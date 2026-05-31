@@ -637,7 +637,6 @@
                 </div>
                 
                 <div class='portal-grid-wrapper' id='mainModuleGrid'>
-                    <!-- CARDS -->
                     <div class='portal-module-card' id='menuCardBulk' onclick='navigateToPanel("bulk", this)'>
                         <div class='card-icon'>📦</div>
                         <h3>Monthly Bulk Bills (ACG-17)</h3>
@@ -697,7 +696,6 @@
 
             </div>
 
-            <!-- TA TRANSFER PANEL -->
             <div class='portal-page-panel' id='panelTATransferMode'>
                 <div class='back-nav-link' onclick='returnToHomeGrid()'>&#11013;&#65039; Back to Dashboard</div>
                 <h3>Module: Application for Advance of T.A. on Transfer</h3>
@@ -808,7 +806,6 @@
                 <button class='action-btn' onclick='triggerSmartGeneration("taTransfer")' style='background-color:#4f46e5;' type='button'>Generate T.A. Transfer PDF</button>
             </div>
 
-            <!-- TA ADVANCE PANEL -->
             <div class='portal-page-panel' id='panelTAAdvanceMode'>
                 <div class='back-nav-link' onclick='returnToHomeGrid()'>&#11013;&#65039; Back to Dashboard</div>
                 <h3>Module: Application for Advance of T.A. on Tour</h3>
@@ -921,7 +918,6 @@
                 <button class='action-btn' onclick='triggerSmartGeneration("taAdvance")' style='background-color:#e11d48;' type='button'>Generate T.A. Advance PDF</button>
             </div>
 
-            <!-- REVOLUTIONIZED TAILORED AI CHAT PANEL -->
             <div class='portal-page-panel' id='panelAIChatMode'>
                 <div class='back-nav-link' onclick='returnToHomeGrid()'>&#11013;&#65039; Back to Dashboard</div>
                 
@@ -1185,7 +1181,6 @@
                 <h3>Admin Deck: Security &amp; User Maintenance</h3>
                 
                 <div class='portal-grid-wrapper' id='maintenanceMainGrid'>
-                    <!-- NEW: SEND DIRECT MESSAGE CARD -->
                     <div class='portal-module-card' onclick='openMaintenanceSubPanel("subDirectMessage")' style='grid-column: 1 / -1; border-color: #f59e0b;'>
                         <div class='card-icon' style='background: #fef3c7;'>✉️</div>
                         <h3>Send Direct Alert Message</h3>
@@ -1242,7 +1237,6 @@
                     </div>
                 </div>
 
-                <!-- NEW: SEND DIRECT MESSAGE SUB PANEL -->
                 <div class='maintenance-sub-panel' id='subDirectMessage'>
                     <div class='back-nav-link sub-back-nav' onclick='closeMaintenanceSubPanel()'>&#11013;&#65039; Back to Settings Menu</div>
                     <div class='sub-action-card' style='border-top: 4px solid #f59e0b;'>
@@ -1441,7 +1435,6 @@
         </div>
     </div>
 
-    <!-- NEW: DIRECT MESSAGE USER OVERLAY POPUP -->
     <div class='custom-popup-overlay' id='directMessageModal' style='z-index: 50000000;'>
         <div class='custom-popup-card' style='border-top: 6px solid #f59e0b;'>
             <div class='popup-icon-alert'>✉️</div>
@@ -1515,6 +1508,19 @@
         let currentDashboardPage = 1;
         const cardsPerPage = 6;
 
+        // NEW: CENTRALIZED LOGGING FUNCTION FOR TIMEZONE AND STORAGE LIMIT
+        function logSystemEvent(username, eventMsg) {
+            let options = { timeZone: 'Asia/Kolkata', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
+            let timeStamp = new Date().toLocaleString('en-IN', options);
+            
+            SYSTEM_LOGIN_HISTORY.push({ time: timeStamp, user: username, event: eventMsg });
+            
+            // STRICT CLEANING: Keep only the 15 most recent logs to protect database space
+            if (SYSTEM_LOGIN_HISTORY.length > 15) {
+                SYSTEM_LOGIN_HISTORY = SYSTEM_LOGIN_HISTORY.slice(SYSTEM_LOGIN_HISTORY.length - 15);
+            }
+        }
+
         window.onload = async function() {
             document.getElementById("appDashboardView").style.display="none";
             document.getElementById('selectMonth').value = "03";
@@ -1566,7 +1572,7 @@
                                         return;
                                     }
 
-                                    // NEW: CHECK FOR INCOMING DIRECT MESSAGES LIVE
+                                    // CHECK FOR INCOMING DIRECT MESSAGES LIVE
                                     if(updatedProfile.pendingMessage && updatedProfile.pendingMessage.trim() !== "") {
                                         document.getElementById('dmMessageField').innerText = updatedProfile.pendingMessage;
                                         const dmModal = document.getElementById('directMessageModal');
@@ -1604,10 +1610,6 @@
             } else {
                 if (!isCloudDataLoaded) return;
                 loaderMsg.innerText = "Loading...";
-                
-                if (SYSTEM_LOGIN_HISTORY.length > 40) {
-                    SYSTEM_LOGIN_HISTORY = SYSTEM_LOGIN_HISTORY.slice(SYSTEM_LOGIN_HISTORY.length - 40);
-                }
                 await forcePushToCloud();
             }
             
@@ -1892,8 +1894,7 @@
             SYSTEM_USER_REGISTRY[profileIndex].isFirstTimeDefault = false; 
             authenticatedUserSession.pass = p1;
 
-            let timeStamp = new Date().toISOString().replace('T',' ').substring(0, 19);
-            SYSTEM_LOGIN_HISTORY.push({ time: timeStamp, user: authenticatedUserSession.user, event: "Self Passcode Modified" });
+            logSystemEvent(authenticatedUserSession.user, "Self Passcode Modified");
 
             await synchronizeSystemDatabase(false);
 
@@ -1928,8 +1929,7 @@
             SYSTEM_USER_REGISTRY[profileIndex].isFirstTimeDefault = false;
             authenticatedUserSession.pass = fp1;
 
-            let timeStamp = new Date().toISOString().replace('T',' ').substring(0, 19);
-            SYSTEM_LOGIN_HISTORY.push({ time: timeStamp, user: authenticatedUserSession.user, event: "First Login Passcode Activated" });
+            logSystemEvent(authenticatedUserSession.user, "First Login Passcode Activated");
 
             document.getElementById('forcedPasswordResetOverlay').style.display = "none";
             document.getElementById('forcedNewPassInput').value = "";
@@ -2080,7 +2080,7 @@
                 locked: false,
                 failedAttempts: 0,
                 isFirstTimeDefault: true,
-                pendingMessage: "", // NEW FIELD FOR MESSAGES
+                pendingMessage: "", 
                 allowedCards: defaultCards
             });
 
@@ -2111,7 +2111,6 @@
             }
         }
 
-        // NEW: SEND DIRECT MESSAGE LOGIC
         async function executeSendDirectMessage() {
             const selectedUser = document.getElementById('muMessageSelect').value;
             const messageText = document.getElementById('muMessageInput').value.trim();
@@ -2131,15 +2130,14 @@
             displayCustomAlert(`Success: Alert message securely queued for '${selectedUser}'. It will self-delete the moment they acknowledge it on their screen.`);
         }
 
-        // NEW: ACKNOWLEDGE AND AUTO-DELETE LOGIC
         async function acknowledgeDirectMessage() {
             if(!authenticatedUserSession) return;
             
             const profileIndex = SYSTEM_USER_REGISTRY.findIndex(acc => acc.user === authenticatedUserSession.user);
             if(profileIndex !== -1) {
-                SYSTEM_USER_REGISTRY[profileIndex].pendingMessage = ""; // Clean out the message
+                SYSTEM_USER_REGISTRY[profileIndex].pendingMessage = ""; 
                 authenticatedUserSession.pendingMessage = "";
-                await synchronizeSystemDatabase(false); // Push the cleaned state to Firebase
+                await synchronizeSystemDatabase(false); 
             }
             
             const dmModal = document.getElementById('directMessageModal');
@@ -2251,7 +2249,6 @@
         }
 
         function refreshMaintenanceControlViews() {
-            // UPDATED DROPDOWN LIST TO INCLUDE MESSAGING
             const dropdownIds = ['muLockSelect', 'muEnableSelect', 'muResetSelect', 'muRoleTargetSelect', 'muDeleteSelect', 'muCustomizeSelect', 'muMessageSelect'];
             
             dropdownIds.forEach(id => {
@@ -2423,31 +2420,30 @@
 
             const profileIndex = SYSTEM_USER_REGISTRY.findIndex(account => account.user === u);
             const profile = profileIndex !== -1 ? SYSTEM_USER_REGISTRY[profileIndex] : null;
-            let timeStamp = new Date().toISOString().replace('T',' ').substring(0, 19);
 
             if(!profile) {
-                SYSTEM_LOGIN_HISTORY.push({ time: timeStamp, user: u || "Unknown", event: "Failure: Invalid Username" });
+                logSystemEvent(u || "Unknown", "Failure: Invalid Username");
                 await synchronizeSystemDatabase(false);
                 displayCustomAlert("Security Violation: Invalid Account Username or Passcode!");
                 return;
             }
 
             if(!profile.active) {
-                SYSTEM_LOGIN_HISTORY.push({ time: timeStamp, user: u, event: "Failure: Account Disabled" });
+                logSystemEvent(u, "Failure: Account Disabled");
                 await synchronizeSystemDatabase(false);
                 displayCustomAlert("Security Status Error: This user account has been disabled by the system administrator.");
                 return;
             }
 
             if(profile.locked) {
-                SYSTEM_LOGIN_HISTORY.push({ time: timeStamp, user: u, event: "Failure: Account Locked" });
+                logSystemEvent(u, "Failure: Account Locked");
                 await synchronizeSystemDatabase(false);
                 displayCustomAlert("Security Access Error: This account profile is locked down due to administrative execution or multiple failed login attempts.");
                 return;
             }
 
             if(profile.pass !== p) {
-                SYSTEM_LOGIN_HISTORY.push({ time: timeStamp, user: u, event: "Failure: Invalid Passcode" });
+                logSystemEvent(u, "Failure: Invalid Passcode");
                 
                 if (u !== "admin") {
                     profile.failedAttempts = (profile.failedAttempts || 0) + 1;
@@ -2471,11 +2467,10 @@
 
             profile.failedAttempts = 0; 
             authenticatedUserSession = profile;
-            SYSTEM_LOGIN_HISTORY.push({ time: timeStamp, user: u, event: "Authentication Success" });
+            logSystemEvent(u, "Authentication Success");
             await synchronizeSystemDatabase(false);
             
             const allCards = document.querySelectorAll('#mainModuleGrid .portal-module-card');
-
             
             allCards.forEach(card => card.style.display = "none");
             
@@ -2515,7 +2510,6 @@
                 document.getElementById('forcedPasswordResetOverlay').style.display = "flex";
             }
 
-            // NEW: CHECK FOR MESSAGE IMMEDIATELY ON LOGIN
             if(profile.pendingMessage && profile.pendingMessage.trim() !== "") {
                 document.getElementById('dmMessageField').innerText = profile.pendingMessage;
                 const dmModal = document.getElementById('directMessageModal');
