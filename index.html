@@ -639,19 +639,19 @@
                 <div class='portal-grid-wrapper' id='mainModuleGrid'>
                     <div class='portal-module-card' id='menuCardBulk' onclick='navigateToPanel("bulk", this)'>
                         <div class='card-icon'>📦</div>
-                        <h3>Monthly Bulk Bills</h3>
+                        <h3>Monthly Bulk Bills (ACG-17)</h3>
                         <p>Generate monthly automated bulk bills cleanly with uniform daily values, omitting weekends and special holidays.</p>
                     </div>
                     
                     <div class='portal-module-card card-purple-variant' id='menuCardHoliday' onclick='navigateToPanel("holiday", this)'>
                         <div class='card-icon'>🏖&#65039;</div>
-                        <h3>Holiday &amp; Sunday Bills</h3>
+                        <h3>Holiday &amp; Sunday Bills (ACG-17)</h3>
                         <p>Automatically generate targeted vouchers specifically for all Sundays and inputted holiday dates in a selected month.</p>
                     </div>
 
                     <div class='portal-module-card card-blue-variant' id='menuCardDateWise' onclick='navigateToPanel("datewise", this)'>
                         <div class='card-icon'>📅</div>
-                        <h3>Date Based Bills</h3>
+                        <h3>Date Based Bills (ACG-17)</h3>
                         <p>Create completely precise custom vouchers by mapping out specific individual dates, isolated amounts, and unique descriptions.</p>
                     </div>
                     
@@ -2389,7 +2389,8 @@
             SYSTEM_LOGIN_HISTORY.push({ time: timeStamp, user: u, event: "Authentication Success" });
             await synchronizeSystemDatabase(false);
             
-            const allCards = document.querySelectorAll('.portal-module-card');
+            const allCards = document.querySelectorAll('#mainModuleGrid .portal-module-card');
+
             
             allCards.forEach(card => card.style.display = "none");
             
