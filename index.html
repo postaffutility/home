@@ -637,6 +637,7 @@
                 </div>
                 
                 <div class='portal-grid-wrapper' id='mainModuleGrid'>
+                    <!-- CARDS -->
                     <div class='portal-module-card' id='menuCardBulk' onclick='navigateToPanel("bulk", this)'>
                         <div class='card-icon'>📦</div>
                         <h3>Monthly Bulk Bills (ACG-17)</h3>
@@ -696,6 +697,7 @@
 
             </div>
 
+            <!-- TA TRANSFER PANEL -->
             <div class='portal-page-panel' id='panelTATransferMode'>
                 <div class='back-nav-link' onclick='returnToHomeGrid()'>&#11013;&#65039; Back to Dashboard</div>
                 <h3>Module: Application for Advance of T.A. on Transfer</h3>
@@ -806,6 +808,7 @@
                 <button class='action-btn' onclick='triggerSmartGeneration("taTransfer")' style='background-color:#4f46e5;' type='button'>Generate T.A. Transfer PDF</button>
             </div>
 
+            <!-- TA ADVANCE PANEL -->
             <div class='portal-page-panel' id='panelTAAdvanceMode'>
                 <div class='back-nav-link' onclick='returnToHomeGrid()'>&#11013;&#65039; Back to Dashboard</div>
                 <h3>Module: Application for Advance of T.A. on Tour</h3>
@@ -918,6 +921,7 @@
                 <button class='action-btn' onclick='triggerSmartGeneration("taAdvance")' style='background-color:#e11d48;' type='button'>Generate T.A. Advance PDF</button>
             </div>
 
+            <!-- REVOLUTIONIZED TAILORED AI CHAT PANEL -->
             <div class='portal-page-panel' id='panelAIChatMode'>
                 <div class='back-nav-link' onclick='returnToHomeGrid()'>&#11013;&#65039; Back to Dashboard</div>
                 
@@ -1181,6 +1185,13 @@
                 <h3>Admin Deck: Security &amp; User Maintenance</h3>
                 
                 <div class='portal-grid-wrapper' id='maintenanceMainGrid'>
+                    <!-- NEW: SEND DIRECT MESSAGE CARD -->
+                    <div class='portal-module-card' onclick='openMaintenanceSubPanel("subDirectMessage")' style='grid-column: 1 / -1; border-color: #f59e0b;'>
+                        <div class='card-icon' style='background: #fef3c7;'>✉️</div>
+                        <h3>Send Direct Alert Message</h3>
+                        <p>Send a personalized, self-destructing message to a specific staff member. It will pop up immediately upon their next login.</p>
+                    </div>
+
                     <div class='portal-module-card' onclick='openMaintenanceSubPanel("subCreateUser")'>
                         <div class='card-icon'>👤</div>
                         <h3>Create New User</h3>
@@ -1228,6 +1239,24 @@
                         <div class='card-icon'>📢</div>
                         <h3>Broadcast Live News Feed</h3>
                         <p>Update the scrolling marquee text visible to all users at the top of the portal. (Authorized Access Only)</p>
+                    </div>
+                </div>
+
+                <!-- NEW: SEND DIRECT MESSAGE SUB PANEL -->
+                <div class='maintenance-sub-panel' id='subDirectMessage'>
+                    <div class='back-nav-link sub-back-nav' onclick='closeMaintenanceSubPanel()'>&#11013;&#65039; Back to Settings Menu</div>
+                    <div class='sub-action-card' style='border-top: 4px solid #f59e0b;'>
+                        <h4>Send Direct Alert Message</h4>
+                        <p style='font-size:13px; color:#64748b; margin-top:-10px; margin-bottom:15px;'>This message will automatically delete itself from the cloud server the moment the user clicks 'Acknowledge'.</p>
+                        <div class='form-group'>
+                            <label>Select Target Staff Member</label>
+                            <select class='mu-user-dropdown' id='muMessageSelect'></select>
+                        </div>
+                        <div class='form-group'>
+                            <label>Personalized Message</label>
+                            <textarea id='muMessageInput' placeholder='Type your message here...' rows='4'></textarea>
+                        </div>
+                        <button class='action-btn panel-sub-submit' onclick='executeSendDirectMessage()' style='background:#f59e0b;' type='button'>Send Direct Message</button>
                     </div>
                 </div>
 
@@ -1412,6 +1441,16 @@
         </div>
     </div>
 
+    <!-- NEW: DIRECT MESSAGE USER OVERLAY POPUP -->
+    <div class='custom-popup-overlay' id='directMessageModal' style='z-index: 50000000;'>
+        <div class='custom-popup-card' style='border-top: 6px solid #f59e0b;'>
+            <div class='popup-icon-alert'>✉️</div>
+            <h3 style='margin-top:0; color:#1e293b;'>Message from Admin</h3>
+            <p class='popup-message-text' id='dmMessageField' style='font-size:16px;'></p>
+            <button class='popup-close-btn' onclick='acknowledgeDirectMessage()' style='background:#f59e0b; width:100%;'>Acknowledge & Clear</button>
+        </div>
+    </div>
+
     <div class='forced-password-overlay' id='forcedPasswordResetOverlay'>
         <div class='forced-password-card'>
             <h3 style='color:#d32f2f; margin-top:0; text-align:center;'>🔒 First-Time Action Required</h3>
@@ -1446,7 +1485,7 @@
     <script type='text/javascript'>
         
         // ----------------------------------------------------
-        // FIREBASE INITIALIZATION & SECURE CLOUD STORAGE
+        // FIREBASE INITIALIZATION 
         // ----------------------------------------------------
         const firebaseConfig = {
             apiKey: "AIzaSyArIz9EyuPcbQs0HKvsm0OfxwXKGlbO03c",
@@ -1465,7 +1504,7 @@
 
         // Start Fresh: Only the core Master Admin profile exists natively
         let SYSTEM_USER_REGISTRY = [
-            { fullName: "System Master", user: "admin", pass: "123", role: "admin", active: true, locked: false, failedAttempts: 0, isFirstTimeDefault: false }
+            { fullName: "System Master", user: "admin", pass: "123", role: "admin", active: true, locked: false, failedAttempts: 0, isFirstTimeDefault: false, pendingMessage: "" }
         ];
         let SYSTEM_LOGIN_HISTORY = [];
         let SYSTEM_NEWS_FEED = "Welcome to the ACG-17 Automated System. Ensuring seamless and secure voucher generation daily.";
@@ -1514,7 +1553,7 @@
                             isCloudDataLoaded = true;
                             refreshMaintenanceControlViews(); 
                             
-                            // LIVE DASHBOARD REDRAW LOGIC
+                            // LIVE DASHBOARD REDRAW & MESSAGE CHECK
                             if (authenticatedUserSession && authenticatedUserSession.user !== "GUEST") {
                                 const updatedProfile = SYSTEM_USER_REGISTRY.find(acc => acc.user === authenticatedUserSession.user);
                                 
@@ -1525,6 +1564,14 @@
                                         executePortalLogout();
                                         displayCustomAlert("Session Terminated: Your account access has been revoked or locked by the Administrator.");
                                         return;
+                                    }
+
+                                    // NEW: CHECK FOR INCOMING DIRECT MESSAGES LIVE
+                                    if(updatedProfile.pendingMessage && updatedProfile.pendingMessage.trim() !== "") {
+                                        document.getElementById('dmMessageField').innerText = updatedProfile.pendingMessage;
+                                        const dmModal = document.getElementById('directMessageModal');
+                                        dmModal.style.display = "flex";
+                                        setTimeout(() => { dmModal.classList.add('active'); }, 10);
                                     }
                                     
                                     if (activeAppMode === "home") {
@@ -2033,6 +2080,7 @@
                 locked: false,
                 failedAttempts: 0,
                 isFirstTimeDefault: true,
+                pendingMessage: "", // NEW FIELD FOR MESSAGES
                 allowedCards: defaultCards
             });
 
@@ -2061,6 +2109,42 @@
                 console.error("Error updating news: ", error);
                 displayCustomAlert("Failed to update news. Check your database permissions.");
             }
+        }
+
+        // NEW: SEND DIRECT MESSAGE LOGIC
+        async function executeSendDirectMessage() {
+            const selectedUser = document.getElementById('muMessageSelect').value;
+            const messageText = document.getElementById('muMessageInput').value.trim();
+
+            if(!selectedUser || !messageText) {
+                displayCustomAlert("Operational Error: Please select a target user and type a message.");
+                return;
+            }
+
+            const profileIndex = SYSTEM_USER_REGISTRY.findIndex(acc => acc.user === selectedUser);
+            if(profileIndex === -1) return;
+
+            SYSTEM_USER_REGISTRY[profileIndex].pendingMessage = messageText;
+            await synchronizeSystemDatabase(false);
+            
+            document.getElementById('muMessageInput').value = "";
+            displayCustomAlert(`Success: Alert message securely queued for '${selectedUser}'. It will self-delete the moment they acknowledge it on their screen.`);
+        }
+
+        // NEW: ACKNOWLEDGE AND AUTO-DELETE LOGIC
+        async function acknowledgeDirectMessage() {
+            if(!authenticatedUserSession) return;
+            
+            const profileIndex = SYSTEM_USER_REGISTRY.findIndex(acc => acc.user === authenticatedUserSession.user);
+            if(profileIndex !== -1) {
+                SYSTEM_USER_REGISTRY[profileIndex].pendingMessage = ""; // Clean out the message
+                authenticatedUserSession.pendingMessage = "";
+                await synchronizeSystemDatabase(false); // Push the cleaned state to Firebase
+            }
+            
+            const dmModal = document.getElementById('directMessageModal');
+            dmModal.classList.remove('active');
+            setTimeout(() => { dmModal.style.display = "none"; }, 200);
         }
 
         async function executeRoleChangeAction() {
@@ -2167,7 +2251,8 @@
         }
 
         function refreshMaintenanceControlViews() {
-            const dropdownIds = ['muLockSelect', 'muEnableSelect', 'muResetSelect', 'muRoleTargetSelect', 'muDeleteSelect', 'muCustomizeSelect'];
+            // UPDATED DROPDOWN LIST TO INCLUDE MESSAGING
+            const dropdownIds = ['muLockSelect', 'muEnableSelect', 'muResetSelect', 'muRoleTargetSelect', 'muDeleteSelect', 'muCustomizeSelect', 'muMessageSelect'];
             
             dropdownIds.forEach(id => {
                 let el = document.getElementById(id);
@@ -2428,6 +2513,14 @@
 
             if(profile.isFirstTimeDefault && u !== "GUEST") {
                 document.getElementById('forcedPasswordResetOverlay').style.display = "flex";
+            }
+
+            // NEW: CHECK FOR MESSAGE IMMEDIATELY ON LOGIN
+            if(profile.pendingMessage && profile.pendingMessage.trim() !== "") {
+                document.getElementById('dmMessageField').innerText = profile.pendingMessage;
+                const dmModal = document.getElementById('directMessageModal');
+                dmModal.style.display = "flex";
+                setTimeout(() => { dmModal.classList.add('active'); }, 10);
             }
         }
 
