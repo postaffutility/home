@@ -2389,7 +2389,7 @@
             SYSTEM_LOGIN_HISTORY.push({ time: timeStamp, user: u, event: "Authentication Success" });
             await synchronizeSystemDatabase(false);
             
-            const allCards = document.querySelectorAll('.portal-module-card');
+            const allCards = document.querySelectorAll('#mainModuleGrid .portal-module-card');
             
             allCards.forEach(card => card.style.display = "none");
             
