@@ -1,0 +1,3058 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PO Staff Utility System</title>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
+    <style>
+        /* Minimalist Baseline Setup */
+        body, html {
+            margin: 0 !important;
+            padding: 0 !important;
+            width: 100% !important;
+            height: 100% !important;
+            background-color: #f4f6f9 !important;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+
+        .standalone-viewport {
+            display: none;
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            min-height: 100vh;
+            padding: 40px 10px;
+            box-sizing: border-box;
+        }
+
+        .app-container {
+            max-width: 900px;
+            background: #ffffff;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+            margin: 0 auto;
+            border-top: 6px solid #d32f2f;
+            position: relative;
+        }
+
+        /* LIVE NEWS TICKER CSS */
+        .news-ticker-container {
+            background: #fff8f8;
+            border-bottom: 1px solid #ffcdd2;
+            margin: -40px -40px 30px -40px;
+            padding: 12px 20px;
+            border-radius: 14px 14px 0 0;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+        }
+        .ticker-label {
+            background: #d32f2f;
+            color: white;
+            font-weight: 800;
+            font-size: 11px;
+            padding: 5px 10px;
+            border-radius: 6px;
+            margin-right: 15px;
+            letter-spacing: 0.5px;
+            z-index: 2;
+            box-shadow: 0 2px 6px rgba(211,47,47,0.3);
+            white-space: nowrap;
+        }
+        .ticker-scroll {
+            flex-grow: 1;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+        .ticker-text {
+            display: inline-block;
+            padding-left: 100%;
+            animation: scrollTicker 25s linear infinite;
+            font-weight: 600;
+            color: #d32f2f;
+            font-size: 14.5px;
+        }
+        @keyframes scrollTicker {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-100%); }
+        }
+
+        /* IMAGE BACKGROUND CONTEXT */
+        .postal-scenery-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: url('https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiLukHUcccahQ6Bfcb_7aqvdjF2xnC7xdpIKJUywZiVsxduw79-FCwwuOGlU34vjrWquTNJblVmu3xAY1eFSTMMbDYlVkjR_v0xwrcyqKwdTTr8SfiWRhYVTNFa3wT01tLQTwIsHp3LfpNOJ3smkqTe3eEqtl8zM-kRDGCBnFMOpWkpsNhbsRhdBldFKBQ/s1535/1000205806.png') no-repeat center center;
+            background-size: cover;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        /* LOGIN INTERFACE OVERLAY */
+        .login-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 1000000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(5px);
+        }
+
+        .login-card {
+            background: rgba(255, 255, 255, 0.98);
+            padding: 45px 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 420px;
+            border-top: 6px solid #d32f2f;
+            box-sizing: border-box;
+            z-index: 1000001;
+        }
+
+        h2 { text-align: center; color: #1e293b; margin: 0 0 8px 0; font-size: 26px; font-weight: 800; letter-spacing: -0.5px; }
+        .tagline { text-align: center; color: #64748b; font-size: 13.5px; margin-bottom: 30px; line-height: 1.6; }
+        
+        #portalHomeHead {
+            animation: fadeIn 0.4s ease-out forwards;
+        }
+        
+        /* HEADER ALIGNMENT WITH SEARCH BAR */
+        .dashboard-header-flex {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .header-titles h2 { text-align: left; font-size: 28px; margin-bottom: 5px; color: #0f172a; }
+        .header-titles .tagline { text-align: left; padding: 0; margin-bottom: 0; }
+        #portalWelcomeMessage { text-align: left; color: #1565c0; margin: 15px 0 10px 0; font-size: 20px; font-weight: 800; letter-spacing: -0.3px; }
+        
+        /* SEARCH BAR CSS */
+        .dashboard-controls {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+        }
+        .search-module-input {
+            width: 100%;
+            min-width: 250px;
+            padding: 12px 20px;
+            border: 1px solid #cbd5e1;
+            border-radius: 25px;
+            font-size: 14px;
+            background: #f8fafc url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="%2364748b" viewBox="0 0 16 16"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/></svg>') no-repeat 15px center;
+            padding-left: 42px;
+            transition: all 0.2s;
+            color: #1e293b;
+        }
+        .search-module-input:focus {
+            border-color: #d32f2f;
+            box-shadow: 0 0 0 3px rgba(211, 47, 47, 0.1);
+            background-color: #ffffff;
+            outline: none;
+        }
+
+        .form-group { margin-bottom: 20px; }
+        label { display: block; font-weight: 700; margin-bottom: 8px; font-size: 14px; color: #334155; }
+        
+        input[type="text"], input[type="number"], input[type="password"], input[type="date"], select, textarea {
+            width: 100%;
+            padding: 14px 16px;
+            box-sizing: border-box;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 14.5px;
+            background: #f8fafc;
+            color: #1e293b !important;
+            transition: all 0.2s ease;
+        }
+        
+        input[type="text"]:focus, input[type="password"]:focus, select:focus, textarea:focus, input[type="number"]:focus {
+            border-color: #d32f2f;
+            background: #ffffff;
+            box-shadow: 0 0 0 4px rgba(211, 47, 47, 0.1);
+            outline: none;
+        }
+
+        .secure-mask {
+            -webkit-text-security: disc;
+        }
+
+        input:focus::placeholder, textarea:focus::placeholder { color: transparent !important; }
+        textarea { resize: vertical; font-family: 'Segoe UI', Arial, sans-serif; }
+        .flex-row { display: flex; gap: 15px; }
+        .flex-row > div { flex: 1; }
+        
+        /* --- MODERN DASHBOARD GRID & ANIMATIONS --- */
+        .portal-grid-wrapper {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 24px;
+            margin-top: 30px;
+        }
+
+        .portal-module-card {
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 28px 24px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            border: 1px solid #e2e8f0;
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            position: relative;
+            overflow: hidden;
+            display: block; 
+            transform-origin: center center;
+        }
+        
+        .portal-module-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 4px;
+            background: #d32f2f; 
+            transition: height 0.3s ease;
+        }
+
+        .portal-module-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+            border-color: #cbd5e1;
+        }
+        
+        .portal-module-card:hover::before {
+            height: 6px;
+        }
+
+        /* Animation Classes */
+        .portal-module-card.fade-out {
+            opacity: 0;
+            transform: scale(0.9) translateY(20px);
+            pointer-events: none;
+        }
+
+        .portal-module-card.expand-active {
+            transform: scale(1.05);
+            z-index: 10;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.15);
+            border-color: #d32f2f;
+        }
+
+        /* Safe hiding classes for Search/Pagination that won't break Roles */
+        .search-hidden { display: none !important; }
+        .page-hidden { display: none !important; }
+
+        .card-icon {
+            font-size: 28px;
+            margin-bottom: 18px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 56px;
+            height: 56px;
+            border-radius: 14px;
+            background: #fee2e2;
+            transition: transform 0.3s ease;
+        }
+        
+        .portal-module-card:hover .card-icon {
+            transform: scale(1.1);
+        }
+
+        /* Specific Color Accents */
+        .card-blue-variant::before { background: #3b82f6; }
+        .card-blue-variant .card-icon { background: #dbeafe; }
+        
+        .card-green-variant::before { background: #10b981; }
+        .card-green-variant .card-icon { background: #d1fae5; }
+        
+        .card-purple-variant::before { background: #8b5cf6; }
+        .card-purple-variant .card-icon { background: #ede9fe; }
+        
+        .card-teal-variant::before { background: #14b8a6; }
+        .card-teal-variant .card-icon { background: #ccfbf1; }
+        
+        .card-orange-variant::before { background: #f59e0b; }
+        .card-orange-variant .card-icon { background: #fef3c7; }
+        
+        .card-dark-variant::before { background: #475569; }
+        .card-dark-variant .card-icon { background: #f1f5f9; }
+
+        .card-rose-variant::before { background: #e11d48; }
+        .card-rose-variant .card-icon { background: #ffe4e6; }
+        
+        .card-indigo-variant::before { background: #4f46e5; }
+        .card-indigo-variant .card-icon { background: #e0e7ff; }
+        
+        .portal-module-card h3 { margin: 0 0 10px 0; font-size: 18px; font-weight: 800; color: #1e293b; letter-spacing: -0.3px;}
+        .portal-module-card p { margin: 0; font-size: 13.5px; color: #64748b; line-height: 1.6; }
+
+        /* PAGINATION CONTROLS CSS */
+        .pagination-container {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 35px;
+        }
+        .page-nav-btn {
+            background: #f1f5f9;
+            border: 1px solid #cbd5e1;
+            color: #334155;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 800;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+        .page-nav-btn:hover:not(:disabled) {
+            background: #e2e8f0;
+            color: #0f172a;
+        }
+        .page-nav-btn.active-page {
+            background: #d32f2f;
+            color: white;
+            border-color: #b71c1c;
+            box-shadow: 0 4px 10px rgba(211, 47, 47, 0.2);
+        }
+        .page-nav-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            background: #f8fafc;
+        }
+
+        /* USER SUB CARD HUB DESIGN MODIFICATIONS */
+        .sub-action-card {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 25px;
+        }
+        .sub-action-card h4 { margin: 0 0 16px 0; color: #0f172a; font-size: 16px; font-weight: 800; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; }
+        .maintenance-sub-panel { display: none; animation: fadeIn 0.3s ease-out forwards; }
+
+        /* AI CHAT INTERFACE CSS */
+        .chat-container {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 20px;
+            height: 400px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+        .chat-message {
+            max-width: 80%;
+            padding: 14px 18px;
+            border-radius: 12px;
+            font-size: 14.5px;
+            line-height: 1.5;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            animation: fadeIn 0.3s ease-out forwards;
+        }
+        .ai-message {
+            background: #ccfbf1;
+            color: #0f766e;
+            align-self: flex-start;
+            border-bottom-left-radius: 4px;
+            border: 1px solid #99f6e4;
+        }
+        .user-message {
+            background: #0f172a;
+            color: #ffffff;
+            align-self: flex-end;
+            border-bottom-right-radius: 4px;
+        }
+        .chat-input-area {
+            display: flex;
+            gap: 12px;
+        }
+        .chat-input {
+            flex: 1;
+            padding: 15px;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            font-size: 14.5px;
+        }
+        .chat-send-btn {
+            background: #14b8a6;
+            color: white;
+            border: none;
+            padding: 0 25px;
+            border-radius: 10px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: background 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .chat-send-btn:hover { background: #0d9488; }
+
+        /* MANDATORY PASSWORD COMPULSORY POPUP OVERLAY */
+        .forced-password-overlay {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(8px); z-index: 40000000;
+            display: none; justify-content: center; align-items: center;
+        }
+        .forced-password-card {
+            background: #ffffff; width: 90%; max-width: 440px; padding: 40px; border-radius: 20px; box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+            box-sizing: border-box; border-top: 6px solid #d32f2f;
+        }
+
+        /* SYSTEM DATA RECORDS TABLES STYLE */
+        .system-log-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            font-size: 13px;
+        }
+        .system-log-table th, .system-log-table td {
+            border: 1px solid #e2e8f0;
+            padding: 12px;
+            text-align: left;
+            color: #334155 !important;
+        }
+        .system-log-table th { background: #f8fafc; font-weight: 800; color: #0f172a; }
+        .system-log-table tr:nth-child(even) { background: #f1f5f9; }
+        
+        .status-badge {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 800;
+            color: #fff;
+            letter-spacing: 0.5px;
+        }
+        .badge-active { background: #10b981; }
+        .badge-disabled { background: #ef4444; }
+        .badge-locked { background: #f59e0b; }
+
+        .portal-logout-anchor {
+            position: absolute;
+            top: 40px; right: 40px; 
+            background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1;
+            padding: 8px 16px; font-size: 13px; font-weight: 800; border-radius: 8px;
+            cursor: pointer; display: flex; align-items: center; gap: 6px; transition: all 0.2s ease;
+            z-index: 50;
+        }
+        .portal-logout-anchor:hover { background: #ef4444; color: #ffffff; border-color: #dc2626; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2); }
+
+        .portal-page-panel { 
+            display: none; 
+            animation: fadeIn 0.4s ease-out forwards;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .back-nav-link { display: inline-flex; align-items: center; color: #3b82f6; font-weight: 800; font-size: 14px; text-decoration: none; margin-bottom: 25px; cursor: pointer; width: fit-content; transition: color 0.2s; }
+        .back-nav-link:hover { color: #1d4ed8; }
+        .sub-back-nav { color: #f59e0b; }
+
+        .dynamic-date-row { display: flex; gap: 15px; background: #f8fafc; border: 1px solid #e2e8f0; padding: 20px; border-radius: 12px; margin-bottom: 15px; align-items: flex-end; }
+        @media(max-width: 550px){ .dynamic-date-row { flex-direction: column; align-items: stretch; gap: 15px; } }
+        .delete-row-btn { background: #475569; color: white; border: none; padding: 14px; border-radius: 8px; cursor: pointer; font-weight: bold; transition: background 0.2s; }
+        .delete-row-btn:hover { background: #dc2626; }
+        .add-more-row-container { margin: 20px 0 30px 0; }
+        .secondary-action-btn { background: #334155; color: #fff; padding: 12px 20px; border: none; border-radius: 8px; font-weight: 800; font-size: 13.5px; cursor: pointer; transition: background 0.2s; }
+        .secondary-action-btn:hover { background: #1e293b; }
+
+        button.action-btn {
+            width: 100%; padding: 16px; background: #d32f2f; color: white; border: none; border-radius: 8px;
+            font-size: 15.5px; font-weight: 800; cursor: pointer; text-transform: uppercase; letter-spacing: 0.8px; margin-top: 15px;
+            box-shadow: 0 4px 12px rgba(211, 47, 47, 0.25); transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        button.action-btn:hover { background: #b71c1c; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(183, 28, 28, 0.3); }
+        
+        button.panel-sub-submit {
+            background: #3b82f6; padding: 14px 18px; font-size: 14.5px; margin-top: 20px; box-shadow: none; width: 100%; text-transform: none; border-radius: 8px; color: white; border: none; font-weight: 800; cursor: pointer;
+        }
+        button.panel-sub-submit:hover { background: #2563eb; }
+        
+        button.demo-btn {
+            background: transparent; border: 2px solid #e2e8f0; color: #64748b; padding: 14px; margin-top: 12px; font-weight: 800; border-radius: 8px; cursor: pointer; width: 100%; transition: all 0.2s;
+        }
+        button.demo-btn:hover { border-color: #94a3b8; color: #334155; }
+
+        .preview-title { margin-top: 35px; font-weight: 800; color: #0f172a; display: none; text-align: center; font-size: 18px; }
+        #pdfFrameViewer { width: 100%; height: 650px; border: 2px solid #cbd5e1; margin-top: 15px; display: none; background: #f1f5f9; border-radius: 12px; }
+        .help-note { font-size: 12px; color: #64748b; margin-top: 6px; display: block; }
+
+        .custom-popup-overlay {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(6px); z-index: 20000000;
+            display: none; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.2s ease-in-out;
+        }
+        .custom-popup-card {
+            background: #ffffff; width: 90%; max-width: 420px; padding: 35px; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            text-align: center; box-sizing: border-box; border-top: 6px solid #d32f2f; transform: scale(0.95); transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .custom-popup-overlay.active { display: flex; opacity: 1; }
+        .custom-popup-overlay.active .custom-popup-card { transform: scale(1); }
+        .popup-icon-alert { font-size: 48px; margin-bottom: 15px; }
+        .popup-message-text { color: #334155; font-size: 15px; line-height: 1.6; margin: 0 0 25px 0; font-weight: 600; white-space: pre-line; }
+        .popup-close-btn { background: #0f172a; color: white; padding: 12px 28px; border: none; border-radius: 8px; font-size: 13.5px; font-weight: 800; cursor: pointer; text-transform: uppercase; letter-spacing: 0.5px; transition: background 0.2s;}
+        .popup-close-btn:hover { background: #334155; }
+
+        .processing-loader-container {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(5px); z-index: 30000000;
+            display: none; flex-direction: column; justify-content: center; align-items: center;
+        }
+        .app-loading-spinner { width: 45px; height: 45px; border: 4px solid #f1f5f9; border-top: 4px solid #3b82f6; border-radius: 50%; animation: spinSystem 0.8s linear infinite; margin-bottom: 20px; }
+        .text-input-placeholder-gray::placeholder { color: #94a3b8; font-style: italic; }
+        .loading-status-msg { font-size: 15px; font-weight: 800; color: #0f172a; letter-spacing: 0.5px; }
+        @keyframes spinSystem { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        
+        .ta-family-table { width: 100%; border-collapse: collapse; margin-bottom: 10px; }
+        .ta-family-table th, .ta-family-table td { padding: 8px; border: 1px solid #cbd5e1; }
+        .ta-family-table th { background: #f1f5f9; font-size: 12px; color: #334155; text-align: center; }
+        .ta-family-table input { padding: 8px; border: none; background: transparent; width:100%; box-sizing:border-box;}
+        .ta-family-table input:focus { box-shadow: none; background: #fff; }
+    </style>
+</head>
+<body>
+
+    <div class='postal-scenery-bg' id='sceneryBackground'></div>
+
+    <div class='login-overlay' id='loginScreen'>
+        <div class='login-card'>
+            <h2>PO Staff Utility</h2>
+            <div class='tagline'>Developed by Subhajit Parbat<br/>MTS, Radhakishorepur HPO</div>
+            <div class='form-group'>
+                <label>Username</label>
+                <input id='sysUser' placeholder='Enter username' type='text'/>
+            </div>
+            <div class='form-group'>
+                <label>Security Passcode</label>
+                <input class='secure-mask' id='sysPass' placeholder='Enter security passcode' type='text'/>
+            </div>
+            <button class='action-btn' onclick='verifyBloggerAuth()' type='button'>Login to Workspace</button>
+            <button class='demo-btn' onclick='fillDemoCredentials()' type='button'>Use Guest Access</button>
+        </div>
+    </div>
+
+    <div class='standalone-viewport' id='appDashboardView'>
+        <div class='app-container'>
+            
+            <div class='news-ticker-container' id='mainNewsTicker'>
+                <div class='ticker-label'>📢 LATEST NEWS</div>
+                <div class='ticker-scroll'>
+                    <div class='ticker-text' id='scrollingNewsText'>Loading...</div>
+                </div>
+            </div>
+
+            <div class='portal-logout-anchor' onclick='executePortalLogout()'>🚪 Logout</div>
+
+            <div id='portalHomeHead'>
+                
+                <div class='dashboard-header-flex'>
+                    <div class='header-titles'>
+                        <h2>PO STAFF UTILITY SYSTEM</h2>
+                        <div class='tagline'>Developed by Subhajit Parbat, MTS, Radhakishorepur HPO</div>
+                        <div id='portalWelcomeMessage'></div>
+                    </div>
+                    <div class='dashboard-controls'>
+                        <input class='search-module-input' id='moduleSearch' onkeyup='filterAndPaginateCards(true)' placeholder='Search modules...' type='text'/>
+                    </div>
+                </div>
+                
+                <div class='portal-grid-wrapper' id='mainModuleGrid'>
+                    <!-- CARDS -->
+                    <div class='portal-module-card' id='menuCardBulk' onclick='navigateToPanel("bulk", this)'>
+                        <div class='card-icon'>📦</div>
+                        <h3>Monthly Bulk Bills</h3>
+                        <p>Generate monthly automated bulk bills cleanly with uniform daily values, omitting weekends and special holidays.</p>
+                    </div>
+                    
+                    <div class='portal-module-card card-purple-variant' id='menuCardHoliday' onclick='navigateToPanel("holiday", this)'>
+                        <div class='card-icon'>🏖&#65039;</div>
+                        <h3>Holiday &amp; Sunday Bills</h3>
+                        <p>Automatically generate targeted vouchers specifically for all Sundays and inputted holiday dates in a selected month.</p>
+                    </div>
+
+                    <div class='portal-module-card card-blue-variant' id='menuCardDateWise' onclick='navigateToPanel("datewise", this)'>
+                        <div class='card-icon'>📅</div>
+                        <h3>Date Based Bills</h3>
+                        <p>Create completely precise custom vouchers by mapping out specific individual dates, isolated amounts, and unique descriptions.</p>
+                    </div>
+                    
+                    <div class='portal-module-card card-green-variant' id='menuCardACG61' onclick='navigateToPanel("acg61", this)'>
+                        <div class='card-icon'>📄</div>
+                        <h3>Charge Report (ACG-61)</h3>
+                        <p>Compile official reports and dynamic transfer of charge receipts for cash and stamps automatically.</p>
+                    </div>
+
+                    <div class='portal-module-card card-rose-variant' id='menuCardTAAdvance' onclick='navigateToPanel("taAdvance", this)'>
+                        <div class='card-icon'>🧳</div>
+                        <h3>T.A. Advance Application</h3>
+                        <p>Draft and generate your official T.A. on Tour advance application instantly with precise formatting.</p>
+                    </div>
+                    
+                    <div class='portal-module-card card-indigo-variant' id='menuCardTATransfer' onclick='navigateToPanel("taTransfer", this)'>
+                        <div class='card-icon'>🚚</div>
+                        <h3>T.A. Advance on Transfer</h3>
+                        <p>Generate a perfectly structured Application for Advance of T.A. on Transfer, complete with family particulars.</p>
+                    </div>
+
+                    <div class='portal-module-card card-teal-variant' id='menuCardAI' onclick='navigateToPanel("aichat", this)'>
+                        <div class='card-icon'>🤖</div>
+                        <h3>Talk with AI</h3>
+                        <p>Access your built-in simulated postal assistant to help you draft leave applications, understand regulations, or get quick answers.</p>
+                    </div>
+
+                    <div class='portal-module-card card-orange-variant' id='menuCardMaintenance' onclick='navigateToPanel("maintenance", this)'>
+                        <div class='card-icon'>&#9881;&#65039;</div>
+                        <h3>User Maintenance Hub</h3>
+                        <p>Administrative configuration deck to create new users, modify access, block/unblock credentials, and review user history.</p>
+                    </div>
+                    
+                    <div class='portal-module-card card-dark-variant' id='menuCardSelfPassword' onclick='navigateToPanel("selfpassword", this)'>
+                        <div class='card-icon'>🔒</div>
+                        <h3>Change Passcode</h3>
+                        <p>Update your custom connection system passcode directly anytime to maintain dynamic security configuration profiles.</p>
+                    </div>
+                </div>
+
+                <!-- PAGINATION CONTROLS -->
+                <div class='pagination-container' id='dashboardPagination'></div>
+
+            </div>
+
+            <!-- TA TRANSFER PANEL -->
+            <div class='portal-page-panel' id='panelTATransferMode'>
+                <div class='back-nav-link' onclick='returnToHomeGrid()'>&#11013;&#65039; Back to Dashboard</div>
+                <h3>Module: Application for Advance of T.A. on Transfer</h3>
+                <br/>
+
+                <div class='flex-row'>
+                    <div class='form-group'>
+                        <label>1. Name of the Officer/ Official:</label>
+                        <input class='text-input-placeholder-gray' id='tatName' placeholder='e.g. Subhajit Parbat' type='text'/>
+                    </div>
+                    <div class='form-group'>
+                        <label>2. Designation:</label>
+                        <input class='text-input-placeholder-gray' id='tatDesignation' placeholder='e.g. MTS' type='text'/>
+                    </div>
+                </div>
+
+                <div class='flex-row'>
+                    <div class='form-group'>
+                        <label>3. Whether temporary / permanent:</label>
+                        <select id='tatPermTemp'>
+                            <option value='Permanent'>Permanent</option>
+                            <option value='Temporary'>Temporary</option>
+                        </select>
+                    </div>
+                    <div class='form-group'>
+                        <label>4. Office/Station in which working:</label>
+                        <input class='text-input-placeholder-gray' id='tatOffice' placeholder='e.g. Radhakishorepur HPO' type='text'/>
+                    </div>
+                </div>
+
+                <div class='flex-row'>
+                    <div class='form-group'>
+                        <label>5. Basic Pay + NPA + SI:</label>
+                        <input class='text-input-placeholder-gray' id='tatPay' placeholder='e.g. 18000' type='text'/>
+                    </div>
+                    <div class='form-group'>
+                        <label>6. Station to which transferred:</label>
+                        <input class='text-input-placeholder-gray' id='tatStationTransferred' placeholder='e.g. Agartala HPO' type='text'/>
+                    </div>
+                </div>
+
+                <div class='form-group'>
+                    <label>7. No. &amp; Date of the transfer order:</label>
+                    <input class='text-input-placeholder-gray' id='tatOrderNo' placeholder='e.g. Memo No. 123 dated 10/05/2026' type='text'/>
+                </div>
+
+                <div style='background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 25px; margin-bottom: 20px;'>
+                    <h4 style='margin-top: 0; color: #0f172a; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;'>8. Details of family members</h4>
+                    <table class='ta-family-table'>
+                        <thead>
+                            <tr>
+                                <th>Family Particulars (Name)</th>
+                                <th>Age</th>
+                                <th>Relationship</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><input id='tatFamName1' placeholder='Name 1' type='text'/></td>
+                                <td><input id='tatFamAge1' placeholder='Age' type='text'/></td>
+                                <td><input id='tatFamRel1' placeholder='Relation' type='text'/></td>
+                            </tr>
+                            <tr>
+                                <td><input id='tatFamName2' placeholder='Name 2' type='text'/></td>
+                                <td><input id='tatFamAge2' placeholder='Age' type='text'/></td>
+                                <td><input id='tatFamRel2' placeholder='Relation' type='text'/></td>
+                            </tr>
+                            <tr>
+                                <td><input id='tatFamName3' placeholder='Name 3' type='text'/></td>
+                                <td><input id='tatFamAge3' placeholder='Age' type='text'/></td>
+                                <td><input id='tatFamRel3' placeholder='Relation' type='text'/></td>
+                            </tr>
+                            <tr>
+                                <td><input id='tatFamName4' placeholder='Name 4' type='text'/></td>
+                                <td><input id='tatFamAge4' placeholder='Age' type='text'/></td>
+                                <td><input id='tatFamRel4' placeholder='Relation' type='text'/></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class='flex-row'>
+                    <div class='form-group'>
+                        <label>9. Advance required for:</label>
+                        <select id='tatAdvanceFor'>
+                            <option value='Self alone'>Self alone</option>
+                            <option value='Self and family'>Self and family</option>
+                            <option value='Family alone'>Family alone</option>
+                        </select>
+                    </div>
+                    <div class='form-group'>
+                        <label>10. Amount of advance required:</label>
+                        <input class='text-input-placeholder-gray' id='tatAdvanceReq' placeholder='Enter amount (Rs.)' type='number'/>
+                    </div>
+                </div>
+
+                <div class='flex-row'>
+                    <div class='form-group'>
+                        <label>Station:</label>
+                        <input class='text-input-placeholder-gray' id='tatStation' placeholder='e.g. Radhakishorepur' type='text'/>
+                    </div>
+                    <div class='form-group'>
+                        <label>Date:</label>
+                        <input id='tatDate' type='date'/>
+                    </div>
+                </div>
+
+                <button class='action-btn' onclick='triggerSmartGeneration("taTransfer")' style='background-color:#4f46e5;' type='button'>Generate T.A. Transfer PDF</button>
+            </div>
+
+            <!-- TA ADVANCE PANEL -->
+            <div class='portal-page-panel' id='panelTAAdvanceMode'>
+                <div class='back-nav-link' onclick='returnToHomeGrid()'>&#11013;&#65039; Back to Dashboard</div>
+                <h3>Module: Application for Advance of T.A. on Tour</h3>
+                <br/>
+
+                <div class='flex-row'>
+                    <div class='form-group'>
+                        <label>1. Name of the Officer/ Official:</label>
+                        <input class='text-input-placeholder-gray' id='taName' placeholder='e.g. Subhajit Parbat' type='text'/>
+                    </div>
+                    <div class='form-group'>
+                        <label>2. Designation:</label>
+                        <input class='text-input-placeholder-gray' id='taDesignation' placeholder='e.g. MTS' type='text'/>
+                    </div>
+                </div>
+
+                <div class='flex-row'>
+                    <div class='form-group'>
+                        <label>3. Permanent / Temporary:</label>
+                        <select id='taPermTemp'>
+                            <option value='Permanent'>Permanent</option>
+                            <option value='Temporary'>Temporary</option>
+                        </select>
+                    </div>
+                    <div class='form-group'>
+                        <label>4. Office/Section in which working:</label>
+                        <input class='text-input-placeholder-gray' id='taOffice' placeholder='e.g. Radhakishorepur HPO' type='text'/>
+                    </div>
+                </div>
+
+                <div class='flex-row'>
+                    <div class='form-group'>
+                        <label>5. Basic Pay + NPA + SI:</label>
+                        <input class='text-input-placeholder-gray' id='taPay' placeholder='e.g. 18000' type='text'/>
+                    </div>
+                    <div class='form-group'>
+                        <label>9. Duration of journey (in days):</label>
+                        <input class='text-input-placeholder-gray' id='taDuration' placeholder='e.g. 2' type='number'/>
+                    </div>
+                </div>
+
+                <div class='form-group'>
+                    <label>6. Places to be visited and period of halt at each station:</label>
+                    <textarea class='text-input-placeholder-gray' id='taPlaces' placeholder='e.g. Agartala (1 day halt)' rows='2'></textarea>
+                </div>
+
+                <div class='form-group'>
+                    <label>7. Purpose of tour:</label>
+                    <textarea class='text-input-placeholder-gray' id='taPurpose' placeholder='e.g. Official Meeting' rows='2'></textarea>
+                </div>
+
+                <div class='form-group'>
+                    <label>8. Has the tour programme been approved by competent authority?</label>
+                    <select id='taApproved'>
+                        <option value='Yes'>Yes</option>
+                        <option value='No'>No</option>
+                    </select>
+                </div>
+
+                <div class='form-group'>
+                    <label>10. Rail/Road fare by the entitled class...</label>
+                    <textarea class='text-input-placeholder-gray' id='taFare' placeholder='Describe mode of travel and fare. e.g. Bus fare Rs. 500 for outward and inward.' rows='2'></textarea>
+                </div>
+
+                <div style='background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 25px; margin-bottom: 20px;'>
+                    <h4 style='margin-top: 0; color: #0f172a; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;'>11. Daily Allowance Entitled (Rs.)</h4>
+                    <div class='flex-row'>
+                        <div class='form-group'>
+                            <label>(i) For journey period:</label>
+                            <input class='text-input-placeholder-gray' id='taDaJourney' oninput='calculateTATotals()' placeholder='0' type='number'/>
+                        </div>
+                        <div class='form-group'>
+                            <label>(ii) For the halts:</label>
+                            <input class='text-input-placeholder-gray' id='taDaHalts' oninput='calculateTATotals()' placeholder='0' type='number'/>
+                        </div>
+                        <div class='form-group'>
+                            <label>Total D.A. (i + ii):</label>
+                            <input class='text-input-placeholder-gray' id='taDaTotal' placeholder='Auto-calculated' readonly='readonly' style='background:#e2e8f0;' type='number'/>
+                        </div>
+                    </div>
+                </div>
+
+                <div class='flex-row'>
+                    <div class='form-group'>
+                        <label>12. Total T.A. + D.A. (10 + 11):</label>
+                        <input class='text-input-placeholder-gray' id='taTotalTADA' placeholder='Enter combined total (Rs.)' type='number'/>
+                    </div>
+                    <div class='form-group'>
+                        <label>13. Amount of Advance required:</label>
+                        <input class='text-input-placeholder-gray' id='taAdvanceReq' placeholder='Enter required advance (Rs.)' type='number'/>
+                    </div>
+                </div>
+
+                <div class='form-group'>
+                    <label>14. Whether any earlier advance is outstanding. If so, the date...</label>
+                    <textarea class='text-input-placeholder-gray' id='taOutstanding' placeholder='e.g. Nil' rows='2'></textarea>
+                </div>
+
+                <div class='flex-row'>
+                    <div class='form-group'>
+                        <label>Station:</label>
+                        <input class='text-input-placeholder-gray' id='taStation' placeholder='e.g. Radhakishorepur' type='text'/>
+                    </div>
+                    <div class='form-group'>
+                        <label>Date:</label>
+                        <input id='taDate' type='date'/>
+                    </div>
+                </div>
+
+                <button class='action-btn' onclick='triggerSmartGeneration("taAdvance")' style='background-color:#e11d48;' type='button'>Generate T.A. Advance PDF</button>
+            </div>
+
+            <!-- OTHER PANELS (AI, Bulk, Holiday, Datewise, ACG61, Maintenance, Password) -->
+            <div class='portal-page-panel' id='panelAIChatMode'>
+                <div class='back-nav-link' onclick='returnToHomeGrid()'>&#11013;&#65039; Back to Dashboard</div>
+                <h3>🤖 PO Assistant AI</h3>
+                <p style='font-size:13px; color:#64748b; margin-top:0;'>Your localized prototype expert. Ask me about ACG forms or say &quot;draft a leave letter&quot;.</p>
+                <div class='chat-container' id='chatHistory'>
+                    <div class='chat-message ai-message'>Hello! I am your PO Assistant AI. How can I help you today with rules, regulations, or drafting letters?</div>
+                </div>
+                <div class='chat-input-area'>
+                    <input class='chat-input' id='aiChatInput' onkeypress='handleChatEnter(event)' placeholder='Type your request here...' type='text'/>
+                    <button class='chat-send-btn' onclick='sendChatMessage()'>Send</button>
+                </div>
+            </div>
+
+            <div class='portal-page-panel' id='panelBulkMode'>
+                <div class='back-nav-link' onclick='returnToHomeGrid()'>&#11013;&#65039; Back to Dashboard</div>
+                <h3>Module: Monthly Bulk Bill Compiler</h3>
+                <br/>
+                
+                <div class='form-group'>
+                    <label for='receivedFromBulk'>Received From:</label>
+                    <input class='text-input-placeholder-gray' id='receivedFromBulk' placeholder='Please insert the sanctioning authority and office location name here' type='text' value=''/>
+                </div>
+
+                <div class='form-group'>
+                    <label for='amount'>Amount Per Voucher (Figures Rs.):</label>
+                    <input class='text-input-placeholder-gray' id='amount' placeholder='Please enter voucher daily amount figure (e.g. 366)' type='number' value=''/>
+                </div>
+
+                <div class='form-group'>
+                    <label for='monthlyVoucherPurpose'>Voucher Account Purpose (Full Month Consolidation):</label>
+                    <textarea class='text-input-placeholder-gray' id='monthlyVoucherPurpose' placeholder='Please enter the main reason or expenditure details for the full month consolidation here' rows='4'></textarea>
+                </div>
+
+                <div class='form-group'>
+                    <div class='flex-row'>
+                        <div>
+                            <label for='selectMonth'>Month:</label>
+                            <select id='selectMonth'>
+                                <option value='01'>January</option><option value='02'>February</option>
+                                <option value='03'>March</option><option value='04'>April</option>
+                                <option value='05'>May</option><option value='06'>June</option>
+                                <option value='07'>July</option><option value='08'>August</option>
+                                <option value='09'>September</option><option value='10'>October</option>
+                                <option value='11'>November</option><option value='12'>December</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for='selectYear'>Year:</label>
+                            <select id='selectYear'>
+                                <option value='2026'>2026</option><option value='2027'>2027</option>
+                                <option value='2028'>2028</option><option value='2029'>2029</option>
+                                <option value='2030'>2030</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class='form-group'>
+                    <label for='exceptionsInput'>Exceptional Holiday Dates to Omit:</label>
+                    <input class='text-input-placeholder-gray' id='exceptionsInput' placeholder='e.g. 5, 12, 23' type='text' value=''/>
+                    <span class='help-note'>Provide specific dates separated with commas. Sundays drop automatically.</span>
+                </div>
+                
+                <button class='action-btn' onclick='triggerSmartGeneration("bulk")' type='button'>Generate Bulk Print Vouchers</button>
+            </div>
+
+            <div class='portal-page-panel' id='panelHolidayMode'>
+                <div class='back-nav-link' onclick='returnToHomeGrid()'>&#11013;&#65039; Back to Dashboard</div>
+                <h3>Module: Holiday &amp; Sunday Bill Compiler</h3>
+                <br/>
+                
+                <div class='form-group'>
+                    <label for='receivedFromHoliday'>Received From:</label>
+                    <input class='text-input-placeholder-gray' id='receivedFromHoliday' placeholder='Please insert the sanctioning authority and office location name here' type='text' value=''/>
+                </div>
+
+                <div class='form-group'>
+                    <label for='amountHoliday'>Amount Per Voucher (Figures Rs.):</label>
+                    <input class='text-input-placeholder-gray' id='amountHoliday' placeholder='Please enter voucher daily amount figure (e.g. 366)' type='number' value=''/>
+                </div>
+
+                <div class='form-group'>
+                    <label for='holidayVoucherPurpose'>Voucher Account Purpose:</label>
+                    <textarea class='text-input-placeholder-gray' id='holidayVoucherPurpose' placeholder='Please enter the main reason or expenditure details here' rows='4'></textarea>
+                </div>
+
+                <div class='form-group'>
+                    <div class='flex-row'>
+                        <div>
+                            <label for='selectMonthHoliday'>Month:</label>
+                            <select id='selectMonthHoliday'>
+                                <option value='01'>January</option><option value='02'>February</option>
+                                <option value='03'>March</option><option value='04'>April</option>
+                                <option value='05'>May</option><option value='06'>June</option>
+                                <option value='07'>July</option><option value='08'>August</option>
+                                <option value='09'>September</option><option value='10'>October</option>
+                                <option value='11'>November</option><option value='12'>December</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for='selectYearHoliday'>Year:</label>
+                            <select id='selectYearHoliday'>
+                                <option value='2026'>2026</option><option value='2027'>2027</option>
+                                <option value='2028'>2028</option><option value='2029'>2029</option>
+                                <option value='2030'>2030</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class='form-group'>
+                    <label for='holidaysInput'>Specific Holiday Dates (Sundays are automatic):</label>
+                    <input class='text-input-placeholder-gray' id='holidaysInput' placeholder='e.g. 15, 26' type='text' value=''/>
+                    <span class='help-note'>Provide specific holiday dates separated with commas. All Sundays will be automatically included.</span>
+                </div>
+                
+                <button class='action-btn' onclick='triggerSmartGeneration("holiday")' style='background-color:#8e24aa;' type='button'>Generate Holiday Vouchers</button>
+            </div>
+
+            <div class='portal-page-panel' id='panelDateWiseMode'>
+                <div class='back-nav-link' onclick='returnToHomeGrid()'>&#11013;&#65039; Back to Dashboard</div>
+                <h3>Module: Isolated Date-Wise Form Compiler</h3>
+                <br/>
+
+                <div class='form-group'>
+                    <label for='receivedFromDatewise'>Received From:</label>
+                    <input class='text-input-placeholder-gray' id='receivedFromDatewise' placeholder='Please insert the sanctioning authority and office location name here' type='text' value=''/>
+                </div>
+
+                <div id='dynamicDateRowsContainer'>
+                </div>
+                <div class='add-more-row-container'>
+                    <button class='secondary-action-btn' onclick='addNewDateEntryRow()' type='button'>+ Add New Ledger Row Slot</button>
+                </div>
+                
+                <button class='action-btn' onclick='triggerSmartGeneration("datewise")' type='button'>Generate Isolated Date Vouchers</button>
+            </div>
+
+            <div class='portal-page-panel' id='panelACG61Mode'>
+                <div class='back-nav-link' onclick='returnToHomeGrid()'>&#11013;&#65039; Back to Dashboard</div>
+                <h3>Module: ACG-61 Charge Report Compiler</h3>
+                <br/>
+                
+                <div class='form-group'>
+                    <label for='acgOfficeName'>Office Name:</label>
+                    <input class='text-input-placeholder-gray' id='acgOfficeName' placeholder='e.g. Radhakishorepur HPO' type='text'/>
+                </div>
+                
+                <div class='flex-row'>
+                    <div class='form-group'>
+                        <label for='acgRelievedOfficer'>Relieved Officer Name:</label>
+                        <input class='text-input-placeholder-gray' id='acgRelievedOfficer' placeholder='Name of officer handing over' type='text'/>
+                    </div>
+                    <div class='form-group'>
+                        <label for='acgRelievingOfficer'>Relieving Officer Name:</label>
+                        <input class='text-input-placeholder-gray' id='acgRelievingOfficer' placeholder='Name of officer taking charge' type='text'/>
+                    </div>
+                </div>
+
+                <div class='flex-row'>
+                    <div class='form-group'>
+                        <label for='acgTransferDate'>Transfer Date:</label>
+                        <input id='acgTransferDate' type='date'/>
+                    </div>
+                    <div class='form-group'>
+                        <label for='acgTransferTime'>Transfer Time:</label>
+                        <select id='acgTransferTime'>
+                            <option value='FN'>Forenoon (FN)</option>
+                            <option value='AN'>Afternoon (AN)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class='flex-row'>
+                    <div class='form-group'>
+                        <label for='acgMemoNo'>Memorandum / Letter No:</label>
+                        <input class='text-input-placeholder-gray' id='acgMemoNo' placeholder='e.g. Est/1-2/2026' type='text'/>
+                    </div>
+                    <div class='form-group'>
+                        <label for='acgMemoDate'>Memorandum Date:</label>
+                        <input id='acgMemoDate' type='date'/>
+                    </div>
+                </div>
+
+                <div class='form-group'>
+                    <label for='acgFromAuthority'>From (Authority):</label>
+                    <input class='text-input-placeholder-gray' id='acgFromAuthority' placeholder='e.g. SPOs, South Tripura Division' type='text'/>
+                </div>
+
+                <div style='background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 25px; margin-bottom: 25px;'>
+                    <h4 style='margin-top: 0; color: #0f172a; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;'>Balances Handed Over Verification</h4>
+                    <div class='form-group'>
+                        <label for='acgCashRs'>Total Net Cash (Rs.):</label>
+                        <input class='text-input-placeholder-gray' id='acgCashRs' placeholder='e.g. 25450.00' type='number'/>
+                    </div>
+                    <div class='flex-row'>
+                        <div class='form-group'>
+                            <label for='acgStampRs'>Stamp Imprest Value (Rs.):</label>
+                            <input class='text-input-placeholder-gray' id='acgStampRs' placeholder='e.g. 5000.00' type='number'/>
+                        </div>
+                        <div class='form-group'>
+                            <label for='acgImprestCashRs'>Imprest Cash Component (Rs.):</label>
+                            <input class='text-input-placeholder-gray' id='acgImprestCashRs' placeholder='e.g. 500.00' type='number'/>
+                        </div>
+                    </div>
+                </div>
+
+                <div style='background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 25px; margin-bottom: 25px;'>
+                    <h4 style='margin-top: 0; color: #0f172a; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;'>Copy Forwarded To Ledger</h4>
+                    <div id='acgForwardContainer'>
+                    </div>
+                    <div class='add-more-row-container' style='margin-bottom: 0;'>
+                        <button class='secondary-action-btn' onclick='addNewForwardRow()' type='button'>+ Add Forwarded Officer</button>
+                    </div>
+                </div>
+
+                <button class='action-btn' onclick='triggerSmartGeneration("acg61")' type='button'>Generate ACG-61 Document</button>
+            </div>
+
+            <div class='portal-page-panel' id='panelSelfPasswordMode'>
+                <div class='back-nav-link' onclick='returnToHomeGrid()'>&#11013;&#65039; Back to Dashboard</div>
+                <h3>Security Center: Change Your Passcode</h3>
+                <br/>
+                <div class='sub-action-card'>
+                    <h4>Update Passcode Profile</h4>
+                    <div class='form-group'>
+                        <label>New Passcode</label>
+                        <input class='secure-mask' id='selfNewPassInput' placeholder='Enter your brand new passcode here' type='text'/>
+                    </div>
+                    <div class='form-group'>
+                        <label>Confirm New Passcode</label>
+                        <input class='secure-mask' id='selfConfirmPassInput' placeholder='Retype your new passcode to verify' type='text'/>
+                    </div>
+                    <button class='action-btn panel-sub-submit' onclick='executeSelfPasswordChange()' type='button'>Apply Modification</button>
+                </div>
+            </div>
+
+            <div class='portal-page-panel' id='panelMaintenanceMode'>
+                <div class='back-nav-link' onclick='returnToHomeGrid()'>&#11013;&#65039; Back to Dashboard</div>
+                <h3>Admin Deck: Security &amp; User Maintenance</h3>
+                
+                <div class='portal-grid-wrapper' id='maintenanceMainGrid'>
+                    <div class='portal-module-card' onclick='openMaintenanceSubPanel("subCreateUser")'>
+                        <div class='card-icon'>👤</div>
+                        <h3>Create New User</h3>
+                        <p>Register a new system user profile and assign role.</p>
+                    </div>
+                    <div class='portal-module-card card-orange-variant' onclick='openMaintenanceSubPanel("subLockUnlock")'>
+                        <div class='card-icon'>🗝&#65039;</div>
+                        <h3>Lock / Unlock User</h3>
+                        <p>Temporarily lock or unlock an existing user account.</p>
+                    </div>
+                    <div class='portal-module-card card-blue-variant' onclick='openMaintenanceSubPanel("subEnableDisable")'>
+                        <div class='card-icon'>&#9989;</div>
+                        <h3>Enable / Disable User</h3>
+                        <p>Completely disable or re-enable an existing user&#39;s access.</p>
+                    </div>
+                    <div class='portal-module-card card-dark-variant' onclick='openMaintenanceSubPanel("subResetPass")'>
+                        <div class='card-icon'>🔄</div>
+                        <h3>Reset Passcode</h3>
+                        <p>Change the login passcode for an existing system user.</p>
+                    </div>
+                    <div class='portal-module-card' onclick='openMaintenanceSubPanel("subChangeRole")'>
+                        <div class='card-icon'>🛡&#65039;</div>
+                        <h3>Change User Role</h3>
+                        <p>Elevate a user to Admin or restrict to Maker (Billing Only).</p>
+                    </div>
+                    <div class='portal-module-card card-orange-variant' onclick='openMaintenanceSubPanel("subDeleteUser")'>
+                        <div class='card-icon'>🗑&#65039;</div>
+                        <h3>Delete User</h3>
+                        <p>Permanently remove a user profile from the database.</p>
+                    </div>
+                    
+                    <div class='portal-module-card card-purple-variant' onclick='openMaintenanceSubPanel("subCustomizeCards")'>
+                        <div class='card-icon'>🎛&#65039;</div>
+                        <h3>Customize User Cards</h3>
+                        <p>Add or remove specific dashboard modules for individual users.</p>
+                    </div>
+                    
+                    <div class='portal-module-card card-blue-variant' onclick='openMaintenanceSubPanel("subUserLogs")' style='grid-column: 1 / -1;'>
+                        <div class='card-icon'>📊</div>
+                        <h3>User Status &amp; Login Logs</h3>
+                        <p>View current account registry status and recent historical login connection attempts.</p>
+                    </div>
+                    
+                    <div class='portal-module-card card-green-variant' id='menuCardUpdateNews' onclick='openMaintenanceSubPanel("subUpdateNews")' style='grid-column: 1 / -1; display:none;'>
+                        <div class='card-icon'>📢</div>
+                        <h3>Broadcast Live News Feed</h3>
+                        <p>Update the scrolling marquee text visible to all users at the top of the portal. (Authorized Access Only)</p>
+                    </div>
+                </div>
+
+                <div class='maintenance-sub-panel' id='subCreateUser'>
+                    <div class='back-nav-link sub-back-nav' onclick='closeMaintenanceSubPanel()'>&#11013;&#65039; Back to Settings Menu</div>
+                    <div class='sub-action-card'>
+                        <h4>Create New User</h4>
+                        <div class='form-group'>
+                            <label>Full Name</label>
+                            <input id='muNewFullName' placeholder='Enter Full Name (e.g. Somnath)' type='text'/>
+                        </div>
+                        <div class='form-group'>
+                            <label>Username</label>
+                            <input id='muNewUser' placeholder='Enter unique login username' type='text'/>
+                        </div>
+                        <div class='form-group'>
+                            <label>Passcode</label>
+                            <input class='secure-mask' id='muNewPass' placeholder='Enter default secure passcode' type='text'/>
+                        </div>
+                        <div class='form-group'>
+                            <label>Access Role</label>
+                            <select id='muNewRole'>
+                                <option value='maker'>Maker (Billing Only)</option>
+                                <option value='admin'>Admin (Full Access)</option>
+                            </select>
+                        </div>
+                        <button class='action-btn panel-sub-submit' onclick='executeCreateUserAction()' type='button'>Register Profile</button>
+                    </div>
+                </div>
+
+                <div class='maintenance-sub-panel' id='subUpdateNews'>
+                    <div class='back-nav-link sub-back-nav' onclick='closeMaintenanceSubPanel()'>&#11013;&#65039; Back to Settings Menu</div>
+                    <div class='sub-action-card'>
+                        <h4>Broadcast Live News</h4>
+                        <div class='form-group'>
+                            <label>Enter the latest announcement to scroll on the main dashboard:</label>
+                            <textarea id='muNewsInput' placeholder='Enter the news feed text...' rows='3'></textarea>
+                        </div>
+                        <button class='action-btn panel-sub-submit' onclick='executeUpdateNewsAction()' style='background:#10b981;' type='button'>Publish Live News</button>
+                    </div>
+                </div>
+
+                <div class='maintenance-sub-panel' id='subLockUnlock'>
+                    <div class='back-nav-link sub-back-nav' onclick='closeMaintenanceSubPanel()'>&#11013;&#65039; Back to Settings Menu</div>
+                    <div class='sub-action-card'>
+                        <h4>Lock / Unlock Existing User</h4>
+                        <div class='form-group'>
+                            <label>Select Target User</label>
+                            <select class='mu-user-dropdown' id='muLockSelect'></select>
+                        </div>
+                        <button class='action-btn panel-sub-submit' onclick='executeToggleUserStatus("lock", "muLockSelect")' type='button'>Toggle Lock Status</button>
+                    </div>
+                </div>
+
+                <div class='maintenance-sub-panel' id='subEnableDisable'>
+                    <div class='back-nav-link sub-back-nav' onclick='closeMaintenanceSubPanel()'>&#11013;&#65039; Back to Settings Menu</div>
+                    <div class='sub-action-card'>
+                        <h4>Enable / Disable Existing User</h4>
+                        <div class='form-group'>
+                            <label>Select Target User</label>
+                            <select class='mu-user-dropdown' id='muEnableSelect'></select>
+                        </div>
+                        <button class='action-btn panel-sub-submit' onclick='executeToggleUserStatus("disable", "muEnableSelect")' type='button'>Toggle Enable/Disable Status</button>
+                    </div>
+                </div>
+
+                <div class='maintenance-sub-panel' id='subResetPass'>
+                    <div class='back-nav-link sub-back-nav' onclick='closeMaintenanceSubPanel()'>&#11013;&#65039; Back to Settings Menu</div>
+                    <div class='sub-action-card'>
+                        <h4>Reset Passcode for Existing User</h4>
+                        <div class='form-group'>
+                            <label>Select Target User</label>
+                            <select class='mu-user-dropdown' id='muResetSelect'></select>
+                        </div>
+                        <div class='form-group'>
+                            <label>New Passcode</label>
+                            <input class='secure-mask' id='muResetPassInput' placeholder='Enter new passcode' type='text'/>
+                        </div>
+                        <button class='action-btn panel-sub-submit' onclick='executeResetPasswordAction()' type='button'>Update Passcode</button>
+                    </div>
+                </div>
+
+                <div class='maintenance-sub-panel' id='subChangeRole'>
+                    <div class='back-nav-link sub-back-nav' onclick='closeMaintenanceSubPanel()'>&#11013;&#65039; Back to Settings Menu</div>
+                    <div class='sub-action-card'>
+                        <h4>Change User Role</h4>
+                        <div class='form-group'>
+                            <label>Select Target User</label>
+                            <select class='mu-user-dropdown' id='muRoleTargetSelect'></select>
+                        </div>
+                        <div class='form-group'>
+                            <label>New Access Role</label>
+                            <select id='muNewRoleSelect'>
+                                <option value='maker'>Maker (Billing Only)</option>
+                                <option value='admin'>Admin (Full Access)</option>
+                            </select>
+                        </div>
+                        <button class='action-btn panel-sub-submit' onclick='executeRoleChangeAction()' type='button'>Update Role</button>
+                    </div>
+                </div>
+
+                <div class='maintenance-sub-panel' id='subDeleteUser'>
+                    <div class='back-nav-link sub-back-nav' onclick='closeMaintenanceSubPanel()'>&#11013;&#65039; Back to Settings Menu</div>
+                    <div class='sub-action-card' style='border-top: 4px solid #ef4444;'>
+                        <h4>Permanently Delete User</h4>
+                        <div class='form-group'>
+                            <label>Select Target User</label>
+                            <select class='mu-user-dropdown' id='muDeleteSelect'></select>
+                        </div>
+                        <button class='action-btn panel-sub-submit' onclick='executeDeleteUserAction()' style='background:#ef4444;' type='button'>Delete Profile</button>
+                    </div>
+                </div>
+
+                <div class='maintenance-sub-panel' id='subCustomizeCards'>
+                    <div class='back-nav-link sub-back-nav' onclick='closeMaintenanceSubPanel()'>&#11013;&#65039; Back to Settings Menu</div>
+                    <div class='sub-action-card'>
+                        <h4>Customize Specific Dashboard Cards</h4>
+                        <div class='form-group'>
+                            <label>Select Target User</label>
+                            <select class='mu-user-dropdown' id='muCustomizeSelect' onchange='loadUserCurrentCards()'></select>
+                        </div>
+                        
+                        <div style='background: #fff; padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: 20px;'>
+                            <label style='margin-bottom: 15px;'>Select Accessible Modules:</label>
+                            
+                            <div style='display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 14px;'>
+                                <label><input class='card-checkbox' type='checkbox' value='menuCardBulk'/> Bulk Bills</label>
+                                <label><input class='card-checkbox' type='checkbox' value='menuCardHoliday'/> Holiday Bills</label>
+                                <label><input class='card-checkbox' type='checkbox' value='menuCardDateWise'/> Date-Wise Bills</label>
+                                <label><input class='card-checkbox' type='checkbox' value='menuCardACG61'/> ACG-61 Charge Report</label>
+                                <label><input class='card-checkbox' type='checkbox' value='menuCardTAAdvance'/> T.A. Advance</label>
+                                <label><input class='card-checkbox' type='checkbox' value='menuCardTATransfer'/> T.A. Transfer</label>
+                                <label><input class='card-checkbox' type='checkbox' value='menuCardAI'/> Talk with AI</label>
+                                <label><input class='card-checkbox' type='checkbox' value='menuCardMaintenance'/> User Maintenance Hub</label>
+                                <label><input class='card-checkbox' type='checkbox' value='menuCardUpdateNews'/> Broadcast News</label>
+                                <label><input class='card-checkbox' type='checkbox' value='menuCardSelfPassword'/> Change Passcode</label>
+                            </div>
+                        </div>
+                        
+                        <button class='action-btn panel-sub-submit' onclick='executeSaveUserCards()' style='background:#8b5cf6;' type='button'>Save Card Configuration</button>
+                    </div>
+                </div>
+
+                <div class='maintenance-sub-panel' id='subUserLogs'>
+                    <div class='back-nav-link sub-back-nav' onclick='closeMaintenanceSubPanel()'>&#11013;&#65039; Back to Settings Menu</div>
+                    
+                    <div class='sub-action-card' style='margin-bottom:20px;'>
+                        <h4>Registered System Account Registry</h4>
+                        <table class='system-log-table'>
+                            <thead>
+                                <tr>
+                                    <th>Full Name</th>
+                                    <th>Username</th>
+                                    <th>Account Role</th>
+                                    <th>Permission</th>
+                                    <th>Security State</th>
+                                </tr>
+                            </thead>
+                            <tbody id='muUserRosterTableBody'></tbody>
+                        </table>
+                    </div>
+
+                    <div class='sub-action-card'>
+                        <h4>Live Portal Connection Access History</h4>
+                        <table class='system-log-table'>
+                            <thead>
+                                <tr>
+                                    <th>Timestamp Ledger Entry</th>
+                                    <th>Connecting User</th>
+                                    <th>Security Event Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id='muLoginHistoryTableBody'></tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+            
+            <div class='preview-title' id='previewTitle'>--- Generated Document Live Preview ---</div>
+            <iframe id='pdfFrameViewer'></iframe>
+        </div>
+    </div>
+
+    <div class='forced-password-overlay' id='forcedPasswordResetOverlay'>
+        <div class='forced-password-card'>
+            <h3 style='color:#d32f2f; margin-top:0; text-align:center;'>🔒 First-Time Action Required</h3>
+            <p style='font-size:13.5px; color:#64748b; line-height:1.6; text-align:center; margin-bottom:25px;'>
+                An administrator has generated or modified your workspace profile parameters. You must change your default assignment credentials to activate system access.
+            </p>
+            <div class='form-group'>
+                <label>New Passcode</label>
+                <input class='secure-mask' id='forcedNewPassInput' placeholder='Choose a secure passcode' type='text'/>
+            </div>
+            <div class='form-group'>
+                <label>Confirm New Passcode</label>
+                <input class='secure-mask' id='forcedConfirmPassInput' placeholder='Confirm secure passcode' type='text'/>
+            </div>
+            <button class='action-btn' onclick='executeForcedPasswordReset()' style='margin-top:15px;' type='button'>Save &amp; Launch Portal</button>
+        </div>
+    </div>
+
+    <div class='custom-popup-overlay' id='customAppAlertModal'>
+        <div class='custom-popup-card'>
+            <div class='popup-icon-alert'>🔔</div>
+            <p class='popup-message-text' id='customAlertMsgField'>Security Validation Notice</p>
+            <button class='popup-close-btn' onclick='closeCustomAlert()'>Continue</button>
+        </div>
+    </div>
+
+    <div class='processing-loader-container' id='globalAppLoader'>
+        <div class='app-loading-spinner'></div>
+        <div class='loading-status-msg'>Loading...</div>
+    </div>
+
+    <script type='text/javascript'>
+        
+        // ----------------------------------------------------
+        // FIREBASE INITIALIZATION & SECURE CLOUD STORAGE
+        // ----------------------------------------------------
+        const firebaseConfig = {
+            apiKey: "AIzaSyArIz9EyuPcbQs0HKvsm0OfxwXKGlbO03c",
+            authDomain: "po-staff-utility.firebaseapp.com",
+            projectId: "po-staff-utility",
+            storageBucket: "po-staff-utility.firebasestorage.app",
+            messagingSenderId: "893250505080",
+            appId: "1:893250505080:web:ae37a3ea6e959b652ca08d"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        const INDIA_POST_LOGO_URL = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXlVwmm2OUFIPv_sRjEtehJrDPqIS-nbUCLNZU8i4LT-O-V14Wp6hpQGw&s=10";
+
+        let isCloudDataLoaded = false; 
+
+        // Start Fresh: Only the core Master Admin profile exists natively
+        let SYSTEM_USER_REGISTRY = [
+            { fullName: "System Master", user: "admin", pass: "123", role: "admin", active: true, locked: false, failedAttempts: 0, isFirstTimeDefault: false }
+        ];
+        let SYSTEM_LOGIN_HISTORY = [];
+        let SYSTEM_NEWS_FEED = "Welcome to the ACG-17 Automated System. Ensuring seamless and secure voucher generation daily.";
+        
+        let authenticatedUserSession = null;
+        let activeAppMode = "home"; 
+        
+        let currentDashboardPage = 1;
+        const cardsPerPage = 6;
+
+        window.onload = async function() {
+            document.getElementById("appDashboardView").style.display="none";
+            document.getElementById('selectMonth').value = "03";
+            document.getElementById('selectYear').value = "2026";
+            
+            document.getElementById('selectMonthHoliday').value = "03";
+            document.getElementById('selectYearHoliday').value = "2026";
+            
+            addNewDateEntryRow();
+            addNewForwardRow(); 
+            
+            await synchronizeSystemDatabase(true);
+        }
+
+        async function synchronizeSystemDatabase(isInitialBoot) {
+            const systemLoader = document.getElementById('globalAppLoader');
+            const loaderMsg = document.querySelector('.loading-status-msg');
+            systemLoader.style.display = 'flex';
+
+            if (isInitialBoot) {
+                loaderMsg.innerText = "Loading...";
+                try {
+                    db.collection("system").doc("announcements").onSnapshot((doc) => {
+                        if (doc.exists) {
+                            SYSTEM_NEWS_FEED = doc.data().tickerText || SYSTEM_NEWS_FEED;
+                            document.getElementById('scrollingNewsText').innerText = SYSTEM_NEWS_FEED;
+                            if(document.getElementById('muNewsInput')) document.getElementById('muNewsInput').value = SYSTEM_NEWS_FEED;
+                        }
+                    });
+
+                    db.collection("system").doc("registry").onSnapshot((registryDoc) => {
+                        if (registryDoc.exists) {
+                            const data = registryDoc.data();
+                            SYSTEM_USER_REGISTRY = data.users || SYSTEM_USER_REGISTRY;
+                            SYSTEM_LOGIN_HISTORY = data.logs || [];
+                            isCloudDataLoaded = true;
+                            refreshMaintenanceControlViews(); 
+                            
+                            // LIVE DASHBOARD REDRAW LOGIC
+                            if (authenticatedUserSession && authenticatedUserSession.user !== "GUEST") {
+                                const updatedProfile = SYSTEM_USER_REGISTRY.find(acc => acc.user === authenticatedUserSession.user);
+                                
+                                if (updatedProfile) {
+                                    authenticatedUserSession = updatedProfile;
+                                    
+                                    if (!updatedProfile.active || updatedProfile.locked) {
+                                        executePortalLogout();
+                                        displayCustomAlert("Session Terminated: Your account access has been revoked or locked by the Administrator.");
+                                        return;
+                                    }
+                                    
+                                    if (activeAppMode === "home") {
+                                        const allMainCards = document.querySelectorAll('#mainModuleGrid .portal-module-card');
+                                        allMainCards.forEach(card => card.style.display = "none");
+                                        
+                                        let liveAllowedList = updatedProfile.allowedCards || [];
+                                        liveAllowedList.forEach(cardId => {
+                                            let cardEl = document.getElementById(cardId);
+                                            if(cardEl) cardEl.style.display = "block";
+                                        });
+                                        
+                                        filterAndPaginateCards(true);
+                                    }
+                                }
+                            }
+                            
+                        } else {
+                            isCloudDataLoaded = true;
+                            forcePushToCloud();
+                        }
+                    }, (error) => {
+                        console.error("Registry Listener Error:", error);
+                        displayCustomAlert("CRITICAL ERROR: Failed to listen to the secure database.");
+                    });
+                } catch(e) {
+                    console.error("Database Connection Error:", e);
+                    displayCustomAlert("CRITICAL ERROR: Failed to connect to the secure database. Please refresh the page.");
+                }
+            } else {
+                if (!isCloudDataLoaded) return;
+                loaderMsg.innerText = "Loading...";
+                
+                if (SYSTEM_LOGIN_HISTORY.length > 40) {
+                    SYSTEM_LOGIN_HISTORY = SYSTEM_LOGIN_HISTORY.slice(SYSTEM_LOGIN_HISTORY.length - 40);
+                }
+                await forcePushToCloud();
+            }
+            
+            setTimeout(() => { systemLoader.style.display = 'none'; }, 300);
+        }
+
+        async function forcePushToCloud() {
+            try {
+                await db.collection("system").doc("registry").set({
+                    users: SYSTEM_USER_REGISTRY,
+                    logs: SYSTEM_LOGIN_HISTORY
+                });
+            } catch(e) {
+                console.error("Database Sync Error:", e);
+                displayCustomAlert("Network Error: Could not push update to the database.");
+            }
+        }
+
+        function fillDemoCredentials() {
+            document.getElementById('sysUser').value = "GUEST";
+            document.getElementById('sysPass').value = "123";
+        }
+        
+        function filterAndPaginateCards(resetPage = false) {
+            if (resetPage) currentDashboardPage = 1;
+            
+            const searchInput = document.getElementById('moduleSearch');
+            const query = searchInput ? searchInput.value.toLowerCase() : "";
+            
+            const allCards = Array.from(document.querySelectorAll('#mainModuleGrid .portal-module-card'));
+            let visibleCards = [];
+            
+            allCards.forEach(card => {
+                card.classList.remove('search-hidden', 'page-hidden');
+                
+                if (card.style.display === 'none') {
+                    return;
+                }
+                
+                if (query && !card.innerText.toLowerCase().includes(query)) {
+                    card.classList.add('search-hidden');
+                } else {
+                    visibleCards.push(card);
+                }
+            });
+            
+            const totalPages = Math.ceil(visibleCards.length / cardsPerPage) || 1;
+            if (currentDashboardPage > totalPages) currentDashboardPage = totalPages;
+            
+            const startIndex = (currentDashboardPage - 1) * cardsPerPage;
+            const endIndex = startIndex + cardsPerPage;
+            
+            visibleCards.forEach((card, index) => {
+                if (index < startIndex || index >= endIndex) {
+                    card.classList.add('page-hidden');
+                }
+            });
+            
+            renderPaginationControls(totalPages);
+        }
+        
+        function renderPaginationControls(totalPages) {
+            const container = document.getElementById('dashboardPagination');
+            if (!container) return;
+            container.innerHTML = "";
+            
+            if (totalPages <= 1) {
+                container.style.display = 'none';
+                return; 
+            } else {
+                container.style.display = 'flex';
+            }
+            
+            const prevBtn = document.createElement('button');
+            prevBtn.innerHTML = "&laquo;";
+            prevBtn.className = "page-nav-btn";
+            prevBtn.disabled = currentDashboardPage === 1;
+            prevBtn.onclick = () => { currentDashboardPage--; filterAndPaginateCards(); };
+            container.appendChild(prevBtn);
+            
+            for (let i = 1; i <= totalPages; i++) {
+                const pageBtn = document.createElement('button');
+                pageBtn.innerText = i;
+                pageBtn.className = "page-nav-btn " + (i === currentDashboardPage ? "active-page" : "");
+                pageBtn.onclick = () => { currentDashboardPage = i; filterAndPaginateCards(); };
+                container.appendChild(pageBtn);
+            }
+            
+            const nextBtn = document.createElement('button');
+            nextBtn.innerHTML = "&raquo;";
+            nextBtn.className = "page-nav-btn";
+            nextBtn.disabled = currentDashboardPage === totalPages;
+            nextBtn.onclick = () => { currentDashboardPage++; filterAndPaginateCards(); };
+            container.appendChild(nextBtn);
+        }
+
+        function navigateToPanel(panelMode, clickedElement = null) {
+            activeAppMode = panelMode;
+            
+            if (clickedElement) {
+                const parentGrid = clickedElement.closest('.portal-grid-wrapper');
+                if (parentGrid) {
+                    const siblingCards = parentGrid.querySelectorAll('.portal-module-card');
+                    siblingCards.forEach(card => {
+                        if (card !== clickedElement) card.classList.add('fade-out');
+                        else card.classList.add('expand-active');
+                    });
+                    setTimeout(() => {
+                        executePanelSwitch(panelMode);
+                        siblingCards.forEach(card => card.classList.remove('fade-out', 'expand-active'));
+                    }, 400); 
+                    return;
+                }
+            } 
+            executePanelSwitch(panelMode);
+        }
+
+        function executePanelSwitch(panelMode) {
+            document.getElementById('portalHomeHead').style.display = "none";
+            hideAllPanelsAndPreviews();
+
+            if(panelMode === "bulk") {
+                document.getElementById('panelBulkMode').style.display = "block";
+            } else if(panelMode === "holiday") {
+                document.getElementById('panelHolidayMode').style.display = "block";
+            } else if(panelMode === "datewise") {
+                document.getElementById('panelDateWiseMode').style.display = "block";
+            } else if(panelMode === "acg61") {
+                document.getElementById('panelACG61Mode').style.display = "block";
+            } else if(panelMode === "taAdvance") {
+                document.getElementById('panelTAAdvanceMode').style.display = "block";
+            } else if(panelMode === "taTransfer") {
+                document.getElementById('panelTATransferMode').style.display = "block";
+            } else if(panelMode === "aichat") {
+                document.getElementById('panelAIChatMode').style.display = "block";
+            } else if(panelMode === "selfpassword") {
+                document.getElementById('panelSelfPasswordMode').style.display = "block";
+                document.getElementById('selfNewPassInput').value = "";
+                document.getElementById('selfConfirmPassInput').value = "";
+            } else if(panelMode === "maintenance") {
+                document.getElementById('panelMaintenanceMode').style.display = "block";
+                closeMaintenanceSubPanel(); 
+            }
+        }
+
+        function returnToHomeGrid() {
+            activeAppMode = "home";
+            hideAllPanelsAndPreviews();
+            
+            document.getElementById('moduleSearch').value = "";
+            filterAndPaginateCards(true);
+            
+            const homeHead = document.getElementById('portalHomeHead');
+            homeHead.style.animation = 'none';
+            homeHead.offsetHeight; 
+            homeHead.style.animation = null; 
+            homeHead.style.display = "block";
+        }
+
+        function hideAllPanelsAndPreviews() {
+            document.getElementById('panelBulkMode').style.display = "none";
+            document.getElementById('panelHolidayMode').style.display = "none";
+            document.getElementById('panelDateWiseMode').style.display = "none";
+            document.getElementById('panelACG61Mode').style.display = "none";
+            document.getElementById('panelTAAdvanceMode').style.display = "none";
+            document.getElementById('panelTATransferMode').style.display = "none";
+            document.getElementById('panelAIChatMode').style.display = "none";
+            document.getElementById('panelSelfPasswordMode').style.display = "none";
+            document.getElementById('panelMaintenanceMode').style.display = "none";
+            document.getElementById('previewTitle').style.display = "none";
+            document.getElementById('pdfFrameViewer').style.display = "none";
+        }
+
+        function handleChatEnter(e) {
+            if(e.key === 'Enter') { sendChatMessage(); }
+        }
+
+        function sendChatMessage() {
+            const inputField = document.getElementById('aiChatInput');
+            const text = inputField.value.trim();
+            if(!text) return;
+
+            appendMessage(text, 'user-message');
+            inputField.value = '';
+
+            const typingId = 'typing-' + Date.now();
+            appendMessage("Typing...", 'ai-message', typingId);
+            
+            setTimeout(() => {
+                const typingElement = document.getElementById(typingId);
+                if(typingElement) typingElement.remove();
+                
+                const response = getAIResponse(text.toLowerCase());
+                appendMessage(response, 'ai-message');
+            }, 800 + Math.random() * 1000);
+        }
+
+        function appendMessage(text, className, id = null) {
+            const container = document.getElementById('chatHistory');
+            const msgDiv = document.createElement('div');
+            msgDiv.className = 'chat-message ' + className;
+            if(id) msgDiv.id = id;
+            msgDiv.innerText = text; 
+            container.appendChild(msgDiv);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function getAIResponse(query) {
+            if(query.includes("leave") && (query.includes("letter") || query.includes("application") || query.includes("draft"))) {
+                return "Here is a standard leave application draft you can use:\n\nTo\nThe Postmaster,\n[Office Name]\n\nSubject: Application for Casual Leave\n\nRespected Sir/Madam,\nWith due respect, I would like to state that I need to take casual leave for [Number] days from [Start Date] to [End Date] due to [Reason, e.g., urgent personal work / medical reasons].\n\nI kindly request you to grant me leave for the mentioned dates. I have handed over my charge/keys to [Relieving Officer Name].\n\nYours faithfully,\n[Your Name]\n[Your Designation]";
+            } else if (query.includes("acg-61") || query.includes("acg 61") || query.includes("charge report")) {
+                return "ACG-61 is the standard 'Charge Report and Receipt of Cash and Stamps on transfer of charge'. It is used whenever a Postmaster or responsible officer hands over their balances (cash, stamps, imprest) to a relieving officer. Remember, our utility system has a dedicated generator for this on the dashboard!";
+            } else if (query.includes("acg-17") || query.includes("acg 17") || query.includes("voucher") || query.includes("bill")) {
+                return "ACG-17 is a general voucher used in the Department of Posts for miscellaneous receipts and payments. It acts as an official record of money received from or paid to an individual. You can use the Bulk, Holiday, or Date-wise generator on the main dashboard to compile these quickly.";
+            } else if (query.includes("hi") || query.includes("hello") || query.includes("hey")) {
+                return "Hello there! I am your built-in PO Staff AI. You can ask me to 'draft a leave letter', or ask about standard forms like ACG-17 and ACG-61.";
+            } else {
+                return "I am currently running as a localized, offline AI prototype to ensure your system's data remains 100% secure. To process complex, open-ended queries, my system requires integration with a live cloud API (like Google Gemini). \n\nFor now, I can help you draft a leave letter or explain ACG forms!";
+            }
+        }
+
+        async function executeSelfPasswordChange() {
+            const p1 = document.getElementById('selfNewPassInput').value.trim();
+            const p2 = document.getElementById('selfConfirmPassInput').value.trim();
+
+            if(!p1 || !p2) {
+                displayCustomAlert("Operational Error: Passcode input matching spaces cannot be left blank.");
+                return;
+            }
+            if(p1 !== p2) {
+                displayCustomAlert("Validation Failure: The matching passcode inputs specified do not match.");
+                return;
+            }
+
+            const profileIndex = SYSTEM_USER_REGISTRY.findIndex(acc => acc.user === authenticatedUserSession.user);
+            if(profileIndex === -1) {
+                displayCustomAlert("Context Error: Active tracking workspace profile record not found.");
+                return;
+            }
+
+            SYSTEM_USER_REGISTRY[profileIndex].pass = p1;
+            SYSTEM_USER_REGISTRY[profileIndex].isFirstTimeDefault = false; 
+            authenticatedUserSession.pass = p1;
+
+            let timeStamp = new Date().toISOString().replace('T',' ').substring(0, 19);
+            SYSTEM_LOGIN_HISTORY.push({ time: timeStamp, user: authenticatedUserSession.user, event: "Self Passcode Modified" });
+
+            await synchronizeSystemDatabase(false);
+
+            document.getElementById('selfNewPassInput').value = "";
+            document.getElementById('selfConfirmPassInput').value = "";
+
+            displayCustomAlert("Success: Your profile passcode record has been completely updated inside the centralized configuration database wrapper.");
+            returnToHomeGrid();
+        }
+
+        async function executeForcedPasswordReset() {
+            const fp1 = document.getElementById('forcedNewPassInput').value.trim();
+            const fp2 = document.getElementById('forcedConfirmPassInput').value.trim();
+
+            if(!fp1 || !fp2) {
+                displayCustomAlert("Operational Error: Inputs cannot contain spaces or be left completely blank.");
+                return;
+            }
+            if(fp1 === "123" || fp1.toLowerCase() === "post799120") {
+                displayCustomAlert("Security Warning: You cannot reuse a default global initialization passcode string.");
+                return;
+            }
+            if(fp1 !== fp2) {
+                displayCustomAlert("Validation Failure: The matching confirmation strings typed do not align.");
+                return;
+            }
+
+            const profileIndex = SYSTEM_USER_REGISTRY.findIndex(acc => acc.user === authenticatedUserSession.user);
+            if(profileIndex === -1) return;
+
+            SYSTEM_USER_REGISTRY[profileIndex].pass = fp1;
+            SYSTEM_USER_REGISTRY[profileIndex].isFirstTimeDefault = false;
+            authenticatedUserSession.pass = fp1;
+
+            let timeStamp = new Date().toISOString().replace('T',' ').substring(0, 19);
+            SYSTEM_LOGIN_HISTORY.push({ time: timeStamp, user: authenticatedUserSession.user, event: "First Login Passcode Activated" });
+
+            document.getElementById('forcedPasswordResetOverlay').style.display = "none";
+            document.getElementById('forcedNewPassInput').value = "";
+            document.getElementById('forcedConfirmPassInput').value = "";
+
+            await synchronizeSystemDatabase(false);
+            displayCustomAlert("Profile Secure: Initialization parameters applied. Welcome to your main system workspace dashboard!");
+        }
+
+        function openMaintenanceSubPanel(panelId) {
+            document.getElementById('maintenanceMainGrid').style.display = "none";
+            let subPanels = document.querySelectorAll('.maintenance-sub-panel');
+            subPanels.forEach(p => p.style.display = 'none');
+            document.getElementById(panelId).style.display = "block";
+        }
+
+        function closeMaintenanceSubPanel() {
+            let subPanels = document.querySelectorAll('.maintenance-sub-panel');
+            subPanels.forEach(p => p.style.display = 'none');
+            document.getElementById('maintenanceMainGrid').style.display = "grid";
+        }
+
+        function executePortalLogout() {
+            document.getElementById("sysUser").value = "";
+            document.getElementById("sysPass").value = "";
+            
+            document.getElementById("receivedFromBulk").value = "";
+            document.getElementById("amount").value = "";
+            document.getElementById("monthlyVoucherPurpose").value = "";
+            document.getElementById("exceptionsInput").value = "";
+            
+            document.getElementById("receivedFromHoliday").value = "";
+            document.getElementById("amountHoliday").value = "";
+            document.getElementById("holidayVoucherPurpose").value = "";
+            document.getElementById("holidaysInput").value = "";
+            
+            document.getElementById("receivedFromDatewise").value = "";
+            document.getElementById("acgOfficeName").value = "";
+            document.getElementById("acgRelievedOfficer").value = "";
+            document.getElementById("acgRelievingOfficer").value = "";
+            document.getElementById("acgTransferDate").value = "";
+            document.getElementById("acgMemoNo").value = "";
+            document.getElementById("acgMemoDate").value = "";
+            document.getElementById("acgFromAuthority").value = "";
+            document.getElementById("acgCashRs").value = "";
+            document.getElementById("acgStampRs").value = "";
+            document.getElementById("acgImprestCashRs").value = "";
+
+            document.getElementById('taName').value = "";
+            document.getElementById('taDesignation').value = "";
+            document.getElementById('taOffice').value = "";
+            document.getElementById('taPay').value = "";
+            document.getElementById('taPlaces').value = "";
+            document.getElementById('taPurpose').value = "";
+            document.getElementById('taDuration').value = "";
+            document.getElementById('taFare').value = "";
+            document.getElementById('taDaJourney').value = "";
+            document.getElementById('taDaHalts').value = "";
+            document.getElementById('taDaTotal').value = "";
+            document.getElementById('taTotalTADA').value = "";
+            document.getElementById('taAdvanceReq').value = "";
+            document.getElementById('taOutstanding').value = "";
+            document.getElementById('taStation').value = "";
+            document.getElementById('taDate').value = "";
+
+            document.getElementById('tatName').value = "";
+            document.getElementById('tatDesignation').value = "";
+            document.getElementById('tatOffice').value = "";
+            document.getElementById('tatPay').value = "";
+            document.getElementById('tatStationTransferred').value = "";
+            document.getElementById('tatOrderNo').value = "";
+            document.getElementById('tatAdvanceReq').value = "";
+            document.getElementById('tatStation').value = "";
+            document.getElementById('tatDate').value = "";
+            document.getElementById('tatFamName1').value = "";
+            document.getElementById('tatFamAge1').value = "";
+            document.getElementById('tatFamRel1').value = "";
+            document.getElementById('tatFamName2').value = "";
+            document.getElementById('tatFamAge2').value = "";
+            document.getElementById('tatFamRel2').value = "";
+            document.getElementById('tatFamName3').value = "";
+            document.getElementById('tatFamAge3').value = "";
+            document.getElementById('tatFamRel3').value = "";
+            document.getElementById('tatFamName4').value = "";
+            document.getElementById('tatFamAge4').value = "";
+            document.getElementById('tatFamRel4').value = "";
+
+            const chatContainer = document.getElementById('chatHistory');
+            chatContainer.innerHTML = "<div class='chat-message ai-message'>Hello! I am your PO Assistant AI. How can I help you today with rules, regulations, or drafting letters?</div>";
+            document.getElementById('aiChatInput').value = "";
+            
+            document.getElementById("dynamicDateRowsContainer").innerHTML = "";
+            document.getElementById("acgForwardContainer").innerHTML = "";
+            addNewDateEntryRow();
+            addNewForwardRow();
+            
+            authenticatedUserSession = null;
+            returnToHomeGrid();
+            
+            document.getElementById("forcedPasswordResetOverlay").style.display = "none";
+            document.getElementById("appDashboardView").style.display = "none";
+            document.getElementById("sceneryBackground").style.display = "block";
+            document.getElementById("loginScreen").style.display = "flex";
+        }
+
+        async function executeCreateUserAction() {
+            const fullNameInput = document.getElementById('muNewFullName').value.trim();
+            const usernameInput = document.getElementById('muNewUser').value.trim();
+            const passwordInput = document.getElementById('muNewPass').value.trim();
+            const selectedRole = document.getElementById('muNewRole').value;
+
+            if(!fullNameInput || !usernameInput || !passwordInput) {
+                displayCustomAlert("Operational Error: Full Name, Username, and Passcode must be specified.");
+                return;
+            }
+
+            const checkDuplicate = SYSTEM_USER_REGISTRY.some(acc => acc.user.toLowerCase() === usernameInput.toLowerCase());
+            if(checkDuplicate) {
+                displayCustomAlert("Roster Exception: A data entry record matching this username profile already exists.");
+                return;
+            }
+
+            let defaultCards = [];
+            if(selectedRole === 'admin') {
+                defaultCards = [
+                    'menuCardBulk', 'menuCardHoliday', 'menuCardDateWise', 
+                    'menuCardACG61', 'menuCardTAAdvance', 'menuCardTATransfer', 
+                    'menuCardAI', 'menuCardMaintenance', 'menuCardSelfPassword', 'menuCardUpdateNews'
+                ];
+            } else {
+                defaultCards = [
+                    'menuCardBulk', 'menuCardHoliday', 'menuCardDateWise', 
+                    'menuCardACG61', 'menuCardTAAdvance', 'menuCardTATransfer', 
+                    'menuCardAI', 'menuCardSelfPassword'
+                ];
+            }
+
+            SYSTEM_USER_REGISTRY.push({
+                fullName: fullNameInput,
+                user: usernameInput,
+                pass: passwordInput,
+                role: selectedRole,
+                active: true,
+                locked: false,
+                failedAttempts: 0,
+                isFirstTimeDefault: true,
+                allowedCards: defaultCards
+            });
+
+            document.getElementById('muNewFullName').value = "";
+            document.getElementById('muNewUser').value = "";
+            document.getElementById('muNewPass').value = "";
+            
+            await synchronizeSystemDatabase(false);
+            
+            let successMsg = `Account Created Successfully!\n\nFull Name: ${fullNameInput}\nUsername: ${usernameInput}\nDefault Passcode: ${passwordInput}\n\nNote: System will demand a change at first connection.`;
+            displayCustomAlert(successMsg);
+        }
+
+        async function executeUpdateNewsAction() {
+            const newText = document.getElementById('muNewsInput').value.trim();
+            if(!newText) {
+                displayCustomAlert("Operational Error: The news announcement cannot be empty.");
+                return;
+            }
+            
+            try {
+                await db.collection("system").doc("announcements").set({ tickerText: newText }, { merge: true });
+                displayCustomAlert("Success: The Live News Feed has been updated everywhere instantly!");
+                document.getElementById('muNewsInput').value = newText;
+            } catch (error) {
+                console.error("Error updating news: ", error);
+                displayCustomAlert("Failed to update news. Check your database permissions.");
+            }
+        }
+
+        async function executeRoleChangeAction() {
+            const selectElement = document.getElementById('muRoleTargetSelect');
+            const selectedUser = selectElement.value;
+            const newRole = document.getElementById('muNewRoleSelect').value;
+
+            if(!selectedUser) return;
+            if(selectedUser === "admin") {
+                displayCustomAlert("Restriction Notice: Security context flags and roles cannot be altered on the master administrator accounts.");
+                return;
+            }
+
+            const profileIndex = SYSTEM_USER_REGISTRY.findIndex(acc => acc.user === selectedUser);
+            if(profileIndex === -1) return;
+
+            SYSTEM_USER_REGISTRY[profileIndex].role = newRole;
+            
+            if(newRole === 'admin') {
+                SYSTEM_USER_REGISTRY[profileIndex].allowedCards = [
+                    'menuCardBulk', 'menuCardHoliday', 'menuCardDateWise', 
+                    'menuCardACG61', 'menuCardTAAdvance', 'menuCardTATransfer', 
+                    'menuCardAI', 'menuCardMaintenance', 'menuCardSelfPassword', 'menuCardUpdateNews'
+                ];
+            } else {
+                SYSTEM_USER_REGISTRY[profileIndex].allowedCards = [
+                    'menuCardBulk', 'menuCardHoliday', 'menuCardDateWise', 
+                    'menuCardACG61', 'menuCardTAAdvance', 'menuCardTATransfer', 
+                    'menuCardAI', 'menuCardSelfPassword'
+                ];
+            }
+
+            await synchronizeSystemDatabase(false);
+            displayCustomAlert(`Success: The account role for '${selectedUser}' has been updated to '${newRole}' and their dashboard cards have been reset to match.`);
+        }
+
+        async function executeToggleUserStatus(toggleType, selectId) {
+            const selectElement = document.getElementById(selectId);
+            const selectedUser = selectElement.value;
+
+            if(!selectedUser) return;
+            if(selectedUser === "admin") {
+                displayCustomAlert("Restriction Notice: Security context flags cannot be set on the master administrator accounts.");
+                return;
+            }
+
+            const profileIndex = SYSTEM_USER_REGISTRY.findIndex(acc => acc.user === selectedUser);
+            if(profileIndex === -1) return;
+
+            if(toggleType === "lock") {
+                SYSTEM_USER_REGISTRY[profileIndex].locked = !SYSTEM_USER_REGISTRY[profileIndex].locked;
+                if (!SYSTEM_USER_REGISTRY[profileIndex].locked) {
+                    SYSTEM_USER_REGISTRY[profileIndex].failedAttempts = 0;
+                }
+                await synchronizeSystemDatabase(false);
+                displayCustomAlert(`Success: Lock status updated for user '${selectedUser}'.`);
+            } else {
+                SYSTEM_USER_REGISTRY[profileIndex].active = !SYSTEM_USER_REGISTRY[profileIndex].active;
+                await synchronizeSystemDatabase(false);
+                displayCustomAlert(`Success: Enable/Disable status updated for user '${selectedUser}'.`);
+            }
+        }
+
+        async function executeResetPasswordAction() {
+            const selectElement = document.getElementById('muResetSelect');
+            const selectedUser = selectElement.value;
+            const newPass = document.getElementById('muResetPassInput').value.trim();
+
+            if(!selectedUser || !newPass) {
+                displayCustomAlert("Operational Error: Please select a user and provide a new passcode.");
+                return;
+            }
+            if(selectedUser === "admin") {
+                displayCustomAlert("Restriction Notice: You cannot reset the passcode for the master admins from this panel.");
+                return;
+            }
+
+            const profileIndex = SYSTEM_USER_REGISTRY.findIndex(acc => acc.user === selectedUser);
+            if(profileIndex === -1) return;
+
+            SYSTEM_USER_REGISTRY[profileIndex].pass = newPass;
+            SYSTEM_USER_REGISTRY[profileIndex].isFirstTimeDefault = true; 
+            document.getElementById('muResetPassInput').value = "";
+            await synchronizeSystemDatabase(false);
+            displayCustomAlert(`Success: Passcode successfully reset for user '${selectedUser}'.\nNew Passcode: ${newPass}\n\nNote: This user must change this temporary string at their next login event.`);
+        }
+
+        async function executeDeleteUserAction() {
+            const selectElement = document.getElementById('muDeleteSelect');
+            const selectedUser = selectElement.value;
+
+            if(!selectedUser) return;
+            if(selectedUser === "admin") {
+                displayCustomAlert("Restriction Notice: Cannot delete the master administrator accounts.");
+                return;
+            }
+
+            const profileIndex = SYSTEM_USER_REGISTRY.findIndex(acc => acc.user === selectedUser);
+            if(profileIndex === -1) return;
+
+            SYSTEM_USER_REGISTRY.splice(profileIndex, 1);
+            await synchronizeSystemDatabase(false);
+            displayCustomAlert(`Success: User profile '${selectedUser}' has been permanently deleted.`);
+        }
+
+        function refreshMaintenanceControlViews() {
+            const dropdownIds = ['muLockSelect', 'muEnableSelect', 'muResetSelect', 'muRoleTargetSelect', 'muDeleteSelect', 'muCustomizeSelect'];
+            
+            dropdownIds.forEach(id => {
+                let el = document.getElementById(id);
+                if(el) el.innerHTML = "";
+            });
+            
+            const rosterBody = document.getElementById('muUserRosterTableBody');
+            if(rosterBody) rosterBody.innerHTML = "";
+
+            SYSTEM_USER_REGISTRY.forEach(account => {
+                let dName = account.fullName || account.user;
+
+                if (account.user !== 'admin') {
+                    dropdownIds.forEach(id => {
+                        let el = document.getElementById(id);
+                        if(el) {
+                            let opt = document.createElement('option');
+                            opt.value = account.user;
+                            opt.innerText = `${dName} (${account.user}) [${account.role.toUpperCase()}]`;
+                            el.appendChild(opt);
+                        }
+                    });
+                }
+
+                if(rosterBody) {
+                    let row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${dName}</td>
+                        <td><strong>${account.user}</strong></td>
+                        <td><span style="text-transform:uppercase;">${account.role}</span></td>
+                        <td><span class="status-badge ${account.active ? 'badge-active' : 'badge-disabled'}">${account.active ? 'ENABLED' : 'DISABLED'}</span></td>
+                        <td><span class="status-badge ${account.locked ? 'badge-locked' : 'badge-active'}">${account.locked ? 'LOCKED' : 'UNLOCKED'}</span></td>
+                    `;
+                    rosterBody.appendChild(row);
+                }
+            });
+
+            const historyBody = document.getElementById('muLoginHistoryTableBody');
+            if(historyBody) {
+                historyBody.innerHTML = "";
+                let operationalStack = [...SYSTEM_LOGIN_HISTORY].reverse().slice(0, 6);
+                operationalStack.forEach(log => {
+                    let r = document.createElement('tr');
+                    r.innerHTML = `
+                        <td>${log.time}</td>
+                        <td><code>${log.user}</code></td>
+                        <td><span style="color:${log.event.includes('Success') || log.event.includes('Modified') || log.event.includes('Activated') ? '#10b981':'#ef4444'}; font-weight:bold;">${log.event}</span></td>
+                    `;
+                    historyBody.appendChild(r);
+                });
+            }
+        }
+        
+        function loadUserCurrentCards() {
+            const selectedUser = document.getElementById('muCustomizeSelect').value;
+            if(!selectedUser) return;
+            
+            const profile = SYSTEM_USER_REGISTRY.find(acc => acc.user === selectedUser);
+            if(!profile) return;
+            
+            let currentCards = profile.allowedCards;
+            if (!currentCards) {
+                currentCards = profile.role === 'admin' 
+                    ? ['menuCardBulk', 'menuCardHoliday', 'menuCardDateWise', 'menuCardACG61', 'menuCardTAAdvance', 'menuCardTATransfer', 'menuCardAI', 'menuCardMaintenance', 'menuCardSelfPassword', 'menuCardUpdateNews']
+                    : ['menuCardBulk', 'menuCardHoliday', 'menuCardDateWise', 'menuCardACG61', 'menuCardTAAdvance', 'menuCardTATransfer', 'menuCardAI', 'menuCardSelfPassword'];
+            }
+            
+            const checkboxes = document.querySelectorAll('.card-checkbox');
+            checkboxes.forEach(box => {
+                box.checked = currentCards.includes(box.value);
+            });
+        }
+
+        async function executeSaveUserCards() {
+            const selectedUser = document.getElementById('muCustomizeSelect').value;
+            if(!selectedUser) return;
+            
+            if(selectedUser === "admin") {
+                displayCustomAlert("Restriction Notice: Master Administrator cards cannot be altered.");
+                return;
+            }
+
+            const profileIndex = SYSTEM_USER_REGISTRY.findIndex(acc => acc.user === selectedUser);
+            if(profileIndex === -1) return;
+
+            let newAllowedCards = [];
+            const checkboxes = document.querySelectorAll('.card-checkbox');
+            checkboxes.forEach(box => {
+                if (box.checked) {
+                    newAllowedCards.push(box.value);
+                }
+            });
+
+            if (newAllowedCards.length === 0) {
+                 displayCustomAlert("Operational Error: A user must have at least one card assigned to their dashboard.");
+                 return;
+            }
+
+            SYSTEM_USER_REGISTRY[profileIndex].allowedCards = newAllowedCards;
+            await synchronizeSystemDatabase(false);
+            
+            displayCustomAlert(`Success: Dashboard card configuration has been successfully updated for user '${selectedUser}'.`);
+        }
+
+        function addNewDateEntryRow() {
+            const container = document.getElementById('dynamicDateRowsContainer');
+            const newRow = document.createElement('div');
+            newRow.className = 'dynamic-date-row';
+            
+            newRow.innerHTML = `
+                <div style="flex: 1.2;">
+                    <label>Select Date:</label>
+                    <input type="date" class="row-target-date" />
+                </div>
+                <div style="flex: 1;">
+                    <label>Amount (Rs.):</label>
+                    <input type="number" class="row-target-amount text-input-placeholder-gray" placeholder="e.g. 366" />
+                </div>
+                <div style="flex: 2.5;">
+                    <label>Purpose Description:</label>
+                    <input type="text" class="row-target-purpose text-input-placeholder-gray" placeholder="Enter custom voucher reason detail here..." />
+                </div>
+                <div>
+                    <button type="button" class="delete-row-btn" onclick="this.parentElement.parentElement.remove()">❌</button>
+                </div>
+            `;
+            container.appendChild(newRow);
+        }
+
+        function addNewForwardRow() {
+            const container = document.getElementById('acgForwardContainer');
+            const newRow = document.createElement('div');
+            newRow.className = 'dynamic-date-row';
+            newRow.style.alignItems = 'center';
+            
+            newRow.innerHTML = `
+                <div style='flex: 1;'>
+                    <input type='text' class='row-forward-target text-input-placeholder-gray' placeholder='e.g. The Superintendent of Post Offices, South Tripura Division' />
+                </div>
+                <div>
+                    <button type='button' class='delete-row-btn' onclick='this.parentElement.parentElement.remove()'>❌</button>
+                </div>
+            `;
+            container.appendChild(newRow);
+        }
+
+        function displayCustomAlert(messageContent) {
+            document.getElementById('customAlertMsgField').innerText = messageContent;
+            const targetPopup = document.getElementById('customAppAlertModal');
+            targetPopup.style.display = "flex";
+            setTimeout(() => { targetPopup.classList.add('active'); }, 10);
+        }
+
+        function closeCustomAlert() {
+            const targetPopup = document.getElementById('customAppAlertModal');
+            targetPopup.classList.remove('active');
+            setTimeout(() => { targetPopup.style.display = "none"; }, 200);
+        }
+
+        async function verifyBloggerAuth(){
+            if(!isCloudDataLoaded) {
+                displayCustomAlert("System Security Lock: Cannot authenticate because the user database failed to load. Please refresh the page to reconnect.");
+                return;
+            }
+        
+            const u = document.getElementById("sysUser").value.trim();
+            const p = document.getElementById("sysPass").value.trim();
+
+            const profileIndex = SYSTEM_USER_REGISTRY.findIndex(account => account.user === u);
+            const profile = profileIndex !== -1 ? SYSTEM_USER_REGISTRY[profileIndex] : null;
+            let timeStamp = new Date().toISOString().replace('T',' ').substring(0, 19);
+
+            if(!profile) {
+                SYSTEM_LOGIN_HISTORY.push({ time: timeStamp, user: u || "Unknown", event: "Failure: Invalid Username" });
+                await synchronizeSystemDatabase(false);
+                displayCustomAlert("Security Violation: Invalid Account Username or Passcode!");
+                return;
+            }
+
+            if(!profile.active) {
+                SYSTEM_LOGIN_HISTORY.push({ time: timeStamp, user: u, event: "Failure: Account Disabled" });
+                await synchronizeSystemDatabase(false);
+                displayCustomAlert("Security Status Error: This user account has been disabled by the system administrator.");
+                return;
+            }
+
+            if(profile.locked) {
+                SYSTEM_LOGIN_HISTORY.push({ time: timeStamp, user: u, event: "Failure: Account Locked" });
+                await synchronizeSystemDatabase(false);
+                displayCustomAlert("Security Access Error: This account profile is locked down due to administrative execution or multiple failed login attempts.");
+                return;
+            }
+
+            if(profile.pass !== p) {
+                SYSTEM_LOGIN_HISTORY.push({ time: timeStamp, user: u, event: "Failure: Invalid Passcode" });
+                
+                if (u !== "admin") {
+                    profile.failedAttempts = (profile.failedAttempts || 0) + 1;
+                    let attemptsLeft = 3 - profile.failedAttempts;
+                    
+                    if (profile.failedAttempts >= 3) {
+                        profile.locked = true;
+                        profile.failedAttempts = 0; 
+                        await synchronizeSystemDatabase(false);
+                        displayCustomAlert("Security Alert: Your account has been automatically locked due to 3 consecutive failed login attempts. Please contact the System Administrator to unlock your profile.");
+                    } else {
+                        await synchronizeSystemDatabase(false);
+                        displayCustomAlert(`Security Warning: Invalid Passcode!\n\nYou have ${attemptsLeft} attempt(s) remaining before your account is automatically locked.`);
+                    }
+                } else {
+                    await synchronizeSystemDatabase(false);
+                    displayCustomAlert("Security Violation: Invalid Account Username or Passcode!");
+                }
+                return;
+            }
+
+            profile.failedAttempts = 0; 
+            authenticatedUserSession = profile;
+            SYSTEM_LOGIN_HISTORY.push({ time: timeStamp, user: u, event: "Authentication Success" });
+            await synchronizeSystemDatabase(false);
+            
+            const allCards = document.querySelectorAll('.portal-module-card');
+            
+            allCards.forEach(card => card.style.display = "none");
+            
+            if(u === "GUEST") {
+                const guestCards = ['menuCardBulk', 'menuCardHoliday', 'menuCardDateWise', 'menuCardACG61', 'menuCardTAAdvance', 'menuCardTATransfer', 'menuCardAI'];
+                guestCards.forEach(id => {
+                    let c = document.getElementById(id);
+                    if(c) c.style.display = "block";
+                });
+            } else {
+                let userAllowedList = profile.allowedCards;
+                
+                if (!userAllowedList) {
+                    if (profile.role === "admin") {
+                        userAllowedList = ['menuCardBulk', 'menuCardHoliday', 'menuCardDateWise', 'menuCardACG61', 'menuCardTAAdvance', 'menuCardTATransfer', 'menuCardAI', 'menuCardMaintenance', 'menuCardSelfPassword', 'menuCardUpdateNews'];
+                    } else {
+                        userAllowedList = ['menuCardBulk', 'menuCardHoliday', 'menuCardDateWise', 'menuCardACG61', 'menuCardTAAdvance', 'menuCardTATransfer', 'menuCardAI', 'menuCardSelfPassword'];
+                    }
+                }
+
+                userAllowedList.forEach(cardId => {
+                    let cardEl = document.getElementById(cardId);
+                    if(cardEl) cardEl.style.display = "block";
+                });
+            }
+            
+            filterAndPaginateCards(true);
+            
+            let displayName = profile.fullName || profile.user;
+            document.getElementById('portalWelcomeMessage').innerText = `Welcome, ${displayName}!`;
+
+            document.getElementById("loginScreen").style.display = "none";
+            document.getElementById("sceneryBackground").style.display = "none";
+            document.getElementById("appDashboardView").style.display = "block";
+
+            if(profile.isFirstTimeDefault && u !== "GUEST") {
+                document.getElementById('forcedPasswordResetOverlay').style.display = "flex";
+            }
+        }
+
+        function calculateTATotals() {
+            const j = parseFloat(document.getElementById('taDaJourney').value) || 0;
+            const h = parseFloat(document.getElementById('taDaHalts').value) || 0;
+            document.getElementById('taDaTotal').value = j + h;
+        }
+
+        function triggerSmartGeneration(modeType) {
+            const systemLoader = document.getElementById('globalAppLoader');
+            const loaderMsg = document.querySelector('.loading-status-msg');
+
+            if(modeType === "bulk") {
+                const sender = document.getElementById('receivedFromBulk').value;
+                const amountNum = document.getElementById('amount').value;
+                const currentPurpose = document.getElementById('monthlyVoucherPurpose').value;
+                if (!sender || !amountNum || !currentPurpose) {
+                    displayCustomAlert("Form Defect: All fields in the monthly bulk panel must be filled.");
+                    return;
+                }
+            } else if(modeType === "holiday") {
+                const sender = document.getElementById('receivedFromHoliday').value;
+                const amountNum = document.getElementById('amountHoliday').value;
+                const currentPurpose = document.getElementById('holidayVoucherPurpose').value;
+                if (!sender || !amountNum || !currentPurpose) {
+                    displayCustomAlert("Form Defect: All fields in the holiday panel must be filled.");
+                    return;
+                }
+            } else if(modeType === "datewise") {
+                const sender = document.getElementById('receivedFromDatewise').value;
+                if (!sender) {
+                    displayCustomAlert("Form Defect: 'Received From' field is mandatory.");
+                    return;
+                }
+                
+                const container = document.getElementById('dynamicDateRowsContainer');
+                const rows = container.querySelectorAll('.dynamic-date-row');
+                let validCount = 0;
+                rows.forEach(row => {
+                    if(row.querySelector('.row-target-date').value && row.querySelector('.row-target-amount').value && row.querySelector('.row-target-purpose').value) {
+                        validCount++;
+                    }
+                });
+                if(validCount === 0){
+                    displayCustomAlert("Form Defect: Please complete at least one complete Date ledger slot row.");
+                    return;
+                }
+            } else if(modeType === "acg61") {
+                const office = document.getElementById('acgOfficeName').value;
+                const rOfficer = document.getElementById('acgRelievedOfficer').value;
+                const rgOfficer = document.getElementById('acgRelievingOfficer').value;
+                if (!office || !rOfficer || !rgOfficer) {
+                    displayCustomAlert("Form Defect: Office Name, Relieved Officer, and Relieving Officer are mandatory.");
+                    return;
+                }
+            } else if(modeType === "taAdvance") {
+                const taName = document.getElementById('taName').value;
+                if (!taName) {
+                    displayCustomAlert("Form Defect: Name of the Officer/Official is mandatory.");
+                    return;
+                }
+            } else if(modeType === "taTransfer") {
+                const tatName = document.getElementById('tatName').value;
+                if (!tatName) {
+                    displayCustomAlert("Form Defect: Name of the Officer/Official is mandatory.");
+                    return;
+                }
+            }
+            
+            systemLoader.style.display = 'flex';
+            loaderMsg.innerText = "Processing Document...";
+
+            setTimeout(() => {
+                try {
+                    if(modeType === "bulk") {
+                        generatePerfectPDF();
+                    } else if(modeType === "holiday") {
+                        generateHolidayPDF();
+                    } else if(modeType === "datewise") {
+                        generateDateWisePDF();
+                    } else if(modeType === "acg61") {
+                        generateACG61PDF();
+                    } else if(modeType === "taAdvance") {
+                        generateTAAdvancePDF();
+                    } else if(modeType === "taTransfer") {
+                        generateTATransferPDF();
+                    }
+                } catch (err) {
+                    console.error("PDF generation failure context: ", err);
+                    displayCustomAlert("Engine Failure Error: Failed to successfully output compile final PDF.");
+                } finally {
+                    systemLoader.style.display = 'none';
+                }
+            }, 750);
+        }
+
+        function generateTATransferPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF('p', 'mm', 'a4');
+
+            const name = document.getElementById('tatName').value || "";
+            const desig = document.getElementById('tatDesignation').value || "";
+            const permTemp = document.getElementById('tatPermTemp').value || "";
+            const office = document.getElementById('tatOffice').value || "";
+            const pay = document.getElementById('tatPay').value || "";
+            const stationTransferred = document.getElementById('tatStationTransferred').value || "";
+            const orderNo = document.getElementById('tatOrderNo').value || "";
+            const advanceFor = document.getElementById('tatAdvanceFor').value || "";
+            const advanceReq = document.getElementById('tatAdvanceReq').value || "";
+            const station = document.getElementById('tatStation').value || "";
+            
+            let rawDate = document.getElementById('tatDate').value;
+            let formattedDate = "";
+            if (rawDate) {
+                let p = rawDate.split("-");
+                formattedDate = p[2] + "/" + p[1] + "/" + p[0];
+            }
+
+            doc.setFont("times", "bold");
+            doc.setFontSize(14);
+            doc.text("APPLICATION FOR ADVANCE OF T.A. ON", 105, 20, { align: "center" });
+            doc.text("TRANSFER", 105, 26, { align: "center" });
+
+            try {
+                doc.addImage(INDIA_POST_LOGO_URL, 'PNG', 165, 10, 20, 20);
+            } catch (err) {
+                console.error("Logo error:", err);
+            }
+
+            doc.setFontSize(10);
+            let currentY = 35;
+            
+            const drawRow = (sno, label, val, h) => {
+                doc.setFont("times", "bold");
+                doc.text(sno, 20, currentY + (h/2) + 1.5, { align: "center" });
+                
+                doc.setFont("times", "bold");
+                let splitLabel = doc.splitTextToSize(label, 80);
+                doc.text(splitLabel, 27, currentY + 6);
+                
+                doc.setFont("times", "normal");
+                let splitVal = doc.splitTextToSize(val, 80);
+                doc.text(splitVal, 112, currentY + 6);
+                
+                currentY += h;
+                doc.line(15, currentY, 195, currentY); 
+            };
+
+            doc.line(15, currentY, 195, currentY); 
+
+            drawRow("1.", "Name of the Officer/ Official.", name, 10);
+            drawRow("2.", "Designation.", desig, 10);
+            drawRow("3.", "Whether temporary / permanent.", permTemp, 10);
+            drawRow("4.", "Office/Station in which working.", office, 10);
+            drawRow("5.", "Basic Pay + NPA + SI.", pay, 10);
+            drawRow("6.", "Station to which transferred.", stationTransferred, 10);
+            drawRow("7.", "No. & Date of the transfer order.", orderNo, 10);
+
+            let r8StartY = currentY;
+            doc.setFont("times", "bold");
+            doc.text("8.", 20, currentY + 6, { align: "center" });
+            doc.text("Details of family members alongwith\ntheir age and relationship.", 27, currentY + 5);
+            currentY += 12;
+            doc.line(25, currentY, 195, currentY);
+            
+            doc.text("Family Particulars", 67, currentY + 5.5, { align: "center" });
+            doc.text("Age", 127, currentY + 5.5, { align: "center" });
+            doc.text("Relationship", 170, currentY + 5.5, { align: "center" });
+            currentY += 8;
+            doc.line(25, currentY, 195, currentY);
+
+            doc.setFont("times", "normal");
+            for(let i=1; i<=4; i++) {
+                let fName = document.getElementById('tatFamName' + i).value || "";
+                let fAge = document.getElementById('tatFamAge' + i).value || "";
+                let fRel = document.getElementById('tatFamRel' + i).value || "";
+                
+                doc.text(fName, 27, currentY + 5.5);
+                doc.text(fAge, 127, currentY + 5.5, { align: "center" });
+                doc.text(fRel, 170, currentY + 5.5, { align: "center" });
+                
+                currentY += 8;
+                doc.line(25, currentY, 195, currentY);
+            }
+
+            doc.setFont("times", "bold");
+            doc.text("9.", 20, currentY + 5.5, { align: "center" });
+            doc.text("Whether the advance is required for.", 27, currentY + 5.5);
+            currentY += 8;
+            doc.line(15, currentY, 195, currentY); 
+            
+            const checkA = advanceFor === 'Self alone' ? 'Yes' : '';
+            const checkB = advanceFor === 'Self and family' ? 'Yes' : '';
+            const checkC = advanceFor === 'Family alone' ? 'Yes' : '';
+
+            let r9aStartY = currentY;
+            doc.setFont("times", "bold");
+            doc.text("(a)", 31, currentY + 5.5, { align: "center" });
+            doc.text("Self alone, or", 40, currentY + 5.5);
+            doc.setFont("times", "normal");
+            doc.text(checkA, 112, currentY + 5.5);
+            currentY += 8;
+            doc.line(25, currentY, 195, currentY);
+
+            doc.setFont("times", "bold");
+            doc.text("(b)", 31, currentY + 5.5, { align: "center" });
+            doc.text("Self and family, or", 40, currentY + 5.5);
+            doc.setFont("times", "normal");
+            doc.text(checkB, 112, currentY + 5.5);
+            currentY += 8;
+            doc.line(25, currentY, 195, currentY);
+
+            doc.setFont("times", "bold");
+            doc.text("(c)", 31, currentY + 5.5, { align: "center" });
+            doc.text("Family alone", 40, currentY + 5.5);
+            doc.setFont("times", "normal");
+            doc.text(checkC, 112, currentY + 5.5);
+            currentY += 8;
+            doc.line(15, currentY, 195, currentY);
+
+            drawRow("10.", "Amount of advance required", advanceReq ? "Rs. " + advanceReq : "", 10);
+
+            doc.line(15, 35, 15, currentY); 
+            doc.line(25, 35, 25, currentY); 
+            doc.line(110, 35, 110, currentY); 
+            doc.line(195, 35, 195, currentY); 
+
+            doc.line(145, r8StartY + 12, 145, r8StartY + 12 + 8 + 32); 
+            
+            doc.line(38, r9aStartY, 38, r9aStartY + 24); 
+
+            currentY += 15;
+            doc.setFont("times", "bold");
+            doc.text("I declare that the particulars furnished above are correct.", 105, currentY, { align: "center" });
+
+            currentY += 25;
+            doc.text("Station :", 15, currentY);
+            doc.setFont("times", "normal");
+            doc.text(station, 32, currentY);
+            
+            currentY += 10;
+            doc.setFont("times", "bold");
+            doc.text("Date :", 15, currentY);
+            doc.setFont("times", "normal");
+            doc.text(formattedDate, 26, currentY);
+            
+            doc.setFont("times", "bold");
+            doc.text("Signature of the Government Servant.", 195, currentY - 5, { align: "right" });
+            
+            doc.text("- t r j -", 185, 285, { align: "right" }); 
+
+            finalizeDocumentViewer(doc);
+        }
+
+        function generateTAAdvancePDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF('p', 'mm', 'a4');
+
+            const name = document.getElementById('taName').value || "";
+            const desig = document.getElementById('taDesignation').value || "";
+            const permTemp = document.getElementById('taPermTemp').value || "";
+            const office = document.getElementById('taOffice').value || "";
+            const pay = document.getElementById('taPay').value || "";
+            const places = document.getElementById('taPlaces').value || "";
+            const purpose = document.getElementById('taPurpose').value || "";
+            const approved = document.getElementById('taApproved').value || "";
+            const duration = document.getElementById('taDuration').value || "";
+            const fare = document.getElementById('taFare').value || "";
+            const daJourney = document.getElementById('taDaJourney').value || "";
+            const daHalts = document.getElementById('taDaHalts').value || "";
+            const daTotal = document.getElementById('taDaTotal').value || "";
+            const totalTADA = document.getElementById('taTotalTADA').value || "";
+            const advanceReq = document.getElementById('taAdvanceReq').value || "";
+            const outstanding = document.getElementById('taOutstanding').value || "";
+            const station = document.getElementById('taStation').value || "";
+            
+            let rawDate = document.getElementById('taDate').value;
+            let formattedDate = "";
+            if (rawDate) {
+                let p = rawDate.split("-");
+                formattedDate = p[2] + "/" + p[1] + "/" + p[0];
+            }
+
+            doc.setFont("times", "bold");
+            doc.setFontSize(14);
+            doc.text("APPLICATION FOR ADVANCE OF T.A. ON TOUR", 105, 25, { align: "center" });
+
+            try {
+                doc.addImage(INDIA_POST_LOGO_URL, 'PNG', 165, 10, 20, 20);
+            } catch (err) {
+                console.error("Logo error:", err);
+            }
+
+            doc.setFontSize(10);
+            let currentY = 40;
+            
+            const drawRow = (sno, label, val, h, isBoldLabel = true) => {
+                doc.setFont("times", "bold");
+                doc.text(sno, 20, currentY + (h/2) + 1.5, { align: "center" });
+                
+                if (isBoldLabel) doc.setFont("times", "bold");
+                else doc.setFont("times", "normal");
+                
+                let splitLabel = doc.splitTextToSize(label, 80);
+                doc.text(splitLabel, 27, currentY + 6);
+                
+                doc.setFont("times", "normal");
+                let splitVal = doc.splitTextToSize(val, 80);
+                doc.text(splitVal, 112, currentY + 6);
+                
+                currentY += h;
+                doc.line(15, currentY, 195, currentY); 
+            };
+
+            doc.line(15, currentY, 195, currentY); 
+
+            drawRow("1.", "Name of the Officer/ Official.", name, 10);
+            drawRow("2.", "Designation.", desig, 10);
+            drawRow("3.", "Whether permanent / temporary.", permTemp, 10);
+            drawRow("4.", "Office/Section in which working.", office, 10);
+            drawRow("5.", "Basic Pay + NPA + SI.", pay, 10);
+            drawRow("6.", "Places to be visited and period of halt\nat each station.", places, 14);
+            drawRow("7.", "Purpose of tour.", purpose, 10);
+            drawRow("8.", "Has the tour programme been\napproved by competent authority ?", approved, 14);
+            drawRow("9.", "Duration of journey (in days).", duration, 10);
+            drawRow("10.", "Rail/Road fare by the entitled class by\nwhich the Government Servant\nproposes to travel for both outward\nand inward journeys.", fare, 18);
+
+            let r11StartY = currentY;
+            doc.setFont("times", "bold");
+            doc.text("11.", 20, currentY + 6, { align: "center" });
+            doc.text("Daily allowance entitled -", 27, currentY + 6);
+            currentY += 10;
+            doc.line(25, currentY, 195, currentY);
+            
+            doc.text("(i)", 30, currentY + 6, { align: "center" });
+            doc.text("For journey period", 36, currentY + 6);
+            doc.setFont("times", "normal");
+            doc.text(daJourney ? "Rs. " + daJourney : "", 112, currentY + 6);
+            currentY += 10;
+            doc.line(25, currentY, 195, currentY);
+            
+            doc.setFont("times", "bold");
+            doc.text("(ii)", 30, currentY + 6, { align: "center" });
+            doc.text("For the halts", 36, currentY + 6);
+            doc.setFont("times", "normal");
+            doc.text(daHalts ? "Rs. " + daHalts : "", 112, currentY + 6);
+            currentY += 10;
+            doc.line(25, currentY, 195, currentY);
+            
+            doc.setFont("times", "bold");
+            doc.text("Total", 65, currentY + 6, { align: "center" });
+            doc.setFont("times", "normal");
+            doc.text(daTotal ? "Rs. " + daTotal : "", 112, currentY + 6);
+            currentY += 10;
+            doc.line(15, currentY, 195, currentY); 
+
+            doc.line(34, r11StartY + 10, 34, currentY - 10); 
+
+            drawRow("12.", "Total T.A. + D.A. ( 10 + 11)", totalTADA, 10);
+            drawRow("13.", "Amount of Advance required", advanceReq, 10);
+            drawRow("14.", "Whether any earlier advance is\noutstanding. If so, the date on which\nT.A. bill was submitted.", outstanding, 16);
+
+            doc.line(15, 40, 15, currentY); 
+            doc.line(25, 40, 25, currentY); 
+            doc.line(110, 40, 110, currentY); 
+            doc.line(195, 40, 195, currentY); 
+
+            currentY += 15;
+            doc.setFont("times", "bold");
+            doc.text("I declare that the particulars furnished above are correct.", 105, currentY, { align: "center" });
+
+            currentY += 25;
+            doc.text("Station :", 15, currentY);
+            doc.setFont("times", "normal");
+            doc.text(station, 32, currentY);
+            
+            currentY += 10;
+            doc.setFont("times", "bold");
+            doc.text("Date :", 15, currentY);
+            doc.setFont("times", "normal");
+            doc.text(formattedDate, 26, currentY);
+            
+            doc.setFont("times", "bold");
+            doc.text("Signature of the Government Servant.", 195, currentY - 5, { align: "right" });
+            
+            doc.text("- t r j -", 185, 285, { align: "right" }); 
+
+            finalizeDocumentViewer(doc);
+        }
+
+        function parseNumberToWords(num) {
+            const units = ['','One ','Two ','Three ','Four ','Five ','Six ','Seven ','Eight ','Nine ','Ten ','Eleven ','Twelve ','Thirteen ','Fourteen ','Fifteen ','Sixteen ','Seventeen ','Eighteen ','Nineteen '];
+            const tens = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
+            let val = parseInt(num, 10);
+            if (isNaN(val) || val === 0) return "Zero only";
+            
+            let words = "";
+            if (Math.floor(val / 10000000) > 0) { words += parseNumberToWords(Math.floor(val / 10000000)) + " Crore "; val %= 10000000; }
+            if (Math.floor(val / 100000) > 0) { words += parseNumberToWords(Math.floor(val / 100000)) + " Lakh "; val %= 100000; }
+            if (Math.floor(val / 1000) > 0) { words += parseNumberToWords(Math.floor(val / 1000)) + " Thousand "; val %= 1000; }
+            if (Math.floor(val / 100) > 0) { words += parseNumberToWords(Math.floor(val / 100)) + " Hundred "; val %= 100; }
+            if (val > 0) {
+                if (val < 20) words += units[val];
+                else { words += tens[Math.floor(val / 10)]; if (val % 10 > 0) words += " " + units[val % 10]; }
+            }
+            return words.replace(/\s+/g, ' ').trim();
+        }
+
+        function drawStandardVoucherPage(doc, sender, dateString, voucherIndex, amountNum, purposeText) {
+            const leftMidX = 73; 
+            const amountText = parseNumberToWords(amountNum) + " only";
+
+            try {
+                doc.addImage(INDIA_POST_LOGO_URL, 'PNG', 132, 5, 10, 10);
+            } catch (err) {
+                console.error("Voucher Logo asset render skip background: ", err);
+            }
+
+            doc.setFont("times", "bold"); doc.setFontSize(10.5); doc.text("ACG-17", 12, 15); 
+            doc.setFontSize(11); doc.setFont("times", "bold"); doc.text("DEPARTMENT OF POSTS - INDIA", leftMidX, 15, { align: "center" });
+            doc.setFont("times", "normal"); doc.setFontSize(7.5);
+            doc.text("(See Note below Rules 6 (b) of Appendix II to Posts and Telegraphs Financial Handbook Volume I)", leftMidX, 20, { align: "center" });
+            doc.text("2nd Edition 2nd Reprinting)", leftMidX, 24, { align: "center" });
+            doc.setFont("times", "bold"); doc.setFontSize(9); doc.text("/Receipt", leftMidX, 30, { align: "center" });
+
+            doc.setFont("times", "normal"); doc.setFontSize(9.5);
+            doc.text("The " + dateString, 12, 42); doc.text("Voucher No-" + voucherIndex, 85, 42);
+
+            doc.setFont("times", "bold"); doc.text("Received from", 12, 51);
+            doc.setFont("times", "normal"); doc.text(sender, 45, 51); doc.line(45, 52, 140, 52);
+
+            doc.setFont("times", "bold"); doc.text("The Sum of Rupees", 12, 61);
+            doc.setFont("times", "normal"); doc.text(amountText, 52, 61); doc.line(52, 62, 140, 62);
+
+            doc.setFont("times", "bold"); doc.text("On Account of", 12, 71);
+            doc.setFont("times", "normal");
+            
+            const wrappedPurpose = doc.splitTextToSize(purposeText, 95);
+            for (let i = 0; i < wrappedPurpose.length; i++) {
+                doc.text(wrappedPurpose[i], 44, 71 + (i * 5));
+                doc.line(44, 72 + (i * 5), 140, 72 + (i * 5));
+            }
+
+            let offsetHeight = (wrappedPurpose.length - 1) * 5;
+            let currentLeftY = 91 + offsetHeight; 
+            doc.setFont("times", "bold"); doc.setFontSize(10.5); doc.text("/Rs. " + amountNum + "/-", 12, currentLeftY);
+
+            currentLeftY += 15; doc.setFont("times", "bold"); doc.setFontSize(8.5); doc.text("Witnessed Payment", 12, currentLeftY);
+            currentLeftY += 12; doc.text("Signature of Witness", 12, currentLeftY); doc.text("Signature of Payee", 100, currentLeftY);
+
+            currentLeftY += 10; doc.setFont("times", "normal"); doc.setFontSize(6.5);
+            let legalText1 = "Note :- If the receipt be not written or not signed in English/Hindi the whole of the portion not in English/Hindi must be translated by the Paying Officer.";
+            let legalText2 = "A person signing such receipt in Hindi should be required to indicate his full name in block letters within brackets below his signature.";
+            let legalText3 = "If the person paid cannot sign, the payment must be certified by the paying officer and atleast one witness.";
+            let legalText4 = "If the amount be paid more than Rs. 5000/- a Receipt Stamp of 1/- must be affixed and this stamp must be paid for by the person to whom the amount of receipt is paid.";
+            let legalText5 = "1. Certified that the amount included in the voucher has been disbursed to the proper person.";
+
+            const w1 = doc.splitTextToSize(legalText1, 128); const w2 = doc.splitTextToSize(legalText2, 128);
+            const w3 = doc.splitTextToSize(legalText3, 128); const w4 = doc.splitTextToSize(legalText4, 128);
+            const w5 = doc.splitTextToSize(legalText5, 128);
+
+            for(let k=0; k<w1.length; k++) { doc.text(w1[k], 12, currentLeftY); currentLeftY += 3.5; }
+            for(let k=0; k<w2.length; k++) { doc.text(w2[k], 12, currentLeftY); currentLeftY += 3.5; }
+            for(let k=0; k<w3.length; k++) { doc.text(w3[k], 12, currentLeftY); currentLeftY += 3.5; }
+            for(let k=0; k<w4.length; k++) { doc.text(w4[k], 12, currentLeftY); currentLeftY += 3.5; }
+            
+            currentLeftY += 2; doc.line(12, currentLeftY, 140, currentLeftY); currentLeftY += 4;
+            for(let k=0; k<w5.length; k++) { doc.text(w5[k], 12, currentLeftY); currentLeftY += 3.5; }
+
+            const rightEdgeX = 285; doc.setFontSize(8.5); doc.setFont("times", "bold");
+            doc.text("Paying", rightEdgeX, 15, { align: "right" }); doc.text("Officer", rightEdgeX, 19, { align: "right" });
+            doc.text("Counter", rightEdgeX, 35, { align: "right" }); doc.text("Signed", rightEdgeX, 39, { align: "right" });
+            doc.text("Disbursing", rightEdgeX, 54, { align: "right" }); doc.text("Officer", rightEdgeX, 58, { align: "right" });
+
+            let currentRightY = 74; doc.setFont("times", "normal");
+            let termsText = "2. Received contents and certified that I have satisfied myself that all advances included in receipt form A.C.G. 17 drawn 1 month / 2 months / 3 months previous to this date with the exception of those detailed below (of which the total has been refunded from this receipt) has been disbursed to the proper persons and that their acceptances have been taken & filed in my office with receipt stamps duly cancelled for every payment in excess of Rs. 5000/-";
+
+            const wTerms = doc.splitTextToSize(termsText, 132);
+            for(let m=0; m<wTerms.length; m++) { doc.text(wTerms[m], 152, currentRightY + (m * 4)); }
+
+            currentRightY += (wTerms.length * 4) + 15;
+            doc.setFont("times", "bold");
+            doc.text("Disbursing", rightEdgeX, currentRightY, { align: "right" }); doc.text("Officer", rightEdgeX, currentRightY + 4, { align: "right" });
+
+            doc.setDrawColor(180, 180, 180); doc.setLineDashPattern([2, 2], 0); doc.line(146, 5, 146, 205);
+            doc.setDrawColor(0, 0, 0); doc.setLineDashPattern([], 0);
+        }
+
+        function generateACG61PDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF('p', 'mm', 'a4'); 
+
+            const office = document.getElementById('acgOfficeName').value;
+            const relieved = document.getElementById('acgRelievedOfficer').value;
+            const relieving = document.getElementById('acgRelievingOfficer').value;
+            const tDateRaw = document.getElementById('acgTransferDate').value;
+            const tTime = document.getElementById('acgTransferTime').value;
+            const memoNo = document.getElementById('acgMemoNo').value;
+            const memoDateRaw = document.getElementById('acgMemoDate').value;
+            const authority = document.getElementById('acgFromAuthority').value;
+            
+            const cash = document.getElementById('acgCashRs').value;
+            const stamp = document.getElementById('acgStampRs').value;
+            const impCash = document.getElementById('acgImprestCashRs').value;
+
+            const formatD = (d) => { if(!d) return ""; const p = d.split("-"); return p[2] + "/" + p[1] + "/" + p[0]; };
+
+            const forwardInputs = document.querySelectorAll('.row-forward-target');
+            let targetRecipients = [];
+            forwardInputs.forEach(input => { let v = input.value.trim(); if(v) targetRecipients.push(v); });
+            if(targetRecipients.length === 0) targetRecipients.push("");
+
+            for(let pageIndex = 0; pageIndex < targetRecipients.length; pageIndex++) {
+                if(pageIndex > 0) doc.addPage('a4', 'p');
+
+                doc.setFont("times", "bold"); doc.setFontSize(10); doc.text("ACG-61", 15, 15);
+                doc.addImage(INDIA_POST_LOGO_URL, 'PNG', 170, 5, 25, 25);
+
+                doc.setFontSize(12); doc.text("DEPARTMENT OF POSTS, INDIA", 105, 22, { align: "center" });
+                doc.setFont("times", "normal"); doc.setFontSize(8.5);
+                doc.text("(See Rule 267, Posts and Telegraphs Financial Hand book, Volume 1, Second Edition)", 105, 27, { align: "center" });
+                
+                doc.setFont("times", "bold"); doc.setFontSize(11);
+                doc.text("Charge Report and Receipt of Cash and Stamps on transfer of charge", 105, 36, { align: "center" });
+                doc.line(40, 38, 170, 38);
+
+                doc.setFont("times", "normal"); doc.setFontSize(11);
+                let blockY = 52;
+                
+                const drawLineInput = (text, x, y, len) => {
+                    doc.text(text, x, y);
+                    doc.line(x, y + 1, x + len, y + 1);
+                };
+
+                doc.text("Certified that the charge of the office of", 30, blockY);
+                drawLineInput(office, 120, blockY, 75);
+
+                blockY += 9;
+                doc.text("was made over by", 15, blockY);
+                drawLineInput(relieved, 55, blockY, 65);
+                doc.text("to", 125, blockY);
+                drawLineInput(relieving, 135, blockY, 60);
+
+                blockY += 9;
+                doc.text("on", 15, blockY);
+                drawLineInput(formatD(tDateRaw) + " " + tTime, 25, blockY, 45);
+                doc.text("in accordance with Office Order/ Memorandum/ letter No.", 75, blockY);
+                
+                blockY += 9;
+                drawLineInput(memoNo, 15, blockY, 80);
+                doc.text("dated", 100, blockY);
+                drawLineInput(formatD(memoDateRaw), 115, blockY, 35);
+                doc.text("from", 155, blockY);
+                
+                blockY += 9;
+                drawLineInput(authority, 15, blockY, 180);
+
+                blockY += 24;
+                doc.setFont("times", "bold");
+                doc.text("Relieved Officer", 30, blockY);
+                doc.text("Relieving Officer", 145, blockY);
+                doc.setFont("times", "normal");
+
+                blockY += 16;
+                doc.line(15, blockY, 195, blockY);
+                blockY += 8;
+                doc.setFont("times", "bold"); doc.setFontSize(12);
+                doc.text("Receipt for Cash & stamps on transfer of charge", 105, blockY, { align: "center" });
+                doc.line(55, blockY+1, 155, blockY+1);
+                
+                doc.setFont("times", "normal"); doc.setFontSize(10.5);
+                blockY += 12;
+                let certText1 = "* Certified that the balances on this date of the several books (including Stock Book and Register) and accounts of the office have been checked and found correct.";
+                let lines1 = doc.splitTextToSize(certText1, 175);
+                doc.text(lines1, 15, blockY);
+
+                blockY += (lines1.length * 5) + 3;
+                let certText2 = "* Certified that the balances as detailed below were handed over to me by the Relieved Officer and I accept the responsibility for the same.";
+                let lines2 = doc.splitTextToSize(certText2, 175);
+                doc.text(lines2, 15, blockY);
+
+                blockY += (lines2.length * 5) + 6;
+                doc.text("(a) Cash", 15, blockY);
+                doc.text(": Rs. " + cash, 75, blockY);
+                
+                blockY += 7;
+                doc.text("(b) Stamp Imprest made up of", 15, blockY);
+                doc.text("(i) Stamp : Rs. " + stamp, 75, blockY);
+                blockY += 6;
+                doc.text("(ii) Cash  : Rs. " + impCash, 75, blockY);
+
+                blockY += 26;
+                doc.setFont("times", "bold");
+                doc.text("Relieved Officer", 30, blockY);
+                doc.text("Relieving Officer", 145, blockY);
+                doc.setFont("times", "normal");
+
+                blockY += 10;
+                doc.line(15, blockY, 195, blockY);
+                blockY += 5;
+                doc.setFont("times", "bold");
+                doc.text("No: " + memoNo, 15, blockY);
+                doc.text("dated @ " + formatD(memoDateRaw), 100, blockY);
+                doc.setFont("times", "normal");
+
+                blockY += 12;
+                doc.setFont("times", "bold"); doc.text("Copy forwarded to:", 15, blockY);
+                doc.line(15, blockY+1, 46, blockY+1);
+                doc.setFont("times", "normal");
+
+                let assignedRecipient = targetRecipients[pageIndex];
+                if(assignedRecipient) {
+                    blockY += 8;
+                    doc.text("1. " + assignedRecipient, 20, blockY);
+                } else {
+                    blockY += 8;
+                    doc.text("1. ............................................................................................................", 20, blockY);
+                }
+            }
+
+            let finalOutputDoc = doc;
+            finalizeDocumentViewer(finalOutputDoc);
+        }
+
+        function generatePerfectPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF('l', 'mm', 'a4'); 
+            
+            const sender = document.getElementById('receivedFromBulk').value;
+            const amountNum = document.getElementById('amount').value;
+            const mVal = document.getElementById('selectMonth').value;
+            const yVal = document.getElementById('selectYear').value;
+            const exceptions = document.getElementById('exceptionsInput').value;
+            const currentPurpose = document.getElementById('monthlyVoucherPurpose').value;
+
+            const maxDays = new Date(parseInt(yVal, 10), parseInt(mVal, 10) - 1, 0).getDate();
+            let omittedDates = exceptions.split(",").map(tok => parseInt(tok.trim(), 10)).filter(num => !isNaN(num));
+
+            let voucherIndex = 1;
+            let isChainedPage = false;
+
+            for (let processingDay = 1; processingDay <= maxDays; processingDay++) {
+                const targetDate = new Date(parseInt(yVal, 10), parseInt(mVal, 10) - 1, processingDay);
+                if (targetDate.getDay() === 0 || omittedDates.includes(processingDay)) continue; 
+
+                if (isChainedPage) { doc.addPage('a4', 'l'); }
+                isChainedPage = true;
+
+                const finalDateString = (processingDay < 10 ? "0" + processingDay : processingDay) + "/" + mVal + "/" + yVal;
+                
+                drawStandardVoucherPage(doc, sender, finalDateString, voucherIndex, amountNum, currentPurpose);
+                voucherIndex++;
+            }
+
+            finalizeDocumentViewer(doc);
+        }
+
+        function generateHolidayPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF('l', 'mm', 'a4'); 
+            
+            const sender = document.getElementById('receivedFromHoliday').value;
+            const amountNum = document.getElementById('amountHoliday').value;
+            const mVal = document.getElementById('selectMonthHoliday').value;
+            const yVal = document.getElementById('selectYearHoliday').value;
+            const holidayStr = document.getElementById('holidaysInput').value;
+            const currentPurpose = document.getElementById('holidayVoucherPurpose').value;
+
+            const maxDays = new Date(parseInt(yVal, 10), parseInt(mVal, 10) - 1, 0).getDate();
+            let explicitHolidays = holidayStr.split(",").map(tok => parseInt(tok.trim(), 10)).filter(num => !isNaN(num));
+
+            let voucherIndex = 1;
+            let isChainedPage = false;
+            let generatedAny = false;
+
+            for (let processingDay = 1; processingDay <= maxDays; processingDay++) {
+                const targetDate = new Date(parseInt(yVal, 10), parseInt(mVal, 10) - 1, processingDay);
+                
+                if (targetDate.getDay() === 0 || explicitHolidays.includes(processingDay)) {
+                    if (isChainedPage) { doc.addPage('a4', 'l'); }
+                    isChainedPage = true;
+                    generatedAny = true;
+
+                    const finalDateString = (processingDay < 10 ? "0" + processingDay : processingDay) + "/" + mVal + "/" + yVal;
+                    
+                    drawStandardVoucherPage(doc, sender, finalDateString, voucherIndex, amountNum, currentPurpose);
+                    voucherIndex++;
+                }
+            }
+            
+            if(!generatedAny) {
+                 displayCustomAlert("Generation Notice: No valid Sundays or holidays were found for the selected month.");
+                 return;
+            }
+
+            finalizeDocumentViewer(doc);
+        }
+
+        function generateDateWisePDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF('l', 'mm', 'a4');
+
+            const sender = document.getElementById('receivedFromDatewise').value;
+            
+            const container = document.getElementById('dynamicDateRowsContainer');
+            const dateRows = container.querySelectorAll('.dynamic-date-row');
+
+            let voucherIndex = 1;
+            let isChainedPage = false;
+
+            for(let x=0; x<dateRows.length; x++) {
+                const row = dateRows[x];
+                const selectedDateVal = row.querySelector('.row-target-date').value;
+                const selectedAmount = row.querySelector('.row-target-amount').value;
+                const selectedPurpose = row.querySelector('.row-target-purpose').value;
+
+                if(!selectedDateVal || !selectedAmount || !selectedPurpose) {
+                    continue; 
+                }
+
+                const splitPieces = selectedDateVal.split("-");
+                const localizedDateStr = splitPieces[2] + "/" + splitPieces[1] + "/" + splitPieces[0];
+
+                if (isChainedPage) { doc.addPage('a4', 'l'); }
+                isChainedPage = true;
+
+                drawStandardVoucherPage(doc, sender, localizedDateStr, voucherIndex, selectedAmount, selectedPurpose);
+                voucherIndex++;
+            }
+
+            finalizeDocumentViewer(doc);
+        }
+
+        function finalizeDocumentViewer(doc) {
+            const blobDataUrl = doc.output('datauristring');
+            const iframe = document.getElementById('pdfFrameViewer');
+            const titleText = document.getElementById('previewTitle');
+            
+            titleText.style.display = "block";
+            iframe.style.display = "block";
+            iframe.src = blobDataUrl;
+            
+            iframe.scrollIntoView({ behavior: 'smooth' });
+        }
+        
+    </script>
+</body>
+</html>
