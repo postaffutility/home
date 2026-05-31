@@ -8,6 +8,14 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-storage-compat.js"></script>
+    
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script type="text/javascript">
+        (function(){
+            emailjs.init("80G1Nxg0OS9RfjTj2");
+        })();
+    </script>
 
     <style>
         /* Minimalist Baseline Setup */
@@ -1409,6 +1417,20 @@
             
             <div class='preview-title' id='previewTitle'>--- Generated Document Live Preview ---</div>
             <iframe id='pdfFrameViewer'></iframe>
+            
+            <div class='sub-action-card' id='quickEmailPanel' style='display:none; margin-top: 20px; border-top: 4px solid #3b82f6;'>
+                <h4>📧 Forward Document via Email</h4>
+                <div class='form-group'>
+                    <label>Recipient Email Address</label>
+                    <input class='text-input-placeholder-gray' id='quickEmailTo' placeholder='e.g., division.office@indiapost.gov.in' type='text'/>
+                </div>
+                <div class='form-group'>
+                    <label>Message / Remarks</label>
+                    <textarea class='text-input-placeholder-gray' id='quickEmailNote' placeholder='Please find the generated bill attached...' rows='2'></textarea>
+                </div>
+                <button class='action-btn' onclick='uploadAndEmailDocument()' style='background:#3b82f6;' type='button'>Generate Link & Send Email</button>
+            </div>
+            
         </div>
     </div>
 
@@ -1458,10 +1480,12 @@
         };
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
+        const storage = firebase.storage(); // ADDED STORAGE INITIALIZATION
 
         const INDIA_POST_LOGO_URL = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXlVwmm2OUFIPv_sRjEtehJrDPqIS-nbUCLNZU8i4LT-O-V14Wp6hpQGw&s=10";
 
         let isCloudDataLoaded = false; 
+        let currentGeneratedPDFBlob = null; // ADDED BLOB TRACKER
 
         // Start Fresh: Only the core Master Admin profile exists natively
         let SYSTEM_USER_REGISTRY = [
@@ -1732,6 +1756,7 @@
             document.getElementById('panelMaintenanceMode').style.display = "none";
             document.getElementById('previewTitle').style.display = "none";
             document.getElementById('pdfFrameViewer').style.display = "none";
+            document.getElementById('quickEmailPanel').style.display = "none"; // Hide Email Panel
         }
 
         function handleChatEnter(e) {
@@ -1969,6 +1994,9 @@
             document.getElementById('tatFamName4').value = "";
             document.getElementById('tatFamAge4').value = "";
             document.getElementById('tatFamRel4').value = "";
+
+            document.getElementById('quickEmailTo').value = "";
+            document.getElementById('quickEmailNote').value = "";
 
             const chatContainer = document.getElementById('chatHistory');
             chatContainer.innerHTML = `<div class="chat-msg-row ai-row">
@@ -2522,6 +2550,55 @@
                     systemLoader.style.display = 'none';
                 }
             }, 750);
+        }
+
+        // ADDED EMAIL DISPATCH FUNCTION
+        async function uploadAndEmailDocument() {
+            const emailTo = document.getElementById('quickEmailTo').value.trim();
+            const emailNote = document.getElementById('quickEmailNote').value.trim();
+
+            if(!emailTo) {
+                displayCustomAlert("Operational Error: Please enter a recipient email address.");
+                return;
+            }
+            if(!currentGeneratedPDFBlob) {
+                displayCustomAlert("System Error: No document found to send.");
+                return;
+            }
+
+            const systemLoader = document.getElementById('globalAppLoader');
+            const loaderMsg = document.querySelector('.loading-status-msg');
+            
+            try {
+                systemLoader.style.display = 'flex';
+                loaderMsg.innerText = "Encrypting & Uploading Document...";
+
+                const fileName = `bills/Generated_Bill_${Date.now()}.pdf`;
+                const storageRef = storage.ref().child(fileName);
+                await storageRef.put(currentGeneratedPDFBlob);
+                
+                const downloadLink = await storageRef.getDownloadURL();
+
+                loaderMsg.innerText = "Dispatching Email...";
+
+                await emailjs.send("service_xi7n45g", "template_e7huyq2", {
+                    to_email: emailTo,
+                    sender_name: authenticatedUserSession.fullName,
+                    message: emailNote,
+                    document_link: downloadLink
+                });
+
+                systemLoader.style.display = 'none';
+                displayCustomAlert("Success: The document has been securely uploaded and the link has been dispatched to the recipient.");
+                
+                document.getElementById('quickEmailTo').value = "";
+                document.getElementById('quickEmailNote').value = "";
+                
+            } catch (error) {
+                console.error("Dispatch Failed: ", error);
+                systemLoader.style.display = 'none';
+                displayCustomAlert("Transmission Error: Failed to process the document delivery. Check network connectivity.");
+            }
         }
 
         function generateTATransferPDF() {
@@ -3161,14 +3238,20 @@
             finalizeDocumentViewer(doc);
         }
 
+        // ADDED EMAIL PANEL TRIGGER TO VIEWER
         function finalizeDocumentViewer(doc) {
+            currentGeneratedPDFBlob = doc.output('blob'); // Track the PDF for uploading
             const blobDataUrl = doc.output('datauristring');
+            
             const iframe = document.getElementById('pdfFrameViewer');
             const titleText = document.getElementById('previewTitle');
+            const emailPanel = document.getElementById('quickEmailPanel'); // Added the email panel
             
             titleText.style.display = "block";
             iframe.style.display = "block";
             iframe.src = blobDataUrl;
+            
+            emailPanel.style.display = "block"; // Show the email panel
             
             iframe.scrollIntoView({ behavior: 'smooth' });
         }
