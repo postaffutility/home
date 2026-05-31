@@ -8,14 +8,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-storage-compat.js"></script>
-    
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-    <script type="text/javascript">
-        (function(){
-            emailjs.init("80G1Nxg0OS9RfjTj2");
-        })();
-    </script>
 
     <style>
         /* Minimalist Baseline Setup */
@@ -355,106 +347,46 @@
         .sub-action-card h4 { margin: 0 0 16px 0; color: #0f172a; font-size: 16px; font-weight: 800; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; }
         .maintenance-sub-panel { display: none; animation: fadeIn 0.3s ease-out forwards; }
 
-        /* ELEVATED AI CHAT INTERFACE */
-        .ai-chat-wrapper {
-            background: #ffffff;
-            border: 1px solid #e2e8f0;
-            border-radius: 16px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.02);
-            overflow: hidden;
-            margin-top: 15px;
-        }
-        .chat-header-accent {
-            background: linear-gradient(135deg, #14b8a6, #0d9488);
-            color: white;
-            padding: 20px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        .chat-header-accent h4 { margin: 0; font-size: 16px; font-weight: 800; }
-        .chat-header-accent p { margin: 2px 0 0 0; font-size: 12px; opacity: 0.9; }
-
-        .chat-container-modern {
+        /* AI CHAT INTERFACE CSS */
+        .chat-container {
             background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
             padding: 20px;
-            height: 380px;
+            height: 400px;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
-            gap: 16px;
+            gap: 12px;
+            margin-bottom: 15px;
         }
-        .chat-msg-row { display: flex; width: 100%; }
-        .chat-msg-row.user-row { justify-content: flex-end; }
-        .chat-msg-row.ai-row { justify-content: flex-start; }
-
-        .modern-bubble {
-            max-width: 75%;
-            padding: 12px 16px;
-            border-radius: 16px;
-            font-size: 14px;
-            line-height: 1.6;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
-            word-wrap: break-word;
+        .chat-message {
+            max-width: 80%;
+            padding: 14px 18px;
+            border-radius: 12px;
+            font-size: 14.5px;
+            line-height: 1.5;
             white-space: pre-wrap;
+            word-wrap: break-word;
+            animation: fadeIn 0.3s ease-out forwards;
         }
-        .user-bubble {
+        .ai-message {
+            background: #ccfbf1;
+            color: #0f766e;
+            align-self: flex-start;
+            border-bottom-left-radius: 4px;
+            border: 1px solid #99f6e4;
+        }
+        .user-message {
             background: #0f172a;
             color: #ffffff;
+            align-self: flex-end;
             border-bottom-right-radius: 4px;
         }
-        .ai-bubble {
-            background: #ffffff;
-            color: #334155;
-            border-bottom-left-radius: 4px;
-            border: 1px solid #e2e8f0;
-        }
-        .ai-template-card {
-            background: #fff8f8;
-            border-left: 4px solid #d32f2f;
-            padding: 15px;
-            margin-top: 8px;
-            border-radius: 4px 8px 8px 4px;
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 13px;
-            color: #1e293b;
-            overflow-x: auto;
-        }
-
-        /* SUGGESTION CHIPS STYLE */
-        .ai-chips-container {
+        .chat-input-area {
             display: flex;
-            gap: 8px;
-            padding: 12px 20px;
-            background: #ffffff;
-            border-top: 1px solid #e2e8f0;
-            overflow-x: auto;
-            white-space: nowrap;
+            gap: 12px;
         }
-        .suggestion-chip {
-            background: #f1f5f9;
-            color: #0f766e;
-            border: 1px solid #e2e8f0;
-            padding: 8px 14px;
-            border-radius: 20px;
-            font-size: 12.5px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-        .suggestion-chip:hover {
-            background: #ccfbf1;
-            border-color: #99f6e4;
-            transform: translateY(-1px);
-        }
-
-        .chat-input-area-modern {
-            display: flex;
-            gap: 10px;
-            padding: 15px 20px 20px 20px;
-            background: #ffffff;
-        }
-        
         .chat-input {
             flex: 1;
             padding: 15px;
@@ -645,6 +577,7 @@
                 </div>
                 
                 <div class='portal-grid-wrapper' id='mainModuleGrid'>
+                    <!-- CARDS -->
                     <div class='portal-module-card' id='menuCardBulk' onclick='navigateToPanel("bulk", this)'>
                         <div class='card-icon'>📦</div>
                         <h3>Monthly Bulk Bills</h3>
@@ -700,10 +633,12 @@
                     </div>
                 </div>
 
+                <!-- PAGINATION CONTROLS -->
                 <div class='pagination-container' id='dashboardPagination'></div>
 
             </div>
 
+            <!-- TA TRANSFER PANEL -->
             <div class='portal-page-panel' id='panelTATransferMode'>
                 <div class='back-nav-link' onclick='returnToHomeGrid()'>&#11013;&#65039; Back to Dashboard</div>
                 <h3>Module: Application for Advance of T.A. on Transfer</h3>
@@ -814,6 +749,7 @@
                 <button class='action-btn' onclick='triggerSmartGeneration("taTransfer")' style='background-color:#4f46e5;' type='button'>Generate T.A. Transfer PDF</button>
             </div>
 
+            <!-- TA ADVANCE PANEL -->
             <div class='portal-page-panel' id='panelTAAdvanceMode'>
                 <div class='back-nav-link' onclick='returnToHomeGrid()'>&#11013;&#65039; Back to Dashboard</div>
                 <h3>Module: Application for Advance of T.A. on Tour</h3>
@@ -926,37 +862,17 @@
                 <button class='action-btn' onclick='triggerSmartGeneration("taAdvance")' style='background-color:#e11d48;' type='button'>Generate T.A. Advance PDF</button>
             </div>
 
+            <!-- OTHER PANELS (AI, Bulk, Holiday, Datewise, ACG61, Maintenance, Password) -->
             <div class='portal-page-panel' id='panelAIChatMode'>
                 <div class='back-nav-link' onclick='returnToHomeGrid()'>&#11013;&#65039; Back to Dashboard</div>
-                
-                <div class="ai-chat-wrapper">
-                    <div class="chat-header-accent">
-                        <div style="font-size: 24px;">🤖</div>
-                        <div>
-                            <h4>PO Assistant Core AI</h4>
-                            <p>Active Expert Model V2 — Cloud Synchronized Utility Support</p>
-                        </div>
-                    </div>
-                    
-                    <div class='chat-container-modern' id='chatHistory'>
-                        <div class="chat-msg-row ai-row">
-                            <div class="modern-bubble ai-bubble">
-                                Namaskar! I am your updated PO Assistant AI. Tap any quick option below or type a custom request to generate official formats instantly.
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="ai-chips-container">
-                        <div class="suggestion-chip" onclick="triggerQuickChip('Draft Leave Application')">📝 Leave Application</div>
-                        <div class="suggestion-chip" onclick="triggerQuickChip('Explain ACG-61 Rules')">📄 ACG-61 Protocol</div>
-                        <div class="suggestion-chip" onclick="triggerQuickChip('Format for Transfer Request')">🚚 Transfer Request</div>
-                        <div class="suggestion-chip" onclick="triggerQuickChip('Voucher Verification Note')">📦 ACG-17 Ledger Help</div>
-                    </div>
-                    
-                    <div class='chat-input-area-modern'>
-                        <input class='chat-input' id='aiChatInput' onkeypress='handleChatEnter(event)' placeholder='Ask about postal regulations or write a script...' type='text' style='margin:0;'/>
-                        <button class='chat-send-btn' onclick='sendChatMessage()' style='padding: 0 24px;'>Send</button>
-                    </div>
+                <h3>🤖 PO Assistant AI</h3>
+                <p style='font-size:13px; color:#64748b; margin-top:0;'>Your localized prototype expert. Ask me about ACG forms or say &quot;draft a leave letter&quot;.</p>
+                <div class='chat-container' id='chatHistory'>
+                    <div class='chat-message ai-message'>Hello! I am your PO Assistant AI. How can I help you today with rules, regulations, or drafting letters?</div>
+                </div>
+                <div class='chat-input-area'>
+                    <input class='chat-input' id='aiChatInput' onkeypress='handleChatEnter(event)' placeholder='Type your request here...' type='text'/>
+                    <button class='chat-send-btn' onclick='sendChatMessage()'>Send</button>
                 </div>
             </div>
 
@@ -1417,20 +1333,6 @@
             
             <div class='preview-title' id='previewTitle'>--- Generated Document Live Preview ---</div>
             <iframe id='pdfFrameViewer'></iframe>
-            
-            <div class='sub-action-card' id='quickEmailPanel' style='display:none; margin-top: 20px; border-top: 4px solid #3b82f6;'>
-                <h4>📧 Forward Document via Email</h4>
-                <div class='form-group'>
-                    <label>Recipient Email Address</label>
-                    <input class='text-input-placeholder-gray' id='quickEmailTo' placeholder='e.g., division.office@indiapost.gov.in' type='text'/>
-                </div>
-                <div class='form-group'>
-                    <label>Message / Remarks</label>
-                    <textarea class='text-input-placeholder-gray' id='quickEmailNote' placeholder='Please find the generated bill attached...' rows='2'></textarea>
-                </div>
-                <button class='action-btn' onclick='uploadAndEmailDocument()' style='background:#3b82f6;' type='button'>Generate Link & Send Email</button>
-            </div>
-            
         </div>
     </div>
 
@@ -1480,12 +1382,10 @@
         };
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
-        const storage = firebase.storage(); // ADDED STORAGE INITIALIZATION
 
         const INDIA_POST_LOGO_URL = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXlVwmm2OUFIPv_sRjEtehJrDPqIS-nbUCLNZU8i4LT-O-V14Wp6hpQGw&s=10";
 
         let isCloudDataLoaded = false; 
-        let currentGeneratedPDFBlob = null; // ADDED BLOB TRACKER
 
         // Start Fresh: Only the core Master Admin profile exists natively
         let SYSTEM_USER_REGISTRY = [
@@ -1756,16 +1656,10 @@
             document.getElementById('panelMaintenanceMode').style.display = "none";
             document.getElementById('previewTitle').style.display = "none";
             document.getElementById('pdfFrameViewer').style.display = "none";
-            document.getElementById('quickEmailPanel').style.display = "none"; // Hide Email Panel
         }
 
         function handleChatEnter(e) {
             if(e.key === 'Enter') { sendChatMessage(); }
-        }
-
-        function triggerQuickChip(promptText) {
-            document.getElementById('aiChatInput').value = promptText;
-            sendChatMessage();
         }
 
         function sendChatMessage() {
@@ -1773,78 +1667,43 @@
             const text = inputField.value.trim();
             if(!text) return;
 
-            appendMessage(text, 'user-row');
+            appendMessage(text, 'user-message');
             inputField.value = '';
 
             const typingId = 'typing-' + Date.now();
-            appendMessage("Typing response...", 'ai-row', typingId);
+            appendMessage("Typing...", 'ai-message', typingId);
             
             setTimeout(() => {
                 const typingElement = document.getElementById(typingId);
                 if(typingElement) typingElement.remove();
                 
-                const response = getAIResponse(text);
-                appendMessage(response, 'ai-row');
-            }, 600 + Math.random() * 400);
+                const response = getAIResponse(text.toLowerCase());
+                appendMessage(response, 'ai-message');
+            }, 800 + Math.random() * 1000);
         }
 
-        function appendMessage(text, rowClassName, id = null) {
+        function appendMessage(text, className, id = null) {
             const container = document.getElementById('chatHistory');
-            const rowDiv = document.createElement('div');
-            rowDiv.className = 'chat-msg-row ' + rowClassName;
-            if(id) rowDiv.id = id;
-            
-            const bubbleDiv = document.createElement('div');
-            bubbleDiv.className = 'modern-bubble ' + (rowClassName === 'user-row' ? 'user-bubble' : 'ai-bubble');
-            bubbleDiv.innerHTML = text;
-            
-            rowDiv.appendChild(bubbleDiv);
-            container.appendChild(rowDiv);
+            const msgDiv = document.createElement('div');
+            msgDiv.className = 'chat-message ' + className;
+            if(id) msgDiv.id = id;
+            msgDiv.innerText = text; 
+            container.appendChild(msgDiv);
             container.scrollTop = container.scrollHeight;
         }
 
         function getAIResponse(query) {
-            const lowQuery = query.toLowerCase();
-            
-            if(lowQuery.includes("leave") || lowQuery.includes("application")) {
-                return "Here is an optimized format for an official casual leave request:<br/>" +
-                       "<div class='ai-template-card'>To,<br/>The Postmaster / Competent Authority,<br/>Radhakishorepur HPO<br/><br/>" +
-                       "Subject: Application for Casual Leave Approval<br/><br/>Respected Sir/Madam,<br/>" +
-                       "I am writing to formally request casual leave for [Number] days starting from [Date] to [Date] due to mandatory personal business at home.<br/><br/>" +
-                       "Arrangements have been made with my workspace colleague to handle any emergency ledger requirements during my temporary absence. I request you to kindly sanction my leave application.<br/><br/>" +
-                       "Yours faithfully,<br/>[Staff Name]<br/>Designation, Radhakishorepur HPO</div>";
-            } 
-            
-            if(lowQuery.includes("acg-61") || lowQuery.includes("acg 61") || lowQuery.includes("61")) {
-                return "<strong>ACG-61 Protocol Instruction:</strong><br/>" +
-                       "Whenever a Postmaster or responsible dynamic officer relinquishes charge of an office, an ACG-61 report must be completed. Ensure these vital data checks match your document:<br/><br/>" +
-                       "1. Verify that the system time indicator states exactly <strong>Forenoon (FN)</strong> or <strong>Afternoon (AN)</strong>.<br/>" +
-                       "2. Check that the net physical cash vault matches the closing entry down to the last paisa.<br/>" +
-                       "3. Both the Relieved and Relieving officers must sign the verification block simultaneously to seal the cloud record.";
+            if(query.includes("leave") && (query.includes("letter") || query.includes("application") || query.includes("draft"))) {
+                return "Here is a standard leave application draft you can use:\n\nTo\nThe Postmaster,\n[Office Name]\n\nSubject: Application for Casual Leave\n\nRespected Sir/Madam,\nWith due respect, I would like to state that I need to take casual leave for [Number] days from [Start Date] to [End Date] due to [Reason, e.g., urgent personal work / medical reasons].\n\nI kindly request you to grant me leave for the mentioned dates. I have handed over my charge/keys to [Relieving Officer Name].\n\nYours faithfully,\n[Your Name]\n[Your Designation]";
+            } else if (query.includes("acg-61") || query.includes("acg 61") || query.includes("charge report")) {
+                return "ACG-61 is the standard 'Charge Report and Receipt of Cash and Stamps on transfer of charge'. It is used whenever a Postmaster or responsible officer hands over their balances (cash, stamps, imprest) to a relieving officer. Remember, our utility system has a dedicated generator for this on the dashboard!";
+            } else if (query.includes("acg-17") || query.includes("acg 17") || query.includes("voucher") || query.includes("bill")) {
+                return "ACG-17 is a general voucher used in the Department of Posts for miscellaneous receipts and payments. It acts as an official record of money received from or paid to an individual. You can use the Bulk, Holiday, or Date-wise generator on the main dashboard to compile these quickly.";
+            } else if (query.includes("hi") || query.includes("hello") || query.includes("hey")) {
+                return "Hello there! I am your built-in PO Staff AI. You can ask me to 'draft a leave letter', or ask about standard forms like ACG-17 and ACG-61.";
+            } else {
+                return "I am currently running as a localized, offline AI prototype to ensure your system's data remains 100% secure. To process complex, open-ended queries, my system requires integration with a live cloud API (like Google Gemini). \n\nFor now, I can help you draft a leave letter or explain ACG forms!";
             }
-            
-            if(lowQuery.includes("transfer") || lowQuery.includes("request")) {
-                return "Here is the official format for a request targeting a workspace station relocation:<br/>" +
-                       "<div class='ai-template-card'>To,<br/>The Superintendent of Post Offices,<br/>South Tripura Division<br/><br/>" +
-                       "Subject: Application for Station Transfer Request<br/><br/>Respected Sir,<br/>" +
-                       "I beg to state that I have been serving as [Your Designation] at Radhakishorepur HPO for the past [X] months/years.<br/><br/>" +
-                       "Due to pressing family circumstances and the location of my dependents, I humbly request a transfer to [Target Office Location, e.g., Agartala HPO] against any existing or upcoming vacancy.<br/><br/>" +
-                       "I am ready to abide by standard departmental deployment conditions. I pray that my application receives favorable consideration.<br/><br/>" +
-                       "Yours obediently,<br/>[Staff Name]<br/>[Designation]</div>";
-            }
-            
-            if(lowQuery.includes("voucher") || lowQuery.includes("acg-17") || lowQuery.includes("17")) {
-                return "<strong>ACG-17 Ledger Management Guide:</strong><br/>" +
-                       "The ACG-17 acts as the master receipt blueprint for contingency payments. Avoid audit defects by cross-checking these items:<br/><br/>" +
-                       "• Any payment exceeding <strong>Rs. 5,000</strong> strictly requires a revenue stamp affixed and crossed.<br/>" +
-                       "• Ensure descriptions do not contain broad, generalized remarks; always state the concrete expenditure details explicitly.";
-            }
-
-            if(lowQuery.includes("hi") || lowQuery.includes("hello") || lowQuery.includes("hey")) {
-                return "Hello! I am initialized and ready. Try selecting one of the template chips above to instantly auto-generate structured layout text blocks.";
-            }
-
-            return "I am operating as a high-speed local utility assistant script. I recognize keywords like 'leave', 'transfer', 'ACG-61', and 'ACG-17'. Try rephrasing your question or tap one of the structural quick-action suggestion chips above!";
         }
 
         async function executeSelfPasswordChange() {
@@ -1995,15 +1854,8 @@
             document.getElementById('tatFamAge4').value = "";
             document.getElementById('tatFamRel4').value = "";
 
-            document.getElementById('quickEmailTo').value = "";
-            document.getElementById('quickEmailNote').value = "";
-
             const chatContainer = document.getElementById('chatHistory');
-            chatContainer.innerHTML = `<div class="chat-msg-row ai-row">
-                                           <div class="modern-bubble ai-bubble">
-                                               Namaskar! I am your updated PO Assistant AI. Tap any quick option below or type a custom request to generate official formats instantly.
-                                           </div>
-                                       </div>`;
+            chatContainer.innerHTML = "<div class='chat-message ai-message'>Hello! I am your PO Assistant AI. How can I help you today with rules, regulations, or drafting letters?</div>";
             document.getElementById('aiChatInput').value = "";
             
             document.getElementById("dynamicDateRowsContainer").innerHTML = "";
@@ -2417,7 +2269,7 @@
             SYSTEM_LOGIN_HISTORY.push({ time: timeStamp, user: u, event: "Authentication Success" });
             await synchronizeSystemDatabase(false);
             
-            const allCards = document.querySelectorAll('#mainModuleGrid .portal-module-card');
+            const allCards = document.querySelectorAll('.portal-module-card');
             
             allCards.forEach(card => card.style.display = "none");
             
@@ -2550,55 +2402,6 @@
                     systemLoader.style.display = 'none';
                 }
             }, 750);
-        }
-
-        // ADDED EMAIL DISPATCH FUNCTION
-        async function uploadAndEmailDocument() {
-            const emailTo = document.getElementById('quickEmailTo').value.trim();
-            const emailNote = document.getElementById('quickEmailNote').value.trim();
-
-            if(!emailTo) {
-                displayCustomAlert("Operational Error: Please enter a recipient email address.");
-                return;
-            }
-            if(!currentGeneratedPDFBlob) {
-                displayCustomAlert("System Error: No document found to send.");
-                return;
-            }
-
-            const systemLoader = document.getElementById('globalAppLoader');
-            const loaderMsg = document.querySelector('.loading-status-msg');
-            
-            try {
-                systemLoader.style.display = 'flex';
-                loaderMsg.innerText = "Encrypting & Uploading Document...";
-
-                const fileName = `bills/Generated_Bill_${Date.now()}.pdf`;
-                const storageRef = storage.ref().child(fileName);
-                await storageRef.put(currentGeneratedPDFBlob);
-                
-                const downloadLink = await storageRef.getDownloadURL();
-
-                loaderMsg.innerText = "Dispatching Email...";
-
-                await emailjs.send("service_xi7n45g", "template_e7huyq2", {
-                    to_email: emailTo,
-                    sender_name: authenticatedUserSession.fullName,
-                    message: emailNote,
-                    document_link: downloadLink
-                });
-
-                systemLoader.style.display = 'none';
-                displayCustomAlert("Success: The document has been securely uploaded and the link has been dispatched to the recipient.");
-                
-                document.getElementById('quickEmailTo').value = "";
-                document.getElementById('quickEmailNote').value = "";
-                
-            } catch (error) {
-                console.error("Dispatch Failed: ", error);
-                systemLoader.style.display = 'none';
-                displayCustomAlert("Transmission Error: Failed to process the document delivery. Check network connectivity.");
-            }
         }
 
         function generateTATransferPDF() {
@@ -3238,20 +3041,14 @@
             finalizeDocumentViewer(doc);
         }
 
-        // ADDED EMAIL PANEL TRIGGER TO VIEWER
         function finalizeDocumentViewer(doc) {
-            currentGeneratedPDFBlob = doc.output('blob'); // Track the PDF for uploading
             const blobDataUrl = doc.output('datauristring');
-            
             const iframe = document.getElementById('pdfFrameViewer');
             const titleText = document.getElementById('previewTitle');
-            const emailPanel = document.getElementById('quickEmailPanel'); // Added the email panel
             
             titleText.style.display = "block";
             iframe.style.display = "block";
             iframe.src = blobDataUrl;
-            
-            emailPanel.style.display = "block"; // Show the email panel
             
             iframe.scrollIntoView({ behavior: 'smooth' });
         }
