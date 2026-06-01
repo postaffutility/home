@@ -637,6 +637,7 @@
                 </div>
                 
                 <div class='portal-grid-wrapper' id='mainModuleGrid'>
+                    <!-- CARDS -->
                     <div class='portal-module-card' id='menuCardBulk' onclick='navigateToPanel("bulk", this)'>
                         <div class='card-icon'>📦</div>
                         <h3>Monthly Bulk Bills (ACG-17)</h3>
@@ -659,6 +660,13 @@
                         <div class='card-icon'>📄</div>
                         <h3>Charge Report (ACG-61)</h3>
                         <p>Compile official reports and dynamic transfer of charge receipts for cash and stamps automatically.</p>
+                    </div>
+
+                    <!-- NEW S.R.-1 Leave Application Card -->
+                    <div class='portal-module-card card-teal-variant' id='menuCardSR1' onclick='navigateToPanel("sr1", this)'>
+                        <div class='card-icon'>📝</div>
+                        <h3>S.R.-1 Leave Application</h3>
+                        <p>Generate official S.R.-1 leave application forms instantly for casual, earned, or medical leave.</p>
                     </div>
 
                     <div class='portal-module-card card-rose-variant' id='menuCardTAAdvance' onclick='navigateToPanel("taAdvance", this)'>
@@ -696,6 +704,122 @@
 
             </div>
 
+            <!-- S.R.-1 LEAVE APPLICATION PANEL -->
+            <div class='portal-page-panel' id='panelSR1Mode'>
+                <div class='back-nav-link' onclick='returnToHomeGrid()'>&#11013;&#65039; Back to Dashboard</div>
+                <h3>Module: Application for Leave (S.R.-1)</h3>
+                <br/>
+
+                <div class='flex-row'>
+                    <div class='form-group'>
+                        <label>1. Name of the applicant:</label>
+                        <input class='text-input-placeholder-gray' id='sr1Name' placeholder='e.g. Subhajit Parbat' type='text'/>
+                    </div>
+                    <div class='form-group'>
+                        <label>2. Leave rules applicable:</label>
+                        <input class='text-input-placeholder-gray' id='sr1Rules' placeholder='e.g. CCS Leave Rules 1972' type='text' value='CCS Leave Rules 1972'/>
+                    </div>
+                </div>
+
+                <div class='flex-row'>
+                    <div class='form-group'>
+                        <label>3. Post held:</label>
+                        <input class='text-input-placeholder-gray' id='sr1Post' placeholder='e.g. MTS' type='text'/>
+                    </div>
+                    <div class='form-group'>
+                        <label>4. Department, Office and Section:</label>
+                        <input class='text-input-placeholder-gray' id='sr1Dept' placeholder='e.g. Radhakishorepur HPO' type='text'/>
+                    </div>
+                </div>
+
+                <div class='flex-row'>
+                    <div class='form-group'>
+                        <label>5. Pay (Rs.):</label>
+                        <input class='text-input-placeholder-gray' id='sr1Pay' placeholder='e.g. 18000' type='text'/>
+                    </div>
+                    <div class='form-group'>
+                        <label>6. Allowances drawn in the present post:</label>
+                        <input class='text-input-placeholder-gray' id='sr1Allowances' placeholder='e.g. HRA, DA, TA' type='text'/>
+                    </div>
+                </div>
+
+                <div style='background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 25px; margin-bottom: 20px;'>
+                    <h4 style='margin-top: 0; color: #0f172a; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;'>7. Nature and period of leave applied for</h4>
+                    <div class='flex-row'>
+                        <div class='form-group'>
+                            <label>Nature of Leave:</label>
+                            <select id='sr1Nature'>
+                                <option value='Casual Leave'>Casual Leave</option>
+                                <option value='Earned Leave'>Earned Leave</option>
+                                <option value='Half Pay Leave'>Half Pay Leave</option>
+                                <option value='Commuted Leave'>Commuted Leave</option>
+                                <option value='Medical Leave'>Medical Leave</option>
+                            </select>
+                        </div>
+                        <div class='form-group'>
+                            <label>Period (No. of days):</label>
+                            <input class='text-input-placeholder-gray' id='sr1Period' placeholder='e.g. 3' type='number'/>
+                        </div>
+                    </div>
+                    <div class='flex-row'>
+                        <div class='form-group'>
+                            <label>From Date:</label>
+                            <input id='sr1FromDate' type='date'/>
+                        </div>
+                        <div class='form-group'>
+                            <label>To Date:</label>
+                            <input id='sr1ToDate' type='date'/>
+                        </div>
+                    </div>
+                </div>
+
+                <div class='form-group'>
+                    <label>8. Sunday and holidays, if any proposed to be prefixed/suffixed:</label>
+                    <input class='text-input-placeholder-gray' id='sr1PrefixSuffix' placeholder='e.g. Prefixed Sunday 14th, Suffixed Holiday 18th' type='text'/>
+                </div>
+
+                <div class='form-group'>
+                    <label>9. Ground on which leave is applied for:</label>
+                    <textarea class='text-input-placeholder-gray' id='sr1Grounds' placeholder='e.g. Personal work at home' rows='2'></textarea>
+                </div>
+
+                <div class='form-group'>
+                    <label>10. Date of return from last leave and nature/period of that leave:</label>
+                    <input class='text-input-placeholder-gray' id='sr1LastLeave' placeholder='e.g. Returned on 10/02/2026 after 2 days EL' type='text'/>
+                </div>
+
+                <div style='background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 25px; margin-bottom: 20px;'>
+                    <h4 style='margin-top: 0; color: #0f172a; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;'>11. Leave Travel Concession (LTC) Proposal</h4>
+                    <div class='flex-row'>
+                        <div class='form-group'>
+                            <label>Do you propose to avail LTC?</label>
+                            <select id='sr1LtcProp'>
+                                <option value='do not propose'>I do NOT propose</option>
+                                <option value='propose'>I propose</option>
+                            </select>
+                        </div>
+                        <div class='form-group'>
+                            <label>In the block years:</label>
+                            <input class='text-input-placeholder-gray' id='sr1LtcBlock' placeholder='e.g. 2026-2029' type='text'/>
+                        </div>
+                    </div>
+                </div>
+
+                <div class='flex-row'>
+                    <div class='form-group'>
+                        <label>Station:</label>
+                        <input class='text-input-placeholder-gray' id='sr1Station' placeholder='e.g. Radhakishorepur' type='text'/>
+                    </div>
+                    <div class='form-group'>
+                        <label>Date of Application:</label>
+                        <input id='sr1Date' type='date'/>
+                    </div>
+                </div>
+
+                <button class='action-btn' onclick='triggerSmartGeneration("sr1")' style='background-color:#14b8a6;' type='button'>Generate S.R.-1 Leave PDF</button>
+            </div>
+
+            <!-- TA TRANSFER PANEL -->
             <div class='portal-page-panel' id='panelTATransferMode'>
                 <div class='back-nav-link' onclick='returnToHomeGrid()'>&#11013;&#65039; Back to Dashboard</div>
                 <h3>Module: Application for Advance of T.A. on Transfer</h3>
@@ -806,6 +930,7 @@
                 <button class='action-btn' onclick='triggerSmartGeneration("taTransfer")' style='background-color:#4f46e5;' type='button'>Generate T.A. Transfer PDF</button>
             </div>
 
+            <!-- TA ADVANCE PANEL -->
             <div class='portal-page-panel' id='panelTAAdvanceMode'>
                 <div class='back-nav-link' onclick='returnToHomeGrid()'>&#11013;&#65039; Back to Dashboard</div>
                 <h3>Module: Application for Advance of T.A. on Tour</h3>
@@ -918,6 +1043,7 @@
                 <button class='action-btn' onclick='triggerSmartGeneration("taAdvance")' style='background-color:#e11d48;' type='button'>Generate T.A. Advance PDF</button>
             </div>
 
+            <!-- REVOLUTIONIZED TAILORED AI CHAT PANEL -->
             <div class='portal-page-panel' id='panelAIChatMode'>
                 <div class='back-nav-link' onclick='returnToHomeGrid()'>&#11013;&#65039; Back to Dashboard</div>
                 
@@ -1381,10 +1507,11 @@
                                 <label><input class='card-checkbox' type='checkbox' value='menuCardHoliday'/> Holiday Bills</label>
                                 <label><input class='card-checkbox' type='checkbox' value='menuCardDateWise'/> Date-Wise Bills</label>
                                 <label><input class='card-checkbox' type='checkbox' value='menuCardACG61'/> ACG-61 Charge Report</label>
+                                <label><input class='card-checkbox' type='checkbox' value='menuCardSR1'/> SR-1 Leave App</label>
                                 <label><input class='card-checkbox' type='checkbox' value='menuCardTAAdvance'/> T.A. Advance</label>
                                 <label><input class='card-checkbox' type='checkbox' value='menuCardTATransfer'/> T.A. Transfer</label>
                                 <label><input class='card-checkbox' type='checkbox' value='menuCardAI'/> Talk with AI</label>
-                                <label><input class='card-checkbox' type='checkbox' value='menuCardMaintenance'/> User Maintenance Hub</label>
+                                <label><input class='card-checkbox' type='checkbox' value='menuCardMaintenance'/> User Maint. Hub</label>
                                 <label><input class='card-checkbox' type='checkbox' value='menuCardUpdateNews'/> Broadcast News</label>
                                 <label><input class='card-checkbox' type='checkbox' value='menuCardSelfPassword'/> Change Passcode</label>
                             </div>
@@ -1435,6 +1562,7 @@
         </div>
     </div>
 
+    <!-- DIRECT MESSAGE USER OVERLAY POPUP -->
     <div class='custom-popup-overlay' id='directMessageModal' style='z-index: 50000000;'>
         <div class='custom-popup-card' style='border-top: 6px solid #f59e0b;'>
             <div class='popup-icon-alert'>✉️</div>
@@ -1508,14 +1636,14 @@
         let currentDashboardPage = 1;
         const cardsPerPage = 6;
 
-        // NEW: CENTRALIZED LOGGING FUNCTION FOR TIMEZONE AND STORAGE LIMIT
+        // CENTRALIZED LOGGING FUNCTION FOR TIMEZONE AND STORAGE LIMIT
         function logSystemEvent(username, eventMsg) {
             let options = { timeZone: 'Asia/Kolkata', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
             let timeStamp = new Date().toLocaleString('en-IN', options);
             
             SYSTEM_LOGIN_HISTORY.push({ time: timeStamp, user: username, event: eventMsg });
             
-            // STRICT CLEANING: Keep only the 15 most recent logs to protect database space
+            // STRICT CLEANING: Keep only the 15 most recent logs
             if (SYSTEM_LOGIN_HISTORY.length > 15) {
                 SYSTEM_LOGIN_HISTORY = SYSTEM_LOGIN_HISTORY.slice(SYSTEM_LOGIN_HISTORY.length - 15);
             }
@@ -1559,7 +1687,6 @@
                             isCloudDataLoaded = true;
                             refreshMaintenanceControlViews(); 
                             
-                            // LIVE DASHBOARD REDRAW & MESSAGE CHECK
                             if (authenticatedUserSession && authenticatedUserSession.user !== "GUEST") {
                                 const updatedProfile = SYSTEM_USER_REGISTRY.find(acc => acc.user === authenticatedUserSession.user);
                                 
@@ -1572,7 +1699,6 @@
                                         return;
                                     }
 
-                                    // CHECK FOR INCOMING DIRECT MESSAGES LIVE
                                     if(updatedProfile.pendingMessage && updatedProfile.pendingMessage.trim() !== "") {
                                         document.getElementById('dmMessageField').innerText = updatedProfile.pendingMessage;
                                         const dmModal = document.getElementById('directMessageModal');
@@ -1739,6 +1865,8 @@
                 document.getElementById('panelDateWiseMode').style.display = "block";
             } else if(panelMode === "acg61") {
                 document.getElementById('panelACG61Mode').style.display = "block";
+            } else if(panelMode === "sr1") { // NEW: SR-1 Panel Show
+                document.getElementById('panelSR1Mode').style.display = "block";
             } else if(panelMode === "taAdvance") {
                 document.getElementById('panelTAAdvanceMode').style.display = "block";
             } else if(panelMode === "taTransfer") {
@@ -1774,6 +1902,7 @@
             document.getElementById('panelHolidayMode').style.display = "none";
             document.getElementById('panelDateWiseMode').style.display = "none";
             document.getElementById('panelACG61Mode').style.display = "none";
+            document.getElementById('panelSR1Mode').style.display = "none"; // NEW
             document.getElementById('panelTAAdvanceMode').style.display = "none";
             document.getElementById('panelTATransferMode').style.display = "none";
             document.getElementById('panelAIChatMode').style.display = "none";
@@ -1956,6 +2085,22 @@
             document.getElementById("sysUser").value = "";
             document.getElementById("sysPass").value = "";
             
+            // CLEAR SR-1 FIELDS
+            document.getElementById('sr1Name').value = "";
+            document.getElementById('sr1Post').value = "";
+            document.getElementById('sr1Dept').value = "";
+            document.getElementById('sr1Pay').value = "";
+            document.getElementById('sr1Allowances').value = "";
+            document.getElementById('sr1Period').value = "";
+            document.getElementById('sr1PrefixSuffix').value = "";
+            document.getElementById('sr1Grounds').value = "";
+            document.getElementById('sr1LastLeave').value = "";
+            document.getElementById('sr1LtcBlock').value = "";
+            document.getElementById('sr1Station').value = "";
+            document.getElementById('sr1Date').value = "";
+            document.getElementById('sr1FromDate').value = "";
+            document.getElementById('sr1ToDate').value = "";
+
             document.getElementById("receivedFromBulk").value = "";
             document.getElementById("amount").value = "";
             document.getElementById("monthlyVoucherPurpose").value = "";
@@ -2060,13 +2205,13 @@
             if(selectedRole === 'admin') {
                 defaultCards = [
                     'menuCardBulk', 'menuCardHoliday', 'menuCardDateWise', 
-                    'menuCardACG61', 'menuCardTAAdvance', 'menuCardTATransfer', 
+                    'menuCardACG61', 'menuCardSR1', 'menuCardTAAdvance', 'menuCardTATransfer', 
                     'menuCardAI', 'menuCardMaintenance', 'menuCardSelfPassword', 'menuCardUpdateNews'
                 ];
             } else {
                 defaultCards = [
                     'menuCardBulk', 'menuCardHoliday', 'menuCardDateWise', 
-                    'menuCardACG61', 'menuCardTAAdvance', 'menuCardTATransfer', 
+                    'menuCardACG61', 'menuCardSR1', 'menuCardTAAdvance', 'menuCardTATransfer', 
                     'menuCardAI', 'menuCardSelfPassword'
                 ];
             }
@@ -2164,13 +2309,13 @@
             if(newRole === 'admin') {
                 SYSTEM_USER_REGISTRY[profileIndex].allowedCards = [
                     'menuCardBulk', 'menuCardHoliday', 'menuCardDateWise', 
-                    'menuCardACG61', 'menuCardTAAdvance', 'menuCardTATransfer', 
+                    'menuCardACG61', 'menuCardSR1', 'menuCardTAAdvance', 'menuCardTATransfer', 
                     'menuCardAI', 'menuCardMaintenance', 'menuCardSelfPassword', 'menuCardUpdateNews'
                 ];
             } else {
                 SYSTEM_USER_REGISTRY[profileIndex].allowedCards = [
                     'menuCardBulk', 'menuCardHoliday', 'menuCardDateWise', 
-                    'menuCardACG61', 'menuCardTAAdvance', 'menuCardTATransfer', 
+                    'menuCardACG61', 'menuCardSR1', 'menuCardTAAdvance', 'menuCardTATransfer', 
                     'menuCardAI', 'menuCardSelfPassword'
                 ];
             }
@@ -2313,8 +2458,8 @@
             let currentCards = profile.allowedCards;
             if (!currentCards) {
                 currentCards = profile.role === 'admin' 
-                    ? ['menuCardBulk', 'menuCardHoliday', 'menuCardDateWise', 'menuCardACG61', 'menuCardTAAdvance', 'menuCardTATransfer', 'menuCardAI', 'menuCardMaintenance', 'menuCardSelfPassword', 'menuCardUpdateNews']
-                    : ['menuCardBulk', 'menuCardHoliday', 'menuCardDateWise', 'menuCardACG61', 'menuCardTAAdvance', 'menuCardTATransfer', 'menuCardAI', 'menuCardSelfPassword'];
+                    ? ['menuCardBulk', 'menuCardHoliday', 'menuCardDateWise', 'menuCardACG61', 'menuCardSR1', 'menuCardTAAdvance', 'menuCardTATransfer', 'menuCardAI', 'menuCardMaintenance', 'menuCardSelfPassword', 'menuCardUpdateNews']
+                    : ['menuCardBulk', 'menuCardHoliday', 'menuCardDateWise', 'menuCardACG61', 'menuCardSR1', 'menuCardTAAdvance', 'menuCardTATransfer', 'menuCardAI', 'menuCardSelfPassword'];
             }
             
             const checkboxes = document.querySelectorAll('.card-checkbox');
@@ -2475,7 +2620,7 @@
             allCards.forEach(card => card.style.display = "none");
             
             if(u === "GUEST") {
-                const guestCards = ['menuCardBulk', 'menuCardHoliday', 'menuCardDateWise', 'menuCardACG61', 'menuCardTAAdvance', 'menuCardTATransfer', 'menuCardAI'];
+                const guestCards = ['menuCardBulk', 'menuCardHoliday', 'menuCardDateWise', 'menuCardACG61', 'menuCardSR1', 'menuCardTAAdvance', 'menuCardTATransfer', 'menuCardAI'];
                 guestCards.forEach(id => {
                     let c = document.getElementById(id);
                     if(c) c.style.display = "block";
@@ -2485,9 +2630,9 @@
                 
                 if (!userAllowedList) {
                     if (profile.role === "admin") {
-                        userAllowedList = ['menuCardBulk', 'menuCardHoliday', 'menuCardDateWise', 'menuCardACG61', 'menuCardTAAdvance', 'menuCardTATransfer', 'menuCardAI', 'menuCardMaintenance', 'menuCardSelfPassword', 'menuCardUpdateNews'];
+                        userAllowedList = ['menuCardBulk', 'menuCardHoliday', 'menuCardDateWise', 'menuCardACG61', 'menuCardSR1', 'menuCardTAAdvance', 'menuCardTATransfer', 'menuCardAI', 'menuCardMaintenance', 'menuCardSelfPassword', 'menuCardUpdateNews'];
                     } else {
-                        userAllowedList = ['menuCardBulk', 'menuCardHoliday', 'menuCardDateWise', 'menuCardACG61', 'menuCardTAAdvance', 'menuCardTATransfer', 'menuCardAI', 'menuCardSelfPassword'];
+                        userAllowedList = ['menuCardBulk', 'menuCardHoliday', 'menuCardDateWise', 'menuCardACG61', 'menuCardSR1', 'menuCardTAAdvance', 'menuCardTATransfer', 'menuCardAI', 'menuCardSelfPassword'];
                     }
                 }
 
@@ -2583,6 +2728,12 @@
                     displayCustomAlert("Form Defect: Name of the Officer/Official is mandatory.");
                     return;
                 }
+            } else if(modeType === "sr1") {
+                const srName = document.getElementById('sr1Name').value;
+                if (!srName) {
+                    displayCustomAlert("Form Defect: Name of the applicant is mandatory.");
+                    return;
+                }
             }
             
             systemLoader.style.display = 'flex';
@@ -2602,6 +2753,8 @@
                         generateTAAdvancePDF();
                     } else if(modeType === "taTransfer") {
                         generateTATransferPDF();
+                    } else if(modeType === "sr1") {
+                        generateSR1PDF();
                     }
                 } catch (err) {
                     console.error("PDF generation failure context: ", err);
@@ -2610,6 +2763,169 @@
                     systemLoader.style.display = 'none';
                 }
             }, 750);
+        }
+
+        // NEW: S.R.-1 PDF GENERATOR LOGIC
+        function generateSR1PDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF('p', 'mm', 'a4');
+
+            const name = document.getElementById('sr1Name').value || "";
+            const rules = document.getElementById('sr1Rules').value || "";
+            const post = document.getElementById('sr1Post').value || "";
+            const dept = document.getElementById('sr1Dept').value || "";
+            const pay = document.getElementById('sr1Pay').value || "";
+            const allowances = document.getElementById('sr1Allowances').value || "";
+            const nature = document.getElementById('sr1Nature').value || "";
+            const period = document.getElementById('sr1Period').value || "";
+            
+            let fDateRaw = document.getElementById('sr1FromDate').value;
+            let tDateRaw = document.getElementById('sr1ToDate').value;
+            let fromDateStr = fDateRaw ? fDateRaw.split("-").reverse().join("/") : "";
+            let toDateStr = tDateRaw ? tDateRaw.split("-").reverse().join("/") : "";
+            let natureString = period ? `${nature} for ${period} days (From ${fromDateStr} to ${toDateStr})` : nature;
+
+            const prefixSuffix = document.getElementById('sr1PrefixSuffix').value || "";
+            const grounds = document.getElementById('sr1Grounds').value || "";
+            const lastLeave = document.getElementById('sr1LastLeave').value || "";
+            
+            const ltcProp = document.getElementById('sr1LtcProp').value || "";
+            const ltcBlock = document.getElementById('sr1LtcBlock').value || "";
+            const station = document.getElementById('sr1Station').value || "";
+            
+            let aDateRaw = document.getElementById('sr1Date').value;
+            let appDateStr = aDateRaw ? aDateRaw.split("-").reverse().join("/") : "";
+
+            doc.setFont("times", "bold");
+            doc.setFontSize(14);
+            doc.text("FORM FOR APPLICATION FOR LEAVE", 105, 20, { align: "center" });
+            
+            doc.setFontSize(10);
+            doc.text("(See Supplementary Rule 216)", 105, 26, { align: "center" });
+            
+            doc.setFontSize(12);
+            doc.text("S.R.-1", 195, 20, { align: "right" });
+
+            doc.setFontSize(9);
+            doc.setFont("times", "normal");
+            doc.text("Note: Items 1 to 11 must be filled in by all applicants whether gazetted or non-gazetted", 105, 34, { align: "center" });
+
+            let currentY = 40;
+
+            const drawRow = (sno, label, val, h) => {
+                doc.setFont("times", "bold");
+                doc.text(sno, 15, currentY + 5.5);
+                
+                doc.setFont("times", "normal");
+                let splitLabel = doc.splitTextToSize(label, 75);
+                doc.text(splitLabel, 22, currentY + 5.5);
+                
+                doc.setFont("times", "bold");
+                let splitVal = doc.splitTextToSize(val, 90);
+                doc.text(splitVal, 105, currentY + 5.5);
+                
+                currentY += h;
+                doc.line(12, currentY, 198, currentY); 
+            };
+
+            doc.line(12, currentY, 198, currentY); 
+
+            drawRow("1.", "Name of the applicant", name, 10);
+            drawRow("2.", "Leave rules applicable", rules, 10);
+            drawRow("3.", "Post held", post, 10);
+            drawRow("4.", "Department, Office and Section", dept, 10);
+            drawRow("5.", "Pay", pay ? "Rs. " + pay : "", 10);
+            drawRow("6.", "House rent allowance, conveyance\nallowance or other compensatory\nallowances drawn in the present post.", allowances, 16);
+            drawRow("7.", "Nature and period of leave applied for\nand date from which required", natureString, 12);
+            drawRow("8.", "Sunday and holidays, if any proposed\nto be prefixed/suffixed to leave.", prefixSuffix, 12);
+            drawRow("9.", "Ground on which leave is applied for", grounds, 10);
+            drawRow("10.", "Date of return from last leave and the\nnature and period of that leave", lastLeave, 12);
+
+            let r11StartY = currentY;
+            doc.setFont("times", "bold");
+            doc.text("11.", 15, currentY + 5.5);
+            doc.setFont("times", "normal");
+            
+            let ltcString = `I ${ltcProp} to avail myself of leave travel concession in the block years ${ltcBlock} during the ensuing leave.`;
+            let splitLtc = doc.splitTextToSize(ltcString, 170);
+            doc.text(splitLtc, 22, currentY + 5.5);
+            
+            currentY += 12;
+            doc.line(12, currentY, 198, currentY); 
+
+            let r12StartY = currentY;
+            doc.setFont("times", "bold");
+            doc.text("12.", 15, currentY + 5.5);
+            doc.setFont("times", "normal");
+
+            let ud1 = "(a) I undertake to refund the difference between the leave salary drawn during leave on average pay/commuted leave and that admissible leave on half average pay half leave, which would not have been admissible had the provision to F.R.81(b)(II) Rule 11(c)(III) of the revised Leave Rules, 1933 not been applied in the event of my retirement from service at end or during the currency of the leave.";
+            let ud2 = "(b) I undertake to refund leave salary drawn during leave not due which would not have been admissible had F.R.81(c) Rule 11(d) of the Revised Leave Rule 1933 not been applied, in the event of my voluntary retirement or resignation from service at any time until I earn half pay leave not less than the amount of leave not due availed of by me.";
+
+            let splitUd1 = doc.splitTextToSize(ud1, 170);
+            doc.text(splitUd1, 22, currentY + 5.5);
+            currentY += (splitUd1.length * 4) + 4;
+            
+            let splitUd2 = doc.splitTextToSize(ud2, 170);
+            doc.text(splitUd2, 22, currentY);
+            currentY += (splitUd2.length * 4) + 4;
+
+            doc.text("Date:", 22, currentY + 6);
+            doc.setFont("times", "bold");
+            doc.text(appDateStr, 33, currentY + 6);
+            
+            doc.setFont("times", "normal");
+            doc.text("Signature of applicant", 190, currentY + 6, { align: "right" });
+            currentY += 10;
+            doc.line(12, currentY, 198, currentY); 
+
+            let r13StartY = currentY;
+            doc.setFont("times", "bold");
+            doc.text("13.", 15, currentY + 6);
+            doc.setFont("times", "normal");
+            doc.text("Remarks and/or recommendation of the\ncontrolling Officer.", 22, currentY + 6);
+            
+            currentY += 24;
+            doc.text("Date:", 22, currentY);
+            doc.text("Signature", 190, currentY - 5, { align: "right" });
+            doc.text("Designation", 190, currentY + 2, { align: "right" });
+            currentY += 4;
+            doc.line(12, currentY, 198, currentY);
+
+            doc.setFont("times", "bold");
+            doc.text("CERTIFICATE REGARDING ADMISSIBILITY OF LEAVE", 105, currentY + 8, { align: "center" });
+            doc.setFontSize(9);
+            doc.text("(By Accountant General to the case of gazetted Officers)", 105, currentY + 13, { align: "center" });
+            doc.setFontSize(10);
+            
+            currentY += 20;
+            doc.setFont("times", "bold");
+            doc.text("14.", 15, currentY);
+            doc.setFont("times", "normal");
+            
+            let certLine = `Certified that ${nature} for ${period} days from ${fromDateStr} to ${toDateStr} is admissible under rule .................................... of the ${rules} Rules.`;
+            let splitCert = doc.splitTextToSize(certLine, 170);
+            doc.text(splitCert, 22, currentY);
+
+            currentY += 15;
+            doc.text("Date:", 22, currentY);
+            doc.text("Signature", 190, currentY - 5, { align: "right" });
+            doc.text("Designation", 190, currentY + 2, { align: "right" });
+
+            currentY += 6;
+            doc.line(12, currentY, 198, currentY); 
+            doc.setFontSize(8.5);
+            let footNote = "* If the applicant is drawing any compensatory allowance the sanctioning authority should state whether on the expiry of leave he is likely to return the same post or to another post carrying a similar allowance.";
+            let splitFoot = doc.splitTextToSize(footNote, 180);
+            doc.text(splitFoot, 15, currentY + 5);
+
+            doc.line(12, 40, 12, currentY); 
+            doc.line(198, 40, 198, currentY); 
+            doc.line(20, 40, 20, r11StartY); 
+            doc.line(100, 40, 100, r11StartY); 
+
+            doc.line(20, r11StartY, 20, currentY);
+
+            finalizeDocumentViewer(doc);
         }
 
         function generateTATransferPDF() {
