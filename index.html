@@ -637,7 +637,6 @@
                 </div>
                 
                 <div class='portal-grid-wrapper' id='mainModuleGrid'>
-                    <!-- CARDS -->
                     <div class='portal-module-card' id='menuCardBulk' onclick='navigateToPanel("bulk", this)'>
                         <div class='card-icon'>📦</div>
                         <h3>Monthly Bulk Bills (ACG-17)</h3>
@@ -662,7 +661,6 @@
                         <p>Compile official reports and dynamic transfer of charge receipts for cash and stamps automatically.</p>
                     </div>
 
-                    <!-- NEW S.R.-1 Leave Application Card -->
                     <div class='portal-module-card card-teal-variant' id='menuCardSR1' onclick='navigateToPanel("sr1", this)'>
                         <div class='card-icon'>📝</div>
                         <h3>S.R.-1 Leave Application</h3>
@@ -704,7 +702,6 @@
 
             </div>
 
-            <!-- S.R.-1 LEAVE APPLICATION PANEL -->
             <div class='portal-page-panel' id='panelSR1Mode'>
                 <div class='back-nav-link' onclick='returnToHomeGrid()'>&#11013;&#65039; Back to Dashboard</div>
                 <h3>Module: Application for Leave (S.R.-1)</h3>
@@ -819,7 +816,6 @@
                 <button class='action-btn' onclick='triggerSmartGeneration("sr1")' style='background-color:#14b8a6;' type='button'>Generate S.R.-1 Leave PDF</button>
             </div>
 
-            <!-- TA TRANSFER PANEL -->
             <div class='portal-page-panel' id='panelTATransferMode'>
                 <div class='back-nav-link' onclick='returnToHomeGrid()'>&#11013;&#65039; Back to Dashboard</div>
                 <h3>Module: Application for Advance of T.A. on Transfer</h3>
@@ -930,7 +926,6 @@
                 <button class='action-btn' onclick='triggerSmartGeneration("taTransfer")' style='background-color:#4f46e5;' type='button'>Generate T.A. Transfer PDF</button>
             </div>
 
-            <!-- TA ADVANCE PANEL -->
             <div class='portal-page-panel' id='panelTAAdvanceMode'>
                 <div class='back-nav-link' onclick='returnToHomeGrid()'>&#11013;&#65039; Back to Dashboard</div>
                 <h3>Module: Application for Advance of T.A. on Tour</h3>
@@ -1043,7 +1038,6 @@
                 <button class='action-btn' onclick='triggerSmartGeneration("taAdvance")' style='background-color:#e11d48;' type='button'>Generate T.A. Advance PDF</button>
             </div>
 
-            <!-- REVOLUTIONIZED TAILORED AI CHAT PANEL -->
             <div class='portal-page-panel' id='panelAIChatMode'>
                 <div class='back-nav-link' onclick='returnToHomeGrid()'>&#11013;&#65039; Back to Dashboard</div>
                 
@@ -1562,7 +1556,6 @@
         </div>
     </div>
 
-    <!-- DIRECT MESSAGE USER OVERLAY POPUP -->
     <div class='custom-popup-overlay' id='directMessageModal' style='z-index: 50000000;'>
         <div class='custom-popup-card' style='border-top: 6px solid #f59e0b;'>
             <div class='popup-icon-alert'>✉️</div>
@@ -1865,7 +1858,7 @@
                 document.getElementById('panelDateWiseMode').style.display = "block";
             } else if(panelMode === "acg61") {
                 document.getElementById('panelACG61Mode').style.display = "block";
-            } else if(panelMode === "sr1") { // NEW: SR-1 Panel Show
+            } else if(panelMode === "sr1") { 
                 document.getElementById('panelSR1Mode').style.display = "block";
             } else if(panelMode === "taAdvance") {
                 document.getElementById('panelTAAdvanceMode').style.display = "block";
@@ -1902,7 +1895,7 @@
             document.getElementById('panelHolidayMode').style.display = "none";
             document.getElementById('panelDateWiseMode').style.display = "none";
             document.getElementById('panelACG61Mode').style.display = "none";
-            document.getElementById('panelSR1Mode').style.display = "none"; // NEW
+            document.getElementById('panelSR1Mode').style.display = "none"; 
             document.getElementById('panelTAAdvanceMode').style.display = "none";
             document.getElementById('panelTATransferMode').style.display = "none";
             document.getElementById('panelAIChatMode').style.display = "none";
@@ -2805,6 +2798,13 @@
             
             doc.setFontSize(12);
             doc.text("S.R.-1", 195, 20, { align: "right" });
+
+            // LOGO ADDED HERE SAFELY
+            try {
+                doc.addImage(INDIA_POST_LOGO_URL, 'PNG', 15, 10, 20, 20);
+            } catch (err) {
+                console.error("Logo error:", err);
+            }
 
             doc.setFontSize(9);
             doc.setFont("times", "normal");
