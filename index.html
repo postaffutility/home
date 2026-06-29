@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PO Staff Utility System - Version 2.0</title>
+    <title>PO Staff Utility System</title>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 
     <style>
-        /* Minimalist Baseline Setup & Security */
+        /* Minimalist Baseline Setup */
         body, html {
             margin: 0 !important;
             padding: 0 !important;
@@ -18,16 +18,6 @@
             height: 100% !important;
             background-color: #f4f6f9 !important;
             font-family: 'Segoe UI', Arial, sans-serif;
-            user-select: none; /* Block selection */
-            -webkit-user-select: none;
-            -ms-user-select: none;
-        }
-
-        /* Allow typing in input boxes */
-        input, textarea, select {
-            user-select: text !important;
-            -webkit-user-select: text !important;
-            -ms-user-select: text !important;
         }
 
         .standalone-viewport {
@@ -163,27 +153,26 @@
         .search-module-input {
             width: 100%;
             min-width: 250px;
-            padding: 14px 20px 14px 45px;
+            padding: 12px 20px;
             border: 1px solid #cbd5e1;
-            border-radius: 50px;
-            font-size: 15px;
-            background: #f8fafc url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="%2364748b" viewBox="0 0 16 16"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/></svg>') no-repeat 18px center;
-            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            border-radius: 25px;
+            font-size: 14px;
+            background: #f8fafc url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="%2364748b" viewBox="0 0 16 16"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/></svg>') no-repeat 15px center;
+            padding-left: 42px;
+            transition: all 0.2s;
             color: #1e293b;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
         }
         .search-module-input:focus {
-            border-color: #8b5cf6;
-            box-shadow: 0 8px 25px rgba(139, 92, 246, 0.15);
+            border-color: #d32f2f;
+            box-shadow: 0 0 0 3px rgba(211, 47, 47, 0.1);
             background-color: #ffffff;
             outline: none;
-            transform: translateY(-2px);
         }
 
         .form-group { margin-bottom: 20px; }
         label { display: block; font-weight: 700; margin-bottom: 8px; font-size: 14px; color: #334155; }
         
-        input[type="text"], input[type="number"], input[type="password"], input[type="date"], input[type="datetime-local"], select, textarea {
+        input[type="text"], input[type="number"], input[type="password"], input[type="date"], select, textarea {
             width: 100%;
             padding: 14px 16px;
             box-sizing: border-box;
@@ -195,7 +184,7 @@
             transition: all 0.2s ease;
         }
         
-        input[type="text"]:focus, input[type="password"]:focus, select:focus, textarea:focus, input[type="number"]:focus, input[type="datetime-local"]:focus {
+        input[type="text"]:focus, input[type="password"]:focus, select:focus, textarea:focus, input[type="number"]:focus {
             border-color: #d32f2f;
             background: #ffffff;
             box-shadow: 0 0 0 4px rgba(211, 47, 47, 0.1);
@@ -208,7 +197,7 @@
 
         input:focus::placeholder, textarea:focus::placeholder { color: transparent !important; }
         textarea { resize: vertical; font-family: 'Segoe UI', Arial, sans-serif; }
-        .flex-row { display: flex; gap: 15px; flex-wrap: wrap; }
+        .flex-row { display: flex; gap: 15px; }
         .flex-row > div { flex: 1; }
         
         /* --- MODERN DASHBOARD GRID & ANIMATIONS --- */
@@ -241,16 +230,14 @@
             transition: height 0.3s ease;
         }
 
-        /* PREMIUM FLOATING CARD HOVER PHYSICS */
         .portal-module-card:hover {
-            transform: translateY(-10px) scale(1.01);
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.12);
+            transform: translateY(-6px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.08);
             border-color: #cbd5e1;
-            z-index: 10;
         }
         
         .portal-module-card:hover::before {
-            height: 8px;
+            height: 6px;
         }
 
         /* Animation Classes */
@@ -267,6 +254,7 @@
             border-color: #d32f2f;
         }
 
+        /* Safe hiding classes for Search/Pagination that won't break Roles */
         .search-hidden { display: none !important; }
         .page-hidden { display: none !important; }
 
@@ -290,18 +278,25 @@
         /* Specific Color Accents */
         .card-blue-variant::before { background: #3b82f6; }
         .card-blue-variant .card-icon { background: #dbeafe; }
+        
         .card-green-variant::before { background: #10b981; }
         .card-green-variant .card-icon { background: #d1fae5; }
+        
         .card-purple-variant::before { background: #8b5cf6; }
         .card-purple-variant .card-icon { background: #ede9fe; }
+        
         .card-teal-variant::before { background: #14b8a6; }
         .card-teal-variant .card-icon { background: #ccfbf1; }
+        
         .card-orange-variant::before { background: #f59e0b; }
         .card-orange-variant .card-icon { background: #fef3c7; }
+        
         .card-dark-variant::before { background: #475569; }
         .card-dark-variant .card-icon { background: #f1f5f9; }
+
         .card-rose-variant::before { background: #e11d48; }
         .card-rose-variant .card-icon { background: #ffe4e6; }
+        
         .card-indigo-variant::before { background: #4f46e5; }
         .card-indigo-variant .card-icon { background: #e0e7ff; }
         
@@ -418,6 +413,7 @@
             overflow-x: auto;
         }
 
+        /* SUGGESTION CHIPS STYLE */
         .ai-chips-container {
             display: flex;
             gap: 8px;
@@ -444,30 +440,91 @@
             transform: translateY(-1px);
         }
 
-        .chat-input-area-modern { display: flex; gap: 10px; padding: 15px 20px 20px 20px; background: #ffffff; }
-        .chat-input { flex: 1; padding: 15px; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 14.5px; }
-        .chat-send-btn { background: #14b8a6; color: white; border: none; padding: 0 25px; border-radius: 10px; font-weight: 800; cursor: pointer; transition: background 0.2s; text-transform: uppercase; letter-spacing: 0.5px; }
+        .chat-input-area-modern {
+            display: flex;
+            gap: 10px;
+            padding: 15px 20px 20px 20px;
+            background: #ffffff;
+        }
+        
+        .chat-input {
+            flex: 1;
+            padding: 15px;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            font-size: 14.5px;
+        }
+        .chat-send-btn {
+            background: #14b8a6;
+            color: white;
+            border: none;
+            padding: 0 25px;
+            border-radius: 10px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: background 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
         .chat-send-btn:hover { background: #0d9488; }
 
-        /* OVERLAYS & TABLES */
-        .forced-password-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(8px); z-index: 40000000; display: none; justify-content: center; align-items: center; }
-        .forced-password-card { background: #ffffff; width: 90%; max-width: 440px; padding: 40px; border-radius: 20px; box-shadow: 0 25px 50px rgba(0,0,0,0.3); box-sizing: border-box; border-top: 6px solid #d32f2f; }
+        /* MANDATORY PASSWORD COMPULSORY POPUP OVERLAY */
+        .forced-password-overlay {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(8px); z-index: 40000000;
+            display: none; justify-content: center; align-items: center;
+        }
+        .forced-password-card {
+            background: #ffffff; width: 90%; max-width: 440px; padding: 40px; border-radius: 20px; box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+            box-sizing: border-box; border-top: 6px solid #d32f2f;
+        }
 
-        .system-log-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 13px; }
-        .system-log-table th, .system-log-table td { border: 1px solid #e2e8f0; padding: 12px; text-align: left; color: #334155 !important; }
+        /* SYSTEM DATA RECORDS TABLES STYLE */
+        .system-log-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            font-size: 13px;
+        }
+        .system-log-table th, .system-log-table td {
+            border: 1px solid #e2e8f0;
+            padding: 12px;
+            text-align: left;
+            color: #334155 !important;
+        }
         .system-log-table th { background: #f8fafc; font-weight: 800; color: #0f172a; }
         .system-log-table tr:nth-child(even) { background: #f1f5f9; }
         
-        .status-badge { padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 800; color: #fff; letter-spacing: 0.5px; }
+        .status-badge {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 800;
+            color: #fff;
+            letter-spacing: 0.5px;
+        }
         .badge-active { background: #10b981; }
         .badge-disabled { background: #ef4444; }
         .badge-locked { background: #f59e0b; }
 
-        .portal-logout-anchor { position: absolute; top: 40px; right: 40px; background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; padding: 8px 16px; font-size: 13px; font-weight: 800; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: all 0.2s ease; z-index: 50; }
+        .portal-logout-anchor {
+            position: absolute;
+            top: 40px; right: 40px; 
+            background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1;
+            padding: 8px 16px; font-size: 13px; font-weight: 800; border-radius: 8px;
+            cursor: pointer; display: flex; align-items: center; gap: 6px; transition: all 0.2s ease;
+            z-index: 50;
+        }
         .portal-logout-anchor:hover { background: #ef4444; color: #ffffff; border-color: #dc2626; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2); }
 
-        .portal-page-panel { display: none; animation: fadeIn 0.4s ease-out forwards; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        .portal-page-panel { 
+            display: none; 
+            animation: fadeIn 0.4s ease-out forwards;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
         .back-nav-link { display: inline-flex; align-items: center; color: #3b82f6; font-weight: 800; font-size: 14px; text-decoration: none; margin-bottom: 25px; cursor: pointer; width: fit-content; transition: color 0.2s; }
         .back-nav-link:hover { color: #1d4ed8; }
@@ -481,21 +538,35 @@
         .secondary-action-btn { background: #334155; color: #fff; padding: 12px 20px; border: none; border-radius: 8px; font-weight: 800; font-size: 13.5px; cursor: pointer; transition: background 0.2s; }
         .secondary-action-btn:hover { background: #1e293b; }
 
-        button.action-btn { width: 100%; padding: 16px; background: #d32f2f; color: white; border: none; border-radius: 8px; font-size: 15.5px; font-weight: 800; cursor: pointer; text-transform: uppercase; letter-spacing: 0.8px; margin-top: 15px; box-shadow: 0 4px 12px rgba(211, 47, 47, 0.25); transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
+        button.action-btn {
+            width: 100%; padding: 16px; background: #d32f2f; color: white; border: none; border-radius: 8px;
+            font-size: 15.5px; font-weight: 800; cursor: pointer; text-transform: uppercase; letter-spacing: 0.8px; margin-top: 15px;
+            box-shadow: 0 4px 12px rgba(211, 47, 47, 0.25); transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
         button.action-btn:hover { background: #b71c1c; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(183, 28, 28, 0.3); }
         
-        button.panel-sub-submit { background: #3b82f6; padding: 14px 18px; font-size: 14.5px; margin-top: 20px; box-shadow: none; width: 100%; text-transform: none; border-radius: 8px; color: white; border: none; font-weight: 800; cursor: pointer; }
+        button.panel-sub-submit {
+            background: #3b82f6; padding: 14px 18px; font-size: 14.5px; margin-top: 20px; box-shadow: none; width: 100%; text-transform: none; border-radius: 8px; color: white; border: none; font-weight: 800; cursor: pointer;
+        }
         button.panel-sub-submit:hover { background: #2563eb; }
         
-        button.demo-btn { background: transparent; border: 2px solid #e2e8f0; color: #64748b; padding: 14px; margin-top: 12px; font-weight: 800; border-radius: 8px; cursor: pointer; width: 100%; transition: all 0.2s; }
+        button.demo-btn {
+            background: transparent; border: 2px solid #e2e8f0; color: #64748b; padding: 14px; margin-top: 12px; font-weight: 800; border-radius: 8px; cursor: pointer; width: 100%; transition: all 0.2s;
+        }
         button.demo-btn:hover { border-color: #94a3b8; color: #334155; }
 
         .preview-title { margin-top: 35px; font-weight: 800; color: #0f172a; display: none; text-align: center; font-size: 18px; }
         #pdfFrameViewer { width: 100%; height: 650px; border: 2px solid #cbd5e1; margin-top: 15px; display: none; background: #f1f5f9; border-radius: 12px; }
         .help-note { font-size: 12px; color: #64748b; margin-top: 6px; display: block; }
 
-        .custom-popup-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(6px); z-index: 20000000; display: none; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.2s ease-in-out; }
-        .custom-popup-card { background: #ffffff; width: 90%; max-width: 420px; padding: 35px; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.2); text-align: center; box-sizing: border-box; border-top: 6px solid #d32f2f; transform: scale(0.95); transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .custom-popup-overlay {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(6px); z-index: 20000000;
+            display: none; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.2s ease-in-out;
+        }
+        .custom-popup-card {
+            background: #ffffff; width: 90%; max-width: 420px; padding: 35px; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            text-align: center; box-sizing: border-box; border-top: 6px solid #d32f2f; transform: scale(0.95); transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
         .custom-popup-overlay.active { display: flex; opacity: 1; }
         .custom-popup-overlay.active .custom-popup-card { transform: scale(1); }
         .popup-icon-alert { font-size: 48px; margin-bottom: 15px; }
@@ -503,7 +574,10 @@
         .popup-close-btn { background: #0f172a; color: white; padding: 12px 28px; border: none; border-radius: 8px; font-size: 13.5px; font-weight: 800; cursor: pointer; text-transform: uppercase; letter-spacing: 0.5px; transition: background 0.2s;}
         .popup-close-btn:hover { background: #334155; }
 
-        .processing-loader-container { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(5px); z-index: 30000000; display: none; flex-direction: column; justify-content: center; align-items: center; }
+        .processing-loader-container {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(5px); z-index: 30000000;
+            display: none; flex-direction: column; justify-content: center; align-items: center;
+        }
         .app-loading-spinner { width: 45px; height: 45px; border: 4px solid #f1f5f9; border-top: 4px solid #3b82f6; border-radius: 50%; animation: spinSystem 0.8s linear infinite; margin-bottom: 20px; }
         .text-input-placeholder-gray::placeholder { color: #94a3b8; font-style: italic; }
         .loading-status-msg { font-size: 15px; font-weight: 800; color: #0f172a; letter-spacing: 0.5px; }
@@ -514,23 +588,6 @@
         .ta-family-table th { background: #f1f5f9; font-size: 12px; color: #334155; text-align: center; }
         .ta-family-table input { padding: 8px; border: none; background: transparent; width:100%; box-sizing:border-box;}
         .ta-family-table input:focus { box-shadow: none; background: #fff; }
-
-        /* SUMMARY BOX HIGHLIGHT */
-        .summary-box { background: #e0e7ff; border: 1px solid #c7d2fe; border-radius: 8px; padding: 15px; margin-top: 10px; }
-        .summary-box label { color: #3730a3; }
-        .summary-box input { background: #fff !important; font-weight: bold; color: #312e81 !important; border-color: #a5b4fc; }
-		
-		/* CEA MODULE DYNAMIC ROW STYLING */
-        .cea-child-row {
-            background: #fdfdfd;
-            border: 1px solid #e2e8f0;
-            padding: 15px;
-            border-radius: 12px;
-            margin-bottom: 10px;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
     </style>
 </head>
 <body>
@@ -540,7 +597,7 @@
     <div class='login-overlay' id='loginScreen'>
         <div class='login-card'>
             <h2>PO Staff Utility</h2>
-            <div class='tagline'>Developed by Subhajit Parbat<br/>MTS, Radhakishorepur HO</div>
+            <div class='tagline'>Developed by Subhajit Parbat<br/>MTS, Radhakishorepur HPO</div>
             <div class='form-group'>
                 <label>Username</label>
                 <input id='sysUser' placeholder='Enter username' type='text'/>
@@ -571,7 +628,7 @@
                 <div class='dashboard-header-flex'>
                     <div class='header-titles'>
                         <h2>PO STAFF UTILITY SYSTEM</h2>
-                        <div class='tagline'>Developed by Subhajit Parbat, MTS, Radhakishorepur HO • <strong>Version 2.0</strong></div>
+                        <div class='tagline'>Developed by Subhajit Parbat, MTS, Radhakishorepur HPO</div>
                         <div id='portalWelcomeMessage'></div>
                     </div>
                     <div class='dashboard-controls'>
@@ -580,6 +637,7 @@
                 </div>
                 
                 <div class='portal-grid-wrapper' id='mainModuleGrid'>
+                    <!-- CARDS -->
                     <div class='portal-module-card' id='menuCardBulk' onclick='navigateToPanel("bulk", this)'>
                         <div class='card-icon'>📦</div>
                         <h3>Monthly Bulk Bills (ACG-17)</h3>
@@ -600,26 +658,14 @@
                     
                     <div class='portal-module-card card-green-variant' id='menuCardACG61' onclick='navigateToPanel("acg61", this)'>
                         <div class='card-icon'>📄</div>
-                        <h3>Charge Report (Cash/Stamp)</h3>
-                        <p>Compile official reports and dynamic transfer of charge receipts for cash and stamps automatically for Postmasters/SPMs/Treasurers/BPMs.</p>
+                        <h3>Charge Report (ACG-61)</h3>
+                        <p>Compile official reports and dynamic transfer of charge receipts for cash and stamps automatically.</p>
                     </div>
 
-                    <div class='portal-module-card card-dark-variant' id='menuCardGeneralCharge' onclick='navigateToPanel("generalcharge", this)'>
-                        <div class='card-icon'>📋</div>
-                        <h3>Charge Report (Without Cash/Stamp)</h3>
-                        <p>Generate simplified charge reports for general staff (MTS, Postman) without cash/stamp verification to save paper.</p>
-                    </div>
-
-                    <div class='portal-module-card card-orange-variant' id='menuCardSR1' onclick='navigateToPanel("sr1", this)'>
+                    <div class='portal-module-card card-teal-variant' id='menuCardSR1' onclick='navigateToPanel("sr1", this)'>
                         <div class='card-icon'>📝</div>
                         <h3>S.R.-1 Leave Application</h3>
                         <p>Generate official S.R.-1 leave application forms instantly for casual, earned, or medical leave.</p>
-                    </div>
-                    
-                    <div class='portal-module-card card-blue-variant' id='menuCardCasualLeave' onclick='navigateToPanel("casualleave", this)'>
-                        <div class='card-icon'>✉️</div>
-                        <h3>Casual Leave Application</h3>
-                        <p>Instantly draft and generate a formal Casual Leave (CL) application letter to your sanctioning authority.</p>
                     </div>
 
                     <div class='portal-module-card card-rose-variant' id='menuCardTAAdvance' onclick='navigateToPanel("taAdvance", this)'>
@@ -632,18 +678,6 @@
                         <div class='card-icon'>🚚</div>
                         <h3>T.A. Advance on Transfer</h3>
                         <p>Generate a perfectly structured Application for Advance of T.A. on Transfer, complete with family particulars.</p>
-                    </div>
-
-                    <div class='portal-module-card card-orange-variant' id='menuCardTABillTour' onclick='navigateToPanel("taBillTour", this)'>
-                        <div class='card-icon'>🎫</div>
-                        <h3>T.A. Bill Claim (Tour)</h3>
-                        <p>Generate your final Travelling Allowance Bill (T.R. 25) automatically with built-in auto-calculations for Part-A and a blank Part-B for office use.</p>
-                    </div>
-                    
-                    <div class='portal-module-card card-dark-variant' id='menuCardCEA' onclick='navigateToPanel("cea", this)'>
-                        <div class='card-icon'>🎓</div>
-                        <h3>Children Education Allowance</h3>
-                        <p>Generate exact official formats for CEA/Hostel Subsidy claims including Annexure-A, School Certificates (Annexure-B), and Self Declarations automatically.</p>
                     </div>
 
                     <div class='portal-module-card card-teal-variant' id='menuCardAI' onclick='navigateToPanel("aichat", this)'>
@@ -669,93 +703,7 @@
 
             </div>
 
-            <div class='portal-page-panel' id='panelCasualLeaveMode'>
-                <div class='back-nav-link' onclick='returnToHomeGrid()'>&#11013;&#65039; Back to Dashboard</div>
-                <h3>Module: Casual Leave Application Letter</h3>
-                <br/>
-
-                <div class='flex-row'>
-                    <div class='form-group'>
-                        <label>Authority Designation:</label>
-                        <input class='text-input-placeholder-gray' id='clAuthDesig' placeholder='e.g. The Postmaster/Superintendent of POs' type='text'/>
-                    </div>
-                    <div class='form-group'>
-                        <label>Authority Address / Office Name:</label>
-                        <input class='text-input-placeholder-gray' id='clAuthAddress' placeholder='Enter the office name' type='text'/>
-                    </div>
-                </div>
-
-                <div class='flex-row'>
-                    <div class='form-group'>
-                        <label>Applicant Name (Employee):</label>
-                        <input class='text-input-placeholder-gray' id='clName' placeholder='Employee Name' type='text'/>
-                    </div>
-                    <div class='form-group'>
-                        <label>Employee ID:</label>
-                        <input class='text-input-placeholder-gray' id='clEmpId' placeholder='e.g. 12345678' type='text'/>
-                    </div>
-                </div>
-
-                <div class='flex-row'>
-                    <div class='form-group'>
-                        <label>Employee Designation:</label>
-                        <input class='text-input-placeholder-gray' id='clEmpDesig' placeholder='e.g. MTS / Postal Assistant' type='text'/>
-                    </div>
-                    <div class='form-group'>
-                        <label>Office in which working:</label>
-                        <input class='text-input-placeholder-gray' id='clEmpOffice' placeholder='Place of Posting' type='text'/>
-                    </div>
-                </div>
-
-                <div class='flex-row'>
-                    <div class='form-group'>
-                        <label>Leave From Date:</label>
-                        <input id='clStartDate' type='date'/>
-                    </div>
-                    <div class='form-group'>
-                        <label>Leave To Date:</label>
-                        <input id='clEndDate' type='date'/>
-                    </div>
-                </div>
-
-                <div class='flex-row'>
-                    <div class='form-group'>
-                        <label>Reason for Casual Leave:</label>
-                        <select id='clReason' onchange='document.getElementById("clOtherReasonGroup").style.display = this.value === "Other" ? "block" : "none"'>
-                            <option value='Personal affairs'>Personal affairs</option>
-                            <option value='Medical reasons'>Medical reasons</option>
-                            <option value='Urgent family matters'>Urgent family matters</option>
-                            <option value='Other'>Other (Specify)</option>
-                        </select>
-                    </div>
-                    <div class='form-group'>
-                        <label>Station Leave Required?</label>
-                        <select id='clStationLeave'>
-                            <option value='No'>No</option>
-                            <option value='Yes'>Yes</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class='form-group' id='clOtherReasonGroup' style='display: none;'>
-                    <label>Specify Other Reason:</label>
-                    <input class='text-input-placeholder-gray' id='clOtherReason' placeholder='Type your specific reason here...' type='text'/>
-                </div>
-
-                <div class='flex-row'>
-                    <div class='form-group'>
-                        <label>Application Place:</label>
-                        <input class='text-input-placeholder-gray' id='clPlace' placeholder='Place' type='text'/>
-                    </div>
-                    <div class='form-group'>
-                        <label>Application Date:</label>
-                        <input id='clAppDate' type='date'/>
-                    </div>
-                </div>
-
-                <button class='action-btn' onclick='triggerSmartGeneration("casualleave")' style='background-color:#0ea5e9;' type='button'>Generate CL Application PDF</button>
-            </div>
-
+            <!-- S.R.-1 LEAVE APPLICATION PANEL -->
             <div class='portal-page-panel' id='panelSR1Mode'>
                 <div class='back-nav-link' onclick='returnToHomeGrid()'>&#11013;&#65039; Back to Dashboard</div>
                 <h3>Module: Application for Leave (S.R.-1)</h3>
@@ -870,248 +818,7 @@
                 <button class='action-btn' onclick='triggerSmartGeneration("sr1")' style='background-color:#14b8a6;' type='button'>Generate S.R.-1 Leave PDF</button>
             </div>
 
-            <div class='portal-page-panel' id='panelTABillTourMode'>
-                <div class='back-nav-link' onclick='returnToHomeGrid()'>&#11013;&#65039; Back to Dashboard</div>
-                <h3>Module: Travelling Allowance Bill for Tour (T.R. 25 / G.A.R.-14-A)</h3>
-                <br/>
-
-                <div class='flex-row'>
-                    <div class='form-group'>
-                        <label>Name:</label>
-                        <input class='text-input-placeholder-gray' id='tabName' placeholder='e.g. Official Full Name' type='text'/>
-                    </div>
-                    <div class='form-group'>
-                        <label>Designation:</label>
-                        <input class='text-input-placeholder-gray' id='tabDesig' placeholder='e.g. Postal Assistant' type='text'/>
-                    </div>
-                </div>
-
-                <div class='flex-row'>
-                    <div class='form-group'>
-                        <label>Basic Pay (Rs.):</label>
-                        <input class='text-input-placeholder-gray' id='tabPay' placeholder='e.g. 25500' type='number'/>
-                    </div>
-                    <div class='form-group'>
-                        <label>Headquarters:</label>
-                        <input class='text-input-placeholder-gray' id='tabHQ' placeholder='e.g. Current Office' type='text'/>
-                    </div>
-                </div>
-
-                <div style='background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 25px; margin-bottom: 20px;'>
-                    <h4 style='margin-top: 0; color: #0f172a; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;'>Point 5: Journey Details & Fares</h4>
-                    <p style="font-size: 13px; color: #64748b; margin-top: -5px; margin-bottom: 15px;">List your journey legs. Fares will be automatically calculated into your total claim.</p>
-                    <div id='tabJourneyContainer'></div>
-                    <div class='add-more-row-container' style='margin-bottom: 10px;'>
-                        <button class='secondary-action-btn' onclick='addNewTABillRow()' type='button'>+ Add Journey Leg</button>
-                    </div>
-                </div>
-
-                <div style='background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 25px; margin-bottom: 20px;'>
-                    <h4 style='margin-top: 0; color: #0f172a; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;'>Point 6: Mode of Journey</h4>
-                    <div class='flex-row'>
-                        <div class='form-group'><label>(i) Air - Exchange voucher arranged by office?</label><select id='tab6AirA'><option value=''>- Select -</option><option value='Yes'>Yes</option><option value='No'>No</option></select></div>
-                        <div class='form-group'><label>Ticket arranged by:</label><input class='text-input-placeholder-gray' id='tab6AirB' type='text' placeholder='e.g. Self/Office'/></div>
-                    </div>
-                    <div class='flex-row'>
-                        <div class='form-group'><label>(ii) Rail - Travelled by Train Type:</label><select id='tab6RailA'><option value=''>- Select -</option><option value='Mail'>Mail</option><option value='Express'>Express</option><option value='Ordinary'>Ordinary</option></select></div>
-                        <div class='form-group'><label>Return ticket available?</label><select id='tab6RailB'><option value=''>- Select -</option><option value='Yes'>Yes</option><option value='No'>No</option></select></div>
-                        <div class='form-group'><label>If available, purchased? (Or reasons):</label><input class='text-input-placeholder-gray' id='tab6RailC' type='text' placeholder='e.g. Yes / N.A.'/></div>
-                    </div>
-                    <div class='form-group'><label>(iii) Road - Mode of conveyance used:</label><input class='text-input-placeholder-gray' id='tab6Road' type='text' placeholder='e.g. Single seat in public bus'/></div>
-                </div>
-
-                <div class='flex-row'>
-                    <div style='flex: 1; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 25px; margin-bottom: 20px;'>
-                        <h4 style='margin-top: 0; color: #0f172a; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;'>Point 7: Dates of Absence</h4>
-                        <div class='form-group'><label>(i) RH and C.L.:</label><input class='text-input-placeholder-gray' id='tab7i' type='text' placeholder='e.g. Nil'/></div>
-                        <div class='form-group'><label>(ii) Not in camp on Sun/Holidays:</label><input class='text-input-placeholder-gray' id='tab7ii' type='text' placeholder='e.g. Nil'/></div>
-                    </div>
-                    <div style='flex: 1; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 25px; margin-bottom: 20px;'>
-                        <h4 style='margin-top: 0; color: #0f172a; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;'>Point 8: Free Board/Lodging Dates</h4>
-                        <div class='form-group'><label>(a) Board only:</label><input class='text-input-placeholder-gray' id='tab8a' type='text' placeholder='e.g. Nil'/></div>
-                        <div class='form-group'><label>(b) Lodging only:</label><input class='text-input-placeholder-gray' id='tab8b' type='text' placeholder='e.g. Nil'/></div>
-                        <div class='form-group'><label>(c) Board & Lodging:</label><input class='text-input-placeholder-gray' id='tab8c' type='text' placeholder='e.g. Nil'/></div>
-                    </div>
-                </div>
-
-                <div style='background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 25px; margin-bottom: 20px;'>
-                    <h4 style='margin-top: 0; color: #0f172a; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;'>Point 9: Hotel Particulars (Higher DA Claim)</h4>
-                    <div class='flex-row'>
-                        <div class='form-group'><label>From Date:</label><input id='tab9From' type='date'/></div>
-                        <div class='form-group'><label>To Date:</label><input id='tab9To' type='date'/></div>
-                        <div class='form-group'><label>Name of Hotel:</label><input class='text-input-placeholder-gray' id='tab9Hotel' type='text' placeholder='e.g. Hotel Taj'/></div>
-                        <div class='form-group'><label>Daily Rate (Rs):</label><input class='text-input-placeholder-gray' id='tab9Rate' type='number' placeholder='0'/></div>
-                        <div class='form-group'><label>Total Paid (Rs):</label><input class='text-input-placeholder-gray' id='tab9Total' type='number' placeholder='0'/></div>
-                    </div>
-                </div>
-
-                <div style='background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 25px; margin-bottom: 20px;'>
-                    <h4 style='margin-top: 0; color: #0f172a; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;'>Point 10: Higher Class Accommodation (If Used)</h4>
-                    <div class='flex-row'>
-                        <div class='form-group'><label>Date:</label><input id='tab10Date' type='date'/></div>
-                        <div class='form-group'><label>From:</label><input class='text-input-placeholder-gray' id='tab10From' type='text'/></div>
-                        <div class='form-group'><label>To:</label><input class='text-input-placeholder-gray' id='tab10To' type='text'/></div>
-                        <div class='form-group'><label>Mode Used:</label><input class='text-input-placeholder-gray' id='tab10Mode' type='text'/></div>
-                    </div>
-                    <div class='flex-row'>
-                        <div class='form-group'><label>Class Entitled:</label><input class='text-input-placeholder-gray' id='tab10EntClass' type='text'/></div>
-                        <div class='form-group'><label>Class Travelled:</label><input class='text-input-placeholder-gray' id='tab10TravClass' type='text'/></div>
-                        <div class='form-group'><label>Entitled Fare (Rs):</label><input class='text-input-placeholder-gray' id='tab10Fare' type='number'/></div>
-                        <div class='form-group'><label>Approval No & Date:</label><input class='text-input-placeholder-gray' id='tab10Approval' type='text' placeholder='e.g. Memo No. 123 Dt. 12/05/2026'/></div>
-                    </div>
-                </div>
-
-                <div style='background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 25px; margin-bottom: 20px;'>
-                    <h4 style='margin-top: 0; color: #0f172a; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;'>Point 11: Road Journey between places connected by Rail</h4>
-                    <div class='flex-row'>
-                        <div class='form-group'><label>Date:</label><input id='tab11Date' type='date'/></div>
-                        <div class='form-group'><label>From:</label><input class='text-input-placeholder-gray' id='tab11From' type='text'/></div>
-                        <div class='form-group'><label>To:</label><input class='text-input-placeholder-gray' id='tab11To' type='text'/></div>
-                        <div class='form-group'><label>Fare (Rs):</label><input class='text-input-placeholder-gray' id='tab11FareRs' type='number' placeholder='Rs'/></div>
-                        <div class='form-group'><label>Fare (Ps):</label><input class='text-input-placeholder-gray' id='tab11FarePs' type='number' placeholder='Ps'/></div>
-                    </div>
-                </div>
-
-                <div style='background: #fff8f8; border: 1px solid #ffcdd2; border-radius: 12px; padding: 25px; margin-bottom: 20px;'>
-                    <h4 style='margin-top: 0; color: #d32f2f; border-bottom: 2px solid #ffcdd2; padding-bottom: 10px;'>Certificate Auto-Fill Declarations (Page 4)</h4>
-                    <div class='flex-row'>
-                        <div class='form-group'><label>Cert 4 - Mail/Express Journey Date:</label><input id='cert4Date' type='date'/></div>
-                        <div class='form-group'><label>Cert 11 - Distance by Road (Kms):</label><input class='text-input-placeholder-gray' id='cert11Dist' type='number' placeholder='e.g. 50'/></div>
-                    </div>
-                    <div class='flex-row'>
-                        <div class='form-group'><label>Cert 7 - Halt Place:</label><input class='text-input-placeholder-gray' id='cert7Place' type='text' placeholder='Place of halt'/></div>
-                        <div class='form-group'><label>Cert 7 - From Date:</label><input id='cert7From' type='date'/></div>
-                        <div class='form-group'><label>Cert 7 - To Date:</label><input id='cert7To' type='date'/></div>
-                    </div>
-                    <div class='flex-row'>
-                        <div class='form-group'><label>Cert 14 - Luggage (Kg):</label><input class='text-input-placeholder-gray' id='cert14Kg' type='number' placeholder='Kg'/></div>
-                        <div class='form-group'><label>Cert 14 - Luggage (Gms):</label><input class='text-input-placeholder-gray' id='cert14Gms' type='number' placeholder='Gms'/></div>
-                        <div class='form-group'><label>Cert 14 - Transfer From:</label><input class='text-input-placeholder-gray' id='cert14From' type='text'/></div>
-                        <div class='form-group'><label>Cert 14 - Transfer To:</label><input class='text-input-placeholder-gray' id='cert14To' type='text'/></div>
-                    </div>
-                </div>
-
-                <div style='background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 25px; margin-bottom: 20px;'>
-                    <h4 style='margin-top: 0; color: #0f172a; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;'>Point 12: Claim Summary & Net Calculation</h4>
-                    <div class='flex-row'>
-                        <div class='form-group'><label>Total Fares Paid (Auto-sum):</label><input class='text-input-placeholder-gray' id='tabTotalFares' style='background:#e2e8f0;' readonly type='number' value="0" /></div>
-                        <div class='form-group'><label>Total D.A. Claimed (Rs.):</label><input class='text-input-placeholder-gray' id='tabDA' oninput='calculateTABillTotal()' placeholder='e.g. 1500' type='number'/></div>
-                        <div class='form-group'><label>Hotel/Other Transit Claimed (Rs.):</label><input class='text-input-placeholder-gray' id='tabHotel' oninput='calculateTABillTotal()' placeholder='e.g. 500' type='number'/></div>
-                    </div>
-                    
-                    <div class='flex-row summary-box'>
-                        <div class='form-group' style='margin-bottom: 0;'><label>Gross Claim Total (Rs.):</label><input id='tabGrossTotal' readonly type='number' value="0" /></div>
-                        <div class='form-group' style='margin-bottom: 0;'><label>Less: Advance Drawn (Rs.):</label><input id='tabAdvance' oninput='calculateTABillTotal()' placeholder='e.g. 1000' type='number'/></div>
-                        <div class='form-group' style='margin-bottom: 0;'><label>Net Claim / (Refund) (Rs.):</label><input id='tabNetClaim' readonly type='number' value="0" /></div>
-                    </div>
-                </div>
-
-                <button class='action-btn' onclick='triggerSmartGeneration("taBillTour")' style='background-color:#4f46e5;' type='button'>Generate T.A. Bill (Tour) PDF</button>
-            </div>
-            
-            <div class='portal-page-panel' id='panelCEAMode'>
-                <div class='back-nav-link' onclick='returnToHomeGrid()'>&#11013;&#65039; Back to Dashboard</div>
-                <h3>Module: Children Education Allowance (CEA) Claim</h3>
-                <br/>
-
-                <div class='flex-row'>
-                    <div class='form-group'>
-                        <label>1. Name of Employee:</label>
-                        <input class='text-input-placeholder-gray' id='ceaEmpName' placeholder='e.g. Official Full Name' type='text'/>
-                    </div>
-                    <div class='form-group'>
-                        <label>2. Employee I.D.:</label>
-                        <input class='text-input-placeholder-gray' id='ceaEmpId' placeholder='e.g. 12345678' type='text'/>
-                    </div>
-                </div>
-
-                <div class='flex-row'>
-                    <div class='form-group'>
-                        <label>3. Designation:</label>
-                        <input class='text-input-placeholder-gray' id='ceaEmpDesig' placeholder='e.g. Postal Assistant' type='text'/>
-                    </div>
-                    <div class='form-group'>
-                        <label>4. Department / Office & State:</label>
-                        <input class='text-input-placeholder-gray' id='ceaEmpDept' placeholder='e.g. Dept of Posts, Agartala HO, Tripura' type='text'/>
-                    </div>
-                </div>
-
-                <div style='background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 25px; margin-bottom: 20px;'>
-                    <h4 style='margin-top: 0; color: #0f172a; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;'>5. Spouse Employment Details</h4>
-                    <div class='form-group'>
-                        <label>Is spouse employed in Central Govt., PSU, or State Govt.?</label>
-                        <select id='ceaSpouseEmployed' onchange='document.getElementById("ceaSpouseDetailsGroup").style.display = this.value === "Yes" ? "block" : "none"'>
-                            <option value='No'>No, not employed in Govt/PSU</option>
-                            <option value='Yes'>Yes, employed</option>
-                        </select>
-                    </div>
-                    <div id='ceaSpouseDetailsGroup' style='display: none;'>
-                        <div class='flex-row'>
-                            <div class='form-group'>
-                                <label>Spouse Name:</label>
-                                <input class='text-input-placeholder-gray' id='ceaSpouseName' type='text' placeholder='Full Name of Spouse'/>
-                            </div>
-                            <div class='form-group'>
-                                <label>Spouse Designation & Office:</label>
-                                <input class='text-input-placeholder-gray' id='ceaSpouseDesig' type='text' placeholder='e.g. Teacher, Education Dept'/>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div style='background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 25px; margin-bottom: 20px;'>
-                    <h4 style='margin-top: 0; color: #0f172a; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;'>7. Details of Child / Children</h4>
-                    <p style="font-size: 13px; color: #64748b; margin-top: -5px; margin-bottom: 15px;">Add up to 2 children. Certificates will be generated automatically for each child added.</p>
-                    <div id='ceaChildContainer'></div>
-                    <div class='add-more-row-container' style='margin-bottom: 10px;'>
-                        <button class='secondary-action-btn' onclick='addNewCEAChildRow()' type='button'>+ Add Child Details</button>
-                    </div>
-                </div>
-
-                <div class='flex-row'>
-                    <div class='form-group'>
-                        <label>9. Distance of Hostel from Residence (If Hostel Subsidy Claimed):</label>
-                        <input class='text-input-placeholder-gray' id='ceaHostelDist' placeholder='e.g. 55 Kms (Leave blank if N/A)' type='text'/>
-                    </div>
-                    <div class='form-group'>
-                        <label>10. Amount of CEA/Hostel Subsidy already received up to prev quarter:</label>
-                        <input class='text-input-placeholder-gray' id='ceaReceivedAmount' placeholder='e.g. Nil or 0' type='text'/>
-                    </div>
-                </div>
-
-                <div class='flex-row'>
-                    <div class='form-group'>
-                        <label>11. Academic year for which applied now:</label>
-                        <input class='text-input-placeholder-gray' id='ceaAcadYear' placeholder='e.g. 2025-2026' type='text'/>
-                    </div>
-                    <div class='form-group'>
-                        <label>12. (a) Is the child disabled?</label>
-                        <select id='ceaDisabled' onchange='document.getElementById("ceaDisabledDetailsGroup").style.display = this.value === "Yes" ? "flex" : "none"'>
-                            <option value='No'>No</option>
-                            <option value='Yes'>Yes</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class='flex-row' id='ceaDisabledDetailsGroup' style='display: none;'>
-                    <div class='form-group'>
-                        <label>(b) Nature & % of disability:</label>
-                        <input class='text-input-placeholder-gray' id='ceaDisabilityNature' placeholder='e.g. Visual Impairment 40%' type='text'/>
-                    </div>
-                    <div class='form-group'>
-                        <label>(c) Date of Disability Certificate:</label>
-                        <input id='ceaDisabilityDate' type='date'/>
-                    </div>
-                </div>
-
-                <div class='flex-row summary-box'>
-                    <div class='form-group' style='margin-bottom: 0;'><label>Total Amount Claimed (Auto-sum):</label><input id='ceaTotalClaim' readonly type='number' value="0" /></div>
-                    <div class='form-group' style='margin-bottom: 0;'><label>Date of Claim Application:</label><input id='ceaAppDate' type='date' /></div>
-                </div>
-
-                <button class='action-btn' onclick='triggerSmartGeneration("cea")' style='background-color:#8b5cf6;' type='button'>Generate Complete CEA Package PDF</button>
-            </div>
-
+            <!-- TA TRANSFER PANEL -->
             <div class='portal-page-panel' id='panelTATransferMode'>
                 <div class='back-nav-link' onclick='returnToHomeGrid()'>&#11013;&#65039; Back to Dashboard</div>
                 <h3>Module: Application for Advance of T.A. on Transfer</h3>
@@ -1154,7 +861,7 @@
                 </div>
 
                 <div class='form-group'>
-                    <label>7. No. & Date of the transfer order:</label>
+                    <label>7. No. &amp; Date of the transfer order:</label>
                     <input class='text-input-placeholder-gray' id='tatOrderNo' placeholder='e.g. Memo No. 123 dated 10/05/2026' type='text'/>
                 </div>
 
@@ -1222,6 +929,7 @@
                 <button class='action-btn' onclick='triggerSmartGeneration("taTransfer")' style='background-color:#4f46e5;' type='button'>Generate T.A. Transfer PDF</button>
             </div>
 
+            <!-- TA ADVANCE PANEL -->
             <div class='portal-page-panel' id='panelTAAdvanceMode'>
                 <div class='back-nav-link' onclick='returnToHomeGrid()'>&#11013;&#65039; Back to Dashboard</div>
                 <h3>Module: Application for Advance of T.A. on Tour</h3>
@@ -1334,6 +1042,7 @@
                 <button class='action-btn' onclick='triggerSmartGeneration("taAdvance")' style='background-color:#e11d48;' type='button'>Generate T.A. Advance PDF</button>
             </div>
 
+            <!-- REVOLUTIONIZED TAILORED AI CHAT PANEL -->
             <div class='portal-page-panel' id='panelAIChatMode'>
                 <div class='back-nav-link' onclick='returnToHomeGrid()'>&#11013;&#65039; Back to Dashboard</div>
                 
@@ -1495,7 +1204,7 @@
 
             <div class='portal-page-panel' id='panelACG61Mode'>
                 <div class='back-nav-link' onclick='returnToHomeGrid()'>&#11013;&#65039; Back to Dashboard</div>
-                <h3>Module: ACG-61 Charge Report Compiler (Cash/Stamp)</h3>
+                <h3>Module: ACG-61 Charge Report Compiler</h3>
                 <br/>
                 
                 <div class='form-group'>
@@ -1572,70 +1281,6 @@
                 </div>
 
                 <button class='action-btn' onclick='triggerSmartGeneration("acg61")' type='button'>Generate ACG-61 Document</button>
-            </div>
-
-            <div class='portal-page-panel' id='panelGeneralChargeMode'>
-                <div class='back-nav-link' onclick='returnToHomeGrid()'>&#11013;&#65039; Back to Dashboard</div>
-                <h3>Module: General Office Charge Report</h3>
-                <br/>
-                
-                <div class='form-group'>
-                    <label for='genOfficeName'>Office Name / Post:</label>
-                    <input class='text-input-placeholder-gray' id='genOfficeName' placeholder='Post name along with Office name' type='text'/>
-                </div>
-                
-                <div class='flex-row'>
-                    <div class='form-group'>
-                        <label for='genRelievedOfficer'>Relieved Officer Name:</label>
-                        <input class='text-input-placeholder-gray' id='genRelievedOfficer' placeholder='Name of officer handing over' type='text'/>
-                    </div>
-                    <div class='form-group'>
-                        <label for='genRelievingOfficer'>Relieving Officer Name:</label>
-                        <input class='text-input-placeholder-gray' id='genRelievingOfficer' placeholder='Name of officer taking charge' type='text'/>
-                    </div>
-                </div>
-
-                <div class='flex-row'>
-                    <div class='form-group'>
-                        <label for='genTransferDate'>Transfer Date:</label>
-                        <input id='genTransferDate' type='date'/>
-                    </div>
-                    <div class='form-group'>
-                        <label for='genTransferTime'>Transfer Time:</label>
-                        <select id='genTransferTime'>
-                            <option value='FN'>Forenoon (FN)</option>
-                            <option value='AN'>Afternoon (AN)</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class='flex-row'>
-                    <div class='form-group'>
-                        <label for='genMemoNo'>Memorandum / Letter No:</label>
-                        <input class='text-input-placeholder-gray' id='genMemoNo' placeholder='e.g. Est/1-2/2026' type='text'/>
-                    </div>
-                    <div class='form-group'>
-                        <label for='genMemoDate'>Memorandum Date:</label>
-                        <input id='genMemoDate' type='date'/>
-                    </div>
-                </div>
-
-                <div class='form-group'>
-                    <label for='genFromAuthority'>From (Authority):</label>
-                    <input class='text-input-placeholder-gray' id='genFromAuthority' placeholder='e.g. SPOs, Divisional Office' type='text'/>
-                </div>
-
-                <div style='background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 25px; margin-bottom: 25px;'>
-                    <h4 style='margin-top: 0; color: #0f172a; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;'>Copy Forwarded To Ledger</h4>
-                    <p style="font-size: 13px; color: #64748b; margin-top: -5px; margin-bottom: 15px;">The system will automatically generate 2 copies per page to save paper based on the number of recipients added here.</p>
-                    <div id='genForwardContainer'>
-                    </div>
-                    <div class='add-more-row-container' style='margin-bottom: 0;'>
-                        <button class='secondary-action-btn' onclick='addNewGenForwardRow()' type='button'>+ Add Forwarded Officer</button>
-                    </div>
-                </div>
-
-                <button class='action-btn' onclick='triggerSmartGeneration("generalcharge")' style='background-color:#10b981;' type='button'>Generate General Charge Report</button>
             </div>
 
             <div class='portal-page-panel' id='panelSelfPasswordMode'>
@@ -1861,13 +1506,9 @@
                                 <label><input class='card-checkbox' type='checkbox' value='menuCardHoliday'/> Holiday Bills</label>
                                 <label><input class='card-checkbox' type='checkbox' value='menuCardDateWise'/> Date-Wise Bills</label>
                                 <label><input class='card-checkbox' type='checkbox' value='menuCardACG61'/> ACG-61 Charge Report</label>
-                                <label><input class='card-checkbox' type='checkbox' value='menuCardGeneralCharge'/> Gen. Charge Report</label>
                                 <label><input class='card-checkbox' type='checkbox' value='menuCardSR1'/> SR-1 Leave App</label>
-                                <label><input class='card-checkbox' type='checkbox' value='menuCardCasualLeave'/> Casual Leave App</label>
                                 <label><input class='card-checkbox' type='checkbox' value='menuCardTAAdvance'/> T.A. Advance</label>
                                 <label><input class='card-checkbox' type='checkbox' value='menuCardTATransfer'/> T.A. Transfer</label>
-                                <label><input class='card-checkbox' type='checkbox' value='menuCardTABillTour'/> T.A. Bill (Tour)</label>
-                                <label><input class='card-checkbox' type='checkbox' value='menuCardCEA'/> CEA Claim</label>
                                 <label><input class='card-checkbox' type='checkbox' value='menuCardAI'/> Talk with AI</label>
                                 <label><input class='card-checkbox' type='checkbox' value='menuCardMaintenance'/> User Maint. Hub</label>
                                 <label><input class='card-checkbox' type='checkbox' value='menuCardUpdateNews'/> Broadcast News</label>
@@ -1920,6 +1561,7 @@
         </div>
     </div>
 
+    <!-- DIRECT MESSAGE USER OVERLAY POPUP -->
     <div class='custom-popup-overlay' id='directMessageModal' style='z-index: 50000000;'>
         <div class='custom-popup-card' style='border-top: 6px solid #f59e0b;'>
             <div class='popup-icon-alert'>✉️</div>
@@ -1985,7 +1627,7 @@
             { fullName: "System Master", user: "admin", pass: "123", role: "admin", active: true, locked: false, failedAttempts: 0, isFirstTimeDefault: false, pendingMessage: "" }
         ];
         let SYSTEM_LOGIN_HISTORY = [];
-        let SYSTEM_NEWS_FEED = "⚠ Disclaimer: Independent educational utility • Not endorsed by DoP • Verify all information before official use • Portal under continuous development • Use at your own discretion.";
+        let SYSTEM_NEWS_FEED = "Welcome to the ACG-17 Automated System. Ensuring seamless and secure voucher generation daily.";
         
         let authenticatedUserSession = null;
         let activeAppMode = "home"; 
@@ -2016,9 +1658,6 @@
             
             addNewDateEntryRow();
             addNewForwardRow(); 
-            addNewGenForwardRow();
-            addNewTABillRow();
-            addNewCEAChildRow();
             
             await synchronizeSystemDatabase(true);
         }
@@ -2217,18 +1856,22 @@
             document.getElementById('portalHomeHead').style.display = "none";
             hideAllPanelsAndPreviews();
 
-            if(panelMode === "bulk") { document.getElementById('panelBulkMode').style.display = "block";
-            } else if(panelMode === "holiday") { document.getElementById('panelHolidayMode').style.display = "block";
-            } else if(panelMode === "datewise") { document.getElementById('panelDateWiseMode').style.display = "block";
-            } else if(panelMode === "acg61") { document.getElementById('panelACG61Mode').style.display = "block";
-            } else if(panelMode === "generalcharge") { document.getElementById('panelGeneralChargeMode').style.display = "block";
-            } else if(panelMode === "sr1") { document.getElementById('panelSR1Mode').style.display = "block";
-            } else if(panelMode === "casualleave") { document.getElementById('panelCasualLeaveMode').style.display = "block";
-            } else if(panelMode === "taAdvance") { document.getElementById('panelTAAdvanceMode').style.display = "block";
-            } else if(panelMode === "taTransfer") { document.getElementById('panelTATransferMode').style.display = "block";
-            } else if(panelMode === "taBillTour") { document.getElementById('panelTABillTourMode').style.display = "block";
-            } else if(panelMode === "cea") { document.getElementById('panelCEAMode').style.display = "block";
-            } else if(panelMode === "aichat") { document.getElementById('panelAIChatMode').style.display = "block";
+            if(panelMode === "bulk") {
+                document.getElementById('panelBulkMode').style.display = "block";
+            } else if(panelMode === "holiday") {
+                document.getElementById('panelHolidayMode').style.display = "block";
+            } else if(panelMode === "datewise") {
+                document.getElementById('panelDateWiseMode').style.display = "block";
+            } else if(panelMode === "acg61") {
+                document.getElementById('panelACG61Mode').style.display = "block";
+            } else if(panelMode === "sr1") { 
+                document.getElementById('panelSR1Mode').style.display = "block";
+            } else if(panelMode === "taAdvance") {
+                document.getElementById('panelTAAdvanceMode').style.display = "block";
+            } else if(panelMode === "taTransfer") {
+                document.getElementById('panelTATransferMode').style.display = "block";
+            } else if(panelMode === "aichat") {
+                document.getElementById('panelAIChatMode').style.display = "block";
             } else if(panelMode === "selfpassword") {
                 document.getElementById('panelSelfPasswordMode').style.display = "block";
                 document.getElementById('selfNewPassInput').value = "";
@@ -2258,13 +1901,9 @@
             document.getElementById('panelHolidayMode').style.display = "none";
             document.getElementById('panelDateWiseMode').style.display = "none";
             document.getElementById('panelACG61Mode').style.display = "none";
-            document.getElementById('panelGeneralChargeMode').style.display = "none";
             document.getElementById('panelSR1Mode').style.display = "none"; 
-            document.getElementById('panelCasualLeaveMode').style.display = "none"; 
             document.getElementById('panelTAAdvanceMode').style.display = "none";
             document.getElementById('panelTATransferMode').style.display = "none";
-            document.getElementById('panelTABillTourMode').style.display = "none"; 
-            document.getElementById('panelCEAMode').style.display = "none";
             document.getElementById('panelAIChatMode').style.display = "none";
             document.getElementById('panelSelfPasswordMode').style.display = "none";
             document.getElementById('panelMaintenanceMode').style.display = "none";
@@ -2357,7 +1996,7 @@
                 return "Hello! I am initialized and ready. Try selecting one of the template chips above to instantly auto-generate structured layout text blocks.";
             }
 
-            return "I am operating as a high-speed cloud utility assistant script. I recognize keywords like 'leave', 'transfer', 'ACG-61', and 'ACG-17'. Try rephrasing your question or tap one of the structural quick-action suggestion chips above!";
+            return "I am operating as a high-speed local utility assistant script. I recognize keywords like 'leave', 'transfer', 'ACG-61', and 'ACG-17'. Try rephrasing your question or tap one of the structural quick-action suggestion chips above!";
         }
 
         async function executeSelfPasswordChange() {
@@ -2460,35 +2099,7 @@
             document.getElementById('sr1Date').value = "";
             document.getElementById('sr1FromDate').value = "";
             document.getElementById('sr1ToDate').value = "";
-            
-            // CLEAR CASUAL LEAVE FIELDS
-            document.getElementById('clAuthDesig').value = "";
-            document.getElementById('clAuthAddress').value = "";
-            document.getElementById('clName').value = "";
-            document.getElementById('clEmpId').value = "";
-            document.getElementById('clEmpDesig').value = "";
-            document.getElementById('clEmpOffice').value = "";
-            document.getElementById('clStartDate').value = "";
-            document.getElementById('clEndDate').value = "";
-            document.getElementById('clReason').value = "Personal affairs";
-            document.getElementById('clOtherReason').value = "";
-            document.getElementById("clOtherReasonGroup").style.display = "none";
-            document.getElementById('clStationLeave').value = "No";
-            document.getElementById('clAppDate').value = "";
-            document.getElementById('clPlace').value = "";
 
-            // CLEAR GENERAL CHARGE REPORT FIELDS
-            document.getElementById('genOfficeName').value = "";
-            document.getElementById('genRelievedOfficer').value = "";
-            document.getElementById('genRelievingOfficer').value = "";
-            document.getElementById('genTransferDate').value = "";
-            document.getElementById('genMemoNo').value = "";
-            document.getElementById('genMemoDate').value = "";
-            document.getElementById('genFromAuthority').value = "";
-            document.getElementById("genForwardContainer").innerHTML = "";
-            addNewGenForwardRow(); 
-
-            // CLEAR BULK & HOLIDAY & DATEWISE FIELDS
             document.getElementById("receivedFromBulk").value = "";
             document.getElementById("amount").value = "";
             document.getElementById("monthlyVoucherPurpose").value = "";
@@ -2500,8 +2111,6 @@
             document.getElementById("holidaysInput").value = "";
             
             document.getElementById("receivedFromDatewise").value = "";
-            
-            // CLEAR ACG-61 FIELDS
             document.getElementById("acgOfficeName").value = "";
             document.getElementById("acgRelievedOfficer").value = "";
             document.getElementById("acgRelievingOfficer").value = "";
@@ -2513,7 +2122,6 @@
             document.getElementById("acgStampRs").value = "";
             document.getElementById("acgImprestCashRs").value = "";
 
-            // CLEAR TA ADVANCE & TRANSFER FIELDS
             document.getElementById('taName').value = "";
             document.getElementById('taDesignation').value = "";
             document.getElementById('taOffice').value = "";
@@ -2540,46 +2148,18 @@
             document.getElementById('tatAdvanceReq').value = "";
             document.getElementById('tatStation').value = "";
             document.getElementById('tatDate').value = "";
-            for(let i=1; i<=4; i++){
-                if(document.getElementById('tatFamName'+i)) document.getElementById('tatFamName'+i).value = "";
-                if(document.getElementById('tatFamAge'+i)) document.getElementById('tatFamAge'+i).value = "";
-                if(document.getElementById('tatFamRel'+i)) document.getElementById('tatFamRel'+i).value = "";
-            }
-
-            // CLEAR TA BILL TOUR FIELDS
-            document.getElementById('tabName').value = "";
-            document.getElementById('tabDesig').value = "";
-            document.getElementById('tabPay').value = "";
-            document.getElementById('tabHQ').value = "";
-            document.getElementById('tabDA').value = "";
-            document.getElementById('tabHotel').value = "";
-            document.getElementById('tabAdvance').value = "";
-            document.getElementById('tabJourneyContainer').innerHTML = "";
-            addNewTABillRow();
-            calculateTABillTotal();
-
-            // CLEAR CEA FIELDS
-            if(document.getElementById('ceaEmpName')) {
-                document.getElementById('ceaEmpName').value = "";
-                document.getElementById('ceaEmpId').value = "";
-                document.getElementById('ceaEmpDesig').value = "";
-                document.getElementById('ceaEmpDept').value = "";
-                document.getElementById('ceaSpouseEmployed').value = "No";
-                document.getElementById('ceaSpouseDetailsGroup').style.display = "none";
-                document.getElementById('ceaSpouseName').value = "";
-                document.getElementById('ceaSpouseDesig').value = "";
-                document.getElementById('ceaHostelDist').value = "";
-                document.getElementById('ceaReceivedAmount').value = "";
-                document.getElementById('ceaAcadYear').value = "";
-                document.getElementById('ceaDisabled').value = "No";
-                document.getElementById('ceaDisabledDetailsGroup').style.display = "none";
-                document.getElementById('ceaDisabilityNature').value = "";
-                document.getElementById('ceaDisabilityDate').value = "";
-                document.getElementById('ceaTotalClaim').value = "0";
-                document.getElementById('ceaAppDate').value = "";
-                document.getElementById('ceaChildContainer').innerHTML = "";
-                addNewCEAChildRow(); 
-            }
+            document.getElementById('tatFamName1').value = "";
+            document.getElementById('tatFamAge1').value = "";
+            document.getElementById('tatFamRel1').value = "";
+            document.getElementById('tatFamName2').value = "";
+            document.getElementById('tatFamAge2').value = "";
+            document.getElementById('tatFamRel2').value = "";
+            document.getElementById('tatFamName3').value = "";
+            document.getElementById('tatFamAge3').value = "";
+            document.getElementById('tatFamRel3').value = "";
+            document.getElementById('tatFamName4').value = "";
+            document.getElementById('tatFamAge4').value = "";
+            document.getElementById('tatFamRel4').value = "";
 
             const chatContainer = document.getElementById('chatHistory');
             chatContainer.innerHTML = `<div class="chat-msg-row ai-row">
@@ -2624,13 +2204,13 @@
             if(selectedRole === 'admin') {
                 defaultCards = [
                     'menuCardBulk', 'menuCardHoliday', 'menuCardDateWise', 
-                    'menuCardACG61', 'menuCardGeneralCharge', 'menuCardSR1', 'menuCardCasualLeave', 'menuCardTAAdvance', 'menuCardTATransfer', 'menuCardTABillTour', 'menuCardCEA',
+                    'menuCardACG61', 'menuCardSR1', 'menuCardTAAdvance', 'menuCardTATransfer', 
                     'menuCardAI', 'menuCardMaintenance', 'menuCardSelfPassword', 'menuCardUpdateNews'
                 ];
             } else {
                 defaultCards = [
                     'menuCardBulk', 'menuCardHoliday', 'menuCardDateWise', 
-                    'menuCardACG61', 'menuCardGeneralCharge', 'menuCardSR1', 'menuCardCasualLeave', 'menuCardTAAdvance', 'menuCardTATransfer', 'menuCardTABillTour', 'menuCardCEA',
+                    'menuCardACG61', 'menuCardSR1', 'menuCardTAAdvance', 'menuCardTATransfer', 
                     'menuCardAI', 'menuCardSelfPassword'
                 ];
             }
@@ -2667,9 +2247,8 @@
             
             try {
                 await db.collection("system").doc("announcements").set({ tickerText: newText }, { merge: true });
-                SYSTEM_NEWS_FEED = newText;
-                document.getElementById('scrollingNewsText').innerText = SYSTEM_NEWS_FEED;
                 displayCustomAlert("Success: The Live News Feed has been updated everywhere instantly!");
+                document.getElementById('muNewsInput').value = newText;
             } catch (error) {
                 console.error("Error updating news: ", error);
                 displayCustomAlert("Failed to update news. Check your database permissions.");
@@ -2729,13 +2308,13 @@
             if(newRole === 'admin') {
                 SYSTEM_USER_REGISTRY[profileIndex].allowedCards = [
                     'menuCardBulk', 'menuCardHoliday', 'menuCardDateWise', 
-                    'menuCardACG61', 'menuCardGeneralCharge', 'menuCardSR1', 'menuCardCasualLeave', 'menuCardTAAdvance', 'menuCardTATransfer', 'menuCardTABillTour', 'menuCardCEA',
+                    'menuCardACG61', 'menuCardSR1', 'menuCardTAAdvance', 'menuCardTATransfer', 
                     'menuCardAI', 'menuCardMaintenance', 'menuCardSelfPassword', 'menuCardUpdateNews'
                 ];
             } else {
                 SYSTEM_USER_REGISTRY[profileIndex].allowedCards = [
                     'menuCardBulk', 'menuCardHoliday', 'menuCardDateWise', 
-                    'menuCardACG61', 'menuCardGeneralCharge', 'menuCardSR1', 'menuCardCasualLeave', 'menuCardTAAdvance', 'menuCardTATransfer', 'menuCardTABillTour', 'menuCardCEA',
+                    'menuCardACG61', 'menuCardSR1', 'menuCardTAAdvance', 'menuCardTATransfer', 
                     'menuCardAI', 'menuCardSelfPassword'
                 ];
             }
@@ -2878,8 +2457,8 @@
             let currentCards = profile.allowedCards;
             if (!currentCards) {
                 currentCards = profile.role === 'admin' 
-                    ? ['menuCardBulk', 'menuCardHoliday', 'menuCardDateWise', 'menuCardACG61', 'menuCardGeneralCharge', 'menuCardSR1', 'menuCardCasualLeave', 'menuCardTAAdvance', 'menuCardTATransfer', 'menuCardTABillTour', 'menuCardCEA', 'menuCardAI', 'menuCardMaintenance', 'menuCardSelfPassword', 'menuCardUpdateNews']
-                    : ['menuCardBulk', 'menuCardHoliday', 'menuCardDateWise', 'menuCardACG61', 'menuCardGeneralCharge', 'menuCardSR1', 'menuCardCasualLeave', 'menuCardTAAdvance', 'menuCardTATransfer', 'menuCardTABillTour', 'menuCardCEA', 'menuCardAI', 'menuCardSelfPassword'];
+                    ? ['menuCardBulk', 'menuCardHoliday', 'menuCardDateWise', 'menuCardACG61', 'menuCardSR1', 'menuCardTAAdvance', 'menuCardTATransfer', 'menuCardAI', 'menuCardMaintenance', 'menuCardSelfPassword', 'menuCardUpdateNews']
+                    : ['menuCardBulk', 'menuCardHoliday', 'menuCardDateWise', 'menuCardACG61', 'menuCardSR1', 'menuCardTAAdvance', 'menuCardTATransfer', 'menuCardAI', 'menuCardSelfPassword'];
             }
             
             const checkboxes = document.querySelectorAll('.card-checkbox');
@@ -2961,191 +2540,17 @@
             container.appendChild(newRow);
         }
 
-        function addNewGenForwardRow() {
-            const container = document.getElementById('genForwardContainer');
-            const newRow = document.createElement('div');
-            newRow.className = 'dynamic-date-row';
-            newRow.style.alignItems = 'center';
-            
-            newRow.innerHTML = `
-                <div style='flex: 1;'>
-                    <input type='text' class='row-gen-forward-target text-input-placeholder-gray' placeholder='e.g. The Superintendent of Post Offices, Divisional Office' />
-                </div>
-                <div>
-                    <button type='button' class='delete-row-btn' onclick='this.parentElement.parentElement.remove()'>❌</button>
-                </div>
-            `;
-            container.appendChild(newRow);
+        function displayCustomAlert(messageContent) {
+            document.getElementById('customAlertMsgField').innerText = messageContent;
+            const targetPopup = document.getElementById('customAppAlertModal');
+            targetPopup.style.display = "flex";
+            setTimeout(() => { targetPopup.classList.add('active'); }, 10);
         }
 
-        function addNewTABillRow() {
-            const container = document.getElementById('tabJourneyContainer');
-            const newRow = document.createElement('div');
-            newRow.className = 'dynamic-date-row';
-            newRow.style.flexWrap = 'wrap';
-            
-            newRow.innerHTML = `
-                <div style="flex: 1; min-width: 120px;">
-                    <label>Dep. Date & Time</label>
-                    <input type="datetime-local" class="tab-dep-dt" />
-                </div>
-                <div style="flex: 1; min-width: 100px;">
-                    <label>Dep. Station</label>
-                    <input type="text" class="tab-dep-st text-input-placeholder-gray" placeholder="From" />
-                </div>
-                <div style="flex: 1; min-width: 120px;">
-                    <label>Arr. Date & Time</label>
-                    <input type="datetime-local" class="tab-arr-dt" />
-                </div>
-                <div style="flex: 1; min-width: 100px;">
-                    <label>Arr. Station</label>
-                    <input type="text" class="tab-arr-st text-input-placeholder-gray" placeholder="To" />
-                </div>
-                <div style="flex: 1; min-width: 100px;">
-                    <label>Mode/Class</label>
-                    <input type="text" class="tab-mode text-input-placeholder-gray" placeholder="e.g. Bus/AC" />
-                </div>
-                <div style="flex: 1; min-width: 80px;">
-                    <label>Fare (Rs.)</label>
-                    <input type="number" class="tab-fare text-input-placeholder-gray" oninput="calculateTABillTotal()" placeholder="0" />
-                </div>
-                <div style="flex: 1; min-width: 80px;">
-                    <label>Distance(Km)</label>
-                    <input type="number" class="tab-dist text-input-placeholder-gray" placeholder="e.g. 15" />
-                </div>
-                <div style="flex: 1; min-width: 80px;">
-                    <label>Halt Duration</label>
-                    <input type="text" class="tab-halt text-input-placeholder-gray" placeholder="e.g. 2 Days" />
-                </div>
-                <div style="flex: 1.5; min-width: 120px;">
-                    <label>Purpose</label>
-                    <input type="text" class="tab-purpose text-input-placeholder-gray" placeholder="e.g. Inspection" />
-                </div>
-                <div style="flex: 0.5; min-width: 50px; display:flex; align-items:flex-end;">
-                    <button type="button" class="delete-row-btn" onclick="this.parentElement.parentElement.remove(); calculateTABillTotal();">❌</button>
-                </div>
-            `;
-            container.appendChild(newRow);
-        }
-
-        function calculateTABillTotal() {
-            const fareInputs = document.querySelectorAll('.tab-fare');
-            let totalFares = 0;
-            fareInputs.forEach(input => {
-                let val = parseFloat(input.value);
-                if(!isNaN(val)) totalFares += val;
-            });
-            
-            document.getElementById('tabTotalFares').value = totalFares;
-            
-            const da = parseFloat(document.getElementById('tabDA').value) || 0;
-            const hotel = parseFloat(document.getElementById('tabHotel').value) || 0;
-            const advance = parseFloat(document.getElementById('tabAdvance').value) || 0;
-            
-            const gross = totalFares + da + hotel;
-            const net = gross - advance;
-            
-            document.getElementById('tabGrossTotal').value = gross;
-            document.getElementById('tabNetClaim').value = net;
-        }
-
-        function addNewCEAChildRow() {
-            const container = document.getElementById('ceaChildContainer');
-            if (container.children.length >= 2) {
-                displayCustomAlert("Rule Restriction: CEA can only be claimed for a maximum of two eldest surviving children.");
-                return;
-            }
-            
-            let childIndex = container.children.length + 1;
-            let sequenceLabel = childIndex === 1 ? "1st Child" : "2nd Child";
-
-            const newRow = document.createElement('div');
-            newRow.className = 'dynamic-date-row';
-            newRow.style.flexWrap = 'wrap';
-            newRow.style.position = 'relative';
-            
-            newRow.innerHTML = `
-                <div style="width: 100%; border-bottom: 2px solid #cbd5e1; margin-bottom: 15px; padding-bottom: 5px;">
-                    <h5 style="margin: 0; color: #d32f2f; font-size: 15px; display: inline-block;">${sequenceLabel} Details</h5>
-                    ${childIndex > 1 ? `<button type="button" class="delete-row-btn" style="float:right; padding:6px 10px; font-size:12px; margin-top:-5px;" onclick="this.parentElement.parentElement.remove(); calculateCEATotal();">❌ Remove</button>` : ''}
-                </div>
-                
-                <div style="flex: 1; min-width: 150px;">
-                    <label>Name of Child</label>
-                    <input type="text" class="cea-child-name text-input-placeholder-gray" placeholder="Child Name" />
-                    <input type="hidden" class="cea-child-seq" value="${sequenceLabel}" />
-                </div>
-                <div style="flex: 1; min-width: 120px;">
-                    <label>Date of Birth</label>
-                    <input type="date" class="cea-child-dob" />
-                </div>
-                <div style="flex: 1; min-width: 100px;">
-                    <label>Standard / Class</label>
-                    <input type="text" class="cea-child-class text-input-placeholder-gray" placeholder="e.g. VI" />
-                </div>
-                <div style="flex: 1; min-width: 80px;">
-                    <label>Section</label>
-                    <input type="text" class="cea-child-sec text-input-placeholder-gray" placeholder="e.g. A" />
-                </div>
-                <div style="flex: 1; min-width: 80px;">
-                    <label>Roll No.</label>
-                    <input type="text" class="cea-child-roll text-input-placeholder-gray" placeholder="Roll No" />
-                </div>
-                <div style="flex: 1; min-width: 100px;">
-                    <label>Admission No.</label>
-                    <input type="text" class="cea-child-adm text-input-placeholder-gray" placeholder="Adm No" />
-                </div>
-
-                <div style="flex: 1; min-width: 250px; margin-top: 10px;">
-                    <label>School Name</label>
-                    <input type="text" class="cea-child-school text-input-placeholder-gray" placeholder="Full name of school" />
-                </div>
-                <div style="flex: 1; min-width: 150px; margin-top: 10px;">
-                    <label>School Place / City</label>
-                    <input type="text" class="cea-child-place text-input-placeholder-gray" placeholder="City/Town" />
-                </div>
-                
-                <div style="flex: 1; min-width: 120px; margin-top: 10px;">
-                    <label>Affiliation Reg. No.</label>
-                    <input type="text" class="cea-child-affil text-input-placeholder-gray" placeholder="Affiliation No" />
-                </div>
-                <div style="flex: 1; min-width: 100px; margin-top: 10px;">
-                    <label>Curriculum Board</label>
-                    <input type="text" class="cea-child-pattern text-input-placeholder-gray" placeholder="e.g. CBSE / TBSE" />
-                </div>
-                <div style="flex: 1; min-width: 100px; margin-top: 10px;">
-                    <label>Pattern Code</label>
-                    <input type="text" class="cea-child-code text-input-placeholder-gray" placeholder="Code (If any)" />
-                </div>
-
-                <div style="flex: 1; min-width: 150px; margin-top: 10px;">
-                    <label>Claim Period</label>
-                    <input type="text" class="cea-child-period text-input-placeholder-gray" placeholder="e.g. Apr 2025 to Mar 2026" />
-                </div>
-                <div style="flex: 1; min-width: 100px; margin-top: 10px;">
-                    <label>Rate of CEA (Rs.)</label>
-                    <input type="number" class="cea-child-rate text-input-placeholder-gray" placeholder="2250" />
-                </div>
-                <div style="flex: 1; min-width: 120px; margin-top: 10px;">
-                    <label>Amount Claimed</label>
-                    <input type="number" class="cea-child-amount text-input-placeholder-gray" oninput="calculateCEATotal()" placeholder="0" />
-                </div>
-                <div style="flex: 1; min-width: 150px; margin-top: 10px;">
-                    <label>Remarks</label>
-                    <input type="text" class="cea-child-remark text-input-placeholder-gray" placeholder="e.g. Full Year" value="Full Year Claim"/>
-                </div>
-            `;
-            container.appendChild(newRow);
-        }
-
-        function calculateCEATotal() {
-            const amountInputs = document.querySelectorAll('.cea-child-amount');
-            let total = 0;
-            amountInputs.forEach(input => {
-                let val = parseFloat(input.value);
-                if(!isNaN(val)) total += val;
-            });
-            document.getElementById('ceaTotalClaim').value = total;
+        function closeCustomAlert() {
+            const targetPopup = document.getElementById('customAppAlertModal');
+            targetPopup.classList.remove('active');
+            setTimeout(() => { targetPopup.style.display = "none"; }, 200);
         }
 
         async function verifyBloggerAuth(){
@@ -3207,53 +2612,26 @@
             profile.failedAttempts = 0; 
             authenticatedUserSession = profile;
             logSystemEvent(u, "Authentication Success");
-            
-            // --- AUTO-PATCH: Ensure old profiles automatically get the new cards ---
-            let userAllowedList = profile.allowedCards;
-            let needsPatch = false;
-            
-            if (userAllowedList && !userAllowedList.includes('menuCardCasualLeave')) {
-                userAllowedList.push('menuCardCasualLeave'); needsPatch = true;
-            }
-            if (userAllowedList && !userAllowedList.includes('menuCardGeneralCharge')) {
-                const acgIndex = userAllowedList.indexOf('menuCardACG61');
-                if (acgIndex !== -1) userAllowedList.splice(acgIndex + 1, 0, 'menuCardGeneralCharge');
-                else userAllowedList.push('menuCardGeneralCharge');
-                needsPatch = true;
-            }
-            if (userAllowedList && !userAllowedList.includes('menuCardTABillTour')) {
-                const taIndex = userAllowedList.indexOf('menuCardTATransfer');
-                if (taIndex !== -1) userAllowedList.splice(taIndex + 1, 0, 'menuCardTABillTour');
-                else userAllowedList.push('menuCardTABillTour');
-                needsPatch = true;
-            }
-            if (userAllowedList && !userAllowedList.includes('menuCardCEA')) { 
-                const trIndex = userAllowedList.indexOf('menuCardTABillTour');
-                if (trIndex !== -1) userAllowedList.splice(trIndex + 1, 0, 'menuCardCEA');
-                else userAllowedList.push('menuCardCEA');
-                needsPatch = true;
-            }
-            
-            if(needsPatch) {
-                await synchronizeSystemDatabase(false);
-            }
+            await synchronizeSystemDatabase(false);
             
             const allCards = document.querySelectorAll('#mainModuleGrid .portal-module-card');
             
             allCards.forEach(card => card.style.display = "none");
             
             if(u === "GUEST") {
-                const guestCards = ['menuCardBulk', 'menuCardHoliday', 'menuCardDateWise', 'menuCardACG61', 'menuCardGeneralCharge', 'menuCardSR1', 'menuCardCasualLeave', 'menuCardTAAdvance', 'menuCardTATransfer', 'menuCardTABillTour', 'menuCardCEA', 'menuCardAI'];
+                const guestCards = ['menuCardBulk', 'menuCardHoliday', 'menuCardDateWise', 'menuCardACG61', 'menuCardSR1', 'menuCardTAAdvance', 'menuCardTATransfer', 'menuCardAI'];
                 guestCards.forEach(id => {
                     let c = document.getElementById(id);
                     if(c) c.style.display = "block";
                 });
             } else {
+                let userAllowedList = profile.allowedCards;
+                
                 if (!userAllowedList) {
                     if (profile.role === "admin") {
-                        userAllowedList = ['menuCardBulk', 'menuCardHoliday', 'menuCardDateWise', 'menuCardACG61', 'menuCardGeneralCharge', 'menuCardSR1', 'menuCardCasualLeave', 'menuCardTAAdvance', 'menuCardTATransfer', 'menuCardTABillTour', 'menuCardCEA', 'menuCardAI', 'menuCardMaintenance', 'menuCardSelfPassword', 'menuCardUpdateNews'];
+                        userAllowedList = ['menuCardBulk', 'menuCardHoliday', 'menuCardDateWise', 'menuCardACG61', 'menuCardSR1', 'menuCardTAAdvance', 'menuCardTATransfer', 'menuCardAI', 'menuCardMaintenance', 'menuCardSelfPassword', 'menuCardUpdateNews'];
                     } else {
-                        userAllowedList = ['menuCardBulk', 'menuCardHoliday', 'menuCardDateWise', 'menuCardACG61', 'menuCardGeneralCharge', 'menuCardSR1', 'menuCardCasualLeave', 'menuCardTAAdvance', 'menuCardTATransfer', 'menuCardTABillTour', 'menuCardCEA', 'menuCardAI', 'menuCardSelfPassword'];
+                        userAllowedList = ['menuCardBulk', 'menuCardHoliday', 'menuCardDateWise', 'menuCardACG61', 'menuCardSR1', 'menuCardTAAdvance', 'menuCardTATransfer', 'menuCardAI', 'menuCardSelfPassword'];
                     }
                 }
 
@@ -3284,6 +2662,12 @@
             }
         }
 
+        function calculateTATotals() {
+            const j = parseFloat(document.getElementById('taDaJourney').value) || 0;
+            const h = parseFloat(document.getElementById('taDaHalts').value) || 0;
+            document.getElementById('taDaTotal').value = j + h;
+        }
+
         function triggerSmartGeneration(modeType) {
             const systemLoader = document.getElementById('globalAppLoader');
             const loaderMsg = document.querySelector('.loading-status-msg');
@@ -3292,38 +2676,63 @@
                 const sender = document.getElementById('receivedFromBulk').value;
                 const amountNum = document.getElementById('amount').value;
                 const currentPurpose = document.getElementById('monthlyVoucherPurpose').value;
-                if (!sender || !amountNum || !currentPurpose) { displayCustomAlert("Form Defect: All fields in the monthly bulk panel must be filled."); return; }
+                if (!sender || !amountNum || !currentPurpose) {
+                    displayCustomAlert("Form Defect: All fields in the monthly bulk panel must be filled.");
+                    return;
+                }
             } else if(modeType === "holiday") {
                 const sender = document.getElementById('receivedFromHoliday').value;
                 const amountNum = document.getElementById('amountHoliday').value;
                 const currentPurpose = document.getElementById('holidayVoucherPurpose').value;
-                if (!sender || !amountNum || !currentPurpose) { displayCustomAlert("Form Defect: All fields in the holiday panel must be filled."); return; }
+                if (!sender || !amountNum || !currentPurpose) {
+                    displayCustomAlert("Form Defect: All fields in the holiday panel must be filled.");
+                    return;
+                }
             } else if(modeType === "datewise") {
                 const sender = document.getElementById('receivedFromDatewise').value;
-                if (!sender) { displayCustomAlert("Form Defect: 'Received From' field is mandatory."); return; }
+                if (!sender) {
+                    displayCustomAlert("Form Defect: 'Received From' field is mandatory.");
+                    return;
+                }
+                
                 const container = document.getElementById('dynamicDateRowsContainer');
                 const rows = container.querySelectorAll('.dynamic-date-row');
                 let validCount = 0;
-                rows.forEach(row => { if(row.querySelector('.row-target-date').value && row.querySelector('.row-target-amount').value && row.querySelector('.row-target-purpose').value) { validCount++; } });
-                if(validCount === 0){ displayCustomAlert("Form Defect: Please complete at least one complete Date ledger slot row."); return; }
+                rows.forEach(row => {
+                    if(row.querySelector('.row-target-date').value && row.querySelector('.row-target-amount').value && row.querySelector('.row-target-purpose').value) {
+                        validCount++;
+                    }
+                });
+                if(validCount === 0){
+                    displayCustomAlert("Form Defect: Please complete at least one complete Date ledger slot row.");
+                    return;
+                }
             } else if(modeType === "acg61") {
-                if (!document.getElementById('acgOfficeName').value || !document.getElementById('acgRelievedOfficer').value || !document.getElementById('acgRelievingOfficer').value) { displayCustomAlert("Form Defect: Office Name, Relieved Officer, and Relieving Officer are mandatory."); return; }
-            } else if(modeType === "generalcharge") {
-                if (!document.getElementById('genOfficeName').value || !document.getElementById('genRelievedOfficer').value || !document.getElementById('genRelievingOfficer').value) { displayCustomAlert("Form Defect: Office Name/Post, Relieved Officer, and Relieving Officer are mandatory."); return; }
+                const office = document.getElementById('acgOfficeName').value;
+                const rOfficer = document.getElementById('acgRelievedOfficer').value;
+                const rgOfficer = document.getElementById('acgRelievingOfficer').value;
+                if (!office || !rOfficer || !rgOfficer) {
+                    displayCustomAlert("Form Defect: Office Name, Relieved Officer, and Relieving Officer are mandatory.");
+                    return;
+                }
             } else if(modeType === "taAdvance") {
-                if (!document.getElementById('taName').value) { displayCustomAlert("Form Defect: Name of the Officer/Official is mandatory."); return; }
+                const taName = document.getElementById('taName').value;
+                if (!taName) {
+                    displayCustomAlert("Form Defect: Name of the Officer/Official is mandatory.");
+                    return;
+                }
             } else if(modeType === "taTransfer") {
-                if (!document.getElementById('tatName').value) { displayCustomAlert("Form Defect: Name of the Officer/Official is mandatory."); return; }
-            } else if(modeType === "taBillTour") {
-                if (!document.getElementById('tabName').value) { displayCustomAlert("Form Defect: Name of the Official is mandatory for T.A. Bill."); return; }
+                const tatName = document.getElementById('tatName').value;
+                if (!tatName) {
+                    displayCustomAlert("Form Defect: Name of the Officer/Official is mandatory.");
+                    return;
+                }
             } else if(modeType === "sr1") {
-                if (!document.getElementById('sr1Name').value) { displayCustomAlert("Form Defect: Name of the applicant is mandatory."); return; }
-            } else if(modeType === "casualleave") {
-                if (!document.getElementById('clAuthDesig').value || !document.getElementById('clName').value) { displayCustomAlert("Form Defect: Authority Designation and Applicant Name are mandatory."); return; }
-            } else if(modeType === "cea") {
-                if (!document.getElementById('ceaEmpName').value) { displayCustomAlert("Form Defect: Name of Employee is mandatory for CEA."); return; }
-                const childRows = document.querySelectorAll('#ceaChildContainer .dynamic-date-row');
-                if(childRows.length === 0) { displayCustomAlert("Form Defect: You must add at least one child to claim CEA."); return; }
+                const srName = document.getElementById('sr1Name').value;
+                if (!srName) {
+                    displayCustomAlert("Form Defect: Name of the applicant is mandatory.");
+                    return;
+                }
             }
             
             systemLoader.style.display = 'flex';
@@ -3331,17 +2740,20 @@
 
             setTimeout(() => {
                 try {
-                    if(modeType === "bulk") { generatePerfectPDF();
-                    } else if(modeType === "holiday") { generateHolidayPDF();
-                    } else if(modeType === "datewise") { generateDateWisePDF();
-                    } else if(modeType === "acg61") { generateACG61PDF();
-                    } else if(modeType === "generalcharge") { generateGeneralChargePDF();
-                    } else if(modeType === "taAdvance") { generateTAAdvancePDF();
-                    } else if(modeType === "taTransfer") { generateTATransferPDF();
-                    } else if(modeType === "taBillTour") { generateTABillTourPDF();
-                    } else if(modeType === "sr1") { generateSR1PDF();
-                    } else if(modeType === "casualleave") { generateCasualLeavePDF();
-                    } else if(modeType === "cea") { generateCEAPDF(); 
+                    if(modeType === "bulk") {
+                        generatePerfectPDF();
+                    } else if(modeType === "holiday") {
+                        generateHolidayPDF();
+                    } else if(modeType === "datewise") {
+                        generateDateWisePDF();
+                    } else if(modeType === "acg61") {
+                        generateACG61PDF();
+                    } else if(modeType === "taAdvance") {
+                        generateTAAdvancePDF();
+                    } else if(modeType === "taTransfer") {
+                        generateTATransferPDF();
+                    } else if(modeType === "sr1") {
+                        generateSR1PDF();
                     }
                 } catch (err) {
                     console.error("PDF generation failure context: ", err);
@@ -3352,394 +2764,9 @@
             }, 750);
         }
 
-        function generateACG61PDF() {
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF('p', 'mm', 'a4'); 
-
-            const office = document.getElementById('acgOfficeName').value;
-            const relieved = document.getElementById('acgRelievedOfficer').value;
-            const relieving = document.getElementById('acgRelievingOfficer').value;
-            const tDateRaw = document.getElementById('acgTransferDate').value;
-            const tTime = document.getElementById('acgTransferTime').value;
-            const memoNo = document.getElementById('acgMemoNo').value;
-            const memoDateRaw = document.getElementById('acgMemoDate').value;
-            const authority = document.getElementById('acgFromAuthority').value;
-            
-            const cash = document.getElementById('acgCashRs').value;
-            const stamp = document.getElementById('acgStampRs').value;
-            const impCash = document.getElementById('acgImprestCashRs').value;
-
-            const formatD = (d) => { if(!d) return ""; const p = d.split("-"); return p[2] + "/" + p[1] + "/" + p[0]; };
-
-            const forwardInputs = document.querySelectorAll('.row-forward-target');
-            let targetRecipients = [];
-            forwardInputs.forEach(input => { let v = input.value.trim(); if(v) targetRecipients.push(v); });
-            if(targetRecipients.length === 0) targetRecipients.push("");
-
-            for(let pageIndex = 0; pageIndex < targetRecipients.length; pageIndex++) {
-                if(pageIndex > 0) doc.addPage('a4', 'p');
-
-                doc.setFont("times", "bold"); doc.setFontSize(10); doc.text("ACG-61", 15, 15);
-
-                doc.setFontSize(12); doc.text("DEPARTMENT OF POSTS, INDIA", 105, 22, { align: "center" });
-                doc.setFont("times", "normal"); doc.setFontSize(8.5);
-                doc.text("(See Rule 267, Posts and Telegraphs Financial Hand book, Volume 1, Second Edition)", 105, 27, { align: "center" });
-                
-                doc.setFont("times", "bold"); doc.setFontSize(11);
-                doc.text("Charge Report and Receipt of Cash and Stamps on transfer of charge", 105, 36, { align: "center" });
-                doc.line(40, 38, 170, 38);
-
-                doc.setFontSize(11);
-                let blockY = 52;
-                
-                // --- FIXED JUSTIFIED BLOCK LAYOUT ---
-                
-                // Line 1
-                doc.setFont("times", "normal");
-                doc.text("Certified that the charge of the office of", 15, blockY);
-                doc.line(82, blockY + 1, 195, blockY + 1); 
-                doc.setFont("times", "bold");
-                doc.text(office, 85, blockY);
-
-                // Line 2
-                blockY += 10;
-                doc.setFont("times", "normal");
-                doc.text("was made over by", 15, blockY);
-                doc.line(45, blockY + 1, 120, blockY + 1);
-                doc.setFont("times", "bold");
-                doc.text(relieved, 48, blockY);
-                
-                doc.setFont("times", "normal");
-                doc.text("to", 123, blockY);
-                doc.line(128, blockY + 1, 195, blockY + 1); 
-                doc.setFont("times", "bold");
-                doc.text(relieving, 131, blockY);
-
-                // Line 3
-                blockY += 10;
-                doc.setFont("times", "normal");
-                doc.text("on", 15, blockY);
-                doc.line(21, blockY + 1, 80, blockY + 1);
-                doc.setFont("times", "bold");
-                doc.text(formatD(tDateRaw) + (formatD(tDateRaw) ? " " : "") + tTime, 24, blockY);
-                
-                doc.setFont("times", "normal");
-                doc.text("in accordance with Office Order/ Memorandum/ letter No.", 195, blockY, { align: "right" }); 
-                
-                // Line 4
-                blockY += 10;
-                doc.line(15, blockY + 1, 80, blockY + 1);
-                doc.setFont("times", "bold");
-                doc.text(memoNo, 17, blockY);
-                
-                doc.setFont("times", "normal");
-                doc.text("dated", 83, blockY);
-                doc.line(95, blockY + 1, 125, blockY + 1);
-                doc.setFont("times", "bold");
-                doc.text(formatD(memoDateRaw), 97, blockY);
-                
-                doc.setFont("times", "normal");
-                doc.text("from", 128, blockY);
-                doc.line(138, blockY + 1, 195, blockY + 1); 
-                doc.setFont("times", "bold");
-                doc.text(authority, 141, blockY);
-
-                blockY += 24;
-                doc.text("Relieved Officer", 30, blockY);
-                doc.text("Relieving Officer", 145, blockY);
-                doc.setFont("times", "normal");
-
-                blockY += 16;
-                doc.line(15, blockY, 195, blockY);
-                blockY += 8;
-                doc.setFont("times", "bold"); doc.setFontSize(12);
-                doc.text("Receipt for Cash & stamps on transfer of charge", 105, blockY, { align: "center" });
-                doc.line(55, blockY+1, 155, blockY+1);
-                
-                doc.setFont("times", "normal"); doc.setFontSize(10.5);
-                blockY += 12;
-                let certText1 = "* Certified that the balances on this date of the several books (including Stock Book and Register) and accounts of the office have been checked and found correct.";
-                let lines1 = doc.splitTextToSize(certText1, 175);
-                doc.text(lines1, 15, blockY);
-
-                blockY += (lines1.length * 5) + 3;
-                let certText2 = "* Certified that the balances as detailed below were handed over to me by the Relieved Officer and I accept the responsibility for the same.";
-                let lines2 = doc.splitTextToSize(certText2, 175);
-                doc.text(lines2, 15, blockY);
-
-                blockY += (lines2.length * 5) + 6;
-                doc.text("(a) Cash", 15, blockY);
-                doc.setFont("times", "bold");
-                doc.text(": Rs. " + cash, 70, blockY);
-                doc.setFont("times", "normal");
-                
-                blockY += 7;
-                doc.text("(b) Stamp Imprest made up of", 15, blockY);
-                doc.text("(i) Stamp", 25, blockY + 6);
-                doc.setFont("times", "bold");
-                doc.text(": Rs. " + stamp, 70, blockY + 6);
-                doc.setFont("times", "normal");
-
-                blockY += 12;
-                doc.text("(ii) Cash", 25, blockY);
-                doc.setFont("times", "bold");
-                doc.text(": Rs. " + impCash, 70, blockY);
-                doc.setFont("times", "normal");
-
-                blockY += 26;
-                doc.setFont("times", "bold");
-                doc.text("Relieved Officer", 30, blockY);
-                doc.text("Relieving Officer", 145, blockY);
-                doc.setFont("times", "normal");
-
-                blockY += 10;
-                doc.line(15, blockY, 195, blockY);
-                blockY += 8;
-                doc.setFont("times", "bold");
-                doc.text("No: " + memoNo, 15, blockY);
-                doc.text("dated @ " + formatD(memoDateRaw), 100, blockY);
-                doc.setFont("times", "normal");
-
-                blockY += 12;
-                doc.setFont("times", "bold"); doc.text("Copy forwarded to:", 15, blockY);
-                doc.line(15, blockY+1, 46, blockY+1);
-                doc.setFont("times", "normal");
-
-                let assignedRecipient = targetRecipients[pageIndex];
-                if(assignedRecipient) {
-                    blockY += 8;
-                    doc.text("1. " + assignedRecipient, 20, blockY);
-                } else {
-                    blockY += 8;
-                    doc.text("1. ............................................................................................................", 20, blockY);
-                }
-            }
-
-            let finalOutputDoc = doc;
-            finalizeDocumentViewer(finalOutputDoc);
-        }
-        
-        function generateGeneralChargePDF() {
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF('p', 'mm', 'a4'); 
-
-            const office = document.getElementById('genOfficeName').value;
-            const relieved = document.getElementById('genRelievedOfficer').value;
-            const relieving = document.getElementById('genRelievingOfficer').value;
-            const tDateRaw = document.getElementById('genTransferDate').value;
-            const tTime = document.getElementById('genTransferTime').value;
-            const memoNo = document.getElementById('genMemoNo').value;
-            const memoDateRaw = document.getElementById('genMemoDate').value;
-            const authority = document.getElementById('genFromAuthority').value;
-
-            const formatD = (d) => { if(!d) return ""; const p = d.split("-"); return p[2] + "/" + p[1] + "/" + p[0]; };
-
-            const forwardInputs = document.querySelectorAll('.row-gen-forward-target');
-            let targetRecipients = [];
-            forwardInputs.forEach(input => { let v = input.value.trim(); if(v) targetRecipients.push(v); });
-            if(targetRecipients.length === 0) targetRecipients.push("");
-
-            const drawHalf = (offsetY, recipient) => {
-                doc.setTextColor(0, 0, 0);
-                doc.setDrawColor(0, 0, 0);
-                doc.setLineWidth(0.3);
-
-                doc.setFont("times", "bold"); doc.setFontSize(10); doc.text("ACG-61", 15, 15 + offsetY);
-                
-                doc.setFontSize(12); doc.text("DEPARTMENT OF POSTS, INDIA", 105, 22 + offsetY, { align: "center" });
-                doc.setFont("times", "normal"); doc.setFontSize(8.5);
-                doc.text("(See Rule 267, Posts and Telegraphs Financial Hand book, Volume 1, Second Edition)", 105, 27 + offsetY, { align: "center" });
-                
-                doc.setFont("times", "bold"); doc.setFontSize(11);
-                doc.text("Charge Report and Receipt of Cash and Stamps on transfer of charge", 105, 36 + offsetY, { align: "center" });
-                doc.line(40, 38 + offsetY, 170, 38 + offsetY);
-
-                let blockY = 52 + offsetY;
-                
-                doc.setFont("times", "normal");
-                doc.setFontSize(11);
-                doc.text("Certified that the charge of the office of", 15, blockY);
-                doc.line(82, blockY + 1, 195, blockY + 1); 
-                doc.setFont("times", "bold");
-                doc.text(office, 85, blockY);
-
-                blockY += 10;
-                doc.setFont("times", "normal");
-                doc.text("was made over by", 15, blockY);
-                doc.line(45, blockY + 1, 115, blockY + 1);
-                doc.setFont("times", "bold");
-                doc.text(relieved, 48, blockY);
-                
-                doc.setFont("times", "normal");
-                doc.text("to", 118, blockY);
-                doc.line(125, blockY + 1, 195, blockY + 1);
-                doc.setFont("times", "bold");
-                doc.text(relieving, 128, blockY);
-
-                blockY += 10;
-                doc.setFont("times", "normal");
-                doc.text("on", 15, blockY);
-                doc.line(21, blockY + 1, 75, blockY + 1);
-                doc.setFont("times", "bold");
-                doc.text(formatD(tDateRaw) + (formatD(tDateRaw) ? " " : "") + tTime, 24, blockY);
-                
-                doc.setFont("times", "normal");
-                doc.text("in accordance with Office Order/ Memorandum/ letter No.", 80, blockY); 
-                
-                blockY += 10;
-                doc.line(15, blockY + 1, 80, blockY + 1);
-                doc.setFont("times", "bold");
-                doc.text(memoNo, 17, blockY);
-                
-                doc.setFont("times", "normal");
-                doc.text("dated", 83, blockY);
-                doc.line(95, blockY + 1, 125, blockY + 1);
-                doc.setFont("times", "bold");
-                doc.text(formatD(memoDateRaw), 97, blockY);
-                
-                doc.setFont("times", "normal");
-                doc.text("from", 128, blockY);
-                doc.line(138, blockY + 1, 195, blockY + 1); 
-                doc.setFont("times", "bold");
-                doc.text(authority, 141, blockY);
-
-                blockY += 24;
-                doc.text("Relieved Officer", 30, blockY);
-                doc.text("Relieving Officer", 145, blockY);
-                doc.setFont("times", "normal");
-
-                blockY += 20;
-                doc.setFont("times", "bold"); doc.text("Copy forwarded to:", 15, blockY);
-                doc.line(15, blockY+1, 46, blockY+1);
-                doc.setFont("times", "normal");
-
-                if(recipient) {
-                    blockY += 8;
-                    doc.text("1. " + recipient, 20, blockY);
-                } else {
-                    blockY += 8;
-                    doc.text("1. ............................................................................................................", 20, blockY);
-                }
-            };
-
-            for (let i = 0; i < targetRecipients.length; i += 2) {
-                if (i > 0) doc.addPage('a4', 'p');
-                
-                drawHalf(0, targetRecipients[i]);
-                
-                doc.setDrawColor(180, 180, 180); 
-                doc.setLineWidth(0.4);
-                doc.setLineDashPattern([3, 3], 0); 
-                doc.line(15, 148.5, 195, 148.5); 
-                
-                doc.setFillColor(255, 255, 255);
-                doc.rect(95, 146, 20, 5, 'F');
-                
-                doc.setFont("times", "italic");
-                doc.setFontSize(9);
-                doc.setTextColor(140, 140, 140);
-                doc.text("Cut Here", 105, 149.5, { align: "center" });
-                
-                doc.setDrawColor(0, 0, 0);
-                doc.setTextColor(0, 0, 0);
-                doc.setLineDashPattern([], 0);
-                doc.setLineWidth(0.3);
-
-                if (i + 1 < targetRecipients.length) {
-                    drawHalf(148.5, targetRecipients[i+1]);
-                } else {
-                    drawHalf(148.5, "Office Copy / Spare");
-                }
-            }
-
-            finalizeDocumentViewer(doc);
-        }
-
-        function generateCasualLeavePDF() {
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF('p', 'mm', 'a4');
-
-            const authDesig = document.getElementById('clAuthDesig').value || "";
-            const authAdd = document.getElementById('clAuthAddress').value || "";
-            const name = document.getElementById('clName').value || "";
-            const empId = document.getElementById('clEmpId').value || "";
-            const empDesig = document.getElementById('clEmpDesig').value || "";
-            const empOffice = document.getElementById('clEmpOffice').value || "";
-            const reasonDrop = document.getElementById('clReason').value;
-            const otherReason = document.getElementById('clOtherReason').value || "";
-            const stationLeave = document.getElementById('clStationLeave').value;
-            const place = document.getElementById('clPlace').value || "";
-
-            let sDateRaw = document.getElementById('clStartDate').value;
-            let eDateRaw = document.getElementById('clEndDate').value;
-            let aDateRaw = document.getElementById('clAppDate').value;
-
-            const formatD = (d) => { if(!d) return ""; const p = d.split("-"); return p[2] + "/" + p[1] + "/" + p[0]; };
-
-            let startStr = formatD(sDateRaw);
-            let endStr = formatD(eDateRaw);
-            let appDateStr = formatD(aDateRaw);
-
-            let finalReason = reasonDrop === "Other" ? otherReason : reasonDrop;
-
-            let diffDays = 1;
-            if (sDateRaw && eDateRaw) {
-                let sD = new Date(sDateRaw);
-                let eD = new Date(eDateRaw);
-                if (sD <= eD) {
-                    const diffTime = Math.abs(eD - sD);
-                    diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
-                }
-            }
-
-            doc.setFont("times", "normal");
-            doc.setFontSize(12);
-
-            let currentY = 30;
-
-            doc.text("To,", 20, currentY); currentY += 7;
-            doc.setFont("times", "bold");
-            doc.text(authDesig + ",", 20, currentY); currentY += 7;
-            doc.text(authAdd + ".", 20, currentY); currentY += 15;
-
-            doc.setFont("times", "normal");
-            if (appDateStr) { doc.text("Date: " + appDateStr, 20, currentY); }
-            if (place) { doc.text("Place: " + place, 140, currentY); }
-            currentY += 15;
-
-            doc.setFont("times", "bold");
-            doc.text("Subject: Prayer for Casual Leave.", 20, currentY); currentY += 15;
-
-            doc.setFont("times", "normal");
-            doc.text("Respected Sir/Madam,", 20, currentY); currentY += 10;
-
-            let bodyText = `With due respect, I, ${name}, working as ${empDesig} at ${empOffice} (Emp ID: ${empId}), humbly request you to grant me Casual Leave for ${diffDays} day(s) from ${startStr} to ${endStr}. I require this leave due to ${finalReason.toLowerCase()}.`;
-
-            if(stationLeave === "Yes") {
-                bodyText += ` I also request your kind permission to leave the headquarters (Station Leave) during this period.`;
-            }
-
-            let splitBody = doc.splitTextToSize(bodyText, 170);
-            doc.text(bodyText, 20, currentY, { maxWidth: 170, align: "justify" });
-            currentY += (splitBody.length * 6) + 5;
-
-            let closingText = "I shall be highly obliged if you kindly consider my application and grant me the leave for the above-mentioned period.";
-            let splitClosing = doc.splitTextToSize(closingText, 170);
-            doc.text(closingText, 20, currentY, { maxWidth: 170, align: "justify" });
-            currentY += (splitClosing.length * 6) + 15;
-
-            doc.text("Thanking you,", 20, currentY); currentY += 15;
-
-            doc.text("Yours faithfully,", 140, currentY); currentY += 15;
-            doc.setFont("times", "bold");
-            doc.text(name, 140, currentY);
-            doc.setFont("times", "normal");
-            doc.text(`Designation: ${empDesig}`, 140, currentY + 6);
-            doc.text(`Emp ID: ${empId}`, 140, currentY + 12);
-
-            finalizeDocumentViewer(doc);
-        }
-
+        // ----------------------------------------------------
+        // FULLY UPDATED SR-1 PDF GENERATOR LOGIC
+        // ----------------------------------------------------
         function generateSR1PDF() {
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF('p', 'mm', 'a4');
@@ -3769,6 +2796,12 @@
             
             let aDateRaw = document.getElementById('sr1Date').value;
             let appDateStr = aDateRaw ? aDateRaw.split("-").reverse().join("/") : "";
+
+            try {
+                doc.addImage(INDIA_POST_LOGO_URL, 'PNG', 15, 8, 30, 30);
+            } catch (err) {
+                console.error("Logo error:", err);
+            }
 
             doc.setFont("times", "bold");
             doc.setFontSize(14);
@@ -3852,15 +2885,20 @@
             currentY += 10;
             doc.line(12, currentY, 198, currentY); 
 
+            // DRAW BORDERS FOR PAGE 1
             doc.line(12, 46, 12, currentY); 
             doc.line(198, 46, 198, currentY); 
             doc.line(20, 46, 20, r11StartY); 
             doc.line(100, 46, 100, r11StartY); 
             doc.line(20, r11StartY, 20, currentY); 
 
+            // PAGE 1 FOOTER
             doc.setFontSize(10);
             doc.text("Page 1 of 2", 105, 285, { align: "center" });
 
+            // ----------------------------------------------------
+            // PAGE 2 BREAK
+            // ----------------------------------------------------
             doc.addPage('a4', 'p');
             currentY = 20;
 
@@ -3891,6 +2929,7 @@
             doc.text("14.", 15, currentY);
             doc.setFont("times", "normal");
             
+            // BLANK TEMPLATE AS REQUESTED
             let certLine = "Certified that ....................................................................... for ................................... from ...................................\nto ................................... is admissible under rule ................................... of the ........................................................ Rules.";
             let splitCert = doc.splitTextToSize(certLine, 170);
             doc.text(splitCert, 22, currentY);
@@ -3908,10 +2947,12 @@
             let splitFoot = doc.splitTextToSize(footNote, 180);
             doc.text(splitFoot, 15, currentY + 5);
             
+            // DRAW BORDERS FOR PAGE 2
             doc.line(12, 20, 12, currentY); 
             doc.line(198, 20, 198, currentY); 
             doc.line(20, 20, 20, currentY); 
 
+            // PAGE 2 FOOTER
             doc.setFontSize(10);
             doc.text("Page 2 of 2", 105, 285, { align: "center" });
             
@@ -4216,7 +3257,7 @@
             const units = ['','One ','Two ','Three ','Four ','Five ','Six ','Seven ','Eight ','Nine ','Ten ','Eleven ','Twelve ','Thirteen ','Fourteen ','Fifteen ','Sixteen ','Seventeen ','Eighteen ','Nineteen '];
             const tens = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
             let val = parseInt(num, 10);
-            if (isNaN(val) || val === 0) return "Zero";
+            if (isNaN(val) || val === 0) return "Zero only";
             
             let words = "";
             if (Math.floor(val / 10000000) > 0) { words += parseNumberToWords(Math.floor(val / 10000000)) + " Crore "; val %= 10000000; }
@@ -4308,6 +3349,142 @@
 
             doc.setDrawColor(180, 180, 180); doc.setLineDashPattern([2, 2], 0); doc.line(146, 5, 146, 205);
             doc.setDrawColor(0, 0, 0); doc.setLineDashPattern([], 0);
+        }
+
+        function generateACG61PDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF('p', 'mm', 'a4'); 
+
+            const office = document.getElementById('acgOfficeName').value;
+            const relieved = document.getElementById('acgRelievedOfficer').value;
+            const relieving = document.getElementById('acgRelievingOfficer').value;
+            const tDateRaw = document.getElementById('acgTransferDate').value;
+            const tTime = document.getElementById('acgTransferTime').value;
+            const memoNo = document.getElementById('acgMemoNo').value;
+            const memoDateRaw = document.getElementById('acgMemoDate').value;
+            const authority = document.getElementById('acgFromAuthority').value;
+            
+            const cash = document.getElementById('acgCashRs').value;
+            const stamp = document.getElementById('acgStampRs').value;
+            const impCash = document.getElementById('acgImprestCashRs').value;
+
+            const formatD = (d) => { if(!d) return ""; const p = d.split("-"); return p[2] + "/" + p[1] + "/" + p[0]; };
+
+            const forwardInputs = document.querySelectorAll('.row-forward-target');
+            let targetRecipients = [];
+            forwardInputs.forEach(input => { let v = input.value.trim(); if(v) targetRecipients.push(v); });
+            if(targetRecipients.length === 0) targetRecipients.push("");
+
+            for(let pageIndex = 0; pageIndex < targetRecipients.length; pageIndex++) {
+                if(pageIndex > 0) doc.addPage('a4', 'p');
+
+                doc.setFont("times", "bold"); doc.setFontSize(10); doc.text("ACG-61", 15, 15);
+                doc.addImage(INDIA_POST_LOGO_URL, 'PNG', 170, 5, 25, 25);
+
+                doc.setFontSize(12); doc.text("DEPARTMENT OF POSTS, INDIA", 105, 22, { align: "center" });
+                doc.setFont("times", "normal"); doc.setFontSize(8.5);
+                doc.text("(See Rule 267, Posts and Telegraphs Financial Hand book, Volume 1, Second Edition)", 105, 27, { align: "center" });
+                
+                doc.setFont("times", "bold"); doc.setFontSize(11);
+                doc.text("Charge Report and Receipt of Cash and Stamps on transfer of charge", 105, 36, { align: "center" });
+                doc.line(40, 38, 170, 38);
+
+                doc.setFont("times", "normal"); doc.setFontSize(11);
+                let blockY = 52;
+                
+                const drawLineInput = (text, x, y, len) => {
+                    doc.text(text, x, y);
+                    doc.line(x, y + 1, x + len, y + 1);
+                };
+
+                doc.text("Certified that the charge of the office of", 30, blockY);
+                drawLineInput(office, 120, blockY, 75);
+
+                blockY += 9;
+                doc.text("was made over by", 15, blockY);
+                drawLineInput(relieved, 55, blockY, 65);
+                doc.text("to", 125, blockY);
+                drawLineInput(relieving, 135, blockY, 60);
+
+                blockY += 9;
+                doc.text("on", 15, blockY);
+                drawLineInput(formatD(tDateRaw) + " " + tTime, 25, blockY, 45);
+                doc.text("in accordance with Office Order/ Memorandum/ letter No.", 75, blockY);
+                
+                blockY += 9;
+                drawLineInput(memoNo, 15, blockY, 80);
+                doc.text("dated", 100, blockY);
+                drawLineInput(formatD(memoDateRaw), 115, blockY, 35);
+                doc.text("from", 155, blockY);
+                
+                blockY += 9;
+                drawLineInput(authority, 15, blockY, 180);
+
+                blockY += 24;
+                doc.setFont("times", "bold");
+                doc.text("Relieved Officer", 30, blockY);
+                doc.text("Relieving Officer", 145, blockY);
+                doc.setFont("times", "normal");
+
+                blockY += 16;
+                doc.line(15, blockY, 195, blockY);
+                blockY += 8;
+                doc.setFont("times", "bold"); doc.setFontSize(12);
+                doc.text("Receipt for Cash & stamps on transfer of charge", 105, blockY, { align: "center" });
+                doc.line(55, blockY+1, 155, blockY+1);
+                
+                doc.setFont("times", "normal"); doc.setFontSize(10.5);
+                blockY += 12;
+                let certText1 = "* Certified that the balances on this date of the several books (including Stock Book and Register) and accounts of the office have been checked and found correct.";
+                let lines1 = doc.splitTextToSize(certText1, 175);
+                doc.text(lines1, 15, blockY);
+
+                blockY += (lines1.length * 5) + 3;
+                let certText2 = "* Certified that the balances as detailed below were handed over to me by the Relieved Officer and I accept the responsibility for the same.";
+                let lines2 = doc.splitTextToSize(certText2, 175);
+                doc.text(lines2, 15, blockY);
+
+                blockY += (lines2.length * 5) + 6;
+                doc.text("(a) Cash", 15, blockY);
+                doc.text(": Rs. " + cash, 75, blockY);
+                
+                blockY += 7;
+                doc.text("(b) Stamp Imprest made up of", 15, blockY);
+                doc.text("(i) Stamp : Rs. " + stamp, 75, blockY);
+                blockY += 6;
+                doc.text("(ii) Cash  : Rs. " + impCash, 75, blockY);
+
+                blockY += 26;
+                doc.setFont("times", "bold");
+                doc.text("Relieved Officer", 30, blockY);
+                doc.text("Relieving Officer", 145, blockY);
+                doc.setFont("times", "normal");
+
+                blockY += 10;
+                doc.line(15, blockY, 195, blockY);
+                blockY += 5;
+                doc.setFont("times", "bold");
+                doc.text("No: " + memoNo, 15, blockY);
+                doc.text("dated @ " + formatD(memoDateRaw), 100, blockY);
+                doc.setFont("times", "normal");
+
+                blockY += 12;
+                doc.setFont("times", "bold"); doc.text("Copy forwarded to:", 15, blockY);
+                doc.line(15, blockY+1, 46, blockY+1);
+                doc.setFont("times", "normal");
+
+                let assignedRecipient = targetRecipients[pageIndex];
+                if(assignedRecipient) {
+                    blockY += 8;
+                    doc.text("1. " + assignedRecipient, 20, blockY);
+                } else {
+                    blockY += 8;
+                    doc.text("1. ............................................................................................................", 20, blockY);
+                }
+            }
+
+            let finalOutputDoc = doc;
+            finalizeDocumentViewer(finalOutputDoc);
         }
 
         function generatePerfectPDF() {
@@ -4429,1079 +3606,6 @@
             iframe.src = blobDataUrl;
             
             iframe.scrollIntoView({ behavior: 'smooth' });
-        }
-
-        // ----------------------------------------------------
-        // T.A. BILL TOUR PDF GENERATOR LOGIC
-        // ----------------------------------------------------
-        function generateTABillTourPDF() {
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF('p', 'mm', 'a4');
-
-            doc.setFont("helvetica");
-
-            // --- FETCH UI VALUES ---
-            const tabName = document.getElementById('tabName').value || "";
-            const tabDesig = document.getElementById('tabDesig').value || "";
-            const tabPay = document.getElementById('tabPay').value || "";
-            const tabHQ = document.getElementById('tabHQ').value || "";
-            
-            // Point 6
-            const t6AirA = document.getElementById('tab6AirA').value || "";
-            const t6AirB = document.getElementById('tab6AirB').value || "";
-            const t6RailA = document.getElementById('tab6RailA').value || "";
-            const t6RailB = document.getElementById('tab6RailB').value || "";
-            const t6RailC = document.getElementById('tab6RailC').value || "";
-            const t6Road = document.getElementById('tab6Road').value || "";
-            // Point 7
-            const t7i = document.getElementById('tab7i').value || "";
-            const t7ii = document.getElementById('tab7ii').value || "";
-            // Point 8
-            const t8a = document.getElementById('tab8a').value || "";
-            const t8b = document.getElementById('tab8b').value || "";
-            const t8c = document.getElementById('tab8c').value || "";
-            // Point 9
-            const t9From = document.getElementById('tab9From').value || "";
-            const t9To = document.getElementById('tab9To').value || "";
-            const t9Hotel = document.getElementById('tab9Hotel').value || "";
-            const t9Rate = document.getElementById('tab9Rate').value || "";
-            const t9Total = document.getElementById('tab9Total').value || "";
-            // Point 10
-            const t10Date = document.getElementById('tab10Date').value || "";
-            const t10From = document.getElementById('tab10From').value || "";
-            const t10To = document.getElementById('tab10To').value || "";
-            const t10Mode = document.getElementById('tab10Mode').value || "";
-            const t10Ent = document.getElementById('tab10EntClass').value || "";
-            const t10Trav = document.getElementById('tab10TravClass').value || "";
-            const t10Fare = document.getElementById('tab10Fare').value || "";
-            const t10App = document.getElementById('tab10Approval').value || "";
-            // Point 11
-            const t11Date = document.getElementById('tab11Date').value || "";
-            const t11From = document.getElementById('tab11From').value || "";
-            const t11To = document.getElementById('tab11To').value || "";
-            const t11Rs = document.getElementById('tab11FareRs').value || "";
-            const t11Ps = document.getElementById('tab11FarePs').value || "";
-
-            // Claim Summary & Point 12
-            const tabAdvance = document.getElementById('tabAdvance').value || "0";
-            const totalFares = document.getElementById('tabTotalFares').value || "0";
-            const da = document.getElementById('tabDA').value || "0";
-            const hotel = document.getElementById('tabHotel').value || "0";
-            const gross = document.getElementById('tabGrossTotal').value || "0";
-            const netClaim = document.getElementById('tabNetClaim').value || "0";
-
-            // Certificates Auto Fill
-            const c4Dt = document.getElementById('cert4Date').value || "";
-            const c11Dist = document.getElementById('cert11Dist').value || "";
-            const c7Place = document.getElementById('cert7Place').value || "";
-            const c7From = document.getElementById('cert7From').value || "";
-            const c7To = document.getElementById('cert7To').value || "";
-            const c14Kg = document.getElementById('cert14Kg').value || "";
-            const c14Gms = document.getElementById('cert14Gms').value || "";
-            const c14From = document.getElementById('cert14From').value || "";
-            const c14To = document.getElementById('cert14To').value || "";
-
-            let today = new Date();
-            let appDateStr = ("0" + today.getDate()).slice(-2) + "/" + ("0" + (today.getMonth() + 1)).slice(-2) + "/" + today.getFullYear();
-
-            const rows = document.querySelectorAll('#tabJourneyContainer .dynamic-date-row');
-            const journeyData = [];
-            rows.forEach(r => {
-                journeyData.push({
-                    depDt: r.querySelector('.tab-dep-dt').value || "",
-                    depSt: r.querySelector('.tab-dep-st').value || "",
-                    arrDt: r.querySelector('.tab-arr-dt').value || "",
-                    arrSt: r.querySelector('.tab-arr-st').value || "",
-                    mode: r.querySelector('.tab-mode').value || "",
-                    fare: r.querySelector('.tab-fare').value || "",
-                    dist: r.querySelector('.tab-dist').value || "",
-                    halt: r.querySelector('.tab-halt').value || "",
-                    purpose: r.querySelector('.tab-purpose').value || ""
-                });
-            });
-
-            const fmtDt = (val) => {
-                if(!val) return "";
-                let d = new Date(val);
-                if(isNaN(d)) return val;
-                let datePart = ("0" + d.getDate()).slice(-2) + "/" + ("0" + (d.getMonth() + 1)).slice(-2) + "/" + d.getFullYear();
-                let hrs = d.getHours(); let ampm = hrs >= 12 ? 'PM' : 'AM';
-                hrs = hrs % 12; hrs = hrs ? hrs : 12;
-                let timePart = ("0" + hrs).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2) + " " + ampm;
-                return datePart + "\n" + timePart;
-            };
-
-            const fmtDtOnly = (val) => {
-                if(!val) return "";
-                let d = new Date(val);
-                if(isNaN(d)) return val;
-                return ("0" + d.getDate()).slice(-2) + "/" + ("0" + (d.getMonth() + 1)).slice(-2) + "/" + d.getFullYear();
-            };
-
-            // ==========================================
-            // PAGE 1: PART-A & JOURNEY TABLE
-            // ==========================================
-            doc.setFont("helvetica", "bold"); doc.setFontSize(10); doc.text("G.A.R.-14-A", 12, 15);
-            doc.setFontSize(8); doc.text("[See Rules 66 (I) & 90 (I) (i)]", 12, 19);
-            doc.setFontSize(10); doc.text("Sub-bill No...................................", 140, 15);
-            doc.setFontSize(12); doc.text("TRAVELLING ALLOWANCE BILL FOR TOUR", 105, 30, { align: "center" });
-
-            doc.setFontSize(9); doc.setFont("helvetica", "italic");
-            doc.text("NOTE:- This bill should be prepared in duplicate-one for payment and the others as office copy.", 105, 36, { align: "center" });
-
-            doc.setFont("helvetica", "bold"); doc.setFontSize(11);
-            doc.text("PART-A (To be filled up by Government servant)", 105, 45, { align: "center" });
-
-            doc.setFontSize(10);
-            doc.text("1. Name", 15, 55); doc.setFont("helvetica", "normal"); doc.text(": " + tabName, 45, 55);
-            doc.setFont("helvetica", "bold");
-            doc.text("2. Designation", 15, 63); doc.setFont("helvetica", "normal"); doc.text(": " + tabDesig, 45, 63);
-            doc.setFont("helvetica", "bold");
-            doc.text("3. Pay", 15, 71); doc.setFont("helvetica", "normal"); doc.text(": " + (tabPay ? "Rs. " + tabPay : ""), 45, 71);
-            doc.setFont("helvetica", "bold");
-            doc.text("4. Headquarters", 15, 79); doc.setFont("helvetica", "normal"); doc.text(": " + tabHQ, 45, 79);
-
-            doc.setFont("helvetica", "bold");
-            doc.text("5. Details and purpose of journey (s) performed.", 15, 90);
-
-            // Detailed 9-Column Journey Table
-            doc.rect(12, 95, 186, 21);
-            let colX = [12, 33, 54, 75, 96, 122, 138, 154, 170, 198];
-            doc.line(12, 116, 198, 116); doc.line(12, 103, 198, 103); doc.line(12, 110, 198, 110); 
-            doc.line(54, 95, 54, 116); doc.line(96, 95, 96, 116); doc.line(122, 95, 122, 116); 
-            doc.line(138, 95, 138, 116); doc.line(154, 95, 154, 116); doc.line(170, 95, 170, 116); 
-            doc.line(33, 103, 33, 116); doc.line(75, 103, 75, 116); 
-
-            doc.setFontSize(8.5);
-            doc.text("Departure", 33, 99.5, { align: "center" }); doc.text("Arrival", 75, 99.5, { align: "center" });
-            doc.text("Mode of", 109, 98, { align: "center" }); doc.text("travel & class", 109, 101.5, { align: "center" });
-            doc.text("Fare", 130, 98, { align: "center" }); doc.text("Paid", 130, 101.5, { align: "center" });
-            doc.text("Distance", 146, 98, { align: "center" }); doc.text("in Kms", 146, 101.5, { align: "center" });
-            doc.text("Duration", 162, 98, { align: "center" }); doc.text("of Halt", 162, 101.5, { align: "center" });
-            doc.text("Purpose of", 184, 98, { align: "center" }); doc.text("Journey", 184, 101.5, { align: "center" });
-
-            doc.setFontSize(8);
-            doc.text("Date & Time", 22.5, 107.5, { align: "center" }); doc.text("From", 43.5, 107.5, { align: "center" });
-            doc.text("Date & Time", 64.5, 107.5, { align: "center" }); doc.text("To", 85.5, 107.5, { align: "center" });
-
-            doc.setFont("helvetica", "bold");
-            doc.text("1.", 22.5, 114, { align: "center" }); doc.text("2.", 43.5, 114, { align: "center" });
-            doc.text("3.", 64.5, 114, { align: "center" }); doc.text("4.", 85.5, 114, { align: "center" });
-            doc.text("5.", 109, 114, { align: "center" }); doc.text("6.", 130, 114, { align: "center" });
-            doc.text("7.", 146, 114, { align: "center" }); doc.text("8.", 162, 114, { align: "center" });
-            doc.text("9.", 184, 114, { align: "center" });
-
-            let currentY = 116;
-            doc.setFontSize(8); doc.setFont("helvetica", "normal");
-
-            if (journeyData.length === 0) {
-                currentY += 15; doc.line(12, currentY, 198, currentY); colX.forEach(x => doc.line(x, 116, x, currentY));
-            } else {
-                journeyData.forEach(row => {
-                    let yOffset = 4;
-                    let spl1 = doc.splitTextToSize(fmtDt(row.depDt), 19); let spl2 = doc.splitTextToSize(row.depSt, 19);
-                    let spl3 = doc.splitTextToSize(fmtDt(row.arrDt), 19); let spl4 = doc.splitTextToSize(row.arrSt, 19);
-                    let spl5 = doc.splitTextToSize(row.mode, 24); let spl6 = doc.splitTextToSize(row.fare, 14);
-                    let spl7 = doc.splitTextToSize(row.dist, 14); let spl8 = doc.splitTextToSize(row.halt, 14);
-                    let spl9 = doc.splitTextToSize(row.purpose, 26);
-
-                    let maxLines = Math.max(spl1.length, spl2.length, spl3.length, spl4.length, spl5.length, spl6.length, spl7.length, spl8.length, spl9.length, 1);
-                    let rowH = (maxLines * 4) + 3;
-
-                    doc.text(spl1, 22.5, currentY + yOffset, { align: "center" }); doc.text(spl2, 43.5, currentY + yOffset, { align: "center" });
-                    doc.text(spl3, 64.5, currentY + yOffset, { align: "center" }); doc.text(spl4, 85.5, currentY + yOffset, { align: "center" });
-                    doc.text(spl5, 109, currentY + yOffset, { align: "center" }); doc.text(spl6, 130, currentY + yOffset, { align: "center" });
-                    doc.text(spl7, 146, currentY + yOffset, { align: "center" }); doc.text(spl8, 162, currentY + yOffset, { align: "center" });
-                    doc.text(spl9, 184, currentY + yOffset, { align: "center" });
-
-                    currentY += rowH; doc.line(12, currentY, 198, currentY); colX.forEach(x => doc.line(x, currentY - rowH, x, currentY));
-                });
-            }
-
-            currentY += 10; doc.setFont("helvetica", "bold"); doc.setFontSize(10); doc.text("6. Mode of journey:-", 12, currentY);
-            currentY += 6; doc.text("(i) Air", 17, currentY);
-            currentY += 6; doc.setFont("helvetica", "normal"); doc.text("(a) Exchange voucher arranged by office", 22, currentY); doc.text(t6AirA || "........................", 130, currentY);
-            currentY += 6; doc.text("(b) Ticket/Exchange voucher arranged by", 22, currentY); doc.text(t6AirB || "...................................................", 130, currentY);
-            currentY += 8; doc.setFont("helvetica", "bold"); doc.text("(ii) Rail", 17, currentY);
-            currentY += 6; doc.setFont("helvetica", "normal"); doc.text("(a) Whether travelled by Mail/Express/Ordinary train?", 22, currentY); doc.text(t6RailA || "........................", 130, currentY);
-            currentY += 6; doc.text("(b) Whether return ticket was available?", 22, currentY); doc.text(t6RailB || "........................", 130, currentY);
-            currentY += 6; doc.text("(c) If available, whether return ticket purchased? If not, state reasons", 22, currentY); doc.text(t6RailC || "........................", 130, currentY);
-
-            doc.text("Page 1 of 4", 105, 285, { align: "center" });
-
-            // ==========================================
-            // PAGE 2: ROAD DETAILS & HOTEL PARTICULARS
-            // ==========================================
-            doc.addPage();
-            let p2Y = 20;
-            doc.setFont("helvetica", "bold"); doc.text("(iii) Road", 17, p2Y);
-            p2Y += 6; doc.setFont("helvetica", "normal");
-            doc.text("Mode of conveyance used i.e. by Govt. transport/by taking a taxi, single seat in a bus or other public conveyance/by sharing with another Govt. servant in car belonging to him or to a third person, to be mentioned.", 22, p2Y, { maxWidth: 170, align: "justify" });
-            p2Y += 12;
-            doc.text(t6Road || "........................................................................................................................................................................", 22, p2Y);
-
-            p2Y += 12; doc.setFont("helvetica", "bold"); doc.text("7. Dates of absent from place of halt on account of:-", 12, p2Y);
-            p2Y += 6; doc.setFont("helvetica", "normal"); doc.text("(i) RH. and C.L.", 22, p2Y); doc.text(t7i || "....................................................................", 90, p2Y);
-            p2Y += 6; doc.text("(ii) Not being actually in camp on Sunday and holidays.", 22, p2Y); doc.text(t7ii || "....................................................................", 115, p2Y);
-
-            p2Y += 10; doc.setFont("helvetica", "bold"); doc.text("8. Dates on which free board and/or lodging provided by the State or any organisation financed", 12, p2Y);
-            p2Y += 5; doc.text("   by State funds:-", 12, p2Y);
-            p2Y += 6; doc.setFont("helvetica", "normal"); doc.text("(a) Board only", 22, p2Y); doc.text(t8a || "....................................................................", 80, p2Y);
-            p2Y += 6; doc.text("(b) Lodging only", 22, p2Y); doc.text(t8b || "....................................................................", 80, p2Y);
-            p2Y += 6; doc.text("(c) Board and lodging", 22, p2Y); doc.text(t8c || "....................................................................", 80, p2Y);
-
-            p2Y += 12; doc.setFont("helvetica", "bold");
-            let hotelTxt = "9. Particulars to be furnished alongwith hotel receipt etc. in cases where higher rate of D.A. is claimed for stay in hotel other establishments providing board and/or lodging at scheduled tariffs-";
-            doc.text(hotelTxt, 12, p2Y, { maxWidth: 175, align: "justify" });
-            p2Y += 10;
-
-            doc.rect(12, p2Y, 186, 25);
-            let hCols = [12, 55, 115, 155, 198];
-            doc.line(12, p2Y + 8, 55, p2Y + 8);
-            hCols.forEach(x => doc.line(x, p2Y, x, p2Y + 25)); 
-            doc.setFontSize(9);
-            doc.text("Period of Stay", 33.5, p2Y + 5, { align: "center" });
-            doc.text("From", 23.5, p2Y + 12, { align: "center" }); doc.text("To", 44.5, p2Y + 12, { align: "center" }); doc.line(33.5, p2Y + 8, 33.5, p2Y + 25);
-            doc.text("Name of the Hotel", 85, p2Y + 8, { align: "center" });
-            doc.text("Daily rate of", 135, p2Y + 6, { align: "center" }); doc.text("Lodging charged", 135, p2Y + 10, { align: "center" });
-            doc.text("Total Amount", 176.5, p2Y + 6, { align: "center" }); doc.text("paid", 176.5, p2Y + 10, { align: "center" });
-            doc.line(12, p2Y + 15, 198, p2Y + 15);
-            
-            doc.setFont("helvetica", "normal");
-            doc.text(fmtDtOnly(t9From), 23.5, p2Y + 21, { align: "center" });
-            doc.text(fmtDtOnly(t9To), 44.5, p2Y + 21, { align: "center" });
-            doc.text(t9Hotel, 85, p2Y + 21, { align: "center" });
-            doc.text(t9Rate, 135, p2Y + 21, { align: "center" });
-            doc.text(t9Total, 176.5, p2Y + 21, { align: "center" });
-
-            p2Y += 35; doc.setFontSize(10); doc.setFont("helvetica", "bold");
-            let jTxt = "10. Particulars of journey(s) for which higher class of accommodation than the one to which the Government servant is entitled was used:-";
-            doc.text(jTxt, 12, p2Y, { maxWidth: 175, align: "justify" });
-            p2Y += 10;
-
-            doc.rect(12, p2Y, 186, 25);
-            let jCols = [12, 27, 67, 97, 127, 157, 198];
-            doc.line(27, p2Y + 8, 67, p2Y + 8);
-            jCols.forEach(x => doc.line(x, p2Y, x, p2Y + 25));
-
-            doc.setFontSize(8.5);
-            doc.text("Date", 19.5, p2Y + 6, { align: "center" }); doc.text("1.", 19.5, p2Y + 12, { align: "center" });
-            doc.text("Period of Stay & Places", 47, p2Y + 5, { align: "center" });
-            doc.text("From", 37, p2Y + 12, { align: "center" }); doc.text("To", 57, p2Y + 12, { align: "center" }); doc.line(47, p2Y + 8, 47, p2Y + 25);
-            doc.text("Mode of", 82, p2Y + 5, { align: "center" }); doc.text("conveyance used", 82, p2Y + 9, { align: "center" }); doc.text("4.", 82, p2Y + 13, { align: "center" });
-            doc.text("Class to which", 112, p2Y + 5, { align: "center" }); doc.text("entitled", 112, p2Y + 9, { align: "center" }); doc.text("5.", 112, p2Y + 13, { align: "center" });
-            doc.text("Class to which", 142, p2Y + 5, { align: "center" }); doc.text("travelled", 142, p2Y + 9, { align: "center" }); doc.text("6.", 142, p2Y + 13, { align: "center" });
-            doc.text("Fare of the", 177.5, p2Y + 5, { align: "center" }); doc.text("entitled class/Rs", 177.5, p2Y + 9, { align: "center" }); doc.text("7.", 177.5, p2Y + 13, { align: "center" });
-            doc.line(12, p2Y + 15, 198, p2Y + 15);
-
-            doc.setFont("helvetica", "normal");
-            doc.text(fmtDtOnly(t10Date), 19.5, p2Y + 21, { align: "center" });
-            doc.text(t10From, 37, p2Y + 21, { align: "center" });
-            doc.text(t10To, 57, p2Y + 21, { align: "center" });
-            doc.text(t10Mode, 82, p2Y + 21, { align: "center" });
-            doc.text(t10Ent, 112, p2Y + 21, { align: "center" });
-            doc.text(t10Trav, 142, p2Y + 21, { align: "center" });
-            doc.text(t10Fare, 177.5, p2Y + 21, { align: "center" });
-
-            p2Y += 35; doc.setFontSize(10); doc.setFont("helvetica", "normal");
-            doc.text("If the journey(s) by higher class accommodation has been performed with the approval of the competent authority.", 12, p2Y);
-            p2Y += 6;
-            doc.text("No. and date of sanction may be quoted. " + (t10App || "............................................................................."), 12, p2Y);
-
-            doc.text("Page 2 of 4", 105, 285, { align: "center" });
-
-            // ==========================================
-            // PAGE 3: CLAIM SUMMARY & PART-B (OFFICE USE)
-            // ==========================================
-            doc.addPage();
-            let p3Y = 20;
-            doc.setFont("helvetica", "bold");
-            doc.text("11. Details of Journey (s) performed by road between places connected by rail:-", 12, p3Y);
-            p3Y += 8;
-
-            doc.rect(12, p3Y, 150, 25);
-            let rCols = [12, 42, 102, 162];
-            doc.line(42, p3Y + 8, 162, p3Y + 8);
-            rCols.forEach(x => doc.line(x, p3Y, x, p3Y + 25));
-            doc.line(72, p3Y + 8, 72, p3Y + 25); 
-            doc.line(132, p3Y + 8, 132, p3Y + 25); 
-
-            doc.text("Date", 27, p3Y + 5, { align: "center" }); doc.text("1.", 27, p3Y + 12, { align: "center" });
-            doc.text("Name of places", 72, p3Y + 5, { align: "center" });
-            doc.text("From", 57, p3Y + 12, { align: "center" }); doc.text("To", 87, p3Y + 12, { align: "center" });
-            doc.text("Fare paid", 132, p3Y + 5, { align: "center" });
-            doc.text("Rs.", 117, p3Y + 12, { align: "center" }); doc.text("Ps.", 147, p3Y + 12, { align: "center" });
-            doc.line(12, p3Y + 15, 162, p3Y + 15);
-
-            doc.setFont("helvetica", "normal");
-            doc.text(fmtDtOnly(t11Date), 27, p3Y + 21, { align: "center" });
-            doc.text(t11From, 57, p3Y + 21, { align: "center" });
-            doc.text(t11To, 87, p3Y + 21, { align: "center" });
-            doc.text(t11Rs, 117, p3Y + 21, { align: "center" });
-            doc.text(t11Ps, 147, p3Y + 21, { align: "center" });
-
-            p3Y += 35; doc.setFont("helvetica", "bold");
-            doc.text("12. Amount of T.A. advance. If any, drawn.       Rs. " + (tabAdvance || ".................."), 12, p3Y);
-
-            p3Y += 10;
-            // Detailed Net Claim Calculation (New Additions)
-            doc.rect(12, p3Y, 186, 35);
-            doc.setFillColor(240, 240, 240);
-            doc.rect(12, p3Y, 186, 8, "F");
-            doc.setFont("helvetica", "bold");
-            doc.text("CLAIM SUMMARY & NET CALCULATION", 105, p3Y + 5.5, { align: "center" });
-            
-            doc.setFont("helvetica", "normal");
-            doc.text("Total Fares Paid: Rs. " + totalFares, 15, p3Y + 14);
-            doc.text("Total D.A. Claimed: Rs. " + da, 80, p3Y + 14);
-            doc.text("Hotel / Transit: Rs. " + hotel, 140, p3Y + 14);
-            
-            doc.setFont("helvetica", "bold");
-            doc.text("Gross Claim: Rs. " + gross, 15, p3Y + 22);
-            doc.text("Less: Advance Drawn: Rs. " + tabAdvance, 80, p3Y + 22);
-            
-            doc.text("Net Claim Payable: Rs. " + netClaim, 15, p3Y + 31);
-            let netWords = "Rupees " + parseNumberToWords(Math.abs(parseFloat(netClaim) || 0)) + " only";
-            doc.setFont("helvetica", "normal"); doc.setFontSize(9);
-            doc.text("(In words: " + netWords + ")", 65, p3Y + 31);
-
-            p3Y += 45; doc.setFontSize(10);
-            doc.text("Certified that the information as given above, is true to the best of my knowledge and belief.", 12, p3Y);
-
-            p3Y += 15;
-            doc.text("Date: " + appDateStr, 12, p3Y);
-            doc.setFont("helvetica", "bold");
-            doc.text("Signature of the Govt. servant ..............................", 195, p3Y, { align: "right" });
-
-            p3Y += 15; doc.setFontSize(12); doc.setFont("helvetica", "bold");
-            doc.text("PART-B (To be filled in the Bill Section)", 105, p3Y, { align: "center" });
-
-            p3Y += 10; doc.setFontSize(10); doc.setFont("helvetica", "normal");
-            doc.text("1. The net entitlement on account of travelling allowance works out to Rs. ....................................", 12, p3Y);
-            p3Y += 6; doc.text("as detailed below:-", 17, p3Y);
-
-            p3Y += 8; doc.text("a) Railway/air/bus/steamer fare", 22, p3Y); doc.text("Rs. ...........................", 140, p3Y);
-            p3Y += 6; doc.text("b) Road mileage for ........ Kms @ Rs. ........ Per/Km.", 22, p3Y); doc.text("Rs. ...........................", 140, p3Y);
-            p3Y += 6; doc.text("c) Daily allowance", 22, p3Y);
-            p3Y += 6; doc.text("(i) ........ Days @ Rs. ........ /Per Days", 32, p3Y); doc.text("Rs. ...........................", 140, p3Y);
-            p3Y += 6; doc.text("(ii) ........ Days @ Rs. ........ Per Days", 32, p3Y); doc.text("Rs. ...........................", 140, p3Y);
-            p3Y += 6; doc.text("(iii) ........ Days @ Rs. ........ /Per Days", 32, p3Y); doc.text("Rs. ...........................", 140, p3Y);
-            p3Y += 6; doc.text("d) Actual expenses", 22, p3Y); doc.text("Rs. ...........................", 140, p3Y);
-
-            p3Y += 4; doc.line(140, p3Y, 180, p3Y);
-            p3Y += 5; doc.setFont("helvetica", "bold"); doc.text("Gross Amount", 100, p3Y); doc.text("Rs. ...........................", 140, p3Y);
-            p3Y += 6; doc.setFont("helvetica", "normal"); doc.text("Less amount of T.A. advance. If any, drawn vide", 60, p3Y);
-            p3Y += 5; doc.text("Voucher No. ........................ Dated ........................", 60, p3Y); doc.text("Rs. ...........................", 140, p3Y);
-
-            p3Y += 4; doc.line(140, p3Y, 180, p3Y);
-            p3Y += 5; doc.setFont("helvetica", "bold"); doc.text("Net amount", 100, p3Y); doc.text("Rs. ...........................", 140, p3Y);
-
-            p3Y += 10; doc.setFont("helvetica", "normal");
-            doc.text("2. The expenditure is debitable to ..........................................................................................................", 12, p3Y);
-
-            p3Y += 20; doc.setFont("helvetica", "bold");
-            doc.text("Initial Bill Clerk", 30, p3Y, { align: "center" }); doc.text("Signature of D.D.O", 175, p3Y, { align: "center" });
-            p3Y += 15; doc.text("Countersigned", 105, p3Y, { align: "center" });
-            p3Y += 15; doc.text("Signature of Controlling Officer", 105, p3Y, { align: "center" });
-
-            doc.setFont("helvetica", "normal"); doc.text("Page 3 of 4", 105, 285, { align: "center" });
-
-            // ==========================================
-            // PAGE 4: CERTIFICATES & FINAL SIGNATURES
-            // ==========================================
-            doc.addPage();
-            let p4Y = 20;
-            doc.setFont("helvetica", "bold"); doc.setFontSize(12);
-            doc.text("CERTIFICATE FOR TOUR T.A. BILLS", 105, p4Y, { align: "center" });
-
-            p4Y += 15; doc.setFontSize(10); doc.setFont("helvetica", "normal");
-            
-            // Map the Auto-Fill Certificate Strings
-            let fillDt4 = c4Dt ? fmtDtOnly(c4Dt) : "..............................";
-            let fillPl7 = c7Place || "..............................";
-            let fillFr7 = c7From ? fmtDtOnly(c7From) : "..............................";
-            let fillTo7 = c7To ? fmtDtOnly(c7To) : "..............................";
-            let fillDist11 = c11Dist || "..............................";
-            let fillKg14 = c14Kg || "................";
-            let fillGms14 = c14Gms || "................";
-            let fillFr14 = c14From || "..............................";
-            let fillTo14 = c14To || "..............................";
-
-            const rulesLines = [
-                "1. Certified that I/my family was neither allowed free transit by Rail under free pass or otherwise provided with means of communication at expense of the state or local round journey for the which T.A. has been claimed in the bill.",
-                "2. Certified that I/my family actually travelled by the class for the T.A. claimed in this bill.",
-                "3. Certified that number of kilometers shown in this bill is in accordance with the poly metenal tables of the establishment.",
-                `4. Certified that journey on ${fillDt4} was performed by Mail/Express train in the interest of public service.`,
-                "5. Certified that I was actually not merely contrusively in camp on Sundays and holidays for which daily allowance is claimed.",
-                "6. Certified that I was not absent on casual leave during the period for which daily allowance has been claimed.",
-                `7. Certified that during my halt at ${fillPl7} from ${fillFr7} to ${fillTo7} while on inspection duty continue to be in our expenditure after the first 10 days.`,
-                "8. Certified that I did not perform the road journey for which the kilometer allowance has been claimed at the higher rates prescribed in Rule 46 of the supplementary Rule by taking a single sent in a taxi motor or mini bus or lorry plying for hire.",
-                "9. Certified that I incurred running expenses on a car in this journey.",
-                "10. Certified that the road journeys for which kilometer has been claimed at the higher prescribed in supplementary Rule 46 were performed in my own car.",
-                `11. Certified that the road journeys for which mileage is claimed were performed by road but were charged by rail. The number of kilometers actually travelled by road being ${fillDist11} Kms.`,
-                "12. Certified that the family members for whom T.A. has been claimed actually travelled with me or followed me on transfer.",
-                "13. Certified that actual expenses incurred as cost of transportation of personal was not less than the sum claimed in the bill.",
-                `14. Certified that I have transported ${fillKg14} Kg ${fillGms14} gms of luggage on my transfer from ${fillFr14} to ${fillTo14}.`
-            ];
-
-            rulesLines.forEach(r => {
-                doc.text(r, 12, p4Y, { maxWidth: 180, align: "justify" });
-                let linesArr = doc.splitTextToSize(r, 180);
-                p4Y += (linesArr.length * 5) + 3;
-            });
-
-            p4Y += 25; doc.setFont("helvetica", "bold");
-            doc.text("Signature of the claimant", 195, p4Y, { align: "right" });
-            p4Y += 20; doc.text("Countersigned", 12, p4Y);
-            p4Y += 15; doc.text("(Signature & Designation of the controlling officer)", 12, p4Y);
-
-            doc.setFont("helvetica", "normal");
-            doc.text("Page 4 of 4", 105, 285, { align: "center" });
-
-            finalizeDocumentViewer(doc);
-        }
-
-        async function generateCEAPDF() {
-            try {
-                const systemLoader = document.getElementById('globalAppLoader');
-                if (systemLoader) {
-                    systemLoader.style.display = 'flex';
-                    document.querySelector('.loading-status-msg').innerText = "Generating Official Forms...";
-                }
-
-                const { jsPDF } = window.jspdf;
-                const doc = new jsPDF('p', 'mm', 'a4');
-
-                // --- DATA GATHERING ---
-                const getVal = (id) => {
-                    const el = document.getElementById(id);
-                    return el ? el.value : "";
-                };
-
-                const fmtDtOnly = (val) => {
-                    if(!val) return "";
-                    let d = new Date(val);
-                    if(isNaN(d)) return val;
-                    return ("0" + d.getDate()).slice(-2) + "/" + ("0" + (d.getMonth() + 1)).slice(-2) + "/" + d.getFullYear();
-                };
-
-                const children = [];
-                document.querySelectorAll('#ceaChildContainer .dynamic-date-row').forEach(r => {
-                    children.push({
-                        name: r.querySelector('.cea-child-name') ? r.querySelector('.cea-child-name').value : "",
-                        dob: r.querySelector('.cea-child-dob') ? r.querySelector('.cea-child-dob').value : "",
-                        std: r.querySelector('.cea-child-class') ? r.querySelector('.cea-child-class').value : "",
-                        sec: r.querySelector('.cea-child-sec') ? r.querySelector('.cea-child-sec').value : "",
-                        roll: r.querySelector('.cea-child-roll') ? r.querySelector('.cea-child-roll').value : "",
-                        adm: r.querySelector('.cea-child-adm') ? r.querySelector('.cea-child-adm').value : "",
-                        school: r.querySelector('.cea-child-school') ? r.querySelector('.cea-child-school').value : "",
-                        place: r.querySelector('.cea-child-place') ? r.querySelector('.cea-child-place').value : "",
-                        affil: r.querySelector('.cea-child-affil') ? r.querySelector('.cea-child-affil').value : "",
-                        pattern: r.querySelector('.cea-child-pattern') ? r.querySelector('.cea-child-pattern').value : "",
-                        code: r.querySelector('.cea-child-code') ? r.querySelector('.cea-child-code').value : "",
-                        period: r.querySelector('.cea-child-period') ? r.querySelector('.cea-child-period').value : "",
-                        rate: r.querySelector('.cea-child-rate') ? r.querySelector('.cea-child-rate').value : "",
-                        amount: r.querySelector('.cea-child-amount') ? r.querySelector('.cea-child-amount').value : "",
-                        remark: r.querySelector('.cea-child-remark') ? r.querySelector('.cea-child-remark').value : ""
-                    });
-                });
-
-                const empName = getVal('ceaEmpName');
-                const empId = getVal('ceaEmpId');
-                const empDesig = getVal('ceaEmpDesig');
-                const empDept = getVal('ceaEmpDept');
-                const acadYear = getVal('ceaAcadYear');
-
-                // ==========================================
-                // RENDER PAGE 1: EXACT 100% MATCH
-                // ==========================================
-                
-                // HEADER SECTION (Bold, Italic, Underlined precisely like the image)
-                doc.setFont("times", "bolditalic");
-                doc.setFontSize(11);
-                doc.text("Annexure 'A'", 195, 18, { align: "right" });
-                doc.line(174, 19, 195, 19);
-
-                doc.setFontSize(12);
-                doc.text("CEA: Proforma For Re-Imbursement", 105, 26, { align: "center" });
-                doc.line(71, 27, 139, 27);
-
-                doc.setFontSize(11);
-                doc.text("Proforma For Re-Imbursement of Children Education Allowance Claim for the", 105, 32, { align: "center" });
-                doc.line(28, 33, 182, 33);
-                
-                doc.text("Academic Year:.............................", 105, 38, { align: "center" });
-                doc.line(78, 39, 132, 39);
-                // Overlay the actual variable on top of the dots to keep the official look
-                doc.setFont("times", "bold");
-                doc.text(acadYear, 109, 37.5); 
-
-                // INTRO TEXT
-                doc.setFont("times", "normal");
-                doc.setFontSize(10.5);
-                doc.text("I hereby apply for the reimbursement of Children Education Allowance/ Hostel-Subsidy", 15, 46);
-                doc.text("for my child/Children and relevant particulars are furnished below:", 15, 52);
-
-                // ==========================================
-                // TABLE 1: EMPLOYEE DETAILS
-                // ==========================================
-                let t1Y = 56;
-                doc.setLineWidth(0.2);
-                doc.rect(15, t1Y, 180, 68); // Main Box
-                
-                // Vertical Lines
-                doc.line(25, t1Y, 25, t1Y + 68);
-                doc.line(100, t1Y, 100, t1Y + 68);
-                doc.line(105, t1Y, 105, t1Y + 68);
-
-                // Horizontal Lines
-                doc.line(15, t1Y + 8, 195, t1Y + 8);
-                doc.line(15, t1Y + 16, 195, t1Y + 16);
-                doc.line(15, t1Y + 24, 195, t1Y + 24);
-                doc.line(15, t1Y + 32, 195, t1Y + 32);
-                doc.line(15, t1Y + 52, 195, t1Y + 52); // Taller row for spouse details
-
-                // Text Content & Data
-                doc.text("1.", 17, t1Y + 5.5); doc.text("Name of Employee", 27, t1Y + 5.5); doc.text(":", 101.5, t1Y + 5.5); doc.text(empName, 107, t1Y + 5.5);
-                doc.text("2.", 17, t1Y + 13.5); doc.text("Employee I.D.", 27, t1Y + 13.5); doc.text(":", 101.5, t1Y + 13.5); doc.text(empId, 107, t1Y + 13.5);
-                doc.text("3.", 17, t1Y + 21.5); doc.text("Designation", 27, t1Y + 21.5); doc.text(":", 101.5, t1Y + 21.5); doc.text(empDesig, 107, t1Y + 21.5);
-                doc.text("4.", 17, t1Y + 29.5); doc.text("Department/ Office", 27, t1Y + 29.5); doc.text(empDept, 107, t1Y + 29.5); // No colon exactly like image
-                
-                doc.text("5.", 17, t1Y + 37.5); 
-                doc.text("If spouse is employed, State\nwhether in Central Govt., PSU,\nState Govt. (give details with\nname of the spouse)", 27, t1Y + 37.5);
-                let sp1 = getVal('ceaSpouseEmployed') === "Yes" ? getVal('ceaSpouseName') : "";
-                doc.text(sp1, 107, t1Y + 37.5);
-                
-                doc.text("6.", 17, t1Y + 57.5);
-                doc.text("Designation, office & B.U. No. of\nspouse, if spouse is employed in", 27, t1Y + 57.5);
-                let sp2 = getVal('ceaSpouseEmployed') === "Yes" ? getVal('ceaSpouseDesig') : "";
-                doc.text(sp2, 107, t1Y + 57.5);
-
-                // ==========================================
-                // TABLE 2: CHILD DETAILS
-                // ==========================================
-                let t2Y = 132;
-                doc.text("7. Details of the child/Children for whom CEA/Hostel Subsidy Claimed:", 15, t2Y);
-                t2Y += 2; // Starts at 134
-                
-                doc.rect(15, t2Y, 180, 40); // 5 rows x 8mm
-                
-                // Horizontal Lines
-                doc.line(15, t2Y + 8, 195, t2Y + 8);
-                doc.line(15, t2Y + 16, 195, t2Y + 16);
-                doc.line(15, t2Y + 24, 195, t2Y + 24);
-                doc.line(15, t2Y + 32, 195, t2Y + 32);
-                
-                // Vertical Lines
-                doc.line(37, t2Y, 37, t2Y + 40);
-                doc.line(85, t2Y, 85, t2Y + 40);
-                doc.line(105, t2Y, 105, t2Y + 40);
-                doc.line(140, t2Y, 140, t2Y + 40);
-                
-                // Headers
-                doc.text("Sequence", 17, t2Y + 5);
-                doc.text("Name of Child", 39, t2Y + 5);
-                doc.text("DOB", 87, t2Y + 5);
-                doc.text("Standard\n(A.Y..............)", 107, t2Y + 3.5);
-                doc.text("Name & place of the\nSchool/Institution", 142, t2Y + 3.5);
-                
-                // Data mapping (Accounting for the exact blank rows in the image)
-                let c1 = children[0] || {};
-                doc.text("1st Child", 17, t2Y + 13);
-                doc.text(c1.name || "", 39, t2Y + 13); doc.text(fmtDtOnly(c1.dob), 87, t2Y + 13); doc.text(c1.std || "", 107, t2Y + 13); doc.text(doc.splitTextToSize(c1.school + (c1.place ? ", " + c1.place : ""), 53), 142, t2Y + 12);
-                
-                let c2 = children[1] || {};
-                doc.text("2nd Child", 17, t2Y + 29); // Skips one row perfectly
-                doc.text(c2.name || "", 39, t2Y + 29); doc.text(fmtDtOnly(c2.dob), 87, t2Y + 29); doc.text(c2.std || "", 107, t2Y + 29); doc.text(doc.splitTextToSize(c2.school + (c2.place ? ", " + c2.place : ""), 53), 142, t2Y + 28);
-
-                // ==========================================
-                // TABLE 3: EXPENDITURE
-                // ==========================================
-                let t3Y = 182;
-                doc.text("8. Re-Imbursement of Expenditure:", 15, t3Y);
-                t3Y += 2; // Starts at 184
-                
-                doc.rect(15, t3Y, 180, 48); // 6 rows x 8mm
-                
-                // Horizontal Lines
-                doc.line(15, t3Y + 8, 195, t3Y + 8);
-                doc.line(15, t3Y + 16, 195, t3Y + 16);
-                doc.line(15, t3Y + 24, 195, t3Y + 24);
-                doc.line(15, t3Y + 32, 195, t3Y + 32);
-                doc.line(15, t3Y + 40, 195, t3Y + 40);
-                
-                // Vertical Lines (Notice they stop at 40mm to allow the Total box to stretch, just like the image)
-                doc.line(37, t3Y, 37, t3Y + 40);
-                doc.line(70, t3Y, 70, t3Y + 40);
-                doc.line(105, t3Y, 105, t3Y + 40);
-                doc.line(150, t3Y, 150, t3Y + 48); // Amount claimed line goes all the way down
-                
-                // Headers
-                doc.text("Sequence", 17, t3Y + 5);
-                doc.text("Period", 39, t3Y + 5);
-                doc.text("Rate of CEA (Rs.)", 72, t3Y + 5);
-                doc.text("Amount Claimed", 107, t3Y + 5);
-                doc.text("Remark", 152, t3Y + 5);
-                
-                // Data (Again, factoring in the blank rows from the screenshot)
-                doc.text("1st Child", 17, t3Y + 13);
-                doc.text(c1.period || "", 39, t3Y + 13); doc.text(c1.rate || "", 72, t3Y + 13); doc.text(c1.amount || "", 107, t3Y + 13); doc.text(c1.remark || "", 152, t3Y + 13);
-                
-                doc.text("2nd Child", 17, t3Y + 29); // Skips one row perfectly
-                doc.text(c2.period || "", 39, t3Y + 29); doc.text(c2.rate || "", 72, t3Y + 29); doc.text(c2.amount || "", 107, t3Y + 29); doc.text(c2.remark || "", 152, t3Y + 29);
-                
-                // Total Row
-                doc.text("Total Amount Claimed Rs.", 17, t3Y + 45);
-                let totAmt = (parseFloat(c1.amount) || 0) + (parseFloat(c2.amount) || 0);
-                doc.text(totAmt > 0 ? totAmt.toString() : "", 107, t3Y + 45);
-
-                // ==========================================
-                // BOTTOM SECTION
-                // ==========================================
-                let botY = 242;
-                let dHostel = getVal('ceaHostelDist') || "...........";
-                let dRec = getVal('ceaReceivedAmount') || "........................";
-                
-                doc.text("9. Distance of Hostel of child from residence of employee (In case Hostel Subsidy): " + dHostel, 15, botY);
-                doc.text("10. Amount of CEA/Hostel Subsidy already received up to previous quarter: " + dRec, 15, botY + 8);
-                doc.text("11. Academic year for which CEA/Hostel Subsidy is applied now: " + acadYear, 15, botY + 16);
-
-                doc.setFont("times", "bold");
-                doc.text("Contd..P/2", 195, 275, { align: "right" });
-
-                // ==========================================
-                // PAGE 2: EXACT 100% MATCH
-                // ==========================================
-                doc.addPage();
-                let p2Y = 15;
-                doc.setFont("times", "normal");
-                doc.setFontSize(11); // Perfectly matched font size for this page
-                
-                doc.text("-2-", 105, p2Y, { align: "center" });
-                
-                p2Y += 8;
-                doc.text("12. (a) Whether the child for whom the CEA is applied for is a disabled child: YES/No", 15, p2Y);
-                // Overlay user's choice clearly next to the YES/No
-                let disab = getVal('ceaDisabled');
-                if (disab) {
-                    doc.setFont("times", "bold");
-                    doc.text(`[ ${disab.toUpperCase()} ]`, 165, p2Y);
-                    doc.setFont("times", "normal");
-                }
-
-                p2Y += 6;
-                doc.text("      (b) If yes, indicate the nature of disability:", 15, p2Y);
-                doc.setFont("times", "bold"); 
-                doc.text(disab === "Yes" ? getVal('ceaDisabilityNature') : "", 90, p2Y); 
-                doc.setFont("times", "normal");
-
-                p2Y += 6;
-                doc.text("      (c) Date of disability certificate:", 15, p2Y);
-                doc.setFont("times", "bold"); 
-                doc.text(disab === "Yes" ? fmtDtOnly(getVal('ceaDisabilityDate')) : "", 75, p2Y); 
-                doc.setFont("times", "normal");
-
-                p2Y += 6;
-                doc.text("      (d) Indicate the percentage of disability:", 15, p2Y);
-
-                p2Y += 10;
-                doc.text("13. Whether the Bonafide certificate from Head of Institution/School has been attached:", 15, p2Y);
-                p2Y += 8;
-                doc.text("YES/No", 185, p2Y, { align: "right" });
-
-                p2Y += 6;
-                doc.text("14. For Hostel Subsidy, the Bonafide certificate form mentioning the amount is attached:", 15, p2Y);
-                p2Y += 8;
-                doc.text("YES/No", 185, p2Y, { align: "right" });
-
-                p2Y += 10;
-                doc.text("15. If Yes at item No.14. Amount claimed for Hostel Subsidy: Rs. ........................................", 15, p2Y);
-                
-                p2Y += 8;
-                doc.text("16. (a) Certified that I or my wife/husband is/ is not a Central Govt. Servant.", 15, p2Y);
-                
-                p2Y += 6;
-                doc.text("      (b) Certified that my husband/ wife Shri/Smt:", 15, p2Y);
-                doc.text("........................................ is presently", 98, p2Y);
-                // Overlay Spouse Name
-                doc.setFont("times", "bold");
-                doc.text(getVal('ceaSpouseName') || "", 100, p2Y - 1);
-                doc.setFont("times", "normal");
-                
-                p2Y += 6;
-                doc.text("            working as:", 15, p2Y);
-                doc.text("........................ in ........................................ And that he/she shall", 50, p2Y);
-                // Overlay Spouse Designation
-                doc.setFont("times", "bold");
-                doc.text(getVal('ceaSpouseDesig') || "", 52, p2Y - 1);
-                doc.setFont("times", "normal");
-                
-                p2Y += 6;
-                doc.text("            not apply/has not applied for theChildrenEducation Allowance for the child/Children mentioned above", 15, p2Y);
-                
-
-                p2Y += 6;
-                doc.text("      (c) certified that I or my wife/ husband has not claimed this re-imbursement from any other source and", 15, p2Y);
-                p2Y += 6;
-                doc.text("           will not claim the same in future.", 15, p2Y);
-
-                // ----------- THE MANUAL WRAPPING FIX IS HERE -----------
-                p2Y += 10;
-                let t17 = [
-                    "17. Certified that my child in respect of whom reimbursement of Children Education Allowance is applied",
-                    "    is studying in the School/ Jr. College which is recognized and affiliated to Board of Education/University."
-                       
-                ];
-                
-                t17.forEach(line => {
-                    doc.text(line, 15, p2Y);
-                    p2Y += 6; 
-                });
-
-                p2Y += 4; 
-                
-                let t18 = [
-                    "18. Certified that I am claiming the CEA in respect of my two eldest surviving children only. The information",
-                    "    furnished above are complete and correct and I have not suppressed any relevant information. In the event",
-                    "    of any change in the particulars given above which affect my eligibility for reimbursement of Children",
-                    "    Education Allowance, I undertake to intimate the same promptly and also to refund excess payments if any",
-                    "    made.Further, I am aware that if at any stage the information/documents furnished above is found to be false,",
-                    "    I am liable for disciplinary action."   
-                           
-                ];
-                
-                t18.forEach(line => {
-                    doc.text(line, 15, p2Y);
-                    p2Y += 6;
-                });
-                // -------------------------------------------------------
-
-                p2Y += 15;
-                doc.text("Dated: ....................", 15, p2Y + 8);
-                // Overlay Date
-                let appDate = fmtDtOnly(getVal('ceaAppDate'));
-                if(appDate) {
-                    doc.setFont("times", "bold");
-                    doc.text(appDate, 28, p2Y + 7);
-                    doc.setFont("times", "normal");
-                }
-                
-                let rColX = 130;
-                doc.text("Signature:", rColX, p2Y);
-                doc.text("I.D. No.", rColX, p2Y + 8);
-                doc.text("Name:", rColX, p2Y + 16);
-                doc.text("Designation", rColX, p2Y + 24);
-                doc.text("Department", rColX, p2Y + 32);
-                
-                doc.setFont("times", "bold");
-                doc.text(empId, rColX + 25, p2Y + 8);
-                doc.text(empName, rColX + 25, p2Y + 16);
-                doc.text(empDesig, rColX + 25, p2Y + 24);
-                doc.text(empDept, rColX + 25, p2Y + 32);
-                doc.setFont("times", "normal");
-
-                p2Y += 50;
-                doc.text("Signature Head of the Deptt.", 185, p2Y, { align: "right" });
-                doc.text("With Office Seal and stamp", 185, p2Y + 6, { align: "right" });
-
-               // ==========================================
-                // PAGE 3 & 4: PER CHILD (Annexure B & Self Dec)
-                // ==========================================
-                children.forEach((c, idx) => {
-                    
-                    // ==========================================
-                    // PAGE 3: ANNEXURE 'B' (CHARGE REPORT STANDARD)
-                    // ==========================================
-                    doc.addPage();
-                    let p3Y = 15;
-                    
-                    doc.setFont("times", "normal");
-                    doc.setFontSize(11);
-                    doc.text("-3-", 105, p3Y, { align: "center" });
-
-                    p3Y += 10;
-                    doc.setFont("times", "bolditalic");
-                    doc.setFontSize(12);
-                    doc.text("Annexure 'B'", 195, p3Y, { align: "right" });
-                    doc.line(174, p3Y + 1, 195, p3Y + 1);
-
-                    p3Y += 15;
-                    doc.setFont("times", "bold");
-                    doc.setFontSize(13);
-                    doc.text("CEA: CERTIFICATE FORM THE HEAD OF INSTITUTION/SCHOL", 105, p3Y, { align: "center" });
-                    doc.line(38, p3Y + 1, 172, p3Y + 1);
-
-                    p3Y += 10;
-                    doc.setFont("times", "normal");
-                    doc.setFontSize(11);
-                    doc.text("Authority vide Government of India Ministry of Personal P.G. and Department of", 105, p3Y, { align: "center" });
-                    p3Y += 6;
-                    doc.text("Personal & Training New Delhi Order No.A-27102(02)2017 Estt. (AI.) 16 August 2017.", 105, p3Y, { align: "center" });
-
-                    p3Y += 12;
-                    doc.setFont("times", "bold");
-                    doc.setFontSize(12);
-                    doc.text("Certificate from the Head of Institution/School", 105, p3Y, { align: "center" });
-                    p3Y += 6;
-                    doc.text("(For Re-imbursement CEA)", 105, p3Y, { align: "center" });
-
-                    p3Y += 15;
-                    doc.setFont("times", "normal");
-                    doc.setFontSize(11);
-                    doc.setLineWidth(0.3); // Match Charge Report line thickness
-                    
-                    // Header Ref and Date
-                    doc.text("Ref. No.", 15, p3Y);
-                    doc.line(30, p3Y + 1, 80, p3Y + 1);
-                    
-                    doc.text("Date.", 145, p3Y);
-                    doc.line(155, p3Y + 1, 195, p3Y + 1);
-
-                    p3Y += 18;
-                    // Line 1
-                    doc.text("It is certified that Master/ Kumari", 25, p3Y); // Indented like original
-                    doc.line(78, p3Y + 1, 180, p3Y + 1);
-                    doc.text("having", 182, p3Y);
-                    
-                    doc.setFont("times", "bold");
-                    doc.text(c.name || "", 80, p3Y - 1); // Overlay Child Name
-                    doc.setFont("times", "normal");
-
-                    p3Y += 12;
-                    // Line 2
-                    doc.text("Admission No.", 15, p3Y);
-                    doc.line(40, p3Y + 1, 75, p3Y + 1);
-                    doc.text("D.O.B.", 78, p3Y);
-                    doc.line(90, p3Y + 1, 125, p3Y + 1);
-                    doc.text("Son/Daughter of Mr./Mrs.", 128, p3Y);
-                    doc.line(170, p3Y + 1, 195, p3Y + 1);
-                    
-                    doc.setFont("times", "bold");
-                    doc.text(c.adm || "", 42, p3Y - 1); // Overlay Admission No
-                    doc.text(fmtDtOnly(c.dob) || "", 92, p3Y - 1); // Overlay DOB
-                    doc.text(empName || "", 172, p3Y - 1); // Overlay Parent Name
-                    doc.setFont("times", "normal");
-
-                    p3Y += 12;
-                    // Line 3
-                    doc.text("was studying in Class", 15, p3Y);
-                    doc.line(50, p3Y + 1, 95, p3Y + 1);
-                    doc.text("Sec.", 98, p3Y);
-                    doc.line(106, p3Y + 1, 126, p3Y + 1);
-                    doc.text("Roll No.", 129, p3Y);
-                    doc.line(144, p3Y + 1, 180, p3Y + 1);
-                    doc.text("during", 183, p3Y);
-                    
-                    doc.setFont("times", "bold");
-                    doc.text(c.std || "", 52, p3Y - 1); // Overlay Class
-                    doc.text(c.sec || "", 108, p3Y - 1); // Overlay Sec
-                    doc.text(c.roll || "", 146, p3Y - 1); // Overlay Roll No
-                    doc.setFont("times", "normal");
-
-                    p3Y += 12;
-                    // Line 4
-                    doc.text("the Previous Academic year from 20", 15, p3Y);
-                    doc.line(74, p3Y + 1, 84, p3Y + 1);
-                    doc.text("to 20", 86, p3Y);
-                    doc.line(95, p3Y + 1, 105, p3Y + 1);
-                    doc.text("School/Institution. Namely", 108, p3Y);
-                    
-                    let y1 = "", y2 = "";
-                    if (acadYear && acadYear.includes("-")) {
-                        let parts = acadYear.split("-");
-                        y1 = parts[0].slice(-2); 
-                        y2 = parts[1].slice(-2); 
-                    }
-                    doc.setFont("times", "bold");
-                    doc.text(y1, 76, p3Y - 1); // Overlay Year 1
-                    doc.text(y2, 97, p3Y - 1); // Overlay Year 2
-                    doc.setFont("times", "normal");
-
-                    p3Y += 12;
-                    // Line 5
-                    doc.line(15, p3Y + 1, 95, p3Y + 1);
-                    doc.text("Vide affiliation Reg. No.", 98, p3Y);
-                    doc.line(138, p3Y + 1, 182, p3Y + 1);
-                    doc.text("code", 185, p3Y);
-                    
-                    doc.setFont("times", "bold");
-                    let schoolFull = c.school + (c.place ? ", " + c.place : "");
-                    doc.text(schoolFull.substring(0, 45), 17, p3Y - 1); // Overlay School Name
-                    doc.text(c.affil || "", 140, p3Y - 1); // Overlay Affiliation No
-                    doc.setFont("times", "normal");
-
-                    p3Y += 12;
-                    // Line 6
-                    doc.line(15, p3Y + 1, 65, p3Y + 1);
-                    doc.text("and pattern", 68, p3Y);
-                    doc.line(88, p3Y + 1, 168, p3Y + 1);
-                    doc.text("Curriculum.", 171, p3Y);
-                    
-                    doc.setFont("times", "bold");
-                    doc.text(c.code || "", 17, p3Y - 1); // Overlay Code
-                    doc.text(c.pattern || "", 90, p3Y - 1); // Overlay Pattern/Curriculum
-                    doc.setFont("times", "normal");
-
-                    // Bottom Signatures
-                    p3Y += 40;
-                    doc.text("Date:", 25, p3Y);
-                    doc.line(35, p3Y + 1, 80, p3Y + 1);
-                    doc.text("Signature of Principal", 185, p3Y, { align: "right" });
-                    
-                    p3Y += 8;
-                    doc.text("Place:", 25, p3Y);
-                    doc.line(36, p3Y + 1, 80, p3Y + 1);
-                    doc.text("(Affix School Seal)", 182, p3Y, { align: "right" });
-                    
-                    // Bottom Page Note
-                    doc.setFont("times", "bold");
-                    doc.text("Contd..P/4", 195, 275, { align: "right" });
-
-                    // ==========================================
-                    // PAGE 4: Self Declaration (Refined Spacing & Font 12)
-                    // ==========================================
-                    doc.addPage();
-                    let p4Y = 20;
-
-                    // Standardize font size to 12 for the entire page
-                    doc.setFont("times", "normal");
-                    doc.setFontSize(12); 
-                    doc.text("-4-", 105, p4Y, { align: "center" });
-
-                    p4Y += 15;
-                    doc.setFont("times", "bold");
-                    doc.text("CEA: Self Declaration to be submitted by the Govt. Servant", 105, p4Y, { align: "center" });
-                    doc.line(30, p4Y + 1, 180, p4Y + 1); // Exact underline
-
-                    p4Y += 8;
-                    doc.text("Self Declaration", 105, p4Y, { align: "center" });
-                    doc.line(90, p4Y + 1, 120, p4Y + 1); // Exact underline
-
-                    p4Y += 18;
-                    doc.setFont("times", "normal");
-                    doc.setLineWidth(0.3); // Charge Report line thickness
-
-                    // Line 1
-                    doc.text("I", 15, p4Y);
-                    doc.line(19, p4Y + 1, 95, p4Y + 1);
-                    doc.text("Designation", 98, p4Y);
-                    doc.line(120, p4Y + 1, 195, p4Y + 1);
-                    
-                    doc.setFont("times", "bold");
-                    doc.text(empName || "", 21, p4Y - 1);
-                    doc.text(empDesig || "", 122, p4Y - 1);
-                    doc.setFont("times", "normal");
-
-                    // Line 2
-                    p4Y += 12;
-                    doc.text("I.D.: No.", 15, p4Y);
-                    doc.line(31, p4Y + 1, 85, p4Y + 1);
-                    doc.text("Deptt./Office", 88, p4Y);
-                    doc.line(112, p4Y + 1, 195, p4Y + 1);
-                    
-                    doc.setFont("times", "bold");
-                    doc.text(empId || "", 33, p4Y - 1);
-                    doc.text(empDept || "", 114, p4Y - 1);
-                    doc.setFont("times", "normal");
-
-                    // Line 3
-                    p4Y += 12;
-                    doc.text("do hereby certify that my Son/Daughter namely", 15, p4Y);
-                    doc.line(93, p4Y + 1, 180, p4Y + 1);
-                    doc.text("studied", 182, p4Y);
-                    
-                    doc.setFont("times", "bold");
-                    doc.text(c.name || "", 95, p4Y - 1);
-                    doc.setFont("times", "normal");
-
-                    // Line 4
-                    p4Y += 12;
-                    doc.text("in class", 15, p4Y);
-                    doc.line(30, p4Y + 1, 65, p4Y + 1);
-                    doc.text("Section", 68, p4Y);
-                    doc.line(82, p4Y + 1, 125, p4Y + 1);
-                    doc.text("Roll No.", 128, p4Y);
-                    doc.line(144, p4Y + 1, 180, p4Y + 1);
-                    doc.text("during", 182, p4Y);
-                    
-                    doc.setFont("times", "bold");
-                    doc.text(c.std || "", 32, p4Y - 1);
-                    doc.text(c.sec || "", 84, p4Y - 1);
-                    doc.text(c.roll || "", 146, p4Y - 1);
-                    doc.setFont("times", "normal");
-
-                    // Line 5
-                    p4Y += 12;
-                    doc.text("Previous Academic Year", 15, p4Y);
-                    doc.line(58, p4Y + 1, 100, p4Y + 1);
-                    doc.text("In", 103, p4Y);
-                    doc.line(108, p4Y + 1, 182, p4Y + 1);
-                    doc.text("School.", 184, p4Y);
-                    
-                    doc.setFont("times", "bold");
-                    doc.text(acadYear || "", 60, p4Y - 1);
-                    let schoolFull4 = c.school + (c.place ? ", " + c.place : "");
-                    doc.text(schoolFull4.substring(0, 38), 110, p4Y - 1);
-                    doc.setFont("times", "normal");
-
-                    // Quoted Text (Bold, Italic, and Indented just like the image)
-                    p4Y += 12;
-                    doc.setFont("times", "bolditalic");
-                    let decText = [
-                        "\"In the event of any change in the particulars given above which affect my eligibility for Children",
-                        " Education Allowance. I undertake to intimate the same promptly and refund excess payment. If any ",
-                        " made to me.\""
-                    ];
-                    decText.forEach(line => { 
-                        doc.text(line, 20, p4Y); 
-                        p4Y += 10; 
-                    });
-
-                    // Signatures & Date Block
-                    p4Y += 20; // Reduced gap before signatures
-                    doc.setFont("times", "bold");
-
-                    doc.text("Signature", 95, p4Y);
-                    doc.line(125, p4Y + 1, 195, p4Y + 1);
-                    
-                    p4Y += 10; // Tightened line spacing
-                    doc.text("I.D. No.:", 95, p4Y);
-                    doc.line(125, p4Y + 1, 195, p4Y + 1);
-                    doc.text(empId || "", 127, p4Y - 1);
-
-                    p4Y += 10; // Tightened line spacing
-                    doc.text("Name :", 95, p4Y);
-                    doc.line(125, p4Y + 1, 195, p4Y + 1);
-                    doc.text(empName || "", 127, p4Y - 1);
-
-                    // Dated on the left side, horizontally aligned with the "Name" row
-                    doc.setFont("times", "normal");
-                    doc.text("Dated:", 15, p4Y);
-                    doc.line(28, p4Y + 1, 75, p4Y + 1);
-                    doc.setFont("times", "bold");
-                    doc.text(fmtDtOnly(getVal('ceaAppDate')) || "", 30, p4Y - 1);
-
-                    p4Y += 10; // Tightened line spacing
-                    doc.text("Designation :", 95, p4Y);
-                    doc.line(125, p4Y + 1, 195, p4Y + 1);
-                    doc.text(empDesig || "", 127, p4Y - 1);
-
-                    p4Y += 10; // Tightened line spacing
-                    doc.text("Department :", 95, p4Y);
-                    doc.line(125, p4Y + 1, 195, p4Y + 1);
-                    doc.text(empDept || "", 127, p4Y - 1);
-                });
-
-                finalizeDocumentViewer(doc);
-
-                if (systemLoader) systemLoader.style.display = 'none';
-
-            } catch (err) {
-                const systemLoader = document.getElementById('globalAppLoader');
-                if (systemLoader) systemLoader.style.display = 'none';
-                console.error("Critical Error:", err);
-                displayCustomAlert("PDF Error: " + err.message);
-            }
         }
         
     </script>
