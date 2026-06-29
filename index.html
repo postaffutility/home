@@ -1222,9 +1222,16 @@
                                 }
                             }
                         } else {
-                            isCloudDataLoaded = true;
-                            forcePushToCloud();
-                        }
+    isCloudDataLoaded = true;
+    // CRITICAL FIX: We removed forcePushToCloud() here!
+    // Now, if the database drops, the system will never accidentally wipe your staff users.
+    console.warn("Registry document missing from cloud! Operating in Safe Mode to protect data.");
+    
+    // Optional: Alert the admin that something is wrong without destroying data
+    if (authenticatedUserSession && authenticatedUserSession.role === "admin") {
+        displayCustomAlert("System Warning: Live database document is missing or unreachable. The system is operating in Safe Mode to prevent accidental data overwrites. Please check Firebase.");
+    }
+}
                     }, (error) => {
                         console.error("Registry Listener Error:", error);
                         displayCustomAlert("CRITICAL ERROR: Failed to listen to the secure database.");
