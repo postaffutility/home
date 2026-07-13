@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOL Management Hub</title>
+    
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
+    <style>
+        /* Minimalist Baseline Setup & Security */
+        body, html { margin: 0 !important; padding: 0 !important; width: 100% !important; height: 100% !important; background-color: #f4f6f9 !important; font-family: 'Segoe UI', Arial, sans-serif; user-select: none; -webkit-user-select: none; -ms-user-select: none; }
+        input, textarea, select { user-select: text !important; -webkit-user-select: text !important; -ms-user-select: text !important; }
+        .standalone-viewport { position: relative; z-index: 10; width: 100%; min-height: 100vh; padding: 40px 10px; box-sizing: border-box; }
+        .app-container { max-width: 1000px; background: #ffffff; padding: 40px; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); margin: 0 auto; border-top: 6px solid #d32f2f; position: relative; }
+        
+        h2 { text-align: left; color: #1e293b; margin: 0 0 8px 0; font-size: 28px; font-weight: 800; letter-spacing: -0.5px; }
+        .tagline { text-align: left; color: #64748b; font-size: 13.5px; margin-bottom: 30px; line-height: 1.6; }
+        
+        .status-badge { padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 800; color: #fff; letter-spacing: 0.5px; display: inline-block; text-align: center; min-width: 60px; }
+        .badge-active { background: #10b981; } .badge-disabled { background: #ef4444; } .badge-locked { background: #f59e0b; }
+        
+        .form-group { margin-bottom: 20px; }
+        label { display: block; font-weight: 700; margin-bottom: 8px; font-size: 14px; color: #334155; }
+        input[type="text"], input[type="number"], select { width: 100%; padding: 14px 16px; box-sizing: border-box; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14.5px; background: #f8fafc; color: #1e293b !important; transition: all 0.2s ease; }
+        input[type="text"]:focus, input[type="number"]:focus, select:focus { border-color: #d32f2f; background: #ffffff; box-shadow: 0 0 0 4px rgba(211, 47, 47, 0.1); outline: none; }
+        .flex-row { display: flex; gap: 15px; flex-wrap: wrap; }
+        .flex-row > div { flex: 1; }
+
+        .portal-grid-wrapper { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 24px; margin-top: 30px; }
+        .portal-module-card { background: #ffffff; border-radius: 16px; padding: 28px 24px; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.03); border: 1px solid #e2e8f0; transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); position: relative; overflow: hidden; display: block; }
+        .portal-module-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: #d32f2f; transition: height 0.3s ease; }
+        .portal-module-card:hover { transform: translateY(-10px); box-shadow: 0 25px 50px rgba(0, 0, 0, 0.12); border-color: #cbd5e1; z-index: 10; }
+        .portal-module-card:hover::before { height: 8px; }
+        
+        .card-icon { font-size: 28px; margin-bottom: 18px; display: inline-flex; align-items: center; justify-content: center; width: 56px; height: 56px; border-radius: 14px; background: #fee2e2; transition: transform 0.3s ease; }
+        .portal-module-card:hover .card-icon { transform: scale(1.1); }
+        .card-blue-variant::before { background: #3b82f6; } .card-blue-variant .card-icon { background: #dbeafe; }
+        .card-green-variant::before { background: #10b981; } .card-green-variant .card-icon { background: #d1fae5; }
+        .card-orange-variant::before { background: #f59e0b; } .card-orange-variant .card-icon { background: #fef3c7; }
+        .card-dark-variant::before { background: #475569; } .card-dark-variant .card-icon { background: #f1f5f9; }
+        .card-rose-variant::before { background: #e11d48; } .card-rose-variant .card-icon { background: #ffe4e6; }
+        .card-purple-variant::before { background: #8b5cf6; } .card-purple-variant .card-icon { background: #ede9fe; }
+        .card-gold-variant::before { background: #eab308; } .card-gold-variant .card-icon { background: #fef08a; }
+        
+        .portal-module-card h3 { margin: 0 0 10px 0; font-size: 18px; font-weight: 800; color: #1e293b; letter-spacing: -0.3px;}
+        .portal-module-card p { margin: 0; font-size: 13.5px; color: #64748b; line-height: 1.6; }
+        
+        .sub-action-card { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 25px; margin-bottom: 20px;}
+        .sub-action-card h4 { margin: 0 0 16px 0; color: #0f172a; font-size: 16px; font-weight: 800; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; }
+        
+        .system-log-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 13px; }
+        .system-log-table th, .system-log-table td { border: 1px solid #e2e8f0; padding: 12px; text-align: left; color: #334155 !important; vertical-align: middle; }
+        .system-log-table th { background: #f8fafc; font-weight: 800; color: #0f172a; }
+        .system-log-table tr:nth-child(even) { background: #f1f5f9; }
+        
+        .portal-page-panel { display: none; animation: fadeIn 0.4s ease-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        .back-nav-link { display: inline-flex; align-items: center; color: #3b82f6; font-weight: 800; font-size: 14px; text-decoration: none; margin-bottom: 25px; cursor: pointer; width: fit-content; transition: color 0.2s; }
+        .back-nav-link:hover { color: #1d4ed8; }
+        
+        button.action-btn { width: 100%; padding: 16px; background: #d32f2f; color: white; border: none; border-radius: 8px; font-size: 15.5px; font-weight: 800; cursor: pointer; text-transform: uppercase; letter-spacing: 0.8px; margin-top: 15px; box-shadow: 0 4px 12px rgba(211, 47, 47, 0.25); transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
+        button.action-btn:hover { background: #b71c1c; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(183, 28, 28, 0.3); }
+        button.panel-sub-submit { background: #3b82f6; padding: 14px 18px; font-size: 14.5px; margin-top: 20px; box-shadow: none; width: 100%; text-transform: none; border-radius: 8px; color: white; border: none; font-weight: 800; cursor: pointer; }
+        button.panel-sub-submit:hover { filter: brightness(90%); }
+        
+        .custom-popup-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(6px); z-index: 20000000; display: none; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.2s ease-in-out; }
+        .custom-popup-card { background: #ffffff; width: 90%; max-width: 420px; padding: 35px; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.2); text-align: center; box-sizing: border-box; border-top: 6px solid #d32f2f; transform: scale(0.95); transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .custom-popup-overlay.active { display: flex; opacity: 1; }
+        .custom-popup-overlay.active .custom-popup-card { transform: scale(1); }
+        .popup-icon-alert { font-size: 48px; margin-bottom: 15px; }
+        .popup-message-text { color: #334155; font-size: 15px; line-height: 1.6; margin: 0 0 25px 0; font-weight: 600; white-space: pre-line; }
+        .popup-close-btn { background: #0f172a; color: white; padding: 12px 28px; border: none; border-radius: 8px; font-size: 13.5px; font-weight: 800; cursor: pointer; text-transform: uppercase; letter-spacing: 0.5px; transition: background 0.2s;}
+        .popup-close-btn:hover { background: #334155; }
+        
+        .processing-loader-container { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(5px); z-index: 30000000; display: none; flex-direction: column; justify-content: center; align-items: center; }
+        .app-loading-spinner { width: 45px; height: 45px; border: 4px solid #f1f5f9; border-top: 4px solid #3b82f6; border-radius: 50%; animation: spinSystem 0.8s linear infinite; margin-bottom: 20px; }
+        .loading-status-msg { font-size: 15px; font-weight: 800; color: #0f172a; letter-spacing: 0.5px; }
+        @keyframes spinSystem { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+
+    <!-- SECURITY DISCREPANCY FIXED: Container is hidden by default -->
+    <div class='standalone-viewport' id='appDashboardView' style="display: none;">
+        <div class='app-container'>
+            
+            <div id='solDashboardHead'>
+                <!-- MOVED THE BACK BUTTON INSIDE THE HEADER SO IT HIDES CORRECTLY -->
+                <div class='back-nav-link' onclick='window.location.href="index.html"'>⬅️ Back to Main Dashboard</div>
+                
+                <div class='header-titles' style="margin-bottom: 30px;">
+                    <h2>OFFICE & SOL MANAGEMENT HUB</h2>
+                    <div class='tagline'>Secure Admin Operations Module</div>
+                </div>
+                
+                <!-- THE SUB-DASHBOARD CARDS -->
+                <div class='portal-grid-wrapper' id='solModuleGrid'>
+                    <div class='portal-module-card card-rose-variant' onclick='navigateToSubPanel("panelCreateSOL")'>
+                        <div class='card-icon'>🏢</div>
+                        <h3>Create New Office</h3>
+                        <p>Generate a new SOL ID, set establishment limits, and register a new post office.</p>
+                    </div>
+
+                    <div class='portal-module-card card-blue-variant' onclick='navigateToSubPanel("panelMapUser")'>
+                        <div class='card-icon'>🔗</div>
+                        <h3>Map/Transfer Users</h3>
+                        <p>Assign staff to an office. Automatically validates against the office establishment limits.</p>
+                    </div>
+
+                    <div class='portal-module-card card-orange-variant' onclick='navigateToSubPanel("panelModifySOL")'>
+                        <div class='card-icon'>✏️</div>
+                        <h3>Modify Office Profile</h3>
+                        <p>Update the official registered name and revise the maximum allowed user limits.</p>
+                    </div>
+
+                    <div class='portal-module-card card-dark-variant' onclick='navigateToSubPanel("panelDeleteSOL")'>
+                        <div class='card-icon'>🗑️</div>
+                        <h3>Delete Office</h3>
+                        <p>Permanently remove an office from the network. (Ensure no users are mapped first).</p>
+                    </div>
+                    
+                    <div class='portal-module-card card-purple-variant' onclick='navigateToSubPanel("panelDisableSOL")'>
+                        <div class='card-icon'>🚧</div>
+                        <h3>Enable / Disable Office</h3>
+                        <p>Place an office in maintenance mode to safely restrict user login access.</p>
+                    </div>
+                    
+                    <div class='portal-module-card card-gold-variant' onclick='navigateToSubPanel("panelForceDBDE")'>
+                        <div class='card-icon'>⏳</div>
+                        <h3>Force Day Begin/End</h3>
+                        <p>Remotely override and execute Day Begin or Day End for any mapped office.</p>
+                    </div>
+
+                    <div class='portal-module-card card-green-variant' onclick='navigateToSubPanel("panelViewSOLs")' style="grid-column: 1 / -1;">
+                        <div class='card-icon'>📋</div>
+                        <h3>View Master Directory</h3>
+                        <p>View the live registry of all offices, their statuses, and current staff capacity vs limits.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PANEL: CREATE SOL -->
+            <div class='portal-page-panel' id='panelCreateSOL'>
+                <div class='back-nav-link' onclick='returnToSolDashboard()'>⬅️ Back to SOL Hub</div>
+                <h3 style="margin-top:0; color:#1e293b; font-size:22px;">Create New Office / SOL</h3>
+                <div class='sub-action-card' style="border-top: 4px solid #e11d48;">
+                    <div class='form-group'>
+                        <label>Official Office Name</label>
+                        <input id='newOfficeName' placeholder='e.g. Udaipur HO' type='text'/>
+                    </div>
+                    
+                    <h4 style="margin-top: 25px; border-bottom: 1px solid #cbd5e1; padding-bottom: 5px;">Establishment User Limits</h4>
+                    <p style="font-size: 13px; color: #64748b; margin-top:-5px;">Define the maximum number of staff that can be mapped to this office.</p>
+                    
+                    <div class='flex-row'>
+                        <div class='form-group'>
+                            <label>Max Makers</label>
+                            <input id='newLimitMaker' type='number' placeholder='0'/>
+                        </div>
+                        <div class='form-group'>
+                            <label>Max Superusers</label>
+                            <input id='newLimitSuper' type='number' placeholder='0'/>
+                        </div>
+                        <div class='form-group'>
+                            <label>Max Admins</label>
+                            <input id='newLimitAdmin' type='number' placeholder='0'/>
+                        </div>
+                    </div>
+
+                    <button class='action-btn panel-sub-submit' onclick='executeCreateOffice()' style='background:#e11d48;' type='button'>Generate Office & SOL</button>
+                </div>
+            </div>
+
+            <!-- PANEL: MAP USER -->
+            <div class='portal-page-panel' id='panelMapUser'>
+                <div class='back-nav-link' onclick='returnToSolDashboard()'>⬅️ Back to SOL Hub</div>
+                <h3 style="margin-top:0; color:#1e293b; font-size:22px;">Map / Transfer User to Office</h3>
+                <div class='sub-action-card' style="border-top: 4px solid #3b82f6;">
+                    <div class='form-group'>
+                        <label>Select Target User</label>
+                        <select id='mapUserSelect'></select>
+                    </div>
+                    <div class='form-group'>
+                        <label>Select Destination Office (SOL)</label>
+                        <select id='mapOfficeSelect'></select>
+                    </div>
+                    <button class='action-btn panel-sub-submit' onclick='executeMapUserToOffice()' style='background:#3b82f6;' type='button'>Apply Transfer / Mapping</button>
+                </div>
+            </div>
+
+            <!-- PANEL: MODIFY SOL -->
+            <div class='portal-page-panel' id='panelModifySOL'>
+                <div class='back-nav-link' onclick='returnToSolDashboard()'>⬅️ Back to SOL Hub</div>
+                <h3 style="margin-top:0; color:#1e293b; font-size:22px;">Modify Existing Office Profile</h3>
+                <div class='sub-action-card' style="border-top: 4px solid #f59e0b;">
+                    <div class='form-group'>
+                        <label>Select Office to Modify</label>
+                        <select id='modifyOfficeSelect' onchange='autofillModifyPanel()'></select>
+                    </div>
+                    <div class='form-group'>
+                        <label>Corrected Office Name</label>
+                        <input id='modifiedOfficeName' placeholder='Enter corrected name' type='text'/>
+                    </div>
+
+                    <h4 style="margin-top: 25px; border-bottom: 1px solid #cbd5e1; padding-bottom: 5px;">Revise Establishment Limits</h4>
+                    <div class='flex-row'>
+                        <div class='form-group'>
+                            <label>Max Makers</label>
+                            <input id='modLimitMaker' type='number' placeholder='0'/>
+                        </div>
+                        <div class='form-group'>
+                            <label>Max Superusers</label>
+                            <input id='modLimitSuper' type='number' placeholder='0'/>
+                        </div>
+                        <div class='form-group'>
+                            <label>Max Admins</label>
+                            <input id='modLimitAdmin' type='number' placeholder='0'/>
+                        </div>
+                    </div>
+
+                    <button class='action-btn panel-sub-submit' onclick='executeModifyOffice()' style='background:#f59e0b;' type='button'>Update Office Profile</button>
+                </div>
+            </div>
+
+            <!-- PANEL: DELETE SOL -->
+            <div class='portal-page-panel' id='panelDeleteSOL'>
+                <div class='back-nav-link' onclick='returnToSolDashboard()'>⬅️ Back to SOL Hub</div>
+                <h3 style="margin-top:0; color:#1e293b; font-size:22px;">Delete Office from Registry</h3>
+                <div class='sub-action-card' style="border-top: 4px solid #475569;">
+                    <p style="color: #ef4444; font-size: 13px; font-weight: bold; margin-top:-5px;">Warning: Deleting an office is permanent. Ensure no staff are actively mapped here.</p>
+                    <div class='form-group'>
+                        <label>Select Office to Delete</label>
+                        <select id='deleteOfficeSelect'></select>
+                    </div>
+                    <button class='action-btn panel-sub-submit' onclick='executeDeleteOffice()' style='background:#475569;' type='button'>Permanently Delete SOL</button>
+                </div>
+            </div>
+
+            <!-- PANEL: DISABLE SOL -->
+            <div class='portal-page-panel' id='panelDisableSOL'>
+                <div class='back-nav-link' onclick='returnToSolDashboard()'>⬅️ Back to SOL Hub</div>
+                <h3 style="margin-top:0; color:#1e293b; font-size:22px;">Maintenance: Enable/Disable Office</h3>
+                <div class='sub-action-card' style="border-top: 4px solid #8b5cf6;">
+                    <p style="color: #64748b; font-size: 13px; margin-top:-5px;">Disabling an office will immediately block all mapped users from logging into the portal.</p>
+                    <div class='form-group'>
+                        <label>Select Office</label>
+                        <select id='disableOfficeSelect'></select>
+                    </div>
+                    <button class='action-btn panel-sub-submit' onclick='executeToggleDisableOffice()' style='background:#8b5cf6;' type='button'>Toggle Enable / Disable Status</button>
+                </div>
+            </div>
+
+            <!-- PANEL: FORCE DB DE -->
+            <div class='portal-page-panel' id='panelForceDBDE'>
+                <div class='back-nav-link' onclick='returnToSolDashboard()'>⬅️ Back to SOL Hub</div>
+                <h3 style="margin-top:0; color:#1e293b; font-size:22px;">Force Admin Day Begin / End</h3>
+                <div class='sub-action-card' style="border-top: 4px solid #eab308;">
+                    <div class='form-group'>
+                        <label>Select Target Office</label>
+                        <select id='forceDBDESelect'></select>
+                    </div>
+                    <button class='action-btn panel-sub-submit' onclick='executeForceDBDE()' style='background:#eab308; color:#1e293b;' type='button'>Force Toggle Operations Status</button>
+                </div>
+            </div>
+
+            <!-- PANEL: VIEW DIRECTORY -->
+            <div class='portal-page-panel' id='panelViewSOLs'>
+                <div class='back-nav-link' onclick='returnToSolDashboard()'>⬅️ Back to SOL Hub</div>
+                <h3 style="margin-top:0; color:#1e293b; font-size:22px;">Master SOL Directory</h3>
+                <div class='sub-action-card' style="border-top: 4px solid #10b981; overflow-x: auto;">
+                    <table class='system-log-table' style="min-width: 700px;">
+                        <thead>
+                            <tr>
+                                <th>SOL ID</th>
+                                <th>Office Name</th>
+                                <th>Access</th>
+                                <th>Operations</th>
+                                <th>Staff Capacity (Current / Max)</th>
+                            </tr>
+                        </thead>
+                        <tbody id='officeDirectoryTableBody'></tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Modals for Alerts -->
+    <div class='custom-popup-overlay' id='customAppAlertModal' style="z-index: 60000000;">
+        <div class='custom-popup-card'>
+            <div class='popup-icon-alert' id='popupAlertIcon'>🔔</div>
+            <p class='popup-message-text' id='customAlertMsgField'>Notice</p>
+            <button class='popup-close-btn' onclick='closeCustomAlert()'>Continue</button>
+        </div>
+    </div>
+
+    <div class='processing-loader-container' id='globalAppLoader'>
+        <div class='app-loading-spinner'></div>
+        <div class='loading-status-msg'>Syncing with Cloud...</div>
+    </div>
+
+    <script type="text/javascript">
+        // ----------------------------------------------------
+        // 1. FIREBASE CONFIGURATION
+        // ----------------------------------------------------
+        const firebaseConfig = {
+            apiKey: "AIzaSyArIz9EyuPcbQs0HKvsm0OfxwXKGlbO03c",
+            authDomain: "po-staff-utility.firebaseapp.com",
+            projectId: "po-staff-utility",
+            storageBucket: "po-staff-utility.firebasestorage.app",
+            messagingSenderId: "893250505080",
+            appId: "1:893250505080:web:ae37a3ea6e959b652ca08d"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        // ----------------------------------------------------
+        // 2. GLOBAL VARIABLES
+        // ----------------------------------------------------
+        let SYSTEM_USER_REGISTRY = [];
+        let SYSTEM_OFFICE_REGISTRY = [];
+        let SYSTEM_LOGIN_HISTORY = [];
+        let activeUser = null;
+        let activeRole = null;
+
+        // ----------------------------------------------------
+        // 3. SECURITY BOUNCER (Hidden until verified)
+        // ----------------------------------------------------
+        window.onload = function() {
+            activeUser = sessionStorage.getItem("activeUser");
+            activeRole = sessionStorage.getItem("activeRole");
+
+            // Check 1 & 2: If not logged in or NOT an Admin, redirect instantly.
+            // Notice there is NO alert, and the page is hidden, so they see nothing!
+            if (!activeUser || activeRole !== "admin") {
+                window.location.replace("index.html");
+                return;
+            }
+
+            // User is verified. Show the app and connect to cloud.
+            document.getElementById('appDashboardView').style.display = 'block';
+            document.getElementById('globalAppLoader').style.display = 'flex';
+
+            db.collection("system").doc("registry").onSnapshot((registryDoc) => {
+                if (registryDoc.exists) {
+                    const data = registryDoc.data();
+                    SYSTEM_USER_REGISTRY = data.users || [];
+                    SYSTEM_OFFICE_REGISTRY = data.offices || [];
+                    SYSTEM_LOGIN_HISTORY = data.logs || [];
+                    
+                    refreshSolUI(); 
+                }
+                document.getElementById('globalAppLoader').style.display = 'none';
+            }, (error) => {
+                console.error("Sync Error:", error);
+                displayCustomAlert("Failed to sync with secure database.");
+                document.getElementById('globalAppLoader').style.display = 'none';
+            });
+        };
+
+        // ----------------------------------------------------
+        // 4. UI NAVIGATION FUNCTIONS
+        // ----------------------------------------------------
+        function navigateToSubPanel(panelId) {
+            document.getElementById('solDashboardHead').style.display = 'none';
+            const panels = ['panelCreateSOL', 'panelMapUser', 'panelModifySOL', 'panelDeleteSOL', 'panelDisableSOL', 'panelForceDBDE', 'panelViewSOLs'];
+            panels.forEach(id => { document.getElementById(id).style.display = 'none'; });
+            document.getElementById(panelId).style.display = 'block';
+            
+            if(panelId === 'panelModifySOL') autofillModifyPanel();
+        }
+
+        function returnToSolDashboard() {
+            const panels = ['panelCreateSOL', 'panelMapUser', 'panelModifySOL', 'panelDeleteSOL', 'panelDisableSOL', 'panelForceDBDE', 'panelViewSOLs'];
+            panels.forEach(id => { document.getElementById(id).style.display = 'none'; });
+            document.getElementById('solDashboardHead').style.display = 'block';
+        }
+
+        function displayCustomAlert(msg, icon = '🔔') {
+            document.getElementById('popupAlertIcon').innerText = icon;
+            document.getElementById('customAlertMsgField').innerHTML = msg;
+            const modal = document.getElementById('customAppAlertModal');
+            modal.style.display = 'flex';
+            setTimeout(() => { modal.classList.add('active'); }, 10);
+        }
+
+        function closeCustomAlert() {
+            const modal = document.getElementById('customAppAlertModal');
+            modal.classList.remove('active');
+            setTimeout(() => { modal.style.display = 'none'; }, 200);
+        }
+
+        // Helper to count users in a specific office for a specific role
+        function getRoleCount(solId, targetRole) {
+            return SYSTEM_USER_REGISTRY.filter(u => u.solId === solId && u.role === targetRole).length;
+        }
+
+        // ----------------------------------------------------
+        // 5. POPULATE DROPDOWNS & TABLES
+        // ----------------------------------------------------
+        function refreshSolUI() {
+            const uSelect = document.getElementById('mapUserSelect');
+            const mapSelect = document.getElementById('mapOfficeSelect');
+            const modSelect = document.getElementById('modifyOfficeSelect');
+            const delSelect = document.getElementById('deleteOfficeSelect');
+            const disSelect = document.getElementById('disableOfficeSelect');
+            const forceSelect = document.getElementById('forceDBDESelect');
+            const tBody = document.getElementById('officeDirectoryTableBody');
+            
+            if(uSelect) {
+                uSelect.innerHTML = "<option value=''>-- Select User --</option>";
+                SYSTEM_USER_REGISTRY.forEach(u => {
+                    if(!u.user.toLowerCase().startsWith('admin')) {
+                        let opt = document.createElement('option');
+                        opt.value = u.user;
+                        opt.innerText = `${u.fullName} (${u.user}) - [Role: ${u.role}] [Current SOL: ${u.solId || 'None'}]`;
+                        uSelect.appendChild(opt);
+                    }
+                });
+            }
+
+            const officeOptions = "<option value=''>-- Select Office --</option>" + 
+                SYSTEM_OFFICE_REGISTRY.map(o => `<option value='${o.solId}'>${o.solId} - ${o.name}</option>`).join("");
+            
+            if(mapSelect) mapSelect.innerHTML = officeOptions;
+            if(modSelect) modSelect.innerHTML = officeOptions;
+            if(delSelect) delSelect.innerHTML = officeOptions;
+            if(disSelect) disSelect.innerHTML = officeOptions;
+            if(forceSelect) forceSelect.innerHTML = officeOptions;
+
+            if(tBody) {
+                tBody.innerHTML = "";
+                SYSTEM_OFFICE_REGISTRY.forEach(o => {
+                    const lM = o.limits?.maker || 0; const cM = getRoleCount(o.solId, 'maker');
+                    const lS = o.limits?.superuser || 0; const cS = getRoleCount(o.solId, 'superuser');
+                    const lA = o.limits?.admin || 0; const cA = getRoleCount(o.solId, 'admin');
+
+                    let tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td><strong>${o.solId}</strong></td>
+                        <td>${o.name}</td>
+                        <td><span class="status-badge ${o.disabled ? 'badge-disabled' : 'badge-active'}">${o.disabled ? 'DISABLED' : 'ENABLED'}</span></td>
+                        <td><span class="status-badge ${o.status==='DAY_BEGUN' ? 'badge-active' : 'badge-disabled'}">${o.status.replace('_', ' ')}</span></td>
+                        <td style="font-size: 12px; line-height: 1.5;">
+                            Maker: <strong>${cM}/${lM}</strong> | 
+                            Superuser: <strong>${cS}/${lS}</strong> | 
+                            Admin: <strong>${cA}/${lA}</strong>
+                        </td>
+                    `;
+                    tBody.appendChild(tr);
+                });
+            }
+        }
+
+        function autofillModifyPanel() {
+            const sol = document.getElementById('modifyOfficeSelect').value;
+            if(!sol) return;
+            const office = SYSTEM_OFFICE_REGISTRY.find(o => o.solId === sol);
+            if(office) {
+                document.getElementById('modifiedOfficeName').value = office.name;
+                document.getElementById('modLimitMaker').value = office.limits?.maker || 0;
+                document.getElementById('modLimitSuper').value = office.limits?.superuser || 0;
+                document.getElementById('modLimitAdmin').value = office.limits?.admin || 0;
+            }
+        }
+
+        // ----------------------------------------------------
+        // 6. CLOUD SAVING LOGIC
+        // ----------------------------------------------------
+        async function saveToCloud() {
+            try {
+                document.getElementById('globalAppLoader').style.display = 'flex';
+                await db.collection("system").doc("registry").set({
+                    users: SYSTEM_USER_REGISTRY,
+                    logs: SYSTEM_LOGIN_HISTORY,
+                    offices: SYSTEM_OFFICE_REGISTRY
+                });
+                document.getElementById('globalAppLoader').style.display = 'none';
+            } catch(e) {
+                console.error("Save Error:", e);
+                displayCustomAlert("Network Error: Could not save to the cloud.", "❌");
+                document.getElementById('globalAppLoader').style.display = 'none';
+            }
+        }
+
+        function logAdminAction(eventMsg) {
+            let options = { timeZone: 'Asia/Kolkata', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
+            let timeStamp = new Date().toLocaleString('en-IN', options);
+            SYSTEM_LOGIN_HISTORY.push({ time: timeStamp, user: activeUser, event: eventMsg });
+            if (SYSTEM_LOGIN_HISTORY.length > 15) SYSTEM_LOGIN_HISTORY = SYSTEM_LOGIN_HISTORY.slice(SYSTEM_LOGIN_HISTORY.length - 15);
+        }
+
+        // ----------------------------------------------------
+        // 7. CORE CRUD FUNCTIONS
+        // ----------------------------------------------------
+        
+        async function executeCreateOffice() {
+            const offName = document.getElementById('newOfficeName').value.trim();
+            if(!offName) { displayCustomAlert("Error: Office Name is required.", "⚠️"); return; }
+
+            const lMaker = parseInt(document.getElementById('newLimitMaker').value) || 0;
+            const lSuper = parseInt(document.getElementById('newLimitSuper').value) || 0;
+            const lAdmin = parseInt(document.getElementById('newLimitAdmin').value) || 0;
+
+            const generatedSol = Math.floor(100000 + Math.random() * 900000).toString();
+            
+            SYSTEM_OFFICE_REGISTRY.push({ 
+                solId: generatedSol, 
+                name: offName, 
+                status: "DAY_BEGUN",
+                disabled: false,
+                limits: { maker: lMaker, superuser: lSuper, admin: lAdmin }
+            });
+            
+            logAdminAction(`Created new SOL: ${generatedSol} (${offName})`);
+            await saveToCloud();
+            
+            document.getElementById('newOfficeName').value = "";
+            document.getElementById('newLimitMaker').value = "";
+            document.getElementById('newLimitSuper').value = "";
+            document.getElementById('newLimitAdmin').value = "";
+
+            displayCustomAlert(`<strong>Office Successfully Created!</strong><br/><br/>Office: ${offName}<br/>Generated SOL ID: <span style="color:#d32f2f; font-size:20px;">${generatedSol}</span>`, "🏢");
+        }
+
+        async function executeMapUserToOffice() {
+            const user = document.getElementById('mapUserSelect').value;
+            const sol = document.getElementById('mapOfficeSelect').value;
+            
+            if(!user || !sol) { displayCustomAlert("Error: Please select both a User and an Office.", "⚠️"); return; }
+
+            const uIdx = SYSTEM_USER_REGISTRY.findIndex(u => u.user === user);
+            const targetRole = SYSTEM_USER_REGISTRY[uIdx].role;
+            
+            const offIdx = SYSTEM_OFFICE_REGISTRY.findIndex(o => o.solId === sol);
+            const office = SYSTEM_OFFICE_REGISTRY[offIdx];
+
+            // VALIDATION: Check Establishment Limits
+            let currentCount = getRoleCount(sol, targetRole);
+            let limit = office.limits ? office.limits[targetRole] : 0;
+            
+            if(currentCount >= limit) {
+                displayCustomAlert(`<strong>Transfer Blocked</strong><br/>${office.name} has reached its maximum establishment limit for <strong>${targetRole.toUpperCase()}S</strong> (${limit}).<br/><br/>Please modify the office limits before transferring this user.`, "🛑");
+                return;
+            }
+
+            SYSTEM_USER_REGISTRY[uIdx].solId = sol;
+            logAdminAction(`Mapped user '${user}' to SOL '${sol}'`);
+            
+            await saveToCloud();
+            displayCustomAlert(`Success! User '${user}' has been mapped to SOL ID '${sol}'.`, "✅");
+        }
+
+        async function executeModifyOffice() {
+            const solToMod = document.getElementById('modifyOfficeSelect').value;
+            const newName = document.getElementById('modifiedOfficeName').value.trim();
+
+            if(!solToMod || !newName) { displayCustomAlert("Error: Please select an office and enter a name.", "⚠️"); return; }
+
+            const offIdx = SYSTEM_OFFICE_REGISTRY.findIndex(o => o.solId === solToMod);
+            if (offIdx === -1) return;
+
+            const lMaker = parseInt(document.getElementById('modLimitMaker').value) || 0;
+            const lSuper = parseInt(document.getElementById('modLimitSuper').value) || 0;
+            const lAdmin = parseInt(document.getElementById('modLimitAdmin').value) || 0;
+
+            const oldName = SYSTEM_OFFICE_REGISTRY[offIdx].name;
+            SYSTEM_OFFICE_REGISTRY[offIdx].name = newName;
+            SYSTEM_OFFICE_REGISTRY[offIdx].limits = { maker: lMaker, superuser: lSuper, admin: lAdmin };
+            
+            logAdminAction(`Modified SOL profile '${solToMod}'`);
+            
+            await saveToCloud();
+            displayCustomAlert(`Success! Office profile for '${newName}' has been updated.`, "✅");
+        }
+
+        async function executeDeleteOffice() {
+            const solToDelete = document.getElementById('deleteOfficeSelect').value;
+            if(!solToDelete) { displayCustomAlert("Error: Please select an office to delete.", "⚠️"); return; }
+
+            const mappedUsers = SYSTEM_USER_REGISTRY.filter(u => u.solId === solToDelete);
+            if (mappedUsers.length > 0) {
+                displayCustomAlert(`Action Blocked: You cannot delete this office because ${mappedUsers.length} user(s) are currently mapped to it. Please transfer them first.`, "🛑");
+                return;
+            }
+
+            const offIdx = SYSTEM_OFFICE_REGISTRY.findIndex(o => o.solId === solToDelete);
+            if (offIdx === -1) return;
+
+            const deletedName = SYSTEM_OFFICE_REGISTRY[offIdx].name;
+            SYSTEM_OFFICE_REGISTRY.splice(offIdx, 1);
+            logAdminAction(`Deleted SOL '${solToDelete}' (${deletedName})`);
+
+            await saveToCloud();
+            displayCustomAlert(`Success! Office '${deletedName}' has been permanently deleted.`, "🗑️");
+        }
+
+        async function executeToggleDisableOffice() {
+            const solToDisable = document.getElementById('disableOfficeSelect').value;
+            if(!solToDisable) { displayCustomAlert("Error: Please select an office.", "⚠️"); return; }
+
+            const offIdx = SYSTEM_OFFICE_REGISTRY.findIndex(o => o.solId === solToDisable);
+            if (offIdx === -1) return;
+
+            let currentState = SYSTEM_OFFICE_REGISTRY[offIdx].disabled || false;
+            SYSTEM_OFFICE_REGISTRY[offIdx].disabled = !currentState;
+
+            let statusTxt = !currentState ? "DISABLED" : "ENABLED";
+            logAdminAction(`${statusTxt} SOL '${solToDisable}'`);
+
+            await saveToCloud();
+            displayCustomAlert(`Success! Office is now <strong>${statusTxt}</strong>.`, "⚙️");
+        }
+
+        async function executeForceDBDE() {
+            const solToToggle = document.getElementById('forceDBDESelect').value;
+            if(!solToToggle) { displayCustomAlert("Error: Please select an office.", "⚠️"); return; }
+
+            const offIdx = SYSTEM_OFFICE_REGISTRY.findIndex(o => o.solId === solToToggle);
+            if (offIdx === -1) return;
+
+            let currentStatus = SYSTEM_OFFICE_REGISTRY[offIdx].status;
+            let newStatus = currentStatus === "DAY_BEGUN" ? "DAY_ENDED" : "DAY_BEGUN";
+            
+            SYSTEM_OFFICE_REGISTRY[offIdx].status = newStatus;
+
+            logAdminAction(`Admin Forced ${newStatus.replace('_', ' ')} for SOL '${solToToggle}'`);
+
+            await saveToCloud();
+            displayCustomAlert(`Success! Office is now forcefully put into a <strong>${newStatus.replace('_', ' ')}</strong> state.`, "⏳");
+        }
+    </script>
+</body>
+</html>

@@ -223,7 +223,7 @@
                         <p>Control the operational status of your mapped office. Executing Day End locks the system for makers.</p>
                     </div>
 
-                    <div class='portal-module-card card-rose-variant' id='menuCardOfficeHub' onclick='navigateToPanel("officeHub", this)' style='display:none;'>
+                    <div class='portal-module-card card-rose-variant' id='menuCardOfficeHub' onclick='window.location.href="management.html"' style='display:none;'>
                         <div class='card-icon'>🏢</div>
                         <h3>Office & SOL Management</h3>
                         <p>Create new office SOLs and map existing users to specific branch locations securely.</p>
@@ -316,7 +316,8 @@
 
                 <div class='pagination-container' id='dashboardPagination'></div>
             </div>
-			<div class='portal-page-panel' id='panelDBDEMode'>
+
+            <div class='portal-page-panel' id='panelDBDEMode'>
                 <div class='back-nav-link' onclick='returnToHomeGrid()'>⬅️ Back to Dashboard</div>
                 <h3>Office Operations: Day Begin / Day End</h3>
                 <br/>
@@ -333,50 +334,7 @@
                 </div>
             </div>
 
-            <div class='portal-page-panel' id='panelOfficeHubMode'>
-                <div class='back-nav-link' onclick='returnToHomeGrid()'>⬅️ Back to Dashboard</div>
-                <h3>Admin Deck: Office & SOL Management</h3>
-                <br/>
-
-                <div class='portal-grid-wrapper' style="margin-top: 0; margin-bottom: 25px;">
-                    <div class='sub-action-card' style="border-top: 4px solid #e11d48; margin-bottom: 0;">
-                        <h4>Create New Office / SOL</h4>
-                        <div class='form-group'>
-                            <label>Office Name</label>
-                            <input id='newOfficeName' placeholder='e.g. Udaipur HO' type='text'/>
-                        </div>
-                        <button class='action-btn panel-sub-submit' onclick='executeCreateOffice()' style='background:#e11d48;' type='button'>Generate Office SOL</button>
-                    </div>
-
-                    <div class='sub-action-card' style="border-top: 4px solid #3b82f6; margin-bottom: 0;">
-                        <h4>Map / Transfer User to Office</h4>
-                        <p style="font-size: 12.5px; color: #64748b; margin-top:-10px;">Select a user to map them to a new SOL or transfer them from their current office.</p>
-                        <div class='form-group'>
-                            <label>Select User</label>
-                            <select id='mapUserSelect'></select>
-                        </div>
-                        <div class='form-group'>
-                            <label>Select Destination Office (SOL)</label>
-                            <select id='mapOfficeSelect'></select>
-                        </div>
-                        <button class='action-btn panel-sub-submit' onclick='executeMapUserToOffice()' style='background:#3b82f6;' type='button'>Apply Transfer / Mapping</button>
-                    </div>
-                </div>
-
-                <div class='sub-action-card'>
-                    <h4>Registered Office SOL Directory</h4>
-                    <table class='system-log-table'>
-                        <thead>
-                            <tr>
-                                <th>SOL ID</th>
-                                <th>Office Name</th>
-                                <th>Current Operational Status</th>
-                            </tr>
-                        </thead>
-                        <tbody id='officeDirectoryTableBody'></tbody>
-                    </table>
-                </div>
-            </div>
+            
 
             <div class='portal-page-panel' id='panelCasualLeaveMode'>
                 <div class='back-nav-link' onclick='returnToHomeGrid()'>⬅️ Back to Dashboard</div>
@@ -464,8 +422,7 @@
                 </div>
                 <button class='action-btn' onclick='triggerSmartGeneration("sr1")' style='background-color:#14b8a6;' type='button'>Generate S.R.-1 Leave PDF</button>
             </div>
-
-            <div class='portal-page-panel' id='panelTABillTourMode'>
+			<div class='portal-page-panel' id='panelTABillTourMode'>
                 <div class='back-nav-link' onclick='returnToHomeGrid()'>⬅️ Back to Dashboard</div>
                 <h3>Module: Travelling Allowance Bill for Tour (T.R. 25)</h3>
                 <br/>
@@ -1090,7 +1047,7 @@
         <div class='app-loading-spinner'></div>
         <div class='loading-status-msg'>Loading...</div>
     </div>
-	<script type='text/javascript'>
+    <script type='text/javascript'>
         // ----------------------------------------------------
         // FIREBASE INITIALIZATION & CORE VARIABLES
         // ----------------------------------------------------
@@ -1532,7 +1489,7 @@
             return "I am operating as a high-speed cloud utility assistant script. I recognize keywords like 'leave', 'transfer', 'ACG-61', and 'ACG-17'. Try rephrasing your question or tap one of the structural quick-action suggestion chips above!";
         }
 
-        // --- AUTH & DASHBOARD RENDERING ---
+       // --- AUTH & DASHBOARD RENDERING ---
         async function verifyBloggerAuth() {
             if(!isCloudDataLoaded) { 
                 displayCustomAlert("System Security Lock: Cannot authenticate because the user database failed to load. Please refresh the page to reconnect."); 
@@ -1591,6 +1548,11 @@
 
             profile.failedAttempts = 0; 
             authenticatedUserSession = profile;
+            
+            // --- NEW: SESSION MEMORY FOR MULTI-PAGE SECURITY ---
+            sessionStorage.setItem("activeUser", profile.user);
+            sessionStorage.setItem("activeRole", profile.role);
+
             logSystemEvent(u, "Authentication Success");
             
             // Auto Patch Missing Cards (Skipped for Master Admin to prevent override bugs)
@@ -1629,6 +1591,16 @@
                 mappedOffice = SYSTEM_OFFICE_REGISTRY.find(o => o.solId === profile.solId);
                 if (mappedOffice) {
                     officeStatus = mappedOffice.status;
+                    
+                    // --- NEW SECURITY CHECK: BLOCK IF OFFICE IS DISABLED ---
+                    if (mappedOffice.disabled && profile.role !== "admin") {
+                        displayCustomAlert("System Alert: This office is temporarily disabled. Maintenance work is under process.");
+                        // Wait 3 seconds so the user can read the alert, then log them out
+                        setTimeout(() => {
+                            executePortalLogout();
+                        }, 3000);
+                        return;
+                    }
                 }
             }
 
@@ -2001,6 +1973,9 @@
         }
 
         function executePortalLogout() {
+            // --- NEW: WIPE SESSION MEMORY ---
+            sessionStorage.clear();
+            
             const clearIds = [
                 'sysUser', 'sysPass', 'sr1Name', 'sr1Post', 'sr1Dept', 'sr1Pay', 'sr1Allowances', 
                 'sr1Period', 'sr1PrefixSuffix', 'sr1Grounds', 'sr1LastLeave', 'sr1LtcBlock', 
@@ -2814,8 +2789,7 @@
                 }
             }, 750);
         }
-
-        // ==========================================
+		// ==========================================
         // PDF GENERATION FUNCTIONS (UNCOMPRESSED)
         // ==========================================
         
