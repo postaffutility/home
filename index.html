@@ -1161,7 +1161,7 @@
                         }
                     });
 
-                    db.collection("system").doc("registry").onSnapshot((registryDoc) => {
+                   db.collection("system").doc("registry").onSnapshot((registryDoc) => {
                         if (registryDoc.exists) {
                             const data = registryDoc.data();
                             SYSTEM_USER_REGISTRY = data.users || SYSTEM_USER_REGISTRY;
@@ -1171,7 +1171,18 @@
                             isCloudDataLoaded = true;
                             refreshMaintenanceControlViews(); 
                             
-                            if (authenticatedUserSession && authenticatedUserSession.user !== "GUEST") {
+                            // --- NEW AUTO-LOGIN LOGIC ---
+                            let sessionUser = sessionStorage.getItem("activeUser");
+                            
+                            if (!authenticatedUserSession && sessionUser && sessionUser !== "GUEST") {
+                                // User came back from management.html, auto-login seamlessly!
+                                let profile = SYSTEM_USER_REGISTRY.find(acc => acc.user === sessionUser);
+                                if (profile) {
+                                    authenticatedUserSession = profile;
+                                    verifyBloggerAuth_Reentry();
+                                }
+                            } else if (authenticatedUserSession && authenticatedUserSession.user !== "GUEST") {
+                                // Live update for already logged-in user
                                 const updatedProfile = SYSTEM_USER_REGISTRY.find(acc => acc.user === authenticatedUserSession.user);
                                 if (updatedProfile) {
                                     authenticatedUserSession = updatedProfile;
@@ -1179,16 +1190,12 @@
                                 }
                             }
                         } else {
-    isCloudDataLoaded = true;
-    // CRITICAL FIX: We removed forcePushToCloud() here!
-    // Now, if the database drops, the system will never accidentally wipe your staff users.
-    console.warn("Registry document missing from cloud! Operating in Safe Mode to protect data.");
-    
-    // Optional: Alert the admin that something is wrong without destroying data
-    if (authenticatedUserSession && authenticatedUserSession.role === "admin") {
-        displayCustomAlert("System Warning: Live database document is missing or unreachable. The system is operating in Safe Mode to prevent accidental data overwrites. Please check Firebase.");
-    }
-}
+                            isCloudDataLoaded = true;
+                            console.warn("Registry document missing from cloud! Operating in Safe Mode.");
+                            if (authenticatedUserSession && authenticatedUserSession.role === "admin") {
+                                displayCustomAlert("System Warning: Live database document is missing or unreachable. The system is operating in Safe Mode.");
+                            }
+                        }
                     }, (error) => {
                         console.error("Registry Listener Error:", error);
                         displayCustomAlert("CRITICAL ERROR: Failed to listen to the secure database.");
