@@ -18,7 +18,6 @@
     </script>
 
     <style>
-        /* Hidden by default to prevent glimpse, enabled by script above */
         body { display: none; margin: 0; padding: 0; width: 100%; height: 100%; background-color: #f4f6f9; font-family: 'Segoe UI', Arial, sans-serif; }
         
         .back-nav-link { display: inline-flex; align-items: center; color: #3b82f6; font-weight: 800; font-size: 14px; text-decoration: none; margin-bottom: 25px; cursor: pointer; transition: color 0.2s; }
@@ -40,13 +39,24 @@
 
         /* SPLIT LAYOUT FOR DATA ENTRY */
         .split-layout { display: flex; height: 100vh; overflow: hidden; }
-        .left-panel { flex: 3.2; background: #ffffff; padding: 30px; box-shadow: 2px 0 15px rgba(0,0,0,0.05); z-index: 10; overflow-y: auto; border-right: 1px solid #e2e8f0; border-top: 6px solid #4f46e5; }
-        .right-panel { flex: 6.8; padding: 30px; background: #f8fafc; overflow-y: auto; }
+        .left-panel { flex: 3.2; background: #ffffff; padding: 30px; box-shadow: 2px 0 15px rgba(0,0,0,0.05); z-index: 10; overflow-y: auto; border-right: 1px solid #e2e8f0; border-top: 6px solid #4f46e5; transition: all 0.3s ease; }
+        .right-panel { flex: 6.8; padding: 30px; background: #f8fafc; overflow-y: auto; position: relative; transition: all 0.3s ease; }
         
+        /* Collapsed Sender Panel State */
+        .left-panel.collapsed { flex: 0 0 70px; padding: 30px 15px; overflow: hidden; cursor: pointer; }
+        .left-panel.collapsed:hover { background: #f8fafc; }
+        .left-panel.collapsed #senderFormWrapper { display: none; }
+        .left-panel.collapsed .back-nav-link { display: none; }
+        .left-panel.collapsed .hamburger-btn { margin: 0 auto; display: block; text-align: center; }
+        .left-panel.collapsed h2 { display: none; }
+        
+        .hamburger-btn { cursor: pointer; font-size: 24px; color: #1e293b; user-select: none; padding: 5px; border-radius: 6px; }
+        .hamburger-btn:hover { background: #f1f5f9; }
+
         /* INVOICE PANEL */
         .invoice-container { max-width: 800px; margin: 50px auto; padding: 40px; background: white; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.05); border-top: 6px solid #10b981; }
 
-        h2 { color: #1e293b; margin: 0 0 5px 0; font-size: 24px; font-weight: 800; }
+        h2 { color: #1e293b; margin: 0 0 5px 0; font-size: 24px; font-weight: 800; display: inline-block; vertical-align: middle;}
         p.subtitle { color: #64748b; font-size: 13px; margin-top: 0; margin-bottom: 20px; }
         
         .form-group { margin-bottom: 15px; }
@@ -57,6 +67,10 @@
         .flex-row { display: flex; gap: 15px; }
         .flex-row > div { flex: 1; }
         
+        /* Sticky Action Header in Right Panel */
+        .right-panel-header { position: sticky; top: -30px; background: rgba(248, 250, 252, 0.95); backdrop-filter: blur(8px); padding: 15px 0 20px 0; z-index: 50; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #e2e8f0; margin-bottom: 25px; margin-top: -10px; }
+        .action-buttons-group { display: flex; gap: 15px; }
+        
         /* Article Cards */
         .article-card { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; margin-bottom: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.02); overflow: hidden; }
         .article-header { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; background: #f8fafc; border-bottom: 1px solid #e2e8f0; cursor: pointer; }
@@ -65,10 +79,14 @@
         .delete-btn { background: #fee2e2; color: #ef4444; border: none; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: bold; cursor: pointer; z-index: 5; position: relative;}
         .article-body { padding: 20px; }
         
-        button.add-article-btn { background: #ffffff; color: #4f46e5; border: 2px dashed #4f46e5; padding: 15px; border-radius: 12px; font-weight: 800; font-size: 14px; cursor: pointer; width: 100%; margin-bottom: 40px; }
-        button.generate-btn { background: #10b981; color: white; border: none; padding: 18px; border-radius: 12px; font-weight: 900; font-size: 16px; cursor: pointer; width: 100%; text-transform: uppercase; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3); transition: all 0.2s; margin-top: 20px; }
-        button.generate-btn:hover { background: #059669; transform: translateY(-2px); box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4); }
+        button.add-article-btn { background: #ffffff; color: #4f46e5; border: 2px dashed #4f46e5; padding: 15px; border-radius: 12px; font-weight: 800; font-size: 14px; cursor: pointer; width: 100%; margin-bottom: 40px; transition: all 0.2s;}
+        button.add-article-btn:hover, button.add-article-btn:focus { background: #e0e7ff; outline: none; box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.2); }
         
+        button.generate-btn { background: #10b981; color: white; border: none; padding: 12px 24px; border-radius: 8px; font-weight: 900; font-size: 14px; cursor: pointer; text-transform: uppercase; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3); transition: all 0.2s; }
+        button.generate-btn:hover { background: #059669; transform: translateY(-2px); box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4); }
+        button.preview-btn { background: #3b82f6; color: white; border: none; padding: 12px 24px; border-radius: 8px; font-weight: 900; font-size: 14px; cursor: pointer; text-transform: uppercase; box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3); transition: all 0.2s; }
+        button.preview-btn:hover { background: #2563eb; transform: translateY(-2px); box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4); }
+
         .api-loader { font-size: 11px; color: #f59e0b; font-weight: bold; display: none; margin-top: 4px; }
         .db-status-box { background: #fef2f2; border: 1px solid #fecaca; padding: 15px; border-radius: 8px; margin-bottom: 20px; display: flex; align-items: center; gap: 10px;}
         .db-status-box.active { background: #f0fdf4; border-color: #86efac; }
@@ -80,7 +98,7 @@
         .checkbox-label { display: flex; align-items: center; gap: 8px; font-size: 13.5px; font-weight: 700; color: #92400e; cursor: pointer; margin-bottom: 5px;}
         select.po-dropdown { background-color: #fef9c3; border-color: #f59e0b; font-weight: bold; }
         
-        /* Modals */
+        /* Modals & Previews */
         .custom-popup-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(6px); z-index: 20000000; display: none; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.2s ease-in-out; }
         .custom-popup-card { background: #ffffff; width: 90%; max-width: 420px; padding: 35px; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.2); text-align: center; border-top: 6px solid #d32f2f; transform: scale(0.95); transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         .custom-popup-overlay.active { display: flex; opacity: 1; }
@@ -89,6 +107,14 @@
         .popup-message-text { color: #334155; font-size: 15px; line-height: 1.6; margin: 0 0 25px 0; font-weight: 600; white-space: pre-line; }
         .popup-close-btn { background: #0f172a; color: white; padding: 12px 28px; border: none; border-radius: 8px; font-size: 13.5px; font-weight: 800; cursor: pointer; text-transform: uppercase; width: 100%; transition: background 0.2s;}
         .popup-close-btn:hover { background: #334155; }
+
+        /* Preview Data Modal Styling */
+        .preview-modal-card { max-width: 95%; width: 1100px; padding: 30px; text-align: left; border-top: 6px solid #3b82f6; }
+        .preview-table-wrapper { max-height: 60vh; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 8px; margin-bottom: 20px; }
+        .preview-table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+        .preview-table th { background: #f8fafc; padding: 12px; border-bottom: 2px solid #cbd5e1; position: sticky; top: 0; color: #0f172a; }
+        .preview-table td { padding: 10px 12px; border-bottom: 1px solid #e2e8f0; color: #334155; }
+        .preview-table tr:hover { background: #f1f5f9; }
     </style>
 </head>
 <body>
@@ -116,84 +142,130 @@
 
     <div id="dataEntryPanel" class="app-panel">
         <div class="split-layout">
-            <div class="left-panel">
-                <div class='back-nav-link' onclick='switchPanel("hubPanel")'>⬅️ Back to Hub</div>
-                <h2>Sender Parameters</h2>
-                <p class="subtitle">Batch configurations & routing settings.</p>
-
-                <div class="db-status-box" id="dbStatusUI">
-                    <div class="status-icon" id="dbIcon">⚠️</div>
-                    <div class="status-text">
-                        <h4 id="dbTitle">Checking Database...</h4>
-                        <p id="dbSubtitle">Scanning for pincode_database.js</p>
+            
+            <div class="left-panel" id="senderPanel">
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
+                    <span class="hamburger-btn" onclick="toggleSenderPanel()" title="Toggle Sender Options">☰</span>
+                    <div id="senderTitleBlock">
+                        <div class='back-nav-link' onclick='switchPanel("hubPanel")' style="margin-bottom:0;">⬅️ Hub</div>
+                        <h2 style="margin:5px 0 0 0;">Sender Parameters</h2>
                     </div>
                 </div>
 
-                <div class="global-settings-box">
-                    <label class="checkbox-label">
-                        <input type="checkbox" id="gUseDefaultMob" checked onchange="toggleDefaultMobile()">
-                        Force Default Mobile (1234567890) everywhere
-                    </label>
-                </div>
-
-                <div class="form-group">
-                    <label>Sender Name / Company <span class="mandatory">*</span></label>
-                    <input type="text" id="gSenderName" placeholder="e.g. SBI, UDAIPUR">
-                </div>
-
-                <div class="flex-row">
-                    <div class="form-group" style="position:relative;">
-                        <label>Sender PIN <span class="mandatory">*</span></label>
-                        <input type="text" id="gSenderPin" placeholder="6 Digits" maxlength="6" onkeyup="smartPinFetch(this, 'sender')">
-                        <div class="api-loader" id="senderLoader">Checking Dual Network...</div>
+                <div id="senderFormWrapper">
+                    <div class="db-status-box" id="dbStatusUI">
+                        <div class="status-icon" id="dbIcon">⚠️</div>
+                        <div class="status-text">
+                            <h4 id="dbTitle">Checking Database...</h4>
+                            <p id="dbSubtitle">Scanning for pincode_database.js</p>
+                        </div>
                     </div>
+
+                    <div class="global-settings-box">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="gUseDefaultMob" checked onchange="toggleDefaultMobile()">
+                            Force Default Mobile (1234567890) everywhere
+                        </label>
+                    </div>
+
                     <div class="form-group">
-                        <label>Sender Mob No <span class="mandatory">*</span></label>
-                        <input type="text" id="gSenderMobile" placeholder="10 Digits" value="1234567890">
+                        <label>Article Category <span class="mandatory">*</span></label>
+                        <select id="gArticleType">
+                            <option value="Parcel & Gyan Post">Parcel & Gyan Post</option>
+                            <option value="Speed Post">Speed Post</option>
+                            <option value="Speed Post Parcel">Speed Post Parcel</option>
+                            <option value="Registered Post">Registered Post</option>
+                            <option value="Business Parcel">Business Parcel</option>
+                            <option value="VP">VP</option>
+                            <option value="COD">COD</option>
+                        </select>
                     </div>
-                </div>
 
-                <div class="form-group" id="senderPoContainer">
-                    <label>Sender Post Office <span class="mandatory">*</span></label>
-                    <select id="gSenderPoSelect" class="po-dropdown" disabled><option>Enter PIN first</option></select>
-                </div>
+                    <div class="flex-row">
+                        <div class="form-group">
+                            <label>Payment Mode <span class="mandatory">*</span></label>
+                            <select id="gPaymentMethod">
+                                <option value="Cash/Cheque">Cash/Cheque</option>
+                                <option value="POS">POS Terminal</option>
+                                <option value="UPI">UPI / QR Scan</option>
+                                <option value="Account">Account</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Insured <span class="mandatory">*</span></label>
+                            <select id="gInsuranceStatus">
+                                <option value="No">No</option>
+                                <option value="Yes">Yes</option>
+                            </select>
+                        </div>
+                    </div>
 
-                <div class="flex-row">
                     <div class="form-group">
-                        <label>Sender Add1 <span class="mandatory">*</span></label>
-                        <input type="text" id="gSenderAdd1" placeholder="Auto-filled from PO">
+                        <label>Sender Name / Company <span class="mandatory">*</span></label>
+                        <input type="text" id="gSenderName" placeholder="e.g. SBI, UDAIPUR">
                     </div>
-                    <div class="form-group">
-                        <label>Sender Add2 <span class="mandatory">*</span></label>
-                        <input type="text" id="gSenderAdd2" placeholder="Auto-filled from PO">
-                    </div>
-                </div>
 
-                <div class="flex-row">
-                    <div class="form-group">
-                        <label>Sender City (Auto)</label>
-                        <input type="text" id="gSenderCity" placeholder="City" readonly style="background:#e2e8f0;">
+                    <div class="flex-row">
+                        <div class="form-group" style="position:relative;">
+                            <label>Sender PIN <span class="mandatory">*</span></label>
+                            <input type="text" id="gSenderPin" placeholder="6 Digits" maxlength="6" onkeyup="smartPinFetch(this, 'sender')">
+                            <div class="api-loader" id="senderLoader">Checking Dual Network...</div>
+                        </div>
+                        <div class="form-group">
+                            <label>Sender Mob No <span class="mandatory">*</span></label>
+                            <input type="text" id="gSenderMobile" placeholder="10 Digits" value="1234567890">
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label>Sender State (Auto)</label>
-                        <input type="text" id="gSenderState" placeholder="State" readonly style="background:#e2e8f0;">
-                    </div>
-                </div>
-                
-                <div class="form-group">
-                    <label>Booking Reference Date</label>
-                    <input type="date" id="gFileDate">
-                </div>
 
-                <button class="generate-btn" onclick="generateBatchPackage()">⬇️ Generate India Post Excel</button>
+                    <div class="form-group" id="senderPoContainer">
+                        <label>Sender Post Office <span class="mandatory">*</span></label>
+                        <select id="gSenderPoSelect" class="po-dropdown" disabled><option>Enter PIN first</option></select>
+                    </div>
+
+                    <div class="flex-row">
+                        <div class="form-group">
+                            <label>Sender Add1 <span class="mandatory">*</span></label>
+                            <input type="text" id="gSenderAdd1" placeholder="Auto-filled from PO">
+                        </div>
+                        <div class="form-group">
+                            <label>Sender Add2 <span class="mandatory">*</span></label>
+                            <input type="text" id="gSenderAdd2" placeholder="Auto-filled from PO">
+                        </div>
+                    </div>
+
+                    <div class="flex-row">
+                        <div class="form-group">
+                            <label>Sender City (Auto)</label>
+                            <input type="text" id="gSenderCity" placeholder="City" readonly style="background:#e2e8f0;">
+                        </div>
+                        <div class="form-group">
+                            <label>Sender State (Auto)</label>
+                            <input type="text" id="gSenderState" placeholder="State" readonly style="background:#e2e8f0;">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Booking Reference Date</label>
+                        <input type="date" id="gFileDate">
+                    </div>
+                </div>
             </div>
 
             <div class="right-panel">
-                <h2>Article Consignment Ledger</h2>
-                <p class="subtitle">Optimized data-entry layout with smart memory fields.</p>
+                <div class="right-panel-header">
+                    <div>
+                        <h2 style="margin:0;">Article Consignment Ledger</h2>
+                        <p class="subtitle" style="margin:0;">Data-entry layout optimized for Tab navigation speed.</p>
+                    </div>
+                    <div class="action-buttons-group">
+                        <button class="preview-btn" onclick="openPreviewModal()">👁️ Preview Data</button>
+                        <button class="generate-btn" onclick="generateBatchPackage()" style="margin:0;">⬇️ Generate Excel</button>
+                    </div>
+                </div>
 
                 <div id="articleContainer"></div>
-                <button class="add-article-btn" onclick="addArticleRow()">+ Add New Article</button>
+                
+                <button class="add-article-btn" onclick="addArticleRow()">+ Add New Article (Press Enter)</button>
             </div>
         </div>
     </div>
@@ -243,6 +315,36 @@
         </div>
     </div>
 
+    <div class='custom-popup-overlay' id='previewDataModal' style="z-index: 25000000;">
+        <div class='custom-popup-card preview-modal-card'>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+                <h2 style="margin:0; color:#1e3a8a;">Data Entry Preview</h2>
+                <button onclick="closePreviewModal()" style="background:#ef4444; color:white; border:none; padding:8px 16px; border-radius:6px; font-weight:bold; cursor:pointer;">Close</button>
+            </div>
+            <div class="preview-table-wrapper">
+                <table class="preview-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Barcode No</th>
+                            <th>Receiver Name</th>
+                            <th>PIN Code</th>
+                            <th>City / State</th>
+                            <th>Address Block</th>
+                            <th>Mobile</th>
+                            <th>Weight</th>
+                        </tr>
+                    </thead>
+                    <tbody id="previewTableBody">
+                        </tbody>
+                </table>
+            </div>
+            <div style="text-align: right;">
+                <button onclick="closePreviewModal(); generateBatchPackage();" style="background:#10b981; color:white; border:none; padding:12px 24px; border-radius:8px; font-weight:bold; cursor:pointer;">Looks Good - Generate Excel</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         // --- GLOBAL STATE ---
         let lastEnteredWeight = ""; 
@@ -272,6 +374,19 @@
         function switchPanel(panelId) {
             document.querySelectorAll('.app-panel').forEach(p => p.classList.remove('active'));
             document.getElementById(panelId).classList.add('active');
+        }
+
+        // --- SENDER COLLAPSE LOGIC ---
+        function toggleSenderPanel() {
+            const panel = document.getElementById('senderPanel');
+            const titleBlock = document.getElementById('senderTitleBlock');
+            if (panel.classList.contains('collapsed')) {
+                panel.classList.remove('collapsed');
+                titleBlock.style.display = 'block';
+            } else {
+                panel.classList.add('collapsed');
+                titleBlock.style.display = 'none';
+            }
         }
 
         function displayCustomAlert(msg, icon = '🔔') {
@@ -323,6 +438,7 @@
             }
         }
 
+        // --- PERFECT DOM TAB-FLOW ARTICLE CARD ---
         function addArticleRow() {
             collapseAllArticles();
             articleCount++;
@@ -333,6 +449,8 @@
             
             let initMobile = document.getElementById('gUseDefaultMob').checked ? "1234567890" : "";
 
+            // Notice the lack of explicit tabindexes on interactive fields so it flows naturally
+            // Notice City & State have tabindex="-1" so they are skipped.
             card.innerHTML = `
                 <div class="article-header" onclick="toggleArticle('${card.id}', event)">
                     <div class="header-info">
@@ -341,7 +459,7 @@
                         <div class="article-summary-text">New Consignment File</div>
                     </div>
                     <div class="header-actions">
-                        <button class="delete-btn" onclick="removeArticle('${card.id}', event)">🗑️ Remove</button>
+                        <button class="delete-btn" tabindex="-1" onclick="removeArticle('${card.id}', event)">🗑️ Remove</button>
                     </div>
                 </div>
                 
@@ -349,46 +467,46 @@
                     <div class="flex-row">
                         <div class="form-group" style="flex: 2;">
                             <label>Article No (13 Chars) <span class="mandatory">*</span></label>
-                            <input type="text" class="a-barcode" placeholder="e.g. JN110401227IN" maxlength="13" oninput="validateAndNormalizeCard('${card.id}')" tabindex="1">
+                            <input type="text" class="a-barcode" placeholder="e.g. JN110401227IN" maxlength="13" oninput="validateAndNormalizeCard('${card.id}')">
                         </div>
                         <div class="form-group" style="flex: 1.5; position:relative;">
-                            <label>PIN (F4) <span class="mandatory">*</span></label>
-                            <input type="text" class="a-pin" placeholder="6 Digits" maxlength="6" onkeyup="smartPinFetch(this, 'receiver', '${card.id}')" tabindex="2">
+                            <label>PIN Code <span class="mandatory">*</span></label>
+                            <input type="text" class="a-pin" placeholder="6 Digits" maxlength="6" onkeyup="smartPinFetch(this, 'receiver', '${card.id}')">
                             <div class="api-loader" id="loader_${card.id}">Checking Dual Network...</div>
                         </div>
                         <div class="form-group" style="flex: 1;">
                             <label>Weight (g) <span class="mandatory">*</span></label>
-                            <input type="number" class="a-weight" placeholder="e.g. 20" value="${lastEnteredWeight}" oninput="updateWeightMemory(this.value)" tabindex="3">
+                            <input type="number" class="a-weight" placeholder="e.g. 20" value="${lastEnteredWeight}" oninput="updateWeightMemory(this.value)">
                         </div>
                     </div>
 
                     <div class="flex-row">
                         <div class="form-group" style="flex: 1.5;" id="poContainer_${card.id}">
                             <label>Post Office <span class="mandatory">*</span></label>
-                            <select class="a-po-select po-dropdown" disabled tabindex="4"><option>Enter PIN first</option></select>
+                            <select class="a-po-select po-dropdown" disabled><option>Enter PIN first</option></select>
                         </div>
                         <div class="form-group" style="flex: 2;">
                             <label>Addressee Name <span class="mandatory">*</span></label>
-                            <input type="text" class="a-name" placeholder="Full Name" oninput="updateHeaderSummary('${card.id}')" tabindex="5">
+                            <input type="text" class="a-name" placeholder="Full Name" oninput="updateHeaderSummary('${card.id}')">
                         </div>
                         <div class="form-group" style="flex: 1.5;">
                             <label>Mobile <span class="mandatory">*</span></label>
-                            <input type="text" class="a-mobile" placeholder="10 Digits" value="${initMobile}" tabindex="6">
+                            <input type="text" class="a-mobile" placeholder="10 Digits" value="${initMobile}">
                         </div>
                     </div>
 
                     <div class="flex-row">
                         <div class="form-group" style="flex: 1.5;">
                             <label>Add-1 <span class="mandatory">*</span></label>
-                            <input type="text" class="a-add1" placeholder="Auto-filled from PO" tabindex="7">
+                            <input type="text" class="a-add1" placeholder="Auto-filled from PO">
                         </div>
                         <div class="form-group" style="flex: 1.5;">
                             <label>Add-2 <span class="mandatory">*</span></label>
-                            <input type="text" class="a-add2" placeholder="Auto-filled from PO" tabindex="8">
+                            <input type="text" class="a-add2" placeholder="Auto-filled from PO">
                         </div>
                         <div class="form-group" style="flex: 1.5;">
                             <label>Add-3</label>
-                            <input type="text" class="a-add3" placeholder="Village/Landmark" tabindex="9">
+                            <input type="text" class="a-add3" placeholder="Village/Landmark">
                         </div>
                     </div>
 
@@ -405,7 +523,9 @@
                 </div>
             `;
             container.appendChild(card);
-            setTimeout(() => { document.querySelector(`#${card.id} .a-barcode`).focus(); }, 100);
+            
+            // Auto focus the new barcode
+            setTimeout(() => { document.querySelector(`#${card.id} .a-barcode`).focus(); }, 50);
         }
 
         function removeArticle(cardId, event) {
@@ -479,9 +599,8 @@
 
             let selectClass = mode === 'sender' ? 'po-dropdown' : 'a-po-select po-dropdown';
             let selectId = mode === 'sender' ? 'gSenderPoSelect' : '';
-            let tabIdx = mode === 'sender' ? '' : 'tabindex="4"';
             
-            let selectHTML = `<select class="${selectClass}" id="${selectId}" ${tabIdx} onchange="handlePoSelection(this, '${mode}', '${cardId}')">`;
+            let selectHTML = `<select class="${selectClass}" id="${selectId}" onchange="handlePoSelection(this, '${mode}', '${cardId}')">`;
             data.offices.forEach(office => {
                 let cleanName = office.replace(/\s+(H\.O|S\.O|B\.O|HO|SO|BO)$/i, '').trim();
                 selectHTML += `<option value="${cleanName.toUpperCase()}">${office.toUpperCase()}</option>`;
@@ -497,6 +616,7 @@
 
         function handlePoSelection(selectEl, mode, cardId) {
             let rawPoName = selectEl.value;
+            // Instantly strip HO, SO, BO
             let cleanName = rawPoName.replace(/\s+(H\.O|S\.O|B\.O|HO|SO|BO)$/i, '').trim().toUpperCase();
             
             if (mode === 'sender') {
@@ -521,6 +641,63 @@
             containerEl.innerHTML = `<label>${labelText}</label><select class="${selectClass}" id="${selectId}" disabled><option>Enter PIN first</option></select>`;
         }
 
+        // --- NEW: HTML PREVIEW TABLE MODAL ---
+        function openPreviewModal() {
+            const tbody = document.getElementById('previewTableBody');
+            tbody.innerHTML = ''; // clear previous
+            
+            const articles = document.querySelectorAll('.article-card');
+            let validCount = 0;
+
+            articles.forEach(card => {
+                let rName = card.querySelector('.a-name').value.trim();
+                let rPin = card.querySelector('.a-pin').value.trim();
+                let rMob = card.querySelector('.a-mobile').value.trim();
+                let rWeight = card.querySelector('.a-weight').value.trim();
+                let rCity = card.querySelector('.a-city').value.trim() || "NA";
+                let rState = card.querySelector('.a-state').value.trim() || "NA";
+                let rAdd1El = card.querySelector('.a-add1');
+                let rAdd1 = rAdd1El ? rAdd1El.value.trim() : "";
+                let rAdd2 = card.querySelector('.a-add2').value.trim();
+                let rAdd3 = card.querySelector('.a-add3').value.trim();
+                let barcode = card.querySelector('.a-barcode').value.trim();
+
+                if (!rName && !rPin && !barcode && !rWeight) return; // skip entirely blank
+                
+                validCount++;
+                
+                let fullAddr = [rAdd1, rAdd2, rAdd3].filter(Boolean).join(", ");
+                
+                let tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><strong>${validCount}</strong></td>
+                    <td style="color:#4f46e5; font-family:monospace; font-weight:bold;">${barcode || '<span style="color:red">Missing</span>'}</td>
+                    <td>${rName || '<span style="color:red">Missing</span>'}</td>
+                    <td>${rPin || '<span style="color:red">Missing</span>'}</td>
+                    <td style="font-size:12px; color:#64748b;">${rCity}, ${rState}</td>
+                    <td style="font-size:12px;">${fullAddr}</td>
+                    <td>${rMob}</td>
+                    <td><strong>${rWeight}g</strong></td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            if (validCount === 0) {
+                displayCustomAlert("No data entered yet. Please fill out an article first.", "⚠️");
+                return;
+            }
+
+            const modal = document.getElementById('previewDataModal');
+            modal.style.display = 'flex';
+            setTimeout(() => { modal.classList.add('active'); }, 10);
+        }
+
+        function closePreviewModal() {
+            const modal = document.getElementById('previewDataModal');
+            modal.classList.remove('active');
+            setTimeout(() => { modal.style.display = 'none'; }, 200);
+        }
+
         // --- DATA ENTRY EXCEL EXPORT (No Math or Rates) ---
         function generateBatchPackage() {
             try {
@@ -538,7 +715,7 @@
                 let finalSenderMob = useDefaultMob ? "1234567890" : sMob;
 
                 if (!sName || !finalSenderMob || !sPin || !sAdd1 || !sAdd2) {
-                    displayCustomAlert("Form Defect: All sender identity parameters are required.", "🛑");
+                    displayCustomAlert("Form Defect: All sender identity parameters are required. Open the Sender Parameters menu.", "🛑");
                     return;
                 }
 
@@ -658,7 +835,7 @@
             }
         }
 
-        // --- NEW: INVOICE GENERATOR LOGIC ---
+        // --- INVOICE GENERATOR LOGIC ---
         function readFileAsJSON(file) {
             return new Promise((resolve, reject) => {
                 const reader = new FileReader();
@@ -701,7 +878,6 @@
             let dateStr = dateStrRaw ? dateStrRaw.split("-").reverse().join("-") : new Date().toLocaleDateString('en-GB');
 
             try {
-                // Read both files
                 const ourData = await readFileAsJSON(ourFileInput);
                 const ipData = await readFileAsJSON(ipFileInput);
 
@@ -718,7 +894,6 @@
                     throw new Error("Could not automatically identify Barcode or Postage columns in the India Post file.");
                 }
 
-                // Create Lookup Dictionary from India Post File
                 const ipDictionary = {};
                 ipData.forEach(row => {
                     if(row[ipBarcodeCol]) {
@@ -727,11 +902,9 @@
                     }
                 });
 
-                // Prepare PDF Data
                 let invoiceItems = [];
                 let grandTotal = 0;
 
-                // Sender Info from Our File
                 const senderName = ourData[0]["SENDER NAME"] || "UNKNOWN";
                 const senderMob = ourData[0]["SENDER MOBILE NO"] || "";
                 const senderPin = ourData[0]["SENDER PINCODE"] || "";
