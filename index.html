@@ -181,6 +181,12 @@
         .summary-box input { background: #fff !important; font-weight: bold; color: #312e81 !important; border-color: #a5b4fc; }
         .cea-child-row { background: #fdfdfd; border: 1px solid #e2e8f0; padding: 15px; border-radius: 12px; margin-bottom: 10px; display: flex; flex-wrap: wrap; gap: 10px; }
     </style>
+	<script>
+        // Instantly hide login screen if user is already logged in to prevent flicker
+        if (sessionStorage.getItem("activeUser")) {
+            document.write('<style>#loginScreen, #sceneryBackground { display: none !important; } #appDashboardView { display: block !important; }</style>');
+        }
+    </script>
 </head>
 <body>
 
@@ -200,11 +206,11 @@
                 
                 <div class='form-group'>
                     <label>Username</label>
-                    <input id='sysUser' placeholder='Enter your username' type='text'/>
+                    <input id='sysUser' placeholder='Enter your username' type='text' autocomplete='off' spellcheck='false'/>
                 </div>
                 <div class='form-group'>
                     <label>Secure Passcode</label>
-                    <input class='secure-mask' id='sysPass' placeholder='Enter your passcode' type='password'/>
+                    <input class='secure-mask' id='sysPass' placeholder='Enter your passcode' type='password' autocomplete='off' spellcheck='false'/>
                 </div>
                 
                 <button class='primary-login-btn' onclick='verifyBloggerAuth()' type='button'>Secure Login</button>
@@ -247,6 +253,11 @@
                         <div class='card-icon'>⏳</div>
                         <h3>Day Begin / Day End</h3>
                         <p>Control the operational status of your mapped office. Executing Day End locks the system for makers.</p>
+                    </div>
+					<div class='portal-module-card card-indigo-variant' id='menuCardBulkBooking' onclick='window.location.href="bulkBooking.html"'>
+                        <div class='card-icon'>📥</div>
+                        <h3>Bulk Article Booking</h3>
+                        <p>Generate exact India Post Bulk Booking Excel upload files. Define sender parameters and map articles directly to the official spreadsheet format.</p>
                     </div>
 
                     <div class='portal-module-card card-rose-variant' id='menuCardOfficeHub' onclick='window.location.href="management.html"' style='display:none;'>
@@ -299,7 +310,7 @@
 
                     <div class='portal-module-card card-rose-variant' id='menuCardTAAdvance' onclick='navigateToPanel("taAdvance", this)'>
                         <div class='card-icon'>🧳</div>
-                        <h3>T.A. Advance Application</h3>
+                        <h3>T.A. Tour Advance Application</h3>
                         <p>Draft and generate your official T.A. on Tour advance application instantly with precise formatting.</p>
                     </div>
                     
@@ -1158,9 +1169,9 @@
         <div class='app-loading-spinner'></div>
         <div class='loading-status-msg'>Loading...</div>
     </div>
-    <script type='text/javascript'>
+    <script type="text/javascript">
         // ----------------------------------------------------
-        // FIREBASE INITIALIZATION & CORE VARIABLES
+        // 1. FIREBASE CONFIGURATION & CORE VARIABLES
         // ----------------------------------------------------
         const firebaseConfig = {
             apiKey: "AIzaSyArIz9EyuPcbQs0HKvsm0OfxwXKGlbO03c",
@@ -1433,18 +1444,22 @@
         }
 
         function navigateToPanel(panelMode, clickedElement = null) {
+            // STRICT SECURITY LOCK: If no session exists, force logout immediately
+            if (!sessionStorage.getItem("activeUser")) {
+                executePortalLogout();
+                return;
+            }
+
             activeAppMode = panelMode;
+            if (typeof resetIdleTimer === "function") resetIdleTimer(); // Reset timer on click
             
             if (clickedElement) {
                 const parentGrid = clickedElement.closest('.portal-grid-wrapper');
                 if (parentGrid) {
                     const siblingCards = parentGrid.querySelectorAll('.portal-module-card');
                     siblingCards.forEach(card => {
-                        if (card !== clickedElement) {
-                            card.classList.add('fade-out');
-                        } else {
-                            card.classList.add('expand-active');
-                        }
+                        if (card !== clickedElement) card.classList.add('fade-out');
+                        else card.classList.add('expand-active');
                     });
                     
                     setTimeout(() => {
@@ -1518,8 +1533,7 @@
                 'panelACG61Mode', 'panelGeneralChargeMode', 'panelSR1Mode', 
                 'panelCasualLeaveMode', 'panelTAAdvanceMode', 'panelTATransferMode', 
                 'panelTABillTourMode', 'panelCEAMode', 'panelAIChatMode', 
-                'panelSelfPasswordMode', 'panelMaintenanceMode', 
-                'panelDBDEMode'
+                'panelSelfPasswordMode', 'panelMaintenanceMode', 'panelDBDEMode'
             ];
             
             panels.forEach(id => {
@@ -1586,7 +1600,7 @@
             const lowQuery = query.toLowerCase();
             
             if(lowQuery.includes("leave") || lowQuery.includes("application")) {
-                return "Here is an optimized format for an official casual leave request:<br/><div class='ai-template-card'>To,<br/>The Postmaster / Competent Authority,<br/>[Current Office Name]<br/><br/>Subject: Application for Casual Leave Approval<br/><br/>Respected Sir,<br/>I am writing to formally request casual leave for [Number] days starting from [Date] to [Date] due to mandatory personal business at home.<br/><br/>Arrangements have been made with my workspace colleague to handle any emergency ledger requirements during my temporary absence. I request you to kindly sanction my leave application.<br/><br/>Yours faithfully,<br/>[Staff Name]<br/>Designation, [Current Office Name]</div>";
+                return "Here is an optimized format for an official casual leave request:<br/><div class='ai-template-card'>To,<br/>The Postmaster / Competent Authority,<br/>[Current Office Name]<br/><br/>Subject: Application for Casual Leave Approval<br/><br/>Respected Sir/Madam,<br/>I am writing to formally request casual leave for [Number] days starting from [Date] to [Date] due to mandatory personal business at home.<br/><br/>Arrangements have been made with my workspace colleague to handle any emergency ledger requirements during my temporary absence. I request you to kindly sanction my leave application.<br/><br/>Yours faithfully,<br/>[Staff Name]<br/>Designation, [Current Office Name]</div>";
             }
             if(lowQuery.includes("acg-61") || lowQuery.includes("61")) {
                 return "<strong>ACG-61 Protocol Instruction:</strong><br/>Whenever a Postmaster or responsible dynamic officer relinquishes charge of an office, an ACG-61 report must be completed. Ensure these vital data checks match your document:<br/><br/>1. Verify that the system time indicator states exactly <strong>Forenoon (FN)</strong> or <strong>Afternoon (AN)</strong>.<br/>2. Check that the net physical cash vault matches the closing entry down to the last paisa.<br/>3. Both the Relieved and Relieving officers must sign the verification block simultaneously to seal the cloud record.";
@@ -1603,7 +1617,8 @@
             
             return "I am operating as a high-speed cloud utility assistant script. I recognize keywords like 'leave', 'transfer', 'ACG-61', and 'ACG-17'. Try rephrasing your question or tap one of the structural quick-action suggestion chips above!";
         }
-		// --- AUTH & DASHBOARD RENDERING ---
+
+        // --- AUTH & DASHBOARD RENDERING ---
         async function verifyBloggerAuth() {
             if(!isCloudDataLoaded) { 
                 displayCustomAlert("System Security Lock: Cannot authenticate because the user database failed to load. Please refresh the page to reconnect."); 
@@ -1663,17 +1678,18 @@
             profile.failedAttempts = 0; 
             authenticatedUserSession = profile;
             
-            // --- NEW: SESSION MEMORY FOR MULTI-PAGE SECURITY ---
             sessionStorage.setItem("activeUser", profile.user);
             sessionStorage.setItem("activeRole", profile.role);
 
             logSystemEvent(u, "Authentication Success");
             
-            // Auto Patch Missing Cards (Skipped for Master Admin to prevent override bugs)
+            // Auto Patch Missing Cards
             if (profile.role !== "admin") {
                 let userAllowedList = profile.allowedCards || [];
                 let needsPatch = false;
-                const newModules = ['menuCardCasualLeave','menuCardGeneralCharge','menuCardTABillTour','menuCardCEA'];
+                
+                // ADDED 'menuCardBulkBooking' HERE
+                const newModules = ['menuCardCasualLeave','menuCardGeneralCharge','menuCardTABillTour','menuCardCEA', 'menuCardBulkBooking'];
                 
                 newModules.forEach(c => {
                     if(!userAllowedList.includes(c)) { 
@@ -1697,7 +1713,6 @@
             const profile = authenticatedUserSession;
             const u = profile.user;
             
-            // Determine Office Status
             let officeStatus = "UNMAPPED";
             let mappedOffice = null;
             
@@ -1706,10 +1721,8 @@
                 if (mappedOffice) {
                     officeStatus = mappedOffice.status;
                     
-                    // --- NEW SECURITY CHECK: BLOCK IF OFFICE IS DISABLED ---
                     if (mappedOffice.disabled && profile.role !== "admin") {
                         displayCustomAlert("System Alert: This office is temporarily disabled. Maintenance work is under process.");
-                        // Wait 3 seconds so the user can read the alert, then log them out
                         setTimeout(() => {
                             executePortalLogout();
                         }, 3000);
@@ -1720,10 +1733,10 @@
 
             let userAllowedList = [];
 
-            // --- BUG FIX: FORCE ADMIN TO ALWAYS HAVE EVERYTHING ---
             if (profile.role === "admin" || u.toLowerCase().startsWith("admin")) {
+                // ADDED 'menuCardBulkBooking' HERE
                 userAllowedList = [
-                    'menuCardDBDE', 'menuCardOfficeHub', 'menuCardBulk', 'menuCardHoliday', 
+                    'menuCardDBDE', 'menuCardOfficeHub', 'menuCardBulkBooking', 'menuCardBulk', 'menuCardHoliday', 
                     'menuCardDateWise', 'menuCardACG61', 'menuCardGeneralCharge', 'menuCardSR1', 
                     'menuCardCasualLeave', 'menuCardTAAdvance', 'menuCardTATransfer', 
                     'menuCardTABillTour', 'menuCardCEA', 'menuCardAI', 'menuCardMaintenance', 
@@ -1731,22 +1744,20 @@
                 ];
             } else {
                 userAllowedList = profile.allowedCards || [];
-                // If legacy account with empty cards, give standard defaults
                 if (userAllowedList.length === 0) {
+                    // ADDED 'menuCardBulkBooking' HERE
                     userAllowedList = [
-                        'menuCardBulk', 'menuCardHoliday', 'menuCardDateWise', 'menuCardACG61', 
+                        'menuCardBulkBooking', 'menuCardBulk', 'menuCardHoliday', 'menuCardDateWise', 'menuCardACG61', 
                         'menuCardGeneralCharge', 'menuCardSR1', 'menuCardCasualLeave', 'menuCardTAAdvance', 
                         'menuCardTATransfer', 'menuCardTABillTour', 'menuCardCEA', 'menuCardAI', 
                         'menuCardSelfPassword'
                     ];
                 }
-                // Ensure Superuser has Day Begin/End card
                 if (profile.role === "superuser" && !userAllowedList.includes('menuCardDBDE')) {
                     userAllowedList.push('menuCardDBDE');
                 }
             }
 
-            // --- THE DAY END LOCKOUT LOGIC ---
             if (officeStatus === "DAY_ENDED" && profile.role !== "admin") {
                 if (profile.role === "maker" || profile.role === "superuser") {
                     userAllowedList = profile.role === "superuser" ? ['menuCardDBDE', 'menuCardSelfPassword'] : ['menuCardSelfPassword'];
@@ -1765,8 +1776,9 @@
             });
             
             if(u === "GUEST") {
+                // ADDED 'menuCardBulkBooking' HERE
                 const guestCards = [
-                    'menuCardBulk', 'menuCardHoliday', 'menuCardDateWise', 
+                    'menuCardBulkBooking', 'menuCardBulk', 'menuCardHoliday', 'menuCardDateWise', 
                     'menuCardACG61', 'menuCardGeneralCharge', 'menuCardSR1', 
                     'menuCardCasualLeave', 'menuCardTAAdvance', 'menuCardTATransfer', 
                     'menuCardTABillTour', 'menuCardCEA', 'menuCardAI'
@@ -1784,13 +1796,11 @@
             
             filterAndPaginateCards(true);
             
-            // Format Welcome Title & Dashboard Indicator
             let displayName = profile.fullName || profile.user;
             let roleDisplay = profile.role === 'superuser' ? ' (Superuser)' : (profile.role === 'admin' ? ' (Admin)' : '');
             
             document.getElementById('portalWelcomeMessage').innerText = `Welcome, ${displayName}${roleDisplay}`;
 
-            // Update Dynamic Indicator
             const badge = document.getElementById('officeStatusBadge');
             const dot = document.getElementById('statusDot');
             const statusTxt = document.getElementById('statusText');
@@ -1821,7 +1831,6 @@
             document.getElementById("sceneryBackground").style.display = "none";
             document.getElementById("appDashboardView").style.display = "block";
 
-            // If we are currently in a panel that just got locked, throw them home
             if (activeAppMode !== 'home' && activeAppMode !== 'selfpassword' && activeAppMode !== 'dbde') {
                 if(officeStatus === "DAY_ENDED" && profile.role !== "admin") {
                     returnToHomeGrid();
@@ -1840,9 +1849,7 @@
             }
         }
 
-        // --- SUPERUSER & ADMIN DAY BEGIN / DAY END LOGIC ---
         function refreshDBDEView() {
-            // Allow BOTH superuser and admin
             if(!authenticatedUserSession || (authenticatedUserSession.role !== 'superuser' && authenticatedUserSession.role !== 'admin')) return;
             
             const mySol = authenticatedUserSession.solId;
@@ -1875,7 +1882,6 @@
         }
 
         async function executeToggleDayStatus() {
-            // Allow BOTH superuser and admin
             if (!authenticatedUserSession || (authenticatedUserSession.role !== 'superuser' && authenticatedUserSession.role !== 'admin')) return;
             
             const mySol = authenticatedUserSession.solId;
@@ -1899,7 +1905,6 @@
             verifyBloggerAuth_Reentry(); 
         }
 
-        // --- ADMIN OFFICE HUB LOGIC ---
         function refreshOfficeHubViews() {
             const uSelect = document.getElementById('mapUserSelect');
             const oSelect = document.getElementById('mapOfficeSelect');
@@ -1956,7 +1961,6 @@
             document.getElementById('newOfficeName').value = "";
             refreshOfficeHubViews();
             
-            // SHOW THE NEW OFFICE POPUP
             document.getElementById('officeCreationField').innerHTML = `<strong>Office Name:</strong> ${offName}<br/><br/><strong>Auto-Generated SOL ID:</strong> <span style="color:#d32f2f; font-size:22px;">${generatedSol}</span>`;
             
             const modal = document.getElementById('officeCreationModal');
@@ -2087,8 +2091,10 @@
         }
 
         function executePortalLogout() {
-            // --- NEW: WIPE SESSION MEMORY ---
+            // 1. Destroy Security Session
             sessionStorage.clear();
+            authenticatedUserSession = null;
+            if (typeof idleTimer !== 'undefined') clearTimeout(idleTimer);
             
             const clearIds = [
                 'sysUser', 'sysPass', 'sr1Name', 'sr1Post', 'sr1Dept', 'sr1Pay', 'sr1Allowances', 
@@ -2113,65 +2119,37 @@
             
             clearIds.forEach(id => { 
                 let el = document.getElementById(id); 
-                if (el) {
-                    el.value = ""; 
-                }
+                if (el) el.value = ""; 
             });
             
-            document.getElementById('clReason').value = "Personal affairs"; 
-            
+            if(document.getElementById('clReason')) document.getElementById('clReason').value = "Personal affairs"; 
             const otherReasonGroup = document.getElementById("clOtherReasonGroup");
             if(otherReasonGroup) otherReasonGroup.style.display = "none"; 
             
-            document.getElementById('clStationLeave').value = "No"; 
-            document.getElementById('ceaSpouseEmployed').value = "No"; 
-            
+            if(document.getElementById('clStationLeave')) document.getElementById('clStationLeave').value = "No"; 
+            if(document.getElementById('ceaSpouseEmployed')) document.getElementById('ceaSpouseEmployed').value = "No"; 
             const spouseGroup = document.getElementById('ceaSpouseDetailsGroup');
             if(spouseGroup) spouseGroup.style.display = "none"; 
             
-            document.getElementById('ceaDisabled').value = "No"; 
-            
+            if(document.getElementById('ceaDisabled')) document.getElementById('ceaDisabled').value = "No"; 
             const disabledGroup = document.getElementById('ceaDisabledDetailsGroup');
             if(disabledGroup) disabledGroup.style.display = "none";
 
-            const genContainer = document.getElementById("genForwardContainer");
-            if(genContainer) {
-                genContainer.innerHTML = ""; 
-                addNewGenForwardRow(); 
-            }
-            
-            const tabContainer = document.getElementById('tabJourneyContainer');
-            if(tabContainer) {
-                tabContainer.innerHTML = ""; 
-                addNewTABillRow(); 
-                calculateTABillTotal();
-            }
-            
-            const ceaContainer = document.getElementById('ceaChildContainer');
-            if(ceaContainer) {
-                ceaContainer.innerHTML = ""; 
-                addNewCEAChildRow(); 
-            }
-            
-            const dateContainer = document.getElementById("dynamicDateRowsContainer");
-            if(dateContainer) {
-                dateContainer.innerHTML = ""; 
-                addNewDateEntryRow();
-            }
-            
-            const acgContainer = document.getElementById("acgForwardContainer");
-            if(acgContainer) {
-                acgContainer.innerHTML = ""; 
-                addNewForwardRow();
-            }
-            
+            ['genForwardContainer', 'tabJourneyContainer', 'ceaChildContainer', 'dynamicDateRowsContainer', 'acgForwardContainer'].forEach(id => {
+                let container = document.getElementById(id);
+                if(container) container.innerHTML = ""; 
+            });
+
+            if(typeof addNewGenForwardRow === "function") addNewGenForwardRow(); 
+            if(typeof addNewTABillRow === "function") addNewTABillRow(); 
+            if(typeof addNewCEAChildRow === "function") addNewCEAChildRow(); 
+            if(typeof addNewDateEntryRow === "function") addNewDateEntryRow();
+            if(typeof addNewForwardRow === "function") addNewForwardRow();
+
             for(let i = 1; i <= 4; i++){ 
-                const famPrefixes = ['tatFamName', 'tatFamAge', 'tatFamRel'];
-                famPrefixes.forEach(pfx => { 
+                ['tatFamName', 'tatFamAge', 'tatFamRel'].forEach(pfx => { 
                     let el = document.getElementById(pfx + i); 
-                    if(el) {
-                        el.value = ""; 
-                    }
+                    if(el) el.value = ""; 
                 }); 
             }
 
@@ -2183,16 +2161,18 @@
                     </div>
                 `; 
             }
+            if(document.getElementById('aiChatInput')) document.getElementById('aiChatInput').value = "";
             
-            document.getElementById('aiChatInput').value = "";
-            
-            authenticatedUserSession = null; 
-            returnToHomeGrid();
-            
+            // 2. Hide Dashboard UI completely
+            hideAllPanelsAndPreviews();
+            activeAppMode = "home";
             document.getElementById("forcedPasswordResetOverlay").style.display = "none"; 
             document.getElementById("appDashboardView").style.display = "none"; 
-            document.getElementById("sceneryBackground").style.display = "block"; 
-            document.getElementById("loginScreen").style.display = "flex";
+            document.getElementById("sceneryBackground").style.display = "none"; 
+            document.getElementById("loginScreen").style.display = "none";
+            
+            // 3. Trigger Goodbye Screen
+            document.getElementById("goodbyeScreen").style.display = "flex";
         }
 
         async function executeCreateUserAction() {
@@ -2215,22 +2195,23 @@
             let defaultCards = [];
             
             if(selectedRole === 'admin') { 
+                // ADDED 'menuCardBulkBooking' HERE
                 defaultCards = [
-                    'menuCardBulk', 'menuCardHoliday', 'menuCardDateWise', 'menuCardACG61', 
+                    'menuCardBulkBooking', 'menuCardBulk', 'menuCardHoliday', 'menuCardDateWise', 'menuCardACG61', 
                     'menuCardGeneralCharge', 'menuCardSR1', 'menuCardCasualLeave', 'menuCardTAAdvance', 
                     'menuCardTATransfer', 'menuCardTABillTour', 'menuCardCEA', 'menuCardAI', 
                     'menuCardMaintenance', 'menuCardSelfPassword', 'menuCardUpdateNews'
                 ]; 
             } else if (selectedRole === 'superuser') { 
                 defaultCards = [
-                    'menuCardBulk', 'menuCardHoliday', 'menuCardDateWise', 'menuCardACG61', 
+                    'menuCardBulkBooking', 'menuCardBulk', 'menuCardHoliday', 'menuCardDateWise', 'menuCardACG61', 
                     'menuCardGeneralCharge', 'menuCardSR1', 'menuCardCasualLeave', 'menuCardTAAdvance', 
                     'menuCardTATransfer', 'menuCardTABillTour', 'menuCardCEA', 'menuCardAI', 
                     'menuCardSelfPassword'
                 ]; 
             } else { 
                 defaultCards = [
-                    'menuCardBulk', 'menuCardHoliday', 'menuCardDateWise', 'menuCardACG61', 
+                    'menuCardBulkBooking', 'menuCardBulk', 'menuCardHoliday', 'menuCardDateWise', 'menuCardACG61', 
                     'menuCardGeneralCharge', 'menuCardSR1', 'menuCardCasualLeave', 'menuCardTAAdvance', 
                     'menuCardTATransfer', 'menuCardTABillTour', 'menuCardCEA', 'menuCardAI', 
                     'menuCardSelfPassword'
@@ -2326,15 +2307,16 @@
             SYSTEM_USER_REGISTRY[profileIndex].role = newRole;
             
             if(newRole === 'admin') { 
+                // ADDED 'menuCardBulkBooking' HERE
                 SYSTEM_USER_REGISTRY[profileIndex].allowedCards = [
-                    'menuCardBulk', 'menuCardHoliday', 'menuCardDateWise', 'menuCardACG61', 
+                    'menuCardBulkBooking', 'menuCardBulk', 'menuCardHoliday', 'menuCardDateWise', 'menuCardACG61', 
                     'menuCardGeneralCharge', 'menuCardSR1', 'menuCardCasualLeave', 'menuCardTAAdvance', 
                     'menuCardTATransfer', 'menuCardTABillTour', 'menuCardCEA', 'menuCardAI', 
                     'menuCardMaintenance', 'menuCardSelfPassword', 'menuCardUpdateNews'
                 ]; 
             } else { 
                 SYSTEM_USER_REGISTRY[profileIndex].allowedCards = [
-                    'menuCardBulk', 'menuCardHoliday', 'menuCardDateWise', 'menuCardACG61', 
+                    'menuCardBulkBooking', 'menuCardBulk', 'menuCardHoliday', 'menuCardDateWise', 'menuCardACG61', 
                     'menuCardGeneralCharge', 'menuCardSR1', 'menuCardCasualLeave', 'menuCardTAAdvance', 
                     'menuCardTATransfer', 'menuCardTABillTour', 'menuCardCEA', 'menuCardAI', 
                     'menuCardSelfPassword'
@@ -2504,15 +2486,16 @@
             
             if (!currentCards) {
                 if (profile.role === 'admin') {
+                    // ADDED 'menuCardBulkBooking' HERE
                     currentCards = [
-                        'menuCardBulk', 'menuCardHoliday', 'menuCardDateWise', 'menuCardACG61', 
+                        'menuCardBulkBooking', 'menuCardBulk', 'menuCardHoliday', 'menuCardDateWise', 'menuCardACG61', 
                         'menuCardGeneralCharge', 'menuCardSR1', 'menuCardCasualLeave', 'menuCardTAAdvance', 
                         'menuCardTATransfer', 'menuCardTABillTour', 'menuCardCEA', 'menuCardAI', 
                         'menuCardMaintenance', 'menuCardSelfPassword', 'menuCardUpdateNews'
                     ];
                 } else {
                     currentCards = [
-                        'menuCardBulk', 'menuCardHoliday', 'menuCardDateWise', 'menuCardACG61', 
+                        'menuCardBulkBooking', 'menuCardBulk', 'menuCardHoliday', 'menuCardDateWise', 'menuCardACG61', 
                         'menuCardGeneralCharge', 'menuCardSR1', 'menuCardCasualLeave', 'menuCardTAAdvance', 
                         'menuCardTATransfer', 'menuCardTABillTour', 'menuCardCEA', 'menuCardAI', 
                         'menuCardSelfPassword'
@@ -3570,7 +3553,7 @@
             currentY += 15;
 
             doc.setFont("times", "normal");
-            doc.text("Respected Sir,", 20, currentY); 
+            doc.text("Respected Sir/Madam,", 20, currentY); 
             currentY += 10;
 
             let bodyText = `With due respect, I, ${name}, working as ${empDesig} at ${empOffice} (Emp ID: ${empId}), humbly request you to grant me Casual Leave for ${diffDays} day(s) from ${startStr} to ${endStr}. I require this leave due to ${finalReason.toLowerCase()}.`;
@@ -5143,6 +5126,73 @@
                 console.error("Critical Error:", err);
                 displayCustomAlert("PDF Error: " + err.message);
             }
+        }
+		// ==========================================
+        // SECURITY: IDLE TIMEOUT & GOODBYE SCREEN
+        // ==========================================
+        let idleTimer;
+        const IDLE_TIMEOUT_MS = 5 * 60 * 1000; // 5 Minutes in milliseconds
+
+        function resetIdleTimer() {
+            clearTimeout(idleTimer);
+            // Only run timer if a user is actively logged in
+            if (sessionStorage.getItem("activeUser")) {
+                idleTimer = setTimeout(() => {
+                    displayCustomAlert("Security Timeout: You have been automatically logged out due to 5 minutes of inactivity.");
+                    setTimeout(executePortalLogout, 3000); 
+                }, IDLE_TIMEOUT_MS);
+            }
+        }
+
+        // Attach listeners to reset the clock whenever the user interacts with the system
+        ['mousemove', 'keypress', 'click', 'scroll'].forEach(evt => 
+            document.addEventListener(evt, resetIdleTimer, false)
+        );
+
+        // Dynamically inject the premium, animated Goodbye screen into the HTML
+        const goodbyeDiv = document.createElement('div');
+        goodbyeDiv.id = 'goodbyeScreen';
+        // Using a soft, premium gradient background
+        goodbyeDiv.style.cssText = 'display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: linear-gradient(135deg, #e0e7ff 0%, #ede9fe 100%); z-index: 9999999; justify-content: center; align-items: center; font-family: "Segoe UI", Arial, sans-serif;';
+        
+        goodbyeDiv.innerHTML = `
+            <style>
+                @keyframes slideUpFade {
+                    from { opacity: 0; transform: translateY(40px); }
+                    to { opacity: 1; transform: translateY(0); }
+                }
+            </style>
+            <div style="background: #ffffff; padding: 50px 60px; border-radius: 24px; box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.15); text-align: center; max-width: 420px; animation: slideUpFade 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; border-top: 6px solid #4f46e5;">
+                
+                <div style="width: 80px; height: 80px; background: #e0e7ff; border-radius: 50%; display: flex; justify-content: center; align-items: center; margin: 0 auto 25px auto;">
+                    <span style="font-size: 38px;">👋</span>
+                </div>
+                
+                <h1 style="color: #1e293b; font-size: 32px; margin: 0 0 12px 0; font-weight: 800; letter-spacing: -0.5px;">Securely Logged Out</h1>
+                
+                <p style="color: #64748b; font-size: 15px; margin: 0 0 35px 0; line-height: 1.6;">
+                    Your session has ended successfully. Thank you for using the System. See You Soon!.
+                </p>
+                
+                <button onclick="showLoginScreen()" 
+                    style="width: 100%; padding: 16px 0; background: #4f46e5; color: white; border: none; border-radius: 12px; font-size: 15px; cursor: pointer; font-weight: 800; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 4px 15px rgba(79, 70, 229, 0.25); text-transform: uppercase; letter-spacing: 0.5px;" 
+                    onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 25px rgba(79, 70, 229, 0.4)';" 
+                    onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(79, 70, 229, 0.25)';">
+                    Sign In Again
+                </button>
+                
+            </div>
+        `;
+        document.body.appendChild(goodbyeDiv);
+
+        function showLoginScreen() {
+            document.getElementById('goodbyeScreen').style.display = 'none';
+            document.getElementById('sceneryBackground').style.display = 'block';
+            document.getElementById('loginScreen').style.display = 'flex';
+            
+            // Wipe the login credentials completely clean
+            if (document.getElementById('sysUser')) document.getElementById('sysUser').value = "";
+            if (document.getElementById('sysPass')) document.getElementById('sysPass').value = "";
         }
         
     </script>
