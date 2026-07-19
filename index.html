@@ -181,12 +181,6 @@
         .summary-box input { background: #fff !important; font-weight: bold; color: #312e81 !important; border-color: #a5b4fc; }
         .cea-child-row { background: #fdfdfd; border: 1px solid #e2e8f0; padding: 15px; border-radius: 12px; margin-bottom: 10px; display: flex; flex-wrap: wrap; gap: 10px; }
     </style>
-	<script>
-        // Instantly hide login screen if user is already logged in to prevent flicker
-        if (sessionStorage.getItem("activeUser")) {
-            document.write('<style>#loginScreen, #sceneryBackground { display: none !important; } #appDashboardView { display: block !important; }</style>');
-        }
-    </script>
 </head>
 <body>
 
@@ -372,92 +366,6 @@
             </div>
 
             <div class='portal-page-panel' id='panelCasualLeaveMode'>
-                <div class='back-nav-link' onclick='returnToHomeGrid()'>⬅️ Back to Dashboard</div>
-                <h3>Module: Casual Leave Application Letter</h3>
-                <br/>
-                <div class='flex-row'>
-                    <div class='form-group'><label>Authority Designation:</label><input class='text-input-placeholder-gray' id='clAuthDesig' placeholder='e.g. The Postmaster/Superintendent of POs' type='text'/></div>
-                    <div class='form-group'><label>Authority Address / Office Name:</label><input class='text-input-placeholder-gray' id='clAuthAddress' placeholder='Enter the office name' type='text'/></div>
-                </div>
-                <div class='flex-row'>
-                    <div class='form-group'><label>Applicant Name (Employee):</label><input class='text-input-placeholder-gray' id='clName' placeholder='Employee Name' type='text'/></div>
-                    <div class='form-group'><label>Employee ID:</label><input class='text-input-placeholder-gray' id='clEmpId' placeholder='e.g. 12345678' type='text'/></div>
-                </div>
-                <div class='flex-row'>
-                    <div class='form-group'><label>Employee Designation:</label><input class='text-input-placeholder-gray' id='clEmpDesig' placeholder='e.g. MTS / Postal Assistant' type='text'/></div>
-                    <div class='form-group'><label>Office in which working:</label><input class='text-input-placeholder-gray' id='clEmpOffice' placeholder='Place of Posting' type='text'/></div>
-                </div>
-                <div class='flex-row'>
-                    <div class='form-group'><label>Leave From Date:</label><input id='clStartDate' type='date'/></div>
-                    <div class='form-group'><label>Leave To Date:</label><input id='clEndDate' type='date'/></div>
-                </div>
-                <div class='flex-row'>
-                    <div class='form-group'>
-                        <label>Reason for Casual Leave:</label>
-                        <select id='clReason' onchange='document.getElementById("clOtherReasonGroup").style.display = this.value === "Other" ? "block" : "none"'>
-                            <option value='Personal affairs'>Personal affairs</option>
-                            <option value='Medical reasons'>Medical reasons</option>
-                            <option value='Urgent family matters'>Urgent family matters</option>
-                            <option value='Other'>Other (Specify)</option>
-                        </select>
-                    </div>
-                    <div class='form-group'><label>Station Leave Required?</label><select id='clStationLeave'><option value='No'>No</option><option value='Yes'>Yes</option></select></div>
-                </div>
-                <div class='form-group' id='clOtherReasonGroup' style='display: none;'><label>Specify Other Reason:</label><input class='text-input-placeholder-gray' id='clOtherReason' placeholder='Type your specific reason here...' type='text'/></div>
-                <div class='flex-row'>
-                    <div class='form-group'><label>Application Place:</label><input class='text-input-placeholder-gray' id='clPlace' placeholder='Place' type='text'/></div>
-                    <div class='form-group'><label>Application Date:</label><input id='clAppDate' type='date'/></div>
-                </div>
-                <button class='action-btn' onclick='triggerSmartGeneration("casualleave")' style='background-color:#0ea5e9;' type='button'>Generate CL Application PDF</button>
-            </div>
-
-            <div class='portal-page-panel' id='panelSR1Mode'>
-                <div class='back-nav-link' onclick='returnToHomeGrid()'>⬅️ Back to Dashboard</div>
-                <h3>Module: Application for Leave (S.R.-1)</h3>
-                <br/>
-                <div class='flex-row'>
-                    <div class='form-group'><label>1. Name of the applicant:</label><input class='text-input-placeholder-gray' id='sr1Name' placeholder='e.g. Official Full Name' type='text'/></div>
-                    <div class='form-group'><label>2. Leave rules applicable:</label><input class='text-input-placeholder-gray' id='sr1Rules' placeholder='e.g. CCS Leave Rules 1972' type='text' value='CCS Leave Rules 1972'/></div>
-                </div>
-                <div class='flex-row'>
-                    <div class='form-group'><label>3. Post held:</label><input class='text-input-placeholder-gray' id='sr1Post' placeholder='e.g. Postal Assistant / Postmaster' type='text'/></div>
-                    <div class='form-group'><label>4. Department, Office and Section:</label><input class='text-input-placeholder-gray' id='sr1Dept' placeholder='e.g. Head Post Office Name' type='text'/></div>
-                </div>
-                <div class='flex-row'>
-                    <div class='form-group'><label>5. Pay (Rs.):</label><input class='text-input-placeholder-gray' id='sr1Pay' placeholder='e.g. 25500' type='text'/></div>
-                    <div class='form-group'><label>6. Allowances drawn in the present post:</label><input class='text-input-placeholder-gray' id='sr1Allowances' placeholder='e.g. HRA, DA, TA' type='text'/></div>
-                </div>
-                <div style='background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 25px; margin-bottom: 20px;'>
-                    <h4 style='margin-top: 0; color: #0f172a; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;'>7. Nature and period of leave applied for</h4>
-                    <div class='flex-row'>
-                        <div class='form-group'>
-                            <label>Nature of Leave:</label>
-                            <select id='sr1Nature'><option value='Casual Leave'>Casual Leave</option><option value='Earned Leave'>Earned Leave</option><option value='Half Pay Leave'>Half Pay Leave</option><option value='Commuted Leave'>Commuted Leave</option><option value='Medical Leave'>Medical Leave</option></select>
-                        </div>
-                        <div class='form-group'><label>Period (No. of days):</label><input class='text-input-placeholder-gray' id='sr1Period' placeholder='e.g. 3' type='number'/></div>
-                    </div>
-                    <div class='flex-row'>
-                        <div class='form-group'><label>From Date:</label><input id='sr1FromDate' type='date'/></div>
-                        <div class='form-group'><label>To Date:</label><input id='sr1ToDate' type='date'/></div>
-                    </div>
-                </div>
-                <div class='form-group'><label>8. Sunday and holidays, if any proposed to be prefixed/suffixed:</label><input class='text-input-placeholder-gray' id='sr1PrefixSuffix' placeholder='e.g. Prefixed Sunday 14th, Suffixed Holiday 18th' type='text'/></div>
-                <div class='form-group'><label>9. Ground on which leave is applied for:</label><textarea class='text-input-placeholder-gray' id='sr1Grounds' placeholder='e.g. Personal work at home' rows='2'></textarea></div>
-                <div class='form-group'><label>10. Date of return from last leave and nature/period of that leave:</label><input class='text-input-placeholder-gray' id='sr1LastLeave' placeholder='e.g. Returned on 10/02/2026 after 2 days EL' type='text'/></div>
-                <div style='background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 25px; margin-bottom: 20px;'>
-                    <h4 style='margin-top: 0; color: #0f172a; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;'>11. Leave Travel Concession (LTC) Proposal</h4>
-                    <div class='flex-row'>
-                        <div class='form-group'><label>Do you propose to avail LTC?</label><select id='sr1LtcProp'><option value='do not propose'>I do NOT propose</option><option value='propose'>I propose</option></select></div>
-                        <div class='form-group'><label>In the block years:</label><input class='text-input-placeholder-gray' id='sr1LtcBlock' placeholder='e.g. 2026-2029' type='text'/></div>
-                    </div>
-                </div>
-                <div class='flex-row'>
-                    <div class='form-group'><label>Station:</label><input class='text-input-placeholder-gray' id='sr1Station' placeholder='e.g. Current Station' type='text'/></div>
-                    <div class='form-group'><label>Date of Application:</label><input id='sr1Date' type='date'/></div>
-                </div>
-                <button class='action-btn' onclick='triggerSmartGeneration("sr1")' style='background-color:#14b8a6;' type='button'>Generate S.R.-1 Leave PDF</button>
-            </div>
-			<div class='portal-page-panel' id='panelCasualLeaveMode'>
                 <div class='back-nav-link' onclick='returnToHomeGrid()'>⬅️ Back to Dashboard</div>
                 <h3>Module: Casual Leave Application Letter</h3>
                 <br/>
@@ -1127,6 +1035,7 @@
         </div>
     </div>
 
+    <!-- MODALS AND OVERLAYS -->
     <div class='custom-popup-overlay' id='officeCreationModal' style='z-index: 60000000;'>
         <div class='custom-popup-card' style='border-top: 6px solid #e11d48;'>
             <div class='popup-icon-alert'>🏢</div>
@@ -1169,7 +1078,42 @@
         <div class='app-loading-spinner'></div>
         <div class='loading-status-msg'>Loading...</div>
     </div>
-    <script type="text/javascript">
+    
+    <!-- ========================================== -->
+    <!-- PREMIUM TWO-FACTOR AUTHENTICATION SCREEN   -->
+    <!-- ========================================== -->
+    <div class="custom-popup-overlay" id="twoFactorScreen" style="z-index: 9999999;">
+        <style>
+            .otp-input-group { display: flex; gap: 10px; justify-content: center; margin: 25px 0; }
+            .otp-input { width: 45px; height: 55px; border: 2px solid #cbd5e1; border-radius: 10px; font-size: 24px; font-weight: 800; text-align: center; color: #1e293b; background: #f8fafc; transition: all 0.2s; outline: none; }
+            .otp-input:focus { border-color: #d32f2f; background: #ffffff; box-shadow: 0 0 0 4px rgba(211, 47, 47, 0.15); transform: translateY(-2px); }
+        </style>
+        
+        <div class="custom-popup-card" style="max-width: 420px; padding: 40px 35px;">
+            <div style="width: 65px; height: 65px; background: #fee2e2; border-radius: 50%; display: flex; justify-content: center; align-items: center; margin: 0 auto 20px auto;">
+                <span style="font-size: 30px;">🔐</span>
+            </div>
+            
+            <h2 style="color: #1e293b; font-size: 24px; margin: 0 0 10px 0; font-weight: 900; letter-spacing: -0.5px;">Security Verification</h2>
+            <p style="color: #64748b; font-size: 14.5px; margin: 0; line-height: 1.6;">Enter the Master Authorization Code to securely access the system.</p>
+            
+            <div class="otp-input-group" id="otpContainer">
+                <input type="text" class="otp-input" maxlength="1" onkeyup="moveToNext(this, event)" autofocus>
+                <input type="text" class="otp-input" maxlength="1" onkeyup="moveToNext(this, event)">
+                <input type="text" class="otp-input" maxlength="1" onkeyup="moveToNext(this, event)">
+                <input type="text" class="otp-input" maxlength="1" onkeyup="moveToNext(this, event)">
+                <input type="text" class="otp-input" maxlength="1" onkeyup="moveToNext(this, event)">
+                <input type="text" class="otp-input" maxlength="1" onkeyup="moveToNext(this, event)">
+            </div>
+            
+            <button class="action-btn" onclick="verifyTwoFactorAuth()" style="margin-top: 5px;">Verify & Login</button>
+            
+            <p style="margin-top: 20px; font-size: 13.5px;">
+                <span onclick="cancelTwoFactor()" style="color: #64748b; font-weight: 700; cursor: pointer; transition: color 0.2s;" onmouseover="this.style.color='#d32f2f'" onmouseout="this.style.color='#64748b'">← Cancel & Return to Login</span>
+            </p>
+        </div>
+    </div>
+	<script type="text/javascript">
         // ----------------------------------------------------
         // 1. FIREBASE CONFIGURATION & CORE VARIABLES
         // ----------------------------------------------------
@@ -1187,35 +1131,18 @@
         const INDIA_POST_LOGO_URL = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXlVwmm2OUFIPv_sRjEtehJrDPqIS-nbUCLNZU8i4LT-O-V14Wp6hpQGw&s=10";
 
         let isCloudDataLoaded = false; 
+        
+        // --- NEW IRONCLAD SAFETY LOCK ---
+        // This prevents the system from ever wiping the database
+        let hasSuccessfullySyncedWithCloud = false;
 
-        // Core Registers
         let SYSTEM_USER_REGISTRY = [
-            { 
-                fullName: "System Master", 
-                user: "admin", 
-                pass: "123", 
-                role: "admin", 
-                active: true, 
-                locked: false, 
-                failedAttempts: 0, 
-                isFirstTimeDefault: false, 
-                pendingMessage: "",
-                solId: "",
-                allowedCards: []
-            }
+            { fullName: "System Master", user: "admin", pass: "123", role: "admin", active: true, locked: false, failedAttempts: 0, isFirstTimeDefault: false, pendingMessage: "", solId: "", allowedCards: [] }
         ];
         
         let SYSTEM_LOGIN_HISTORY = [];
-        let SYSTEM_NEWS_FEED = "Welcome to PO Staff Utility v2.0 - Offline Supported!";
-        
-        // NEW: Office Entity Registry
-        let SYSTEM_OFFICE_REGISTRY = [
-            { 
-                solId: "799120", 
-                name: "Radhakishorepur HO", 
-                status: "DAY_BEGUN" 
-            }
-        ];
+        let SYSTEM_NEWS_FEED = "Welcome to PO Staff Utility v3.0 - Offline Supported!";
+        let SYSTEM_OFFICE_REGISTRY = [{ solId: "799120", name: "Radhakishorepur HO", status: "DAY_BEGUN" }];
         
         let authenticatedUserSession = null;
         let activeAppMode = "home"; 
@@ -1223,63 +1150,62 @@
         const cardsPerPage = 6;
 
         function logSystemEvent(username, eventMsg) {
-            let options = { 
-                timeZone: 'Asia/Kolkata', 
-                year: 'numeric', 
-                month: '2-digit', 
-                day: '2-digit', 
-                hour: '2-digit', 
-                minute: '2-digit', 
-                second: '2-digit', 
-                hour12: true 
-            };
+            let options = { timeZone: 'Asia/Kolkata', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
             let timeStamp = new Date().toLocaleString('en-IN', options);
-            
-            SYSTEM_LOGIN_HISTORY.push({ 
-                time: timeStamp, 
-                user: username, 
-                event: eventMsg 
-            });
-            
-            // STRICT CLEANING: Keep only the 15 most recent logs
-            if (SYSTEM_LOGIN_HISTORY.length > 15) {
-                SYSTEM_LOGIN_HISTORY = SYSTEM_LOGIN_HISTORY.slice(SYSTEM_LOGIN_HISTORY.length - 15);
-            }
+            SYSTEM_LOGIN_HISTORY.push({ time: timeStamp, user: username, event: eventMsg });
+            if (SYSTEM_LOGIN_HISTORY.length > 15) SYSTEM_LOGIN_HISTORY = SYSTEM_LOGIN_HISTORY.slice(SYSTEM_LOGIN_HISTORY.length - 15);
         }
 
+        // ----------------------------------------------------
+        // 2. WINDOW ONLOAD & DATABASE SYNC
+        // ----------------------------------------------------
         window.onload = async function() {
-            document.getElementById("appDashboardView").style.display = "none";
-            
+            const allCards = document.querySelectorAll('#mainModuleGrid .portal-module-card');
+            allCards.forEach(card => {
+                card.style.display = "none";
+                card.classList.remove('allowed-module');
+            });
+
+            if (!sessionStorage.getItem("activeUser")) {
+                document.getElementById("appDashboardView").style.display = "none";
+                document.getElementById("sceneryBackground").style.display = "block";
+                document.getElementById("loginScreen").style.display = "flex";
+            } else {
+                document.getElementById("appDashboardView").style.display = "block";
+                document.getElementById("sceneryBackground").style.display = "none";
+                document.getElementById("loginScreen").style.display = "none";
+            }
+
             document.getElementById('selectMonth').value = "03"; 
             document.getElementById('selectYear').value = "2026";
-            
             document.getElementById('selectMonthHoliday').value = "03"; 
             document.getElementById('selectYearHoliday').value = "2026";
             
-            addNewDateEntryRow(); 
-            addNewForwardRow(); 
-            addNewGenForwardRow(); 
-            addNewTABillRow(); 
-            addNewCEAChildRow();
+            if(typeof addNewDateEntryRow === "function") addNewDateEntryRow(); 
+            if(typeof addNewForwardRow === "function") addNewForwardRow(); 
+            if(typeof addNewGenForwardRow === "function") addNewGenForwardRow(); 
+            if(typeof addNewTABillRow === "function") addNewTABillRow(); 
+            if(typeof addNewCEAChildRow === "function") addNewCEAChildRow();
             
             await synchronizeSystemDatabase(true);
-        }
+        };
+
+        window.addEventListener('pageshow', function (event) {
+            if (event.persisted && sessionStorage.getItem("activeUser")) {
+                filterAndPaginateCards(true);
+            }
+        });
 
         async function synchronizeSystemDatabase(isInitialBoot) {
             const systemLoader = document.getElementById('globalAppLoader');
-            const loaderMsg = document.querySelector('.loading-status-msg');
-            systemLoader.style.display = 'flex';
+            if (systemLoader) systemLoader.style.display = 'flex';
 
             if (isInitialBoot) {
-                loaderMsg.innerText = "Connecting to Cloud...";
                 try {
                     db.collection("system").doc("announcements").onSnapshot((doc) => {
                         if (doc.exists) {
                             SYSTEM_NEWS_FEED = doc.data().tickerText || SYSTEM_NEWS_FEED;
-                            document.getElementById('scrollingNewsText').innerText = SYSTEM_NEWS_FEED;
-                            if(document.getElementById('muNewsInput')) {
-                                document.getElementById('muNewsInput').value = SYSTEM_NEWS_FEED;
-                            }
+                            if(document.getElementById('scrollingNewsText')) document.getElementById('scrollingNewsText').innerText = SYSTEM_NEWS_FEED;
                         }
                     });
 
@@ -1291,167 +1217,141 @@
                             SYSTEM_OFFICE_REGISTRY = data.offices || SYSTEM_OFFICE_REGISTRY;
                             
                             isCloudDataLoaded = true;
-                            refreshMaintenanceControlViews(); 
                             
-                            // --- NEW AUTO-LOGIN LOGIC ---
+                            // DISENGAGE SAFETY LOCK ONLY AFTER SUCCESSFUL CLOUD READ
+                            hasSuccessfullySyncedWithCloud = true; 
+                            
+                            if(typeof refreshMaintenanceControlViews === "function") refreshMaintenanceControlViews(); 
+                            
                             let sessionUser = sessionStorage.getItem("activeUser");
-                            
-                            if (!authenticatedUserSession && sessionUser && sessionUser !== "GUEST") {
-                                // User came back from management.html, auto-login seamlessly!
+                            if (sessionUser) {
                                 let profile = SYSTEM_USER_REGISTRY.find(acc => acc.user === sessionUser);
+                                
+                                if (!profile && sessionUser === "GUEST") {
+                                    profile = { fullName: "Guest User", user: "GUEST", role: "guest", active: true, locked: false, isFirstTimeDefault: false };
+                                }
+                                
                                 if (profile) {
                                     authenticatedUserSession = profile;
                                     verifyBloggerAuth_Reentry();
                                 }
-                            } else if (authenticatedUserSession && authenticatedUserSession.user !== "GUEST") {
-                                // Live update for already logged-in user
-                                const updatedProfile = SYSTEM_USER_REGISTRY.find(acc => acc.user === authenticatedUserSession.user);
-                                if (updatedProfile) {
-                                    authenticatedUserSession = updatedProfile;
-                                    verifyBloggerAuth_Reentry(); 
-                                }
                             }
                         } else {
+                            console.warn("Registry missing! Safe Mode.");
+                            // LOCK REMAINS ENGAGED
+                            hasSuccessfullySyncedWithCloud = false; 
                             isCloudDataLoaded = true;
-                            console.warn("Registry document missing from cloud! Operating in Safe Mode.");
-                            if (authenticatedUserSession && authenticatedUserSession.role === "admin") {
-                                displayCustomAlert("System Warning: Live database document is missing or unreachable. The system is operating in Safe Mode.");
-                            }
                         }
-                    }, (error) => {
-                        console.error("Registry Listener Error:", error);
-                        displayCustomAlert("CRITICAL ERROR: Failed to listen to the secure database.");
                     });
                 } catch(e) {
                     console.error("Database Connection Error:", e);
-                    displayCustomAlert("CRITICAL ERROR: Failed to connect to the secure database. Please refresh the page.");
+                    // LOCK REMAINS ENGAGED
+                    hasSuccessfullySyncedWithCloud = false;
                 }
             } else {
                 if (!isCloudDataLoaded) return;
-                loaderMsg.innerText = "Syncing Data...";
                 await forcePushToCloud();
             }
-            
-            setTimeout(() => { 
-                systemLoader.style.display = 'none'; 
-            }, 300);
+            setTimeout(() => { if(systemLoader) systemLoader.style.display = 'none'; }, 300);
         }
 
         async function forcePushToCloud() {
+            // THE IRONCLAD SAFETY CHECK
+            if (!hasSuccessfullySyncedWithCloud) {
+                console.error("CRITICAL: Safety lock prevented an accidental database wipe.");
+                if (typeof displayCustomAlert === "function") {
+                    displayCustomAlert("System Error: Cannot save changes. A safety lock has prevented an accidental database wipe because the live cloud data was not fully loaded. Please refresh the page.");
+                } else {
+                    alert("System Error: Safety lock prevented database wipe. Please refresh.");
+                }
+                return; // INSTANTLY ABORT THE UPLOAD
+            }
+
             try {
                 await db.collection("system").doc("registry").set({
                     users: SYSTEM_USER_REGISTRY,
                     logs: SYSTEM_LOGIN_HISTORY,
                     offices: SYSTEM_OFFICE_REGISTRY
                 });
-            } catch(e) {
-                console.error("Database Sync Error:", e);
-                displayCustomAlert("Network Error: Could not push update to the database.");
-            }
+            } catch(e) { console.error("Database Sync Error:", e); }
         }
 
         function fillDemoCredentials() {
             document.getElementById('sysUser').value = "GUEST";
             document.getElementById('sysPass').value = "123";
         }
-        
+
+        // ----------------------------------------------------
+        // 3. SECURE PAGINATION & NAVIGATION ENGINE
+        // ----------------------------------------------------
         function filterAndPaginateCards(resetPage = false) {
-            if (resetPage) {
-                currentDashboardPage = 1;
-            }
+            if (resetPage) currentDashboardPage = 1;
             
-            const searchInput = document.getElementById('moduleSearch');
-            const query = searchInput ? searchInput.value.toLowerCase() : "";
-            
+            const query = document.getElementById('moduleSearch') ? document.getElementById('moduleSearch').value.toLowerCase() : "";
             const allCards = Array.from(document.querySelectorAll('#mainModuleGrid .portal-module-card'));
-            let visibleCards = [];
             
-            allCards.forEach(card => {
-                card.classList.remove('search-hidden', 'page-hidden');
-                
-                if (card.style.display === 'none') {
-                    return;
-                }
-                
-                if (query && !card.innerText.toLowerCase().includes(query)) {
-                    card.classList.add('search-hidden');
-                } else {
-                    visibleCards.push(card);
-                }
-            });
+            // 1. ABSOLUTE SECURITY OVERRIDE: Mathematically hide every card first
+            allCards.forEach(card => card.style.display = "none");
             
-            const totalPages = Math.ceil(visibleCards.length / cardsPerPage) || 1;
+            // 2. GRAB ONLY AUTHORIZED CARDS: Identify cards with the secure login lock
+            const allowedCards = allCards.filter(card => card.classList.contains('allowed-module'));
             
-            if (currentDashboardPage > totalPages) {
-                currentDashboardPage = totalPages;
-            }
+            // 3. FILTER BY SEARCH
+            let filtered = allowedCards.filter(card => card.innerText.toLowerCase().includes(query));
+
+            // 4. CALCULATE PAGINATION
+            const totalPages = Math.ceil(filtered.length / cardsPerPage) || 1;
+            if (currentDashboardPage > totalPages) currentDashboardPage = totalPages;
             
             const startIndex = (currentDashboardPage - 1) * cardsPerPage;
             const endIndex = startIndex + cardsPerPage;
-            
-            visibleCards.forEach((card, index) => {
-                if (index < startIndex || index >= endIndex) {
-                    card.classList.add('page-hidden');
+
+            // 5. REVEAL TARGETED CARDS: Only make them block if they pass ALL checks
+            filtered.forEach((card, index) => {
+                if (index >= startIndex && index < endIndex) {
+                    card.style.display = "block";
                 }
             });
-            
+
             renderPaginationControls(totalPages);
         }
-        
+
         function renderPaginationControls(totalPages) {
             const container = document.getElementById('dashboardPagination');
             if (!container) return;
-            
             container.innerHTML = "";
             
-            if (totalPages <= 1) { 
-                container.style.display = 'none'; 
-                return; 
-            } else { 
-                container.style.display = 'flex'; 
-            }
+            if (totalPages <= 1) { container.style.display = 'none'; return; } 
+            else { container.style.display = 'flex'; }
             
             const prevBtn = document.createElement('button'); 
-            prevBtn.innerHTML = "&laquo;"; 
-            prevBtn.className = "page-nav-btn";
+            prevBtn.innerHTML = "&laquo;"; prevBtn.className = "page-nav-btn";
             prevBtn.disabled = currentDashboardPage === 1;
-            prevBtn.onclick = () => { 
-                currentDashboardPage--; 
-                filterAndPaginateCards(); 
-            };
+            prevBtn.onclick = () => { currentDashboardPage--; filterAndPaginateCards(); };
             container.appendChild(prevBtn);
             
             for (let i = 1; i <= totalPages; i++) {
                 const pageBtn = document.createElement('button'); 
                 pageBtn.innerText = i;
                 pageBtn.className = "page-nav-btn " + (i === currentDashboardPage ? "active-page" : "");
-                pageBtn.onclick = () => { 
-                    currentDashboardPage = i; 
-                    filterAndPaginateCards(); 
-                };
+                pageBtn.onclick = () => { currentDashboardPage = i; filterAndPaginateCards(); };
                 container.appendChild(pageBtn);
             }
             
             const nextBtn = document.createElement('button'); 
-            nextBtn.innerHTML = "&raquo;"; 
-            nextBtn.className = "page-nav-btn";
+            nextBtn.innerHTML = "&raquo;"; nextBtn.className = "page-nav-btn";
             nextBtn.disabled = currentDashboardPage === totalPages;
-            nextBtn.onclick = () => { 
-                currentDashboardPage++; 
-                filterAndPaginateCards(); 
-            };
+            nextBtn.onclick = () => { currentDashboardPage++; filterAndPaginateCards(); };
             container.appendChild(nextBtn);
         }
 
         function navigateToPanel(panelMode, clickedElement = null) {
-            // STRICT SECURITY LOCK: If no session exists, force logout immediately
             if (!sessionStorage.getItem("activeUser")) {
                 executePortalLogout();
                 return;
             }
-
             activeAppMode = panelMode;
-            if (typeof resetIdleTimer === "function") resetIdleTimer(); // Reset timer on click
+            if (typeof resetIdleTimer === "function") resetIdleTimer(); 
             
             if (clickedElement) {
                 const parentGrid = clickedElement.closest('.portal-grid-wrapper');
@@ -1461,7 +1361,6 @@
                         if (card !== clickedElement) card.classList.add('fade-out');
                         else card.classList.add('expand-active');
                     });
-                    
                     setTimeout(() => {
                         executePanelSwitch(panelMode);
                         siblingCards.forEach(card => card.classList.remove('fade-out', 'expand-active'));
@@ -1476,76 +1375,337 @@
             document.getElementById('portalHomeHead').style.display = "none";
             hideAllPanelsAndPreviews();
 
-            if(panelMode === "bulk") {
-                document.getElementById('panelBulkMode').style.display = "block";
-            } else if(panelMode === "holiday") {
-                document.getElementById('panelHolidayMode').style.display = "block";
-            } else if(panelMode === "datewise") {
-                document.getElementById('panelDateWiseMode').style.display = "block";
-            } else if(panelMode === "acg61") {
-                document.getElementById('panelACG61Mode').style.display = "block";
-            } else if(panelMode === "generalcharge") {
-                document.getElementById('panelGeneralChargeMode').style.display = "block";
-            } else if(panelMode === "sr1") {
-                document.getElementById('panelSR1Mode').style.display = "block";
-            } else if(panelMode === "casualleave") {
-                document.getElementById('panelCasualLeaveMode').style.display = "block";
-            } else if(panelMode === "taAdvance") {
-                document.getElementById('panelTAAdvanceMode').style.display = "block";
-            } else if(panelMode === "taTransfer") {
-                document.getElementById('panelTATransferMode').style.display = "block";
-            } else if(panelMode === "taBillTour") {
-                document.getElementById('panelTABillTourMode').style.display = "block";
-            } else if(panelMode === "cea") {
-                document.getElementById('panelCEAMode').style.display = "block";
-            } else if(panelMode === "aichat") {
-                document.getElementById('panelAIChatMode').style.display = "block";
-            } else if(panelMode === "selfpassword") {
-                document.getElementById('panelSelfPasswordMode').style.display = "block"; 
+            const panelMap = {
+                "bulk": "panelBulkMode", "holiday": "panelHolidayMode", "datewise": "panelDateWiseMode",
+                "acg61": "panelACG61Mode", "generalcharge": "panelGeneralChargeMode", "sr1": "panelSR1Mode",
+                "casualleave": "panelCasualLeaveMode", "taAdvance": "panelTAAdvanceMode", "taTransfer": "panelTATransferMode",
+                "taBillTour": "panelTABillTourMode", "cea": "panelCEAMode", "aichat": "panelAIChatMode",
+                "selfpassword": "panelSelfPasswordMode", "maintenance": "panelMaintenanceMode", "dbde": "panelDBDEMode"
+            };
+
+            if (panelMap[panelMode]) { document.getElementById(panelMap[panelMode]).style.display = "block"; }
+            
+            if (panelMode === "selfpassword") {
                 document.getElementById('selfNewPassInput').value = ""; 
                 document.getElementById('selfConfirmPassInput').value = ""; 
-            } else if(panelMode === "maintenance") {
-                document.getElementById('panelMaintenanceMode').style.display = "block"; 
-                closeMaintenanceSubPanel(); 
-            } else if(panelMode === "dbde") {
-                document.getElementById('panelDBDEMode').style.display = "block"; 
-                refreshDBDEView(); 
             }
+            if (panelMode === "maintenance" && typeof closeMaintenanceSubPanel === "function") closeMaintenanceSubPanel();
+            if (panelMode === "dbde" && typeof refreshDBDEView === "function") refreshDBDEView();
         }
 
         function returnToHomeGrid() {
             activeAppMode = "home";
             hideAllPanelsAndPreviews();
-            
-            document.getElementById('moduleSearch').value = "";
+            document.getElementById('portalHomeHead').style.display = "block";
+            if(document.getElementById('moduleSearch')) document.getElementById('moduleSearch').value = "";
             filterAndPaginateCards(true);
-            
-            const homeHead = document.getElementById('portalHomeHead');
-            homeHead.style.animation = 'none'; 
-            homeHead.offsetHeight; 
-            homeHead.style.animation = null; 
-            homeHead.style.display = "block";
         }
 
         function hideAllPanelsAndPreviews() {
-            const panels = [
-                'panelBulkMode', 'panelHolidayMode', 'panelDateWiseMode', 
-                'panelACG61Mode', 'panelGeneralChargeMode', 'panelSR1Mode', 
-                'panelCasualLeaveMode', 'panelTAAdvanceMode', 'panelTATransferMode', 
-                'panelTABillTourMode', 'panelCEAMode', 'panelAIChatMode', 
-                'panelSelfPasswordMode', 'panelMaintenanceMode', 'panelDBDEMode'
-            ];
-            
-            panels.forEach(id => {
-                if(document.getElementById(id)) {
-                    document.getElementById(id).style.display = "none";
-                }
-            });
-            
-            document.getElementById('previewTitle').style.display = "none";
-            document.getElementById('pdfFrameViewer').style.display = "none";
+            const panels = ['panelBulkMode', 'panelHolidayMode', 'panelDateWiseMode', 'panelACG61Mode', 'panelGeneralChargeMode', 'panelSR1Mode', 'panelCasualLeaveMode', 'panelTAAdvanceMode', 'panelTATransferMode', 'panelTABillTourMode', 'panelCEAMode', 'panelAIChatMode', 'panelSelfPasswordMode', 'panelMaintenanceMode', 'panelDBDEMode'];
+            panels.forEach(id => { if(document.getElementById(id)) document.getElementById(id).style.display = "none"; });
+            if(document.getElementById('previewTitle')) document.getElementById('previewTitle').style.display = "none";
+            if(document.getElementById('pdfFrameViewer')) document.getElementById('pdfFrameViewer').style.display = "none";
         }
 
+        // ----------------------------------------------------
+        // 4. AUTHENTICATION & SESSION SECURITY
+        // ----------------------------------------------------
+        async function verifyBloggerAuth() {
+            if(!isCloudDataLoaded) { displayCustomAlert("System Security Lock: Cannot authenticate because the user database failed to load."); return; }
+        
+            const u = document.getElementById("sysUser").value.trim();
+            const p = document.getElementById("sysPass").value.trim();
+
+            let profileIndex = SYSTEM_USER_REGISTRY.findIndex(account => account.user === u);
+            let profile = profileIndex !== -1 ? SYSTEM_USER_REGISTRY[profileIndex] : null;
+
+            if (!profile && u === "GUEST") {
+                profile = { fullName: "Guest User", user: u, pass: "123", role: "guest", active: true, locked: false, isFirstTimeDefault: false };
+            }
+
+            if(!profile) { 
+                logSystemEvent(u || "Unknown", "Failure: Invalid Username"); 
+                await synchronizeSystemDatabase(false); 
+                displayCustomAlert("Security Violation: Invalid Account Username or Passcode!"); 
+                return; 
+            }
+            if(!profile.active) { 
+                logSystemEvent(u, "Failure: Account Disabled"); 
+                await synchronizeSystemDatabase(false); 
+                displayCustomAlert("Security Status Error: This user account has been disabled."); 
+                return; 
+            }
+            if(profile.locked) { 
+                logSystemEvent(u, "Failure: Account Locked"); 
+                await synchronizeSystemDatabase(false); 
+                displayCustomAlert("Security Access Error: This account profile is locked down."); 
+                return; 
+            }
+
+            if(profile.pass !== p) {
+                logSystemEvent(u, "Failure: Invalid Passcode");
+                if (u !== "admin") {
+                    profile.failedAttempts = (profile.failedAttempts || 0) + 1;
+                    let attemptsLeft = 3 - profile.failedAttempts;
+                    if (profile.failedAttempts >= 3) {
+                        profile.locked = true; 
+                        profile.failedAttempts = 0; 
+                        await synchronizeSystemDatabase(false);
+                        displayCustomAlert("Security Alert: Your account has been automatically locked due to 3 consecutive failed login attempts.");
+                    } else {
+                        await synchronizeSystemDatabase(false); 
+                        displayCustomAlert(`Security Warning: Invalid Passcode!\n\nYou have ${attemptsLeft} attempt(s) remaining.`);
+                    }
+                } else { 
+                    await synchronizeSystemDatabase(false); 
+                    displayCustomAlert("Security Violation: Invalid Account Username or Passcode!"); 
+                }
+                return;
+            }
+
+            profile.failedAttempts = 0; 
+            authenticatedUserSession = profile;
+            
+            sessionStorage.setItem("activeUser", profile.user);
+            sessionStorage.setItem("activeRole", profile.role);
+
+            logSystemEvent(u, "Authentication Success");
+            verifyBloggerAuth_Reentry(); 
+        }
+
+        function verifyBloggerAuth_Reentry() {
+            if(!authenticatedUserSession) return;
+            
+            const profile = authenticatedUserSession;
+            const u = profile.user;
+            
+            let officeStatus = "UNMAPPED";
+            let mappedOffice = null;
+            
+            if (profile.solId) {
+                mappedOffice = SYSTEM_OFFICE_REGISTRY.find(o => o.solId === profile.solId);
+                if (mappedOffice) {
+                    officeStatus = mappedOffice.status;
+                    if (mappedOffice.disabled && profile.role !== "admin") {
+                        displayCustomAlert("System Alert: This office is temporarily disabled.");
+                        setTimeout(() => { executePortalLogout(); }, 3000);
+                        return;
+                    }
+                }
+            }
+
+            let userAllowedList = [];
+            
+            // STRICT ROLE DEFINITIONS
+            if (profile.role === "admin" || u.toLowerCase().startsWith("admin")) {
+                userAllowedList = ['menuCardDBDE', 'menuCardOfficeHub', 'menuCardBulkBooking', 'menuCardBulk', 'menuCardHoliday', 'menuCardDateWise', 'menuCardACG61', 'menuCardGeneralCharge', 'menuCardSR1', 'menuCardCasualLeave', 'menuCardTAAdvance', 'menuCardTATransfer', 'menuCardTABillTour', 'menuCardCEA', 'menuCardAI', 'menuCardMaintenance', 'menuCardSelfPassword', 'menuCardUpdateNews'];
+            } else if (u === "GUEST" || profile.role === "guest") {
+                userAllowedList = ['menuCardBulkBooking', 'menuCardBulk', 'menuCardHoliday', 'menuCardDateWise', 'menuCardACG61', 'menuCardGeneralCharge', 'menuCardSR1', 'menuCardCasualLeave', 'menuCardTAAdvance', 'menuCardTATransfer', 'menuCardTABillTour', 'menuCardCEA', 'menuCardAI'];
+            } else {
+                userAllowedList = profile.allowedCards || [];
+                if (userAllowedList.length === 0) {
+                    userAllowedList = ['menuCardBulkBooking', 'menuCardBulk', 'menuCardHoliday', 'menuCardDateWise', 'menuCardACG61', 'menuCardGeneralCharge', 'menuCardSR1', 'menuCardCasualLeave', 'menuCardTAAdvance', 'menuCardTATransfer', 'menuCardTABillTour', 'menuCardCEA', 'menuCardAI', 'menuCardSelfPassword'];
+                }
+                if (profile.role === "superuser" && !userAllowedList.includes('menuCardDBDE')) {
+                    userAllowedList.push('menuCardDBDE');
+                }
+            }
+
+            if (officeStatus === "DAY_ENDED" && profile.role !== "admin") {
+                if (profile.role === "maker" || profile.role === "superuser") {
+                    userAllowedList = profile.role === "superuser" ? ['menuCardDBDE', 'menuCardSelfPassword'] : ['menuCardSelfPassword'];
+                    if(activeAppMode === 'home') {
+                        setTimeout(() => { displayCustomAlert("SYSTEM LOCKED 🔒\n\nDay End has been executed. All operational modules are hidden."); }, 500);
+                    }
+                }
+            }
+            
+            // HARD SECURITY LOCK: Remove the allowed class from every card
+            const allCards = document.querySelectorAll('#mainModuleGrid .portal-module-card');
+            allCards.forEach(card => card.classList.remove('allowed-module'));
+            
+            // REVEAL ONLY AUTHORIZED CARDS: Give them the allowed-module lock
+            userAllowedList.forEach(id => { 
+                let cardEl = document.getElementById(id); 
+                if(cardEl) cardEl.classList.add('allowed-module'); 
+            });
+            
+            filterAndPaginateCards(true);
+            document.getElementById('portalWelcomeMessage').innerText = `Welcome, ${profile.fullName || profile.user}`;
+
+            document.getElementById("loginScreen").style.display = "none";
+            document.getElementById("sceneryBackground").style.display = "none";
+
+            // --- THE FIX IS HERE: CHECK IF 2FA HAS ALREADY BEEN PASSED THIS SESSION ---
+            if (u === "GUEST" || profile.role === "guest" || sessionStorage.getItem("2faVerified") === "true") {
+                document.getElementById("appDashboardView").style.display = "block";
+                if (typeof resetIdleTimer === "function") resetIdleTimer();
+            } else {
+                triggerTwoFactorScreen();
+            }
+
+            const badge = document.getElementById('officeStatusBadge');
+            const dot = document.getElementById('statusDot');
+            const statusTxt = document.getElementById('statusText');
+            if(u !== "GUEST" && mappedOffice) {
+                badge.style.display = "inline-flex";
+                badge.className = "office-status-wrapper " + (officeStatus === "DAY_BEGUN" ? "status-day-begun" : "status-day-ended");
+                dot.className = "status-dot " + (officeStatus === "DAY_BEGUN" ? "dot-green" : "dot-red");
+                statusTxt.innerText = `${officeStatus === "DAY_BEGUN" ? "DAY BEGUN" : "DAY ENDED"} - ${mappedOffice.name}`;
+            } else {
+                badge.style.display = "none";
+            }
+
+            if(profile.isFirstTimeDefault && u !== "GUEST") {
+                document.getElementById('forcedPasswordResetOverlay').style.display = "flex";
+            }
+            
+            if(profile.pendingMessage && profile.pendingMessage.trim() !== "") {
+                document.getElementById('dmMessageField').innerText = profile.pendingMessage;
+                const dmModal = document.getElementById('directMessageModal'); 
+                dmModal.style.display = "flex"; 
+                setTimeout(() => { dmModal.classList.add('active'); }, 10);
+            }
+        }
+
+        // ----------------------------------------------------
+        // 5. TIMEOUTS, LOGOUT, & 2FA ACTIONS
+        // ----------------------------------------------------
+        let idleTimer;
+        const IDLE_TIMEOUT_MS = 5 * 60 * 1000; 
+
+        function resetIdleTimer() {
+            clearTimeout(idleTimer);
+            if (sessionStorage.getItem("activeUser")) {
+                idleTimer = setTimeout(() => {
+                    if (typeof displayCustomAlert === "function") displayCustomAlert("Security Timeout: You have been automatically logged out.");
+                    setTimeout(executePortalLogout, 3000); 
+                }, IDLE_TIMEOUT_MS);
+            }
+        }
+
+        ['mousemove', 'keypress', 'click', 'scroll'].forEach(evt => document.addEventListener(evt, resetIdleTimer, false));
+
+        function executePortalLogout() {
+            // 1. Destroy the secure session data
+            sessionStorage.clear();
+            authenticatedUserSession = null;
+            if (typeof idleTimer !== 'undefined') clearTimeout(idleTimer);
+            
+            // 2. Hide all current UI elements
+            document.getElementById("appDashboardView").style.display = "none";
+            document.getElementById("sceneryBackground").style.display = "none";
+            document.getElementById("loginScreen").style.display = "none";
+
+            // 3. Dynamically generate and display the premium Goodbye Screen
+            let goodbyeDiv = document.getElementById("goodbyeScreen");
+            if (!goodbyeDiv) {
+                goodbyeDiv = document.createElement('div');
+                goodbyeDiv.id = 'goodbyeScreen';
+                goodbyeDiv.style.cssText = 'display: flex; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: linear-gradient(135deg, #e0e7ff 0%, #ede9fe 100%); z-index: 9999999; justify-content: center; align-items: center; font-family: "Segoe UI", Arial, sans-serif;';
+                
+                goodbyeDiv.innerHTML = `
+                    <style>
+                        @keyframes slideUpFade {
+                            from { opacity: 0; transform: translateY(40px); }
+                            to { opacity: 1; transform: translateY(0); }
+                        }
+                    </style>
+                    <div style="background: #ffffff; padding: 50px 60px; border-radius: 24px; box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.15); text-align: center; max-width: 420px; animation: slideUpFade 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; border-top: 6px solid #4f46e5;">
+                        
+                        <div style="width: 80px; height: 80px; background: #e0e7ff; border-radius: 50%; display: flex; justify-content: center; align-items: center; margin: 0 auto 25px auto;">
+                            <span style="font-size: 38px;">👋</span>
+                        </div>
+                        
+                        <h1 style="color: #1e293b; font-size: 32px; margin: 0 0 12px 0; font-weight: 800; letter-spacing: -0.5px;">Securely Logged Out</h1>
+                        
+                        <p style="color: #64748b; font-size: 15px; margin: 0 0 35px 0; line-height: 1.6;">
+                            Your session has ended successfully. Thank you for using the System. See You Soon!
+                        </p>
+                        
+                        <!-- This button ensures the secure reload still happens! -->
+                        <button onclick="window.location.reload()" 
+                            style="width: 100%; padding: 16px 0; background: #4f46e5; color: white; border: none; border-radius: 12px; font-size: 15px; cursor: pointer; font-weight: 800; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 4px 15px rgba(79, 70, 229, 0.25); text-transform: uppercase; letter-spacing: 0.5px;" 
+                            onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 25px rgba(79, 70, 229, 0.4)';" 
+                            onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(79, 70, 229, 0.25)';">
+                            Sign In Again
+                        </button>
+                        
+                    </div>
+                `;
+                document.body.appendChild(goodbyeDiv);
+            } else {
+                goodbyeDiv.style.display = "flex";
+            }
+        }
+
+        function moveToNext(element, event) {
+            // Prevent interference from modifier keys
+            if (event.key === "Tab" || event.key === "Shift" || event.key === "Meta" || event.key === "Control") return;
+            
+            if (event.key === "Backspace") {
+                element.value = '';
+                if (element.previousElementSibling) {
+                    element.previousElementSibling.focus();
+                }
+            } else if (element.value.length === 1) {
+                if (element.nextElementSibling) {
+                    element.nextElementSibling.focus();
+                } else {
+                    // Automatically trigger the login!
+                    verifyTwoFactorAuth(); 
+                }
+            }
+        }
+
+        function triggerTwoFactorScreen() {
+            document.getElementById('loginScreen').style.display = 'none';
+            const screen = document.getElementById('twoFactorScreen');
+            screen.style.display = 'flex';
+            setTimeout(() => { screen.classList.add('active'); }, 10);
+            
+            const inputs = document.querySelectorAll('.otp-input');
+            inputs.forEach(input => input.value = '');
+            setTimeout(() => inputs[0].focus(), 150);
+        }
+
+        function cancelTwoFactor() {
+            const screen = document.getElementById('twoFactorScreen');
+            screen.classList.remove('active');
+            setTimeout(() => { 
+                screen.style.display = 'none'; 
+                document.getElementById('loginScreen').style.display = 'flex';
+            }, 200);
+        }
+
+        function verifyTwoFactorAuth() {
+            const inputs = document.querySelectorAll('.otp-input');
+            let enteredCode = "";
+            inputs.forEach(input => enteredCode += input.value);
+
+            if (enteredCode.length !== 6) {
+                displayCustomAlert("Security Notice: Please enter the complete 6-digit authorization code.");
+                return;
+            }
+
+            if (enteredCode === "123456") {
+                sessionStorage.setItem("2faVerified", "true"); 
+
+                document.getElementById('twoFactorScreen').style.display = 'none';
+                document.getElementById('sceneryBackground').style.display = 'none';
+                document.getElementById('appDashboardView').style.display = 'block';
+                if (typeof resetIdleTimer === "function") resetIdleTimer();
+            } else {
+                displayCustomAlert("Security Alert: Invalid Authorization Code. Access Denied.");
+                inputs.forEach(input => input.value = '');
+                inputs[0].focus();
+            }
+        }
+		
+		// ----------------------------------------------------
+        // 6. UI MANAGEMENT, MAINTENANCE & CHAT UTILITIES
+        // ----------------------------------------------------
         function handleChatEnter(e) { 
             if(e.key === 'Enter') { 
                 sendChatMessage(); 
@@ -1600,7 +1760,7 @@
             const lowQuery = query.toLowerCase();
             
             if(lowQuery.includes("leave") || lowQuery.includes("application")) {
-                return "Here is an optimized format for an official casual leave request:<br/><div class='ai-template-card'>To,<br/>The Postmaster / Competent Authority,<br/>[Current Office Name]<br/><br/>Subject: Application for Casual Leave Approval<br/><br/>Respected Sir/Madam,<br/>I am writing to formally request casual leave for [Number] days starting from [Date] to [Date] due to mandatory personal business at home.<br/><br/>Arrangements have been made with my workspace colleague to handle any emergency ledger requirements during my temporary absence. I request you to kindly sanction my leave application.<br/><br/>Yours faithfully,<br/>[Staff Name]<br/>Designation, [Current Office Name]</div>";
+                return "Here is an optimized format for an official casual leave request:<br/><div class='ai-template-card'>To,<br/>The Postmaster / Competent Authority,<br/>[Current Office Name]<br/><br/>Subject: Application for Casual Leave Approval<br/><br/>Respected Sir,<br/>I am writing to formally request casual leave for [Number] days starting from [Date] to [Date] due to mandatory personal business at home.<br/><br/>Arrangements have been made with my workspace colleague to handle any emergency ledger requirements during my temporary absence. I request you to kindly sanction my leave application.<br/><br/>Yours faithfully,<br/>[Staff Name]<br/>Designation, [Current Office Name]</div>";
             }
             if(lowQuery.includes("acg-61") || lowQuery.includes("61")) {
                 return "<strong>ACG-61 Protocol Instruction:</strong><br/>Whenever a Postmaster or responsible dynamic officer relinquishes charge of an office, an ACG-61 report must be completed. Ensure these vital data checks match your document:<br/><br/>1. Verify that the system time indicator states exactly <strong>Forenoon (FN)</strong> or <strong>Afternoon (AN)</strong>.<br/>2. Check that the net physical cash vault matches the closing entry down to the last paisa.<br/>3. Both the Relieved and Relieving officers must sign the verification block simultaneously to seal the cloud record.";
@@ -1616,237 +1776,6 @@
             }
             
             return "I am operating as a high-speed cloud utility assistant script. I recognize keywords like 'leave', 'transfer', 'ACG-61', and 'ACG-17'. Try rephrasing your question or tap one of the structural quick-action suggestion chips above!";
-        }
-
-        // --- AUTH & DASHBOARD RENDERING ---
-        async function verifyBloggerAuth() {
-            if(!isCloudDataLoaded) { 
-                displayCustomAlert("System Security Lock: Cannot authenticate because the user database failed to load. Please refresh the page to reconnect."); 
-                return; 
-            }
-        
-            const u = document.getElementById("sysUser").value.trim();
-            const p = document.getElementById("sysPass").value.trim();
-
-            const profileIndex = SYSTEM_USER_REGISTRY.findIndex(account => account.user === u);
-            const profile = profileIndex !== -1 ? SYSTEM_USER_REGISTRY[profileIndex] : null;
-
-            if(!profile) { 
-                logSystemEvent(u || "Unknown", "Failure: Invalid Username"); 
-                await synchronizeSystemDatabase(false); 
-                displayCustomAlert("Security Violation: Invalid Account Username or Passcode!"); 
-                return; 
-            }
-            
-            if(!profile.active) { 
-                logSystemEvent(u, "Failure: Account Disabled"); 
-                await synchronizeSystemDatabase(false); 
-                displayCustomAlert("Security Status Error: This user account has been disabled by the system administrator."); 
-                return; 
-            }
-            
-            if(profile.locked) { 
-                logSystemEvent(u, "Failure: Account Locked"); 
-                await synchronizeSystemDatabase(false); 
-                displayCustomAlert("Security Access Error: This account profile is locked down due to administrative execution or multiple failed login attempts."); 
-                return; 
-            }
-
-            if(profile.pass !== p) {
-                logSystemEvent(u, "Failure: Invalid Passcode");
-                
-                if (u !== "admin") {
-                    profile.failedAttempts = (profile.failedAttempts || 0) + 1;
-                    let attemptsLeft = 3 - profile.failedAttempts;
-                    
-                    if (profile.failedAttempts >= 3) {
-                        profile.locked = true; 
-                        profile.failedAttempts = 0; 
-                        await synchronizeSystemDatabase(false);
-                        displayCustomAlert("Security Alert: Your account has been automatically locked due to 3 consecutive failed login attempts. Please contact the System Administrator to unlock your profile.");
-                    } else {
-                        await synchronizeSystemDatabase(false); 
-                        displayCustomAlert(`Security Warning: Invalid Passcode!\n\nYou have ${attemptsLeft} attempt(s) remaining before your account is automatically locked.`);
-                    }
-                } else { 
-                    await synchronizeSystemDatabase(false); 
-                    displayCustomAlert("Security Violation: Invalid Account Username or Passcode!"); 
-                }
-                return;
-            }
-
-            profile.failedAttempts = 0; 
-            authenticatedUserSession = profile;
-            
-            sessionStorage.setItem("activeUser", profile.user);
-            sessionStorage.setItem("activeRole", profile.role);
-
-            logSystemEvent(u, "Authentication Success");
-            
-            // Auto Patch Missing Cards
-            if (profile.role !== "admin") {
-                let userAllowedList = profile.allowedCards || [];
-                let needsPatch = false;
-                
-                // ADDED 'menuCardBulkBooking' HERE
-                const newModules = ['menuCardCasualLeave','menuCardGeneralCharge','menuCardTABillTour','menuCardCEA', 'menuCardBulkBooking'];
-                
-                newModules.forEach(c => {
-                    if(!userAllowedList.includes(c)) { 
-                        userAllowedList.push(c); 
-                        needsPatch = true; 
-                    }
-                });
-                
-                if(needsPatch) { 
-                    profile.allowedCards = userAllowedList;
-                    await synchronizeSystemDatabase(false); 
-                }
-            }
-
-            verifyBloggerAuth_Reentry(); 
-        }
-
-        function verifyBloggerAuth_Reentry() {
-            if(!authenticatedUserSession) return;
-            
-            const profile = authenticatedUserSession;
-            const u = profile.user;
-            
-            let officeStatus = "UNMAPPED";
-            let mappedOffice = null;
-            
-            if (profile.solId) {
-                mappedOffice = SYSTEM_OFFICE_REGISTRY.find(o => o.solId === profile.solId);
-                if (mappedOffice) {
-                    officeStatus = mappedOffice.status;
-                    
-                    if (mappedOffice.disabled && profile.role !== "admin") {
-                        displayCustomAlert("System Alert: This office is temporarily disabled. Maintenance work is under process.");
-                        setTimeout(() => {
-                            executePortalLogout();
-                        }, 3000);
-                        return;
-                    }
-                }
-            }
-
-            let userAllowedList = [];
-
-            if (profile.role === "admin" || u.toLowerCase().startsWith("admin")) {
-                // ADDED 'menuCardBulkBooking' HERE
-                userAllowedList = [
-                    'menuCardDBDE', 'menuCardOfficeHub', 'menuCardBulkBooking', 'menuCardBulk', 'menuCardHoliday', 
-                    'menuCardDateWise', 'menuCardACG61', 'menuCardGeneralCharge', 'menuCardSR1', 
-                    'menuCardCasualLeave', 'menuCardTAAdvance', 'menuCardTATransfer', 
-                    'menuCardTABillTour', 'menuCardCEA', 'menuCardAI', 'menuCardMaintenance', 
-                    'menuCardSelfPassword', 'menuCardUpdateNews'
-                ];
-            } else {
-                userAllowedList = profile.allowedCards || [];
-                if (userAllowedList.length === 0) {
-                    // ADDED 'menuCardBulkBooking' HERE
-                    userAllowedList = [
-                        'menuCardBulkBooking', 'menuCardBulk', 'menuCardHoliday', 'menuCardDateWise', 'menuCardACG61', 
-                        'menuCardGeneralCharge', 'menuCardSR1', 'menuCardCasualLeave', 'menuCardTAAdvance', 
-                        'menuCardTATransfer', 'menuCardTABillTour', 'menuCardCEA', 'menuCardAI', 
-                        'menuCardSelfPassword'
-                    ];
-                }
-                if (profile.role === "superuser" && !userAllowedList.includes('menuCardDBDE')) {
-                    userAllowedList.push('menuCardDBDE');
-                }
-            }
-
-            if (officeStatus === "DAY_ENDED" && profile.role !== "admin") {
-                if (profile.role === "maker" || profile.role === "superuser") {
-                    userAllowedList = profile.role === "superuser" ? ['menuCardDBDE', 'menuCardSelfPassword'] : ['menuCardSelfPassword'];
-                    
-                    if(activeAppMode === 'home') {
-                        setTimeout(() => {
-                            displayCustomAlert("SYSTEM LOCKED 🔒\n\nDay End has been executed by the Superuser for this office.\nAll operational modules are hidden until Day Begin is initiated.");
-                        }, 500);
-                    }
-                }
-            }
-            
-            const allCards = document.querySelectorAll('#mainModuleGrid .portal-module-card');
-            allCards.forEach(card => {
-                card.style.display = "none";
-            });
-            
-            if(u === "GUEST") {
-                // ADDED 'menuCardBulkBooking' HERE
-                const guestCards = [
-                    'menuCardBulkBooking', 'menuCardBulk', 'menuCardHoliday', 'menuCardDateWise', 
-                    'menuCardACG61', 'menuCardGeneralCharge', 'menuCardSR1', 
-                    'menuCardCasualLeave', 'menuCardTAAdvance', 'menuCardTATransfer', 
-                    'menuCardTABillTour', 'menuCardCEA', 'menuCardAI'
-                ];
-                guestCards.forEach(id => { 
-                    let c = document.getElementById(id); 
-                    if(c) c.style.display = "block"; 
-                });
-            } else {
-                userAllowedList.forEach(cardId => { 
-                    let cardEl = document.getElementById(cardId); 
-                    if(cardEl) cardEl.style.display = "block"; 
-                });
-            }
-            
-            filterAndPaginateCards(true);
-            
-            let displayName = profile.fullName || profile.user;
-            let roleDisplay = profile.role === 'superuser' ? ' (Superuser)' : (profile.role === 'admin' ? ' (Admin)' : '');
-            
-            document.getElementById('portalWelcomeMessage').innerText = `Welcome, ${displayName}${roleDisplay}`;
-
-            const badge = document.getElementById('officeStatusBadge');
-            const dot = document.getElementById('statusDot');
-            const statusTxt = document.getElementById('statusText');
-            
-            if(u !== "GUEST") {
-                badge.style.display = "inline-flex";
-                badge.className = "office-status-wrapper";
-                dot.className = "status-dot";
-                
-                if (officeStatus === "UNMAPPED") {
-                    badge.classList.add("status-unmapped");
-                    dot.classList.add("dot-grey");
-                    statusTxt.innerText = "NO OFFICE MAPPED";
-                } else if (officeStatus === "DAY_BEGUN") {
-                    badge.classList.add("status-day-begun");
-                    dot.classList.add("dot-green");
-                    statusTxt.innerText = `DAY BEGUN - ${mappedOffice.name} [${mappedOffice.solId}]`;
-                } else {
-                    badge.classList.add("status-day-ended");
-                    dot.classList.add("dot-red");
-                    statusTxt.innerText = `DAY ENDED - ${mappedOffice.name} [${mappedOffice.solId}]`;
-                }
-            } else {
-                badge.style.display = "none";
-            }
-
-            document.getElementById("loginScreen").style.display = "none";
-            document.getElementById("sceneryBackground").style.display = "none";
-            document.getElementById("appDashboardView").style.display = "block";
-
-            if (activeAppMode !== 'home' && activeAppMode !== 'selfpassword' && activeAppMode !== 'dbde') {
-                if(officeStatus === "DAY_ENDED" && profile.role !== "admin") {
-                    returnToHomeGrid();
-                }
-            }
-
-            if(profile.isFirstTimeDefault && u !== "GUEST") {
-                document.getElementById('forcedPasswordResetOverlay').style.display = "flex";
-            }
-            
-            if(profile.pendingMessage && profile.pendingMessage.trim() !== "") {
-                document.getElementById('dmMessageField').innerText = profile.pendingMessage;
-                const dmModal = document.getElementById('directMessageModal'); 
-                dmModal.style.display = "flex"; 
-                setTimeout(() => { dmModal.classList.add('active'); }, 10);
-            }
         }
 
         function refreshDBDEView() {
@@ -2090,91 +2019,6 @@
             document.getElementById('maintenanceMainGrid').style.display = "grid";
         }
 
-        function executePortalLogout() {
-            // 1. Destroy Security Session
-            sessionStorage.clear();
-            authenticatedUserSession = null;
-            if (typeof idleTimer !== 'undefined') clearTimeout(idleTimer);
-            
-            const clearIds = [
-                'sysUser', 'sysPass', 'sr1Name', 'sr1Post', 'sr1Dept', 'sr1Pay', 'sr1Allowances', 
-                'sr1Period', 'sr1PrefixSuffix', 'sr1Grounds', 'sr1LastLeave', 'sr1LtcBlock', 
-                'sr1Station', 'sr1Date', 'sr1FromDate', 'sr1ToDate', 'clAuthDesig', 'clAuthAddress', 
-                'clName', 'clEmpId', 'clEmpDesig', 'clEmpOffice', 'clStartDate', 'clEndDate', 
-                'clOtherReason', 'clAppDate', 'clPlace', 'genOfficeName', 'genRelievedOfficer', 
-                'genRelievingOfficer', 'genTransferDate', 'genMemoNo', 'genMemoDate', 
-                'genFromAuthority', 'receivedFromBulk', 'amount', 'monthlyVoucherPurpose', 
-                'exceptionsInput', 'receivedFromHoliday', 'amountHoliday', 'holidayVoucherPurpose', 
-                'holidaysInput', 'receivedFromDatewise', 'acgOfficeName', 'acgRelievedOfficer', 
-                'acgRelievingOfficer', 'acgTransferDate', 'acgMemoNo', 'acgMemoDate', 
-                'acgFromAuthority', 'acgCashRs', 'acgStampRs', 'acgImprestCashRs', 'taName', 
-                'taDesignation', 'taOffice', 'taPay', 'taPlaces', 'taPurpose', 'taDuration', 
-                'taFare', 'taDaJourney', 'taDaHalts', 'taDaTotal', 'taTotalTADA', 'taAdvanceReq', 
-                'taOutstanding', 'taStation', 'taDate', 'tatName', 'tatDesignation', 'tatOffice', 
-                'tatPay', 'tatStationTransferred', 'tatOrderNo', 'tatAdvanceReq', 'tatStation', 
-                'tatDate', 'ceaEmpName', 'ceaEmpId', 'ceaEmpDesig', 'ceaEmpDept', 'ceaSpouseName', 
-                'ceaSpouseDesig', 'ceaHostelDist', 'ceaReceivedAmount', 'ceaAcadYear', 
-                'ceaDisabilityNature', 'ceaDisabilityDate', 'ceaTotalClaim', 'ceaAppDate'
-            ];
-            
-            clearIds.forEach(id => { 
-                let el = document.getElementById(id); 
-                if (el) el.value = ""; 
-            });
-            
-            if(document.getElementById('clReason')) document.getElementById('clReason').value = "Personal affairs"; 
-            const otherReasonGroup = document.getElementById("clOtherReasonGroup");
-            if(otherReasonGroup) otherReasonGroup.style.display = "none"; 
-            
-            if(document.getElementById('clStationLeave')) document.getElementById('clStationLeave').value = "No"; 
-            if(document.getElementById('ceaSpouseEmployed')) document.getElementById('ceaSpouseEmployed').value = "No"; 
-            const spouseGroup = document.getElementById('ceaSpouseDetailsGroup');
-            if(spouseGroup) spouseGroup.style.display = "none"; 
-            
-            if(document.getElementById('ceaDisabled')) document.getElementById('ceaDisabled').value = "No"; 
-            const disabledGroup = document.getElementById('ceaDisabledDetailsGroup');
-            if(disabledGroup) disabledGroup.style.display = "none";
-
-            ['genForwardContainer', 'tabJourneyContainer', 'ceaChildContainer', 'dynamicDateRowsContainer', 'acgForwardContainer'].forEach(id => {
-                let container = document.getElementById(id);
-                if(container) container.innerHTML = ""; 
-            });
-
-            if(typeof addNewGenForwardRow === "function") addNewGenForwardRow(); 
-            if(typeof addNewTABillRow === "function") addNewTABillRow(); 
-            if(typeof addNewCEAChildRow === "function") addNewCEAChildRow(); 
-            if(typeof addNewDateEntryRow === "function") addNewDateEntryRow();
-            if(typeof addNewForwardRow === "function") addNewForwardRow();
-
-            for(let i = 1; i <= 4; i++){ 
-                ['tatFamName', 'tatFamAge', 'tatFamRel'].forEach(pfx => { 
-                    let el = document.getElementById(pfx + i); 
-                    if(el) el.value = ""; 
-                }); 
-            }
-
-            const chatHist = document.getElementById('chatHistory');
-            if(chatHist) {
-                chatHist.innerHTML = `
-                    <div class="chat-msg-row ai-row">
-                        <div class="modern-bubble ai-bubble">Namaskar! I am your updated PO Assistant AI. Tap any quick option below or type a custom request.</div>
-                    </div>
-                `; 
-            }
-            if(document.getElementById('aiChatInput')) document.getElementById('aiChatInput').value = "";
-            
-            // 2. Hide Dashboard UI completely
-            hideAllPanelsAndPreviews();
-            activeAppMode = "home";
-            document.getElementById("forcedPasswordResetOverlay").style.display = "none"; 
-            document.getElementById("appDashboardView").style.display = "none"; 
-            document.getElementById("sceneryBackground").style.display = "none"; 
-            document.getElementById("loginScreen").style.display = "none";
-            
-            // 3. Trigger Goodbye Screen
-            document.getElementById("goodbyeScreen").style.display = "flex";
-        }
-
         async function executeCreateUserAction() {
             const fullNameInput = document.getElementById('muNewFullName').value.trim(); 
             const usernameInput = document.getElementById('muNewUser').value.trim(); 
@@ -2195,7 +2039,6 @@
             let defaultCards = [];
             
             if(selectedRole === 'admin') { 
-                // ADDED 'menuCardBulkBooking' HERE
                 defaultCards = [
                     'menuCardBulkBooking', 'menuCardBulk', 'menuCardHoliday', 'menuCardDateWise', 'menuCardACG61', 
                     'menuCardGeneralCharge', 'menuCardSR1', 'menuCardCasualLeave', 'menuCardTAAdvance', 
@@ -2307,7 +2150,6 @@
             SYSTEM_USER_REGISTRY[profileIndex].role = newRole;
             
             if(newRole === 'admin') { 
-                // ADDED 'menuCardBulkBooking' HERE
                 SYSTEM_USER_REGISTRY[profileIndex].allowedCards = [
                     'menuCardBulkBooking', 'menuCardBulk', 'menuCardHoliday', 'menuCardDateWise', 'menuCardACG61', 
                     'menuCardGeneralCharge', 'menuCardSR1', 'menuCardCasualLeave', 'menuCardTAAdvance', 
@@ -2486,7 +2328,6 @@
             
             if (!currentCards) {
                 if (profile.role === 'admin') {
-                    // ADDED 'menuCardBulkBooking' HERE
                     currentCards = [
                         'menuCardBulkBooking', 'menuCardBulk', 'menuCardHoliday', 'menuCardDateWise', 'menuCardACG61', 
                         'menuCardGeneralCharge', 'menuCardSR1', 'menuCardCasualLeave', 'menuCardTAAdvance', 
@@ -2770,8 +2611,7 @@
             
             document.getElementById('ceaTotalClaim').value = total;
         }
-
-        function triggerSmartGeneration(modeType) {
+		function triggerSmartGeneration(modeType) {
             const systemLoader = document.getElementById('globalAppLoader');
             const loaderMsg = document.querySelector('.loading-status-msg');
 
@@ -2855,29 +2695,17 @@
 
             setTimeout(() => {
                 try {
-                    if (modeType === "bulk") { 
-                        generatePerfectPDF(); 
-                    } else if (modeType === "holiday") { 
-                        generateHolidayPDF(); 
-                    } else if (modeType === "datewise") { 
-                        generateDateWisePDF(); 
-                    } else if (modeType === "acg61") { 
-                        generateACG61PDF(); 
-                    } else if (modeType === "generalcharge") { 
-                        generateGeneralChargePDF(); 
-                    } else if (modeType === "taAdvance") { 
-                        generateTAAdvancePDF(); 
-                    } else if (modeType === "taTransfer") { 
-                        generateTATransferPDF(); 
-                    } else if (modeType === "taBillTour") { 
-                        generateTABillTourPDF(); 
-                    } else if (modeType === "sr1") { 
-                        generateSR1PDF(); 
-                    } else if (modeType === "casualleave") { 
-                        generateCasualLeavePDF(); 
-                    } else if (modeType === "cea") { 
-                        generateCEAPDF(); 
-                    }
+                    if (modeType === "bulk") { generatePerfectPDF(); } 
+                    else if (modeType === "holiday") { generateHolidayPDF(); } 
+                    else if (modeType === "datewise") { generateDateWisePDF(); } 
+                    else if (modeType === "acg61") { generateACG61PDF(); } 
+                    else if (modeType === "generalcharge") { generateGeneralChargePDF(); } 
+                    else if (modeType === "taAdvance") { generateTAAdvancePDF(); } 
+                    else if (modeType === "taTransfer") { generateTATransferPDF(); } 
+                    else if (modeType === "taBillTour") { generateTABillTourPDF(); } 
+                    else if (modeType === "sr1") { generateSR1PDF(); } 
+                    else if (modeType === "casualleave") { generateCasualLeavePDF(); } 
+                    else if (modeType === "cea") { generateCEAPDF(); }
                 } catch (err) {
                     console.error("PDF generation failure: ", err); 
                     displayCustomAlert("Engine Failure Error: Failed to successfully output compile final PDF.");
@@ -2888,7 +2716,7 @@
         }
 
         // ==========================================
-        // PDF GENERATION FUNCTIONS (UNCOMPRESSED)
+        // 8. PDF GENERATION ROUTINES (UNTOUCHED)
         // ==========================================
         
         function finalizeDocumentViewer(doc) {
@@ -3494,8 +3322,7 @@
 
             finalizeDocumentViewer(doc);
         }
-
-        function generateCasualLeavePDF() {
+		function generateCasualLeavePDF() {
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF('p', 'mm', 'a4');
 
@@ -3553,7 +3380,7 @@
             currentY += 15;
 
             doc.setFont("times", "normal");
-            doc.text("Respected Sir/Madam,", 20, currentY); 
+            doc.text("Respected Sir,", 20, currentY); 
             currentY += 10;
 
             let bodyText = `With due respect, I, ${name}, working as ${empDesig} at ${empOffice} (Emp ID: ${empId}), humbly request you to grant me Casual Leave for ${diffDays} day(s) from ${startStr} to ${endStr}. I require this leave due to ${finalReason.toLowerCase()}.`;
@@ -3922,8 +3749,7 @@
 
             finalizeDocumentViewer(doc);
         }
-
-        function generateTAAdvancePDF() {
+		function generateTAAdvancePDF() {
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF('p', 'mm', 'a4');
 
@@ -4484,8 +4310,7 @@
 
             finalizeDocumentViewer(doc);
         }
-
-        async function generateCEAPDF() {
+		async function generateCEAPDF() {
             try {
                 const systemLoader = document.getElementById('globalAppLoader');
                 if (systemLoader) {
@@ -5127,74 +4952,6 @@
                 displayCustomAlert("PDF Error: " + err.message);
             }
         }
-		// ==========================================
-        // SECURITY: IDLE TIMEOUT & GOODBYE SCREEN
-        // ==========================================
-        let idleTimer;
-        const IDLE_TIMEOUT_MS = 5 * 60 * 1000; // 5 Minutes in milliseconds
-
-        function resetIdleTimer() {
-            clearTimeout(idleTimer);
-            // Only run timer if a user is actively logged in
-            if (sessionStorage.getItem("activeUser")) {
-                idleTimer = setTimeout(() => {
-                    displayCustomAlert("Security Timeout: You have been automatically logged out due to 5 minutes of inactivity.");
-                    setTimeout(executePortalLogout, 3000); 
-                }, IDLE_TIMEOUT_MS);
-            }
-        }
-
-        // Attach listeners to reset the clock whenever the user interacts with the system
-        ['mousemove', 'keypress', 'click', 'scroll'].forEach(evt => 
-            document.addEventListener(evt, resetIdleTimer, false)
-        );
-
-        // Dynamically inject the premium, animated Goodbye screen into the HTML
-        const goodbyeDiv = document.createElement('div');
-        goodbyeDiv.id = 'goodbyeScreen';
-        // Using a soft, premium gradient background
-        goodbyeDiv.style.cssText = 'display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: linear-gradient(135deg, #e0e7ff 0%, #ede9fe 100%); z-index: 9999999; justify-content: center; align-items: center; font-family: "Segoe UI", Arial, sans-serif;';
-        
-        goodbyeDiv.innerHTML = `
-            <style>
-                @keyframes slideUpFade {
-                    from { opacity: 0; transform: translateY(40px); }
-                    to { opacity: 1; transform: translateY(0); }
-                }
-            </style>
-            <div style="background: #ffffff; padding: 50px 60px; border-radius: 24px; box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.15); text-align: center; max-width: 420px; animation: slideUpFade 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; border-top: 6px solid #4f46e5;">
-                
-                <div style="width: 80px; height: 80px; background: #e0e7ff; border-radius: 50%; display: flex; justify-content: center; align-items: center; margin: 0 auto 25px auto;">
-                    <span style="font-size: 38px;">👋</span>
-                </div>
-                
-                <h1 style="color: #1e293b; font-size: 32px; margin: 0 0 12px 0; font-weight: 800; letter-spacing: -0.5px;">Securely Logged Out</h1>
-                
-                <p style="color: #64748b; font-size: 15px; margin: 0 0 35px 0; line-height: 1.6;">
-                    Your session has ended successfully. Thank you for using the System. See You Soon!.
-                </p>
-                
-                <button onclick="showLoginScreen()" 
-                    style="width: 100%; padding: 16px 0; background: #4f46e5; color: white; border: none; border-radius: 12px; font-size: 15px; cursor: pointer; font-weight: 800; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 4px 15px rgba(79, 70, 229, 0.25); text-transform: uppercase; letter-spacing: 0.5px;" 
-                    onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 25px rgba(79, 70, 229, 0.4)';" 
-                    onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(79, 70, 229, 0.25)';">
-                    Sign In Again
-                </button>
-                
-            </div>
-        `;
-        document.body.appendChild(goodbyeDiv);
-
-        function showLoginScreen() {
-            document.getElementById('goodbyeScreen').style.display = 'none';
-            document.getElementById('sceneryBackground').style.display = 'block';
-            document.getElementById('loginScreen').style.display = 'flex';
-            
-            // Wipe the login credentials completely clean
-            if (document.getElementById('sysUser')) document.getElementById('sysUser').value = "";
-            if (document.getElementById('sysPass')) document.getElementById('sysPass').value = "";
-        }
-        
     </script>
 </body>
 </html>
