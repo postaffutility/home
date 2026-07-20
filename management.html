@@ -59,6 +59,7 @@
         .card-purple-variant::before { background: #8b5cf6; } .card-purple-variant .card-icon { background: #ede9fe; }
         .card-gold-variant::before { background: #eab308; } .card-gold-variant .card-icon { background: #fef08a; }
         .card-teal-variant::before { background: #14b8a6; } .card-teal-variant .card-icon { background: #ccfbf1; }
+        .card-indigo-variant::before { background: #4f46e5; } .card-indigo-variant .card-icon { background: #e0e7ff; }
         
         .portal-module-card h3 { margin: 0 0 10px 0; font-size: 18px; font-weight: 800; color: #1e293b; letter-spacing: -0.3px;}
         .portal-module-card p { margin: 0; font-size: 13.5px; color: #64748b; line-height: 1.6; }
@@ -82,6 +83,10 @@
         button.panel-sub-submit:hover { filter: brightness(90%); }
         button.download-btn { background: #10b981; margin-top: 5px; color: white; font-weight: bold; border: none; padding: 10px 15px; border-radius: 6px; cursor: pointer; transition: 0.2s; }
         button.download-btn:hover { background: #059669; }
+        button.small-action-btn { background:#3b82f6; color:white; border:none; padding:6px 12px; border-radius:4px; font-size:12px; font-weight:bold; cursor:pointer; margin-right:5px; transition:0.2s; }
+        button.small-action-btn:hover { filter: brightness(90%); }
+        button.small-delete-btn { background:#ef4444; color:white; border:none; padding:6px 12px; border-radius:4px; font-size:12px; font-weight:bold; cursor:pointer; transition:0.2s; }
+        button.small-delete-btn:hover { background:#dc2626; }
         
         .custom-popup-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(6px); z-index: 20000000; display: none; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.2s ease-in-out; }
         .custom-popup-card { background: #ffffff; width: 90%; max-width: 420px; padding: 35px; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.2); text-align: center; box-sizing: border-box; border-top: 6px solid #d32f2f; transform: scale(0.95); transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
@@ -129,13 +134,13 @@
                     <div class='portal-module-card card-teal-variant' onclick='navigateToSubPanel("panelBulkOffice")'>
                         <div class='card-icon'>🗂️</div>
                         <h3>Bulk Office Creation</h3>
-                        <p>Upload an Excel file to register multiple new offices and assign SOL IDs instantly.</p>
+                        <p>Upload an Excel file to review, edit, and safely register multiple new offices instantly.</p>
                     </div>
 
                     <div class='portal-module-card card-indigo-variant' onclick='navigateToSubPanel("panelBulkUser")'>
                         <div class='card-icon'>👥</div>
                         <h3>Bulk User Creation</h3>
-                        <p>Upload an Excel file to generate users, assign dynamic usernames, and map them to offices automatically.</p>
+                        <p>Upload an Excel file to review, edit, generate dynamic usernames, and map users automatically.</p>
                     </div>
 
                     <div class='portal-module-card card-rose-variant' onclick='navigateToSubPanel("panelCreateSOL")'>
@@ -187,7 +192,7 @@
                 <div class='back-nav-link' onclick='returnToSolDashboard()'>⬅️ Back to SOL Hub</div>
                 <h3 style="margin-top:0; color:#1e293b; font-size:22px;">Bulk Office Creation via Excel</h3>
                 <div class='sub-action-card' style="border-top: 4px solid #14b8a6;">
-                    <p style="font-size: 14px; color: #64748b; margin-top:0;">Download the template, fill in your office details, and upload it back here. The system will assign new SOL IDs instantly.</p>
+                    <p style="font-size: 14px; color: #64748b; margin-top:0;">Download the template, fill in your office details, and upload it back here. You can edit or delete entries before confirming.</p>
                     <button class="download-btn" onclick="downloadOfficeTemplate()">⬇️ Download Excel Template</button>
                     
                     <hr style="border:0; border-top:1px solid #cbd5e1; margin:20px 0;">
@@ -197,10 +202,39 @@
                         <input type="file" id="bulkOfficeFile" accept=".xlsx, .xls">
                     </div>
                     
-                    <button class='action-btn panel-sub-submit' onclick='processBulkOffices()' style='background:#14b8a6;' type='button'>Process Bulk Offices</button>
+                    <button class='action-btn panel-sub-submit' onclick='processBulkOffices()' style='background:#14b8a6;' type='button'>Load & Preview Offices</button>
 
+                    <!-- STAGING PREVIEW AREA -->
+                    <div id="bulkOfficePreviewContainer" style="display:none; margin-top:25px;">
+                        <div style="display:flex; justify-content:space-between; align-items:center; border-bottom: 2px solid #cbd5e1; padding-bottom: 10px; margin-bottom:15px;">
+                            <h4 style="margin:0; border:none; padding:0;">Staged Offices for Creation</h4>
+                            <button onclick="deleteSelectedStagedOffices()" class="small-delete-btn">🗑️ Delete Selected</button>
+                        </div>
+                        
+                        <div style="overflow-x: auto; max-height: 400px; border: 1px solid #e2e8f0; border-radius: 8px; margin-bottom:15px;">
+                            <table class="system-log-table" style="margin-top:0;">
+                                <thead>
+                                    <tr>
+                                        <th style="width:40px; text-align:center;"><input type="checkbox" id="boSelectAll" onchange="toggleAllBo(this)"></th>
+                                        <th>Office Name</th>
+                                        <th>Auto SOL ID</th>
+                                        <th>Limits (M/SU/A)</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="bulkOfficePreviewBody"></tbody>
+                            </table>
+                        </div>
+                        
+                        <div style="display:flex; gap:10px;">
+                            <button class="action-btn" style="background:#10b981; margin-top:0; flex:1;" onclick="confirmBulkOffices()">✅ Confirm & Create</button>
+                            <button class="action-btn" style="background:#64748b; margin-top:0; flex:1;" onclick="cancelBulkOffices()">❌ Cancel & Clear</button>
+                        </div>
+                    </div>
+
+                    <!-- SUCCESS RESULTS -->
                     <div id="bulkOfficeResults" class="bulk-results">
-                        <h4 style="color:#0f172a; margin-top:0;">Processing Complete!</h4>
+                        <h4 style="color:#0f172a; margin-top:0;">Creation Complete!</h4>
                         <p id="bulkOfficeSummary" style="font-size:14px; color:#334155;"></p>
                         <button class="download-btn" style="background:#3b82f6;" onclick="downloadBulkOfficePDF()">📄 Download PDF Report</button>
                     </div>
@@ -212,7 +246,7 @@
                 <div class='back-nav-link' onclick='returnToSolDashboard()'>⬅️ Back to SOL Hub</div>
                 <h3 style="margin-top:0; color:#1e293b; font-size:22px;">Bulk User Creation & Mapping</h3>
                 <div class='sub-action-card' style="border-top: 4px solid #4f46e5;">
-                    <p style="font-size: 14px; color: #64748b; margin-top:0;">Download the template, assign roles, and specify the Target SOL. The system will auto-generate usernames, apply default passwords, and respect capacity limits.</p>
+                    <p style="font-size: 14px; color: #64748b; margin-top:0;">Download the template, assign roles, and specify the Target SOL. The system will auto-generate usernames and strictly validate capacity limits.</p>
                     <button class="download-btn" onclick="downloadUserTemplate()">⬇️ Download Excel Template</button>
                     
                     <hr style="border:0; border-top:1px solid #cbd5e1; margin:20px 0;">
@@ -222,15 +256,49 @@
                         <input type="file" id="bulkUserFile" accept=".xlsx, .xls">
                     </div>
                     
-                    <button class='action-btn panel-sub-submit' onclick='processBulkUsers()' style='background:#4f46e5;' type='button'>Process Bulk Users</button>
+                    <button class='action-btn panel-sub-submit' onclick='processBulkUsers()' style='background:#4f46e5;' type='button'>Load, Validate & Preview Users</button>
 
-                    <div id="bulkUserResults" class="bulk-results">
-                        <h4 style="color:#0f172a; margin-top:0;">Processing Complete!</h4>
-                        <p id="bulkUserSummary" style="font-size:14px; color:#334155;"></p>
-                        <div style="display:flex; gap:10px;">
-                            <button class="download-btn" style="background:#10b981; flex:1;" onclick="downloadBulkUserSuccessPDF()">📄 Download Success Report (PDF)</button>
-                            <button class="download-btn" id="btnUserErrorPdf" style="background:#ef4444; flex:1; display:none;" onclick="downloadBulkUserErrorPDF()">📄 Download Error Report (PDF)</button>
+                    <!-- ERROR LOG DISPLAY -->
+                    <div id="bulkUserErrorLog" style="display:none; margin-top:20px; background:#fef2f2; border:1px solid #fecaca; border-radius:8px; padding:15px;">
+                        <h4 style="margin:0 0 10px 0; color:#ef4444;">⚠️ Validation Errors Detected</h4>
+                        <p style="font-size:13px; color:#7f1d1d; margin:0 0 10px 0;">The following entries violated rules (e.g. invalid SOL or limit exceeded) and have been excluded from the preview below.</p>
+                        <button class="small-delete-btn" onclick="downloadBulkUserErrorPDF()">📄 Download Error Report</button>
+                    </div>
+
+                    <!-- STAGING PREVIEW AREA -->
+                    <div id="bulkUserPreviewContainer" style="display:none; margin-top:25px;">
+                        <div style="display:flex; justify-content:space-between; align-items:center; border-bottom: 2px solid #cbd5e1; padding-bottom: 10px; margin-bottom:15px;">
+                            <h4 style="margin:0; border:none; padding:0;">Staged Valid Users for Creation</h4>
+                            <button onclick="deleteSelectedStagedUsers()" class="small-delete-btn">🗑️ Delete Selected</button>
                         </div>
+                        
+                        <div style="overflow-x: auto; max-height: 400px; border: 1px solid #e2e8f0; border-radius: 8px; margin-bottom:15px;">
+                            <table class="system-log-table" style="margin-top:0;">
+                                <thead>
+                                    <tr>
+                                        <th style="width:40px; text-align:center;"><input type="checkbox" id="buSelectAll" onchange="toggleAllBu(this)"></th>
+                                        <th>Full Name</th>
+                                        <th>Auto Username</th>
+                                        <th>Role</th>
+                                        <th>Target SOL</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="bulkUserPreviewBody"></tbody>
+                            </table>
+                        </div>
+                        
+                        <div style="display:flex; gap:10px;">
+                            <button class="action-btn" style="background:#10b981; margin-top:0; flex:1;" onclick="confirmBulkUsers()">✅ Confirm & Create Users</button>
+                            <button class="action-btn" style="background:#64748b; margin-top:0; flex:1;" onclick="cancelBulkUsers()">❌ Cancel & Clear</button>
+                        </div>
+                    </div>
+
+                    <!-- SUCCESS RESULTS -->
+                    <div id="bulkUserResults" class="bulk-results">
+                        <h4 style="color:#0f172a; margin-top:0;">Creation Complete!</h4>
+                        <p id="bulkUserSummary" style="font-size:14px; color:#334155;"></p>
+                        <button class="download-btn" style="background:#10b981;" onclick="downloadBulkUserSuccessPDF()">📄 Download Account Roster (PDF)</button>
                     </div>
                 </div>
             </div>
@@ -391,6 +459,48 @@
         </div>
     </div>
 
+    <!-- EDIT MODAL: STAGED OFFICE -->
+    <div class='custom-popup-overlay' id='editStagedOfficeModal' style="z-index: 40000000;">
+        <div class='custom-popup-card' style="text-align: left; max-width: 500px; border-top: 6px solid #3b82f6;">
+            <h3 style="margin-top:0; color:#1e3a8a;">Edit Staged Office</h3>
+            <input type="hidden" id="esoIdx">
+            <div class="form-group"><label>Office Name</label><input type="text" id="esoName"></div>
+            <div class="flex-row">
+                <div class="form-group"><label>Makers</label><input type="number" id="esoM"></div>
+                <div class="form-group"><label>Superusers</label><input type="number" id="esoSU"></div>
+                <div class="form-group"><label>Admins</label><input type="number" id="esoA"></div>
+            </div>
+            <div style="display:flex; gap:10px; margin-top: 15px;">
+                <button onclick="saveStagedOfficeEdit()" style="background:#10b981; color:white; border:none; padding:12px; border-radius:6px; flex:1; font-weight:bold; cursor:pointer;">Save Changes</button>
+                <button onclick="closeEditStagedOfficeModal()" style="background:#ef4444; color:white; border:none; padding:12px; border-radius:6px; flex:1; font-weight:bold; cursor:pointer;">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- EDIT MODAL: STAGED USER -->
+    <div class='custom-popup-overlay' id='editStagedUserModal' style="z-index: 40000000;">
+        <div class='custom-popup-card' style="text-align: left; max-width: 500px; border-top: 6px solid #4f46e5;">
+            <h3 style="margin-top:0; color:#1e3a8a;">Edit Staged User</h3>
+            <p style="font-size:12px; color:#64748b; margin-top:-10px;">Username will automatically recalculate if name or role is changed.</p>
+            <input type="hidden" id="esuIdx">
+            <div class="form-group"><label>Full Name</label><input type="text" id="esuName"></div>
+            <div class="flex-row">
+                <div class="form-group"><label>Role</label>
+                    <select id="esuRole">
+                        <option value="maker">Maker</option>
+                        <option value="superuser">Superuser</option>
+                        <option value="admin">Admin</option>
+                    </select>
+                </div>
+                <div class="form-group"><label>Target SOL ID</label><input type="text" id="esuSol"></div>
+            </div>
+            <div style="display:flex; gap:10px; margin-top: 15px;">
+                <button onclick="saveStagedUserEdit()" style="background:#10b981; color:white; border:none; padding:12px; border-radius:6px; flex:1; font-weight:bold; cursor:pointer;">Validate & Save</button>
+                <button onclick="closeEditStagedUserModal()" style="background:#ef4444; color:white; border:none; padding:12px; border-radius:6px; flex:1; font-weight:bold; cursor:pointer;">Cancel</button>
+            </div>
+        </div>
+    </div>
+
     <div class='processing-loader-container' id='globalAppLoader'>
         <div class='app-loading-spinner'></div>
         <div class='loading-status-msg' id="loaderTextMsg">Syncing with Cloud...</div>
@@ -412,7 +522,7 @@
         const db = firebase.firestore();
 
         // ----------------------------------------------------
-        // 2. GLOBAL VARIABLES
+        // 2. GLOBAL VARIABLES & STAGING ARRAYS
         // ----------------------------------------------------
         let SYSTEM_USER_REGISTRY = [];
         let SYSTEM_OFFICE_REGISTRY = [];
@@ -421,7 +531,9 @@
         let activeUser = null;
         let activeRole = null;
         
-        // Variables to hold bulk data for PDF reports
+        let stagedBulkOffices = [];
+        let stagedBulkUsers = [];
+        
         let lastProcessedOffices = [];
         let lastProcessedUsersSuccess = [];
         let lastProcessedUsersError = [];
@@ -791,7 +903,7 @@
         }
 
         // ----------------------------------------------------
-        // 8. NEW: BULK OFFICE CREATION ENGINE
+        // 8. NEW: BULK OFFICE CREATION ENGINE & PREVIEW
         // ----------------------------------------------------
         
         function downloadOfficeTemplate() {
@@ -804,11 +916,16 @@
             XLSX.writeFile(wb, "Bulk_Office_Creation_Template.xlsx");
         }
 
+        function toggleAllBo(source) {
+            const checkboxes = document.querySelectorAll('.bo-check');
+            checkboxes.forEach(cb => cb.checked = source.checked);
+        }
+
         async function processBulkOffices() {
             const fileInput = document.getElementById('bulkOfficeFile').files[0];
             if (!fileInput) { displayCustomAlert("Please select an Excel file to upload.", "⚠️"); return; }
 
-            showLoader("Processing Excel File...");
+            showLoader("Reading Excel File...");
             
             const reader = new FileReader();
             reader.onload = async (e) => {
@@ -820,7 +937,7 @@
                     
                     if (jsonData.length === 0) throw new Error("Excel file is empty.");
 
-                    lastProcessedOffices = [];
+                    stagedBulkOffices = [];
                     
                     jsonData.forEach(row => {
                         const name = row["Office Name"];
@@ -828,42 +945,138 @@
                             let newSol;
                             do {
                                 newSol = Math.floor(100000 + Math.random() * 900000).toString();
-                            } while(SYSTEM_OFFICE_REGISTRY.some(o => o.solId === newSol)); // Ensure absolute uniqueness
+                            } while(SYSTEM_OFFICE_REGISTRY.some(o => o.solId === newSol) || stagedBulkOffices.some(o => o.solId === newSol));
                             
                             const lMaker = parseInt(row["Max Maker"]) || 0;
                             const lSuper = parseInt(row["Max Superuser"]) || 0;
                             const lAdmin = parseInt(row["Max Admin"]) || 0;
 
-                            SYSTEM_OFFICE_REGISTRY.push({ 
+                            stagedBulkOffices.push({ 
                                 solId: newSol, 
                                 name: name.trim(), 
                                 status: "DAY_BEGUN",
                                 disabled: false,
                                 limits: { maker: lMaker, superuser: lSuper, admin: lAdmin }
                             });
-
-                            lastProcessedOffices.push({ name: name.trim(), solId: newSol });
                         }
                     });
 
-                    logAdminAction(`Bulk Created ${lastProcessedOffices.length} Offices.`);
-                    
-                    // Save to cloud
-                    await saveToCloud();
-                    
-                    // Show UI Results
-                    document.getElementById('bulkOfficeResults').style.display = "block";
-                    document.getElementById('bulkOfficeSummary').innerText = `Successfully registered ${lastProcessedOffices.length} new offices and automatically assigned unique SOL IDs to them.`;
+                    document.getElementById('bulkOfficePreviewContainer').style.display = 'block';
+                    document.getElementById('bulkOfficeResults').style.display = 'none';
+                    renderBulkOfficePreview();
                     
                     hideLoader();
-                    displayCustomAlert(`Successfully processed and created ${lastProcessedOffices.length} offices!`, "✅");
-
                 } catch (err) {
                     hideLoader();
                     displayCustomAlert(`Error parsing Excel File: ${err.message}`, "❌");
                 }
             };
             reader.readAsArrayBuffer(fileInput);
+        }
+
+        function renderBulkOfficePreview() {
+            const tbody = document.getElementById('bulkOfficePreviewBody');
+            tbody.innerHTML = "";
+            document.getElementById('boSelectAll').checked = false;
+
+            if (stagedBulkOffices.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;">No offices in staging area.</td></tr>`;
+                return;
+            }
+
+            stagedBulkOffices.forEach((off, idx) => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td style="text-align:center;"><input type="checkbox" class="bo-check" data-idx="${idx}"></td>
+                        <td>${off.name}</td>
+                        <td style="color:#e11d48;"><strong>${off.solId}</strong></td>
+                        <td>${off.limits.maker} / ${off.limits.superuser} / ${off.limits.admin}</td>
+                        <td>
+                            <button class="small-action-btn" onclick="editStagedOffice(${idx})">Edit</button>
+                            <button class="small-delete-btn" onclick="deleteStagedOffice(${idx})">Delete</button>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        function editStagedOffice(idx) {
+            let off = stagedBulkOffices[idx];
+            document.getElementById('esoIdx').value = idx;
+            document.getElementById('esoName').value = off.name;
+            document.getElementById('esoM').value = off.limits.maker;
+            document.getElementById('esoSU').value = off.limits.superuser;
+            document.getElementById('esoA').value = off.limits.admin;
+            
+            const modal = document.getElementById('editStagedOfficeModal');
+            modal.style.display = 'flex';
+            setTimeout(()=> modal.classList.add('active'), 10);
+        }
+
+        function closeEditStagedOfficeModal() {
+            const modal = document.getElementById('editStagedOfficeModal');
+            modal.classList.remove('active');
+            setTimeout(()=> modal.style.display = 'none', 200);
+        }
+
+        function saveStagedOfficeEdit() {
+            let idx = document.getElementById('esoIdx').value;
+            let nName = document.getElementById('esoName').value.trim();
+            if(!nName) { alert("Name cannot be blank."); return; }
+
+            stagedBulkOffices[idx].name = nName;
+            stagedBulkOffices[idx].limits.maker = parseInt(document.getElementById('esoM').value) || 0;
+            stagedBulkOffices[idx].limits.superuser = parseInt(document.getElementById('esoSU').value) || 0;
+            stagedBulkOffices[idx].limits.admin = parseInt(document.getElementById('esoA').value) || 0;
+            
+            closeEditStagedOfficeModal();
+            renderBulkOfficePreview();
+        }
+
+        function deleteStagedOffice(idx) {
+            stagedBulkOffices.splice(idx, 1);
+            renderBulkOfficePreview();
+        }
+
+        function deleteSelectedStagedOffices() {
+            const checkboxes = document.querySelectorAll('.bo-check:checked');
+            if (checkboxes.length === 0) return;
+            
+            let indices = Array.from(checkboxes).map(c => parseInt(c.getAttribute('data-idx'))).sort((a,b) => b-a);
+            indices.forEach(idx => stagedBulkOffices.splice(idx, 1));
+            renderBulkOfficePreview();
+        }
+
+        function cancelBulkOffices() {
+            stagedBulkOffices = [];
+            document.getElementById('bulkOfficePreviewContainer').style.display = 'none';
+            document.getElementById('bulkOfficeFile').value = "";
+        }
+
+        async function confirmBulkOffices() {
+            if(stagedBulkOffices.length === 0) { displayCustomAlert("No valid offices to create.", "⚠️"); return; }
+            
+            showLoader("Saving Offices to Cloud...");
+            SYSTEM_OFFICE_REGISTRY.push(...stagedBulkOffices);
+            logAdminAction(`Confirmed Bulk Creation of ${stagedBulkOffices.length} Offices.`);
+            
+            lastProcessedOffices = [...stagedBulkOffices]; // Keep for PDF
+            stagedBulkOffices = []; // Clear staging
+            
+            try {
+                await saveToCloud();
+                document.getElementById('bulkOfficePreviewContainer').style.display = 'none';
+                document.getElementById('bulkOfficeFile').value = "";
+                document.getElementById('bulkOfficeResults').style.display = 'block';
+                document.getElementById('bulkOfficeSummary').innerText = `Successfully registered ${lastProcessedOffices.length} new offices into the live database.`;
+                
+                hideLoader();
+                displayCustomAlert("Offices Created Successfully!", "✅");
+                refreshSolUI();
+            } catch(e) {
+                hideLoader();
+                displayCustomAlert("Network Error: Failed to save bulk offices.", "❌");
+            }
         }
 
         function downloadBulkOfficePDF() {
@@ -879,21 +1092,21 @@
             doc.setFont("helvetica", "normal");
             doc.text(`Generated on: ${new Date().toLocaleString()}`, 14, 28);
             
-            const tableData = lastProcessedOffices.map((o, index) => [index + 1, o.name, o.solId]);
+            const tableData = lastProcessedOffices.map((o, index) => [index + 1, o.name, o.solId, `${o.limits.maker}/${o.limits.superuser}/${o.limits.admin}`]);
             
             doc.autoTable({
                 startY: 35,
-                head: [['#', 'Registered Office Name', 'Auto-Assigned SOL ID']],
+                head: [['#', 'Registered Office Name', 'Auto-Assigned SOL ID', 'Limits (M/SU/A)']],
                 body: tableData,
                 theme: 'grid',
-                headStyles: { fillColor: [20, 184, 166] } // matching teal card color
+                headStyles: { fillColor: [20, 184, 166] } 
             });
             
             doc.save("Bulk_Office_Creation_Report.pdf");
         }
 
         // ----------------------------------------------------
-        // 9. NEW: BULK USER CREATION ENGINE
+        // 10. NEW: BULK USER CREATION ENGINE & PREVIEW
         // ----------------------------------------------------
         
         function downloadUserTemplate() {
@@ -907,11 +1120,15 @@
             XLSX.writeFile(wb, "Bulk_User_Creation_Template.xlsx");
         }
 
-        function generateUniqueUsername(fullName, role, currentBatch) {
+        function toggleAllBu(source) {
+            const checkboxes = document.querySelectorAll('.bu-check');
+            checkboxes.forEach(cb => cb.checked = source.checked);
+        }
+
+        function generateUniqueUsername(fullName, role, currentBatchArray) {
             let names = fullName.trim().split(" ");
-            let base = names[0].toLowerCase().replace(/[^a-z0-9]/g, ''); // strip spaces/specials
+            let base = names[0].toLowerCase().replace(/[^a-z0-9]/g, '');
             
-            // Apply formatting based on rules
             let suffix = role === 'maker' ? '_m' : (role === 'superuser' ? '_su' : '');
             let prefix = role === 'admin' ? 'admin_' : '';
             
@@ -919,8 +1136,7 @@
             let counter = 1;
             let finalName = draft;
             
-            // Loop until we find a name that doesn't exist in live registry OR the current excel batch being built
-            while(SYSTEM_USER_REGISTRY.some(u => u.user === finalName) || currentBatch.some(u => u.user === finalName)) {
+            while(SYSTEM_USER_REGISTRY.some(u => u.user === finalName) || currentBatchArray.some(u => u.user === finalName)) {
                 finalName = draft + counter;
                 counter++;
             }
@@ -943,42 +1159,37 @@
                     
                     if (jsonData.length === 0) throw new Error("Excel file is empty.");
 
-                    lastProcessedUsersSuccess = [];
+                    stagedBulkUsers = [];
                     lastProcessedUsersError = [];
 
-                    // Tracker to ensure we don't exceed limits within the batch itself
                     let batchLimitsTracker = {};
 
                     jsonData.forEach((row, index) => {
                         let fullName = row["Full Name"];
                         let rawRole = row["Role"];
                         let targetSol = row["Target SOL ID"] ? String(row["Target SOL ID"]).trim() : "";
-                        let rowNum = index + 2; // +1 for header, +1 for 0-index
+                        let rowNum = index + 2; 
 
                         if(!fullName || !rawRole || !targetSol) {
-                            lastProcessedUsersError.push({ row: rowNum, name: fullName || "Blank", reason: "Missing mandatory fields (Name/Role/SOL)." });
+                            lastProcessedUsersError.push({ row: rowNum, name: fullName || "Blank", reason: "Missing mandatory fields." });
                             return;
                         }
 
                         let role = rawRole.toLowerCase().trim();
                         if (!['maker', 'superuser', 'admin'].includes(role)) {
-                            lastProcessedUsersError.push({ row: rowNum, name: fullName, reason: "Invalid Role specified. Must be Maker, Superuser, or Admin." });
+                            lastProcessedUsersError.push({ row: rowNum, name: fullName, reason: "Invalid Role. Must be Maker, Superuser, or Admin." });
                             return;
                         }
 
-                        // Validate SOL Exists
                         const offIdx = SYSTEM_OFFICE_REGISTRY.findIndex(o => o.solId === targetSol);
                         if (offIdx === -1) {
-                            lastProcessedUsersError.push({ row: rowNum, name: fullName, reason: `Target SOL ID (${targetSol}) does not exist in registry.` });
+                            lastProcessedUsersError.push({ row: rowNum, name: fullName, reason: `SOL ID (${targetSol}) does not exist.` });
                             return;
                         }
 
                         const office = SYSTEM_OFFICE_REGISTRY[offIdx];
-                        
-                        // Validation: Check Establishment Limits dynamically
                         let liveCount = getRoleCount(targetSol, role);
                         
-                        // Initialize tracker for this SOL if not exists
                         if (!batchLimitsTracker[targetSol]) {
                             batchLimitsTracker[targetSol] = { maker: 0, superuser: 0, admin: 0 };
                         }
@@ -987,15 +1198,13 @@
                         let maxLimit = office.limits ? office.limits[role] : 0;
                         
                         if ((liveCount + newlyAddedInBatch) >= maxLimit) {
-                            lastProcessedUsersError.push({ row: rowNum, name: fullName, reason: `Establishment limit reached for ${role.toUpperCase()}S in SOL ${targetSol}. Max allowed is ${maxLimit}.` });
+                            lastProcessedUsersError.push({ row: rowNum, name: fullName, reason: `Limit reached for ${role.toUpperCase()} in SOL ${targetSol}. Max allowed is ${maxLimit}.` });
                             return;
                         }
 
-                        // Passed all validations! Generate details.
-                        let newUsername = generateUniqueUsername(fullName, role, lastProcessedUsersSuccess);
+                        let newUsername = generateUniqueUsername(fullName, role, stagedBulkUsers);
                         let defaultPassword = "123";
                         
-                        // Define default allowed cards based on role
                         let defaultCards = [];
                         if(role === 'admin') { 
                             defaultCards = ['menuCardBulkBooking', 'menuCardBulk', 'menuCardHoliday', 'menuCardDateWise', 'menuCardACG61', 'menuCardGeneralCharge', 'menuCardSR1', 'menuCardCasualLeave', 'menuCardTAAdvance', 'menuCardTATransfer', 'menuCardTABillTour', 'menuCardCEA', 'menuCardAI', 'menuCardMaintenance', 'menuCardSelfPassword', 'menuCardUpdateNews']; 
@@ -1019,37 +1228,24 @@
                             solId: targetSol
                         };
 
-                        // Add to our success batch
-                        lastProcessedUsersSuccess.push(newUserObj);
-                        
-                        // Update batch tracker limits
+                        stagedBulkUsers.push(newUserObj);
                         batchLimitsTracker[targetSol][role]++;
                     });
 
-                    // If we have successful users, push them to the main registry and save
-                    if (lastProcessedUsersSuccess.length > 0) {
-                        showLoader("Saving Users to Cloud...");
-                        SYSTEM_USER_REGISTRY.push(...lastProcessedUsersSuccess);
-                        logAdminAction(`Bulk Created ${lastProcessedUsersSuccess.length} Users.`);
-                        await saveToCloud();
-                    }
-                    
-                    // Show UI Results
-                    document.getElementById('bulkUserResults').style.display = "block";
-                    document.getElementById('bulkUserSummary').innerHTML = `
-                        <strong>Success:</strong> ${lastProcessedUsersSuccess.length} users created and mapped.<br/>
-                        <strong>Failed:</strong> ${lastProcessedUsersError.length} users rejected due to validation errors.
-                    `;
-                    
-                    if (lastProcessedUsersError.length > 0) {
-                        document.getElementById('btnUserErrorPdf').style.display = "block";
+                    // Update UI
+                    const errLog = document.getElementById('bulkUserErrorLog');
+                    if(lastProcessedUsersError.length > 0) {
+                        errLog.style.display = 'block';
+                        errLog.querySelector('p').innerText = `${lastProcessedUsersError.length} entries violated rules and were excluded from the preview below.`;
                     } else {
-                        document.getElementById('btnUserErrorPdf').style.display = "none";
+                        errLog.style.display = 'none';
                     }
+
+                    document.getElementById('bulkUserPreviewContainer').style.display = 'block';
+                    document.getElementById('bulkUserResults').style.display = 'none';
+                    renderBulkUserPreview();
                     
                     hideLoader();
-                    displayCustomAlert(`Bulk Process Finished.<br/>Success: ${lastProcessedUsersSuccess.length}<br/>Errors: ${lastProcessedUsersError.length}`, "✅");
-
                 } catch (err) {
                     hideLoader();
                     displayCustomAlert(`Error parsing Excel File: ${err.message}`, "❌");
@@ -1058,10 +1254,147 @@
             reader.readAsArrayBuffer(fileInput);
         }
 
+        function renderBulkUserPreview() {
+            const tbody = document.getElementById('bulkUserPreviewBody');
+            tbody.innerHTML = "";
+            document.getElementById('buSelectAll').checked = false;
+
+            if (stagedBulkUsers.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;">No valid users available in staging area.</td></tr>`;
+                return;
+            }
+
+            stagedBulkUsers.forEach((u, idx) => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td style="text-align:center;"><input type="checkbox" class="bu-check" data-idx="${idx}"></td>
+                        <td>${u.fullName}</td>
+                        <td style="color:#4f46e5;"><strong>${u.user}</strong></td>
+                        <td style="text-transform:uppercase; font-size:12px;">${u.role}</td>
+                        <td><strong>${u.solId}</strong></td>
+                        <td>
+                            <button class="small-action-btn" onclick="editStagedUser(${idx})">Edit</button>
+                            <button class="small-delete-btn" onclick="deleteStagedUser(${idx})">Delete</button>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        function editStagedUser(idx) {
+            let u = stagedBulkUsers[idx];
+            document.getElementById('esuIdx').value = idx;
+            document.getElementById('esuName').value = u.fullName;
+            document.getElementById('esuRole').value = u.role;
+            document.getElementById('esuSol').value = u.solId;
+            
+            const modal = document.getElementById('editStagedUserModal');
+            modal.style.display = 'flex';
+            setTimeout(()=> modal.classList.add('active'), 10);
+        }
+
+        function closeEditStagedUserModal() {
+            const modal = document.getElementById('editStagedUserModal');
+            modal.classList.remove('active');
+            setTimeout(()=> modal.style.display = 'none', 200);
+        }
+
+        function saveStagedUserEdit() {
+            let idx = document.getElementById('esuIdx').value;
+            let newName = document.getElementById('esuName').value.trim();
+            let newRole = document.getElementById('esuRole').value;
+            let newSol = document.getElementById('esuSol').value.trim();
+
+            if(!newName || !newSol) { alert("Fields cannot be blank."); return; }
+
+            const offIdx = SYSTEM_OFFICE_REGISTRY.findIndex(o => o.solId === newSol);
+            if (offIdx === -1) { alert(`SOL ID ${newSol} does not exist in the master registry.`); return; }
+
+            const office = SYSTEM_OFFICE_REGISTRY[offIdx];
+            
+            let liveCount = getRoleCount(newSol, newRole);
+            let stagedCount = stagedBulkUsers.filter((u, i) => i != idx && u.solId === newSol && u.role === newRole).length;
+            let maxLimit = office.limits ? office.limits[newRole] : 0;
+            
+            if ((liveCount + stagedCount) >= maxLimit) {
+                alert(`Limit Error: Establishment limit reached for ${newRole.toUpperCase()}S in SOL ${newSol}. Max allowed is ${maxLimit}.`);
+                return;
+            }
+
+            let uObj = stagedBulkUsers[idx];
+            uObj.fullName = newName;
+            uObj.role = newRole;
+            uObj.solId = newSol;
+            
+            // Recalculate unique username automatically based on new inputs
+            uObj.user = generateUniqueUsername(newName, newRole, stagedBulkUsers.filter((u, i) => i != idx));
+
+            closeEditStagedUserModal();
+            renderBulkUserPreview();
+        }
+
+        function deleteStagedUser(idx) {
+            stagedBulkUsers.splice(idx, 1);
+            renderBulkUserPreview();
+        }
+
+        function deleteSelectedStagedUsers() {
+            const checkboxes = document.querySelectorAll('.bu-check:checked');
+            if (checkboxes.length === 0) return;
+            
+            let indices = Array.from(checkboxes).map(c => parseInt(c.getAttribute('data-idx'))).sort((a,b) => b-a);
+            indices.forEach(idx => stagedBulkUsers.splice(idx, 1));
+            renderBulkUserPreview();
+        }
+
+        function cancelBulkUsers() {
+            stagedBulkUsers = [];
+            lastProcessedUsersError = [];
+            document.getElementById('bulkUserErrorLog').style.display = 'none';
+            document.getElementById('bulkUserPreviewContainer').style.display = 'none';
+            document.getElementById('bulkUserFile').value = "";
+        }
+
+        async function confirmBulkUsers() {
+            if(stagedBulkUsers.length === 0) { displayCustomAlert("No valid users to create.", "⚠️"); return; }
+            
+            showLoader("Saving Users to Cloud...");
+            SYSTEM_USER_REGISTRY.push(...stagedBulkUsers);
+            logAdminAction(`Confirmed Bulk Creation of ${stagedBulkUsers.length} Users.`);
+            
+            lastProcessedUsersSuccess = [...stagedBulkUsers];
+            stagedBulkUsers = []; 
+            
+            try {
+                await saveToCloud();
+                document.getElementById('bulkUserPreviewContainer').style.display = 'none';
+                document.getElementById('bulkUserFile').value = "";
+                
+                document.getElementById('bulkUserResults').style.display = "block";
+                document.getElementById('bulkUserSummary').innerHTML = `
+                    <strong>Success:</strong> ${lastProcessedUsersSuccess.length} users permanently created and mapped.<br/>
+                    <strong>Failed:</strong> ${lastProcessedUsersError.length} users were rejected originally.
+                `;
+                
+                if (lastProcessedUsersError.length > 0) {
+                    document.getElementById('btnUserErrorPdf').style.display = "block";
+                } else {
+                    document.getElementById('btnUserErrorPdf').style.display = "none";
+                }
+                
+                hideLoader();
+                displayCustomAlert("Users Created Successfully!", "✅");
+                refreshSolUI();
+            } catch(e) {
+                hideLoader();
+                displayCustomAlert("Network Error: Failed to save bulk users.", "❌");
+            }
+        }
+
         function downloadBulkUserSuccessPDF() {
             if (lastProcessedUsersSuccess.length === 0) return;
             const { jsPDF } = window.jspdf;
-            const doc = new jsPDF('l', 'mm', 'a4'); // Landscape for better fit
+            const doc = new jsPDF('l', 'mm', 'a4'); 
             
             doc.setFont("helvetica", "bold");
             doc.setFontSize(16);
@@ -1086,7 +1419,7 @@
                 head: [['#', 'Full Name', 'Auto-Username', 'Default Pass', 'Role', 'Mapped SOL']],
                 body: tableData,
                 theme: 'grid',
-                headStyles: { fillColor: [79, 70, 229] } // matching indigo card color
+                headStyles: { fillColor: [79, 70, 229] } 
             });
             
             doc.save("Bulk_Users_Success_Report.pdf");
@@ -1099,7 +1432,7 @@
             
             doc.setFont("helvetica", "bold");
             doc.setFontSize(16);
-            doc.setTextColor(239, 68, 68); // Red color for error title
+            doc.setTextColor(239, 68, 68);
             doc.text("Bulk User Creation - ERROR Log", 14, 20);
             
             doc.setFontSize(10);
@@ -1119,8 +1452,8 @@
                 head: [['Excel Row', 'Provided Name', 'Reason for Rejection']],
                 body: tableData,
                 theme: 'grid',
-                headStyles: { fillColor: [239, 68, 68] }, // Red header
-                columnStyles: { 2: { cellWidth: 150 } } // Give reason column more space
+                headStyles: { fillColor: [239, 68, 68] },
+                columnStyles: { 2: { cellWidth: 150 } } 
             });
             
             doc.save("Bulk_Users_Error_Log.pdf");
