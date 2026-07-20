@@ -8,7 +8,7 @@
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
     
-    <!-- New Libraries for Bulk Operations -->
+    <!-- Libraries for Bulk Operations -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
@@ -130,11 +130,17 @@
                 
                 <!-- THE SUB-DASHBOARD CARDS -->
                 <div class='portal-grid-wrapper' id='solModuleGrid'>
-                    <!-- NEW: Bulk Operations -->
+                    <!-- NEW: Admin Approvals Panel -->
+                    <div class='portal-module-card card-teal-variant' id='menuCardApprovals' onclick='navigateToSubPanel("panelApprovals")' style='display:none;'>
+                        <div class='card-icon'>🛡️</div>
+                        <h3>Pending Approvals <span id="approvalBadge" style="background:#ef4444; color:white; padding:2px 8px; border-radius:12px; font-size:12px; vertical-align:middle; margin-left:5px;">0</span></h3>
+                        <p>Review and authorize system modification requests submitted by branch admins.</p>
+                    </div>
+
                     <div class='portal-module-card card-teal-variant' onclick='navigateToSubPanel("panelBulkOffice")'>
                         <div class='card-icon'>🗂️</div>
                         <h3>Bulk Office Creation</h3>
-                        <p>Upload an Excel file to review, edit, and safely register multiple new offices instantly.</p>
+                        <p>Upload an Excel file to review, edit, and securely register multiple new offices instantly.</p>
                     </div>
 
                     <div class='portal-module-card card-indigo-variant' onclick='navigateToSubPanel("panelBulkUser")'>
@@ -187,7 +193,26 @@
                 </div>
             </div>
 
-            <!-- NEW PANEL: BULK OFFICE CREATION -->
+            <!-- NEW PANEL: PENDING APPROVALS -->
+            <div class='portal-page-panel' id='panelApprovals'>
+                <div class='back-nav-link' onclick='returnToSolDashboard()'>⬅️ Back to SOL Hub</div>
+                <h3 style="margin-top:0; color:#1e293b; font-size:22px;">Pending Authorization Requests</h3>
+                <div class='sub-action-card' style="border-top: 4px solid #14b8a6; overflow-x: auto;">
+                    <table class='system-log-table' style="min-width: 700px;">
+                        <thead>
+                            <tr>
+                                <th>Date & Time</th>
+                                <th>Requested By</th>
+                                <th>Request Description</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id='approvalsTableBody'></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- PANEL: BULK OFFICE CREATION -->
             <div class='portal-page-panel' id='panelBulkOffice'>
                 <div class='back-nav-link' onclick='returnToSolDashboard()'>⬅️ Back to SOL Hub</div>
                 <h3 style="margin-top:0; color:#1e293b; font-size:22px;">Bulk Office Creation via Excel</h3>
@@ -202,7 +227,7 @@
                         <input type="file" id="bulkOfficeFile" accept=".xlsx, .xls">
                     </div>
                     
-                    <button class='action-btn panel-sub-submit' onclick='processBulkOffices()' style='background:#14b8a6;' type='button'>Load & Preview Offices</button>
+                    <button class='action-btn panel-sub-submit btn-dynamic' onclick='processBulkOffices()' style='background:#14b8a6;' type='button'>Load & Preview Offices</button>
 
                     <!-- STAGING PREVIEW AREA -->
                     <div id="bulkOfficePreviewContainer" style="display:none; margin-top:25px;">
@@ -227,21 +252,21 @@
                         </div>
                         
                         <div style="display:flex; gap:10px;">
-                            <button class="action-btn" style="background:#10b981; margin-top:0; flex:1;" onclick="confirmBulkOffices()">✅ Confirm & Create</button>
+                            <button class="action-btn btn-dynamic-confirm" style="background:#10b981; margin-top:0; flex:1;" onclick="confirmBulkOffices()">✅ Confirm & Create</button>
                             <button class="action-btn" style="background:#64748b; margin-top:0; flex:1;" onclick="cancelBulkOffices()">❌ Cancel & Clear</button>
                         </div>
                     </div>
 
                     <!-- SUCCESS RESULTS -->
                     <div id="bulkOfficeResults" class="bulk-results">
-                        <h4 style="color:#0f172a; margin-top:0;">Creation Complete!</h4>
+                        <h4 style="color:#0f172a; margin-top:0;" id="boSuccessTitle">Creation Complete!</h4>
                         <p id="bulkOfficeSummary" style="font-size:14px; color:#334155;"></p>
                         <button class="download-btn" style="background:#3b82f6;" onclick="downloadBulkOfficePDF()">📄 Download PDF Report</button>
                     </div>
                 </div>
             </div>
 
-            <!-- NEW PANEL: BULK USER CREATION -->
+            <!-- PANEL: BULK USER CREATION -->
             <div class='portal-page-panel' id='panelBulkUser'>
                 <div class='back-nav-link' onclick='returnToSolDashboard()'>⬅️ Back to SOL Hub</div>
                 <h3 style="margin-top:0; color:#1e293b; font-size:22px;">Bulk User Creation & Mapping</h3>
@@ -256,7 +281,7 @@
                         <input type="file" id="bulkUserFile" accept=".xlsx, .xls">
                     </div>
                     
-                    <button class='action-btn panel-sub-submit' onclick='processBulkUsers()' style='background:#4f46e5;' type='button'>Load, Validate & Preview Users</button>
+                    <button class='action-btn panel-sub-submit btn-dynamic' onclick='processBulkUsers()' style='background:#4f46e5;' type='button'>Load, Validate & Preview Users</button>
 
                     <!-- ERROR LOG DISPLAY -->
                     <div id="bulkUserErrorLog" style="display:none; margin-top:20px; background:#fef2f2; border:1px solid #fecaca; border-radius:8px; padding:15px;">
@@ -289,16 +314,19 @@
                         </div>
                         
                         <div style="display:flex; gap:10px;">
-                            <button class="action-btn" style="background:#10b981; margin-top:0; flex:1;" onclick="confirmBulkUsers()">✅ Confirm & Create Users</button>
+                            <button class="action-btn btn-dynamic-confirm" style="background:#10b981; margin-top:0; flex:1;" onclick="confirmBulkUsers()">✅ Confirm & Create Users</button>
                             <button class="action-btn" style="background:#64748b; margin-top:0; flex:1;" onclick="cancelBulkUsers()">❌ Cancel & Clear</button>
                         </div>
                     </div>
 
                     <!-- SUCCESS RESULTS -->
                     <div id="bulkUserResults" class="bulk-results">
-                        <h4 style="color:#0f172a; margin-top:0;">Creation Complete!</h4>
+                        <h4 style="color:#0f172a; margin-top:0;" id="buSuccessTitle">Creation Complete!</h4>
                         <p id="bulkUserSummary" style="font-size:14px; color:#334155;"></p>
-                        <button class="download-btn" style="background:#10b981;" onclick="downloadBulkUserSuccessPDF()">📄 Download Account Roster (PDF)</button>
+                        <div style="display:flex; gap:10px;">
+                            <button class="download-btn" style="background:#10b981; flex:1;" onclick="downloadBulkUserSuccessPDF()">📄 Download Account Roster (PDF)</button>
+                            <button class="download-btn" id="btnUserErrorPdf" style="background:#ef4444; flex:1; display:none;" onclick="downloadBulkUserErrorPDF()">📄 Download Error Report (PDF)</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -331,7 +359,7 @@
                         </div>
                     </div>
 
-                    <button class='action-btn panel-sub-submit' onclick='executeCreateOffice()' style='background:#e11d48;' type='button'>Generate Office & SOL</button>
+                    <button class='action-btn panel-sub-submit btn-dynamic' onclick='executeCreateOffice()' style='background:#e11d48;' type='button'>Generate Office & SOL</button>
                 </div>
             </div>
 
@@ -348,7 +376,7 @@
                         <label>Select Destination Office (SOL)</label>
                         <select id='mapOfficeSelect'></select>
                     </div>
-                    <button class='action-btn panel-sub-submit' onclick='executeMapUserToOffice()' style='background:#3b82f6;' type='button'>Apply Transfer / Mapping</button>
+                    <button class='action-btn panel-sub-submit btn-dynamic' onclick='executeMapUserToOffice()' style='background:#3b82f6;' type='button'>Apply Transfer / Mapping</button>
                 </div>
             </div>
 
@@ -382,7 +410,7 @@
                         </div>
                     </div>
 
-                    <button class='action-btn panel-sub-submit' onclick='executeModifyOffice()' style='background:#f59e0b;' type='button'>Update Office Profile</button>
+                    <button class='action-btn panel-sub-submit btn-dynamic' onclick='executeModifyOffice()' style='background:#f59e0b;' type='button'>Update Office Profile</button>
                 </div>
             </div>
 
@@ -396,7 +424,7 @@
                         <label>Select Office to Delete</label>
                         <select id='deleteOfficeSelect'></select>
                     </div>
-                    <button class='action-btn panel-sub-submit' onclick='executeDeleteOffice()' style='background:#475569;' type='button'>Permanently Delete SOL</button>
+                    <button class='action-btn panel-sub-submit btn-dynamic' onclick='executeDeleteOffice()' style='background:#475569;' type='button'>Permanently Delete SOL</button>
                 </div>
             </div>
 
@@ -410,7 +438,7 @@
                         <label>Select Office</label>
                         <select id='disableOfficeSelect'></select>
                     </div>
-                    <button class='action-btn panel-sub-submit' onclick='executeToggleDisableOffice()' style='background:#8b5cf6;' type='button'>Toggle Enable / Disable Status</button>
+                    <button class='action-btn panel-sub-submit btn-dynamic' onclick='executeToggleDisableOffice()' style='background:#8b5cf6;' type='button'>Toggle Enable / Disable Status</button>
                 </div>
             </div>
 
@@ -423,7 +451,7 @@
                         <label>Select Target Office</label>
                         <select id='forceDBDESelect'></select>
                     </div>
-                    <button class='action-btn panel-sub-submit' onclick='executeForceDBDE()' style='background:#eab308; color:#1e293b;' type='button'>Force Toggle Operations Status</button>
+                    <button class='action-btn panel-sub-submit btn-dynamic' onclick='executeForceDBDE()' style='background:#eab308; color:#1e293b;' type='button'>Force Toggle Operations Status</button>
                 </div>
             </div>
 
@@ -527,13 +555,17 @@
         let SYSTEM_USER_REGISTRY = [];
         let SYSTEM_OFFICE_REGISTRY = [];
         let SYSTEM_LOGIN_HISTORY = [];
+        let SYSTEM_PENDING_REQUESTS = [];
         let SYSTEM_NEWS_FEED = "Loading...";
+        
         let activeUser = null;
         let activeRole = null;
+        let isMasterAdmin = false;
+        let isAdminOffice = false;
+        let canDirectExecute = false;
         
         let stagedBulkOffices = [];
         let stagedBulkUsers = [];
-        
         let lastProcessedOffices = [];
         let lastProcessedUsersSuccess = [];
         let lastProcessedUsersError = [];
@@ -568,11 +600,32 @@
                     SYSTEM_USER_REGISTRY = data.users || [];
                     SYSTEM_OFFICE_REGISTRY = data.offices || [];
                     SYSTEM_LOGIN_HISTORY = data.logs || [];
+                    SYSTEM_PENDING_REQUESTS = data.requests || [];
                     
-                    // Display Logged In User
-                    const profile = SYSTEM_USER_REGISTRY.find(u => u.user === activeUser);
-                    if(profile) {
-                        document.getElementById('portalWelcomeMessage').innerText = `Welcome, ${profile.fullName} (Admin)`;
+                    // Seed Master Office if it doesn't exist
+                    if (SYSTEM_OFFICE_REGISTRY.length > 0 && !SYSTEM_OFFICE_REGISTRY.some(o => o.solId === "000000")) {
+                        SYSTEM_OFFICE_REGISTRY.push({ solId: "000000", name: "System Admin Headquarter", status: "DAY_BEGUN", disabled: false, limits: { maker: 99, superuser: 99, admin: 99 } });
+                        saveToCloud(); // Auto seed
+                    }
+                    
+                    // Evaluate Security Hierarchy
+                    const myProfile = SYSTEM_USER_REGISTRY.find(u => u.user === activeUser);
+                    isMasterAdmin = (activeUser === "admin");
+                    isAdminOffice = (myProfile && myProfile.solId === "000000");
+                    canDirectExecute = (isMasterAdmin || isAdminOffice);
+                    
+                    // Adjust UI based on permissions
+                    if (!canDirectExecute) {
+                        document.querySelectorAll('.btn-dynamic').forEach(btn => {
+                             btn.innerText = "Request " + btn.innerText;
+                        });
+                        document.querySelectorAll('.btn-dynamic-confirm').forEach(btn => {
+                             btn.innerText = "Request Creation Authorization";
+                        });
+                    }
+
+                    if(myProfile) {
+                        document.getElementById('portalWelcomeMessage').innerText = `Welcome, ${myProfile.fullName} (${canDirectExecute ? 'Super Admin' : 'Branch Admin'})`;
                     }
 
                     refreshSolUI(); 
@@ -586,8 +639,80 @@
         };
 
         // ----------------------------------------------------
-        // 4. UI NAVIGATION FUNCTIONS
+        // 4. REQUEST ENGINE & APPROVAL LOGIC
         // ----------------------------------------------------
+        function createRequest(type, desc, payload) {
+            SYSTEM_PENDING_REQUESTS.push({
+                id: Date.now().toString() + Math.random().toString(36).substr(2, 5),
+                type: type,
+                desc: desc,
+                payload: payload,
+                requestedBy: activeUser,
+                timestamp: new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true })
+            });
+            showLoader("Submitting Authorization Request...");
+            saveToCloud().then(() => {
+                displayCustomAlert("Request Submitted Successfully!<br/><br/>It is pending authorization from the Admin Office.", "✅");
+                hideLoader();
+            }).catch(e => {
+                displayCustomAlert("Failed to submit request.", "❌");
+                hideLoader();
+            });
+        }
+
+        async function processRequest(reqId, action) {
+            const reqIdx = SYSTEM_PENDING_REQUESTS.findIndex(r => r.id === reqId);
+            if (reqIdx === -1) return;
+            const req = SYSTEM_PENDING_REQUESTS[reqIdx];
+
+            if (action === 'APPROVE') {
+                const p = req.payload;
+                switch(req.type) {
+                    case 'CREATE_OFFICE': SYSTEM_OFFICE_REGISTRY.push(p); break;
+                    case 'MAP_USER': {
+                        let u = SYSTEM_USER_REGISTRY.find(x => x.user === p.user);
+                        if(u) u.solId = p.solId;
+                        break;
+                    }
+                    case 'MODIFY_OFFICE': {
+                        let o = SYSTEM_OFFICE_REGISTRY.find(x => x.solId === p.solId);
+                        if(o) { o.name = p.name; o.limits = p.limits; }
+                        break;
+                    }
+                    case 'DELETE_OFFICE': {
+                        let oIdx = SYSTEM_OFFICE_REGISTRY.findIndex(x => x.solId === p.solId);
+                        if(oIdx > -1) SYSTEM_OFFICE_REGISTRY.splice(oIdx, 1);
+                        break;
+                    }
+                    case 'TOGGLE_DISABLE_OFFICE': {
+                        let o = SYSTEM_OFFICE_REGISTRY.find(x => x.solId === p.solId);
+                        if(o) o.disabled = p.disabled;
+                        break;
+                    }
+                    case 'FORCE_DBDE': {
+                        let o = SYSTEM_OFFICE_REGISTRY.find(x => x.solId === p.solId);
+                        if(o) o.status = p.status;
+                        break;
+                    }
+                    case 'BULK_CREATE_OFFICE': SYSTEM_OFFICE_REGISTRY.push(...p.offices); break;
+                    case 'BULK_CREATE_USER': SYSTEM_USER_REGISTRY.push(...p.users); break;
+                }
+                logAdminAction(`Approved Request: ${req.desc}`);
+            } else {
+                logAdminAction(`Rejected Request: ${req.desc}`);
+            }
+
+            SYSTEM_PENDING_REQUESTS.splice(reqIdx, 1);
+            showLoader(action === 'APPROVE' ? "Applying Changes..." : "Discarding Request...");
+            try {
+                await saveToCloud();
+                displayCustomAlert(`Request ${action === 'APPROVE' ? 'Approved' : 'Rejected'} successfully!`, "✅");
+            } catch(e) {
+                displayCustomAlert("Network Error.", "❌");
+            }
+            hideLoader();
+        }
+
         function executePortalLogout() {
             sessionStorage.clear();
             window.location.replace("index.html");
@@ -595,7 +720,7 @@
 
         function navigateToSubPanel(panelId) {
             document.getElementById('solDashboardHead').style.display = 'none';
-            const panels = ['panelCreateSOL', 'panelMapUser', 'panelModifySOL', 'panelDeleteSOL', 'panelDisableSOL', 'panelForceDBDE', 'panelViewSOLs', 'panelBulkOffice', 'panelBulkUser'];
+            const panels = ['panelCreateSOL', 'panelMapUser', 'panelModifySOL', 'panelDeleteSOL', 'panelDisableSOL', 'panelForceDBDE', 'panelViewSOLs', 'panelBulkOffice', 'panelBulkUser', 'panelApprovals'];
             panels.forEach(id => { document.getElementById(id).style.display = 'none'; });
             document.getElementById(panelId).style.display = 'block';
             
@@ -603,7 +728,7 @@
         }
 
         function returnToSolDashboard() {
-            const panels = ['panelCreateSOL', 'panelMapUser', 'panelModifySOL', 'panelDeleteSOL', 'panelDisableSOL', 'panelForceDBDE', 'panelViewSOLs', 'panelBulkOffice', 'panelBulkUser'];
+            const panels = ['panelCreateSOL', 'panelMapUser', 'panelModifySOL', 'panelDeleteSOL', 'panelDisableSOL', 'panelForceDBDE', 'panelViewSOLs', 'panelBulkOffice', 'panelBulkUser', 'panelApprovals'];
             panels.forEach(id => { document.getElementById(id).style.display = 'none'; });
             document.getElementById('solDashboardHead').style.display = 'block';
         }
@@ -647,10 +772,11 @@
             const forceSelect = document.getElementById('forceDBDESelect');
             const tBody = document.getElementById('officeDirectoryTableBody');
             
+            // Protect "admin" from dropdowns
             if(uSelect) {
                 uSelect.innerHTML = "<option value=''>-- Select User --</option>";
                 SYSTEM_USER_REGISTRY.forEach(u => {
-                    if(!u.user.toLowerCase().startsWith('admin')) {
+                    if(u.user !== 'admin') {
                         let opt = document.createElement('option');
                         opt.value = u.user;
                         opt.innerText = `${u.fullName} (${u.user}) - [Role: ${u.role}] [Current SOL: ${u.solId || 'None'}]`;
@@ -690,6 +816,34 @@
                     tBody.appendChild(tr);
                 });
             }
+
+            // Approvals Panel Logic
+            if (canDirectExecute) {
+                document.getElementById('menuCardApprovals').style.display = 'block';
+                document.getElementById('approvalBadge').innerText = SYSTEM_PENDING_REQUESTS.length;
+                
+                const appBody = document.getElementById('approvalsTableBody');
+                appBody.innerHTML = "";
+                if (SYSTEM_PENDING_REQUESTS.length === 0) {
+                    appBody.innerHTML = "<tr><td colspan='4' style='text-align:center;'>No pending requests.</td></tr>";
+                } else {
+                    SYSTEM_PENDING_REQUESTS.forEach(req => {
+                        appBody.innerHTML += `
+                            <tr>
+                                <td>${req.timestamp}</td>
+                                <td><strong>${req.requestedBy}</strong></td>
+                                <td>${req.desc}</td>
+                                <td>
+                                    <button class="small-action-btn" style="background:#10b981;" onclick="processRequest('${req.id}', 'APPROVE')">Approve</button>
+                                    <button class="small-delete-btn" onclick="processRequest('${req.id}', 'REJECT')">Reject</button>
+                                </td>
+                            </tr>
+                        `;
+                    });
+                }
+            } else {
+                document.getElementById('menuCardApprovals').style.display = 'none';
+            }
         }
 
         function autofillModifyPanel() {
@@ -712,11 +866,12 @@
                 await db.collection("system").doc("registry").set({
                     users: SYSTEM_USER_REGISTRY,
                     logs: SYSTEM_LOGIN_HISTORY,
-                    offices: SYSTEM_OFFICE_REGISTRY
+                    offices: SYSTEM_OFFICE_REGISTRY,
+                    requests: SYSTEM_PENDING_REQUESTS
                 });
             } catch(e) {
                 console.error("Save Error:", e);
-                throw e; // Throw to caller
+                throw e; 
             }
         }
 
@@ -728,7 +883,7 @@
         }
 
         // ----------------------------------------------------
-        // 7. CORE CRUD FUNCTIONS (UNTOUCHED)
+        // 7. CORE CRUD FUNCTIONS (WITH HIERARCHY INTERCEPTION)
         // ----------------------------------------------------
         
         async function executeCreateOffice() {
@@ -740,28 +895,24 @@
             const lAdmin = parseInt(document.getElementById('newLimitAdmin').value) || 0;
 
             const generatedSol = Math.floor(100000 + Math.random() * 900000).toString();
-            
-            SYSTEM_OFFICE_REGISTRY.push({ 
-                solId: generatedSol, 
-                name: offName, 
-                status: "DAY_BEGUN",
-                disabled: false,
-                limits: { maker: lMaker, superuser: lSuper, admin: lAdmin }
-            });
-            
-            logAdminAction(`Created new SOL: ${generatedSol} (${offName})`);
-            showLoader("Saving to Cloud...");
-            try {
-                await saveToCloud();
-                document.getElementById('newOfficeName').value = "";
-                document.getElementById('newLimitMaker').value = "";
-                document.getElementById('newLimitSuper').value = "";
-                document.getElementById('newLimitAdmin').value = "";
-                displayCustomAlert(`<strong>Office Successfully Created!</strong><br/><br/>Office: ${offName}<br/>Generated SOL ID: <span style="color:#d32f2f; font-size:20px;">${generatedSol}</span>`, "🏢");
-            } catch(e) {
-                displayCustomAlert("Network Error: Could not save to the cloud.", "❌");
+            const payload = { solId: generatedSol, name: offName, status: "DAY_BEGUN", disabled: false, limits: { maker: lMaker, superuser: lSuper, admin: lAdmin } };
+
+            if (canDirectExecute) {
+                SYSTEM_OFFICE_REGISTRY.push(payload);
+                logAdminAction(`Created new SOL: ${generatedSol} (${offName})`);
+                showLoader("Saving to Cloud...");
+                try {
+                    await saveToCloud();
+                    document.getElementById('newOfficeName').value = "";
+                    document.getElementById('newLimitMaker').value = "";
+                    document.getElementById('newLimitSuper').value = "";
+                    document.getElementById('newLimitAdmin').value = "";
+                    displayCustomAlert(`<strong>Office Successfully Created!</strong><br/><br/>Office: ${offName}<br/>Generated SOL ID: <span style="color:#d32f2f; font-size:20px;">${generatedSol}</span>`, "🏢");
+                } catch(e) { displayCustomAlert("Network Error", "❌"); }
+                hideLoader();
+            } else {
+                createRequest('CREATE_OFFICE', `Create New Office: ${offName}`, payload);
             }
-            hideLoader();
         }
 
         async function executeMapUserToOffice() {
@@ -772,30 +923,28 @@
 
             const uIdx = SYSTEM_USER_REGISTRY.findIndex(u => u.user === user);
             const targetRole = SYSTEM_USER_REGISTRY[uIdx].role;
-            
             const offIdx = SYSTEM_OFFICE_REGISTRY.findIndex(o => o.solId === sol);
             const office = SYSTEM_OFFICE_REGISTRY[offIdx];
 
-            // VALIDATION: Check Establishment Limits
             let currentCount = getRoleCount(sol, targetRole);
             let limit = office.limits ? office.limits[targetRole] : 0;
-            
             if(currentCount >= limit) {
-                displayCustomAlert(`<strong>Transfer Blocked</strong><br/>${office.name} has reached its maximum establishment limit for <strong>${targetRole.toUpperCase()}S</strong> (${limit}).<br/><br/>Please modify the office limits before transferring this user.`, "🛑");
+                displayCustomAlert(`<strong>Transfer Blocked</strong><br/>${office.name} has reached its limit for <strong>${targetRole.toUpperCase()}S</strong> (${limit}).`, "🛑");
                 return;
             }
 
-            SYSTEM_USER_REGISTRY[uIdx].solId = sol;
-            logAdminAction(`Mapped user '${user}' to SOL '${sol}'`);
-            
-            showLoader("Applying Mapping...");
-            try {
-                await saveToCloud();
-                displayCustomAlert(`Success! User '${user}' has been mapped to SOL ID '${sol}'.`, "✅");
-            } catch(e) {
-                displayCustomAlert("Network Error: Could not map user.", "❌");
+            if (canDirectExecute) {
+                SYSTEM_USER_REGISTRY[uIdx].solId = sol;
+                logAdminAction(`Mapped user '${user}' to SOL '${sol}'`);
+                showLoader("Applying Mapping...");
+                try {
+                    await saveToCloud();
+                    displayCustomAlert(`Success! User '${user}' has been mapped to SOL ID '${sol}'.`, "✅");
+                } catch(e) { displayCustomAlert("Network Error", "❌"); }
+                hideLoader();
+            } else {
+                createRequest('MAP_USER', `Map User '${user}' to SOL '${sol}'`, { user, solId: sol });
             }
-            hideLoader();
         }
 
         async function executeModifyOffice() {
@@ -804,28 +953,26 @@
 
             if(!solToMod || !newName) { displayCustomAlert("Error: Please select an office and enter a name.", "⚠️"); return; }
 
-            const offIdx = SYSTEM_OFFICE_REGISTRY.findIndex(o => o.solId === solToMod);
-            if (offIdx === -1) return;
-
             const lMaker = parseInt(document.getElementById('modLimitMaker').value) || 0;
             const lSuper = parseInt(document.getElementById('modLimitSuper').value) || 0;
             const lAdmin = parseInt(document.getElementById('modLimitAdmin').value) || 0;
+            const payload = { solId: solToMod, name: newName, limits: { maker: lMaker, superuser: lSuper, admin: lAdmin } };
 
-            const oldName = SYSTEM_OFFICE_REGISTRY[offIdx].name;
-            SYSTEM_OFFICE_REGISTRY[offIdx].name = newName;
-            SYSTEM_OFFICE_REGISTRY[offIdx].limits = { maker: lMaker, superuser: lSuper, admin: lAdmin };
-            
-            logAdminAction(`Modified SOL profile '${solToMod}'`);
-            
-            showLoader("Updating Office...");
-            try {
-                await saveToCloud();
-                document.getElementById('modifiedOfficeName').value = "";
-                displayCustomAlert(`Success! Office profile for '${newName}' has been updated.`, "✅");
-            } catch(e) {
-                displayCustomAlert("Network Error: Could not modify office.", "❌");
+            if (canDirectExecute) {
+                const offIdx = SYSTEM_OFFICE_REGISTRY.findIndex(o => o.solId === solToMod);
+                SYSTEM_OFFICE_REGISTRY[offIdx].name = newName;
+                SYSTEM_OFFICE_REGISTRY[offIdx].limits = payload.limits;
+                logAdminAction(`Modified SOL profile '${solToMod}'`);
+                showLoader("Updating Office...");
+                try {
+                    await saveToCloud();
+                    document.getElementById('modifiedOfficeName').value = "";
+                    displayCustomAlert(`Success! Office profile for '${newName}' has been updated.`, "✅");
+                } catch(e) { displayCustomAlert("Network Error", "❌"); }
+                hideLoader();
+            } else {
+                createRequest('MODIFY_OFFICE', `Modify Office SOL '${solToMod}'`, payload);
             }
-            hideLoader();
         }
 
         async function executeDeleteOffice() {
@@ -834,72 +981,65 @@
 
             const mappedUsers = SYSTEM_USER_REGISTRY.filter(u => u.solId === solToDelete);
             if (mappedUsers.length > 0) {
-                displayCustomAlert(`Action Blocked: You cannot delete this office because ${mappedUsers.length} user(s) are currently mapped to it. Please transfer them first.`, "🛑");
+                displayCustomAlert(`Action Blocked: ${mappedUsers.length} user(s) are mapped here. Transfer them first.`, "🛑");
                 return;
             }
 
-            const offIdx = SYSTEM_OFFICE_REGISTRY.findIndex(o => o.solId === solToDelete);
-            if (offIdx === -1) return;
-
-            const deletedName = SYSTEM_OFFICE_REGISTRY[offIdx].name;
-            SYSTEM_OFFICE_REGISTRY.splice(offIdx, 1);
-            logAdminAction(`Deleted SOL '${solToDelete}' (${deletedName})`);
-
-            showLoader("Deleting Office...");
-            try {
-                await saveToCloud();
-                displayCustomAlert(`Success! Office '${deletedName}' has been permanently deleted.`, "🗑️");
-            } catch(e) {
-                displayCustomAlert("Network Error: Could not delete office.", "❌");
+            if (canDirectExecute) {
+                const offIdx = SYSTEM_OFFICE_REGISTRY.findIndex(o => o.solId === solToDelete);
+                const deletedName = SYSTEM_OFFICE_REGISTRY[offIdx].name;
+                SYSTEM_OFFICE_REGISTRY.splice(offIdx, 1);
+                logAdminAction(`Deleted SOL '${solToDelete}' (${deletedName})`);
+                showLoader("Deleting Office...");
+                try {
+                    await saveToCloud();
+                    displayCustomAlert(`Success! Office '${deletedName}' has been permanently deleted.`, "🗑️");
+                } catch(e) { displayCustomAlert("Network Error", "❌"); }
+                hideLoader();
+            } else {
+                createRequest('DELETE_OFFICE', `Delete Office SOL '${solToDelete}'`, { solId: solToDelete });
             }
-            hideLoader();
         }
 
         async function executeToggleDisableOffice() {
             const solToDisable = document.getElementById('disableOfficeSelect').value;
-            if(!solToDisable) { displayCustomAlert("Error: Please select an office.", "⚠️"); return; }
-
+            if(!solToDisable) return;
             const offIdx = SYSTEM_OFFICE_REGISTRY.findIndex(o => o.solId === solToDisable);
-            if (offIdx === -1) return;
-
             let currentState = SYSTEM_OFFICE_REGISTRY[offIdx].disabled || false;
-            SYSTEM_OFFICE_REGISTRY[offIdx].disabled = !currentState;
+            let newState = !currentState;
 
-            let statusTxt = !currentState ? "DISABLED" : "ENABLED";
-            logAdminAction(`${statusTxt} SOL '${solToDisable}'`);
-
-            showLoader("Updating Status...");
-            try {
-                await saveToCloud();
-                displayCustomAlert(`Success! Office is now <strong>${statusTxt}</strong>.`, "⚙️");
-            } catch(e) {
-                displayCustomAlert("Network Error: Could not update status.", "❌");
+            if (canDirectExecute) {
+                SYSTEM_OFFICE_REGISTRY[offIdx].disabled = newState;
+                logAdminAction(`${newState ? 'DISABLED' : 'ENABLED'} SOL '${solToDisable}'`);
+                showLoader("Updating Status...");
+                try {
+                    await saveToCloud();
+                    displayCustomAlert(`Success! Office is now <strong>${newState ? 'DISABLED' : 'ENABLED'}</strong>.`, "⚙️");
+                } catch(e) { displayCustomAlert("Network Error", "❌"); }
+                hideLoader();
+            } else {
+                createRequest('TOGGLE_DISABLE_OFFICE', `${newState ? 'DISABLE' : 'ENABLE'} Office SOL '${solToDisable}'`, { solId: solToDisable, disabled: newState });
             }
-            hideLoader();
         }
 
         async function executeForceDBDE() {
             const solToToggle = document.getElementById('forceDBDESelect').value;
-            if(!solToToggle) { displayCustomAlert("Error: Please select an office.", "⚠️"); return; }
-
+            if(!solToToggle) return;
             const offIdx = SYSTEM_OFFICE_REGISTRY.findIndex(o => o.solId === solToToggle);
-            if (offIdx === -1) return;
+            let newStatus = SYSTEM_OFFICE_REGISTRY[offIdx].status === "DAY_BEGUN" ? "DAY_ENDED" : "DAY_BEGUN";
 
-            let currentStatus = SYSTEM_OFFICE_REGISTRY[offIdx].status;
-            let newStatus = currentStatus === "DAY_BEGUN" ? "DAY_ENDED" : "DAY_BEGUN";
-            
-            SYSTEM_OFFICE_REGISTRY[offIdx].status = newStatus;
-
-            logAdminAction(`Admin Forced ${newStatus.replace('_', ' ')} for SOL '${solToToggle}'`);
-
-            showLoader("Applying Operations Override...");
-            try {
-                await saveToCloud();
-                displayCustomAlert(`Success! Office is now forcefully put into a <strong>${newStatus.replace('_', ' ')}</strong> state.`, "⏳");
-            } catch(e) {
-                displayCustomAlert("Network Error: Could not force status.", "❌");
+            if (canDirectExecute) {
+                SYSTEM_OFFICE_REGISTRY[offIdx].status = newStatus;
+                logAdminAction(`Admin Forced ${newStatus} for SOL '${solToToggle}'`);
+                showLoader("Applying Override...");
+                try {
+                    await saveToCloud();
+                    displayCustomAlert(`Success! Office is now <strong>${newStatus}</strong>.`, "⏳");
+                } catch(e) { displayCustomAlert("Network Error", "❌"); }
+                hideLoader();
+            } else {
+                createRequest('FORCE_DBDE', `Force ${newStatus} for SOL '${solToToggle}'`, { solId: solToToggle, status: newStatus });
             }
-            hideLoader();
         }
 
         // ----------------------------------------------------
@@ -1056,26 +1196,35 @@
         async function confirmBulkOffices() {
             if(stagedBulkOffices.length === 0) { displayCustomAlert("No valid offices to create.", "⚠️"); return; }
             
-            showLoader("Saving Offices to Cloud...");
-            SYSTEM_OFFICE_REGISTRY.push(...stagedBulkOffices);
-            logAdminAction(`Confirmed Bulk Creation of ${stagedBulkOffices.length} Offices.`);
-            
-            lastProcessedOffices = [...stagedBulkOffices]; // Keep for PDF
-            stagedBulkOffices = []; // Clear staging
-            
-            try {
-                await saveToCloud();
+            if (canDirectExecute) {
+                showLoader("Saving Offices to Cloud...");
+                SYSTEM_OFFICE_REGISTRY.push(...stagedBulkOffices);
+                logAdminAction(`Confirmed Bulk Creation of ${stagedBulkOffices.length} Offices.`);
+                
+                lastProcessedOffices = [...stagedBulkOffices]; 
+                stagedBulkOffices = []; 
+                
+                try {
+                    await saveToCloud();
+                    document.getElementById('bulkOfficePreviewContainer').style.display = 'none';
+                    document.getElementById('bulkOfficeFile').value = "";
+                    document.getElementById('bulkOfficeResults').style.display = 'block';
+                    document.getElementById('boSuccessTitle').innerText = "Creation Complete!";
+                    document.getElementById('bulkOfficeSummary').innerText = `Successfully registered ${lastProcessedOffices.length} new offices into the live database.`;
+                    
+                    hideLoader();
+                    displayCustomAlert("Offices Created Successfully!", "✅");
+                    refreshSolUI();
+                } catch(e) { hideLoader(); displayCustomAlert("Network Error", "❌"); }
+            } else {
+                createRequest('BULK_CREATE_OFFICE', `Bulk Creation of ${stagedBulkOffices.length} Offices`, { offices: stagedBulkOffices });
+                lastProcessedOffices = [...stagedBulkOffices];
+                stagedBulkOffices = [];
                 document.getElementById('bulkOfficePreviewContainer').style.display = 'none';
                 document.getElementById('bulkOfficeFile').value = "";
                 document.getElementById('bulkOfficeResults').style.display = 'block';
-                document.getElementById('bulkOfficeSummary').innerText = `Successfully registered ${lastProcessedOffices.length} new offices into the live database.`;
-                
-                hideLoader();
-                displayCustomAlert("Offices Created Successfully!", "✅");
-                refreshSolUI();
-            } catch(e) {
-                hideLoader();
-                displayCustomAlert("Network Error: Failed to save bulk offices.", "❌");
+                document.getElementById('boSuccessTitle').innerText = "Request Submitted!";
+                document.getElementById('bulkOfficeSummary').innerText = `You have submitted a request to create ${lastProcessedOffices.length} offices. Pending admin approval.`;
             }
         }
 
@@ -1358,36 +1507,54 @@
         async function confirmBulkUsers() {
             if(stagedBulkUsers.length === 0) { displayCustomAlert("No valid users to create.", "⚠️"); return; }
             
-            showLoader("Saving Users to Cloud...");
-            SYSTEM_USER_REGISTRY.push(...stagedBulkUsers);
-            logAdminAction(`Confirmed Bulk Creation of ${stagedBulkUsers.length} Users.`);
-            
-            lastProcessedUsersSuccess = [...stagedBulkUsers];
-            stagedBulkUsers = []; 
-            
-            try {
-                await saveToCloud();
+            if (canDirectExecute) {
+                showLoader("Saving Users to Cloud...");
+                SYSTEM_USER_REGISTRY.push(...stagedBulkUsers);
+                logAdminAction(`Confirmed Bulk Creation of ${stagedBulkUsers.length} Users.`);
+                
+                lastProcessedUsersSuccess = [...stagedBulkUsers];
+                stagedBulkUsers = []; 
+                
+                try {
+                    await saveToCloud();
+                    document.getElementById('bulkUserPreviewContainer').style.display = 'none';
+                    document.getElementById('bulkUserFile').value = "";
+                    
+                    document.getElementById('bulkUserResults').style.display = "block";
+                    document.getElementById('buSuccessTitle').innerText = "Creation Complete!";
+                    document.getElementById('bulkUserSummary').innerHTML = `
+                        <strong>Success:</strong> ${lastProcessedUsersSuccess.length} users permanently created and mapped.<br/>
+                        <strong>Failed:</strong> ${lastProcessedUsersError.length} users were rejected originally.
+                    `;
+                    
+                    if (lastProcessedUsersError.length > 0) {
+                        document.getElementById('btnUserErrorPdf').style.display = "block";
+                    } else {
+                        document.getElementById('btnUserErrorPdf').style.display = "none";
+                    }
+                    
+                    hideLoader();
+                    displayCustomAlert("Users Created Successfully!", "✅");
+                    refreshSolUI();
+                } catch(e) { hideLoader(); displayCustomAlert("Network Error", "❌"); }
+            } else {
+                createRequest('BULK_CREATE_USER', `Bulk Creation of ${stagedBulkUsers.length} Users`, { users: stagedBulkUsers });
+                lastProcessedUsersSuccess = [...stagedBulkUsers];
+                stagedBulkUsers = [];
+                
                 document.getElementById('bulkUserPreviewContainer').style.display = 'none';
                 document.getElementById('bulkUserFile').value = "";
-                
                 document.getElementById('bulkUserResults').style.display = "block";
+                document.getElementById('buSuccessTitle').innerText = "Request Submitted!";
                 document.getElementById('bulkUserSummary').innerHTML = `
-                    <strong>Success:</strong> ${lastProcessedUsersSuccess.length} users permanently created and mapped.<br/>
-                    <strong>Failed:</strong> ${lastProcessedUsersError.length} users were rejected originally.
+                    <strong>Request Submitted:</strong> You requested authorization for ${lastProcessedUsersSuccess.length} new users.<br/>
+                    <strong>Failed:</strong> ${lastProcessedUsersError.length} users were rejected during staging.
                 `;
-                
                 if (lastProcessedUsersError.length > 0) {
                     document.getElementById('btnUserErrorPdf').style.display = "block";
                 } else {
                     document.getElementById('btnUserErrorPdf').style.display = "none";
                 }
-                
-                hideLoader();
-                displayCustomAlert("Users Created Successfully!", "✅");
-                refreshSolUI();
-            } catch(e) {
-                hideLoader();
-                displayCustomAlert("Network Error: Failed to save bulk users.", "❌");
             }
         }
 
@@ -1398,7 +1565,7 @@
             
             doc.setFont("helvetica", "bold");
             doc.setFontSize(16);
-            doc.text("Bulk User Creation - Success Report", 14, 20);
+            doc.text("Bulk User Creation - Roster Report", 14, 20);
             
             doc.setFontSize(10);
             doc.setFont("helvetica", "normal");
@@ -1439,7 +1606,7 @@
             doc.setFont("helvetica", "normal");
             doc.setTextColor(0, 0, 0);
             doc.text(`Generated on: ${new Date().toLocaleString()}`, 14, 28);
-            doc.text("The following entries were rejected and NOT added to the database.", 14, 33);
+            doc.text("The following entries were rejected and NOT submitted to the database.", 14, 33);
             
             const tableData = lastProcessedUsersError.map(err => [
                 `Row ${err.row}`, 
