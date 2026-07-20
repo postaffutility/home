@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Maintenance Hub</title>
+    
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
+    <style>
+        /* Minimalist Baseline Setup & Security */
+        body, html { margin: 0 !important; padding: 0 !important; width: 100% !important; height: 100% !important; background-color: #f4f6f9 !important; font-family: 'Segoe UI', Arial, sans-serif; user-select: none; -webkit-user-select: none; -ms-user-select: none; }
+        input, textarea, select { user-select: text !important; -webkit-user-select: text !important; -ms-user-select: text !important; }
+        
+        /* --- BEAUTIFUL LIGHT THEME SPLASH SCREEN --- */
+        #splashScreen { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #ffffff; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 99999999; color: #1e293b; text-align: center; transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.8s; border-bottom: 8px solid #f59e0b; }
+        .splash-content { animation: popIn 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        @keyframes popIn { 0% { opacity: 0; transform: scale(0.9) translateY(20px); } 100% { opacity: 1; transform: scale(1) translateY(0); } }
+        .splash-icon { font-size: 72px; margin-bottom: 15px; animation: floatIcon 3s ease-in-out infinite; background: #fef3c7; width: 120px; height: 120px; border-radius: 50%; display: flex; justify-content: center; align-items: center; margin-left: auto; margin-right: auto; box-shadow: 0 10px 25px rgba(245, 158, 11, 0.2); }
+        @keyframes floatIcon { 0% { transform: translateY(0); } 50% { transform: translateY(-10px); } 100% { transform: translateY(0); } }
+        .splash-title { font-size: 38px; font-weight: 900; margin: 15px 0 5px 0; color: #0f172a; letter-spacing: -0.5px;}
+        .splash-badge { display: inline-block; background: #f59e0b; color: white; padding: 6px 16px; border-radius: 20px; font-size: 13px; font-weight: 800; letter-spacing: 1px; margin-bottom: 25px; box-shadow: 0 4px 10px rgba(245, 158, 11, 0.3); }
+        .splash-loader { width: 45px; height: 45px; border: 4px solid #f1f5f9; border-top-color: #f59e0b; border-radius: 50%; animation: spin 1s linear infinite; margin: 40px auto 0 auto; }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+        /* ------------------------------------------- */
+
+        .standalone-viewport { position: relative; z-index: 10; width: 100%; min-height: 100vh; padding: 40px 10px; box-sizing: border-box; }
+        .app-container { max-width: 1000px; background: #ffffff; padding: 40px; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); margin: 0 auto; border-top: 6px solid #f59e0b; position: relative; }
+        
+        .portal-logout-anchor { position: absolute; top: 40px; right: 40px; background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; padding: 8px 16px; font-size: 13px; font-weight: 800; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: all 0.2s ease; z-index: 50; }
+        .portal-logout-anchor:hover { background: #ef4444; color: #ffffff; border-color: #dc2626; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2); }
+
+        h2 { text-align: left; color: #1e293b; margin: 0 0 8px 0; font-size: 28px; font-weight: 800; letter-spacing: -0.5px; }
+        .tagline { text-align: left; color: #64748b; font-size: 13.5px; margin-bottom: 0; line-height: 1.6; }
+        #portalWelcomeMessage { text-align: left; color: #f59e0b; margin: 10px 0 30px 0; font-size: 18px; font-weight: 800; letter-spacing: -0.3px; }
+        
+        .status-badge { padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 800; color: #fff; letter-spacing: 0.5px; display: inline-block; text-align: center; min-width: 60px; }
+        .badge-active { background: #10b981; } .badge-disabled { background: #ef4444; } .badge-locked { background: #f59e0b; }
+        
+        .form-group { margin-bottom: 20px; }
+        label { display: block; font-weight: 700; margin-bottom: 8px; font-size: 14px; color: #334155; }
+        input[type="text"], input[type="number"], select, textarea { width: 100%; padding: 14px 16px; box-sizing: border-box; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14.5px; background: #f8fafc; color: #1e293b !important; transition: all 0.2s ease; }
+        input[type="text"]:focus, input[type="number"]:focus, select:focus, textarea:focus { border-color: #f59e0b; background: #ffffff; box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.1); outline: none; }
+        .flex-row { display: flex; gap: 15px; flex-wrap: wrap; }
+        .flex-row > div { flex: 1; }
+
+        .portal-grid-wrapper { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 24px; margin-top: 15px; }
+        .portal-module-card { background: #ffffff; border-radius: 16px; padding: 28px 24px; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.03); border: 1px solid #e2e8f0; transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); position: relative; overflow: hidden; display: block; }
+        .portal-module-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: #f59e0b; transition: height 0.3s ease; }
+        .portal-module-card:hover { transform: translateY(-10px); box-shadow: 0 25px 50px rgba(0, 0, 0, 0.12); border-color: #cbd5e1; z-index: 10; }
+        .portal-module-card:hover::before { height: 8px; }
+        
+        .card-icon { font-size: 28px; margin-bottom: 18px; display: inline-flex; align-items: center; justify-content: center; width: 56px; height: 56px; border-radius: 14px; background: #fef3c7; transition: transform 0.3s ease; }
+        .portal-module-card:hover .card-icon { transform: scale(1.1); }
+        .portal-module-card h3 { margin: 0 0 10px 0; font-size: 18px; font-weight: 800; color: #1e293b; letter-spacing: -0.3px;}
+        .portal-module-card p { margin: 0; font-size: 13.5px; color: #64748b; line-height: 1.6; }
+        
+        .sub-action-card { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 25px; margin-bottom: 20px;}
+        .sub-action-card h4 { margin: 0 0 16px 0; color: #0f172a; font-size: 16px; font-weight: 800; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; }
+        
+        .system-log-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 13px; }
+        .system-log-table th, .system-log-table td { border: 1px solid #e2e8f0; padding: 12px; text-align: left; color: #334155 !important; vertical-align: middle; }
+        .system-log-table th { background: #f8fafc; font-weight: 800; color: #0f172a; }
+        .system-log-table tr:nth-child(even) { background: #f1f5f9; }
+        
+        .portal-page-panel { display: none; animation: fadeIn 0.4s ease-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        .back-nav-link { display: inline-flex; align-items: center; color: #3b82f6; font-weight: 800; font-size: 14px; text-decoration: none; margin-bottom: 15px; cursor: pointer; width: fit-content; transition: color 0.2s; }
+        .back-nav-link:hover { color: #1d4ed8; }
+        
+        button.action-btn { width: 100%; padding: 16px; background: #f59e0b; color: #1e293b; border: none; border-radius: 8px; font-size: 15.5px; font-weight: 900; cursor: pointer; text-transform: uppercase; letter-spacing: 0.8px; margin-top: 15px; box-shadow: 0 4px 12px rgba(245, 158, 11, 0.25); transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
+        button.action-btn:hover { filter: brightness(95%); transform: translateY(-2px); box-shadow: 0 8px 20px rgba(245, 158, 11, 0.3); }
+        button.panel-sub-submit { padding: 14px 18px; font-size: 14.5px; margin-top: 20px; box-shadow: none; width: 100%; text-transform: none; border-radius: 8px; color: white; border: none; font-weight: 800; cursor: pointer; }
+        button.panel-sub-submit:hover { filter: brightness(90%); }
+        
+        button.small-action-btn { background:#3b82f6; color:white; border:none; padding:6px 12px; border-radius:4px; font-size:12px; font-weight:bold; cursor:pointer; margin-right:5px; transition:0.2s; }
+        button.small-action-btn:hover { filter: brightness(90%); }
+        button.small-delete-btn { background:#ef4444; color:white; border:none; padding:6px 12px; border-radius:4px; font-size:12px; font-weight:bold; cursor:pointer; transition:0.2s; }
+        button.small-delete-btn:hover { background:#dc2626; }
+        
+        /* MODALS */
+        .custom-popup-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(6px); z-index: 20000000; display: none; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.2s ease-in-out; }
+        .custom-popup-card { background: #ffffff; width: 90%; max-width: 420px; padding: 35px; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.2); text-align: center; box-sizing: border-box; border-top: 6px solid #f59e0b; transform: scale(0.95); transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .custom-popup-overlay.active { display: flex; opacity: 1; }
+        .custom-popup-overlay.active .custom-popup-card { transform: scale(1); }
+        .popup-icon-alert { font-size: 48px; margin-bottom: 15px; }
+        .popup-message-text { color: #334155; font-size: 15px; line-height: 1.6; margin: 0 0 25px 0; font-weight: 600; white-space: pre-line; }
+        .popup-close-btn { background: #0f172a; color: white; padding: 12px 28px; border: none; border-radius: 8px; font-size: 13.5px; font-weight: 800; cursor: pointer; text-transform: uppercase; width: 100%; transition: background 0.2s;}
+        .popup-close-btn:hover { background: #334155; }
+        
+        .request-detail-box { text-align: left; background: #f8fafc; border: 1px solid #e2e8f0; padding: 15px; border-radius: 8px; font-size: 14px; margin-bottom: 20px; max-height: 300px; overflow-y: auto; }
+        .request-detail-row { padding: 8px 0; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; }
+        .request-detail-row:last-child { border-bottom: none; }
+        .req-key { font-weight: bold; color: #475569; }
+        .req-val { color: #0f172a; font-family: monospace; font-size: 14px; }
+
+        .processing-loader-container { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(5px); z-index: 30000000; display: none; flex-direction: column; justify-content: center; align-items: center; }
+        .app-loading-spinner { width: 45px; height: 45px; border: 4px solid #f1f5f9; border-top: 4px solid #f59e0b; border-radius: 50%; animation: spinSystem 0.8s linear infinite; margin-bottom: 20px; }
+        .loading-status-msg { font-size: 15px; font-weight: 800; color: #0f172a; letter-spacing: 0.5px; }
+        @keyframes spinSystem { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+
+    <!-- THE BEAUTIFUL LIGHT SPLASH SCREEN -->
+    <div id="splashScreen">
+        <div class="splash-content">
+            <div class="splash-icon">👥</div>
+            <h1 class="splash-title">User Maintenance Hub</h1>
+            <div class="splash-badge">Secure Identity Management</div>
+            <div class="splash-loader"></div>
+        </div>
+    </div>
+
+    <div class='standalone-viewport' id='appDashboardView' style="display: none;">
+        <div class='app-container'>
+            <div class='portal-logout-anchor' onclick='window.location.href="index.html"'>🚪 Exit to Portal</div>
+            
+            <div id='mainDashboardHead'>
+                <div class='header-titles'>
+                    <h2>USER MAINTENANCE HUB</h2>
+                    <div class='tagline'>Secure Admin Identity & Access Management</div>
+                    <div id='portalWelcomeMessage'></div>
+                </div>
+                
+                <div class='portal-grid-wrapper' id='userModuleGrid'>
+                    <!-- APPROVALS PANEL FOR ADMIN OFFICE -->
+                    <div class='portal-module-card' id='menuCardApprovals' onclick='navigateToSubPanel("panelApprovals")' style='display:none; border-color: #ef4444;'>
+                        <div class='card-icon' style="background: #fee2e2;">🛡️</div>
+                        <h3 style="color: #ef4444;">Pending Approvals <span id="approvalBadge" style="background:#ef4444; color:white; padding:2px 8px; border-radius:12px; font-size:12px; vertical-align:middle; margin-left:5px;">0</span></h3>
+                        <p>Review, Audit, and Authorize identity modification requests submitted by local branch admins.</p>
+                    </div>
+
+                    <div class='portal-module-card' onclick='navigateToSubPanel("subCreateUser")' style="border-color: #3b82f6;">
+                        <div class='card-icon' style="background: #dbeafe;">👤</div>
+                        <h3>Create New User</h3>
+                        <p>Register a new system user profile and assign their operational role.</p>
+                    </div>
+
+                    <div class='portal-module-card' onclick='navigateToSubPanel("subLockUnlock")' style="border-color: #f59e0b;">
+                        <div class='card-icon' style="background: #fef3c7;">🗝️</div>
+                        <h3>Lock / Unlock User</h3>
+                        <p>Temporarily lock or unlock an existing user account for security reasons.</p>
+                    </div>
+
+                    <div class='portal-module-card' onclick='navigateToSubPanel("subEnableDisable")' style="border-color: #10b981;">
+                        <div class='card-icon' style="background: #d1fae5;">✅</div>
+                        <h3>Enable / Disable User</h3>
+                        <p>Completely disable or re-enable an existing user's portal access.</p>
+                    </div>
+
+                    <div class='portal-module-card' onclick='navigateToSubPanel("subResetPass")' style="border-color: #475569;">
+                        <div class='card-icon' style="background: #f1f5f9;">🔄</div>
+                        <h3>Reset Passcode</h3>
+                        <p>Change the login passcode for an existing system user to a default value.</p>
+                    </div>
+
+                    <div class='portal-module-card' onclick='navigateToSubPanel("subChangeRole")' style="border-color: #8b5cf6;">
+                        <div class='card-icon' style="background: #ede9fe;">🛡️</div>
+                        <h3>Change User Role</h3>
+                        <p>Elevate a user to Admin or restrict them down to Maker.</p>
+                    </div>
+
+                    <div class='portal-module-card' onclick='navigateToSubPanel("subCustomizeCards")' style="border-color: #14b8a6;">
+                        <div class='card-icon' style="background: #ccfbf1;">🎛️</div>
+                        <h3>Customize User Cards</h3>
+                        <p>Add or remove specific dashboard modules for individual users.</p>
+                    </div>
+
+                    <div class='portal-module-card' onclick='navigateToSubPanel("subDeleteUser")' style="border-color: #e11d48;">
+                        <div class='card-icon' style="background: #ffe4e6;">🗑️</div>
+                        <h3>Delete User</h3>
+                        <p>Permanently remove a user profile from the entire system database.</p>
+                    </div>
+
+                    <div class='portal-module-card' onclick='navigateToSubPanel("subDirectMessage")' style="border-color: #f59e0b;">
+                        <div class='card-icon' style="background: #fef3c7;">✉️</div>
+                        <h3>Send Direct Message</h3>
+                        <p>Send a personalized, self-destructing alert message to a specific staff member.</p>
+                    </div>
+
+                    <div class='portal-module-card' onclick='navigateToSubPanel("subUpdateNews")' style="border-color: #10b981;">
+                        <div class='card-icon' style="background: #d1fae5;">📢</div>
+                        <h3>Broadcast Live News</h3>
+                        <p>Update the scrolling marquee text visible to all users at the top of the portal.</p>
+                    </div>
+
+                    <div class='portal-module-card' onclick='navigateToSubPanel("subUserLogs")' style='grid-column: 1 / -1; border-color: #4f46e5;'>
+                        <div class='card-icon' style="background: #e0e7ff;">📊</div>
+                        <h3>User Status & Login Logs</h3>
+                        <p>View current account registry status and recent historical login connection attempts.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PENDING APPROVALS PANEL -->
+            <div class='portal-page-panel' id='panelApprovals'>
+                <div class='back-nav-link' onclick='returnToMainDashboard()'>⬅️ Back to Hub</div>
+                <h3 style="margin-top:0; color:#1e293b; font-size:22px;">Pending Authorization Requests</h3>
+                <div class='sub-action-card' style="border-top: 4px solid #ef4444; overflow-x: auto;">
+                    <table class='system-log-table' style="min-width: 700px;">
+                        <thead>
+                            <tr>
+                                <th>Date & Time</th>
+                                <th>Requested By</th>
+                                <th>Request Description</th>
+                                <th>Audit Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id='approvalsTableBody'></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- CREATE USER -->
+            <div class='portal-page-panel' id='subCreateUser'>
+                <div class='back-nav-link' onclick='returnToMainDashboard()'>⬅️ Back to Hub</div>
+                <h3 style="margin-top:0; color:#1e293b; font-size:22px;">Create New User</h3>
+                <div class='sub-action-card' style="border-top: 4px solid #3b82f6;">
+                    <div class='form-group'><label>Full Name</label><input id='muNewFullName' placeholder='Enter Official Full Name' type='text'/></div>
+                    <div class='form-group'><label>Username</label><input id='muNewUser' placeholder='Enter unique login username' type='text'/></div>
+                    <div class='form-group'><label>Passcode</label><input id='muNewPass' placeholder='Enter default secure passcode' type='text'/></div>
+                    <div class='form-group'><label>Access Role</label>
+                        <select id='muNewRole'>
+                            <option value='maker'>Maker (Billing Only)</option>
+                            <option value='superuser'>Superuser (Office Head)</option>
+                            <option value='admin'>Admin (Full Access)</option>
+                        </select>
+                    </div>
+                    <button class='action-btn panel-sub-submit btn-dynamic' onclick='executeCreateUserAction()' style='background:#3b82f6;' type='button'>Register Profile</button>
+                </div>
+            </div>
+
+            <!-- LOCK / UNLOCK -->
+            <div class='portal-page-panel' id='subLockUnlock'>
+                <div class='back-nav-link' onclick='returnToMainDashboard()'>⬅️ Back to Hub</div>
+                <h3 style="margin-top:0; color:#1e293b; font-size:22px;">Lock / Unlock User</h3>
+                <div class='sub-action-card' style="border-top: 4px solid #f59e0b;">
+                    <div class='form-group'><label>Select Target User</label><select class='mu-user-dropdown' id='muLockSelect'></select></div>
+                    <button class='action-btn panel-sub-submit btn-dynamic' onclick='executeToggleUserStatus("lock", "muLockSelect")' style='background:#f59e0b;' type='button'>Toggle Lock Status</button>
+                </div>
+            </div>
+
+            <!-- ENABLE / DISABLE -->
+            <div class='portal-page-panel' id='subEnableDisable'>
+                <div class='back-nav-link' onclick='returnToMainDashboard()'>⬅️ Back to Hub</div>
+                <h3 style="margin-top:0; color:#1e293b; font-size:22px;">Enable / Disable User</h3>
+                <div class='sub-action-card' style="border-top: 4px solid #10b981;">
+                    <div class='form-group'><label>Select Target User</label><select class='mu-user-dropdown' id='muEnableSelect'></select></div>
+                    <button class='action-btn panel-sub-submit btn-dynamic' onclick='executeToggleUserStatus("disable", "muEnableSelect")' style='background:#10b981;' type='button'>Toggle Enable/Disable</button>
+                </div>
+            </div>
+
+            <!-- RESET PASSCODE -->
+            <div class='portal-page-panel' id='subResetPass'>
+                <div class='back-nav-link' onclick='returnToMainDashboard()'>⬅️ Back to Hub</div>
+                <h3 style="margin-top:0; color:#1e293b; font-size:22px;">Reset Passcode</h3>
+                <div class='sub-action-card' style="border-top: 4px solid #475569;">
+                    <div class='form-group'><label>Select Target User</label><select class='mu-user-dropdown' id='muResetSelect'></select></div>
+                    <div class='form-group'><label>New Passcode</label><input id='muResetPassInput' placeholder='Enter new passcode' type='text'/></div>
+                    <button class='action-btn panel-sub-submit btn-dynamic' onclick='executeResetPasswordAction()' style='background:#475569;' type='button'>Update Passcode</button>
+                </div>
+            </div>
+
+            <!-- CHANGE ROLE -->
+            <div class='portal-page-panel' id='subChangeRole'>
+                <div class='back-nav-link' onclick='returnToMainDashboard()'>⬅️ Back to Hub</div>
+                <h3 style="margin-top:0; color:#1e293b; font-size:22px;">Change User Role</h3>
+                <div class='sub-action-card' style="border-top: 4px solid #8b5cf6;">
+                    <div class='form-group'><label>Select Target User</label><select class='mu-user-dropdown' id='muRoleTargetSelect'></select></div>
+                    <div class='form-group'><label>New Access Role</label>
+                        <select id='muNewRoleSelect'>
+                            <option value='maker'>Maker (Billing Only)</option>
+                            <option value='superuser'>Superuser (Office Head)</option>
+                            <option value='admin'>Admin (Full Access)</option>
+                        </select>
+                    </div>
+                    <button class='action-btn panel-sub-submit btn-dynamic' onclick='executeRoleChangeAction()' style='background:#8b5cf6;' type='button'>Update Role</button>
+                </div>
+            </div>
+
+            <!-- CUSTOMIZE CARDS -->
+            <div class='portal-page-panel' id='subCustomizeCards'>
+                <div class='back-nav-link' onclick='returnToMainDashboard()'>⬅️ Back to Hub</div>
+                <h3 style="margin-top:0; color:#1e293b; font-size:22px;">Customize User Cards</h3>
+                <div class='sub-action-card' style="border-top: 4px solid #14b8a6;">
+                    <div class='form-group'><label>Select Target User</label><select class='mu-user-dropdown' id='muCustomizeSelect' onchange='loadUserCurrentCards()'></select></div>
+                    <div style='background: #fff; padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: 20px;'>
+                        <label style='margin-bottom: 15px;'>Select Accessible Modules:</label>
+                        <div style='display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 14px;'>
+                            <label><input class='card-checkbox' type='checkbox' value='menuCardDBDE'/> Day Begin/End</label>
+                            <label><input class='card-checkbox' type='checkbox' value='menuCardBulk'/> Bulk Bills</label>
+                            <label><input class='card-checkbox' type='checkbox' value='menuCardHoliday'/> Holiday Bills</label>
+                            <label><input class='card-checkbox' type='checkbox' value='menuCardDateWise'/> Date-Wise Bills</label>
+                            <label><input class='card-checkbox' type='checkbox' value='menuCardACG61'/> ACG-61 Charge Report</label>
+                            <label><input class='card-checkbox' type='checkbox' value='menuCardGeneralCharge'/> Gen. Charge Report</label>
+                            <label><input class='card-checkbox' type='checkbox' value='menuCardSR1'/> SR-1 Leave App</label>
+                            <label><input class='card-checkbox' type='checkbox' value='menuCardCasualLeave'/> Casual Leave App</label>
+                            <label><input class='card-checkbox' type='checkbox' value='menuCardTAAdvance'/> T.A. Advance</label>
+                            <label><input class='card-checkbox' type='checkbox' value='menuCardTATransfer'/> T.A. Transfer</label>
+                            <label><input class='card-checkbox' type='checkbox' value='menuCardTABillTour'/> T.A. Bill (Tour)</label>
+                            <label><input class='card-checkbox' type='checkbox' value='menuCardCEA'/> CEA Claim</label>
+                            <label><input class='card-checkbox' type='checkbox' value='menuCardAI'/> Talk with AI</label>
+                            <label><input class='card-checkbox' type='checkbox' value='menuCardMaintenance'/> User Maint. Hub</label>
+                            <label><input class='card-checkbox' type='checkbox' value='menuCardSelfPassword'/> Change Passcode</label>
+                        </div>
+                    </div>
+                    <button class='action-btn panel-sub-submit btn-dynamic' onclick='executeSaveUserCards()' style='background:#14b8a6;' type='button'>Save Card Configuration</button>
+                </div>
+            </div>
+
+            <!-- DELETE USER -->
+            <div class='portal-page-panel' id='subDeleteUser'>
+                <div class='back-nav-link' onclick='returnToMainDashboard()'>⬅️ Back to Hub</div>
+                <h3 style="margin-top:0; color:#1e293b; font-size:22px;">Permanently Delete User</h3>
+                <div class='sub-action-card' style="border-top: 4px solid #e11d48;">
+                    <div class='form-group'><label>Select Target User</label><select class='mu-user-dropdown' id='muDeleteSelect'></select></div>
+                    <button class='action-btn panel-sub-submit btn-dynamic' onclick='executeDeleteUserAction()' style='background:#e11d48;' type='button'>Delete Profile</button>
+                </div>
+            </div>
+
+            <!-- SEND DIRECT MESSAGE -->
+            <div class='portal-page-panel' id='subDirectMessage'>
+                <div class='back-nav-link' onclick='returnToMainDashboard()'>⬅️ Back to Hub</div>
+                <h3 style="margin-top:0; color:#1e293b; font-size:22px;">Send Direct Alert Message</h3>
+                <div class='sub-action-card' style="border-top: 4px solid #f59e0b;">
+                    <div class='form-group'><label>Select Target Staff Member</label><select class='mu-user-dropdown' id='muMessageSelect'></select></div>
+                    <div class='form-group'><label>Personalized Message</label><textarea id='muMessageInput' placeholder='Type your message here...' rows='4'></textarea></div>
+                    <button class='action-btn panel-sub-submit btn-dynamic' onclick='executeSendDirectMessage()' style='background:#f59e0b;' type='button'>Send Direct Message</button>
+                </div>
+            </div>
+
+            <!-- BROADCAST NEWS -->
+            <div class='portal-page-panel' id='subUpdateNews'>
+                <div class='back-nav-link' onclick='returnToMainDashboard()'>⬅️ Back to Hub</div>
+                <h3 style="margin-top:0; color:#1e293b; font-size:22px;">Broadcast Live News</h3>
+                <div class='sub-action-card' style="border-top: 4px solid #10b981;">
+                    <div class='form-group'><label>Enter the latest announcement to scroll on the main dashboard:</label><textarea id='muNewsInput' placeholder='Enter the news feed text...' rows='3'></textarea></div>
+                    <button class='action-btn panel-sub-submit btn-dynamic' onclick='executeUpdateNewsAction()' style='background:#10b981;' type='button'>Publish Live News</button>
+                </div>
+            </div>
+
+            <!-- USER LOGS -->
+            <div class='portal-page-panel' id='subUserLogs'>
+                <div class='back-nav-link' onclick='returnToMainDashboard()'>⬅️ Back to Hub</div>
+                <h3 style="margin-top:0; color:#1e293b; font-size:22px;">User Status & Login Logs</h3>
+                <div class='sub-action-card' style='margin-bottom:20px; border-top: 4px solid #4f46e5;'>
+                    <h4>Registered System Account Registry</h4>
+                    <table class='system-log-table'>
+                        <thead><tr><th>Full Name</th><th>Username</th><th>Account Role</th><th>Permission</th><th>Security State</th></tr></thead>
+                        <tbody id='muUserRosterTableBody'></tbody>
+                    </table>
+                </div>
+                <div class='sub-action-card' style="border-top: 4px solid #4f46e5;">
+                    <h4>Live Portal Connection Access History</h4>
+                    <table class='system-log-table'>
+                        <thead><tr><th>Timestamp Ledger Entry</th><th>Connecting User</th><th>Security Event Status</th></tr></thead>
+                        <tbody id='muLoginHistoryTableBody'></tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Modals for Alerts & Request Details -->
+    <div class='custom-popup-overlay' id='customAppAlertModal' style="z-index: 60000000;">
+        <div class='custom-popup-card'>
+            <div class='popup-icon-alert' id='popupAlertIcon'>🔔</div>
+            <p class='popup-message-text' id='customAlertMsgField'>Notice</p>
+            <button class='popup-close-btn' onclick='closeCustomAlert()'>Continue</button>
+        </div>
+    </div>
+
+    <!-- VIEW REQUEST DETAILS MODAL -->
+    <div class='custom-popup-overlay' id='requestDetailsModal' style="z-index: 50000000;">
+        <div class='custom-popup-card' style="max-width: 500px; border-top: 6px solid #4f46e5;">
+            <h3 style="margin-top:0; color:#1e3a8a; text-align:left;">Request Audit Details</h3>
+            <div id="requestDetailsContent" class="request-detail-box"></div>
+            <div style="display:flex; gap:10px;">
+                <button onclick="approveCurrentRequest()" style="background:#10b981; color:white; border:none; padding:12px; border-radius:6px; flex:1; font-weight:bold; cursor:pointer;">✅ Approve</button>
+                <button onclick="rejectCurrentRequest()" style="background:#ef4444; color:white; border:none; padding:12px; border-radius:6px; flex:1; font-weight:bold; cursor:pointer;">❌ Reject</button>
+                <button onclick="closeRequestDetails()" style="background:#64748b; color:white; border:none; padding:12px; border-radius:6px; flex:1; font-weight:bold; cursor:pointer;">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <div class='processing-loader-container' id='globalAppLoader'>
+        <div class='app-loading-spinner'></div>
+        <div class='loading-status-msg' id="loaderTextMsg">Syncing with Cloud...</div>
+    </div>
+
+    <script type="text/javascript">
+        // ----------------------------------------------------
+        // 1. FIREBASE CONFIGURATION
+        // ----------------------------------------------------
+        const firebaseConfig = {
+            apiKey: "AIzaSyArIz9EyuPcbQs0HKvsm0OfxwXKGlbO03c",
+            authDomain: "po-staff-utility.firebaseapp.com",
+            projectId: "po-staff-utility",
+            storageBucket: "po-staff-utility.firebasestorage.app",
+            messagingSenderId: "893250505080",
+            appId: "1:893250505080:web:ae37a3ea6e959b652ca08d"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        // ----------------------------------------------------
+        // 2. GLOBAL VARIABLES
+        // ----------------------------------------------------
+        let SYSTEM_USER_REGISTRY = [];
+        let SYSTEM_OFFICE_REGISTRY = [];
+        let SYSTEM_LOGIN_HISTORY = [];
+        let SYSTEM_PENDING_REQUESTS = [];
+        
+        let activeUser = null;
+        let activeRole = null;
+        let isMasterAdmin = false;
+        let isAdminOffice = false;
+        let canDirectExecute = false;
+        let currentlyViewingRequest = null;
+
+        // ----------------------------------------------------
+        // 3. SECURITY BOUNCER & SPLASH SCREEN
+        // ----------------------------------------------------
+        window.onload = function() {
+            activeUser = sessionStorage.getItem("activeUser");
+            activeRole = sessionStorage.getItem("activeRole");
+
+            if (!activeUser || activeRole !== "admin") {
+                window.location.replace("index.html");
+                return;
+            }
+
+            // Sync Registry FIRST to eliminate race condition
+            db.collection("system").doc("registry").onSnapshot((registryDoc) => {
+                if (registryDoc.exists) {
+                    const data = registryDoc.data();
+                    SYSTEM_USER_REGISTRY = data.users || [];
+                    SYSTEM_OFFICE_REGISTRY = data.offices || [];
+                    SYSTEM_LOGIN_HISTORY = data.logs || [];
+                    SYSTEM_PENDING_REQUESTS = data.requests || [];
+                    
+                    // Evaluate Security Hierarchy
+                    const myProfile = SYSTEM_USER_REGISTRY.find(u => u.user === activeUser);
+                    isMasterAdmin = (activeUser === "admin");
+                    isAdminOffice = (myProfile && myProfile.solId === "000000");
+                    canDirectExecute = (isMasterAdmin || isAdminOffice);
+                    
+                    // Adjust UI based on permissions
+                    if (!canDirectExecute) {
+                        document.querySelectorAll('.btn-dynamic').forEach(btn => {
+                             if(!btn.innerText.startsWith("Request")) {
+                                 btn.innerText = "Request " + btn.innerText;
+                             }
+                        });
+                    }
+
+                    if(myProfile) {
+                        document.getElementById('portalWelcomeMessage').innerText = `Welcome, ${myProfile.fullName} (${canDirectExecute ? 'Super Admin' : 'Branch Admin'})`;
+                    }
+
+                    refreshUI(); 
+                }
+                
+                // Hide loader in case it was showing during a later update
+                document.getElementById('globalAppLoader').style.display = 'none';
+
+            }, (error) => {
+                displayCustomAlert("Failed to sync with secure database.");
+                document.getElementById('globalAppLoader').style.display = 'none';
+            });
+
+            // Beautiful Light Theme Splash Screen Sequence
+            setTimeout(() => {
+                const splash = document.getElementById('splashScreen');
+                splash.style.opacity = '0';
+                setTimeout(() => { 
+                    splash.style.display = 'none'; 
+                    document.getElementById('appDashboardView').style.display = 'block';
+                }, 800);
+            }, 2000);
+        };
+
+        // ----------------------------------------------------
+        // 4. NAVIGATION & REQUEST ENGINE
+        // ----------------------------------------------------
+        function navigateToSubPanel(panelId) {
+            document.getElementById('mainDashboardHead').style.display = 'none';
+            const panels = ['subCreateUser', 'subLockUnlock', 'subEnableDisable', 'subResetPass', 'subChangeRole', 'subCustomizeCards', 'subDeleteUser', 'subDirectMessage', 'subUpdateNews', 'subUserLogs', 'panelApprovals'];
+            panels.forEach(id => { document.getElementById(id).style.display = 'none'; });
+            document.getElementById(panelId).style.display = 'block';
+        }
+
+        function returnToMainDashboard() {
+            const panels = ['subCreateUser', 'subLockUnlock', 'subEnableDisable', 'subResetPass', 'subChangeRole', 'subCustomizeCards', 'subDeleteUser', 'subDirectMessage', 'subUpdateNews', 'subUserLogs', 'panelApprovals'];
+            panels.forEach(id => { document.getElementById(id).style.display = 'none'; });
+            document.getElementById('mainDashboardHead').style.display = 'block';
+        }
+
+        function displayCustomAlert(msg, icon = '🔔') {
+            document.getElementById('popupAlertIcon').innerText = icon;
+            document.getElementById('customAlertMsgField').innerHTML = msg;
+            const modal = document.getElementById('customAppAlertModal');
+            modal.style.display = 'flex';
+            setTimeout(() => { modal.classList.add('active'); }, 10);
+        }
+
+        function closeCustomAlert() {
+            const modal = document.getElementById('customAppAlertModal');
+            modal.classList.remove('active');
+            setTimeout(() => { modal.style.display = 'none'; }, 200);
+        }
+
+        function showLoader(msg) {
+            document.getElementById('loaderTextMsg').innerText = msg;
+            document.getElementById('globalAppLoader').style.display = 'flex';
+        }
+
+        function hideLoader() { document.getElementById('globalAppLoader').style.display = 'none'; }
+
+        async function saveToCloud() {
+            await db.collection("system").doc("registry").set({
+                users: SYSTEM_USER_REGISTRY,
+                logs: SYSTEM_LOGIN_HISTORY,
+                offices: SYSTEM_OFFICE_REGISTRY,
+                requests: SYSTEM_PENDING_REQUESTS
+            });
+        }
+
+        function logAdminAction(eventMsg) {
+            let options = { timeZone: 'Asia/Kolkata', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
+            let timeStamp = new Date().toLocaleString('en-IN', options);
+            SYSTEM_LOGIN_HISTORY.push({ time: timeStamp, user: activeUser, event: eventMsg });
+            if (SYSTEM_LOGIN_HISTORY.length > 15) SYSTEM_LOGIN_HISTORY = SYSTEM_LOGIN_HISTORY.slice(SYSTEM_LOGIN_HISTORY.length - 15);
+        }
+
+        function createRequest(type, desc, payload) {
+            SYSTEM_PENDING_REQUESTS.push({
+                id: Date.now().toString() + Math.random().toString(36).substr(2, 5),
+                type: type,
+                desc: desc,
+                payload: payload,
+                requestedBy: activeUser,
+                timestamp: new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true })
+            });
+            showLoader("Submitting Request...");
+            saveToCloud().then(() => {
+                displayCustomAlert("Request Submitted Successfully!<br/><br/>It is pending authorization from the Admin Office.", "✅");
+            }).catch(e => displayCustomAlert("Failed to submit request.", "❌"))
+            .finally(() => hideLoader());
+        }
+
+        // --- APPROVALS & VIEW DETAILS LOGIC ---
+        function viewRequestDetails(reqId) {
+            currentlyViewingRequest = reqId;
+            const req = SYSTEM_PENDING_REQUESTS.find(r => r.id === reqId);
+            if (!req) return;
+
+            let html = ``;
+            for (const [key, value] of Object.entries(req.payload)) {
+                // Formatting payload for readability
+                let displayVal = value;
+                if (typeof value === 'object') displayVal = JSON.stringify(value);
+                if (typeof value === 'boolean') displayVal = value ? "True" : "False";
+                
+                html += `<div class="request-detail-row">
+                            <span class="req-key">${key.toUpperCase()}:</span>
+                            <span class="req-val">${displayVal}</span>
+                         </div>`;
+            }
+
+            document.getElementById('requestDetailsContent').innerHTML = html;
+            const modal = document.getElementById('requestDetailsModal');
+            modal.style.display = 'flex';
+            setTimeout(() => modal.classList.add('active'), 10);
+        }
+
+        function closeRequestDetails() {
+            currentlyViewingRequest = null;
+            const modal = document.getElementById('requestDetailsModal');
+            modal.classList.remove('active');
+            setTimeout(() => modal.style.display = 'none', 200);
+        }
+
+        function approveCurrentRequest() {
+            if(!currentlyViewingRequest) return;
+            processRequest(currentlyViewingRequest, 'APPROVE');
+            closeRequestDetails();
+        }
+
+        function rejectCurrentRequest() {
+            if(!currentlyViewingRequest) return;
+            processRequest(currentlyViewingRequest, 'REJECT');
+            closeRequestDetails();
+        }
+
+        async function processRequest(reqId, action) {
+            const reqIdx = SYSTEM_PENDING_REQUESTS.findIndex(r => r.id === reqId);
+            if (reqIdx === -1) return;
+            const req = SYSTEM_PENDING_REQUESTS[reqIdx];
+
+            if (action === 'APPROVE') {
+                const p = req.payload;
+                switch(req.type) {
+                    case 'CREATE_USER': SYSTEM_USER_REGISTRY.push(p); break;
+                    case 'TOGGLE_LOCK': {
+                        let u = SYSTEM_USER_REGISTRY.find(x => x.user === p.user);
+                        if(u) { u.locked = p.locked; if(!u.locked) u.failedAttempts = 0; }
+                        break;
+                    }
+                    case 'TOGGLE_ENABLE': {
+                        let u = SYSTEM_USER_REGISTRY.find(x => x.user === p.user);
+                        if(u) u.active = p.active;
+                        break;
+                    }
+                    case 'RESET_PASS': {
+                        let u = SYSTEM_USER_REGISTRY.find(x => x.user === p.user);
+                        if(u) { u.pass = p.pass; u.isFirstTimeDefault = true; }
+                        break;
+                    }
+                    case 'CHANGE_ROLE': {
+                        let u = SYSTEM_USER_REGISTRY.find(x => x.user === p.user);
+                        if(u) { u.role = p.role; u.allowedCards = p.allowedCards; }
+                        break;
+                    }
+                    case 'CUSTOMIZE_CARDS': {
+                        let u = SYSTEM_USER_REGISTRY.find(x => x.user === p.user);
+                        if(u) u.allowedCards = p.allowedCards;
+                        break;
+                    }
+                    case 'DELETE_USER': {
+                        let uIdx = SYSTEM_USER_REGISTRY.findIndex(x => x.user === p.user);
+                        if(uIdx > -1) SYSTEM_USER_REGISTRY.splice(uIdx, 1);
+                        break;
+                    }
+                    case 'SEND_MSG': {
+                        let u = SYSTEM_USER_REGISTRY.find(x => x.user === p.user);
+                        if(u) u.pendingMessage = p.msg;
+                        break;
+                    }
+                    case 'UPDATE_NEWS': {
+                        db.collection("system").doc("announcements").set({ tickerText: p.text }, { merge: true });
+                        break;
+                    }
+                }
+                logAdminAction(`Approved Request: ${req.desc}`);
+            } else {
+                logAdminAction(`Rejected Request: ${req.desc}`);
+            }
+
+            SYSTEM_PENDING_REQUESTS.splice(reqIdx, 1);
+            showLoader(action === 'APPROVE' ? "Applying Changes..." : "Discarding Request...");
+            try {
+                await saveToCloud();
+                displayCustomAlert(`Request ${action === 'APPROVE' ? 'Approved' : 'Rejected'} successfully!`, "✅");
+            } catch(e) { displayCustomAlert("Network Error.", "❌"); }
+            hideLoader();
+        }
+
+        // ----------------------------------------------------
+        // 5. UI REFRESH
+        // ----------------------------------------------------
+        function refreshUI() {
+            const dropdownIds = ['muLockSelect', 'muEnableSelect', 'muResetSelect', 'muRoleTargetSelect', 'muDeleteSelect', 'muCustomizeSelect', 'muMessageSelect'];
+            
+            // Protect "admin" from dropdowns
+            dropdownIds.forEach(id => { 
+                let el = document.getElementById(id); 
+                if(el) el.innerHTML = "<option value=''>-- Select User --</option>"; 
+            });
+
+            const rosterBody = document.getElementById('muUserRosterTableBody'); 
+            if(rosterBody) rosterBody.innerHTML = "";
+
+            SYSTEM_USER_REGISTRY.forEach(account => {
+                let dName = account.fullName || account.user;
+                
+                // Exclude "admin" from selection completely
+                if (account.user !== "admin") {
+                    dropdownIds.forEach(id => { 
+                        let el = document.getElementById(id); 
+                        if(el) { 
+                            let opt = document.createElement('option'); 
+                            opt.value = account.user; 
+                            opt.innerText = `${dName} (${account.user}) [${account.role.toUpperCase()}]`; 
+                            el.appendChild(opt); 
+                        } 
+                    });
+                }
+                
+                if(rosterBody) {
+                    let row = document.createElement('tr'); 
+                    row.innerHTML = `
+                        <td>${dName}</td>
+                        <td><strong>${account.user}</strong></td>
+                        <td><span style="text-transform:uppercase;">${account.role}</span></td>
+                        <td><span class="status-badge ${account.active ? 'badge-active' : 'badge-disabled'}">${account.active ? 'ENABLED' : 'DISABLED'}</span></td>
+                        <td><span class="status-badge ${account.locked ? 'badge-locked' : 'badge-active'}">${account.locked ? 'LOCKED' : 'UNLOCKED'}</span></td>
+                    `; 
+                    rosterBody.appendChild(row);
+                }
+            });
+
+            const historyBody = document.getElementById('muLoginHistoryTableBody');
+            if(historyBody) {
+                historyBody.innerHTML = ""; 
+                let operationalStack = [...SYSTEM_LOGIN_HISTORY].reverse().slice(0, 6);
+                operationalStack.forEach(log => { 
+                    let r = document.createElement('tr'); 
+                    r.innerHTML = `
+                        <td>${log.time}</td>
+                        <td><code>${log.user}</code></td>
+                        <td><span style="color:${log.event.includes('Success') || log.event.includes('Approved') ? '#10b981':'#ef4444'}; font-weight:bold;">${log.event}</span></td>
+                    `; 
+                    historyBody.appendChild(r); 
+                });
+            }
+
+            // Approvals Panel Logic
+            if (canDirectExecute) {
+                document.getElementById('menuCardApprovals').style.display = 'block';
+                document.getElementById('approvalBadge').innerText = SYSTEM_PENDING_REQUESTS.length;
+                
+                const appBody = document.getElementById('approvalsTableBody');
+                appBody.innerHTML = "";
+                if (SYSTEM_PENDING_REQUESTS.length === 0) {
+                    appBody.innerHTML = "<tr><td colspan='4' style='text-align:center;'>No pending requests.</td></tr>";
+                } else {
+                    // Only show User Maintenance type requests here
+                    const userTypes = ['CREATE_USER', 'TOGGLE_LOCK', 'TOGGLE_ENABLE', 'RESET_PASS', 'CHANGE_ROLE', 'DELETE_USER', 'CUSTOMIZE_CARDS', 'SEND_MSG', 'UPDATE_NEWS'];
+                    
+                    SYSTEM_PENDING_REQUESTS.forEach(req => {
+                        if(userTypes.includes(req.type)) {
+                            appBody.innerHTML += `
+                                <tr>
+                                    <td>${req.timestamp}</td>
+                                    <td><strong>${req.requestedBy}</strong></td>
+                                    <td>${req.desc}</td>
+                                    <td>
+                                        <button class="small-action-btn" style="background:#3b82f6;" onclick="viewRequestDetails('${req.id}')">👁️ View Details</button>
+                                    </td>
+                                </tr>
+                            `;
+                        }
+                    });
+                }
+            } else {
+                document.getElementById('menuCardApprovals').style.display = 'none';
+            }
+        }
+
+        function loadUserCurrentCards() {
+            const selectedUser = document.getElementById('muCustomizeSelect').value; 
+            if(!selectedUser) return;
+            const profile = SYSTEM_USER_REGISTRY.find(acc => acc.user === selectedUser); 
+            if(!profile) return;
+            
+            let currentCards = profile.allowedCards || [];
+            const checkboxes = document.querySelectorAll('.card-checkbox');
+            checkboxes.forEach(box => { box.checked = currentCards.includes(box.value); });
+        }
+
+        // ----------------------------------------------------
+        // 6. CRUD FUNCTIONS WITH HIERARCHY
+        // ----------------------------------------------------
+        async function executeCreateUserAction() {
+            const fullNameInput = document.getElementById('muNewFullName').value.trim(); 
+            const usernameInput = document.getElementById('muNewUser').value.trim(); 
+            const passwordInput = document.getElementById('muNewPass').value.trim(); 
+            const selectedRole = document.getElementById('muNewRole').value;
+
+            if(!fullNameInput || !usernameInput || !passwordInput) { displayCustomAlert("Error: All fields required.", "⚠️"); return; }
+            if(SYSTEM_USER_REGISTRY.some(acc => acc.user.toLowerCase() === usernameInput.toLowerCase())) { displayCustomAlert("Error: Username exists.", "⚠️"); return; }
+
+            let defaultCards = [];
+            if(selectedRole === 'admin') defaultCards = ['menuCardBulkBooking', 'menuCardBulk', 'menuCardHoliday', 'menuCardDateWise', 'menuCardACG61', 'menuCardGeneralCharge', 'menuCardSR1', 'menuCardCasualLeave', 'menuCardTAAdvance', 'menuCardTATransfer', 'menuCardTABillTour', 'menuCardCEA', 'menuCardAI', 'menuCardMaintenance', 'menuCardSelfPassword', 'menuCardUpdateNews']; 
+            else if (selectedRole === 'superuser') defaultCards = ['menuCardBulkBooking', 'menuCardBulk', 'menuCardHoliday', 'menuCardDateWise', 'menuCardACG61', 'menuCardGeneralCharge', 'menuCardSR1', 'menuCardCasualLeave', 'menuCardTAAdvance', 'menuCardTATransfer', 'menuCardTABillTour', 'menuCardCEA', 'menuCardAI', 'menuCardSelfPassword', 'menuCardDBDE']; 
+            else defaultCards = ['menuCardBulkBooking', 'menuCardBulk', 'menuCardHoliday', 'menuCardDateWise', 'menuCardACG61', 'menuCardGeneralCharge', 'menuCardSR1', 'menuCardCasualLeave', 'menuCardTAAdvance', 'menuCardTATransfer', 'menuCardTABillTour', 'menuCardCEA', 'menuCardAI', 'menuCardSelfPassword']; 
+
+            const payload = { fullName: fullNameInput, user: usernameInput, pass: passwordInput, role: selectedRole, active: true, locked: false, failedAttempts: 0, isFirstTimeDefault: true, pendingMessage: "", allowedCards: defaultCards, solId: "" };
+
+            if (canDirectExecute) {
+                SYSTEM_USER_REGISTRY.push(payload);
+                logAdminAction(`Created User: ${usernameInput}`);
+                showLoader("Saving to Cloud...");
+                try {
+                    await saveToCloud();
+                    document.getElementById('muNewFullName').value = ""; document.getElementById('muNewUser').value = ""; document.getElementById('muNewPass').value = "";
+                    displayCustomAlert(`Account Created!<br/>Username: ${usernameInput}`, "✅");
+                } catch(e) { displayCustomAlert("Network Error", "❌"); }
+                hideLoader();
+            } else {
+                createRequest('CREATE_USER', `Create User: ${usernameInput} (${selectedRole})`, payload);
+            }
+        }
+
+        async function executeToggleUserStatus(toggleType, selectId) {
+            const selectedUser = document.getElementById(selectId).value; 
+            if(!selectedUser) return;
+            if(selectedUser === "admin") { displayCustomAlert("Restriction: Master Admin cannot be altered.", "🛑"); return; }
+            
+            const profileIndex = SYSTEM_USER_REGISTRY.findIndex(acc => acc.user === selectedUser); 
+            if(profileIndex === -1) return;
+
+            if (canDirectExecute) {
+                if(toggleType === "lock") {
+                    SYSTEM_USER_REGISTRY[profileIndex].locked = !SYSTEM_USER_REGISTRY[profileIndex].locked;
+                    if (!SYSTEM_USER_REGISTRY[profileIndex].locked) SYSTEM_USER_REGISTRY[profileIndex].failedAttempts = 0;
+                } else {
+                    SYSTEM_USER_REGISTRY[profileIndex].active = !SYSTEM_USER_REGISTRY[profileIndex].active;
+                }
+                logAdminAction(`Toggled ${toggleType} for '${selectedUser}'`);
+                showLoader("Updating Status...");
+                try { await saveToCloud(); displayCustomAlert(`Success: Status updated for '${selectedUser}'.`, "✅"); } catch(e) { displayCustomAlert("Network Error", "❌"); }
+                hideLoader();
+            } else {
+                if(toggleType === "lock") {
+                    let newState = !SYSTEM_USER_REGISTRY[profileIndex].locked;
+                    createRequest('TOGGLE_LOCK', `${newState ? 'Lock' : 'Unlock'} User '${selectedUser}'`, { user: selectedUser, locked: newState });
+                } else {
+                    let newState = !SYSTEM_USER_REGISTRY[profileIndex].active;
+                    createRequest('TOGGLE_ENABLE', `${newState ? 'Enable' : 'Disable'} User '${selectedUser}'`, { user: selectedUser, active: newState });
+                }
+            }
+        }
+
+        async function executeResetPasswordAction() {
+            const selectedUser = document.getElementById('muResetSelect').value; 
+            const newPass = document.getElementById('muResetPassInput').value.trim();
+            if(!selectedUser || !newPass) { displayCustomAlert("Error: Inputs required.", "⚠️"); return; }
+            if(selectedUser === "admin") { displayCustomAlert("Restriction: Master Admin cannot be altered.", "🛑"); return; }
+
+            if (canDirectExecute) {
+                const profileIndex = SYSTEM_USER_REGISTRY.findIndex(acc => acc.user === selectedUser); 
+                SYSTEM_USER_REGISTRY[profileIndex].pass = newPass; 
+                SYSTEM_USER_REGISTRY[profileIndex].isFirstTimeDefault = true; 
+                document.getElementById('muResetPassInput').value = ""; 
+                logAdminAction(`Reset Passcode for '${selectedUser}'`);
+                showLoader("Updating Passcode...");
+                try { await saveToCloud(); displayCustomAlert(`Success: Passcode reset.`, "✅"); } catch(e) { displayCustomAlert("Network Error", "❌"); }
+                hideLoader();
+            } else {
+                createRequest('RESET_PASS', `Reset Passcode for '${selectedUser}'`, { user: selectedUser, pass: newPass });
+            }
+        }
+
+        async function executeRoleChangeAction() {
+            const selectedUser = document.getElementById('muRoleTargetSelect').value; 
+            const newRole = document.getElementById('muNewRoleSelect').value;
+            if(!selectedUser) return; 
+            if(selectedUser === "admin") { displayCustomAlert("Restriction: Master Admin cannot be altered.", "🛑"); return; }
+
+            let defaultCards = [];
+            if(newRole === 'admin') defaultCards = ['menuCardBulkBooking', 'menuCardBulk', 'menuCardHoliday', 'menuCardDateWise', 'menuCardACG61', 'menuCardGeneralCharge', 'menuCardSR1', 'menuCardCasualLeave', 'menuCardTAAdvance', 'menuCardTATransfer', 'menuCardTABillTour', 'menuCardCEA', 'menuCardAI', 'menuCardMaintenance', 'menuCardSelfPassword', 'menuCardUpdateNews']; 
+            else if (newRole === 'superuser') defaultCards = ['menuCardBulkBooking', 'menuCardBulk', 'menuCardHoliday', 'menuCardDateWise', 'menuCardACG61', 'menuCardGeneralCharge', 'menuCardSR1', 'menuCardCasualLeave', 'menuCardTAAdvance', 'menuCardTATransfer', 'menuCardTABillTour', 'menuCardCEA', 'menuCardAI', 'menuCardSelfPassword', 'menuCardDBDE']; 
+            else defaultCards = ['menuCardBulkBooking', 'menuCardBulk', 'menuCardHoliday', 'menuCardDateWise', 'menuCardACG61', 'menuCardGeneralCharge', 'menuCardSR1', 'menuCardCasualLeave', 'menuCardTAAdvance', 'menuCardTATransfer', 'menuCardTABillTour', 'menuCardCEA', 'menuCardAI', 'menuCardSelfPassword'];
+
+            if (canDirectExecute) {
+                const profileIndex = SYSTEM_USER_REGISTRY.findIndex(acc => acc.user === selectedUser); 
+                SYSTEM_USER_REGISTRY[profileIndex].role = newRole;
+                SYSTEM_USER_REGISTRY[profileIndex].allowedCards = defaultCards;
+                logAdminAction(`Changed Role for '${selectedUser}' to ${newRole}`);
+                showLoader("Updating Role...");
+                try { await saveToCloud(); displayCustomAlert(`Success: Role updated.`, "✅"); } catch(e) { displayCustomAlert("Network Error", "❌"); }
+                hideLoader();
+            } else {
+                createRequest('CHANGE_ROLE', `Change Role for '${selectedUser}' to ${newRole}`, { user: selectedUser, role: newRole, allowedCards: defaultCards });
+            }
+        }
+
+        async function executeSaveUserCards() {
+            const selectedUser = document.getElementById('muCustomizeSelect').value; 
+            if(!selectedUser) return;
+            if(selectedUser === "admin") { displayCustomAlert("Restriction: Master Admin cannot be altered.", "🛑"); return; }
+
+            let newAllowedCards = [];
+            document.querySelectorAll('.card-checkbox').forEach(box => { if (box.checked) newAllowedCards.push(box.value); });
+            if (newAllowedCards.length === 0) { displayCustomAlert("Error: Must have at least one card.", "⚠️"); return; }
+
+            if (canDirectExecute) {
+                const profileIndex = SYSTEM_USER_REGISTRY.findIndex(acc => acc.user === selectedUser); 
+                SYSTEM_USER_REGISTRY[profileIndex].allowedCards = newAllowedCards; 
+                logAdminAction(`Customized Cards for '${selectedUser}'`);
+                showLoader("Saving Config...");
+                try { await saveToCloud(); displayCustomAlert(`Success: Config updated.`, "✅"); } catch(e) { displayCustomAlert("Network Error", "❌"); }
+                hideLoader();
+            } else {
+                createRequest('CUSTOMIZE_CARDS', `Customize Dashboard Cards for '${selectedUser}'`, { user: selectedUser, allowedCards: newAllowedCards });
+            }
+        }
+
+        async function executeDeleteUserAction() {
+            const selectedUser = document.getElementById('muDeleteSelect').value; 
+            if(!selectedUser) return;
+            if(selectedUser === "admin") { displayCustomAlert("Restriction: Master Admin cannot be deleted.", "🛑"); return; }
+
+            if (canDirectExecute) {
+                const profileIndex = SYSTEM_USER_REGISTRY.findIndex(acc => acc.user === selectedUser); 
+                SYSTEM_USER_REGISTRY.splice(profileIndex, 1); 
+                logAdminAction(`Deleted User '${selectedUser}'`);
+                showLoader("Deleting Profile...");
+                try { await saveToCloud(); displayCustomAlert(`Success: Profile deleted.`, "🗑️"); } catch(e) { displayCustomAlert("Network Error", "❌"); }
+                hideLoader();
+            } else {
+                createRequest('DELETE_USER', `Permanently Delete User '${selectedUser}'`, { user: selectedUser });
+            }
+        }
+
+        async function executeSendDirectMessage() {
+            const selectedUser = document.getElementById('muMessageSelect').value; 
+            const messageText = document.getElementById('muMessageInput').value.trim();
+            if(!selectedUser || !messageText) { displayCustomAlert("Error: Inputs required.", "⚠️"); return; }
+
+            if (canDirectExecute) {
+                const profileIndex = SYSTEM_USER_REGISTRY.findIndex(acc => acc.user === selectedUser); 
+                SYSTEM_USER_REGISTRY[profileIndex].pendingMessage = messageText; 
+                document.getElementById('muMessageInput').value = ""; 
+                logAdminAction(`Sent Alert to '${selectedUser}'`);
+                showLoader("Sending Message...");
+                try { await saveToCloud(); displayCustomAlert(`Success: Alert queued.`, "✅"); } catch(e) { displayCustomAlert("Network Error", "❌"); }
+                hideLoader();
+            } else {
+                createRequest('SEND_MSG', `Send Alert Message to '${selectedUser}'`, { user: selectedUser, msg: messageText });
+            }
+        }
+
+        async function executeUpdateNewsAction() {
+            const newText = document.getElementById('muNewsInput').value.trim(); 
+            if(!newText) { displayCustomAlert("Error: Cannot be empty.", "⚠️"); return; }
+
+            if (canDirectExecute) {
+                showLoader("Publishing News...");
+                try { 
+                    await db.collection("system").doc("announcements").set({ tickerText: newText }, { merge: true }); 
+                    document.getElementById('muNewsInput').value = "";
+                    logAdminAction(`Updated Live News`);
+                    displayCustomAlert("Success: Live News Feed updated!", "✅"); 
+                } catch (error) { displayCustomAlert("Network Error", "❌"); }
+                hideLoader();
+            } else {
+                createRequest('UPDATE_NEWS', `Broadcast New System Message`, { text: newText });
+            }
+        }
+    </script>
+</body>
+</html>
