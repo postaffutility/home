@@ -14,26 +14,26 @@
         input, textarea, select { user-select: text !important; -webkit-user-select: text !important; -ms-user-select: text !important; }
         
         /* --- BEAUTIFUL LIGHT THEME SPLASH SCREEN --- */
-        #splashScreen { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #ffffff; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 99999999; color: #1e293b; text-align: center; transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.8s; border-bottom: 8px solid #f59e0b; }
+        #splashScreen { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #ffffff; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 99999999; color: #1e293b; text-align: center; transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.8s; border-bottom: 8px solid #3b82f6; }
         .splash-content { animation: popIn 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
         @keyframes popIn { 0% { opacity: 0; transform: scale(0.9) translateY(20px); } 100% { opacity: 1; transform: scale(1) translateY(0); } }
-        .splash-icon { font-size: 72px; margin-bottom: 15px; animation: floatIcon 3s ease-in-out infinite; background: #fef3c7; width: 120px; height: 120px; border-radius: 50%; display: flex; justify-content: center; align-items: center; margin-left: auto; margin-right: auto; box-shadow: 0 10px 25px rgba(245, 158, 11, 0.2); }
+        .splash-icon { font-size: 72px; margin-bottom: 15px; animation: floatIcon 3s ease-in-out infinite; background: #dbeafe; width: 120px; height: 120px; border-radius: 50%; display: flex; justify-content: center; align-items: center; margin-left: auto; margin-right: auto; box-shadow: 0 10px 25px rgba(59, 130, 246, 0.2); }
         @keyframes floatIcon { 0% { transform: translateY(0); } 50% { transform: translateY(-10px); } 100% { transform: translateY(0); } }
         .splash-title { font-size: 38px; font-weight: 900; margin: 15px 0 5px 0; color: #0f172a; letter-spacing: -0.5px;}
-        .splash-badge { display: inline-block; background: #f59e0b; color: white; padding: 6px 16px; border-radius: 20px; font-size: 13px; font-weight: 800; letter-spacing: 1px; margin-bottom: 25px; box-shadow: 0 4px 10px rgba(245, 158, 11, 0.3); }
-        .splash-loader { width: 45px; height: 45px; border: 4px solid #f1f5f9; border-top-color: #f59e0b; border-radius: 50%; animation: spin 1s linear infinite; margin: 40px auto 0 auto; }
+        .splash-badge { display: inline-block; background: #3b82f6; color: white; padding: 6px 16px; border-radius: 20px; font-size: 13px; font-weight: 800; letter-spacing: 1px; margin-bottom: 25px; box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3); }
+        .splash-loader { width: 45px; height: 45px; border: 4px solid #f1f5f9; border-top-color: #3b82f6; border-radius: 50%; animation: spin 1s linear infinite; margin: 40px auto 0 auto; }
         @keyframes spin { 100% { transform: rotate(360deg); } }
         /* ------------------------------------------- */
 
         .standalone-viewport { position: relative; z-index: 10; width: 100%; min-height: 100vh; padding: 40px 10px; box-sizing: border-box; }
-        .app-container { max-width: 1000px; background: #ffffff; padding: 40px; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); margin: 0 auto; border-top: 6px solid #f59e0b; position: relative; }
+        .app-container { max-width: 1000px; background: #ffffff; padding: 40px; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); margin: 0 auto; border-top: 6px solid #4f46e5; position: relative; }
         
         .portal-logout-anchor { position: absolute; top: 40px; right: 40px; background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; padding: 8px 16px; font-size: 13px; font-weight: 800; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: all 0.2s ease; z-index: 50; }
         .portal-logout-anchor:hover { background: #ef4444; color: #ffffff; border-color: #dc2626; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2); }
 
         h2 { text-align: left; color: #1e293b; margin: 0 0 8px 0; font-size: 28px; font-weight: 800; letter-spacing: -0.5px; }
         .tagline { text-align: left; color: #64748b; font-size: 13.5px; margin-bottom: 0; line-height: 1.6; }
-        #portalWelcomeMessage { text-align: left; color: #f59e0b; margin: 10px 0 30px 0; font-size: 18px; font-weight: 800; letter-spacing: -0.3px; }
+        #portalWelcomeMessage { text-align: left; color: #4f46e5; margin: 10px 0 30px 0; font-size: 18px; font-weight: 800; letter-spacing: -0.3px; }
         
         .status-badge { padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 800; color: #fff; letter-spacing: 0.5px; display: inline-block; text-align: center; min-width: 60px; }
         .badge-active { background: #10b981; } .badge-disabled { background: #ef4444; } .badge-locked { background: #f59e0b; }
@@ -41,17 +41,27 @@
         .form-group { margin-bottom: 20px; }
         label { display: block; font-weight: 700; margin-bottom: 8px; font-size: 14px; color: #334155; }
         input[type="text"], input[type="number"], select, textarea { width: 100%; padding: 14px 16px; box-sizing: border-box; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14.5px; background: #f8fafc; color: #1e293b !important; transition: all 0.2s ease; }
-        input[type="text"]:focus, input[type="number"]:focus, select:focus, textarea:focus { border-color: #f59e0b; background: #ffffff; box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.1); outline: none; }
+        input[type="text"]:focus, input[type="number"]:focus, select:focus, textarea:focus { border-color: #4f46e5; background: #ffffff; box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1); outline: none; }
         .flex-row { display: flex; gap: 15px; flex-wrap: wrap; }
         .flex-row > div { flex: 1; }
 
         .portal-grid-wrapper { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 24px; margin-top: 15px; }
         .portal-module-card { background: #ffffff; border-radius: 16px; padding: 28px 24px; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.03); border: 1px solid #e2e8f0; transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); position: relative; overflow: hidden; display: block; }
-        .portal-module-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: #f59e0b; transition: height 0.3s ease; }
+        .portal-module-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: #4f46e5; transition: height 0.3s ease; }
         .portal-module-card:hover { transform: translateY(-10px); box-shadow: 0 25px 50px rgba(0, 0, 0, 0.12); border-color: #cbd5e1; z-index: 10; }
         .portal-module-card:hover::before { height: 8px; }
         
-        .card-icon { font-size: 28px; margin-bottom: 18px; display: inline-flex; align-items: center; justify-content: center; width: 56px; height: 56px; border-radius: 14px; background: #fef3c7; transition: transform 0.3s ease; }
+        /* CARD COLOR VARIANTS MATCHING MAIN DASHBOARD */
+        .card-blue-variant::before { background: #3b82f6; } .card-blue-variant .card-icon { background: #dbeafe; }
+        .card-green-variant::before { background: #10b981; } .card-green-variant .card-icon { background: #d1fae5; }
+        .card-purple-variant::before { background: #8b5cf6; } .card-purple-variant .card-icon { background: #ede9fe; }
+        .card-teal-variant::before { background: #14b8a6; } .card-teal-variant .card-icon { background: #ccfbf1; }
+        .card-orange-variant::before { background: #f59e0b; } .card-orange-variant .card-icon { background: #fef3c7; }
+        .card-dark-variant::before { background: #475569; } .card-dark-variant .card-icon { background: #f1f5f9; }
+        .card-rose-variant::before { background: #e11d48; } .card-rose-variant .card-icon { background: #ffe4e6; }
+        .card-indigo-variant::before { background: #4f46e5; } .card-indigo-variant .card-icon { background: #e0e7ff; }
+        
+        .card-icon { font-size: 28px; margin-bottom: 18px; display: inline-flex; align-items: center; justify-content: center; width: 56px; height: 56px; border-radius: 14px; transition: transform 0.3s ease; }
         .portal-module-card:hover .card-icon { transform: scale(1.1); }
         .portal-module-card h3 { margin: 0 0 10px 0; font-size: 18px; font-weight: 800; color: #1e293b; letter-spacing: -0.3px;}
         .portal-module-card p { margin: 0; font-size: 13.5px; color: #64748b; line-height: 1.6; }
@@ -69,8 +79,8 @@
         .back-nav-link { display: inline-flex; align-items: center; color: #3b82f6; font-weight: 800; font-size: 14px; text-decoration: none; margin-bottom: 15px; cursor: pointer; width: fit-content; transition: color 0.2s; }
         .back-nav-link:hover { color: #1d4ed8; }
         
-        button.action-btn { width: 100%; padding: 16px; background: #f59e0b; color: #1e293b; border: none; border-radius: 8px; font-size: 15.5px; font-weight: 900; cursor: pointer; text-transform: uppercase; letter-spacing: 0.8px; margin-top: 15px; box-shadow: 0 4px 12px rgba(245, 158, 11, 0.25); transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
-        button.action-btn:hover { filter: brightness(95%); transform: translateY(-2px); box-shadow: 0 8px 20px rgba(245, 158, 11, 0.3); }
+        button.action-btn { width: 100%; padding: 16px; background: #4f46e5; color: white; border: none; border-radius: 8px; font-size: 15.5px; font-weight: 900; cursor: pointer; text-transform: uppercase; letter-spacing: 0.8px; margin-top: 15px; box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25); transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
+        button.action-btn:hover { background: #3730a3; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(79, 70, 229, 0.3); }
         button.panel-sub-submit { padding: 14px 18px; font-size: 14.5px; margin-top: 20px; box-shadow: none; width: 100%; text-transform: none; border-radius: 8px; color: white; border: none; font-weight: 800; cursor: pointer; }
         button.panel-sub-submit:hover { filter: brightness(90%); }
         
@@ -81,7 +91,7 @@
         
         /* MODALS */
         .custom-popup-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(6px); z-index: 20000000; display: none; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.2s ease-in-out; }
-        .custom-popup-card { background: #ffffff; width: 90%; max-width: 420px; padding: 35px; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.2); text-align: center; box-sizing: border-box; border-top: 6px solid #f59e0b; transform: scale(0.95); transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .custom-popup-card { background: #ffffff; width: 90%; max-width: 420px; padding: 35px; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.2); text-align: center; box-sizing: border-box; border-top: 6px solid #4f46e5; transform: scale(0.95); transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         .custom-popup-overlay.active { display: flex; opacity: 1; }
         .custom-popup-overlay.active .custom-popup-card { transform: scale(1); }
         .popup-icon-alert { font-size: 48px; margin-bottom: 15px; }
@@ -96,14 +106,25 @@
         .req-val { color: #0f172a; font-family: monospace; font-size: 14px; }
 
         .processing-loader-container { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(5px); z-index: 30000000; display: none; flex-direction: column; justify-content: center; align-items: center; }
-        .app-loading-spinner { width: 45px; height: 45px; border: 4px solid #f1f5f9; border-top: 4px solid #f59e0b; border-radius: 50%; animation: spinSystem 0.8s linear infinite; margin-bottom: 20px; }
+        .app-loading-spinner { width: 45px; height: 45px; border: 4px solid #f1f5f9; border-top: 4px solid #4f46e5; border-radius: 50%; animation: spinSystem 0.8s linear infinite; margin-bottom: 20px; }
         .loading-status-msg { font-size: 15px; font-weight: 800; color: #0f172a; letter-spacing: 0.5px; }
         @keyframes spinSystem { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
+
+    <!-- ANTI-INSPECT SHIELD -->
+    <script>
+        document.addEventListener('contextmenu', event => event.preventDefault());
+        document.onkeydown = function(e) {
+            if (e.keyCode == 123) { return false; } 
+            if (e.ctrlKey && e.shiftKey && e.keyCode == 73) { return false; } 
+            if (e.ctrlKey && e.shiftKey && e.keyCode == 74) { return false; } 
+            if (e.ctrlKey && e.keyCode == 85) { return false; } 
+        }
+    </script>
 </head>
 <body>
 
-    <!-- THE BEAUTIFUL LIGHT SPLASH SCREEN -->
+    <!-- THE PROFESSIONAL LIGHT THEME SPLASH SCREEN -->
     <div id="splashScreen">
         <div class="splash-content">
             <div class="splash-icon">👥</div>
@@ -126,68 +147,68 @@
                 
                 <div class='portal-grid-wrapper' id='userModuleGrid'>
                     <!-- APPROVALS PANEL FOR ADMIN OFFICE -->
-                    <div class='portal-module-card' id='menuCardApprovals' onclick='navigateToSubPanel("panelApprovals")' style='display:none; border-color: #ef4444;'>
-                        <div class='card-icon' style="background: #fee2e2;">🛡️</div>
-                        <h3 style="color: #ef4444;">Pending Approvals <span id="approvalBadge" style="background:#ef4444; color:white; padding:2px 8px; border-radius:12px; font-size:12px; vertical-align:middle; margin-left:5px;">0</span></h3>
+                    <div class='portal-module-card card-rose-variant' id='menuCardApprovals' onclick='navigateToSubPanel("panelApprovals")' style='display:none;'>
+                        <div class='card-icon'>🛡️</div>
+                        <h3 style="color: #e11d48;">Pending Approvals <span id="approvalBadge" style="background:#e11d48; color:white; padding:2px 8px; border-radius:12px; font-size:12px; vertical-align:middle; margin-left:5px;">0</span></h3>
                         <p>Review, Audit, and Authorize identity modification requests submitted by local branch admins.</p>
                     </div>
 
-                    <div class='portal-module-card' onclick='navigateToSubPanel("subCreateUser")' style="border-color: #3b82f6;">
-                        <div class='card-icon' style="background: #dbeafe;">👤</div>
+                    <div class='portal-module-card card-blue-variant' onclick='navigateToSubPanel("subCreateUser")'>
+                        <div class='card-icon'>👤</div>
                         <h3>Create New User</h3>
                         <p>Register a new system user profile and assign their operational role.</p>
                     </div>
 
-                    <div class='portal-module-card' onclick='navigateToSubPanel("subLockUnlock")' style="border-color: #f59e0b;">
-                        <div class='card-icon' style="background: #fef3c7;">🗝️</div>
+                    <div class='portal-module-card card-orange-variant' onclick='navigateToSubPanel("subLockUnlock")'>
+                        <div class='card-icon'>🗝️</div>
                         <h3>Lock / Unlock User</h3>
                         <p>Temporarily lock or unlock an existing user account for security reasons.</p>
                     </div>
 
-                    <div class='portal-module-card' onclick='navigateToSubPanel("subEnableDisable")' style="border-color: #10b981;">
-                        <div class='card-icon' style="background: #d1fae5;">✅</div>
+                    <div class='portal-module-card card-green-variant' onclick='navigateToSubPanel("subEnableDisable")'>
+                        <div class='card-icon'>✅</div>
                         <h3>Enable / Disable User</h3>
                         <p>Completely disable or re-enable an existing user's portal access.</p>
                     </div>
 
-                    <div class='portal-module-card' onclick='navigateToSubPanel("subResetPass")' style="border-color: #475569;">
-                        <div class='card-icon' style="background: #f1f5f9;">🔄</div>
+                    <div class='portal-module-card card-dark-variant' onclick='navigateToSubPanel("subResetPass")'>
+                        <div class='card-icon'>🔄</div>
                         <h3>Reset Passcode</h3>
                         <p>Change the login passcode for an existing system user to a default value.</p>
                     </div>
 
-                    <div class='portal-module-card' onclick='navigateToSubPanel("subChangeRole")' style="border-color: #8b5cf6;">
-                        <div class='card-icon' style="background: #ede9fe;">🛡️</div>
+                    <div class='portal-module-card card-purple-variant' onclick='navigateToSubPanel("subChangeRole")'>
+                        <div class='card-icon'>🛡️</div>
                         <h3>Change User Role</h3>
                         <p>Elevate a user to Admin or restrict them down to Maker.</p>
                     </div>
 
-                    <div class='portal-module-card' onclick='navigateToSubPanel("subCustomizeCards")' style="border-color: #14b8a6;">
-                        <div class='card-icon' style="background: #ccfbf1;">🎛️</div>
+                    <div class='portal-module-card card-teal-variant' onclick='navigateToSubPanel("subCustomizeCards")'>
+                        <div class='card-icon'>🎛️</div>
                         <h3>Customize User Cards</h3>
                         <p>Add or remove specific dashboard modules for individual users.</p>
                     </div>
 
-                    <div class='portal-module-card' onclick='navigateToSubPanel("subDeleteUser")' style="border-color: #e11d48;">
-                        <div class='card-icon' style="background: #ffe4e6;">🗑️</div>
+                    <div class='portal-module-card card-rose-variant' onclick='navigateToSubPanel("subDeleteUser")'>
+                        <div class='card-icon'>🗑️</div>
                         <h3>Delete User</h3>
                         <p>Permanently remove a user profile from the entire system database.</p>
                     </div>
 
-                    <div class='portal-module-card' onclick='navigateToSubPanel("subDirectMessage")' style="border-color: #f59e0b;">
-                        <div class='card-icon' style="background: #fef3c7;">✉️</div>
+                    <div class='portal-module-card card-orange-variant' onclick='navigateToSubPanel("subDirectMessage")'>
+                        <div class='card-icon'>✉️</div>
                         <h3>Send Direct Message</h3>
                         <p>Send a personalized, self-destructing alert message to a specific staff member.</p>
                     </div>
 
-                    <div class='portal-module-card' onclick='navigateToSubPanel("subUpdateNews")' style="border-color: #10b981;">
-                        <div class='card-icon' style="background: #d1fae5;">📢</div>
+                    <div class='portal-module-card card-green-variant' onclick='navigateToSubPanel("subUpdateNews")'>
+                        <div class='card-icon'>📢</div>
                         <h3>Broadcast Live News</h3>
                         <p>Update the scrolling marquee text visible to all users at the top of the portal.</p>
                     </div>
 
-                    <div class='portal-module-card' onclick='navigateToSubPanel("subUserLogs")' style='grid-column: 1 / -1; border-color: #4f46e5;'>
-                        <div class='card-icon' style="background: #e0e7ff;">📊</div>
+                    <div class='portal-module-card card-indigo-variant' onclick='navigateToSubPanel("subUserLogs")' style='grid-column: 1 / -1;'>
+                        <div class='card-icon'>📊</div>
                         <h3>User Status & Login Logs</h3>
                         <p>View current account registry status and recent historical login connection attempts.</p>
                     </div>
@@ -198,7 +219,7 @@
             <div class='portal-page-panel' id='panelApprovals'>
                 <div class='back-nav-link' onclick='returnToMainDashboard()'>⬅️ Back to Hub</div>
                 <h3 style="margin-top:0; color:#1e293b; font-size:22px;">Pending Authorization Requests</h3>
-                <div class='sub-action-card' style="border-top: 4px solid #ef4444; overflow-x: auto;">
+                <div class='sub-action-card' style="border-top: 4px solid #e11d48; overflow-x: auto;">
                     <table class='system-log-table' style="min-width: 700px;">
                         <thead>
                             <tr>
@@ -464,7 +485,7 @@
                     refreshUI(); 
                 }
                 
-                // Hide loader in case it was showing during a later update
+                // Hide loader cleanly without any race condition delay
                 document.getElementById('globalAppLoader').style.display = 'none';
 
             }, (error) => {
@@ -472,7 +493,7 @@
                 document.getElementById('globalAppLoader').style.display = 'none';
             });
 
-            // Beautiful Light Theme Splash Screen Sequence
+            // Clean, Fast Light Theme Splash Screen Sequence
             setTimeout(() => {
                 const splash = document.getElementById('splashScreen');
                 splash.style.opacity = '0';
@@ -480,7 +501,7 @@
                     splash.style.display = 'none'; 
                     document.getElementById('appDashboardView').style.display = 'block';
                 }, 800);
-            }, 2000);
+            }, 1200);
         };
 
         // ----------------------------------------------------
@@ -560,7 +581,6 @@
 
             let html = ``;
             for (const [key, value] of Object.entries(req.payload)) {
-                // Formatting payload for readability
                 let displayVal = value;
                 if (typeof value === 'object') displayVal = JSON.stringify(value);
                 if (typeof value === 'boolean') displayVal = value ? "True" : "False";
@@ -665,7 +685,6 @@
         function refreshUI() {
             const dropdownIds = ['muLockSelect', 'muEnableSelect', 'muResetSelect', 'muRoleTargetSelect', 'muDeleteSelect', 'muCustomizeSelect', 'muMessageSelect'];
             
-            // Protect "admin" from dropdowns
             dropdownIds.forEach(id => { 
                 let el = document.getElementById(id); 
                 if(el) el.innerHTML = "<option value=''>-- Select User --</option>"; 
@@ -677,7 +696,6 @@
             SYSTEM_USER_REGISTRY.forEach(account => {
                 let dName = account.fullName || account.user;
                 
-                // Exclude "admin" from selection completely
                 if (account.user !== "admin") {
                     dropdownIds.forEach(id => { 
                         let el = document.getElementById(id); 
@@ -728,7 +746,6 @@
                 if (SYSTEM_PENDING_REQUESTS.length === 0) {
                     appBody.innerHTML = "<tr><td colspan='4' style='text-align:center;'>No pending requests.</td></tr>";
                 } else {
-                    // Only show User Maintenance type requests here
                     const userTypes = ['CREATE_USER', 'TOGGLE_LOCK', 'TOGGLE_ENABLE', 'RESET_PASS', 'CHANGE_ROLE', 'DELETE_USER', 'CUSTOMIZE_CARDS', 'SEND_MSG', 'UPDATE_NEWS'];
                     
                     SYSTEM_PENDING_REQUESTS.forEach(req => {
