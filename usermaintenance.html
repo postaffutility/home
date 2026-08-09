@@ -5,8 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Maintenance Hub</title>
     
+    <!-- FIREBASE LIBRARIES -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
+    <!-- QR CODE GENERATOR LIBRARY FOR 2FA -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
     <style>
         /* Minimalist Baseline Setup & Security */
@@ -159,6 +163,13 @@
                         <p>Register a new system user profile and assign their operational role.</p>
                     </div>
 
+                    <!-- NEW 2FA SETUP CARD -->
+                    <div class='portal-module-card card-teal-variant' onclick='navigateToSubPanel("sub2FASetup")'>
+                        <div class='card-icon'>📱</div>
+                        <h3>Authenticator 2FA Setup</h3>
+                        <p>Generate Google Authenticator QR codes to enroll users in high-security 2FA login.</p>
+                    </div>
+
                     <div class='portal-module-card card-orange-variant' onclick='navigateToSubPanel("subLockUnlock")'>
                         <div class='card-icon'>🗝️</div>
                         <h3>Lock / Unlock User</h3>
@@ -250,6 +261,35 @@
                         </select>
                     </div>
                     <button class='action-btn panel-sub-submit btn-dynamic' onclick='executeCreateUserAction()' style='background:#3b82f6;' type='button'>Register Profile</button>
+                </div>
+            </div>
+
+            <!-- NEW: 2FA SETUP PANEL -->
+            <div class='portal-page-panel' id='sub2FASetup'>
+                <div class='back-nav-link' onclick='returnToMainDashboard()'>⬅️ Back to Hub</div>
+                <h3 style="margin-top:0; color:#1e293b; font-size:22px;">Authenticator 2FA Setup</h3>
+                <div class='sub-action-card' style="border-top: 4px solid #14b8a6;">
+                    <p style="color: #64748b; font-size: 13.5px; margin-top: -10px; margin-bottom: 20px;">
+                        Generate a secure Time-Based One-Time Password (TOTP) QR code to enroll users into the high-security login system.
+                    </p>
+                    
+                    <div class='form-group'>
+                        <label>Select Target User</label>
+                        <select class='mu-user-dropdown' id='mu2FASelect'></select>
+                    </div>
+                    
+                    <button class='action-btn' onclick='generate2FAForUser()' style='background:#14b8a6; margin-bottom: 20px;' type='button'>Generate QR Code</button>
+                    
+                    <div id="qrCodeWrapper" style="display:none; text-align: center; background: #ffffff; padding: 30px; border: 1px solid #e2e8f0; border-radius: 12px; margin-bottom: 20px;">
+                        <p style="font-weight: 800; color: #0f172a; margin-top: 0; font-size: 16px;">Scan this with Google / Microsoft Authenticator:</p>
+                        
+                        <div id="qrcodeDisplay" style="display: flex; justify-content: center; margin: 20px 0;"></div>
+                        
+                        <p style="font-size: 13px; color: #64748b; margin-bottom: 8px;">Or enter this setup key manually in the app:</p>
+                        <code id="manualSecretDisplay" style="font-size: 18px; font-weight: bold; color: #e11d48; background: #fee2e2; padding: 6px 15px; border-radius: 6px; letter-spacing: 2px;"></code>
+                    </div>
+
+                    <button class='action-btn panel-sub-submit btn-dynamic' id='save2FABtn' onclick='executeSave2FA()' style='background:#3b82f6; display:none;' type='button'>Save 2FA Enrollment</button>
                 </div>
             </div>
 
@@ -441,6 +481,10 @@
         let isAdminOffice = false;
         let canDirectExecute = false;
         let currentlyViewingRequest = null;
+        
+        // 2FA variables
+        let pending2FASecret = "";
+        let pending2FAUser = "";
 
         // ----------------------------------------------------
         // 3. SECURITY BOUNCER & SPLASH SCREEN
@@ -472,7 +516,7 @@
                     // Adjust UI based on permissions
                     if (!canDirectExecute) {
                         document.querySelectorAll('.btn-dynamic').forEach(btn => {
-                             if(!btn.innerText.startsWith("Request")) {
+                             if(!btn.innerText.startsWith("Request") && !btn.innerText.startsWith("Save")) {
                                  btn.innerText = "Request " + btn.innerText;
                              }
                         });
@@ -509,13 +553,13 @@
         // ----------------------------------------------------
         function navigateToSubPanel(panelId) {
             document.getElementById('mainDashboardHead').style.display = 'none';
-            const panels = ['subCreateUser', 'subLockUnlock', 'subEnableDisable', 'subResetPass', 'subChangeRole', 'subCustomizeCards', 'subDeleteUser', 'subDirectMessage', 'subUpdateNews', 'subUserLogs', 'panelApprovals'];
+            const panels = ['subCreateUser', 'subLockUnlock', 'subEnableDisable', 'subResetPass', 'subChangeRole', 'subCustomizeCards', 'subDeleteUser', 'subDirectMessage', 'subUpdateNews', 'subUserLogs', 'panelApprovals', 'sub2FASetup'];
             panels.forEach(id => { document.getElementById(id).style.display = 'none'; });
             document.getElementById(panelId).style.display = 'block';
         }
 
         function returnToMainDashboard() {
-            const panels = ['subCreateUser', 'subLockUnlock', 'subEnableDisable', 'subResetPass', 'subChangeRole', 'subCustomizeCards', 'subDeleteUser', 'subDirectMessage', 'subUpdateNews', 'subUserLogs', 'panelApprovals'];
+            const panels = ['subCreateUser', 'subLockUnlock', 'subEnableDisable', 'subResetPass', 'subChangeRole', 'subCustomizeCards', 'subDeleteUser', 'subDirectMessage', 'subUpdateNews', 'subUserLogs', 'panelApprovals', 'sub2FASetup'];
             panels.forEach(id => { document.getElementById(id).style.display = 'none'; });
             document.getElementById('mainDashboardHead').style.display = 'block';
         }
@@ -664,6 +708,11 @@
                         db.collection("system").doc("announcements").set({ tickerText: p.text }, { merge: true });
                         break;
                     }
+                    case 'ENROLL_2FA': {
+                        let u = SYSTEM_USER_REGISTRY.find(x => x.user === p.user);
+                        if(u) u.totpSecret = p.secret;
+                        break;
+                    }
                 }
                 logAdminAction(`Approved Request: ${req.desc}`);
             } else {
@@ -683,7 +732,7 @@
         // 5. UI REFRESH
         // ----------------------------------------------------
         function refreshUI() {
-            const dropdownIds = ['muLockSelect', 'muEnableSelect', 'muResetSelect', 'muRoleTargetSelect', 'muDeleteSelect', 'muCustomizeSelect', 'muMessageSelect'];
+            const dropdownIds = ['muLockSelect', 'muEnableSelect', 'muResetSelect', 'muRoleTargetSelect', 'muDeleteSelect', 'muCustomizeSelect', 'muMessageSelect', 'mu2FASelect'];
             
             dropdownIds.forEach(id => { 
                 let el = document.getElementById(id); 
@@ -730,7 +779,7 @@
                     r.innerHTML = `
                         <td>${log.time}</td>
                         <td><code>${log.user}</code></td>
-                        <td><span style="color:${log.event.includes('Success') || log.event.includes('Approved') ? '#10b981':'#ef4444'}; font-weight:bold;">${log.event}</span></td>
+                        <td><span style="color:${log.event.includes('Success') || log.event.includes('Approved') || log.event.includes('Enrolled') ? '#10b981':'#ef4444'}; font-weight:bold;">${log.event}</span></td>
                     `; 
                     historyBody.appendChild(r); 
                 });
@@ -746,7 +795,7 @@
                 if (SYSTEM_PENDING_REQUESTS.length === 0) {
                     appBody.innerHTML = "<tr><td colspan='4' style='text-align:center;'>No pending requests.</td></tr>";
                 } else {
-                    const userTypes = ['CREATE_USER', 'TOGGLE_LOCK', 'TOGGLE_ENABLE', 'RESET_PASS', 'CHANGE_ROLE', 'DELETE_USER', 'CUSTOMIZE_CARDS', 'SEND_MSG', 'UPDATE_NEWS'];
+                    const userTypes = ['CREATE_USER', 'TOGGLE_LOCK', 'TOGGLE_ENABLE', 'RESET_PASS', 'CHANGE_ROLE', 'DELETE_USER', 'CUSTOMIZE_CARDS', 'SEND_MSG', 'UPDATE_NEWS', 'ENROLL_2FA'];
                     
                     SYSTEM_PENDING_REQUESTS.forEach(req => {
                         if(userTypes.includes(req.type)) {
@@ -796,7 +845,8 @@
             else if (selectedRole === 'superuser') defaultCards = ['menuCardBulkBooking', 'menuCardBulk', 'menuCardHoliday', 'menuCardDateWise', 'menuCardACG61', 'menuCardGeneralCharge', 'menuCardSR1', 'menuCardCasualLeave', 'menuCardTAAdvance', 'menuCardTATransfer', 'menuCardTABillTour', 'menuCardCEA', 'menuCardAI', 'menuCardSelfPassword', 'menuCardDBDE']; 
             else defaultCards = ['menuCardBulkBooking', 'menuCardBulk', 'menuCardHoliday', 'menuCardDateWise', 'menuCardACG61', 'menuCardGeneralCharge', 'menuCardSR1', 'menuCardCasualLeave', 'menuCardTAAdvance', 'menuCardTATransfer', 'menuCardTABillTour', 'menuCardCEA', 'menuCardAI', 'menuCardSelfPassword']; 
 
-            const payload = { fullName: fullNameInput, user: usernameInput, pass: passwordInput, role: selectedRole, active: true, locked: false, failedAttempts: 0, isFirstTimeDefault: true, pendingMessage: "", allowedCards: defaultCards, solId: "" };
+            // Note: totpSecret initialized as empty string
+            const payload = { fullName: fullNameInput, user: usernameInput, pass: passwordInput, role: selectedRole, active: true, locked: false, failedAttempts: 0, isFirstTimeDefault: true, pendingMessage: "", allowedCards: defaultCards, solId: "", totpSecret: "" };
 
             if (canDirectExecute) {
                 SYSTEM_USER_REGISTRY.push(payload);
@@ -890,7 +940,7 @@
         async function executeSaveUserCards() {
             const selectedUser = document.getElementById('muCustomizeSelect').value; 
             if(!selectedUser) return;
-            if(selectedUser === "admin") { displayCustomAlert("Restriction: Master Admin cannot be altered.", "🛑"); return; }
+            if(selectedUser === "admin") { displayCustomAlert("Restriction Notice: Master Admin cards cannot be altered.", "🛑"); return; }
 
             let newAllowedCards = [];
             document.querySelectorAll('.card-checkbox').forEach(box => { if (box.checked) newAllowedCards.push(box.value); });
@@ -958,6 +1008,90 @@
                 hideLoader();
             } else {
                 createRequest('UPDATE_NEWS', `Broadcast New System Message`, { text: newText });
+            }
+        }
+
+        // ----------------------------------------------------
+        // 7. NEW: GOOGLE AUTHENTICATOR (TOTP) ENROLLMENT LOGIC
+        // ----------------------------------------------------
+        
+        // Helper: Generate a secure 16-character Base32 String
+        function generateBase32Secret(length = 16) {
+            const charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
+            let secret = '';
+            for (let i = 0; i < length; i++) {
+                secret += charset.charAt(Math.floor(Math.random() * charset.length));
+            }
+            return secret;
+        }
+
+        function generate2FAForUser() {
+            const selectedUser = document.getElementById('mu2FASelect').value;
+            if(!selectedUser) { displayCustomAlert("Please select a target user first.", "⚠️"); return; }
+            
+            // Check if user already has a secret
+            const profile = SYSTEM_USER_REGISTRY.find(acc => acc.user === selectedUser);
+            if (profile && profile.totpSecret && profile.totpSecret !== "") {
+                if(!confirm(`Warning: User '${selectedUser}' is already enrolled in 2FA.\n\nGenerating a new QR code will OVERWRITE their old code and lock them out of their old Authenticator app.\n\nDo you want to proceed?`)) {
+                    return;
+                }
+            }
+            
+            // Generate Secret Key
+            pending2FASecret = generateBase32Secret(16);
+            pending2FAUser = selectedUser;
+            
+            // Format for Google Authenticator (otpauth:// URI)
+            const issuerName = "PO Staff Utility";
+            const otpUri = `otpauth://totp/${encodeURIComponent(issuerName)}:${encodeURIComponent(selectedUser)}?secret=${pending2FASecret}&issuer=${encodeURIComponent(issuerName)}`;
+            
+            // Render QR Code using qrcode.js
+            const qrContainer = document.getElementById('qrcodeDisplay');
+            qrContainer.innerHTML = ""; // Clear previous QR
+            
+            new QRCode(qrContainer, {
+                text: otpUri,
+                width: 180,
+                height: 180,
+                colorDark : "#0f172a",
+                colorLight : "#ffffff",
+                correctLevel : QRCode.CorrectLevel.H
+            });
+            
+            // Display manual code and show UI blocks
+            document.getElementById('manualSecretDisplay').innerText = pending2FASecret;
+            document.getElementById('qrCodeWrapper').style.display = "block";
+            document.getElementById('save2FABtn').style.display = "block";
+        }
+
+        async function executeSave2FA() {
+            if(!pending2FAUser || !pending2FASecret) return;
+            
+            if (canDirectExecute) {
+                const profileIndex = SYSTEM_USER_REGISTRY.findIndex(acc => acc.user === pending2FAUser); 
+                if(profileIndex === -1) return;
+                
+                // Write the new secret to the registry
+                SYSTEM_USER_REGISTRY[profileIndex].totpSecret = pending2FASecret;
+                
+                logAdminAction(`Enrolled 2FA for '${pending2FAUser}'`);
+                showLoader("Saving 2FA Configuration...");
+                try { 
+                    await saveToCloud(); 
+                    displayCustomAlert(`Success! Google Authenticator 2FA is now enabled for '${pending2FAUser}'.`, "✅"); 
+                    
+                    // Reset UI safely
+                    document.getElementById('qrCodeWrapper').style.display = "none";
+                    document.getElementById('save2FABtn').style.display = "none";
+                    document.getElementById('mu2FASelect').value = "";
+                    pending2FASecret = ""; 
+                    pending2FAUser = "";
+                } catch(e) { 
+                    displayCustomAlert("Network Error", "❌"); 
+                }
+                hideLoader();
+            } else {
+                createRequest('ENROLL_2FA', `Enroll 2FA Authentication for '${pending2FAUser}'`, { user: pending2FAUser, secret: pending2FASecret });
             }
         }
     </script>
