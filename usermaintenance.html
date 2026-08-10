@@ -18,44 +18,55 @@
         input, textarea, select { user-select: text !important; -webkit-user-select: text !important; -ms-user-select: text !important; }
         
         /* --- BEAUTIFUL LIGHT THEME SPLASH SCREEN --- */
-        #splashScreen { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #ffffff; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 99999999; color: #1e293b; text-align: center; transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.8s; border-bottom: 8px solid #3b82f6; }
-        .splash-content { animation: popIn 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        #splashScreen { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #ffffff; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 99999999; color: #1e293b; text-align: center; transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.6s; border-bottom: 8px solid #3b82f6; }
+        .splash-content { animation: popIn 1s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
         @keyframes popIn { 0% { opacity: 0; transform: scale(0.9) translateY(20px); } 100% { opacity: 1; transform: scale(1) translateY(0); } }
         .splash-icon { font-size: 72px; margin-bottom: 15px; animation: floatIcon 3s ease-in-out infinite; background: #dbeafe; width: 120px; height: 120px; border-radius: 50%; display: flex; justify-content: center; align-items: center; margin-left: auto; margin-right: auto; box-shadow: 0 10px 25px rgba(59, 130, 246, 0.2); }
         @keyframes floatIcon { 0% { transform: translateY(0); } 50% { transform: translateY(-10px); } 100% { transform: translateY(0); } }
         .splash-title { font-size: 38px; font-weight: 900; margin: 15px 0 5px 0; color: #0f172a; letter-spacing: -0.5px;}
         .splash-badge { display: inline-block; background: #3b82f6; color: white; padding: 6px 16px; border-radius: 20px; font-size: 13px; font-weight: 800; letter-spacing: 1px; margin-bottom: 25px; box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3); }
-        .splash-loader { width: 45px; height: 45px; border: 4px solid #f1f5f9; border-top-color: #3b82f6; border-radius: 50%; animation: spin 1s linear infinite; margin: 40px auto 0 auto; }
+        .splash-loader { width: 45px; height: 45px; border: 4px solid #f1f5f9; border-top-color: #3b82f6; border-radius: 50%; animation: spin 1s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite; margin: 40px auto 0 auto; }
         @keyframes spin { 100% { transform: rotate(360deg); } }
         /* ------------------------------------------- */
 
         .standalone-viewport { position: relative; z-index: 10; width: 100%; min-height: 100vh; padding: 40px 10px; box-sizing: border-box; }
-        .app-container { max-width: 1000px; background: #ffffff; padding: 40px; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); margin: 0 auto; border-top: 6px solid #4f46e5; position: relative; }
+        .app-container { width: 100%; max-width: 1400px; background: transparent; padding: 30px 40px; margin: 0 auto; border: none; box-shadow: none; position: relative; }
         
         .portal-logout-anchor { position: absolute; top: 40px; right: 40px; background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; padding: 8px 16px; font-size: 13px; font-weight: 800; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: all 0.2s ease; z-index: 50; }
-        .portal-logout-anchor:hover { background: #ef4444; color: #ffffff; border-color: #dc2626; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2); }
+        .portal-logout-anchor:hover { background: #ef4444; color: #ffffff; border-color: #dc2626; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2); transform: translateY(-2px); }
 
-        h2 { text-align: left; color: #1e293b; margin: 0 0 8px 0; font-size: 28px; font-weight: 800; letter-spacing: -0.5px; }
-        .tagline { text-align: left; color: #64748b; font-size: 13.5px; margin-bottom: 0; line-height: 1.6; }
+        h2 { text-align: left; color: #1e293b; margin: 0 0 8px 0; font-size: 32px; font-weight: 900; letter-spacing: -0.5px; }
+        .tagline { text-align: left; color: #64748b; font-size: 14.5px; margin-bottom: 0; line-height: 1.6; }
         #portalWelcomeMessage { text-align: left; color: #4f46e5; margin: 10px 0 30px 0; font-size: 18px; font-weight: 800; letter-spacing: -0.3px; }
         
-        .status-badge { padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 800; color: #fff; letter-spacing: 0.5px; display: inline-block; text-align: center; min-width: 60px; }
-        .badge-active { background: #10b981; } .badge-disabled { background: #ef4444; } .badge-locked { background: #f59e0b; }
+        .status-badge { padding: 5px 12px; border-radius: 20px; font-size: 11px; font-weight: 800; color: #fff; letter-spacing: 0.5px; display: inline-block; text-align: center; min-width: 60px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);}
+        .badge-active { background: linear-gradient(135deg, #10b981, #059669); } .badge-disabled { background: linear-gradient(135deg, #ef4444, #dc2626); } .badge-locked { background: linear-gradient(135deg, #f59e0b, #d97706); }
         
-        .form-group { margin-bottom: 20px; }
-        label { display: block; font-weight: 700; margin-bottom: 8px; font-size: 14px; color: #334155; }
-        input[type="text"], input[type="number"], select, textarea { width: 100%; padding: 14px 16px; box-sizing: border-box; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14.5px; background: #f8fafc; color: #1e293b !important; transition: all 0.2s ease; }
-        input[type="text"]:focus, input[type="number"]:focus, select:focus, textarea:focus { border-color: #4f46e5; background: #ffffff; box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1); outline: none; }
-        .flex-row { display: flex; gap: 15px; flex-wrap: wrap; }
+        .form-group { margin-bottom: 22px; }
+        label { display: block; font-weight: 700; margin-bottom: 8px; font-size: 14.5px; color: #334155; }
+        input[type="text"], input[type="number"], select, textarea { width: 100%; padding: 15px 18px; box-sizing: border-box; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 15px; background: #f8fafc; color: #1e293b !important; transition: all 0.3s ease; }
+        input[type="text"]:focus, input[type="number"]:focus, select:focus, textarea:focus { border-color: #4f46e5; background: #ffffff; box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.15); outline: none; transform: translateY(-1px); }
+        .flex-row { display: flex; gap: 20px; flex-wrap: wrap; }
         .flex-row > div { flex: 1; }
 
-        .portal-grid-wrapper { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 24px; margin-top: 15px; }
-        .portal-module-card { background: #ffffff; border-radius: 16px; padding: 28px 24px; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.03); border: 1px solid #e2e8f0; transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); position: relative; overflow: hidden; display: block; }
-        .portal-module-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: #4f46e5; transition: height 0.3s ease; }
-        .portal-module-card:hover { transform: translateY(-10px); box-shadow: 0 25px 50px rgba(0, 0, 0, 0.12); border-color: #cbd5e1; z-index: 10; }
-        .portal-module-card:hover::before { height: 8px; }
+        /* --- NEW: CUSTOM SEARCHABLE DROPDOWN STYLES --- */
+        .searchable-dropdown-container { position: relative; width: 100%; }
+        .searchable-dropdown-container input[type="text"] { background: #ffffff url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="%2364748b" viewBox="0 0 16 16"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/></svg>') no-repeat 16px center; padding-left: 45px; cursor: text; }
+        .custom-select-list { display: none; position: absolute; top: 100%; left: 0; width: 100%; max-height: 280px; overflow-y: auto; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 10px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); z-index: 1000; margin-top: 8px; scrollbar-width: thin; }
+        .custom-select-list::-webkit-scrollbar { width: 8px; } .custom-select-list::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        .custom-select-item { padding: 14px 18px; cursor: pointer; border-bottom: 1px solid #f1f5f9; display: flex; flex-direction: column; transition: background 0.2s; }
+        .custom-select-item:last-child { border-bottom: none; }
+        .custom-select-item:hover { background: #f8fafc; padding-left: 22px; border-left: 4px solid #4f46e5; }
+        .cs-name { font-weight: 800; color: #0f172a; font-size: 15px; }
+        .cs-detail { font-size: 12.5px; color: #64748b; margin-top: 3px; }
+        .cs-empty { padding: 20px; text-align: center; color: #94a3b8; font-style: italic; }
+
+        .portal-grid-wrapper { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin-top: 20px; }
+        .portal-module-card { background: #ffffff; border-radius: 16px; padding: 30px 25px; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.03); border: 1px solid #e2e8f0; transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); position: relative; overflow: hidden; display: block; }
+        .portal-module-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 5px; background: #4f46e5; transition: height 0.3s ease; }
+        .portal-module-card:hover { transform: translateY(-8px) scale(1.02); box-shadow: 0 25px 50px rgba(0, 0, 0, 0.1); border-color: #cbd5e1; z-index: 10; }
+        .portal-module-card:hover::before { height: 10px; }
         
-        /* CARD COLOR VARIANTS MATCHING MAIN DASHBOARD */
         .card-blue-variant::before { background: #3b82f6; } .card-blue-variant .card-icon { background: #dbeafe; }
         .card-green-variant::before { background: #10b981; } .card-green-variant .card-icon { background: #d1fae5; }
         .card-purple-variant::before { background: #8b5cf6; } .card-purple-variant .card-icon { background: #ede9fe; }
@@ -65,54 +76,55 @@
         .card-rose-variant::before { background: #e11d48; } .card-rose-variant .card-icon { background: #ffe4e6; }
         .card-indigo-variant::before { background: #4f46e5; } .card-indigo-variant .card-icon { background: #e0e7ff; }
         
-        .card-icon { font-size: 28px; margin-bottom: 18px; display: inline-flex; align-items: center; justify-content: center; width: 56px; height: 56px; border-radius: 14px; transition: transform 0.3s ease; }
-        .portal-module-card:hover .card-icon { transform: scale(1.1); }
-        .portal-module-card h3 { margin: 0 0 10px 0; font-size: 18px; font-weight: 800; color: #1e293b; letter-spacing: -0.3px;}
-        .portal-module-card p { margin: 0; font-size: 13.5px; color: #64748b; line-height: 1.6; }
+        .card-icon { font-size: 32px; margin-bottom: 20px; display: inline-flex; align-items: center; justify-content: center; width: 64px; height: 64px; border-radius: 16px; transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .portal-module-card:hover .card-icon { transform: scale(1.15) rotate(-5deg); }
+        .portal-module-card h3 { margin: 0 0 12px 0; font-size: 19px; font-weight: 800; color: #1e293b; letter-spacing: -0.3px;}
+        .portal-module-card p { margin: 0; font-size: 14px; color: #64748b; line-height: 1.6; }
         
-        .sub-action-card { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 25px; margin-bottom: 20px;}
-        .sub-action-card h4 { margin: 0 0 16px 0; color: #0f172a; font-size: 16px; font-weight: 800; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; }
+        .sub-action-card { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 30px; margin-bottom: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.02);}
+        .sub-action-card h4 { margin: 0 0 20px 0; color: #0f172a; font-size: 18px; font-weight: 800; border-bottom: 2px solid #f1f5f9; padding-bottom: 12px; }
         
-        .system-log-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 13px; }
-        .system-log-table th, .system-log-table td { border: 1px solid #e2e8f0; padding: 12px; text-align: left; color: #334155 !important; vertical-align: middle; }
-        .system-log-table th { background: #f8fafc; font-weight: 800; color: #0f172a; }
-        .system-log-table tr:nth-child(even) { background: #f1f5f9; }
+        .system-log-table { width: 100%; border-collapse: separate; border-spacing: 0; margin-top: 15px; font-size: 13.5px; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden; }
+        .system-log-table th, .system-log-table td { padding: 15px; text-align: left; color: #334155 !important; vertical-align: middle; border-bottom: 1px solid #e2e8f0; }
+        .system-log-table th { background: #f8fafc; font-weight: 800; color: #0f172a; text-transform: uppercase; font-size: 12px; letter-spacing: 0.5px;}
+        .system-log-table tr:last-child td { border-bottom: none; }
+        .system-log-table tr:hover td { background: #f8fafc; }
         
-        .portal-page-panel { display: none; animation: fadeIn 0.4s ease-out forwards; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
-        .back-nav-link { display: inline-flex; align-items: center; color: #3b82f6; font-weight: 800; font-size: 14px; text-decoration: none; margin-bottom: 15px; cursor: pointer; width: fit-content; transition: color 0.2s; }
-        .back-nav-link:hover { color: #1d4ed8; }
+        .portal-page-panel { display: none; animation: slideInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        @keyframes slideInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
         
-        button.action-btn { width: 100%; padding: 16px; background: #4f46e5; color: white; border: none; border-radius: 8px; font-size: 15.5px; font-weight: 900; cursor: pointer; text-transform: uppercase; letter-spacing: 0.8px; margin-top: 15px; box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25); transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
-        button.action-btn:hover { background: #3730a3; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(79, 70, 229, 0.3); }
-        button.panel-sub-submit { padding: 14px 18px; font-size: 14.5px; margin-top: 20px; box-shadow: none; width: 100%; text-transform: none; border-radius: 8px; color: white; border: none; font-weight: 800; cursor: pointer; }
-        button.panel-sub-submit:hover { filter: brightness(90%); }
+        .back-nav-link { display: inline-flex; align-items: center; color: #3b82f6; font-weight: 800; font-size: 14px; text-decoration: none; margin-bottom: 20px; cursor: pointer; transition: all 0.2s; padding: 10px 18px; background: #f1f5f9; border-radius: 20px;}
+        .back-nav-link:hover { color: #1d4ed8; background: #e2e8f0; transform: translateX(-3px);} 
+        .sub-back-nav { color: #f59e0b; background: #fef3c7; } .sub-back-nav:hover{background: #fde68a;}
         
-        button.small-action-btn { background:#3b82f6; color:white; border:none; padding:6px 12px; border-radius:4px; font-size:12px; font-weight:bold; cursor:pointer; margin-right:5px; transition:0.2s; }
-        button.small-action-btn:hover { filter: brightness(90%); }
-        button.small-delete-btn { background:#ef4444; color:white; border:none; padding:6px 12px; border-radius:4px; font-size:12px; font-weight:bold; cursor:pointer; transition:0.2s; }
-        button.small-delete-btn:hover { background:#dc2626; }
+        button.action-btn { width: 100%; padding: 18px; background: #4f46e5; color: white; border: none; border-radius: 10px; font-size: 15.5px; font-weight: 900; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; margin-top: 15px; box-shadow: 0 10px 20px rgba(79, 70, 229, 0.25); transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        button.action-btn:hover { background: #3730a3; transform: translateY(-3px); box-shadow: 0 15px 25px rgba(79, 70, 229, 0.35); }
+        button.panel-sub-submit { padding: 16px 20px; font-size: 15px; margin-top: 25px; box-shadow: none; width: 100%; text-transform: none; border-radius: 10px; color: white; border: none; font-weight: 800; cursor: pointer; }
+        button.panel-sub-submit:hover { filter: brightness(85%); transform: translateY(-2px); }
         
-        /* MODALS */
-        .custom-popup-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(6px); z-index: 20000000; display: none; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.2s ease-in-out; }
-        .custom-popup-card { background: #ffffff; width: 90%; max-width: 420px; padding: 35px; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.2); text-align: center; box-sizing: border-box; border-top: 6px solid #4f46e5; transform: scale(0.95); transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        button.small-action-btn { background:#3b82f6; color:white; border:none; padding:8px 16px; border-radius:6px; font-size:12.5px; font-weight:bold; cursor:pointer; margin-right:5px; transition:0.2s; box-shadow: 0 2px 5px rgba(59,130,246,0.3);}
+        button.small-action-btn:hover { background:#2563eb; transform: translateY(-1px); }
+        
+        /* --- REFINED PREMIUM POPUPS & LOADERS --- */
+        .custom-popup-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15, 23, 42, 0.5); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); z-index: 20000000; display: none; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.3s ease; }
+        .custom-popup-card { background: #ffffff; width: 90%; max-width: 440px; padding: 45px; border-radius: 24px; box-shadow: 0 25px 50px rgba(0,0,0,0.15); text-align: center; box-sizing: border-box; border-top: 6px solid #4f46e5; transform: scale(0.9) translateY(20px); transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
         .custom-popup-overlay.active { display: flex; opacity: 1; }
-        .custom-popup-overlay.active .custom-popup-card { transform: scale(1); }
-        .popup-icon-alert { font-size: 48px; margin-bottom: 15px; }
-        .popup-message-text { color: #334155; font-size: 15px; line-height: 1.6; margin: 0 0 25px 0; font-weight: 600; white-space: pre-line; }
-        .popup-close-btn { background: #0f172a; color: white; padding: 12px 28px; border: none; border-radius: 8px; font-size: 13.5px; font-weight: 800; cursor: pointer; text-transform: uppercase; width: 100%; transition: background 0.2s;}
-        .popup-close-btn:hover { background: #334155; }
+        .custom-popup-overlay.active .custom-popup-card { transform: scale(1) translateY(0); }
+        .popup-icon-alert { font-size: 54px; margin-bottom: 20px; animation: floatIcon 3s ease-in-out infinite; }
+        .popup-message-text { color: #334155; font-size: 15.5px; line-height: 1.6; margin: 0 0 30px 0; font-weight: 600; white-space: pre-line; }
+        .popup-close-btn { background: #0f172a; color: white; padding: 15px 30px; border: none; border-radius: 10px; font-size: 14px; font-weight: 800; cursor: pointer; text-transform: uppercase; width: 100%; transition: all 0.2s; box-shadow: 0 4px 10px rgba(0,0,0,0.1);}
+        .popup-close-btn:hover { background: #334155; transform: translateY(-2px); }
         
-        .request-detail-box { text-align: left; background: #f8fafc; border: 1px solid #e2e8f0; padding: 15px; border-radius: 8px; font-size: 14px; margin-bottom: 20px; max-height: 300px; overflow-y: auto; }
-        .request-detail-row { padding: 8px 0; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; }
+        .request-detail-box { text-align: left; background: #f8fafc; border: 1px solid #e2e8f0; padding: 20px; border-radius: 12px; font-size: 14.5px; margin-bottom: 25px; max-height: 350px; overflow-y: auto; scrollbar-width: thin; }
+        .request-detail-row { padding: 10px 0; border-bottom: 1px dashed #cbd5e1; display: flex; justify-content: space-between; align-items: flex-start; gap: 15px;}
         .request-detail-row:last-child { border-bottom: none; }
-        .req-key { font-weight: bold; color: #475569; }
-        .req-val { color: #0f172a; font-family: monospace; font-size: 14px; }
+        .req-key { font-weight: 800; color: #475569; width: 40%; flex-shrink: 0; }
+        .req-val { color: #0f172a; font-family: monospace; font-size: 14px; background: #e2e8f0; padding: 4px 8px; border-radius: 6px; word-break: break-all; }
 
-        .processing-loader-container { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(5px); z-index: 30000000; display: none; flex-direction: column; justify-content: center; align-items: center; }
-        .app-loading-spinner { width: 45px; height: 45px; border: 4px solid #f1f5f9; border-top: 4px solid #4f46e5; border-radius: 50%; animation: spinSystem 0.8s linear infinite; margin-bottom: 20px; }
-        .loading-status-msg { font-size: 15px; font-weight: 800; color: #0f172a; letter-spacing: 0.5px; }
-        @keyframes spinSystem { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .processing-loader-container { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); z-index: 30000000; display: none; flex-direction: column; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.3s ease;}
+        .processing-loader-container.active { opacity: 1; }
+        .app-loading-spinner { width: 55px; height: 55px; border: 4px solid #e2e8f0; border-top-color: #4f46e5; border-right-color: #4f46e5; border-radius: 50%; animation: spinSystem 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite; margin-bottom: 25px; box-shadow: 0 0 15px rgba(79, 70, 229, 0.2); }
+        .loading-status-msg { font-size: 16px; font-weight: 800; color: #0f172a; letter-spacing: 0.5px; background: white; padding: 10px 20px; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
     </style>
 
     <!-- ANTI-INSPECT SHIELD -->
@@ -160,14 +172,21 @@
                     <div class='portal-module-card card-blue-variant' onclick='navigateToSubPanel("subCreateUser")'>
                         <div class='card-icon'>👤</div>
                         <h3>Create New User</h3>
-                        <p>Register a new system user profile and assign their operational role.</p>
+                        <p>Register a new system user profile and assign their operational role and mapped SOL.</p>
                     </div>
 
-                    <!-- NEW 2FA SETUP CARD -->
+                    <!-- 2FA SETUP CARD -->
                     <div class='portal-module-card card-teal-variant' onclick='navigateToSubPanel("sub2FASetup")'>
                         <div class='card-icon'>📱</div>
                         <h3>Authenticator 2FA Setup</h3>
                         <p>Generate Google Authenticator QR codes to enroll users in high-security 2FA login.</p>
+                    </div>
+                    
+                    <!-- NEW: RESET 2FA CARD -->
+                    <div class='portal-module-card card-rose-variant' id='maintainReset2FA' onclick='navigateToSubPanel("subReset2FA")'>
+                        <div class='card-icon'>🔓</div>
+                        <h3>Reset User 2FA</h3>
+                        <p>Clear a user's Two-Factor Authentication secret so they can re-enroll a new device.</p>
                     </div>
 
                     <div class='portal-module-card card-orange-variant' onclick='navigateToSubPanel("subLockUnlock")'>
@@ -221,7 +240,7 @@
                     <div class='portal-module-card card-indigo-variant' onclick='navigateToSubPanel("subUserLogs")' style='grid-column: 1 / -1;'>
                         <div class='card-icon'>📊</div>
                         <h3>User Status & Login Logs</h3>
-                        <p>View current account registry status and recent historical login connection attempts.</p>
+                        <p>View current account registry status, mapped offices, and recent login connection attempts.</p>
                     </div>
                 </div>
             </div>
@@ -229,7 +248,7 @@
             <!-- PENDING APPROVALS PANEL -->
             <div class='portal-page-panel' id='panelApprovals'>
                 <div class='back-nav-link' onclick='returnToMainDashboard()'>⬅️ Back to Hub</div>
-                <h3 style="margin-top:0; color:#1e293b; font-size:22px;">Pending Authorization Requests</h3>
+                <h3 style="margin-top:0; color:#1e293b; font-size:24px;">Pending Authorization Requests</h3>
                 <div class='sub-action-card' style="border-top: 4px solid #e11d48; overflow-x: auto;">
                     <table class='system-log-table' style="min-width: 700px;">
                         <thead>
@@ -248,57 +267,93 @@
             <!-- CREATE USER -->
             <div class='portal-page-panel' id='subCreateUser'>
                 <div class='back-nav-link' onclick='returnToMainDashboard()'>⬅️ Back to Hub</div>
-                <h3 style="margin-top:0; color:#1e293b; font-size:22px;">Create New User</h3>
+                <h3 style="margin-top:0; color:#1e293b; font-size:24px;">Create New User</h3>
                 <div class='sub-action-card' style="border-top: 4px solid #3b82f6;">
                     <div class='form-group'><label>Full Name</label><input id='muNewFullName' placeholder='Enter Official Full Name' type='text'/></div>
                     <div class='form-group'><label>Username</label><input id='muNewUser' placeholder='Enter unique login username' type='text'/></div>
                     <div class='form-group'><label>Passcode</label><input id='muNewPass' placeholder='Enter default secure passcode' type='text'/></div>
-                    <div class='form-group'><label>Access Role</label>
-                        <select id='muNewRole'>
-                            <option value='maker'>Maker (Billing Only)</option>
-                            <option value='superuser'>Superuser (Office Head)</option>
-                            <option value='admin'>Admin (Full Access)</option>
-                        </select>
+                    <div class='flex-row'>
+                        <div class='form-group'><label>Access Role</label>
+                            <select id='muNewRole'>
+                                <option value='maker'>Maker (Billing Only)</option>
+                                <option value='superuser'>Superuser (Office Head)</option>
+                                <option value='admin'>Admin (Full Access)</option>
+                            </select>
+                        </div>
+                        <div class='form-group'><label>Mapped Office (SOL)</label>
+                            <!-- New field for mapping SOL ID directly during user creation -->
+                            <select id='muNewUserSol'></select>
+                        </div>
                     </div>
                     <button class='action-btn panel-sub-submit btn-dynamic' onclick='executeCreateUserAction()' style='background:#3b82f6;' type='button'>Register Profile</button>
                 </div>
             </div>
 
-            <!-- NEW: 2FA SETUP PANEL -->
+            <!-- 2FA SETUP PANEL -->
             <div class='portal-page-panel' id='sub2FASetup'>
                 <div class='back-nav-link' onclick='returnToMainDashboard()'>⬅️ Back to Hub</div>
-                <h3 style="margin-top:0; color:#1e293b; font-size:22px;">Authenticator 2FA Setup</h3>
+                <h3 style="margin-top:0; color:#1e293b; font-size:24px;">Authenticator 2FA Setup</h3>
                 <div class='sub-action-card' style="border-top: 4px solid #14b8a6;">
-                    <p style="color: #64748b; font-size: 13.5px; margin-top: -10px; margin-bottom: 20px;">
+                    <p style="color: #64748b; font-size: 14.5px; margin-top: -10px; margin-bottom: 25px;">
                         Generate a secure Time-Based One-Time Password (TOTP) QR code to enroll users into the high-security login system.
                     </p>
                     
                     <div class='form-group'>
                         <label>Select Target User</label>
-                        <select class='mu-user-dropdown' id='mu2FASelect'></select>
+                        <!-- CUSTOM SEARCHABLE DROPDOWN -->
+                        <div class="searchable-dropdown-container" id="wrapper_mu2FASelect">
+                            <input type="text" id="searchInput_mu2FASelect" placeholder="🔍 Search by name or username..." autocomplete="off" onkeyup="filterCustomSelect('mu2FASelect')" onfocus="showCustomSelect('mu2FASelect')" />
+                            <div class="custom-select-list" id="list_mu2FASelect"></div>
+                            <input type="hidden" id="mu2FASelect" />
+                        </div>
                     </div>
                     
                     <button class='action-btn' onclick='generate2FAForUser()' style='background:#14b8a6; margin-bottom: 20px;' type='button'>Generate QR Code</button>
                     
-                    <div id="qrCodeWrapper" style="display:none; text-align: center; background: #ffffff; padding: 30px; border: 1px solid #e2e8f0; border-radius: 12px; margin-bottom: 20px;">
-                        <p style="font-weight: 800; color: #0f172a; margin-top: 0; font-size: 16px;">Scan this with Google / Microsoft Authenticator:</p>
+                    <div id="qrCodeWrapper" style="display:none; text-align: center; background: #ffffff; padding: 40px; border: 1px solid #cbd5e1; border-radius: 16px; margin-bottom: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05);">
+                        <p style="font-weight: 900; color: #0f172a; margin-top: 0; font-size: 18px;">Scan this with Google / Microsoft Authenticator:</p>
                         
-                        <div id="qrcodeDisplay" style="display: flex; justify-content: center; margin: 20px 0;"></div>
+                        <div id="qrcodeDisplay" style="display: flex; justify-content: center; margin: 30px 0;"></div>
                         
-                        <p style="font-size: 13px; color: #64748b; margin-bottom: 8px;">Or enter this setup key manually in the app:</p>
-                        <code id="manualSecretDisplay" style="font-size: 18px; font-weight: bold; color: #e11d48; background: #fee2e2; padding: 6px 15px; border-radius: 6px; letter-spacing: 2px;"></code>
+                        <p style="font-size: 14px; color: #64748b; margin-bottom: 10px; font-weight: 700;">Or enter this setup key manually in the app:</p>
+                        <code id="manualSecretDisplay" style="font-size: 20px; font-weight: 900; color: #e11d48; background: #fee2e2; padding: 8px 20px; border-radius: 8px; letter-spacing: 3px;"></code>
                     </div>
 
                     <button class='action-btn panel-sub-submit btn-dynamic' id='save2FABtn' onclick='executeSave2FA()' style='background:#3b82f6; display:none;' type='button'>Save 2FA Enrollment</button>
+                </div>
+            </div>
+            
+            <!-- NEW: RESET 2FA -->
+            <div class='portal-page-panel' id='subReset2FA'>
+                <div class='back-nav-link' onclick='returnToMainDashboard()'>⬅️ Back to Hub</div>
+                <h3 style="margin-top:0; color:#1e293b; font-size:24px;">Reset User 2FA Device</h3>
+                <div class='sub-action-card' style='border-top: 4px solid #e11d48;'>
+                    <p style="font-size: 14px; color: #64748b; margin-top: -10px; margin-bottom: 20px;">Use this strictly if a user lost their phone or uninstalled Google Authenticator. It forces them to re-enroll.</p>
+                    <div class='form-group'>
+                        <label>Select Target User</label>
+                        <div class="searchable-dropdown-container" id="wrapper_muReset2FASelect">
+                            <input type="text" id="searchInput_muReset2FASelect" placeholder="🔍 Search by name or username..." autocomplete="off" onkeyup="filterCustomSelect('muReset2FASelect')" onfocus="showCustomSelect('muReset2FASelect')" />
+                            <div class="custom-select-list" id="list_muReset2FASelect"></div>
+                            <input type="hidden" id="muReset2FASelect" />
+                        </div>
+                    </div>
+                    <button class='action-btn panel-sub-submit' onclick='executeReset2FAAction()' style='background:#e11d48;' type='button'>Reset 2FA Security</button>
                 </div>
             </div>
 
             <!-- LOCK / UNLOCK -->
             <div class='portal-page-panel' id='subLockUnlock'>
                 <div class='back-nav-link' onclick='returnToMainDashboard()'>⬅️ Back to Hub</div>
-                <h3 style="margin-top:0; color:#1e293b; font-size:22px;">Lock / Unlock User</h3>
+                <h3 style="margin-top:0; color:#1e293b; font-size:24px;">Lock / Unlock User</h3>
                 <div class='sub-action-card' style="border-top: 4px solid #f59e0b;">
-                    <div class='form-group'><label>Select Target User</label><select class='mu-user-dropdown' id='muLockSelect'></select></div>
+                    <div class='form-group'>
+                        <label>Select Target User</label>
+                        <div class="searchable-dropdown-container" id="wrapper_muLockSelect">
+                            <input type="text" id="searchInput_muLockSelect" placeholder="🔍 Search by name or username..." autocomplete="off" onkeyup="filterCustomSelect('muLockSelect')" onfocus="showCustomSelect('muLockSelect')" />
+                            <div class="custom-select-list" id="list_muLockSelect"></div>
+                            <input type="hidden" id="muLockSelect" />
+                        </div>
+                    </div>
                     <button class='action-btn panel-sub-submit btn-dynamic' onclick='executeToggleUserStatus("lock", "muLockSelect")' style='background:#f59e0b;' type='button'>Toggle Lock Status</button>
                 </div>
             </div>
@@ -306,9 +361,16 @@
             <!-- ENABLE / DISABLE -->
             <div class='portal-page-panel' id='subEnableDisable'>
                 <div class='back-nav-link' onclick='returnToMainDashboard()'>⬅️ Back to Hub</div>
-                <h3 style="margin-top:0; color:#1e293b; font-size:22px;">Enable / Disable User</h3>
+                <h3 style="margin-top:0; color:#1e293b; font-size:24px;">Enable / Disable User</h3>
                 <div class='sub-action-card' style="border-top: 4px solid #10b981;">
-                    <div class='form-group'><label>Select Target User</label><select class='mu-user-dropdown' id='muEnableSelect'></select></div>
+                    <div class='form-group'>
+                        <label>Select Target User</label>
+                        <div class="searchable-dropdown-container" id="wrapper_muEnableSelect">
+                            <input type="text" id="searchInput_muEnableSelect" placeholder="🔍 Search by name or username..." autocomplete="off" onkeyup="filterCustomSelect('muEnableSelect')" onfocus="showCustomSelect('muEnableSelect')" />
+                            <div class="custom-select-list" id="list_muEnableSelect"></div>
+                            <input type="hidden" id="muEnableSelect" />
+                        </div>
+                    </div>
                     <button class='action-btn panel-sub-submit btn-dynamic' onclick='executeToggleUserStatus("disable", "muEnableSelect")' style='background:#10b981;' type='button'>Toggle Enable/Disable</button>
                 </div>
             </div>
@@ -316,9 +378,16 @@
             <!-- RESET PASSCODE -->
             <div class='portal-page-panel' id='subResetPass'>
                 <div class='back-nav-link' onclick='returnToMainDashboard()'>⬅️ Back to Hub</div>
-                <h3 style="margin-top:0; color:#1e293b; font-size:22px;">Reset Passcode</h3>
+                <h3 style="margin-top:0; color:#1e293b; font-size:24px;">Reset Passcode</h3>
                 <div class='sub-action-card' style="border-top: 4px solid #475569;">
-                    <div class='form-group'><label>Select Target User</label><select class='mu-user-dropdown' id='muResetSelect'></select></div>
+                    <div class='form-group'>
+                        <label>Select Target User</label>
+                        <div class="searchable-dropdown-container" id="wrapper_muResetSelect">
+                            <input type="text" id="searchInput_muResetSelect" placeholder="🔍 Search by name or username..." autocomplete="off" onkeyup="filterCustomSelect('muResetSelect')" onfocus="showCustomSelect('muResetSelect')" />
+                            <div class="custom-select-list" id="list_muResetSelect"></div>
+                            <input type="hidden" id="muResetSelect" />
+                        </div>
+                    </div>
                     <div class='form-group'><label>New Passcode</label><input id='muResetPassInput' placeholder='Enter new passcode' type='text'/></div>
                     <button class='action-btn panel-sub-submit btn-dynamic' onclick='executeResetPasswordAction()' style='background:#475569;' type='button'>Update Passcode</button>
                 </div>
@@ -327,9 +396,16 @@
             <!-- CHANGE ROLE -->
             <div class='portal-page-panel' id='subChangeRole'>
                 <div class='back-nav-link' onclick='returnToMainDashboard()'>⬅️ Back to Hub</div>
-                <h3 style="margin-top:0; color:#1e293b; font-size:22px;">Change User Role</h3>
+                <h3 style="margin-top:0; color:#1e293b; font-size:24px;">Change User Role</h3>
                 <div class='sub-action-card' style="border-top: 4px solid #8b5cf6;">
-                    <div class='form-group'><label>Select Target User</label><select class='mu-user-dropdown' id='muRoleTargetSelect'></select></div>
+                    <div class='form-group'>
+                        <label>Select Target User</label>
+                        <div class="searchable-dropdown-container" id="wrapper_muRoleTargetSelect">
+                            <input type="text" id="searchInput_muRoleTargetSelect" placeholder="🔍 Search by name or username..." autocomplete="off" onkeyup="filterCustomSelect('muRoleTargetSelect')" onfocus="showCustomSelect('muRoleTargetSelect')" />
+                            <div class="custom-select-list" id="list_muRoleTargetSelect"></div>
+                            <input type="hidden" id="muRoleTargetSelect" />
+                        </div>
+                    </div>
                     <div class='form-group'><label>New Access Role</label>
                         <select id='muNewRoleSelect'>
                             <option value='maker'>Maker (Billing Only)</option>
@@ -344,12 +420,19 @@
             <!-- CUSTOMIZE CARDS -->
             <div class='portal-page-panel' id='subCustomizeCards'>
                 <div class='back-nav-link' onclick='returnToMainDashboard()'>⬅️ Back to Hub</div>
-                <h3 style="margin-top:0; color:#1e293b; font-size:22px;">Customize User Cards</h3>
+                <h3 style="margin-top:0; color:#1e293b; font-size:24px;">Customize User Cards</h3>
                 <div class='sub-action-card' style="border-top: 4px solid #14b8a6;">
-                    <div class='form-group'><label>Select Target User</label><select class='mu-user-dropdown' id='muCustomizeSelect' onchange='loadUserCurrentCards()'></select></div>
-                    <div style='background: #fff; padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: 20px;'>
-                        <label style='margin-bottom: 15px;'>Select Accessible Modules:</label>
-                        <div style='display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 14px;'>
+                    <div class='form-group'>
+                        <label>Select Target User</label>
+                        <div class="searchable-dropdown-container" id="wrapper_muCustomizeSelect">
+                            <input type="text" id="searchInput_muCustomizeSelect" placeholder="🔍 Search by name or username..." autocomplete="off" onkeyup="filterCustomSelect('muCustomizeSelect')" onfocus="showCustomSelect('muCustomizeSelect')" />
+                            <div class="custom-select-list" id="list_muCustomizeSelect"></div>
+                            <input type="hidden" id="muCustomizeSelect" />
+                        </div>
+                    </div>
+                    <div style='background: #fff; padding: 20px; border-radius: 12px; border: 1px solid #e2e8f0; margin-bottom: 20px;'>
+                        <label style='margin-bottom: 15px; border-bottom: 1px solid #e2e8f0; padding-bottom: 10px;'>Select Accessible Modules:</label>
+                        <div style='display: grid; grid-template-columns: 1fr 1fr; gap: 12px; font-size: 14.5px;'>
                             <label><input class='card-checkbox' type='checkbox' value='menuCardDBDE'/> Day Begin/End</label>
                             <label><input class='card-checkbox' type='checkbox' value='menuCardBulk'/> Bulk Bills</label>
                             <label><input class='card-checkbox' type='checkbox' value='menuCardHoliday'/> Holiday Bills</label>
@@ -374,9 +457,16 @@
             <!-- DELETE USER -->
             <div class='portal-page-panel' id='subDeleteUser'>
                 <div class='back-nav-link' onclick='returnToMainDashboard()'>⬅️ Back to Hub</div>
-                <h3 style="margin-top:0; color:#1e293b; font-size:22px;">Permanently Delete User</h3>
+                <h3 style="margin-top:0; color:#1e293b; font-size:24px;">Permanently Delete User</h3>
                 <div class='sub-action-card' style="border-top: 4px solid #e11d48;">
-                    <div class='form-group'><label>Select Target User</label><select class='mu-user-dropdown' id='muDeleteSelect'></select></div>
+                    <div class='form-group'>
+                        <label>Select Target User</label>
+                        <div class="searchable-dropdown-container" id="wrapper_muDeleteSelect">
+                            <input type="text" id="searchInput_muDeleteSelect" placeholder="🔍 Search by name or username..." autocomplete="off" onkeyup="filterCustomSelect('muDeleteSelect')" onfocus="showCustomSelect('muDeleteSelect')" />
+                            <div class="custom-select-list" id="list_muDeleteSelect"></div>
+                            <input type="hidden" id="muDeleteSelect" />
+                        </div>
+                    </div>
                     <button class='action-btn panel-sub-submit btn-dynamic' onclick='executeDeleteUserAction()' style='background:#e11d48;' type='button'>Delete Profile</button>
                 </div>
             </div>
@@ -384,9 +474,16 @@
             <!-- SEND DIRECT MESSAGE -->
             <div class='portal-page-panel' id='subDirectMessage'>
                 <div class='back-nav-link' onclick='returnToMainDashboard()'>⬅️ Back to Hub</div>
-                <h3 style="margin-top:0; color:#1e293b; font-size:22px;">Send Direct Alert Message</h3>
+                <h3 style="margin-top:0; color:#1e293b; font-size:24px;">Send Direct Alert Message</h3>
                 <div class='sub-action-card' style="border-top: 4px solid #f59e0b;">
-                    <div class='form-group'><label>Select Target Staff Member</label><select class='mu-user-dropdown' id='muMessageSelect'></select></div>
+                    <div class='form-group'>
+                        <label>Select Target Staff Member</label>
+                        <div class="searchable-dropdown-container" id="wrapper_muMessageSelect">
+                            <input type="text" id="searchInput_muMessageSelect" placeholder="🔍 Search by name or username..." autocomplete="off" onkeyup="filterCustomSelect('muMessageSelect')" onfocus="showCustomSelect('muMessageSelect')" />
+                            <div class="custom-select-list" id="list_muMessageSelect"></div>
+                            <input type="hidden" id="muMessageSelect" />
+                        </div>
+                    </div>
                     <div class='form-group'><label>Personalized Message</label><textarea id='muMessageInput' placeholder='Type your message here...' rows='4'></textarea></div>
                     <button class='action-btn panel-sub-submit btn-dynamic' onclick='executeSendDirectMessage()' style='background:#f59e0b;' type='button'>Send Direct Message</button>
                 </div>
@@ -395,27 +492,27 @@
             <!-- BROADCAST NEWS -->
             <div class='portal-page-panel' id='subUpdateNews'>
                 <div class='back-nav-link' onclick='returnToMainDashboard()'>⬅️ Back to Hub</div>
-                <h3 style="margin-top:0; color:#1e293b; font-size:22px;">Broadcast Live News</h3>
+                <h3 style="margin-top:0; color:#1e293b; font-size:24px;">Broadcast Live News</h3>
                 <div class='sub-action-card' style="border-top: 4px solid #10b981;">
                     <div class='form-group'><label>Enter the latest announcement to scroll on the main dashboard:</label><textarea id='muNewsInput' placeholder='Enter the news feed text...' rows='3'></textarea></div>
                     <button class='action-btn panel-sub-submit btn-dynamic' onclick='executeUpdateNewsAction()' style='background:#10b981;' type='button'>Publish Live News</button>
                 </div>
             </div>
 
-            <!-- USER LOGS -->
+            <!-- USER LOGS (UPDATED WITH SOL ID COLUMN) -->
             <div class='portal-page-panel' id='subUserLogs'>
                 <div class='back-nav-link' onclick='returnToMainDashboard()'>⬅️ Back to Hub</div>
-                <h3 style="margin-top:0; color:#1e293b; font-size:22px;">User Status & Login Logs</h3>
-                <div class='sub-action-card' style='margin-bottom:20px; border-top: 4px solid #4f46e5;'>
-                    <h4>Registered System Account Registry</h4>
-                    <table class='system-log-table'>
-                        <thead><tr><th>Full Name</th><th>Username</th><th>Account Role</th><th>Permission</th><th>Security State</th></tr></thead>
+                <h3 style="margin-top:0; color:#1e293b; font-size:24px;">User Status & Login Logs</h3>
+                <div class='sub-action-card' style='margin-bottom:25px; border-top: 4px solid #4f46e5; overflow-x: auto;'>
+                    <h4 style="font-size: 18px;">Registered System Account Registry</h4>
+                    <table class='system-log-table' style="min-width: 800px;">
+                        <thead><tr><th>Full Name</th><th>Username</th><th>Mapped Office (SOL)</th><th>Account Role</th><th>Permission</th><th>Security State</th></tr></thead>
                         <tbody id='muUserRosterTableBody'></tbody>
                     </table>
                 </div>
-                <div class='sub-action-card' style="border-top: 4px solid #4f46e5;">
-                    <h4>Live Portal Connection Access History</h4>
-                    <table class='system-log-table'>
+                <div class='sub-action-card' style="border-top: 4px solid #4f46e5; overflow-x: auto;">
+                    <h4 style="font-size: 18px;">Live Portal Connection Access History</h4>
+                    <table class='system-log-table' style="min-width: 600px;">
                         <thead><tr><th>Timestamp Ledger Entry</th><th>Connecting User</th><th>Security Event Status</th></tr></thead>
                         <tbody id='muLoginHistoryTableBody'></tbody>
                     </table>
@@ -436,13 +533,13 @@
 
     <!-- VIEW REQUEST DETAILS MODAL -->
     <div class='custom-popup-overlay' id='requestDetailsModal' style="z-index: 50000000;">
-        <div class='custom-popup-card' style="max-width: 500px; border-top: 6px solid #4f46e5;">
-            <h3 style="margin-top:0; color:#1e3a8a; text-align:left;">Request Audit Details</h3>
+        <div class='custom-popup-card' style="max-width: 550px; border-top: 6px solid #4f46e5;">
+            <h3 style="margin-top:0; color:#1e3a8a; text-align:left; font-size: 22px;">Request Audit Details</h3>
             <div id="requestDetailsContent" class="request-detail-box"></div>
-            <div style="display:flex; gap:10px;">
-                <button onclick="approveCurrentRequest()" style="background:#10b981; color:white; border:none; padding:12px; border-radius:6px; flex:1; font-weight:bold; cursor:pointer;">✅ Approve</button>
-                <button onclick="rejectCurrentRequest()" style="background:#ef4444; color:white; border:none; padding:12px; border-radius:6px; flex:1; font-weight:bold; cursor:pointer;">❌ Reject</button>
-                <button onclick="closeRequestDetails()" style="background:#64748b; color:white; border:none; padding:12px; border-radius:6px; flex:1; font-weight:bold; cursor:pointer;">Cancel</button>
+            <div style="display:flex; gap:12px;">
+                <button onclick="approveCurrentRequest()" style="background:#10b981; color:white; border:none; padding:15px; border-radius:8px; flex:1; font-weight:900; cursor:pointer; font-size: 14.5px; transition: 0.2s; text-transform: uppercase;">✅ Approve</button>
+                <button onclick="rejectCurrentRequest()" style="background:#ef4444; color:white; border:none; padding:15px; border-radius:8px; flex:1; font-weight:900; cursor:pointer; font-size: 14.5px; transition: 0.2s; text-transform: uppercase;">❌ Reject</button>
+                <button onclick="closeRequestDetails()" style="background:#64748b; color:white; border:none; padding:15px; border-radius:8px; flex:1; font-weight:900; cursor:pointer; font-size: 14.5px; transition: 0.2s; text-transform: uppercase;">Cancel</button>
             </div>
         </div>
     </div>
@@ -451,8 +548,7 @@
         <div class='app-loading-spinner'></div>
         <div class='loading-status-msg' id="loaderTextMsg">Syncing with Cloud...</div>
     </div>
-
-    <script type="text/javascript">
+	<script type="text/javascript">
         // ----------------------------------------------------
         // 1. FIREBASE CONFIGURATION
         // ----------------------------------------------------
@@ -493,12 +589,13 @@
             activeUser = sessionStorage.getItem("activeUser");
             activeRole = sessionStorage.getItem("activeRole");
 
+            // Verify if the user is authorized to be here
             if (!activeUser || activeRole !== "admin") {
                 window.location.replace("index.html");
                 return;
             }
 
-            // Sync Registry FIRST to eliminate race condition
+            // Sync Registry
             db.collection("system").doc("registry").onSnapshot((registryDoc) => {
                 if (registryDoc.exists) {
                     const data = registryDoc.data();
@@ -510,10 +607,10 @@
                     // Evaluate Security Hierarchy
                     const myProfile = SYSTEM_USER_REGISTRY.find(u => u.user === activeUser);
                     isMasterAdmin = (activeUser === "admin");
-                    isAdminOffice = (myProfile && myProfile.solId === "000000");
+                    isAdminOffice = (myProfile && myProfile.solId === "000000"); // 000000 indicates master admin office
                     canDirectExecute = (isMasterAdmin || isAdminOffice);
                     
-                    // Adjust UI based on permissions
+                    // Adjust UI based on permissions (Maker vs Admin)
                     if (!canDirectExecute) {
                         document.querySelectorAll('.btn-dynamic').forEach(btn => {
                              if(!btn.innerText.startsWith("Request") && !btn.innerText.startsWith("Save")) {
@@ -529,7 +626,7 @@
                     refreshUI(); 
                 }
                 
-                // Hide loader cleanly without any race condition delay
+                // Hide loader cleanly
                 document.getElementById('globalAppLoader').style.display = 'none';
 
             }, (error) => {
@@ -537,15 +634,15 @@
                 document.getElementById('globalAppLoader').style.display = 'none';
             });
 
-            // Clean, Fast Light Theme Splash Screen Sequence
+            // Splash Screen Hide
             setTimeout(() => {
                 const splash = document.getElementById('splashScreen');
                 splash.style.opacity = '0';
                 setTimeout(() => { 
                     splash.style.display = 'none'; 
                     document.getElementById('appDashboardView').style.display = 'block';
-                }, 800);
-            }, 1200);
+                }, 600);
+            }, 1000);
         };
 
         // ----------------------------------------------------
@@ -553,13 +650,13 @@
         // ----------------------------------------------------
         function navigateToSubPanel(panelId) {
             document.getElementById('mainDashboardHead').style.display = 'none';
-            const panels = ['subCreateUser', 'subLockUnlock', 'subEnableDisable', 'subResetPass', 'subChangeRole', 'subCustomizeCards', 'subDeleteUser', 'subDirectMessage', 'subUpdateNews', 'subUserLogs', 'panelApprovals', 'sub2FASetup'];
+            const panels = ['subCreateUser', 'subLockUnlock', 'subEnableDisable', 'subResetPass', 'subChangeRole', 'subCustomizeCards', 'subDeleteUser', 'subDirectMessage', 'subUpdateNews', 'subUserLogs', 'panelApprovals', 'sub2FASetup', 'subReset2FA'];
             panels.forEach(id => { document.getElementById(id).style.display = 'none'; });
             document.getElementById(panelId).style.display = 'block';
         }
 
         function returnToMainDashboard() {
-            const panels = ['subCreateUser', 'subLockUnlock', 'subEnableDisable', 'subResetPass', 'subChangeRole', 'subCustomizeCards', 'subDeleteUser', 'subDirectMessage', 'subUpdateNews', 'subUserLogs', 'panelApprovals', 'sub2FASetup'];
+            const panels = ['subCreateUser', 'subLockUnlock', 'subEnableDisable', 'subResetPass', 'subChangeRole', 'subCustomizeCards', 'subDeleteUser', 'subDirectMessage', 'subUpdateNews', 'subUserLogs', 'panelApprovals', 'sub2FASetup', 'subReset2FA'];
             panels.forEach(id => { document.getElementById(id).style.display = 'none'; });
             document.getElementById('mainDashboardHead').style.display = 'block';
         }
@@ -581,9 +678,14 @@
         function showLoader(msg) {
             document.getElementById('loaderTextMsg').innerText = msg;
             document.getElementById('globalAppLoader').style.display = 'flex';
+            setTimeout(() => { document.getElementById('globalAppLoader').classList.add('active'); }, 10);
         }
 
-        function hideLoader() { document.getElementById('globalAppLoader').style.display = 'none'; }
+        function hideLoader() { 
+            const loader = document.getElementById('globalAppLoader');
+            loader.classList.remove('active');
+            setTimeout(() => { loader.style.display = 'none'; }, 300);
+        }
 
         async function saveToCloud() {
             await db.collection("system").doc("registry").set({
@@ -591,14 +693,14 @@
                 logs: SYSTEM_LOGIN_HISTORY,
                 offices: SYSTEM_OFFICE_REGISTRY,
                 requests: SYSTEM_PENDING_REQUESTS
-            });
+            }, { merge: true });
         }
 
         function logAdminAction(eventMsg) {
             let options = { timeZone: 'Asia/Kolkata', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
             let timeStamp = new Date().toLocaleString('en-IN', options);
             SYSTEM_LOGIN_HISTORY.push({ time: timeStamp, user: activeUser, event: eventMsg });
-            if (SYSTEM_LOGIN_HISTORY.length > 15) SYSTEM_LOGIN_HISTORY = SYSTEM_LOGIN_HISTORY.slice(SYSTEM_LOGIN_HISTORY.length - 15);
+            if (SYSTEM_LOGIN_HISTORY.length > 20) SYSTEM_LOGIN_HISTORY = SYSTEM_LOGIN_HISTORY.slice(SYSTEM_LOGIN_HISTORY.length - 20);
         }
 
         function createRequest(type, desc, payload) {
@@ -713,6 +815,11 @@
                         if(u) u.totpSecret = p.secret;
                         break;
                     }
+                    case 'RESET_2FA': {
+                        let u = SYSTEM_USER_REGISTRY.find(x => x.user === p.user);
+                        if(u) u.totpSecret = "";
+                        break;
+                    }
                 }
                 logAdminAction(`Approved Request: ${req.desc}`);
             } else {
@@ -729,14 +836,60 @@
         }
 
         // ----------------------------------------------------
-        // 5. UI REFRESH
+        // 5. CUSTOM SEARCHABLE DROPDOWN LOGIC
+        // ----------------------------------------------------
+        function showCustomSelect(id) {
+            document.getElementById('list_' + id).style.display = 'block';
+        }
+
+        function hideCustomSelects(e) {
+            if (!e.target.closest('.searchable-dropdown-container')) {
+                document.querySelectorAll('.custom-select-list').forEach(l => l.style.display = 'none');
+            }
+        }
+        document.addEventListener('click', hideCustomSelects);
+
+        function filterCustomSelect(id) {
+            let input = document.getElementById('searchInput_' + id).value.toLowerCase();
+            let items = document.querySelectorAll('#list_' + id + ' .custom-select-item');
+            let hasVisible = false;
+            
+            items.forEach(item => {
+                let txt = item.innerText.toLowerCase();
+                if (txt.includes(input)) {
+                    item.style.display = 'flex';
+                    hasVisible = true;
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+            
+            let emptyMsg = document.getElementById('empty_' + id);
+            if(emptyMsg) emptyMsg.style.display = hasVisible ? 'none' : 'block';
+        }
+
+        function selectCustomOption(id, value, displayName) {
+            document.getElementById(id).value = value;
+            document.getElementById('searchInput_' + id).value = displayName;
+            document.getElementById('list_' + id).style.display = 'none';
+            // Trigger customized cards load if that specific dropdown is used
+            if(id === 'muCustomizeSelect') loadUserCurrentCards();
+        }
+
+        // ----------------------------------------------------
+        // 6. UI REFRESH (Populating Tables & Custom Dropdowns)
         // ----------------------------------------------------
         function refreshUI() {
-            const dropdownIds = ['muLockSelect', 'muEnableSelect', 'muResetSelect', 'muRoleTargetSelect', 'muDeleteSelect', 'muCustomizeSelect', 'muMessageSelect', 'mu2FASelect'];
+            const customDropdownIds = ['muLockSelect', 'muEnableSelect', 'muResetSelect', 'muRoleTargetSelect', 'muDeleteSelect', 'muCustomizeSelect', 'muMessageSelect', 'mu2FASelect', 'muReset2FASelect'];
             
-            dropdownIds.forEach(id => { 
-                let el = document.getElementById(id); 
-                if(el) el.innerHTML = "<option value=''>-- Select User --</option>"; 
+            // Clear current list and setup empty state
+            customDropdownIds.forEach(id => { 
+                let listEl = document.getElementById('list_' + id); 
+                if(listEl) {
+                    listEl.innerHTML = `<div class="cs-empty" id="empty_${id}" style="display:none;">No user found</div>`;
+                    document.getElementById('searchInput_' + id).value = ""; // clear searches
+                    document.getElementById(id).value = ""; // clear hidden values
+                }
             });
 
             const rosterBody = document.getElementById('muUserRosterTableBody'); 
@@ -745,23 +898,30 @@
             SYSTEM_USER_REGISTRY.forEach(account => {
                 let dName = account.fullName || account.user;
                 
-                if (account.user !== "admin") {
-                    dropdownIds.forEach(id => { 
-                        let el = document.getElementById(id); 
-                        if(el) { 
-                            let opt = document.createElement('option'); 
-                            opt.value = account.user; 
-                            opt.innerText = `${dName} (${account.user}) [${account.role.toUpperCase()}]`; 
-                            el.appendChild(opt); 
+                // Populate Searchable Dropdowns
+                if (!account.user.toLowerCase().startsWith("admin")) {
+                    let displayString = `${dName} (${account.user}) [${account.role.toUpperCase()}]`;
+                    
+                    customDropdownIds.forEach(id => { 
+                        let listEl = document.getElementById('list_' + id); 
+                        if(listEl) { 
+                            let item = document.createElement('div');
+                            item.className = 'custom-select-item';
+                            item.onclick = function() { selectCustomOption(id, account.user, displayString); };
+                            item.innerHTML = `<span class="cs-name">${dName}</span><span class="cs-detail">@${account.user} • ${account.role.toUpperCase()}</span>`;
+                            listEl.appendChild(item);
                         } 
                     });
                 }
                 
+                // Populate Registry Table (Including Mapped SOL)
                 if(rosterBody) {
+                    let solDisplay = account.solId ? account.solId : "<span style='color:#ef4444;'>Unmapped</span>";
                     let row = document.createElement('tr'); 
                     row.innerHTML = `
                         <td>${dName}</td>
                         <td><strong>${account.user}</strong></td>
+                        <td>${solDisplay}</td>
                         <td><span style="text-transform:uppercase;">${account.role}</span></td>
                         <td><span class="status-badge ${account.active ? 'badge-active' : 'badge-disabled'}">${account.active ? 'ENABLED' : 'DISABLED'}</span></td>
                         <td><span class="status-badge ${account.locked ? 'badge-locked' : 'badge-active'}">${account.locked ? 'LOCKED' : 'UNLOCKED'}</span></td>
@@ -770,16 +930,29 @@
                 }
             });
 
+            // Populate New User SOL Creation Dropdown
+            const solSelect = document.getElementById('muNewUserSol');
+            if(solSelect) {
+                solSelect.innerHTML = "<option value=''>-- Do not Map --</option>";
+                SYSTEM_OFFICE_REGISTRY.forEach(o => {
+                    let opt = document.createElement('option');
+                    opt.value = o.solId;
+                    opt.innerText = `${o.solId} - ${o.name}`;
+                    solSelect.appendChild(opt);
+                });
+            }
+
+            // Populate Login History
             const historyBody = document.getElementById('muLoginHistoryTableBody');
             if(historyBody) {
                 historyBody.innerHTML = ""; 
-                let operationalStack = [...SYSTEM_LOGIN_HISTORY].reverse().slice(0, 6);
+                let operationalStack = [...SYSTEM_LOGIN_HISTORY].reverse().slice(0, 8);
                 operationalStack.forEach(log => { 
                     let r = document.createElement('tr'); 
                     r.innerHTML = `
                         <td>${log.time}</td>
                         <td><code>${log.user}</code></td>
-                        <td><span style="color:${log.event.includes('Success') || log.event.includes('Approved') || log.event.includes('Enrolled') ? '#10b981':'#ef4444'}; font-weight:bold;">${log.event}</span></td>
+                        <td><span style="color:${log.event.includes('Success') || log.event.includes('Approved') || log.event.includes('Enrolled') || log.event.includes('Reset') ? '#10b981':'#ef4444'}; font-weight:bold;">${log.event}</span></td>
                     `; 
                     historyBody.appendChild(r); 
                 });
@@ -795,21 +968,17 @@
                 if (SYSTEM_PENDING_REQUESTS.length === 0) {
                     appBody.innerHTML = "<tr><td colspan='4' style='text-align:center;'>No pending requests.</td></tr>";
                 } else {
-                    const userTypes = ['CREATE_USER', 'TOGGLE_LOCK', 'TOGGLE_ENABLE', 'RESET_PASS', 'CHANGE_ROLE', 'DELETE_USER', 'CUSTOMIZE_CARDS', 'SEND_MSG', 'UPDATE_NEWS', 'ENROLL_2FA'];
-                    
                     SYSTEM_PENDING_REQUESTS.forEach(req => {
-                        if(userTypes.includes(req.type)) {
-                            appBody.innerHTML += `
-                                <tr>
-                                    <td>${req.timestamp}</td>
-                                    <td><strong>${req.requestedBy}</strong></td>
-                                    <td>${req.desc}</td>
-                                    <td>
-                                        <button class="small-action-btn" style="background:#3b82f6;" onclick="viewRequestDetails('${req.id}')">👁️ View Details</button>
-                                    </td>
-                                </tr>
-                            `;
-                        }
+                        appBody.innerHTML += `
+                            <tr>
+                                <td>${req.timestamp}</td>
+                                <td><strong>${req.requestedBy}</strong></td>
+                                <td>${req.desc}</td>
+                                <td>
+                                    <button class="small-action-btn" onclick="viewRequestDetails('${req.id}')">👁️ View Details</button>
+                                </td>
+                            </tr>
+                        `;
                     });
                 }
             } else {
@@ -817,36 +986,25 @@
             }
         }
 
-        function loadUserCurrentCards() {
-            const selectedUser = document.getElementById('muCustomizeSelect').value; 
-            if(!selectedUser) return;
-            const profile = SYSTEM_USER_REGISTRY.find(acc => acc.user === selectedUser); 
-            if(!profile) return;
-            
-            let currentCards = profile.allowedCards || [];
-            const checkboxes = document.querySelectorAll('.card-checkbox');
-            checkboxes.forEach(box => { box.checked = currentCards.includes(box.value); });
-        }
-
         // ----------------------------------------------------
-        // 6. CRUD FUNCTIONS WITH HIERARCHY
+        // 7. CRUD FUNCTIONS WITH HIERARCHY
         // ----------------------------------------------------
         async function executeCreateUserAction() {
             const fullNameInput = document.getElementById('muNewFullName').value.trim(); 
             const usernameInput = document.getElementById('muNewUser').value.trim(); 
             const passwordInput = document.getElementById('muNewPass').value.trim(); 
             const selectedRole = document.getElementById('muNewRole').value;
+            const selectedSol = document.getElementById('muNewUserSol').value; // Get Mapped SOL
 
             if(!fullNameInput || !usernameInput || !passwordInput) { displayCustomAlert("Error: All fields required.", "⚠️"); return; }
-            if(SYSTEM_USER_REGISTRY.some(acc => acc.user.toLowerCase() === usernameInput.toLowerCase())) { displayCustomAlert("Error: Username exists.", "⚠️"); return; }
+            if(SYSTEM_USER_REGISTRY.some(acc => acc.user.toLowerCase() === usernameInput.toLowerCase())) { displayCustomAlert("Error: Username already exists in the system.", "⚠️"); return; }
 
             let defaultCards = [];
             if(selectedRole === 'admin') defaultCards = ['menuCardBulkBooking', 'menuCardBulk', 'menuCardHoliday', 'menuCardDateWise', 'menuCardACG61', 'menuCardGeneralCharge', 'menuCardSR1', 'menuCardCasualLeave', 'menuCardTAAdvance', 'menuCardTATransfer', 'menuCardTABillTour', 'menuCardCEA', 'menuCardAI', 'menuCardMaintenance', 'menuCardSelfPassword', 'menuCardUpdateNews']; 
             else if (selectedRole === 'superuser') defaultCards = ['menuCardBulkBooking', 'menuCardBulk', 'menuCardHoliday', 'menuCardDateWise', 'menuCardACG61', 'menuCardGeneralCharge', 'menuCardSR1', 'menuCardCasualLeave', 'menuCardTAAdvance', 'menuCardTATransfer', 'menuCardTABillTour', 'menuCardCEA', 'menuCardAI', 'menuCardSelfPassword', 'menuCardDBDE']; 
             else defaultCards = ['menuCardBulkBooking', 'menuCardBulk', 'menuCardHoliday', 'menuCardDateWise', 'menuCardACG61', 'menuCardGeneralCharge', 'menuCardSR1', 'menuCardCasualLeave', 'menuCardTAAdvance', 'menuCardTATransfer', 'menuCardTABillTour', 'menuCardCEA', 'menuCardAI', 'menuCardSelfPassword']; 
 
-            // Note: totpSecret initialized as empty string
-            const payload = { fullName: fullNameInput, user: usernameInput, pass: passwordInput, role: selectedRole, active: true, locked: false, failedAttempts: 0, isFirstTimeDefault: true, pendingMessage: "", allowedCards: defaultCards, solId: "", totpSecret: "" };
+            const payload = { fullName: fullNameInput, user: usernameInput, pass: passwordInput, role: selectedRole, active: true, locked: false, failedAttempts: 0, isFirstTimeDefault: true, pendingMessage: "", allowedCards: defaultCards, solId: selectedSol, totpSecret: "" };
 
             if (canDirectExecute) {
                 SYSTEM_USER_REGISTRY.push(payload);
@@ -855,7 +1013,8 @@
                 try {
                     await saveToCloud();
                     document.getElementById('muNewFullName').value = ""; document.getElementById('muNewUser').value = ""; document.getElementById('muNewPass').value = "";
-                    displayCustomAlert(`Account Created!<br/>Username: ${usernameInput}`, "✅");
+                    document.getElementById('muNewUserSol').value = "";
+                    displayCustomAlert(`Account Created Successfully!<br/><br/>Username: ${usernameInput}<br/>Role: ${selectedRole}`, "✅");
                 } catch(e) { displayCustomAlert("Network Error", "❌"); }
                 hideLoader();
             } else {
@@ -865,7 +1024,7 @@
 
         async function executeToggleUserStatus(toggleType, selectId) {
             const selectedUser = document.getElementById(selectId).value; 
-            if(!selectedUser) return;
+            if(!selectedUser) { displayCustomAlert("Please search and select a user.", "⚠️"); return; }
             if(selectedUser === "admin") { displayCustomAlert("Restriction: Master Admin cannot be altered.", "🛑"); return; }
             
             const profileIndex = SYSTEM_USER_REGISTRY.findIndex(acc => acc.user === selectedUser); 
@@ -896,8 +1055,8 @@
         async function executeResetPasswordAction() {
             const selectedUser = document.getElementById('muResetSelect').value; 
             const newPass = document.getElementById('muResetPassInput').value.trim();
-            if(!selectedUser || !newPass) { displayCustomAlert("Error: Inputs required.", "⚠️"); return; }
-            if(selectedUser === "admin") { displayCustomAlert("Restriction: Master Admin cannot be altered.", "🛑"); return; }
+            if(!selectedUser || !newPass) { displayCustomAlert("Error: Please select a user and provide a passcode.", "⚠️"); return; }
+            if(selectedUser === "admin") { displayCustomAlert("Restriction: Cannot reset Master Admin.", "🛑"); return; }
 
             if (canDirectExecute) {
                 const profileIndex = SYSTEM_USER_REGISTRY.findIndex(acc => acc.user === selectedUser); 
@@ -916,7 +1075,7 @@
         async function executeRoleChangeAction() {
             const selectedUser = document.getElementById('muRoleTargetSelect').value; 
             const newRole = document.getElementById('muNewRoleSelect').value;
-            if(!selectedUser) return; 
+            if(!selectedUser) { displayCustomAlert("Error: Please select a user.", "⚠️"); return; }
             if(selectedUser === "admin") { displayCustomAlert("Restriction: Master Admin cannot be altered.", "🛑"); return; }
 
             let defaultCards = [];
@@ -939,19 +1098,19 @@
 
         async function executeSaveUserCards() {
             const selectedUser = document.getElementById('muCustomizeSelect').value; 
-            if(!selectedUser) return;
+            if(!selectedUser) { displayCustomAlert("Error: Please select a user.", "⚠️"); return; }
             if(selectedUser === "admin") { displayCustomAlert("Restriction Notice: Master Admin cards cannot be altered.", "🛑"); return; }
 
             let newAllowedCards = [];
             document.querySelectorAll('.card-checkbox').forEach(box => { if (box.checked) newAllowedCards.push(box.value); });
-            if (newAllowedCards.length === 0) { displayCustomAlert("Error: Must have at least one card.", "⚠️"); return; }
+            if (newAllowedCards.length === 0) { displayCustomAlert("Operational Error: Must have at least one card.", "⚠️"); return; }
 
             if (canDirectExecute) {
                 const profileIndex = SYSTEM_USER_REGISTRY.findIndex(acc => acc.user === selectedUser); 
                 SYSTEM_USER_REGISTRY[profileIndex].allowedCards = newAllowedCards; 
                 logAdminAction(`Customized Cards for '${selectedUser}'`);
                 showLoader("Saving Config...");
-                try { await saveToCloud(); displayCustomAlert(`Success: Config updated.`, "✅"); } catch(e) { displayCustomAlert("Network Error", "❌"); }
+                try { await saveToCloud(); displayCustomAlert(`Success: Dashboard card config updated.`, "✅"); } catch(e) { displayCustomAlert("Network Error", "❌"); }
                 hideLoader();
             } else {
                 createRequest('CUSTOMIZE_CARDS', `Customize Dashboard Cards for '${selectedUser}'`, { user: selectedUser, allowedCards: newAllowedCards });
@@ -960,8 +1119,8 @@
 
         async function executeDeleteUserAction() {
             const selectedUser = document.getElementById('muDeleteSelect').value; 
-            if(!selectedUser) return;
-            if(selectedUser === "admin") { displayCustomAlert("Restriction: Master Admin cannot be deleted.", "🛑"); return; }
+            if(!selectedUser) { displayCustomAlert("Error: Please select a user.", "⚠️"); return; }
+            if(selectedUser === "admin") { displayCustomAlert("Restriction: Cannot delete Master Admin.", "🛑"); return; }
 
             if (canDirectExecute) {
                 const profileIndex = SYSTEM_USER_REGISTRY.findIndex(acc => acc.user === selectedUser); 
@@ -978,7 +1137,7 @@
         async function executeSendDirectMessage() {
             const selectedUser = document.getElementById('muMessageSelect').value; 
             const messageText = document.getElementById('muMessageInput').value.trim();
-            if(!selectedUser || !messageText) { displayCustomAlert("Error: Inputs required.", "⚠️"); return; }
+            if(!selectedUser || !messageText) { displayCustomAlert("Error: Target user and message both required.", "⚠️"); return; }
 
             if (canDirectExecute) {
                 const profileIndex = SYSTEM_USER_REGISTRY.findIndex(acc => acc.user === selectedUser); 
@@ -1012,10 +1171,8 @@
         }
 
         // ----------------------------------------------------
-        // 7. NEW: GOOGLE AUTHENTICATOR (TOTP) ENROLLMENT LOGIC
+        // 8. GOOGLE AUTHENTICATOR (TOTP) SETUP & RESET
         // ----------------------------------------------------
-        
-        // Helper: Generate a secure 16-character Base32 String
         function generateBase32Secret(length = 16) {
             const charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
             let secret = '';
@@ -1027,9 +1184,8 @@
 
         function generate2FAForUser() {
             const selectedUser = document.getElementById('mu2FASelect').value;
-            if(!selectedUser) { displayCustomAlert("Please select a target user first.", "⚠️"); return; }
+            if(!selectedUser) { displayCustomAlert("Please search and select a target user first.", "⚠️"); return; }
             
-            // Check if user already has a secret
             const profile = SYSTEM_USER_REGISTRY.find(acc => acc.user === selectedUser);
             if (profile && profile.totpSecret && profile.totpSecret !== "") {
                 if(!confirm(`Warning: User '${selectedUser}' is already enrolled in 2FA.\n\nGenerating a new QR code will OVERWRITE their old code and lock them out of their old Authenticator app.\n\nDo you want to proceed?`)) {
@@ -1037,17 +1193,14 @@
                 }
             }
             
-            // Generate Secret Key
             pending2FASecret = generateBase32Secret(16);
             pending2FAUser = selectedUser;
             
-            // Format for Google Authenticator (otpauth:// URI)
             const issuerName = "PO Staff Utility";
             const otpUri = `otpauth://totp/${encodeURIComponent(issuerName)}:${encodeURIComponent(selectedUser)}?secret=${pending2FASecret}&issuer=${encodeURIComponent(issuerName)}`;
             
-            // Render QR Code using qrcode.js
             const qrContainer = document.getElementById('qrcodeDisplay');
-            qrContainer.innerHTML = ""; // Clear previous QR
+            qrContainer.innerHTML = ""; 
             
             new QRCode(qrContainer, {
                 text: otpUri,
@@ -1058,7 +1211,6 @@
                 correctLevel : QRCode.CorrectLevel.H
             });
             
-            // Display manual code and show UI blocks
             document.getElementById('manualSecretDisplay').innerText = pending2FASecret;
             document.getElementById('qrCodeWrapper').style.display = "block";
             document.getElementById('save2FABtn').style.display = "block";
@@ -1071,27 +1223,48 @@
                 const profileIndex = SYSTEM_USER_REGISTRY.findIndex(acc => acc.user === pending2FAUser); 
                 if(profileIndex === -1) return;
                 
-                // Write the new secret to the registry
                 SYSTEM_USER_REGISTRY[profileIndex].totpSecret = pending2FASecret;
-                
                 logAdminAction(`Enrolled 2FA for '${pending2FAUser}'`);
+                
                 showLoader("Saving 2FA Configuration...");
                 try { 
                     await saveToCloud(); 
                     displayCustomAlert(`Success! Google Authenticator 2FA is now enabled for '${pending2FAUser}'.`, "✅"); 
                     
-                    // Reset UI safely
                     document.getElementById('qrCodeWrapper').style.display = "none";
                     document.getElementById('save2FABtn').style.display = "none";
+                    document.getElementById('searchInput_mu2FASelect').value = "";
                     document.getElementById('mu2FASelect').value = "";
                     pending2FASecret = ""; 
                     pending2FAUser = "";
-                } catch(e) { 
-                    displayCustomAlert("Network Error", "❌"); 
-                }
+                } catch(e) { displayCustomAlert("Network Error", "❌"); }
                 hideLoader();
             } else {
                 createRequest('ENROLL_2FA', `Enroll 2FA Authentication for '${pending2FAUser}'`, { user: pending2FAUser, secret: pending2FASecret });
+            }
+        }
+
+        async function executeReset2FAAction() {
+            const selectedUser = document.getElementById('muReset2FASelect').value; 
+            if(!selectedUser) { displayCustomAlert("Error: Please select a user.", "⚠️"); return; }
+            if(selectedUser === "admin") { displayCustomAlert("Restriction: Cannot reset Master Admin's 2FA from here. Master Admin 2FA can only be reset from the Firebase Console directly.", "🛑"); return; }
+            
+            const profileIndex = SYSTEM_USER_REGISTRY.findIndex(acc => acc.user === selectedUser); 
+            if(profileIndex === -1) return;
+            
+            if (canDirectExecute) {
+                SYSTEM_USER_REGISTRY[profileIndex].totpSecret = ""; 
+                logAdminAction(`Reset 2FA for '${selectedUser}'`);
+                showLoader("Resetting 2FA Security...");
+                try { 
+                    await saveToCloud(); 
+                    displayCustomAlert(`Success: 2FA has been reset for '${selectedUser}'. They will be prompted to setup Google Authenticator again on their next login.`, "🔓"); 
+                    document.getElementById('searchInput_muReset2FASelect').value = "";
+                    document.getElementById('muReset2FASelect').value = "";
+                } catch(e) { displayCustomAlert("Network Error", "❌"); }
+                hideLoader();
+            } else {
+                createRequest('RESET_2FA', `Reset 2FA device for '${selectedUser}'`, { user: selectedUser });
             }
         }
     </script>
