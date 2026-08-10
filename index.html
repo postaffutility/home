@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PO Staff Utility System - Version 3.0</title>
+    <title>PO Staff Utility System - Version 3.1.0</title>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
@@ -16,7 +16,7 @@
 
     <style>
         /* Minimalist Baseline Setup & Security */
-        body, html { margin: 0 !important; padding: 0 !important; width: 100% !important; height: 100% !important; background-color: #f4f6f9 !important; font-family: 'Segoe UI', Arial, sans-serif; user-select: none; -webkit-user-select: none; -ms-user-select: none; overflow-x: hidden; }
+        body, html { margin: 0 !important; padding: 0 !important; width: 100% !important; height: 100% !important; background-color: #ffffff !important; font-family: 'Segoe UI', Arial, sans-serif; user-select: none; -webkit-user-select: none; -ms-user-select: none; overflow-x: hidden; }
         input, textarea, select { user-select: text !important; -webkit-user-select: text !important; -ms-user-select: text !important; }
         .standalone-viewport { display: none; position: relative; z-index: 10; width: 100%; min-height: 100vh; padding: 0; box-sizing: border-box; }
         
@@ -55,10 +55,28 @@
         h2 { text-align: center; color: #1e293b; margin: 0 0 8px 0; font-size: 26px; font-weight: 800; letter-spacing: -0.5px; }
         .tagline { text-align: center; color: #64748b; font-size: 13.5px; margin-bottom: 30px; line-height: 1.6; }
         #portalHomeHead { animation: fadeIn 0.4s ease-out forwards; }
-        .dashboard-header-flex { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 30px; flex-wrap: wrap; gap: 15px; background: white; padding: 25px; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.02); border: 1px solid #e2e8f0; }
-        .header-titles h2 { text-align: left; font-size: 28px; margin-bottom: 5px; color: #0f172a; }
-        .header-titles .tagline { text-align: left; padding: 0; margin-bottom: 0; }
-        #portalWelcomeMessage { text-align: left; color: #1565c0; margin: 15px 0 0 0; font-size: 20px; font-weight: 800; letter-spacing: -0.3px; }
+       /* --- REFINED SEAMLESS HEADER & LIVE CLOCK --- */
+        #portalHomeHead { animation: fadeIn 0.4s ease-out forwards; }
+        
+        /* নতুন হেডার - কোনো বক্স বা ব্যাকগ্রাউন্ড ছাড়া একদম ক্লিন লাইন */
+        .dashboard-top-nav { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 30px; border-bottom: 2px solid #e2e8f0; padding-bottom: 20px; flex-wrap: wrap; gap: 20px; }
+        
+        .header-titles h2 { text-align: left; font-size: 28px; margin-bottom: 5px; color: #0f172a; font-weight: 900; letter-spacing: -0.5px; }
+        .header-titles .tagline { text-align: left; font-size: 13.5px; color: #64748b; margin-bottom: 12px; }
+        
+        .welcome-row { display: flex; align-items: center; gap: 15px; flex-wrap: wrap; }
+        #portalWelcomeMessage { color: #1d4ed8; font-size: 18px; font-weight: 800; letter-spacing: -0.3px; margin: 0; }
+        
+        .header-controls { display: flex; flex-direction: column; align-items: flex-end; gap: 15px; }
+        .action-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; justify-content: flex-end; }
+        
+        /* Live Clock Widget - Sleek & Modern */
+        .live-clock-widget { background: #f8fafc; color: #334155; padding: 8px 16px; border-radius: 8px; font-family: 'Segoe UI', Arial, sans-serif; font-weight: 700; font-size: 14px; display: flex; align-items: center; gap: 8px; border: 1px solid #e2e8f0; }
+        .clock-icon { font-size: 16px; }
+
+        /* নতুন লগআউট বাটন (আর ভাসমান থাকবে না, ঘড়ির পাশে সুন্দর করে বসবে) */
+        .portal-logout-btn { background: #ffffff; color: #d32f2f; border: 1px solid #ffcdd2; padding: 8px 16px; font-size: 14px; font-weight: 800; border-radius: 8px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s ease; box-shadow: 0 2px 5px rgba(211,47,47,0.05); }
+        .portal-logout-btn:hover { background: #d32f2f; color: #ffffff; border-color: #b71c1c; box-shadow: 0 4px 12px rgba(211, 47, 47, 0.2); }
         
         .office-status-wrapper { display: inline-flex; align-items: center; gap: 8px; margin-top: 10px; padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
         .status-day-begun { background: #d1fae5; color: #065f46; border: 1px solid #34d399; }
@@ -301,22 +319,32 @@
                     <div class='ticker-text' id='scrollingNewsText'>Loading...</div>
                 </div>
             </div>
-
-            <div class='portal-logout-anchor' onclick='executePortalLogout()'>🚪 Logout</div>
-
-            <div id='portalHomeHead'>
+<div id='portalHomeHead'>
                 
-                <div class='dashboard-header-flex'>
+                <!-- SEAMLESS TOP NAVIGATION -->
+                <div class='dashboard-top-nav'>
+                    <!-- Left Side: Titles and Welcome -->
                     <div class='header-titles'>
                         <h2>PO STAFF UTILITY SYSTEM</h2>
                         <div class='tagline'>Developed by Subhajit Parbat, MTS, Radhakishorepur HO • <strong>Version 3.0</strong></div>
-                        <div id='portalWelcomeMessage'></div>
-                        <div id='officeStatusBadge' class='office-status-wrapper' style='display:none;'>
-                            <div id='statusDot' class='status-dot'></div>
-                            <span id='statusText'></span>
+                        <div class='welcome-row'>
+                            <div id='portalWelcomeMessage'></div>
+                            <div id='officeStatusBadge' class='office-status-wrapper' style='display:none;'>
+                                <div id='statusDot' class='status-dot'></div>
+                                <span id='statusText'></span>
+                            </div>
                         </div>
                     </div>
-                    <div class='dashboard-controls'>
+                    
+                    <!-- Right Side: Clock, Search, Logout -->
+                    <div class='header-controls'>
+                        <div class='action-row'>
+                            <div class='live-clock-widget'>
+                                <span class="clock-icon">🕒</span> 
+                                <span id="liveClockDisplay">Loading time...</span>
+                            </div>
+                            <button class='portal-logout-btn' onclick='executePortalLogout()'>🚪 Logout</button>
+                        </div>
                         <input class='search-module-input' id='moduleSearch' onkeyup='filterAndPaginateCards(true)' placeholder='Search modules...' type='text'/>
                     </div>
                 </div>
@@ -1003,6 +1031,22 @@
 
         let tempSetupSecret = "";
         let isEnrollmentMode = false;
+		// --- LIVE CLOCK FUNCTION ---
+        function updateLiveClock() {
+            const clockEl = document.getElementById('liveClockDisplay');
+            if (!clockEl) return;
+            
+            const now = new Date();
+            const options = { 
+                weekday: 'short', year: 'numeric', month: 'short', day: 'numeric', 
+                hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true 
+            };
+            clockEl.innerText = now.toLocaleString('en-IN', options);
+        }
+        
+        // Start the clock immediately and update every second
+        setInterval(updateLiveClock, 1000);
+        updateLiveClock();
 
         function logSystemEvent(username, eventMsg) {
             let options = { timeZone: 'Asia/Kolkata', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
