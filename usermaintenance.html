@@ -14,16 +14,13 @@
 
     <style>
         /* Minimalist Baseline Setup & Security */
-        body, html { margin: 0 !important; padding: 0 !important; width: 100% !important; min-height: 100vh !important; background-color: #f4f6f9 !important; font-family: 'Segoe UI', Arial, sans-serif; user-select: none; -webkit-user-select: none; -ms-user-select: none; overflow-x: hidden; }
-        
-        /* Subtle background pattern like official portals */
-        body { background-image: radial-gradient(#cbd5e1 1px, transparent 1px); background-size: 20px 20px; }
-
+        body, html { margin: 0 !important; padding: 0 !important; width: 100% !important; height: 100% !important; background-color: #ffffff !important; font-family: 'Segoe UI', Arial, sans-serif; user-select: none; -webkit-user-select: none; -ms-user-select: none; overflow-x: hidden; }
         input, textarea, select { user-select: text !important; -webkit-user-select: text !important; -ms-user-select: text !important; }
+        .standalone-viewport { display: none; position: relative; z-index: 10; width: 100%; min-height: 100vh; padding: 0; box-sizing: border-box; }
         
-        /* Top Branding Bar */
-        .top-branding-bar { width: 100%; height: 6px; background: #4f46e5; position: fixed; top: 0; left: 0; z-index: 9999; }
-
+        /* EXACT REPLICA OF INDEX.HTML APP CONTAINER */
+        .app-container { max-width: 100%; background: transparent; padding: 30px 4vw; margin: 0; border-top: 6px solid #4f46e5; position: relative; }
+        
         /* --- BEAUTIFUL LIGHT THEME SPLASH SCREEN --- */
         #splashScreen { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #ffffff; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 99999999; color: #1e293b; text-align: center; transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.6s; border-bottom: 8px solid #3b82f6; }
         .splash-content { animation: popIn 1s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
@@ -34,49 +31,39 @@
         .splash-badge { display: inline-block; background: #3b82f6; color: white; padding: 6px 16px; border-radius: 20px; font-size: 13px; font-weight: 800; letter-spacing: 1px; margin-bottom: 25px; box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3); }
         .splash-loader { width: 45px; height: 45px; border: 4px solid #f1f5f9; border-top-color: #3b82f6; border-radius: 50%; animation: spin 1s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite; margin: 40px auto 0 auto; }
         @keyframes spin { 100% { transform: rotate(360deg); } }
-        /* ------------------------------------------- */
 
-        /* FULL SCREEN EXPANSIVE APP CONTAINER */
-        .standalone-viewport { position: relative; z-index: 10; width: 100%; min-height: 100vh; padding: 0; box-sizing: border-box; }
-        .app-container { width: 100%; max-width: 1400px; background: transparent; padding: 40px 4vw; margin: 0 auto; box-shadow: none; border: none; position: relative; }
-        
-        .portal-logout-anchor { position: absolute; top: 30px; right: 4vw; background: #ffffff; color: #d32f2f; border: 1px solid #ffcdd2; padding: 8px 18px; font-size: 14px; font-weight: 800; border-radius: 50px; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: all 0.2s ease; z-index: 50; box-shadow: 0 4px 10px rgba(211,47,47,0.1); }
-        .portal-logout-anchor:hover { background: #d32f2f; color: #ffffff; border-color: #b71c1c; box-shadow: 0 4px 15px rgba(211, 47, 47, 0.3); transform: translateY(-2px); }
-
+        /* EXACT HEADER REPLICA */
         .dashboard-top-nav { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 30px; border-bottom: 2px solid #e2e8f0; padding-bottom: 20px; flex-wrap: wrap; gap: 20px; }
-        .header-titles h2 { text-align: left; color: #1e293b; margin: 0 0 8px 0; font-size: 32px; font-weight: 900; letter-spacing: -0.5px; }
-        .header-titles .tagline { text-align: left; color: #64748b; font-size: 14.5px; margin-bottom: 0; line-height: 1.6; }
-        #portalWelcomeMessage { text-align: left; color: #4f46e5; margin: 10px 0 10px 0; font-size: 18px; font-weight: 800; letter-spacing: -0.3px; }
+        .header-titles h2 { text-align: left; font-size: 28px; margin-bottom: 5px; color: #0f172a; font-weight: 900; letter-spacing: -0.5px; }
+        .header-titles .tagline { text-align: left; font-size: 13.5px; color: #64748b; margin-bottom: 12px; }
+        .welcome-row { display: flex; align-items: center; gap: 15px; flex-wrap: wrap; }
+        #portalWelcomeMessage { color: #4f46e5; font-size: 18px; font-weight: 800; letter-spacing: -0.3px; margin: 0; }
         
-        .status-badge { padding: 5px 12px; border-radius: 20px; font-size: 11px; font-weight: 800; color: #fff; letter-spacing: 0.5px; display: inline-block; text-align: center; min-width: 60px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);}
-        .badge-active { background: linear-gradient(135deg, #10b981, #059669); } .badge-disabled { background: linear-gradient(135deg, #ef4444, #dc2626); } .badge-locked { background: linear-gradient(135deg, #f59e0b, #d97706); } .badge-pending { background: linear-gradient(135deg, #3b82f6, #1d4ed8); }
-        
-        .form-group { margin-bottom: 22px; }
-        label { display: block; font-weight: 700; margin-bottom: 8px; font-size: 14.5px; color: #334155; }
-        input[type="text"], input[type="password"], input[type="number"], select, textarea { width: 100%; padding: 15px 18px; box-sizing: border-box; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 15px; background: #ffffff; color: #1e293b !important; transition: all 0.3s ease; box-shadow: inset 0 1px 3px rgba(0,0,0,0.02); }
-        input[type="text"]:focus, input[type="password"]:focus, input[type="number"]:focus, select:focus, textarea:focus { border-color: #4f46e5; background: #ffffff; box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.15); outline: none; transform: translateY(-1px); }
-        .flex-row { display: flex; gap: 20px; flex-wrap: wrap; }
-        .flex-row > div { flex: 1; }
-        .secure-mask { -webkit-text-security: disc; }
+        .header-controls { display: flex; flex-direction: column; align-items: flex-end; gap: 15px; }
+        .action-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; justify-content: flex-end; }
+        .portal-logout-btn { background: #ffffff; color: #d32f2f; border: 1px solid #ffcdd2; padding: 8px 16px; font-size: 14px; font-weight: 800; border-radius: 8px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s ease; box-shadow: 0 2px 5px rgba(211,47,47,0.05); }
+        .portal-logout-btn:hover { background: #d32f2f; color: #ffffff; border-color: #b71c1c; box-shadow: 0 4px 12px rgba(211, 47, 47, 0.2); }
 
-        /* --- SEARCHABLE DROPDOWN STYLES --- */
-        .searchable-dropdown-container { position: relative; width: 100%; }
-        .searchable-dropdown-container input[type="text"] { background: #ffffff url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="%2364748b" viewBox="0 0 16 16"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/></svg>') no-repeat 16px center; padding-left: 45px; cursor: text; }
-        .custom-select-list { display: none; position: absolute; top: 100%; left: 0; width: 100%; max-height: 280px; overflow-y: auto; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 10px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); z-index: 1000; margin-top: 8px; scrollbar-width: thin; }
-        .custom-select-list::-webkit-scrollbar { width: 8px; } .custom-select-list::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
-        .custom-select-item { padding: 14px 18px; cursor: pointer; border-bottom: 1px solid #f1f5f9; display: flex; flex-direction: column; transition: background 0.2s; }
-        .custom-select-item:last-child { border-bottom: none; }
-        .custom-select-item:hover { background: #f8fafc; padding-left: 22px; border-left: 4px solid #4f46e5; }
-        .cs-name { font-weight: 800; color: #0f172a; font-size: 15px; }
-        .cs-detail { font-size: 12.5px; color: #64748b; margin-top: 3px; }
-        .cs-empty { padding: 20px; text-align: center; color: #94a3b8; font-style: italic; }
+        .search-module-input { width: 100%; min-width: 280px; padding: 14px 20px 14px 45px; border: 1px solid #cbd5e1; border-radius: 50px; font-size: 15px; background: #f8fafc url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="%2364748b" viewBox="0 0 16 16"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/></svg>') no-repeat 18px center; transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); color: #1e293b; box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
+        .search-module-input:focus { border-color: #4f46e5; box-shadow: 0 8px 25px rgba(79, 70, 229, 0.15); background-color: #ffffff; outline: none; transform: translateY(-2px); }
 
-        /* --- CARD GRID DESIGN --- */
-        .portal-grid-wrapper { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 25px; margin-top: 20px; }
-        .portal-module-card { background: #ffffff; border-radius: 16px; padding: 30px 25px; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.03); border: 1px solid #e2e8f0; transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); position: relative; overflow: hidden; display: block; }
-        .portal-module-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 5px; background: #4f46e5; transition: height 0.3s ease; }
-        .portal-module-card:hover { transform: translateY(-8px); box-shadow: 0 25px 50px rgba(0, 0, 0, 0.1); border-color: #cbd5e1; z-index: 10; }
-        .portal-module-card:hover::before { height: 10px; }
+        /* EXACT PAGINATION REPLICA */
+        .pagination-container { display: flex; justify-content: center; gap: 8px; margin-top: 35px; }
+        .page-nav-btn { background: #f1f5f9; border: 1px solid #cbd5e1; color: #334155; padding: 8px 16px; border-radius: 20px; cursor: pointer; font-weight: 800; font-size: 14px; transition: all 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
+        .page-nav-btn:hover:not(:disabled) { background: #e2e8f0; color: #0f172a; }
+        .page-nav-btn.active-page { background: #4f46e5; color: white; border-color: #3730a3; box-shadow: 0 4px 10px rgba(79, 70, 229, 0.2); }
+        .page-nav-btn:disabled { opacity: 0.5; cursor: not-allowed; background: #f8fafc; }
+
+        /* EXACT CARD GRID REPLICA */
+        .portal-grid-wrapper { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 24px; margin-top: 10px; }
+        .portal-module-card { background: #ffffff; border-radius: 16px; padding: 28px 24px; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.03); border: 1px solid #e2e8f0; transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); position: relative; overflow: hidden; display: block; transform-origin: center center; }
+        .portal-module-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: #4f46e5; transition: height 0.3s ease; }
+        .portal-module-card:hover { transform: translateY(-8px); box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08); border-color: #cbd5e1; z-index: 10; }
+        .portal-module-card:hover::before { height: 8px; }
+        .portal-module-card.fade-out { opacity: 0; transform: scale(0.9) translateY(20px); pointer-events: none; }
+        .portal-module-card.expand-active { transform: scale(1.05); z-index: 10; box-shadow: 0 30px 60px rgba(0,0,0,0.15); border-color: #4f46e5; }
+        .search-hidden { display: none !important; }
+        .page-hidden { display: none !important; }
         
         .card-blue-variant::before { background: #3b82f6; } .card-blue-variant .card-icon { background: #dbeafe; }
         .card-green-variant::before { background: #10b981; } .card-green-variant .card-icon { background: #d1fae5; }
@@ -87,12 +74,27 @@
         .card-rose-variant::before { background: #e11d48; } .card-rose-variant .card-icon { background: #ffe4e6; }
         .card-indigo-variant::before { background: #4f46e5; } .card-indigo-variant .card-icon { background: #e0e7ff; }
         
-        .card-icon { font-size: 32px; margin-bottom: 20px; display: inline-flex; align-items: center; justify-content: center; width: 64px; height: 64px; border-radius: 16px; transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-        .portal-module-card:hover .card-icon { transform: scale(1.15) rotate(-5deg); }
-        .portal-module-card h3 { margin: 0 0 12px 0; font-size: 19px; font-weight: 800; color: #1e293b; letter-spacing: -0.3px;}
-        .portal-module-card p { margin: 0; font-size: 14px; color: #64748b; line-height: 1.6; }
+        .card-icon { font-size: 28px; margin-bottom: 18px; display: inline-flex; align-items: center; justify-content: center; width: 56px; height: 56px; border-radius: 14px; transition: transform 0.3s ease; }
+        .portal-module-card:hover .card-icon { transform: scale(1.1); }
+        .portal-module-card h3 { margin: 0 0 10px 0; font-size: 18px; font-weight: 800; color: #1e293b; letter-spacing: -0.3px;}
+        .portal-module-card p { margin: 0; font-size: 13.5px; color: #64748b; line-height: 1.6; }
+
+        /* FORM ELEMENTS & PANELS */
+        .form-group { margin-bottom: 22px; }
+        label { display: block; font-weight: 700; margin-bottom: 8px; font-size: 14.5px; color: #334155; }
+        input[type="text"], input[type="password"], input[type="number"], select, textarea { width: 100%; padding: 15px 18px; box-sizing: border-box; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 15px; background: #f8fafc; color: #1e293b !important; transition: all 0.3s ease; box-shadow: inset 0 1px 3px rgba(0,0,0,0.02); }
+        input[type="text"]:focus, input[type="password"]:focus, input[type="number"]:focus, select:focus, textarea:focus { border-color: #4f46e5; background: #ffffff; box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.15); outline: none; transform: translateY(-1px); }
+        .flex-row { display: flex; gap: 20px; flex-wrap: wrap; }
+        .flex-row > div { flex: 1; }
+
+        .searchable-dropdown-container { position: relative; width: 100%; }
+        .searchable-dropdown-container input[type="text"] { background: #ffffff url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="%2364748b" viewBox="0 0 16 16"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/></svg>') no-repeat 16px center; padding-left: 45px; cursor: text; }
+        .custom-select-list { display: none; position: absolute; top: 100%; left: 0; width: 100%; max-height: 280px; overflow-y: auto; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 10px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); z-index: 1000; margin-top: 8px; scrollbar-width: thin; }
+        .custom-select-item { padding: 14px 18px; cursor: pointer; border-bottom: 1px solid #f1f5f9; display: flex; flex-direction: column; transition: background 0.2s; }
+        .custom-select-item:hover { background: #f8fafc; padding-left: 22px; border-left: 4px solid #4f46e5; }
+        .cs-name { font-weight: 800; color: #0f172a; font-size: 15px; }
+        .cs-detail { font-size: 12.5px; color: #64748b; margin-top: 3px; }
         
-        /* --- SUB PANELS --- */
         .portal-page-panel { display: none; animation: slideInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; max-width: 1200px; margin: 0 auto; background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; }
         @keyframes slideInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
         
@@ -102,10 +104,9 @@
         .system-log-table { width: 100%; border-collapse: separate; border-spacing: 0; margin-top: 15px; font-size: 13.5px; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden; }
         .system-log-table th, .system-log-table td { padding: 15px; text-align: left; color: #334155 !important; vertical-align: middle; border-bottom: 1px solid #e2e8f0; }
         .system-log-table th { background: #f8fafc; font-weight: 800; color: #0f172a; text-transform: uppercase; font-size: 12px; letter-spacing: 0.5px;}
-        .system-log-table tr:last-child td { border-bottom: none; }
         .system-log-table tr:hover td { background: #f8fafc; }
         
-        .back-nav-link { display: inline-flex; align-items: center; color: #3b82f6; font-weight: 800; font-size: 14px; text-decoration: none; margin-bottom: 25px; cursor: pointer; transition: all 0.2s; padding: 10px 18px; background: #f1f5f9; border-radius: 20px;}
+        .back-nav-link { display: inline-flex; align-items: center; color: #3b82f6; font-weight: 800; font-size: 14px; text-decoration: none; margin-bottom: 20px; cursor: pointer; transition: all 0.2s; padding: 10px 18px; background: #f1f5f9; border-radius: 20px;}
         .back-nav-link:hover { color: #1d4ed8; background: #e2e8f0; transform: translateX(-3px);} 
         
         button.action-btn { width: 100%; padding: 18px; background: #4f46e5; color: white; border: none; border-radius: 10px; font-size: 15.5px; font-weight: 900; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; margin-top: 15px; box-shadow: 0 10px 20px rgba(79, 70, 229, 0.25); transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
@@ -114,9 +115,8 @@
         button.panel-sub-submit:hover { filter: brightness(85%); transform: translateY(-2px); }
         button.small-action-btn { background:#3b82f6; color:white; border:none; padding:8px 16px; border-radius:6px; font-size:12.5px; font-weight:bold; cursor:pointer; margin-right:5px; transition:0.2s; box-shadow: 0 2px 5px rgba(59,130,246,0.3);}
         button.small-action-btn:hover { background:#2563eb; transform: translateY(-1px); }
-        
-        /* --- MODALS --- */
-        .custom-popup-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); z-index: 20000000; display: none; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.3s ease; }
+
+        .custom-popup-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15, 23, 42, 0.5); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); z-index: 20000000; display: none; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.3s ease; }
         .custom-popup-card { background: #ffffff; width: 90%; max-width: 440px; padding: 45px; border-radius: 24px; box-shadow: 0 25px 50px rgba(0,0,0,0.15); text-align: center; box-sizing: border-box; border-top: 6px solid #4f46e5; transform: scale(0.9) translateY(20px); transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
         .custom-popup-overlay.active { display: flex; opacity: 1; }
         .custom-popup-overlay.active .custom-popup-card { transform: scale(1) translateY(0); }
@@ -127,7 +127,6 @@
         
         .request-detail-box { text-align: left; background: #f8fafc; border: 1px solid #e2e8f0; padding: 20px; border-radius: 12px; font-size: 14.5px; margin-bottom: 25px; max-height: 350px; overflow-y: auto; scrollbar-width: thin; }
         .request-detail-row { padding: 10px 0; border-bottom: 1px dashed #cbd5e1; display: flex; justify-content: space-between; align-items: flex-start; gap: 15px;}
-        .request-detail-row:last-child { border-bottom: none; }
         .req-key { font-weight: 800; color: #475569; width: 40%; flex-shrink: 0; }
         .req-val { color: #0f172a; font-family: monospace; font-size: 14px; background: #e2e8f0; padding: 4px 8px; border-radius: 6px; word-break: break-all; }
 
@@ -137,13 +136,14 @@
         .loading-status-msg { font-size: 16px; font-weight: 800; color: #0f172a; letter-spacing: 0.5px; background: white; padding: 10px 20px; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
     </style>
 
+    <!-- ANTI-INSPECT SHIELD -->
     <script>
         document.addEventListener('contextmenu', event => event.preventDefault());
         document.onkeydown = function(e) {
-            if (e.keyCode == 123) { return false; } 
-            if (e.ctrlKey && e.shiftKey && e.keyCode == 73) { return false; } 
-            if (e.ctrlKey && e.shiftKey && e.keyCode == 74) { return false; } 
-            if (e.ctrlKey && e.keyCode == 85) { return false; } 
+            if (e.keyCode == 123) return false; 
+            if (e.ctrlKey && e.shiftKey && e.keyCode == 73) return false; 
+            if (e.ctrlKey && e.shiftKey && e.keyCode == 74) return false; 
+            if (e.ctrlKey && e.keyCode == 85) return false; 
         }
     </script>
 </head>
@@ -160,107 +160,121 @@
         </div>
     </div>
 
-    <div class='standalone-viewport' id='appDashboardView' style="display: none;">
+    <!-- MAIN DASHBOARD -->
+    <div class='standalone-viewport' id='appDashboardView' style="display: block;">
         <div class='app-container'>
-            <div class='portal-logout-anchor' onclick='window.location.href="index.html"'>🚪 Exit to Portal</div>
             
+            <!-- HEADER REPLICA OF INDEX.HTML -->
             <div id='mainDashboardHead'>
                 <div class='dashboard-top-nav'>
                     <div class='header-titles'>
                         <h2>USER MAINTENANCE HUB</h2>
                         <div class='tagline'>Secure Admin Identity & Access Management</div>
-                        <div id='portalWelcomeMessage'></div>
+                        <div class='welcome-row'>
+                            <div id='portalWelcomeMessage'></div>
+                        </div>
+                    </div>
+                    
+                    <div class='header-controls'>
+                        <div class='action-row'>
+                            <button class='portal-logout-btn' onclick='window.location.href="index.html"'>🚪 Exit to Portal</button>
+                        </div>
+                        <input class='search-module-input' id='maintModuleSearch' onkeyup='filterAndPaginateMaintCards(true)' placeholder='Search modules...' type='text'/>
                     </div>
                 </div>
                 
+                <!-- ALL CARDS WITH IDs FOR JS FILTERING -->
                 <div class='portal-grid-wrapper' id='userModuleGrid'>
                     <!-- HQ ADMIN ONLY CARDS -->
-                    <div class='portal-module-card card-rose-variant' id='menuCardApprovals' onclick='navigateToSubPanel("panelApprovals")' style='display:none;'>
+                    <div class='portal-module-card card-rose-variant' id='cardApprovals' onclick='navigateToSubPanel("panelApprovals")'>
                         <div class='card-icon'>🛡️</div>
                         <h3 style="color: #e11d48;">Pending Approvals <span id="approvalBadge" style="background:#e11d48; color:white; padding:2px 8px; border-radius:12px; font-size:12px; vertical-align:middle; margin-left:5px;">0</span></h3>
                         <p>Review, Audit, and Authorize identity modification requests submitted by local branch admins.</p>
                     </div>
 
-                    <div class='portal-module-card card-green-variant' id='menuCardUpdateNews' onclick='navigateToSubPanel("subUpdateNews")' style='display:none;'>
+                    <div class='portal-module-card card-green-variant' id='cardUpdateNews' onclick='navigateToSubPanel("subUpdateNews")'>
                         <div class='card-icon'>📢</div>
                         <h3>Broadcast Live News</h3>
                         <p>Update the scrolling marquee text visible to all users at the top of the portal.</p>
                     </div>
 
                     <!-- LOCAL ADMIN ONLY CARD -->
-                    <div class='portal-module-card card-teal-variant' id='menuCardMyRequests' onclick='navigateToSubPanel("panelMyRequests")' style='display:none;'>
+                    <div class='portal-module-card card-teal-variant' id='cardMyRequests' onclick='navigateToSubPanel("panelMyRequests")'>
                         <div class='card-icon'>📨</div>
                         <h3>View Submitted Requests</h3>
                         <p>Track the status (Pending/Approved/Rejected) of modification requests you have submitted to HQ.</p>
                     </div>
 
                     <!-- UNIVERSAL CARDS -->
-                    <div class='portal-module-card card-blue-variant' onclick='navigateToSubPanel("subCreateUser")'>
+                    <div class='portal-module-card card-blue-variant' id='cardCreateUser' onclick='navigateToSubPanel("subCreateUser")'>
                         <div class='card-icon'>👤</div>
                         <h3>Create New User</h3>
                         <p>Register a new system user profile and assign their operational role and mapped SOL.</p>
                     </div>
 
-                    <div class='portal-module-card card-teal-variant' onclick='navigateToSubPanel("sub2FASetup")'>
+                    <div class='portal-module-card card-teal-variant' id='card2FASetup' onclick='navigateToSubPanel("sub2FASetup")'>
                         <div class='card-icon'>📱</div>
                         <h3>Authenticator 2FA Setup</h3>
                         <p>Generate Google Authenticator QR codes to enroll users in high-security 2FA login.</p>
                     </div>
                     
-                    <div class='portal-module-card card-rose-variant' id='maintainReset2FA' onclick='navigateToSubPanel("subReset2FA")'>
+                    <div class='portal-module-card card-rose-variant' id='cardReset2FA' onclick='navigateToSubPanel("subReset2FA")'>
                         <div class='card-icon'>🔓</div>
                         <h3>Reset User 2FA</h3>
                         <p>Clear a user's Two-Factor Authentication secret so they can re-enroll a new device.</p>
                     </div>
 
-                    <div class='portal-module-card card-orange-variant' onclick='navigateToSubPanel("subLockUnlock")'>
+                    <div class='portal-module-card card-orange-variant' id='cardLockUnlock' onclick='navigateToSubPanel("subLockUnlock")'>
                         <div class='card-icon'>🗝️</div>
                         <h3>Lock / Unlock User</h3>
                         <p>Temporarily lock or unlock an existing user account for security reasons.</p>
                     </div>
 
-                    <div class='portal-module-card card-green-variant' onclick='navigateToSubPanel("subEnableDisable")'>
+                    <div class='portal-module-card card-green-variant' id='cardEnableDisable' onclick='navigateToSubPanel("subEnableDisable")'>
                         <div class='card-icon'>✅</div>
                         <h3>Enable / Disable User</h3>
                         <p>Completely disable or re-enable an existing user's portal access.</p>
                     </div>
 
-                    <div class='portal-module-card card-dark-variant' onclick='navigateToSubPanel("subResetPass")'>
+                    <div class='portal-module-card card-dark-variant' id='cardResetPass' onclick='navigateToSubPanel("subResetPass")'>
                         <div class='card-icon'>🔄</div>
                         <h3>Reset Passcode</h3>
                         <p>Change the login passcode for an existing system user to a default value.</p>
                     </div>
 
-                    <div class='portal-module-card card-purple-variant' onclick='navigateToSubPanel("subChangeRole")'>
+                    <div class='portal-module-card card-purple-variant' id='cardChangeRole' onclick='navigateToSubPanel("subChangeRole")'>
                         <div class='card-icon'>🛡️</div>
                         <h3>Change User Role</h3>
                         <p>Elevate a user to Admin or restrict them down to Maker.</p>
                     </div>
 
-                    <div class='portal-module-card card-teal-variant' onclick='navigateToSubPanel("subCustomizeCards")'>
+                    <div class='portal-module-card card-teal-variant' id='cardCustomizeCards' onclick='navigateToSubPanel("subCustomizeCards")'>
                         <div class='card-icon'>🎛️</div>
                         <h3>Customize User Cards</h3>
                         <p>Add or remove specific dashboard modules for individual users.</p>
                     </div>
 
-                    <div class='portal-module-card card-rose-variant' onclick='navigateToSubPanel("subDeleteUser")'>
+                    <div class='portal-module-card card-rose-variant' id='cardDeleteUser' onclick='navigateToSubPanel("subDeleteUser")'>
                         <div class='card-icon'>🗑️</div>
                         <h3>Delete User</h3>
                         <p>Permanently remove a user profile from the entire system database.</p>
                     </div>
 
-                    <div class='portal-module-card card-orange-variant' onclick='navigateToSubPanel("subDirectMessage")'>
+                    <div class='portal-module-card card-orange-variant' id='cardDirectMessage' onclick='navigateToSubPanel("subDirectMessage")'>
                         <div class='card-icon'>✉️</div>
                         <h3>Send Direct Message</h3>
                         <p>Send a personalized, self-destructing alert message to a specific staff member.</p>
                     </div>
 
-                    <div class='portal-module-card card-indigo-variant' onclick='navigateToSubPanel("subUserLogs")' style='grid-column: 1 / -1;'>
+                    <div class='portal-module-card card-indigo-variant' id='cardUserLogs' onclick='navigateToSubPanel("subUserLogs")'>
                         <div class='card-icon'>📊</div>
                         <h3 id="logsCardTitle">User Status & Login Logs</h3>
                         <p id="logsCardDesc">View current account registry status, mapped offices, and recent login connection attempts.</p>
                     </div>
                 </div>
+                
+                <!-- EXACT PAGINATION REPLICA -->
+                <div class='pagination-container' id='maintPagination'></div>
             </div>
 			<!-- ============================================== -->
             <!-- HQ ADMIN: PENDING APPROVALS PANEL              -->
@@ -304,7 +318,7 @@
                 </div>
             </div>
 
-            <!-- CREATE USER -->
+            <!-- MODULE: CREATE USER -->
             <div class='portal-page-panel' id='subCreateUser'>
                 <div class='back-nav-link' onclick='returnToMainDashboard()'>⬅️ Back to Hub</div>
                 <h3 style="margin-top:0; color:#1e293b; font-size:24px;">Create New User</h3>
@@ -321,7 +335,6 @@
                             </select>
                         </div>
                         <div class='form-group'><label>Mapped Office (SOL)</label>
-                            <!-- HQ Admins can select any SOL. Local Admins will have this locked to their own SOL -->
                             <select id='muNewUserSol'></select>
                         </div>
                     </div>
@@ -329,7 +342,7 @@
                 </div>
             </div>
 
-            <!-- 2FA SETUP PANEL -->
+            <!-- MODULE: 2FA SETUP -->
             <div class='portal-page-panel' id='sub2FASetup'>
                 <div class='back-nav-link' onclick='returnToMainDashboard()'>⬅️ Back to Hub</div>
                 <h3 style="margin-top:0; color:#1e293b; font-size:24px;">Authenticator 2FA Setup</h3>
@@ -337,33 +350,26 @@
                     <p style="color: #64748b; font-size: 14.5px; margin-top: -10px; margin-bottom: 25px;">
                         Generate a secure Time-Based One-Time Password (TOTP) QR code to enroll users into the high-security login system.
                     </p>
-                    
                     <div class='form-group'>
                         <label>Select Target User</label>
-                        <!-- CUSTOM SEARCHABLE DROPDOWN -->
                         <div class="searchable-dropdown-container" id="wrapper_mu2FASelect">
                             <input type="text" id="searchInput_mu2FASelect" placeholder="🔍 Search by name or username..." autocomplete="off" onkeyup="filterCustomSelect('mu2FASelect')" onfocus="showCustomSelect('mu2FASelect')" />
                             <div class="custom-select-list" id="list_mu2FASelect"></div>
                             <input type="hidden" id="mu2FASelect" />
                         </div>
                     </div>
-                    
                     <button class='action-btn' onclick='generate2FAForUser()' style='background:#14b8a6; margin-bottom: 20px;' type='button'>Generate QR Code</button>
-                    
                     <div id="qrCodeWrapper" style="display:none; text-align: center; background: #ffffff; padding: 40px; border: 1px solid #cbd5e1; border-radius: 16px; margin-bottom: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05);">
                         <p style="font-weight: 900; color: #0f172a; margin-top: 0; font-size: 18px;">Scan this with Google / Microsoft Authenticator:</p>
-                        
                         <div id="qrcodeDisplay" style="display: flex; justify-content: center; margin: 30px 0;"></div>
-                        
                         <p style="font-size: 14px; color: #64748b; margin-bottom: 10px; font-weight: 700;">Or enter this setup key manually in the app:</p>
                         <code id="manualSecretDisplay" style="font-size: 20px; font-weight: 900; color: #e11d48; background: #fee2e2; padding: 8px 20px; border-radius: 8px; letter-spacing: 3px;"></code>
                     </div>
-
                     <button class='action-btn panel-sub-submit btn-dynamic' id='save2FABtn' onclick='executeSave2FA()' style='background:#3b82f6; display:none;' type='button'>Save 2FA Enrollment</button>
                 </div>
             </div>
             
-            <!-- RESET 2FA -->
+            <!-- MODULE: RESET 2FA -->
             <div class='portal-page-panel' id='subReset2FA'>
                 <div class='back-nav-link' onclick='returnToMainDashboard()'>⬅️ Back to Hub</div>
                 <h3 style="margin-top:0; color:#1e293b; font-size:24px;">Reset User 2FA Device</h3>
@@ -381,7 +387,7 @@
                 </div>
             </div>
 
-            <!-- LOCK / UNLOCK -->
+            <!-- MODULE: LOCK / UNLOCK -->
             <div class='portal-page-panel' id='subLockUnlock'>
                 <div class='back-nav-link' onclick='returnToMainDashboard()'>⬅️ Back to Hub</div>
                 <h3 style="margin-top:0; color:#1e293b; font-size:24px;">Lock / Unlock User</h3>
@@ -398,7 +404,7 @@
                 </div>
             </div>
 
-            <!-- ENABLE / DISABLE -->
+            <!-- MODULE: ENABLE / DISABLE -->
             <div class='portal-page-panel' id='subEnableDisable'>
                 <div class='back-nav-link' onclick='returnToMainDashboard()'>⬅️ Back to Hub</div>
                 <h3 style="margin-top:0; color:#1e293b; font-size:24px;">Enable / Disable User</h3>
@@ -415,7 +421,7 @@
                 </div>
             </div>
 
-            <!-- RESET PASSCODE -->
+            <!-- MODULE: RESET PASSCODE -->
             <div class='portal-page-panel' id='subResetPass'>
                 <div class='back-nav-link' onclick='returnToMainDashboard()'>⬅️ Back to Hub</div>
                 <h3 style="margin-top:0; color:#1e293b; font-size:24px;">Reset Passcode</h3>
@@ -433,7 +439,7 @@
                 </div>
             </div>
 
-            <!-- CHANGE ROLE -->
+            <!-- MODULE: CHANGE ROLE -->
             <div class='portal-page-panel' id='subChangeRole'>
                 <div class='back-nav-link' onclick='returnToMainDashboard()'>⬅️ Back to Hub</div>
                 <h3 style="margin-top:0; color:#1e293b; font-size:24px;">Change User Role</h3>
@@ -457,7 +463,7 @@
                 </div>
             </div>
 
-            <!-- CUSTOMIZE CARDS -->
+            <!-- MODULE: CUSTOMIZE CARDS -->
             <div class='portal-page-panel' id='subCustomizeCards'>
                 <div class='back-nav-link' onclick='returnToMainDashboard()'>⬅️ Back to Hub</div>
                 <h3 style="margin-top:0; color:#1e293b; font-size:24px;">Customize User Cards</h3>
@@ -494,7 +500,7 @@
                 </div>
             </div>
 
-            <!-- DELETE USER -->
+            <!-- MODULE: DELETE USER -->
             <div class='portal-page-panel' id='subDeleteUser'>
                 <div class='back-nav-link' onclick='returnToMainDashboard()'>⬅️ Back to Hub</div>
                 <h3 style="margin-top:0; color:#1e293b; font-size:24px;">Permanently Delete User</h3>
@@ -511,7 +517,7 @@
                 </div>
             </div>
 
-            <!-- SEND DIRECT MESSAGE -->
+            <!-- MODULE: SEND DIRECT MESSAGE -->
             <div class='portal-page-panel' id='subDirectMessage'>
                 <div class='back-nav-link' onclick='returnToMainDashboard()'>⬅️ Back to Hub</div>
                 <h3 style="margin-top:0; color:#1e293b; font-size:24px;">Send Direct Alert Message</h3>
@@ -529,7 +535,7 @@
                 </div>
             </div>
 
-            <!-- BROADCAST NEWS -->
+            <!-- MODULE: BROADCAST NEWS -->
             <div class='portal-page-panel' id='subUpdateNews'>
                 <div class='back-nav-link' onclick='returnToMainDashboard()'>⬅️ Back to Hub</div>
                 <h3 style="margin-top:0; color:#1e293b; font-size:24px;">Broadcast Live News</h3>
@@ -539,7 +545,7 @@
                 </div>
             </div>
 
-            <!-- USER LOGS (DYNAMIC BASED ON ROLE) -->
+            <!-- MODULE: USER LOGS -->
             <div class='portal-page-panel' id='subUserLogs'>
                 <div class='back-nav-link' onclick='returnToMainDashboard()'>⬅️ Back to Hub</div>
                 <h3 style="margin-top:0; color:#1e293b; font-size:24px;" id="logsPanelHeader">User Status & Login Logs</h3>
@@ -571,17 +577,15 @@
         </div>
     </div>
 
-    <!-- VIEW REQUEST DETAILS MODAL (HQ ADMIN ONLY) -->
+    <!-- VIEW REQUEST DETAILS MODAL (HQ ADMIN & MASTER ADMIN) -->
     <div class='custom-popup-overlay' id='requestDetailsModal' style="z-index: 50000000;">
         <div class='custom-popup-card' style="max-width: 550px; border-top: 6px solid #4f46e5;">
             <h3 style="margin-top:0; color:#1e3a8a; text-align:left; font-size: 22px;">Request Audit Details</h3>
             <div id="requestDetailsContent" class="request-detail-box"></div>
-            <div style="display:flex; gap:12px; flex-wrap: wrap;">
-                <button onclick="approveCurrentRequest()" style="background:#10b981; color:white; border:none; padding:15px; border-radius:8px; flex:1; font-weight:900; cursor:pointer; font-size: 13px; transition: 0.2s; text-transform: uppercase;">✅ Approve</button>
-                <button onclick="rejectCurrentRequest()" style="background:#ef4444; color:white; border:none; padding:15px; border-radius:8px; flex:1; font-weight:900; cursor:pointer; font-size: 13px; transition: 0.2s; text-transform: uppercase;">❌ Reject</button>
-                <button onclick="openTransferModal()" style="background:#f59e0b; color:white; border:none; padding:15px; border-radius:8px; flex:1; font-weight:900; cursor:pointer; font-size: 13px; transition: 0.2s; text-transform: uppercase;">🔄 Transfer</button>
-                <button onclick="closeRequestDetails()" style="background:#64748b; color:white; border:none; padding:15px; border-radius:8px; flex:1; font-weight:900; cursor:pointer; font-size: 13px; transition: 0.2s; text-transform: uppercase;">Cancel</button>
-            </div>
+            
+            <!-- Dynamic Action Buttons handled by JavaScript -->
+            <div id="requestModalActionButtons" style="display:flex; gap:12px; flex-wrap: wrap;"></div>
+            
         </div>
     </div>
 
@@ -639,6 +643,10 @@
         let pending2FASecret = "";
         let pending2FAUser = "";
 
+        // Paginator Setup
+        let currentMaintPage = 1;
+        const maintCardsPerPage = 6;
+
         // ----------------------------------------------------
         // 3. LIVE CLOCK
         // ----------------------------------------------------
@@ -679,11 +687,11 @@
                     isHQAdmin = (isMasterAdmin || activeSolId === "000000");
                     canDirectExecute = isHQAdmin;
                     
-                    // Setup UI based on Hierarchy
+                    // Allow UI filtering based on role
                     if (canDirectExecute) {
-                        document.getElementById('menuCardApprovals').style.display = 'block';
-                        document.getElementById('menuCardUpdateNews').style.display = 'block';
-                        document.getElementById('menuCardMyRequests').style.display = 'none';
+                        document.getElementById('cardApprovals').classList.add('allowed-module');
+                        document.getElementById('cardUpdateNews').classList.add('allowed-module');
+                        document.getElementById('cardMyRequests').classList.remove('allowed-module');
                         document.getElementById('logsCardTitle').innerText = "Global System Logs";
                         document.getElementById('logsCardDesc').innerText = "View entire system registry and connection attempts across all SOLs.";
                         
@@ -691,9 +699,9 @@
                             btn.innerText = btn.innerText.replace(/^Request\s/, '');
                         });
                     } else {
-                        document.getElementById('menuCardApprovals').style.display = 'none';
-                        document.getElementById('menuCardUpdateNews').style.display = 'none';
-                        document.getElementById('menuCardMyRequests').style.display = 'block';
+                        document.getElementById('cardApprovals').classList.remove('allowed-module');
+                        document.getElementById('cardUpdateNews').classList.remove('allowed-module');
+                        document.getElementById('cardMyRequests').classList.add('allowed-module');
                         document.getElementById('logsCardTitle').innerText = "My Office (SOL) Logs";
                         document.getElementById('logsCardDesc').innerText = "View account registry and login history strictly for your mapped office.";
                         
@@ -704,12 +712,19 @@
                         });
                     }
 
+                    // Base set of modules available to all admins
+                    const baseCards = ['cardCreateUser', 'card2FASetup', 'cardReset2FA', 'cardLockUnlock', 'cardEnableDisable', 'cardResetPass', 'cardChangeRole', 'cardCustomizeCards', 'cardDeleteUser', 'cardDirectMessage', 'cardUserLogs'];
+                    baseCards.forEach(id => {
+                        document.getElementById(id).classList.add('allowed-module');
+                    });
+
                     if(myProfile) {
                         let rank = isMasterAdmin ? "Super Admin" : (isHQAdmin ? "HQ Admin" : `Local Admin - ${activeSolId}`);
                         document.getElementById('portalWelcomeMessage').innerText = `Welcome, ${myProfile.fullName} (${rank})`;
                     }
 
                     refreshUI(); 
+                    filterAndPaginateMaintCards(true); // Trigger Pagination
                 }
                 
                 document.getElementById('globalAppLoader').style.display = 'none';
@@ -730,7 +745,71 @@
         };
 
         // ----------------------------------------------------
-        // 5. NAVIGATION & ALERTS
+        // 5. DASHBOARD PAGINATION LOGIC (EXACT REPLICA)
+        // ----------------------------------------------------
+        function filterAndPaginateMaintCards(resetPage = false) {
+            if (resetPage) currentMaintPage = 1;
+            
+            const query = document.getElementById('maintModuleSearch') ? document.getElementById('maintModuleSearch').value.toLowerCase() : "";
+            const allCards = Array.from(document.querySelectorAll('#userModuleGrid .portal-module-card'));
+            
+            // 1. Hide everything initially
+            allCards.forEach(card => card.style.display = "none");
+            
+            // 2. Grab only allowed cards
+            const allowedCards = allCards.filter(card => card.classList.contains('allowed-module'));
+            
+            // 3. Filter by search query
+            let filtered = allowedCards.filter(card => card.innerText.toLowerCase().includes(query));
+
+            // 4. Pagination math
+            const totalPages = Math.ceil(filtered.length / maintCardsPerPage) || 1;
+            if (currentMaintPage > totalPages) currentMaintPage = totalPages;
+            
+            const startIndex = (currentMaintPage - 1) * maintCardsPerPage;
+            const endIndex = startIndex + maintCardsPerPage;
+
+            // 5. Reveal targeted cards
+            filtered.forEach((card, index) => {
+                if (index >= startIndex && index < endIndex) {
+                    card.style.display = "block";
+                }
+            });
+
+            renderMaintPaginationControls(totalPages);
+        }
+
+        function renderMaintPaginationControls(totalPages) {
+            const container = document.getElementById('maintPagination');
+            if (!container) return;
+            container.innerHTML = "";
+            
+            if (totalPages <= 1) { container.style.display = 'none'; return; } 
+            else { container.style.display = 'flex'; }
+            
+            const prevBtn = document.createElement('button'); 
+            prevBtn.innerHTML = "&laquo;"; prevBtn.className = "page-nav-btn";
+            prevBtn.disabled = currentMaintPage === 1;
+            prevBtn.onclick = () => { currentMaintPage--; filterAndPaginateMaintCards(); };
+            container.appendChild(prevBtn);
+            
+            for (let i = 1; i <= totalPages; i++) {
+                const pageBtn = document.createElement('button'); 
+                pageBtn.innerText = i;
+                pageBtn.className = "page-nav-btn " + (i === currentMaintPage ? "active-page" : "");
+                pageBtn.onclick = () => { currentMaintPage = i; filterAndPaginateMaintCards(); };
+                container.appendChild(pageBtn);
+            }
+            
+            const nextBtn = document.createElement('button'); 
+            nextBtn.innerHTML = "&raquo;"; nextBtn.className = "page-nav-btn";
+            nextBtn.disabled = currentMaintPage === totalPages;
+            nextBtn.onclick = () => { currentMaintPage++; filterAndPaginateMaintCards(); };
+            container.appendChild(nextBtn);
+        }
+
+        // ----------------------------------------------------
+        // 6. NAVIGATION & ALERTS
         // ----------------------------------------------------
         function navigateToSubPanel(panelId) {
             document.getElementById('mainDashboardHead').style.display = 'none';
@@ -749,6 +828,7 @@
                 if(el) el.style.display = 'none'; 
             });
             document.getElementById('mainDashboardHead').style.display = 'block';
+            filterAndPaginateMaintCards(true); // Refilter upon return
         }
 
         function displayCustomAlert(msg, icon = '🔔') {
@@ -795,7 +875,7 @@
         }
 
         // ----------------------------------------------------
-        // 6. CUSTOM SEARCHABLE DROPDOWN ENGINE
+        // 7. CUSTOM SEARCHABLE DROPDOWN ENGINE
         // ----------------------------------------------------
         function showCustomSelect(id) {
             document.getElementById('list_' + id).style.display = 'block';
@@ -835,10 +915,10 @@
         }
 
         // ----------------------------------------------------
-        // 7. DYNAMIC UI REFRESH (WITH ISOLATION LOGIC)
+        // 8. DYNAMIC UI REFRESH (WITH ISOLATION LOGIC)
         // ----------------------------------------------------
         function refreshUI() {
-            // 1. Calculate VISIBLE users based on hierarchy
+            // Calculate VISIBLE users based on hierarchy
             const visibleUsers = SYSTEM_USER_REGISTRY.filter(u => {
                 if (isMasterAdmin) return true; // Master sees everyone
                 if (u.user === "admin") return false; // Hide master from everyone else
@@ -846,14 +926,13 @@
                 return u.solId === activeSolId; // Local Admin sees ONLY their own SOL
             });
 
-            // 2. Populate Custom Dropdowns
+            // Populate Custom Dropdowns
             const customDropdownIds = ['muLockSelect', 'muEnableSelect', 'muResetSelect', 'muRoleTargetSelect', 'muDeleteSelect', 'muCustomizeSelect', 'muMessageSelect', 'mu2FASelect', 'muReset2FASelect'];
             customDropdownIds.forEach(id => { 
                 let listEl = document.getElementById('list_' + id); 
                 if(listEl) {
                     listEl.innerHTML = `<div class="cs-empty" id="empty_${id}" style="display:none;">No user found</div>`;
-                    document.getElementById('searchInput_' + id).value = ""; 
-                    document.getElementById(id).value = ""; 
+                    // Don't auto-clear the input text if a value is selected to prevent UI jump
                 }
             });
 
@@ -890,7 +969,7 @@
                 }
             });
 
-            // 3. Populate SOL Dropdown for New User
+            // Populate SOL Dropdown for New User
             const solSelect = document.getElementById('muNewUserSol');
             if(solSelect) {
                 solSelect.innerHTML = "<option value=''>-- Select Target SOL --</option>";
@@ -914,7 +993,7 @@
                 }
             }
 
-            // 4. Populate Logs
+            // Populate Logs
             const historyBody = document.getElementById('muLoginHistoryTableBody');
             if(historyBody) {
                 historyBody.innerHTML = ""; 
@@ -933,10 +1012,11 @@
                 });
             }
 
-            // 5. Approvals / My Requests Table
+            // Approvals / My Requests Table
             if (isHQAdmin) {
-                // Pending requests for HQ Admin
-                const pendingOnly = SYSTEM_PENDING_REQUESTS.filter(r => r.status === 'PENDING' && (r.assignedTo === 'ALL' || r.assignedTo === activeUser));
+                // Pending requests for HQ Admin OR Master Admin
+                // Master Admin sees ALL pending requests regardless of assignment. HQ Admin sees 'ALL' or assigned to self.
+                const pendingOnly = SYSTEM_PENDING_REQUESTS.filter(r => r.status === 'PENDING' && (isMasterAdmin || r.assignedTo === 'ALL' || r.assignedTo === activeUser));
                 document.getElementById('approvalBadge').innerText = pendingOnly.length;
                 
                 const appBody = document.getElementById('approvalsTableBody');
@@ -947,11 +1027,13 @@
                     pendingOnly.forEach(req => {
                         let initiatorProfile = SYSTEM_USER_REGISTRY.find(u => u.user === req.requestedBy);
                         let iSol = initiatorProfile ? initiatorProfile.solId : "Unknown";
+                        let assignmentBadge = req.assignedTo !== 'ALL' ? `<span style="background:#f59e0b; color:white; padding:2px 6px; border-radius:4px; font-size:10px; margin-left:5px;">Assigned to @${req.assignedTo}</span>` : "";
+                        
                         appBody.innerHTML += `
                             <tr>
                                 <td>${req.timestamp}</td>
                                 <td><strong>${req.requestedBy}</strong><br/><span style="font-size:11px; color:#64748b;">SOL: ${iSol}</span></td>
-                                <td>${req.desc}</td>
+                                <td>${req.desc} ${assignmentBadge}</td>
                                 <td><button class="small-action-btn" onclick="viewRequestDetails('${req.id}')">👁️ Audit Details</button></td>
                             </tr>
                         `;
@@ -968,12 +1050,15 @@
                     } else {
                         myRequests.forEach(req => {
                             let badgeClass = req.status === 'APPROVED' ? 'badge-active' : (req.status === 'REJECTED' ? 'badge-disabled' : 'badge-pending');
+                            let statusText = req.status;
+                            if(req.status === 'PENDING' && req.assignedTo !== 'ALL') statusText = 'IN REVIEW';
+
                             myBody.innerHTML += `
                                 <tr>
                                     <td>${req.timestamp}</td>
                                     <td><span style="font-weight:bold; color:#4f46e5;">${req.type.replace('_', ' ')}</span></td>
                                     <td>${req.desc}</td>
-                                    <td><span class="status-badge ${badgeClass}">${req.status}</span></td>
+                                    <td><span class="status-badge ${badgeClass}">${statusText}</span></td>
                                 </tr>
                             `;
                         });
@@ -994,7 +1079,7 @@
         }
 
         // ----------------------------------------------------
-        // 8. REQUEST & APPROVAL ENGINE
+        // 9. REQUEST & APPROVAL ENGINE (WITH MASTER OVERRIDE)
         // ----------------------------------------------------
         function createRequest(type, desc, payload) {
             SYSTEM_PENDING_REQUESTS.push({
@@ -1005,7 +1090,8 @@
                 requestedBy: activeUser,
                 solId: activeSolId,
                 status: 'PENDING',
-                assignedTo: 'ALL',
+                assignedTo: 'ALL', // Means any HQ Admin can take it
+                transferredBy: null, // Tracks who transferred it
                 timestamp: new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true })
             });
             showLoader("Submitting Request to HQ...");
@@ -1021,6 +1107,14 @@
             if (!req) return;
 
             let html = ``;
+            // Add Transferred By Info if it exists
+            if (req.transferredBy) {
+                html += `<div class="request-detail-row" style="background: #fffbeb; border-left: 4px solid #f59e0b;">
+                            <span class="req-key" style="color:#d97706;">ROUTED VIA:</span>
+                            <span class="req-val" style="color:#b45309;">Transferred by @${req.transferredBy}</span>
+                         </div>`;
+            }
+
             for (const [key, value] of Object.entries(req.payload)) {
                 let displayVal = value;
                 if (typeof value === 'object') displayVal = JSON.stringify(value);
@@ -1033,6 +1127,23 @@
             }
 
             document.getElementById('requestDetailsContent').innerHTML = html;
+
+            // Generate Action Buttons Dynamically based on Master Admin Override
+            let buttonHtml = `
+                <button onclick="approveCurrentRequest()" style="background:#10b981; color:white; border:none; padding:15px; border-radius:8px; flex:1; font-weight:900; cursor:pointer; font-size: 13px; transition: 0.2s; text-transform: uppercase;">✅ Approve</button>
+                <button onclick="rejectCurrentRequest()" style="background:#ef4444; color:white; border:none; padding:15px; border-radius:8px; flex:1; font-weight:900; cursor:pointer; font-size: 13px; transition: 0.2s; text-transform: uppercase;">❌ Reject</button>
+                <button onclick="openTransferModal()" style="background:#f59e0b; color:white; border:none; padding:15px; border-radius:8px; flex:1; font-weight:900; cursor:pointer; font-size: 13px; transition: 0.2s; text-transform: uppercase;">🔄 Transfer</button>
+            `;
+
+            // If Master Admin is viewing an assigned request, give option to Revoke it
+            if (isMasterAdmin && req.assignedTo !== 'ALL' && req.status === 'PENDING') {
+                buttonHtml += `<button onclick="revokeTransferRequest()" style="background:#8b5cf6; color:white; border:none; padding:15px; border-radius:8px; flex:1; font-weight:900; cursor:pointer; font-size: 13px; transition: 0.2s; text-transform: uppercase;">🔙 Revoke Transfer</button>`;
+            }
+
+            buttonHtml += `<button onclick="closeRequestDetails()" style="background:#64748b; color:white; border:none; padding:15px; border-radius:8px; flex:1; font-weight:900; cursor:pointer; font-size: 13px; transition: 0.2s; text-transform: uppercase;">Cancel</button>`;
+            
+            document.getElementById('requestModalActionButtons').innerHTML = buttonHtml;
+
             const modal = document.getElementById('requestDetailsModal');
             modal.style.display = 'flex';
             setTimeout(() => modal.classList.add('active'), 10);
@@ -1096,6 +1207,15 @@
                         if(uIdx > -1) SYSTEM_USER_REGISTRY.splice(uIdx, 1);
                         break;
                     }
+                    case 'SEND_MSG': {
+                        let u = SYSTEM_USER_REGISTRY.find(x => x.user === p.user);
+                        if(u) u.pendingMessage = p.msg;
+                        break;
+                    }
+                    case 'UPDATE_NEWS': {
+                        db.collection("system").doc("announcements").set({ tickerText: p.text }, { merge: true });
+                        break;
+                    }
                     case 'ENROLL_2FA': {
                         let u = SYSTEM_USER_REGISTRY.find(x => x.user === p.user);
                         if(u) u.totpSecret = p.secret;
@@ -1127,7 +1247,7 @@
             const selectEl = document.getElementById('transferAdminSelect');
             selectEl.innerHTML = "";
             
-            // Find all other HQ Admins
+            // Find all other HQ Admins (Exclude Master Admin & Self)
             const hqAdmins = SYSTEM_USER_REGISTRY.filter(u => u.solId === "000000" && u.user !== activeUser && u.user !== "admin");
             
             if(hqAdmins.length === 0) {
@@ -1163,21 +1283,45 @@
             const reqIdx = SYSTEM_PENDING_REQUESTS.findIndex(r => r.id === currentlyViewingRequest);
             if (reqIdx === -1) return;
 
+            // Mark assignment and who transferred it
             SYSTEM_PENDING_REQUESTS[reqIdx].assignedTo = targetAdmin;
+            SYSTEM_PENDING_REQUESTS[reqIdx].transferredBy = activeUser;
             
             showLoader("Transferring Request...");
             try {
                 await saveToCloud();
                 closeTransferModal();
-                displayCustomAlert(`Request has been exclusively transferred to HQ Admin @${targetAdmin}.`, "🔄");
+                // FIX: Added the missing success popup!
+                displayCustomAlert(`Success! Case has been transferred to HQ Admin @${targetAdmin}.`, "🔄");
             } catch(e) {
                 displayCustomAlert("Network Error during transfer.", "❌");
             }
             hideLoader();
         }
 
+        // --- MASTER ADMIN OVERRIDE (REVOKE TRANSFER) ---
+        async function revokeTransferRequest() {
+            if(!currentlyViewingRequest) return;
+            const reqIdx = SYSTEM_PENDING_REQUESTS.findIndex(r => r.id === currentlyViewingRequest);
+            if (reqIdx === -1) return;
+
+            // Revert assignment back to ALL and clear transferredBy
+            SYSTEM_PENDING_REQUESTS[reqIdx].assignedTo = 'ALL';
+            SYSTEM_PENDING_REQUESTS[reqIdx].transferredBy = null;
+            
+            closeRequestDetails();
+            showLoader("Revoking Transfer...");
+            try {
+                await saveToCloud();
+                displayCustomAlert("System Override: Transfer revoked. The case is now open to all HQ Admins again.", "🔙");
+            } catch(e) {
+                displayCustomAlert("Network Error.", "❌");
+            }
+            hideLoader();
+        }
+
         // ----------------------------------------------------
-        // 9. CRUD ACTIONS
+        // 10. CRUD ACTIONS (Create, Lock, Reset, etc)
         // ----------------------------------------------------
         async function executeCreateUserAction() {
             const fullNameInput = document.getElementById('muNewFullName').value.trim(); 
@@ -1203,6 +1347,7 @@
                 try {
                     await saveToCloud();
                     document.getElementById('muNewFullName').value = ""; document.getElementById('muNewUser').value = ""; document.getElementById('muNewPass').value = "";
+                    document.getElementById('muNewUserSol').value = "";
                     displayCustomAlert(`Account Created Successfully!<br/><br/>Username: ${usernameInput}<br/>Mapped SOL: ${selectedSol}`, "✅");
                 } catch(e) { displayCustomAlert("Network Error", "❌"); }
                 hideLoader();
@@ -1230,6 +1375,8 @@
                 showLoader("Updating Status...");
                 try { await saveToCloud(); displayCustomAlert(`Success: Status updated for '${selectedUser}'.`, "✅"); } catch(e) { displayCustomAlert("Network Error", "❌"); }
                 hideLoader();
+                document.getElementById('searchInput_'+selectId).value = "";
+                document.getElementById(selectId).value = "";
             } else {
                 if(toggleType === "lock") {
                     let newState = !SYSTEM_USER_REGISTRY[profileIndex].locked;
@@ -1254,7 +1401,12 @@
                 document.getElementById('muResetPassInput').value = ""; 
                 logAdminAction(`Reset Passcode for '${selectedUser}'`);
                 showLoader("Updating Passcode...");
-                try { await saveToCloud(); displayCustomAlert(`Success: Passcode reset.`, "✅"); } catch(e) { displayCustomAlert("Network Error", "❌"); }
+                try { 
+                    await saveToCloud(); 
+                    displayCustomAlert(`Success: Passcode reset.`, "✅"); 
+                    document.getElementById('searchInput_muResetSelect').value = "";
+                    document.getElementById('muResetSelect').value = "";
+                } catch(e) { displayCustomAlert("Network Error", "❌"); }
                 hideLoader();
             } else {
                 createRequest('RESET_PASS', `Reset Passcode for '${selectedUser}'`, { user: selectedUser, pass: newPass });
@@ -1278,7 +1430,12 @@
                 SYSTEM_USER_REGISTRY[profileIndex].allowedCards = defaultCards;
                 logAdminAction(`Changed Role for '${selectedUser}' to ${newRole}`);
                 showLoader("Updating Role...");
-                try { await saveToCloud(); displayCustomAlert(`Success: Role updated.`, "✅"); } catch(e) { displayCustomAlert("Network Error", "❌"); }
+                try { 
+                    await saveToCloud(); 
+                    displayCustomAlert(`Success: Role updated.`, "✅"); 
+                    document.getElementById('searchInput_muRoleTargetSelect').value = "";
+                    document.getElementById('muRoleTargetSelect').value = "";
+                } catch(e) { displayCustomAlert("Network Error", "❌"); }
                 hideLoader();
             } else {
                 createRequest('CHANGE_ROLE', `Change Role for '${selectedUser}' to ${newRole}`, { user: selectedUser, role: newRole, allowedCards: defaultCards });
@@ -1299,7 +1456,12 @@
                 SYSTEM_USER_REGISTRY[profileIndex].allowedCards = newAllowedCards; 
                 logAdminAction(`Customized Cards for '${selectedUser}'`);
                 showLoader("Saving Config...");
-                try { await saveToCloud(); displayCustomAlert(`Success: Dashboard card config updated.`, "✅"); } catch(e) { displayCustomAlert("Network Error", "❌"); }
+                try { 
+                    await saveToCloud(); 
+                    displayCustomAlert(`Success: Dashboard card config updated.`, "✅"); 
+                    document.getElementById('searchInput_muCustomizeSelect').value = "";
+                    document.getElementById('muCustomizeSelect').value = "";
+                } catch(e) { displayCustomAlert("Network Error", "❌"); }
                 hideLoader();
             } else {
                 createRequest('CUSTOMIZE_CARDS', `Customize Dashboard Cards for '${selectedUser}'`, { user: selectedUser, allowedCards: newAllowedCards });
@@ -1316,7 +1478,12 @@
                 SYSTEM_USER_REGISTRY.splice(profileIndex, 1); 
                 logAdminAction(`Deleted User '${selectedUser}'`);
                 showLoader("Deleting Profile...");
-                try { await saveToCloud(); displayCustomAlert(`Success: Profile deleted.`, "🗑️"); } catch(e) { displayCustomAlert("Network Error", "❌"); }
+                try { 
+                    await saveToCloud(); 
+                    displayCustomAlert(`Success: Profile deleted.`, "🗑️"); 
+                    document.getElementById('searchInput_muDeleteSelect').value = "";
+                    document.getElementById('muDeleteSelect').value = "";
+                } catch(e) { displayCustomAlert("Network Error", "❌"); }
                 hideLoader();
             } else {
                 createRequest('DELETE_USER', `Permanently Delete User '${selectedUser}'`, { user: selectedUser });
@@ -1328,7 +1495,7 @@
             const messageText = document.getElementById('muMessageInput').value.trim();
             if(!selectedUser || !messageText) { displayCustomAlert("Error: Target user and message both required.", "⚠️"); return; }
 
-            // Local Admins CAN send messages directly, no HQ approval needed for internal messaging
+            // Local Admins CAN send messages directly to their own staff
             const profileIndex = SYSTEM_USER_REGISTRY.findIndex(acc => acc.user === selectedUser); 
             if(profileIndex === -1) return;
             
@@ -1336,7 +1503,12 @@
             document.getElementById('muMessageInput').value = ""; 
             logAdminAction(`Sent Alert to '${selectedUser}'`);
             showLoader("Sending Message...");
-            try { await saveToCloud(); displayCustomAlert(`Success: Alert queued for next login.`, "✅"); } catch(e) { displayCustomAlert("Network Error", "❌"); }
+            try { 
+                await saveToCloud(); 
+                displayCustomAlert(`Success: Alert queued for next login.`, "✅"); 
+                document.getElementById('searchInput_muMessageSelect').value = "";
+                document.getElementById('muMessageSelect').value = "";
+            } catch(e) { displayCustomAlert("Network Error", "❌"); }
             hideLoader();
         }
 
@@ -1344,32 +1516,20 @@
             const newText = document.getElementById('muNewsInput').value.trim(); 
             if(!newText) { displayCustomAlert("Error: Cannot be empty.", "⚠️"); return; }
 
-            if (canDirectExecute) {
-                showLoader("Publishing News...");
-                try { 
-                    await db.collection("system").doc("announcements").set({ tickerText: newText }, { merge: true }); 
-                    document.getElementById('muNewsInput').value = "";
-                    logAdminAction(`Updated Live News`);
-                    displayCustomAlert("Success: Live News Feed updated globally!", "✅"); 
-                } catch (error) { displayCustomAlert("Network Error", "❌"); }
-                hideLoader();
-            } else {
-                createRequest('UPDATE_NEWS', `Broadcast New System Message`, { text: newText });
-            }
+            // Only available for HQ Admin anyway, so direct execution
+            showLoader("Publishing News...");
+            try { 
+                await db.collection("system").doc("announcements").set({ tickerText: newText }, { merge: true }); 
+                document.getElementById('muNewsInput').value = "";
+                logAdminAction(`Updated Live News`);
+                displayCustomAlert("Success: Live News Feed updated globally!", "✅"); 
+            } catch (error) { displayCustomAlert("Network Error", "❌"); }
+            hideLoader();
         }
 
         // ----------------------------------------------------
-        // 10. GOOGLE AUTHENTICATOR (TOTP) SETUP & RESET
+        // 11. GOOGLE AUTHENTICATOR (TOTP) SETUP & RESET
         // ----------------------------------------------------
-        function generateBase32Secret(length = 16) {
-            const charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
-            let secret = '';
-            for (let i = 0; i < length; i++) {
-                secret += charset.charAt(Math.floor(Math.random() * charset.length));
-            }
-            return secret;
-        }
-
         function generate2FAForUser() {
             const selectedUser = document.getElementById('mu2FASelect').value;
             if(!selectedUser) { displayCustomAlert("Please search and select a target user first.", "⚠️"); return; }
