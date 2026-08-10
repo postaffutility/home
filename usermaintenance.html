@@ -14,9 +14,16 @@
 
     <style>
         /* Minimalist Baseline Setup & Security */
-        body, html { margin: 0 !important; padding: 0 !important; width: 100% !important; height: 100% !important; background-color: #f4f6f9 !important; font-family: 'Segoe UI', Arial, sans-serif; user-select: none; -webkit-user-select: none; -ms-user-select: none; }
+        body, html { margin: 0 !important; padding: 0 !important; width: 100% !important; min-height: 100vh !important; background-color: #f4f6f9 !important; font-family: 'Segoe UI', Arial, sans-serif; user-select: none; -webkit-user-select: none; -ms-user-select: none; overflow-x: hidden; }
+        
+        /* Subtle background pattern like official portals */
+        body { background-image: radial-gradient(#cbd5e1 1px, transparent 1px); background-size: 20px 20px; }
+
         input, textarea, select { user-select: text !important; -webkit-user-select: text !important; -ms-user-select: text !important; }
         
+        /* Top Branding Bar */
+        .top-branding-bar { width: 100%; height: 6px; background: #4f46e5; position: fixed; top: 0; left: 0; z-index: 9999; }
+
         /* --- BEAUTIFUL LIGHT THEME SPLASH SCREEN --- */
         #splashScreen { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #ffffff; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 99999999; color: #1e293b; text-align: center; transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.6s; border-bottom: 8px solid #3b82f6; }
         .splash-content { animation: popIn 1s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
@@ -29,27 +36,30 @@
         @keyframes spin { 100% { transform: rotate(360deg); } }
         /* ------------------------------------------- */
 
-        .standalone-viewport { position: relative; z-index: 10; width: 100%; min-height: 100vh; padding: 40px 10px; box-sizing: border-box; }
-        .app-container { width: 100%; max-width: 1400px; background: transparent; padding: 30px 40px; margin: 0 auto; border: none; box-shadow: none; position: relative; }
+        /* FULL SCREEN EXPANSIVE APP CONTAINER */
+        .standalone-viewport { position: relative; z-index: 10; width: 100%; min-height: 100vh; padding: 0; box-sizing: border-box; }
+        .app-container { width: 100%; max-width: 1400px; background: transparent; padding: 40px 4vw; margin: 0 auto; box-shadow: none; border: none; position: relative; }
         
-        .portal-logout-anchor { position: absolute; top: 40px; right: 40px; background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; padding: 8px 16px; font-size: 13px; font-weight: 800; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: all 0.2s ease; z-index: 50; }
-        .portal-logout-anchor:hover { background: #ef4444; color: #ffffff; border-color: #dc2626; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2); transform: translateY(-2px); }
+        .portal-logout-anchor { position: absolute; top: 30px; right: 4vw; background: #ffffff; color: #d32f2f; border: 1px solid #ffcdd2; padding: 8px 18px; font-size: 14px; font-weight: 800; border-radius: 50px; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: all 0.2s ease; z-index: 50; box-shadow: 0 4px 10px rgba(211,47,47,0.1); }
+        .portal-logout-anchor:hover { background: #d32f2f; color: #ffffff; border-color: #b71c1c; box-shadow: 0 4px 15px rgba(211, 47, 47, 0.3); transform: translateY(-2px); }
 
-        h2 { text-align: left; color: #1e293b; margin: 0 0 8px 0; font-size: 32px; font-weight: 900; letter-spacing: -0.5px; }
-        .tagline { text-align: left; color: #64748b; font-size: 14.5px; margin-bottom: 0; line-height: 1.6; }
-        #portalWelcomeMessage { text-align: left; color: #4f46e5; margin: 10px 0 30px 0; font-size: 18px; font-weight: 800; letter-spacing: -0.3px; }
+        .dashboard-top-nav { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 30px; border-bottom: 2px solid #e2e8f0; padding-bottom: 20px; flex-wrap: wrap; gap: 20px; }
+        .header-titles h2 { text-align: left; color: #1e293b; margin: 0 0 8px 0; font-size: 32px; font-weight: 900; letter-spacing: -0.5px; }
+        .header-titles .tagline { text-align: left; color: #64748b; font-size: 14.5px; margin-bottom: 0; line-height: 1.6; }
+        #portalWelcomeMessage { text-align: left; color: #4f46e5; margin: 10px 0 10px 0; font-size: 18px; font-weight: 800; letter-spacing: -0.3px; }
         
         .status-badge { padding: 5px 12px; border-radius: 20px; font-size: 11px; font-weight: 800; color: #fff; letter-spacing: 0.5px; display: inline-block; text-align: center; min-width: 60px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);}
-        .badge-active { background: linear-gradient(135deg, #10b981, #059669); } .badge-disabled { background: linear-gradient(135deg, #ef4444, #dc2626); } .badge-locked { background: linear-gradient(135deg, #f59e0b, #d97706); }
+        .badge-active { background: linear-gradient(135deg, #10b981, #059669); } .badge-disabled { background: linear-gradient(135deg, #ef4444, #dc2626); } .badge-locked { background: linear-gradient(135deg, #f59e0b, #d97706); } .badge-pending { background: linear-gradient(135deg, #3b82f6, #1d4ed8); }
         
         .form-group { margin-bottom: 22px; }
         label { display: block; font-weight: 700; margin-bottom: 8px; font-size: 14.5px; color: #334155; }
-        input[type="text"], input[type="number"], select, textarea { width: 100%; padding: 15px 18px; box-sizing: border-box; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 15px; background: #f8fafc; color: #1e293b !important; transition: all 0.3s ease; }
-        input[type="text"]:focus, input[type="number"]:focus, select:focus, textarea:focus { border-color: #4f46e5; background: #ffffff; box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.15); outline: none; transform: translateY(-1px); }
+        input[type="text"], input[type="password"], input[type="number"], select, textarea { width: 100%; padding: 15px 18px; box-sizing: border-box; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 15px; background: #ffffff; color: #1e293b !important; transition: all 0.3s ease; box-shadow: inset 0 1px 3px rgba(0,0,0,0.02); }
+        input[type="text"]:focus, input[type="password"]:focus, input[type="number"]:focus, select:focus, textarea:focus { border-color: #4f46e5; background: #ffffff; box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.15); outline: none; transform: translateY(-1px); }
         .flex-row { display: flex; gap: 20px; flex-wrap: wrap; }
         .flex-row > div { flex: 1; }
+        .secure-mask { -webkit-text-security: disc; }
 
-        /* --- NEW: CUSTOM SEARCHABLE DROPDOWN STYLES --- */
+        /* --- SEARCHABLE DROPDOWN STYLES --- */
         .searchable-dropdown-container { position: relative; width: 100%; }
         .searchable-dropdown-container input[type="text"] { background: #ffffff url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="%2364748b" viewBox="0 0 16 16"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/></svg>') no-repeat 16px center; padding-left: 45px; cursor: text; }
         .custom-select-list { display: none; position: absolute; top: 100%; left: 0; width: 100%; max-height: 280px; overflow-y: auto; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 10px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); z-index: 1000; margin-top: 8px; scrollbar-width: thin; }
@@ -61,10 +71,11 @@
         .cs-detail { font-size: 12.5px; color: #64748b; margin-top: 3px; }
         .cs-empty { padding: 20px; text-align: center; color: #94a3b8; font-style: italic; }
 
-        .portal-grid-wrapper { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin-top: 20px; }
+        /* --- CARD GRID DESIGN --- */
+        .portal-grid-wrapper { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 25px; margin-top: 20px; }
         .portal-module-card { background: #ffffff; border-radius: 16px; padding: 30px 25px; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.03); border: 1px solid #e2e8f0; transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); position: relative; overflow: hidden; display: block; }
         .portal-module-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 5px; background: #4f46e5; transition: height 0.3s ease; }
-        .portal-module-card:hover { transform: translateY(-8px) scale(1.02); box-shadow: 0 25px 50px rgba(0, 0, 0, 0.1); border-color: #cbd5e1; z-index: 10; }
+        .portal-module-card:hover { transform: translateY(-8px); box-shadow: 0 25px 50px rgba(0, 0, 0, 0.1); border-color: #cbd5e1; z-index: 10; }
         .portal-module-card:hover::before { height: 10px; }
         
         .card-blue-variant::before { background: #3b82f6; } .card-blue-variant .card-icon { background: #dbeafe; }
@@ -81,6 +92,10 @@
         .portal-module-card h3 { margin: 0 0 12px 0; font-size: 19px; font-weight: 800; color: #1e293b; letter-spacing: -0.3px;}
         .portal-module-card p { margin: 0; font-size: 14px; color: #64748b; line-height: 1.6; }
         
+        /* --- SUB PANELS --- */
+        .portal-page-panel { display: none; animation: slideInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; max-width: 1200px; margin: 0 auto; background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; }
+        @keyframes slideInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        
         .sub-action-card { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 30px; margin-bottom: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.02);}
         .sub-action-card h4 { margin: 0 0 20px 0; color: #0f172a; font-size: 18px; font-weight: 800; border-bottom: 2px solid #f1f5f9; padding-bottom: 12px; }
         
@@ -90,23 +105,18 @@
         .system-log-table tr:last-child td { border-bottom: none; }
         .system-log-table tr:hover td { background: #f8fafc; }
         
-        .portal-page-panel { display: none; animation: slideInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-        @keyframes slideInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-        
-        .back-nav-link { display: inline-flex; align-items: center; color: #3b82f6; font-weight: 800; font-size: 14px; text-decoration: none; margin-bottom: 20px; cursor: pointer; transition: all 0.2s; padding: 10px 18px; background: #f1f5f9; border-radius: 20px;}
+        .back-nav-link { display: inline-flex; align-items: center; color: #3b82f6; font-weight: 800; font-size: 14px; text-decoration: none; margin-bottom: 25px; cursor: pointer; transition: all 0.2s; padding: 10px 18px; background: #f1f5f9; border-radius: 20px;}
         .back-nav-link:hover { color: #1d4ed8; background: #e2e8f0; transform: translateX(-3px);} 
-        .sub-back-nav { color: #f59e0b; background: #fef3c7; } .sub-back-nav:hover{background: #fde68a;}
         
         button.action-btn { width: 100%; padding: 18px; background: #4f46e5; color: white; border: none; border-radius: 10px; font-size: 15.5px; font-weight: 900; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; margin-top: 15px; box-shadow: 0 10px 20px rgba(79, 70, 229, 0.25); transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         button.action-btn:hover { background: #3730a3; transform: translateY(-3px); box-shadow: 0 15px 25px rgba(79, 70, 229, 0.35); }
         button.panel-sub-submit { padding: 16px 20px; font-size: 15px; margin-top: 25px; box-shadow: none; width: 100%; text-transform: none; border-radius: 10px; color: white; border: none; font-weight: 800; cursor: pointer; }
         button.panel-sub-submit:hover { filter: brightness(85%); transform: translateY(-2px); }
-        
         button.small-action-btn { background:#3b82f6; color:white; border:none; padding:8px 16px; border-radius:6px; font-size:12.5px; font-weight:bold; cursor:pointer; margin-right:5px; transition:0.2s; box-shadow: 0 2px 5px rgba(59,130,246,0.3);}
         button.small-action-btn:hover { background:#2563eb; transform: translateY(-1px); }
         
-        /* --- REFINED PREMIUM POPUPS & LOADERS --- */
-        .custom-popup-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15, 23, 42, 0.5); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); z-index: 20000000; display: none; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.3s ease; }
+        /* --- MODALS --- */
+        .custom-popup-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); z-index: 20000000; display: none; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.3s ease; }
         .custom-popup-card { background: #ffffff; width: 90%; max-width: 440px; padding: 45px; border-radius: 24px; box-shadow: 0 25px 50px rgba(0,0,0,0.15); text-align: center; box-sizing: border-box; border-top: 6px solid #4f46e5; transform: scale(0.9) translateY(20px); transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
         .custom-popup-overlay.active { display: flex; opacity: 1; }
         .custom-popup-overlay.active .custom-popup-card { transform: scale(1) translateY(0); }
@@ -127,7 +137,6 @@
         .loading-status-msg { font-size: 16px; font-weight: 800; color: #0f172a; letter-spacing: 0.5px; background: white; padding: 10px 20px; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
     </style>
 
-    <!-- ANTI-INSPECT SHIELD -->
     <script>
         document.addEventListener('contextmenu', event => event.preventDefault());
         document.onkeydown = function(e) {
@@ -140,7 +149,8 @@
 </head>
 <body>
 
-    <!-- THE PROFESSIONAL LIGHT THEME SPLASH SCREEN -->
+    <div class="top-branding-bar"></div>
+
     <div id="splashScreen">
         <div class="splash-content">
             <div class="splash-icon">👥</div>
@@ -155,34 +165,48 @@
             <div class='portal-logout-anchor' onclick='window.location.href="index.html"'>🚪 Exit to Portal</div>
             
             <div id='mainDashboardHead'>
-                <div class='header-titles'>
-                    <h2>USER MAINTENANCE HUB</h2>
-                    <div class='tagline'>Secure Admin Identity & Access Management</div>
-                    <div id='portalWelcomeMessage'></div>
+                <div class='dashboard-top-nav'>
+                    <div class='header-titles'>
+                        <h2>USER MAINTENANCE HUB</h2>
+                        <div class='tagline'>Secure Admin Identity & Access Management</div>
+                        <div id='portalWelcomeMessage'></div>
+                    </div>
                 </div>
                 
                 <div class='portal-grid-wrapper' id='userModuleGrid'>
-                    <!-- APPROVALS PANEL FOR ADMIN OFFICE -->
+                    <!-- HQ ADMIN ONLY CARDS -->
                     <div class='portal-module-card card-rose-variant' id='menuCardApprovals' onclick='navigateToSubPanel("panelApprovals")' style='display:none;'>
                         <div class='card-icon'>🛡️</div>
                         <h3 style="color: #e11d48;">Pending Approvals <span id="approvalBadge" style="background:#e11d48; color:white; padding:2px 8px; border-radius:12px; font-size:12px; vertical-align:middle; margin-left:5px;">0</span></h3>
                         <p>Review, Audit, and Authorize identity modification requests submitted by local branch admins.</p>
                     </div>
 
+                    <div class='portal-module-card card-green-variant' id='menuCardUpdateNews' onclick='navigateToSubPanel("subUpdateNews")' style='display:none;'>
+                        <div class='card-icon'>📢</div>
+                        <h3>Broadcast Live News</h3>
+                        <p>Update the scrolling marquee text visible to all users at the top of the portal.</p>
+                    </div>
+
+                    <!-- LOCAL ADMIN ONLY CARD -->
+                    <div class='portal-module-card card-teal-variant' id='menuCardMyRequests' onclick='navigateToSubPanel("panelMyRequests")' style='display:none;'>
+                        <div class='card-icon'>📨</div>
+                        <h3>View Submitted Requests</h3>
+                        <p>Track the status (Pending/Approved/Rejected) of modification requests you have submitted to HQ.</p>
+                    </div>
+
+                    <!-- UNIVERSAL CARDS -->
                     <div class='portal-module-card card-blue-variant' onclick='navigateToSubPanel("subCreateUser")'>
                         <div class='card-icon'>👤</div>
                         <h3>Create New User</h3>
                         <p>Register a new system user profile and assign their operational role and mapped SOL.</p>
                     </div>
 
-                    <!-- 2FA SETUP CARD -->
                     <div class='portal-module-card card-teal-variant' onclick='navigateToSubPanel("sub2FASetup")'>
                         <div class='card-icon'>📱</div>
                         <h3>Authenticator 2FA Setup</h3>
                         <p>Generate Google Authenticator QR codes to enroll users in high-security 2FA login.</p>
                     </div>
                     
-                    <!-- NEW: RESET 2FA CARD -->
                     <div class='portal-module-card card-rose-variant' id='maintainReset2FA' onclick='navigateToSubPanel("subReset2FA")'>
                         <div class='card-icon'>🔓</div>
                         <h3>Reset User 2FA</h3>
@@ -231,35 +255,51 @@
                         <p>Send a personalized, self-destructing alert message to a specific staff member.</p>
                     </div>
 
-                    <div class='portal-module-card card-green-variant' onclick='navigateToSubPanel("subUpdateNews")'>
-                        <div class='card-icon'>📢</div>
-                        <h3>Broadcast Live News</h3>
-                        <p>Update the scrolling marquee text visible to all users at the top of the portal.</p>
-                    </div>
-
                     <div class='portal-module-card card-indigo-variant' onclick='navigateToSubPanel("subUserLogs")' style='grid-column: 1 / -1;'>
                         <div class='card-icon'>📊</div>
-                        <h3>User Status & Login Logs</h3>
-                        <p>View current account registry status, mapped offices, and recent login connection attempts.</p>
+                        <h3 id="logsCardTitle">User Status & Login Logs</h3>
+                        <p id="logsCardDesc">View current account registry status, mapped offices, and recent login connection attempts.</p>
                     </div>
                 </div>
             </div>
-
-            <!-- PENDING APPROVALS PANEL -->
+			<!-- ============================================== -->
+            <!-- HQ ADMIN: PENDING APPROVALS PANEL              -->
+            <!-- ============================================== -->
             <div class='portal-page-panel' id='panelApprovals'>
                 <div class='back-nav-link' onclick='returnToMainDashboard()'>⬅️ Back to Hub</div>
                 <h3 style="margin-top:0; color:#1e293b; font-size:24px;">Pending Authorization Requests</h3>
                 <div class='sub-action-card' style="border-top: 4px solid #e11d48; overflow-x: auto;">
-                    <table class='system-log-table' style="min-width: 700px;">
+                    <table class='system-log-table' style="min-width: 800px;">
                         <thead>
                             <tr>
                                 <th>Date & Time</th>
-                                <th>Requested By</th>
+                                <th>Initiator & SOL</th>
                                 <th>Request Description</th>
                                 <th>Audit Action</th>
                             </tr>
                         </thead>
                         <tbody id='approvalsTableBody'></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ============================================== -->
+            <!-- LOCAL ADMIN: MY SUBMITTED REQUESTS PANEL       -->
+            <!-- ============================================== -->
+            <div class='portal-page-panel' id='panelMyRequests'>
+                <div class='back-nav-link' onclick='returnToMainDashboard()'>⬅️ Back to Hub</div>
+                <h3 style="margin-top:0; color:#1e293b; font-size:24px;">My Submitted Requests</h3>
+                <div class='sub-action-card' style="border-top: 4px solid #14b8a6; overflow-x: auto;">
+                    <table class='system-log-table' style="min-width: 700px;">
+                        <thead>
+                            <tr>
+                                <th>Date & Time</th>
+                                <th>Request Type</th>
+                                <th>Description</th>
+                                <th>Current Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id='myRequestsTableBody'></tbody>
                     </table>
                 </div>
             </div>
@@ -281,7 +321,7 @@
                             </select>
                         </div>
                         <div class='form-group'><label>Mapped Office (SOL)</label>
-                            <!-- New field for mapping SOL ID directly during user creation -->
+                            <!-- HQ Admins can select any SOL. Local Admins will have this locked to their own SOL -->
                             <select id='muNewUserSol'></select>
                         </div>
                     </div>
@@ -323,7 +363,7 @@
                 </div>
             </div>
             
-            <!-- NEW: RESET 2FA -->
+            <!-- RESET 2FA -->
             <div class='portal-page-panel' id='subReset2FA'>
                 <div class='back-nav-link' onclick='returnToMainDashboard()'>⬅️ Back to Hub</div>
                 <h3 style="margin-top:0; color:#1e293b; font-size:24px;">Reset User 2FA Device</h3>
@@ -337,7 +377,7 @@
                             <input type="hidden" id="muReset2FASelect" />
                         </div>
                     </div>
-                    <button class='action-btn panel-sub-submit' onclick='executeReset2FAAction()' style='background:#e11d48;' type='button'>Reset 2FA Security</button>
+                    <button class='action-btn panel-sub-submit btn-dynamic' onclick='executeReset2FAAction()' style='background:#e11d48;' type='button'>Reset 2FA Security</button>
                 </div>
             </div>
 
@@ -499,10 +539,10 @@
                 </div>
             </div>
 
-            <!-- USER LOGS (UPDATED WITH SOL ID COLUMN) -->
+            <!-- USER LOGS (DYNAMIC BASED ON ROLE) -->
             <div class='portal-page-panel' id='subUserLogs'>
                 <div class='back-nav-link' onclick='returnToMainDashboard()'>⬅️ Back to Hub</div>
-                <h3 style="margin-top:0; color:#1e293b; font-size:24px;">User Status & Login Logs</h3>
+                <h3 style="margin-top:0; color:#1e293b; font-size:24px;" id="logsPanelHeader">User Status & Login Logs</h3>
                 <div class='sub-action-card' style='margin-bottom:25px; border-top: 4px solid #4f46e5; overflow-x: auto;'>
                     <h4 style="font-size: 18px;">Registered System Account Registry</h4>
                     <table class='system-log-table' style="min-width: 800px;">
@@ -520,7 +560,7 @@
             </div>
 
         </div>
-    </div>
+    </div> <!-- END OF APP CONTAINER AND STANDALONE VIEWPORT -->
 
     <!-- Modals for Alerts & Request Details -->
     <div class='custom-popup-overlay' id='customAppAlertModal' style="z-index: 60000000;">
@@ -531,15 +571,31 @@
         </div>
     </div>
 
-    <!-- VIEW REQUEST DETAILS MODAL -->
+    <!-- VIEW REQUEST DETAILS MODAL (HQ ADMIN ONLY) -->
     <div class='custom-popup-overlay' id='requestDetailsModal' style="z-index: 50000000;">
         <div class='custom-popup-card' style="max-width: 550px; border-top: 6px solid #4f46e5;">
             <h3 style="margin-top:0; color:#1e3a8a; text-align:left; font-size: 22px;">Request Audit Details</h3>
             <div id="requestDetailsContent" class="request-detail-box"></div>
+            <div style="display:flex; gap:12px; flex-wrap: wrap;">
+                <button onclick="approveCurrentRequest()" style="background:#10b981; color:white; border:none; padding:15px; border-radius:8px; flex:1; font-weight:900; cursor:pointer; font-size: 13px; transition: 0.2s; text-transform: uppercase;">✅ Approve</button>
+                <button onclick="rejectCurrentRequest()" style="background:#ef4444; color:white; border:none; padding:15px; border-radius:8px; flex:1; font-weight:900; cursor:pointer; font-size: 13px; transition: 0.2s; text-transform: uppercase;">❌ Reject</button>
+                <button onclick="openTransferModal()" style="background:#f59e0b; color:white; border:none; padding:15px; border-radius:8px; flex:1; font-weight:900; cursor:pointer; font-size: 13px; transition: 0.2s; text-transform: uppercase;">🔄 Transfer</button>
+                <button onclick="closeRequestDetails()" style="background:#64748b; color:white; border:none; padding:15px; border-radius:8px; flex:1; font-weight:900; cursor:pointer; font-size: 13px; transition: 0.2s; text-transform: uppercase;">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TRANSFER REQUEST MODAL (HQ ADMIN ONLY) -->
+    <div class='custom-popup-overlay' id='transferRequestModal' style="z-index: 55000000;">
+        <div class='custom-popup-card' style="max-width: 450px; border-top: 6px solid #f59e0b;">
+            <h3 style="margin-top:0; color:#d97706; text-align:left; font-size: 22px;">Transfer Request</h3>
+            <p style="text-align: left; font-size: 14px; color: #64748b; margin-bottom: 20px;">Select another HQ Admin to review and authorize this request.</p>
+            <div class='form-group' style="text-align: left;">
+                <select id="transferAdminSelect" style="width:100%; border: 2px solid #cbd5e1;"></select>
+            </div>
             <div style="display:flex; gap:12px;">
-                <button onclick="approveCurrentRequest()" style="background:#10b981; color:white; border:none; padding:15px; border-radius:8px; flex:1; font-weight:900; cursor:pointer; font-size: 14.5px; transition: 0.2s; text-transform: uppercase;">✅ Approve</button>
-                <button onclick="rejectCurrentRequest()" style="background:#ef4444; color:white; border:none; padding:15px; border-radius:8px; flex:1; font-weight:900; cursor:pointer; font-size: 14.5px; transition: 0.2s; text-transform: uppercase;">❌ Reject</button>
-                <button onclick="closeRequestDetails()" style="background:#64748b; color:white; border:none; padding:15px; border-radius:8px; flex:1; font-weight:900; cursor:pointer; font-size: 14.5px; transition: 0.2s; text-transform: uppercase;">Cancel</button>
+                <button onclick="executeTransferRequest()" style="background:#f59e0b; color:white; border:none; padding:15px; border-radius:8px; flex:1; font-weight:900; cursor:pointer; font-size: 14px; transition: 0.2s; text-transform: uppercase;">Confirm Transfer</button>
+                <button onclick="closeTransferModal()" style="background:#64748b; color:white; border:none; padding:15px; border-radius:8px; flex:1; font-weight:900; cursor:pointer; font-size: 14px; transition: 0.2s; text-transform: uppercase;">Cancel</button>
             </div>
         </div>
     </div>
@@ -550,7 +606,7 @@
     </div>
 	<script type="text/javascript">
         // ----------------------------------------------------
-        // 1. FIREBASE CONFIGURATION
+        // 1. FIREBASE CONFIGURATION & CORE VARIABLES
         // ----------------------------------------------------
         const firebaseConfig = {
             apiKey: "AIzaSyArIz9EyuPcbQs0HKvsm0OfxwXKGlbO03c",
@@ -573,29 +629,41 @@
         
         let activeUser = null;
         let activeRole = null;
-        let isMasterAdmin = false;
-        let isAdminOffice = false;
+        let activeSolId = null;
+        
+        let isMasterAdmin = false; // Only 'admin'
+        let isHQAdmin = false;     // SOL 000000 or 'admin'
         let canDirectExecute = false;
         let currentlyViewingRequest = null;
         
-        // 2FA variables
         let pending2FASecret = "";
         let pending2FAUser = "";
 
         // ----------------------------------------------------
-        // 3. SECURITY BOUNCER & SPLASH SCREEN
+        // 3. LIVE CLOCK
+        // ----------------------------------------------------
+        function updateLiveClock() {
+            const clockEl = document.getElementById('liveClockDisplay');
+            if (!clockEl) return;
+            const now = new Date();
+            const options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
+            clockEl.innerText = now.toLocaleString('en-IN', options);
+        }
+        setInterval(updateLiveClock, 1000);
+        updateLiveClock();
+
+        // ----------------------------------------------------
+        // 4. SECURITY BOUNCER & DATA SYNC
         // ----------------------------------------------------
         window.onload = function() {
             activeUser = sessionStorage.getItem("activeUser");
             activeRole = sessionStorage.getItem("activeRole");
 
-            // Verify if the user is authorized to be here
             if (!activeUser || activeRole !== "admin") {
                 window.location.replace("index.html");
                 return;
             }
 
-            // Sync Registry
             db.collection("system").doc("registry").onSnapshot((registryDoc) => {
                 if (registryDoc.exists) {
                     const data = registryDoc.data();
@@ -604,14 +672,31 @@
                     SYSTEM_LOGIN_HISTORY = data.logs || [];
                     SYSTEM_PENDING_REQUESTS = data.requests || [];
                     
-                    // Evaluate Security Hierarchy
                     const myProfile = SYSTEM_USER_REGISTRY.find(u => u.user === activeUser);
-                    isMasterAdmin = (activeUser === "admin");
-                    isAdminOffice = (myProfile && myProfile.solId === "000000"); // 000000 indicates master admin office
-                    canDirectExecute = (isMasterAdmin || isAdminOffice);
+                    activeSolId = myProfile ? myProfile.solId : null;
                     
-                    // Adjust UI based on permissions (Maker vs Admin)
-                    if (!canDirectExecute) {
+                    isMasterAdmin = (activeUser === "admin");
+                    isHQAdmin = (isMasterAdmin || activeSolId === "000000");
+                    canDirectExecute = isHQAdmin;
+                    
+                    // Setup UI based on Hierarchy
+                    if (canDirectExecute) {
+                        document.getElementById('menuCardApprovals').style.display = 'block';
+                        document.getElementById('menuCardUpdateNews').style.display = 'block';
+                        document.getElementById('menuCardMyRequests').style.display = 'none';
+                        document.getElementById('logsCardTitle').innerText = "Global System Logs";
+                        document.getElementById('logsCardDesc').innerText = "View entire system registry and connection attempts across all SOLs.";
+                        
+                        document.querySelectorAll('.btn-dynamic').forEach(btn => {
+                            btn.innerText = btn.innerText.replace(/^Request\s/, '');
+                        });
+                    } else {
+                        document.getElementById('menuCardApprovals').style.display = 'none';
+                        document.getElementById('menuCardUpdateNews').style.display = 'none';
+                        document.getElementById('menuCardMyRequests').style.display = 'block';
+                        document.getElementById('logsCardTitle').innerText = "My Office (SOL) Logs";
+                        document.getElementById('logsCardDesc').innerText = "View account registry and login history strictly for your mapped office.";
+                        
                         document.querySelectorAll('.btn-dynamic').forEach(btn => {
                              if(!btn.innerText.startsWith("Request") && !btn.innerText.startsWith("Save")) {
                                  btn.innerText = "Request " + btn.innerText;
@@ -620,13 +705,13 @@
                     }
 
                     if(myProfile) {
-                        document.getElementById('portalWelcomeMessage').innerText = `Welcome, ${myProfile.fullName} (${canDirectExecute ? 'Super Admin' : 'Branch Admin'})`;
+                        let rank = isMasterAdmin ? "Super Admin" : (isHQAdmin ? "HQ Admin" : `Local Admin - ${activeSolId}`);
+                        document.getElementById('portalWelcomeMessage').innerText = `Welcome, ${myProfile.fullName} (${rank})`;
                     }
 
                     refreshUI(); 
                 }
                 
-                // Hide loader cleanly
                 document.getElementById('globalAppLoader').style.display = 'none';
 
             }, (error) => {
@@ -634,7 +719,6 @@
                 document.getElementById('globalAppLoader').style.display = 'none';
             });
 
-            // Splash Screen Hide
             setTimeout(() => {
                 const splash = document.getElementById('splashScreen');
                 splash.style.opacity = '0';
@@ -646,18 +730,24 @@
         };
 
         // ----------------------------------------------------
-        // 4. NAVIGATION & REQUEST ENGINE
+        // 5. NAVIGATION & ALERTS
         // ----------------------------------------------------
         function navigateToSubPanel(panelId) {
             document.getElementById('mainDashboardHead').style.display = 'none';
-            const panels = ['subCreateUser', 'subLockUnlock', 'subEnableDisable', 'subResetPass', 'subChangeRole', 'subCustomizeCards', 'subDeleteUser', 'subDirectMessage', 'subUpdateNews', 'subUserLogs', 'panelApprovals', 'sub2FASetup', 'subReset2FA'];
-            panels.forEach(id => { document.getElementById(id).style.display = 'none'; });
+            const panels = ['subCreateUser', 'subLockUnlock', 'subEnableDisable', 'subResetPass', 'subChangeRole', 'subCustomizeCards', 'subDeleteUser', 'subDirectMessage', 'subUpdateNews', 'subUserLogs', 'panelApprovals', 'panelMyRequests', 'sub2FASetup', 'subReset2FA'];
+            panels.forEach(id => { 
+                let el = document.getElementById(id);
+                if(el) el.style.display = 'none'; 
+            });
             document.getElementById(panelId).style.display = 'block';
         }
 
         function returnToMainDashboard() {
-            const panels = ['subCreateUser', 'subLockUnlock', 'subEnableDisable', 'subResetPass', 'subChangeRole', 'subCustomizeCards', 'subDeleteUser', 'subDirectMessage', 'subUpdateNews', 'subUserLogs', 'panelApprovals', 'sub2FASetup', 'subReset2FA'];
-            panels.forEach(id => { document.getElementById(id).style.display = 'none'; });
+            const panels = ['subCreateUser', 'subLockUnlock', 'subEnableDisable', 'subResetPass', 'subChangeRole', 'subCustomizeCards', 'subDeleteUser', 'subDirectMessage', 'subUpdateNews', 'subUserLogs', 'panelApprovals', 'panelMyRequests', 'sub2FASetup', 'subReset2FA'];
+            panels.forEach(id => { 
+                let el = document.getElementById(id);
+                if(el) el.style.display = 'none'; 
+            });
             document.getElementById('mainDashboardHead').style.display = 'block';
         }
 
@@ -677,8 +767,9 @@
 
         function showLoader(msg) {
             document.getElementById('loaderTextMsg').innerText = msg;
-            document.getElementById('globalAppLoader').style.display = 'flex';
-            setTimeout(() => { document.getElementById('globalAppLoader').classList.add('active'); }, 10);
+            const loader = document.getElementById('globalAppLoader');
+            loader.style.display = 'flex';
+            setTimeout(() => { loader.classList.add('active'); }, 10);
         }
 
         function hideLoader() { 
@@ -699,10 +790,212 @@
         function logAdminAction(eventMsg) {
             let options = { timeZone: 'Asia/Kolkata', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
             let timeStamp = new Date().toLocaleString('en-IN', options);
-            SYSTEM_LOGIN_HISTORY.push({ time: timeStamp, user: activeUser, event: eventMsg });
-            if (SYSTEM_LOGIN_HISTORY.length > 20) SYSTEM_LOGIN_HISTORY = SYSTEM_LOGIN_HISTORY.slice(SYSTEM_LOGIN_HISTORY.length - 20);
+            SYSTEM_LOGIN_HISTORY.push({ time: timeStamp, user: activeUser, event: eventMsg, solId: activeSolId });
+            if (SYSTEM_LOGIN_HISTORY.length > 50) SYSTEM_LOGIN_HISTORY = SYSTEM_LOGIN_HISTORY.slice(SYSTEM_LOGIN_HISTORY.length - 50);
         }
 
+        // ----------------------------------------------------
+        // 6. CUSTOM SEARCHABLE DROPDOWN ENGINE
+        // ----------------------------------------------------
+        function showCustomSelect(id) {
+            document.getElementById('list_' + id).style.display = 'block';
+        }
+
+        function hideCustomSelects(e) {
+            if (!e.target.closest('.searchable-dropdown-container')) {
+                document.querySelectorAll('.custom-select-list').forEach(l => l.style.display = 'none');
+            }
+        }
+        document.addEventListener('click', hideCustomSelects);
+
+        function filterCustomSelect(id) {
+            let input = document.getElementById('searchInput_' + id).value.toLowerCase();
+            let items = document.querySelectorAll('#list_' + id + ' .custom-select-item');
+            let hasVisible = false;
+            
+            items.forEach(item => {
+                let txt = item.innerText.toLowerCase();
+                if (txt.includes(input)) {
+                    item.style.display = 'flex';
+                    hasVisible = true;
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+            
+            let emptyMsg = document.getElementById('empty_' + id);
+            if(emptyMsg) emptyMsg.style.display = hasVisible ? 'none' : 'block';
+        }
+
+        function selectCustomOption(id, value, displayName) {
+            document.getElementById(id).value = value;
+            document.getElementById('searchInput_' + id).value = displayName;
+            document.getElementById('list_' + id).style.display = 'none';
+            if(id === 'muCustomizeSelect') loadUserCurrentCards();
+        }
+
+        // ----------------------------------------------------
+        // 7. DYNAMIC UI REFRESH (WITH ISOLATION LOGIC)
+        // ----------------------------------------------------
+        function refreshUI() {
+            // 1. Calculate VISIBLE users based on hierarchy
+            const visibleUsers = SYSTEM_USER_REGISTRY.filter(u => {
+                if (isMasterAdmin) return true; // Master sees everyone
+                if (u.user === "admin") return false; // Hide master from everyone else
+                if (isHQAdmin) return true; // HQ Admin sees all except master
+                return u.solId === activeSolId; // Local Admin sees ONLY their own SOL
+            });
+
+            // 2. Populate Custom Dropdowns
+            const customDropdownIds = ['muLockSelect', 'muEnableSelect', 'muResetSelect', 'muRoleTargetSelect', 'muDeleteSelect', 'muCustomizeSelect', 'muMessageSelect', 'mu2FASelect', 'muReset2FASelect'];
+            customDropdownIds.forEach(id => { 
+                let listEl = document.getElementById('list_' + id); 
+                if(listEl) {
+                    listEl.innerHTML = `<div class="cs-empty" id="empty_${id}" style="display:none;">No user found</div>`;
+                    document.getElementById('searchInput_' + id).value = ""; 
+                    document.getElementById(id).value = ""; 
+                }
+            });
+
+            const rosterBody = document.getElementById('muUserRosterTableBody'); 
+            if(rosterBody) rosterBody.innerHTML = "";
+
+            visibleUsers.forEach(account => {
+                let dName = account.fullName || account.user;
+                let displayString = `${dName} (${account.user}) [${account.role.toUpperCase()}]`;
+                
+                customDropdownIds.forEach(id => { 
+                    let listEl = document.getElementById('list_' + id); 
+                    if(listEl) { 
+                        let item = document.createElement('div');
+                        item.className = 'custom-select-item';
+                        item.onclick = function() { selectCustomOption(id, account.user, displayString); };
+                        item.innerHTML = `<span class="cs-name">${dName}</span><span class="cs-detail">@${account.user} • ${account.role.toUpperCase()} • SOL: ${account.solId || 'None'}</span>`;
+                        listEl.appendChild(item);
+                    } 
+                });
+                
+                if(rosterBody) {
+                    let solDisplay = account.solId ? account.solId : "<span style='color:#ef4444;'>Unmapped</span>";
+                    let row = document.createElement('tr'); 
+                    row.innerHTML = `
+                        <td>${dName}</td>
+                        <td><strong>${account.user}</strong></td>
+                        <td>${solDisplay}</td>
+                        <td><span style="text-transform:uppercase;">${account.role}</span></td>
+                        <td><span class="status-badge ${account.active ? 'badge-active' : 'badge-disabled'}">${account.active ? 'ENABLED' : 'DISABLED'}</span></td>
+                        <td><span class="status-badge ${account.locked ? 'badge-locked' : 'badge-active'}">${account.locked ? 'LOCKED' : 'UNLOCKED'}</span></td>
+                    `; 
+                    rosterBody.appendChild(row);
+                }
+            });
+
+            // 3. Populate SOL Dropdown for New User
+            const solSelect = document.getElementById('muNewUserSol');
+            if(solSelect) {
+                solSelect.innerHTML = "<option value=''>-- Select Target SOL --</option>";
+                if (isHQAdmin) {
+                    SYSTEM_OFFICE_REGISTRY.forEach(o => {
+                        let opt = document.createElement('option');
+                        opt.value = o.solId;
+                        opt.innerText = `${o.solId} - ${o.name}`;
+                        solSelect.appendChild(opt);
+                    });
+                } else {
+                    let myOffice = SYSTEM_OFFICE_REGISTRY.find(o => o.solId === activeSolId);
+                    if(myOffice) {
+                        let opt = document.createElement('option');
+                        opt.value = myOffice.solId;
+                        opt.innerText = `${myOffice.solId} - ${myOffice.name} (Locked)`;
+                        opt.selected = true;
+                        solSelect.appendChild(opt);
+                        solSelect.disabled = true; // Local admins can only map to their own SOL
+                    }
+                }
+            }
+
+            // 4. Populate Logs
+            const historyBody = document.getElementById('muLoginHistoryTableBody');
+            if(historyBody) {
+                historyBody.innerHTML = ""; 
+                // Filter logs for Local Admins
+                const visibleLogs = isHQAdmin ? SYSTEM_LOGIN_HISTORY : SYSTEM_LOGIN_HISTORY.filter(l => l.solId === activeSolId);
+                let operationalStack = [...visibleLogs].reverse().slice(0, 15);
+                
+                operationalStack.forEach(log => { 
+                    let r = document.createElement('tr'); 
+                    r.innerHTML = `
+                        <td>${log.time}</td>
+                        <td><code>${log.user}</code></td>
+                        <td><span style="color:${log.event.includes('Success') || log.event.includes('Approved') || log.event.includes('Enrolled') || log.event.includes('Reset') ? '#10b981':'#ef4444'}; font-weight:bold;">${log.event}</span></td>
+                    `; 
+                    historyBody.appendChild(r); 
+                });
+            }
+
+            // 5. Approvals / My Requests Table
+            if (isHQAdmin) {
+                // Pending requests for HQ Admin
+                const pendingOnly = SYSTEM_PENDING_REQUESTS.filter(r => r.status === 'PENDING' && (r.assignedTo === 'ALL' || r.assignedTo === activeUser));
+                document.getElementById('approvalBadge').innerText = pendingOnly.length;
+                
+                const appBody = document.getElementById('approvalsTableBody');
+                appBody.innerHTML = "";
+                if (pendingOnly.length === 0) {
+                    appBody.innerHTML = "<tr><td colspan='4' style='text-align:center; padding: 20px; color: #64748b;'>No pending authorization requests available.</td></tr>";
+                } else {
+                    pendingOnly.forEach(req => {
+                        let initiatorProfile = SYSTEM_USER_REGISTRY.find(u => u.user === req.requestedBy);
+                        let iSol = initiatorProfile ? initiatorProfile.solId : "Unknown";
+                        appBody.innerHTML += `
+                            <tr>
+                                <td>${req.timestamp}</td>
+                                <td><strong>${req.requestedBy}</strong><br/><span style="font-size:11px; color:#64748b;">SOL: ${iSol}</span></td>
+                                <td>${req.desc}</td>
+                                <td><button class="small-action-btn" onclick="viewRequestDetails('${req.id}')">👁️ Audit Details</button></td>
+                            </tr>
+                        `;
+                    });
+                }
+            } else {
+                // Submitted Requests for Local Admin
+                const myRequests = SYSTEM_PENDING_REQUESTS.filter(r => r.requestedBy === activeUser).reverse();
+                const myBody = document.getElementById('myRequestsTableBody');
+                if(myBody) {
+                    myBody.innerHTML = "";
+                    if (myRequests.length === 0) {
+                        myBody.innerHTML = "<tr><td colspan='4' style='text-align:center; padding: 20px; color: #64748b;'>You have not submitted any modification requests yet.</td></tr>";
+                    } else {
+                        myRequests.forEach(req => {
+                            let badgeClass = req.status === 'APPROVED' ? 'badge-active' : (req.status === 'REJECTED' ? 'badge-disabled' : 'badge-pending');
+                            myBody.innerHTML += `
+                                <tr>
+                                    <td>${req.timestamp}</td>
+                                    <td><span style="font-weight:bold; color:#4f46e5;">${req.type.replace('_', ' ')}</span></td>
+                                    <td>${req.desc}</td>
+                                    <td><span class="status-badge ${badgeClass}">${req.status}</span></td>
+                                </tr>
+                            `;
+                        });
+                    }
+                }
+            }
+        }
+
+        function loadUserCurrentCards() {
+            const selectedUser = document.getElementById('muCustomizeSelect').value; 
+            if(!selectedUser) return;
+            const profile = SYSTEM_USER_REGISTRY.find(acc => acc.user === selectedUser); 
+            if(!profile) return;
+            
+            let currentCards = profile.allowedCards || [];
+            const checkboxes = document.querySelectorAll('.card-checkbox');
+            checkboxes.forEach(box => { box.checked = currentCards.includes(box.value); });
+        }
+
+        // ----------------------------------------------------
+        // 8. REQUEST & APPROVAL ENGINE
+        // ----------------------------------------------------
         function createRequest(type, desc, payload) {
             SYSTEM_PENDING_REQUESTS.push({
                 id: Date.now().toString() + Math.random().toString(36).substr(2, 5),
@@ -710,16 +1003,18 @@
                 desc: desc,
                 payload: payload,
                 requestedBy: activeUser,
+                solId: activeSolId,
+                status: 'PENDING',
+                assignedTo: 'ALL',
                 timestamp: new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true })
             });
-            showLoader("Submitting Request...");
+            showLoader("Submitting Request to HQ...");
             saveToCloud().then(() => {
-                displayCustomAlert("Request Submitted Successfully!<br/><br/>It is pending authorization from the Admin Office.", "✅");
+                displayCustomAlert("Request Submitted Successfully!<br/><br/>It is now pending authorization from the HQ Admin.", "✅");
             }).catch(e => displayCustomAlert("Failed to submit request.", "❌"))
             .finally(() => hideLoader());
         }
 
-        // --- APPROVALS & VIEW DETAILS LOGIC ---
         function viewRequestDetails(reqId) {
             currentlyViewingRequest = reqId;
             const req = SYSTEM_PENDING_REQUESTS.find(r => r.id === reqId);
@@ -801,15 +1096,6 @@
                         if(uIdx > -1) SYSTEM_USER_REGISTRY.splice(uIdx, 1);
                         break;
                     }
-                    case 'SEND_MSG': {
-                        let u = SYSTEM_USER_REGISTRY.find(x => x.user === p.user);
-                        if(u) u.pendingMessage = p.msg;
-                        break;
-                    }
-                    case 'UPDATE_NEWS': {
-                        db.collection("system").doc("announcements").set({ tickerText: p.text }, { merge: true });
-                        break;
-                    }
                     case 'ENROLL_2FA': {
                         let u = SYSTEM_USER_REGISTRY.find(x => x.user === p.user);
                         if(u) u.totpSecret = p.secret;
@@ -821,13 +1107,14 @@
                         break;
                     }
                 }
+                req.status = 'APPROVED';
                 logAdminAction(`Approved Request: ${req.desc}`);
             } else {
+                req.status = 'REJECTED';
                 logAdminAction(`Rejected Request: ${req.desc}`);
             }
 
-            SYSTEM_PENDING_REQUESTS.splice(reqIdx, 1);
-            showLoader(action === 'APPROVE' ? "Applying Changes..." : "Discarding Request...");
+            showLoader(action === 'APPROVE' ? "Applying Changes & Notifying..." : "Discarding Request...");
             try {
                 await saveToCloud();
                 displayCustomAlert(`Request ${action === 'APPROVE' ? 'Approved' : 'Rejected'} successfully!`, "✅");
@@ -835,168 +1122,71 @@
             hideLoader();
         }
 
-        // ----------------------------------------------------
-        // 5. CUSTOM SEARCHABLE DROPDOWN LOGIC
-        // ----------------------------------------------------
-        function showCustomSelect(id) {
-            document.getElementById('list_' + id).style.display = 'block';
-        }
-
-        function hideCustomSelects(e) {
-            if (!e.target.closest('.searchable-dropdown-container')) {
-                document.querySelectorAll('.custom-select-list').forEach(l => l.style.display = 'none');
+        // --- REQUEST TRANSFER LOGIC ---
+        function openTransferModal() {
+            const selectEl = document.getElementById('transferAdminSelect');
+            selectEl.innerHTML = "";
+            
+            // Find all other HQ Admins
+            const hqAdmins = SYSTEM_USER_REGISTRY.filter(u => u.solId === "000000" && u.user !== activeUser && u.user !== "admin");
+            
+            if(hqAdmins.length === 0) {
+                displayCustomAlert("No other HQ Admins are currently available to transfer to.", "⚠️");
+                return;
             }
-        }
-        document.addEventListener('click', hideCustomSelects);
 
-        function filterCustomSelect(id) {
-            let input = document.getElementById('searchInput_' + id).value.toLowerCase();
-            let items = document.querySelectorAll('#list_' + id + ' .custom-select-item');
-            let hasVisible = false;
-            
-            items.forEach(item => {
-                let txt = item.innerText.toLowerCase();
-                if (txt.includes(input)) {
-                    item.style.display = 'flex';
-                    hasVisible = true;
-                } else {
-                    item.style.display = 'none';
-                }
-            });
-            
-            let emptyMsg = document.getElementById('empty_' + id);
-            if(emptyMsg) emptyMsg.style.display = hasVisible ? 'none' : 'block';
-        }
-
-        function selectCustomOption(id, value, displayName) {
-            document.getElementById(id).value = value;
-            document.getElementById('searchInput_' + id).value = displayName;
-            document.getElementById('list_' + id).style.display = 'none';
-            // Trigger customized cards load if that specific dropdown is used
-            if(id === 'muCustomizeSelect') loadUserCurrentCards();
-        }
-
-        // ----------------------------------------------------
-        // 6. UI REFRESH (Populating Tables & Custom Dropdowns)
-        // ----------------------------------------------------
-        function refreshUI() {
-            const customDropdownIds = ['muLockSelect', 'muEnableSelect', 'muResetSelect', 'muRoleTargetSelect', 'muDeleteSelect', 'muCustomizeSelect', 'muMessageSelect', 'mu2FASelect', 'muReset2FASelect'];
-            
-            // Clear current list and setup empty state
-            customDropdownIds.forEach(id => { 
-                let listEl = document.getElementById('list_' + id); 
-                if(listEl) {
-                    listEl.innerHTML = `<div class="cs-empty" id="empty_${id}" style="display:none;">No user found</div>`;
-                    document.getElementById('searchInput_' + id).value = ""; // clear searches
-                    document.getElementById(id).value = ""; // clear hidden values
-                }
+            hqAdmins.forEach(u => {
+                let opt = document.createElement('option');
+                opt.value = u.user;
+                opt.innerText = `${u.fullName} (@${u.user})`;
+                selectEl.appendChild(opt);
             });
 
-            const rosterBody = document.getElementById('muUserRosterTableBody'); 
-            if(rosterBody) rosterBody.innerHTML = "";
+            closeRequestDetails();
+            const modal = document.getElementById('transferRequestModal');
+            modal.style.display = 'flex';
+            setTimeout(() => modal.classList.add('active'), 10);
+        }
 
-            SYSTEM_USER_REGISTRY.forEach(account => {
-                let dName = account.fullName || account.user;
-                
-                // Populate Searchable Dropdowns
-                if (!account.user.toLowerCase().startsWith("admin")) {
-                    let displayString = `${dName} (${account.user}) [${account.role.toUpperCase()}]`;
-                    
-                    customDropdownIds.forEach(id => { 
-                        let listEl = document.getElementById('list_' + id); 
-                        if(listEl) { 
-                            let item = document.createElement('div');
-                            item.className = 'custom-select-item';
-                            item.onclick = function() { selectCustomOption(id, account.user, displayString); };
-                            item.innerHTML = `<span class="cs-name">${dName}</span><span class="cs-detail">@${account.user} • ${account.role.toUpperCase()}</span>`;
-                            listEl.appendChild(item);
-                        } 
-                    });
-                }
-                
-                // Populate Registry Table (Including Mapped SOL)
-                if(rosterBody) {
-                    let solDisplay = account.solId ? account.solId : "<span style='color:#ef4444;'>Unmapped</span>";
-                    let row = document.createElement('tr'); 
-                    row.innerHTML = `
-                        <td>${dName}</td>
-                        <td><strong>${account.user}</strong></td>
-                        <td>${solDisplay}</td>
-                        <td><span style="text-transform:uppercase;">${account.role}</span></td>
-                        <td><span class="status-badge ${account.active ? 'badge-active' : 'badge-disabled'}">${account.active ? 'ENABLED' : 'DISABLED'}</span></td>
-                        <td><span class="status-badge ${account.locked ? 'badge-locked' : 'badge-active'}">${account.locked ? 'LOCKED' : 'UNLOCKED'}</span></td>
-                    `; 
-                    rosterBody.appendChild(row);
-                }
-            });
+        function closeTransferModal() {
+            currentlyViewingRequest = null;
+            const modal = document.getElementById('transferRequestModal');
+            modal.classList.remove('active');
+            setTimeout(() => modal.style.display = 'none', 200);
+        }
 
-            // Populate New User SOL Creation Dropdown
-            const solSelect = document.getElementById('muNewUserSol');
-            if(solSelect) {
-                solSelect.innerHTML = "<option value=''>-- Do not Map --</option>";
-                SYSTEM_OFFICE_REGISTRY.forEach(o => {
-                    let opt = document.createElement('option');
-                    opt.value = o.solId;
-                    opt.innerText = `${o.solId} - ${o.name}`;
-                    solSelect.appendChild(opt);
-                });
+        async function executeTransferRequest() {
+            if(!currentlyViewingRequest) return;
+            const targetAdmin = document.getElementById('transferAdminSelect').value;
+            if(!targetAdmin) return;
+
+            const reqIdx = SYSTEM_PENDING_REQUESTS.findIndex(r => r.id === currentlyViewingRequest);
+            if (reqIdx === -1) return;
+
+            SYSTEM_PENDING_REQUESTS[reqIdx].assignedTo = targetAdmin;
+            
+            showLoader("Transferring Request...");
+            try {
+                await saveToCloud();
+                closeTransferModal();
+                displayCustomAlert(`Request has been exclusively transferred to HQ Admin @${targetAdmin}.`, "🔄");
+            } catch(e) {
+                displayCustomAlert("Network Error during transfer.", "❌");
             }
-
-            // Populate Login History
-            const historyBody = document.getElementById('muLoginHistoryTableBody');
-            if(historyBody) {
-                historyBody.innerHTML = ""; 
-                let operationalStack = [...SYSTEM_LOGIN_HISTORY].reverse().slice(0, 8);
-                operationalStack.forEach(log => { 
-                    let r = document.createElement('tr'); 
-                    r.innerHTML = `
-                        <td>${log.time}</td>
-                        <td><code>${log.user}</code></td>
-                        <td><span style="color:${log.event.includes('Success') || log.event.includes('Approved') || log.event.includes('Enrolled') || log.event.includes('Reset') ? '#10b981':'#ef4444'}; font-weight:bold;">${log.event}</span></td>
-                    `; 
-                    historyBody.appendChild(r); 
-                });
-            }
-
-            // Approvals Panel Logic
-            if (canDirectExecute) {
-                document.getElementById('menuCardApprovals').style.display = 'block';
-                document.getElementById('approvalBadge').innerText = SYSTEM_PENDING_REQUESTS.length;
-                
-                const appBody = document.getElementById('approvalsTableBody');
-                appBody.innerHTML = "";
-                if (SYSTEM_PENDING_REQUESTS.length === 0) {
-                    appBody.innerHTML = "<tr><td colspan='4' style='text-align:center;'>No pending requests.</td></tr>";
-                } else {
-                    SYSTEM_PENDING_REQUESTS.forEach(req => {
-                        appBody.innerHTML += `
-                            <tr>
-                                <td>${req.timestamp}</td>
-                                <td><strong>${req.requestedBy}</strong></td>
-                                <td>${req.desc}</td>
-                                <td>
-                                    <button class="small-action-btn" onclick="viewRequestDetails('${req.id}')">👁️ View Details</button>
-                                </td>
-                            </tr>
-                        `;
-                    });
-                }
-            } else {
-                document.getElementById('menuCardApprovals').style.display = 'none';
-            }
+            hideLoader();
         }
 
         // ----------------------------------------------------
-        // 7. CRUD FUNCTIONS WITH HIERARCHY
+        // 9. CRUD ACTIONS
         // ----------------------------------------------------
         async function executeCreateUserAction() {
             const fullNameInput = document.getElementById('muNewFullName').value.trim(); 
             const usernameInput = document.getElementById('muNewUser').value.trim(); 
             const passwordInput = document.getElementById('muNewPass').value.trim(); 
             const selectedRole = document.getElementById('muNewRole').value;
-            const selectedSol = document.getElementById('muNewUserSol').value; // Get Mapped SOL
+            const selectedSol = document.getElementById('muNewUserSol').value;
 
-            if(!fullNameInput || !usernameInput || !passwordInput) { displayCustomAlert("Error: All fields required.", "⚠️"); return; }
+            if(!fullNameInput || !usernameInput || !passwordInput || !selectedSol) { displayCustomAlert("Error: All fields and SOL mapping required.", "⚠️"); return; }
             if(SYSTEM_USER_REGISTRY.some(acc => acc.user.toLowerCase() === usernameInput.toLowerCase())) { displayCustomAlert("Error: Username already exists in the system.", "⚠️"); return; }
 
             let defaultCards = [];
@@ -1008,17 +1198,16 @@
 
             if (canDirectExecute) {
                 SYSTEM_USER_REGISTRY.push(payload);
-                logAdminAction(`Created User: ${usernameInput}`);
+                logAdminAction(`Created User: ${usernameInput} in SOL ${selectedSol}`);
                 showLoader("Saving to Cloud...");
                 try {
                     await saveToCloud();
                     document.getElementById('muNewFullName').value = ""; document.getElementById('muNewUser').value = ""; document.getElementById('muNewPass').value = "";
-                    document.getElementById('muNewUserSol').value = "";
-                    displayCustomAlert(`Account Created Successfully!<br/><br/>Username: ${usernameInput}<br/>Role: ${selectedRole}`, "✅");
+                    displayCustomAlert(`Account Created Successfully!<br/><br/>Username: ${usernameInput}<br/>Mapped SOL: ${selectedSol}`, "✅");
                 } catch(e) { displayCustomAlert("Network Error", "❌"); }
                 hideLoader();
             } else {
-                createRequest('CREATE_USER', `Create User: ${usernameInput} (${selectedRole})`, payload);
+                createRequest('CREATE_USER', `Create User: ${usernameInput} in SOL ${selectedSol}`, payload);
             }
         }
 
@@ -1139,17 +1328,16 @@
             const messageText = document.getElementById('muMessageInput').value.trim();
             if(!selectedUser || !messageText) { displayCustomAlert("Error: Target user and message both required.", "⚠️"); return; }
 
-            if (canDirectExecute) {
-                const profileIndex = SYSTEM_USER_REGISTRY.findIndex(acc => acc.user === selectedUser); 
-                SYSTEM_USER_REGISTRY[profileIndex].pendingMessage = messageText; 
-                document.getElementById('muMessageInput').value = ""; 
-                logAdminAction(`Sent Alert to '${selectedUser}'`);
-                showLoader("Sending Message...");
-                try { await saveToCloud(); displayCustomAlert(`Success: Alert queued.`, "✅"); } catch(e) { displayCustomAlert("Network Error", "❌"); }
-                hideLoader();
-            } else {
-                createRequest('SEND_MSG', `Send Alert Message to '${selectedUser}'`, { user: selectedUser, msg: messageText });
-            }
+            // Local Admins CAN send messages directly, no HQ approval needed for internal messaging
+            const profileIndex = SYSTEM_USER_REGISTRY.findIndex(acc => acc.user === selectedUser); 
+            if(profileIndex === -1) return;
+            
+            SYSTEM_USER_REGISTRY[profileIndex].pendingMessage = messageText; 
+            document.getElementById('muMessageInput').value = ""; 
+            logAdminAction(`Sent Alert to '${selectedUser}'`);
+            showLoader("Sending Message...");
+            try { await saveToCloud(); displayCustomAlert(`Success: Alert queued for next login.`, "✅"); } catch(e) { displayCustomAlert("Network Error", "❌"); }
+            hideLoader();
         }
 
         async function executeUpdateNewsAction() {
@@ -1162,7 +1350,7 @@
                     await db.collection("system").doc("announcements").set({ tickerText: newText }, { merge: true }); 
                     document.getElementById('muNewsInput').value = "";
                     logAdminAction(`Updated Live News`);
-                    displayCustomAlert("Success: Live News Feed updated!", "✅"); 
+                    displayCustomAlert("Success: Live News Feed updated globally!", "✅"); 
                 } catch (error) { displayCustomAlert("Network Error", "❌"); }
                 hideLoader();
             } else {
@@ -1171,7 +1359,7 @@
         }
 
         // ----------------------------------------------------
-        // 8. GOOGLE AUTHENTICATOR (TOTP) SETUP & RESET
+        // 10. GOOGLE AUTHENTICATOR (TOTP) SETUP & RESET
         // ----------------------------------------------------
         function generateBase32Secret(length = 16) {
             const charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
