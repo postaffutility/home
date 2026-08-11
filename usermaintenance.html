@@ -9,19 +9,17 @@
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 
-    <!-- QR CODE GENERATOR LIBRARY FOR 2FA -->
+    <!-- QR CODE & 2FA LIBRARIES -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
     <style>
         /* Minimalist Baseline Setup & Security */
-        body, html { margin: 0 !important; padding: 0 !important; width: 100% !important; height: 100% !important; background-color: #f8fafc !important; font-family: 'Segoe UI', Arial, sans-serif; user-select: none; -webkit-user-select: none; -ms-user-select: none; overflow-x: hidden; }
+        body, html { margin: 0 !important; padding: 0 !important; width: 100% !important; height: 100% !important; background-color: #ffffff !important; font-family: 'Segoe UI', Arial, sans-serif; user-select: none; -webkit-user-select: none; -ms-user-select: none; overflow-x: hidden; }
         input, textarea, select { user-select: text !important; -webkit-user-select: text !important; -ms-user-select: text !important; }
         .standalone-viewport { display: none; position: relative; z-index: 10; width: 100%; min-height: 100vh; padding: 0; box-sizing: border-box; }
         
-        /* EXPANSIVE APP CONTAINER */
-        .app-container { width: 100%; max-width: 1600px; background: transparent; padding: 30px 4vw; margin: 0 auto; border-top: 6px solid #4f46e5; position: relative; }
+        .app-container { max-width: 100%; background: transparent; padding: 30px 4vw; margin: 0; border-top: 6px solid #4f46e5; position: relative; }
         
-        /* --- BEAUTIFUL LIGHT THEME SPLASH SCREEN --- */
         #splashScreen { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #ffffff; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 99999999; color: #1e293b; text-align: center; transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.6s; border-bottom: 8px solid #3b82f6; }
         .splash-content { animation: popIn 1s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
         @keyframes popIn { 0% { opacity: 0; transform: scale(0.9) translateY(20px); } 100% { opacity: 1; transform: scale(1) translateY(0); } }
@@ -32,7 +30,6 @@
         .splash-loader { width: 45px; height: 45px; border: 4px solid #f1f5f9; border-top-color: #3b82f6; border-radius: 50%; animation: spin 1s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite; margin: 40px auto 0 auto; }
         @keyframes spin { 100% { transform: rotate(360deg); } }
 
-        /* EXACT HEADER REPLICA */
         .dashboard-top-nav { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 30px; border-bottom: 2px solid #e2e8f0; padding-bottom: 20px; flex-wrap: wrap; gap: 20px; }
         .header-titles h2 { text-align: left; font-size: 28px; margin-bottom: 5px; color: #0f172a; font-weight: 900; letter-spacing: -0.5px; }
         .header-titles .tagline { text-align: left; font-size: 13.5px; color: #64748b; margin-bottom: 12px; }
@@ -41,25 +38,23 @@
         
         .header-controls { display: flex; flex-direction: column; align-items: flex-end; gap: 15px; }
         .action-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; justify-content: flex-end; }
-        .portal-logout-btn { background: #ffffff; color: #d32f2f; border: 1px solid #ffcdd2; padding: 10px 20px; font-size: 14.5px; font-weight: 800; border-radius: 10px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s ease; box-shadow: 0 4px 10px rgba(211,47,47,0.1); }
-        .portal-logout-btn:hover { background: #d32f2f; color: #ffffff; border-color: #b71c1c; box-shadow: 0 6px 15px rgba(211, 47, 47, 0.2); transform: translateY(-2px); }
+        .portal-logout-btn { background: #ffffff; color: #d32f2f; border: 1px solid #ffcdd2; padding: 8px 16px; font-size: 14px; font-weight: 800; border-radius: 8px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s ease; box-shadow: 0 2px 5px rgba(211,47,47,0.05); }
+        .portal-logout-btn:hover { background: #d32f2f; color: #ffffff; border-color: #b71c1c; box-shadow: 0 4px 12px rgba(211, 47, 47, 0.2); }
 
-        .search-module-input { width: 100%; min-width: 300px; padding: 16px 20px 16px 45px; border: 1px solid #cbd5e1; border-radius: 50px; font-size: 15px; background: #ffffff url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="%2364748b" viewBox="0 0 16 16"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/></svg>') no-repeat 18px center; transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); color: #1e293b; box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
+        .search-module-input { width: 100%; min-width: 280px; padding: 14px 20px 14px 45px; border: 1px solid #cbd5e1; border-radius: 50px; font-size: 15px; background: #f8fafc url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="%2364748b" viewBox="0 0 16 16"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/></svg>') no-repeat 18px center; transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); color: #1e293b; box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
         .search-module-input:focus { border-color: #4f46e5; box-shadow: 0 8px 25px rgba(79, 70, 229, 0.15); background-color: #ffffff; outline: none; transform: translateY(-2px); }
 
-        /* EXACT PAGINATION REPLICA */
         .pagination-container { display: flex; justify-content: center; gap: 8px; margin-top: 35px; }
-        .page-nav-btn { background: #ffffff; border: 1px solid #cbd5e1; color: #334155; padding: 10px 18px; border-radius: 20px; cursor: pointer; font-weight: 800; font-size: 14px; transition: all 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
+        .page-nav-btn { background: #f1f5f9; border: 1px solid #cbd5e1; color: #334155; padding: 8px 16px; border-radius: 20px; cursor: pointer; font-weight: 800; font-size: 14px; transition: all 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
         .page-nav-btn:hover:not(:disabled) { background: #e2e8f0; color: #0f172a; }
         .page-nav-btn.active-page { background: #4f46e5; color: white; border-color: #3730a3; box-shadow: 0 4px 10px rgba(79, 70, 229, 0.2); }
         .page-nav-btn:disabled { opacity: 0.5; cursor: not-allowed; background: #f8fafc; }
 
-        /* EXPANSIVE CARD GRID */
-        .portal-grid-wrapper { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 28px; margin-top: 20px; }
-        .portal-module-card { background: #ffffff; border-radius: 20px; padding: 30px 25px; cursor: pointer; box-shadow: 0 8px 25px rgba(0,0,0,0.04); border: 1px solid #e2e8f0; transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); position: relative; overflow: hidden; display: block; }
-        .portal-module-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 5px; background: #4f46e5; transition: height 0.3s ease; }
-        .portal-module-card:hover { transform: translateY(-8px); box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1); border-color: #cbd5e1; z-index: 10; }
-        .portal-module-card:hover::before { height: 10px; }
+        .portal-grid-wrapper { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 24px; margin-top: 10px; }
+        .portal-module-card { background: #ffffff; border-radius: 16px; padding: 28px 24px; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.03); border: 1px solid #e2e8f0; transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); position: relative; overflow: hidden; display: block; transform-origin: center center; }
+        .portal-module-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: #4f46e5; transition: height 0.3s ease; }
+        .portal-module-card:hover { transform: translateY(-8px); box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08); border-color: #cbd5e1; z-index: 10; }
+        .portal-module-card:hover::before { height: 8px; }
         
         .card-blue-variant::before { background: #3b82f6; } .card-blue-variant .card-icon { background: #dbeafe; }
         .card-green-variant::before { background: #10b981; } .card-green-variant .card-icon { background: #d1fae5; }
@@ -70,110 +65,78 @@
         .card-rose-variant::before { background: #e11d48; } .card-rose-variant .card-icon { background: #ffe4e6; }
         .card-indigo-variant::before { background: #4f46e5; } .card-indigo-variant .card-icon { background: #e0e7ff; }
         
-        .card-icon { font-size: 32px; margin-bottom: 20px; display: inline-flex; align-items: center; justify-content: center; width: 64px; height: 64px; border-radius: 16px; transition: transform 0.3s ease; }
-        .portal-module-card:hover .card-icon { transform: scale(1.15) rotate(-5deg); }
-        .portal-module-card h3 { margin: 0 0 12px 0; font-size: 19px; font-weight: 800; color: #1e293b; letter-spacing: -0.3px;}
-        .portal-module-card p { margin: 0; font-size: 14.5px; color: #64748b; line-height: 1.6; }
+        .card-icon { font-size: 28px; margin-bottom: 18px; display: inline-flex; align-items: center; justify-content: center; width: 56px; height: 56px; border-radius: 14px; transition: transform 0.3s ease; }
+        .portal-module-card:hover .card-icon { transform: scale(1.1); }
+        .portal-module-card h3 { margin: 0 0 10px 0; font-size: 18px; font-weight: 800; color: #1e293b; letter-spacing: -0.3px;}
+        .portal-module-card p { margin: 0; font-size: 13.5px; color: #64748b; line-height: 1.6; }
 
-        /* FORM ELEMENTS & PANELS */
         .form-group { margin-bottom: 22px; }
         label { display: block; font-weight: 700; margin-bottom: 8px; font-size: 14.5px; color: #334155; }
-        input[type="text"], input[type="password"], input[type="number"], select, textarea { width: 100%; padding: 15px 18px; box-sizing: border-box; border: 1px solid #cbd5e1; border-radius: 12px; font-size: 15px; background: #f8fafc; color: #1e293b !important; transition: all 0.3s ease; box-shadow: inset 0 1px 3px rgba(0,0,0,0.02); }
+        input[type="text"], input[type="password"], input[type="number"], select, textarea { width: 100%; padding: 15px 18px; box-sizing: border-box; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 15px; background: #f8fafc; color: #1e293b !important; transition: all 0.3s ease; box-shadow: inset 0 1px 3px rgba(0,0,0,0.02); }
         input[type="text"]:focus, input[type="password"]:focus, input[type="number"]:focus, select:focus, textarea:focus { border-color: #4f46e5; background: #ffffff; box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.15); outline: none; transform: translateY(-1px); }
         .flex-row { display: flex; gap: 20px; flex-wrap: wrap; }
         .flex-row > div { flex: 1; }
 
-        /* SEARCHABLE DROPDOWN */
         .searchable-dropdown-container { position: relative; width: 100%; }
         .searchable-dropdown-container input[type="text"] { background: #ffffff url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="%2364748b" viewBox="0 0 16 16"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/></svg>') no-repeat 16px center; padding-left: 45px; cursor: text; }
-        .custom-select-list { display: none; position: absolute; top: 100%; left: 0; width: 100%; max-height: 280px; overflow-y: auto; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 12px; box-shadow: 0 15px 40px rgba(0,0,0,0.15); z-index: 1000; margin-top: 8px; scrollbar-width: thin; }
+        .custom-select-list { display: none; position: absolute; top: 100%; left: 0; width: 100%; max-height: 280px; overflow-y: auto; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 10px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); z-index: 1000; margin-top: 8px; scrollbar-width: thin; }
         .custom-select-item { padding: 14px 18px; cursor: pointer; border-bottom: 1px solid #f1f5f9; display: flex; flex-direction: column; transition: background 0.2s; }
         .custom-select-item:hover { background: #f8fafc; padding-left: 22px; border-left: 4px solid #4f46e5; }
         .cs-name { font-weight: 800; color: #0f172a; font-size: 15px; }
         .cs-detail { font-size: 12.5px; color: #64748b; margin-top: 3px; }
-        
-        .portal-page-panel { display: none; animation: slideInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; max-width: 1300px; margin: 0 auto; background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; }
+
+        .portal-page-panel { display: none; animation: slideInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; max-width: 1200px; margin: 0 auto; background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; }
         @keyframes slideInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
         
         .sub-action-card { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 30px; margin-bottom: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.02);}
         .sub-action-card h4 { margin: 0 0 20px 0; color: #0f172a; font-size: 18px; font-weight: 800; border-bottom: 2px solid #f1f5f9; padding-bottom: 12px; }
-        
-        /* BEAUTIFUL LOGS TABLE */
-        .system-log-table { width: 100%; border-collapse: separate; border-spacing: 0; margin-top: 15px; font-size: 14px; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden; }
-        .system-log-table th, .system-log-table td { padding: 16px 20px; text-align: left; color: #334155 !important; vertical-align: middle; border-bottom: 1px solid #e2e8f0; }
-        .system-log-table th { background: #f8fafc; font-weight: 800; color: #0f172a; text-transform: uppercase; font-size: 12.5px; letter-spacing: 0.5px;}
-        .system-log-table tr { transition: background 0.2s; }
-        .system-log-table tr:hover { background: #f1f5f9; }
-        
-        /* EXECUTABLE USER ROW */
-        .executable-row { cursor: pointer; }
-        .executable-row:hover td { background: #eff6ff !important; }
-        .executable-row td:first-child { border-left: 4px solid transparent; transition: border-color 0.2s; }
-        .executable-row:hover td:first-child { border-left-color: #3b82f6; }
 
-        .back-nav-link { display: inline-flex; align-items: center; color: #3b82f6; font-weight: 800; font-size: 14.5px; text-decoration: none; margin-bottom: 25px; cursor: pointer; transition: all 0.2s; padding: 10px 20px; background: #eff6ff; border-radius: 25px;}
-        .back-nav-link:hover { color: #1d4ed8; background: #dbeafe; transform: translateX(-4px);} 
+        /* EXECUTABLE LOGS TABLE DESIGN */
+        .system-log-table { width: 100%; border-collapse: separate; border-spacing: 0; margin-top: 15px; font-size: 13.5px; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.02); }
+        .system-log-table th, .system-log-table td { padding: 15px; text-align: left; color: #334155 !important; vertical-align: middle; border-bottom: 1px solid #e2e8f0; transition: background 0.2s; }
+        .system-log-table th { background: #f8fafc; font-weight: 800; color: #0f172a; text-transform: uppercase; font-size: 12px; letter-spacing: 0.5px;}
+        .clickable-row { cursor: pointer; }
+        .clickable-row:hover td { background: #eff6ff; }
         
-        button.action-btn { width: 100%; padding: 18px; background: #4f46e5; color: white; border: none; border-radius: 12px; font-size: 15.5px; font-weight: 900; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; margin-top: 15px; box-shadow: 0 10px 20px rgba(79, 70, 229, 0.25); transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .status-badge { padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 800; color: #fff; letter-spacing: 0.5px; }
+        .badge-active { background: #10b981; } .badge-disabled { background: #ef4444; } .badge-locked { background: #f59e0b; } .badge-pending { background: #8b5cf6; }
+
+        .back-nav-link { display: inline-flex; align-items: center; color: #3b82f6; font-weight: 800; font-size: 14px; text-decoration: none; margin-bottom: 20px; cursor: pointer; transition: all 0.2s; padding: 10px 18px; background: #f1f5f9; border-radius: 20px;}
+        .back-nav-link:hover { color: #1d4ed8; background: #e2e8f0; transform: translateX(-3px);} 
+
+        button.action-btn { width: 100%; padding: 18px; background: #4f46e5; color: white; border: none; border-radius: 10px; font-size: 15.5px; font-weight: 900; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; margin-top: 15px; box-shadow: 0 10px 20px rgba(79, 70, 229, 0.25); transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         button.action-btn:hover { background: #3730a3; transform: translateY(-3px); box-shadow: 0 15px 25px rgba(79, 70, 229, 0.35); }
-        button.panel-sub-submit { padding: 16px 20px; font-size: 15.5px; margin-top: 25px; box-shadow: none; width: 100%; text-transform: none; border-radius: 12px; color: white; border: none; font-weight: 800; cursor: pointer; }
-        button.panel-sub-submit:hover { filter: brightness(85%); transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.15); }
-        button.small-action-btn { background:#3b82f6; color:white; border:none; padding:10px 18px; border-radius:8px; font-size:13px; font-weight:bold; cursor:pointer; transition:0.2s; box-shadow: 0 2px 8px rgba(59,130,246,0.3);}
-        button.small-action-btn:hover { background:#2563eb; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(59,130,246,0.4); }
+        button.panel-sub-submit { padding: 16px 20px; font-size: 15px; margin-top: 25px; box-shadow: none; width: 100%; text-transform: none; border-radius: 10px; color: white; border: none; font-weight: 800; cursor: pointer; }
+        button.panel-sub-submit:hover { filter: brightness(85%); transform: translateY(-2px); }
+        button.small-action-btn { background:#3b82f6; color:white; border:none; padding:8px 16px; border-radius:6px; font-size:12.5px; font-weight:bold; cursor:pointer; margin-right:5px; transition:0.2s; box-shadow: 0 2px 5px rgba(59,130,246,0.3);}
+        button.small-action-btn:hover { background:#2563eb; transform: translateY(-1px); }
 
-        /* --- INDEX.HTML STYLE SMART ALERT MODALS --- */
-        #alert-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.6); z-index: 99999999; display: none; align-items: center; justify-content: center; backdrop-filter: blur(5px); opacity: 0; transition: opacity 0.3s ease; }
-        .alert-show { display: flex !important; opacity: 1 !important; }
-        
-        .custom-modal-box { background: #ffffff; padding: 40px; border-radius: 24px; width: 90%; max-width: 440px; text-align: center; box-shadow: 0 25px 50px rgba(0,0,0,0.2); transform: scale(0.9); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); border-top: 6px solid #3b82f6; }
-        .alert-show .custom-modal-box { transform: scale(1); }
-        
-        .modal-icon { font-size: 60px; margin-bottom: 15px; animation: floatIcon 3s ease-in-out infinite; }
-        .modal-title { font-size: 22px; font-weight: 900; color: #0f172a; margin: 0 0 12px 0; letter-spacing: -0.5px;}
-        .modal-text { font-size: 15px; color: #475569; margin: 0 0 30px 0; line-height: 1.6; font-weight: 600; white-space: pre-line;}
-        
-        .modal-buttons { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;}
-        .modal-btn { padding: 15px 25px; border-radius: 12px; font-weight: 800; font-size: 14.5px; border: none; cursor: pointer; flex: 1; transition: all 0.2s; text-transform: uppercase; letter-spacing: 0.5px; }
-        .modal-btn-cancel { background: #f1f5f9; color: #64748b; }
-        .modal-btn-cancel:hover { background: #e2e8f0; color: #1e293b; transform: translateY(-2px);}
-        .modal-btn-review { background: #3b82f6; color: #ffffff; box-shadow: 0 4px 12px rgba(59,130,246,0.3); }
-        .modal-btn-review:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(59,130,246,0.4); }
+        /* EXACT INDEX.HTML POPUP STYLES */
+        .custom-popup-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(6px); z-index: 20000000; display: none; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.2s ease-in-out; }
+        .custom-popup-card { background: #ffffff; width: 90%; max-width: 420px; padding: 35px; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.2); text-align: center; box-sizing: border-box; border-top: 6px solid #d32f2f; transform: scale(0.95); transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .custom-popup-overlay.active { display: flex; opacity: 1; }
+        .custom-popup-overlay.active .custom-popup-card { transform: scale(1); }
+        .popup-icon-alert { font-size: 48px; margin-bottom: 15px; }
+        .popup-message-text { color: #334155; font-size: 15px; line-height: 1.6; margin: 0 0 25px 0; font-weight: 600; white-space: pre-line; }
+        .popup-close-btn { background: #0f172a; color: white; padding: 12px 28px; border: none; border-radius: 8px; font-size: 13.5px; font-weight: 800; cursor: pointer; text-transform: uppercase; letter-spacing: 0.5px; transition: background 0.2s; width: 100%;}
+        .popup-close-btn:hover { background: #334155; }
 
-        /* USER PROFILE EXECUTABLE MODAL */
-        #profile-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.6); z-index: 80000000; display: none; align-items: center; justify-content: center; backdrop-filter: blur(5px); opacity: 0; transition: opacity 0.3s ease; }
-        .profile-show { display: flex !important; opacity: 1 !important; }
-        
-        .profile-card { background: #ffffff; padding: 0; border-radius: 24px; width: 90%; max-width: 480px; text-align: left; box-shadow: 0 25px 50px rgba(0,0,0,0.2); transform: scale(0.9); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); overflow: hidden;}
-        .profile-show .profile-card { transform: scale(1); }
-        
-        .profile-header { background: linear-gradient(135deg, #4f46e5, #3b82f6); padding: 30px; text-align: center; color: white; position: relative;}
-        .profile-avatar { font-size: 65px; background: rgba(255,255,255,0.2); width: 100px; height: 100px; display: inline-flex; justify-content: center; align-items: center; border-radius: 50%; border: 4px solid #ffffff; box-shadow: 0 10px 20px rgba(0,0,0,0.15); margin-bottom: 10px;}
-        .profile-name { font-size: 24px; font-weight: 900; margin: 0; letter-spacing: -0.5px;}
-        .profile-username { font-size: 14.5px; opacity: 0.9; font-weight: 600; margin-top: 5px; font-family: monospace; letter-spacing: 1px;}
-        
-        .profile-body { padding: 30px; }
-        .profile-stat-row { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; border-bottom: 1px dashed #e2e8f0; }
-        .profile-stat-row:last-child { border-bottom: none; }
-        .profile-stat-label { color: #64748b; font-weight: 700; font-size: 14px; }
-        .profile-stat-val { color: #0f172a; font-weight: 800; font-size: 14.5px; text-align: right;}
-        
-        /* OVERRIDE FOR REQUEST DETAILS (Now using the sleek modal) */
-        .request-detail-box { text-align: left; background: #f8fafc; border: 1px solid #e2e8f0; padding: 25px; border-radius: 16px; font-size: 14.5px; margin-bottom: 25px; max-height: 400px; overflow-y: auto; scrollbar-width: thin; }
-        .request-detail-row { padding: 12px 0; border-bottom: 1px dashed #cbd5e1; display: flex; justify-content: space-between; align-items: flex-start; gap: 15px;}
-        .request-detail-row:last-child { border-bottom: none; }
+        .request-detail-box { text-align: left; background: #f8fafc; border: 1px solid #e2e8f0; padding: 20px; border-radius: 12px; font-size: 14.5px; margin-bottom: 25px; max-height: 350px; overflow-y: auto; scrollbar-width: thin; }
+        .request-detail-row { padding: 10px 0; border-bottom: 1px dashed #cbd5e1; display: flex; justify-content: space-between; align-items: flex-start; gap: 15px;}
         .req-key { font-weight: 800; color: #475569; width: 40%; flex-shrink: 0; }
-        .req-val { color: #0f172a; font-family: monospace; font-size: 14px; background: #e2e8f0; padding: 6px 10px; border-radius: 8px; word-break: break-all; }
+        .req-val { color: #0f172a; font-family: monospace; font-size: 14px; background: #e2e8f0; padding: 4px 8px; border-radius: 6px; word-break: break-all; }
 
-        .processing-loader-container { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); z-index: 90000000; display: none; flex-direction: column; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.3s ease;}
-        .processing-loader-container.active { opacity: 1; }
-        .app-loading-spinner { width: 60px; height: 60px; border: 4px solid #e2e8f0; border-top-color: #4f46e5; border-right-color: #4f46e5; border-radius: 50%; animation: spinSystem 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite; margin-bottom: 25px; box-shadow: 0 0 20px rgba(79, 70, 229, 0.2); }
-        .loading-status-msg { font-size: 17px; font-weight: 800; color: #0f172a; letter-spacing: 0.5px; background: white; padding: 12px 25px; border-radius: 25px; box-shadow: 0 10px 25px rgba(0,0,0,0.08); }
-        
-        .status-badge { padding: 6px 12px; border-radius: 20px; font-size: 11px; font-weight: 900; color: #fff; letter-spacing: 0.5px; text-transform: uppercase; box-shadow: 0 2px 5px rgba(0,0,0,0.1); display: inline-block; text-align: center;}
-        .badge-active { background: #10b981; } .badge-disabled { background: #ef4444; } .badge-locked { background: #f59e0b; } .badge-pending { background: #3b82f6; }
+        .processing-loader-container { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(5px); z-index: 30000000; display: none; flex-direction: column; justify-content: center; align-items: center; }
+        .app-loading-spinner { width: 45px; height: 45px; border: 4px solid #f1f5f9; border-top: 4px solid #d32f2f; border-radius: 50%; animation: spinSystem 0.8s linear infinite; margin-bottom: 20px; }
+        .loading-status-msg { font-size: 15px; font-weight: 800; color: #0f172a; letter-spacing: 0.5px; }
+        @keyframes spinSystem { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        /* USER PROFILE MODAL INFO */
+        .profile-info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; text-align: left; margin-bottom: 20px; background: #f8fafc; padding: 15px; border-radius: 12px; border: 1px solid #e2e8f0;}
+        .profile-info-label { font-size: 12px; color: #64748b; font-weight: bold; text-transform: uppercase;}
+        .profile-info-val { font-size: 15px; color: #0f172a; font-weight: bold;}
     </style>
 
-    <!-- ANTI-INSPECT SHIELD -->
     <script>
         document.addEventListener('contextmenu', event => event.preventDefault());
         document.onkeydown = function(e) {
@@ -186,8 +149,6 @@
 </head>
 <body>
 
-    <div class="top-branding-bar"></div>
-
     <div id="splashScreen">
         <div class="splash-content">
             <div class="splash-icon">👥</div>
@@ -196,11 +157,11 @@
             <div class="splash-loader"></div>
         </div>
     </div>
-	<!-- MAIN DASHBOARD -->
+
+    <!-- MAIN DASHBOARD -->
     <div class='standalone-viewport' id='appDashboardView' style="display: block;">
         <div class='app-container'>
             
-            <!-- HEADER REPLICA OF INDEX.HTML -->
             <div id='mainDashboardHead'>
                 <div class='dashboard-top-nav'>
                     <div class='header-titles'>
@@ -219,9 +180,15 @@
                     </div>
                 </div>
                 
-                <!-- ALL CARDS WITH IDs FOR JS FILTERING -->
                 <div class='portal-grid-wrapper' id='userModuleGrid'>
-                    <!-- HQ ADMIN / MASTER ADMIN ONLY CARDS -->
+                    <!-- MASTER ADMIN ONLY -->
+                    <div class='portal-module-card card-purple-variant' id='cardTransferStatus' onclick='navigateToSubPanel("subTransferStatus")' style='display:none;'>
+                        <div class='card-icon'>👑</div>
+                        <h3 style="color: #8b5cf6;">Transfer Assignment Status</h3>
+                        <p>Master View: Oversee all routed cases, check HQ Admin assignments, and forcefully revoke, approve or reject them.</p>
+                    </div>
+
+                    <!-- HQ ADMIN ONLY CARDS -->
                     <div class='portal-module-card card-rose-variant' id='cardApprovals' onclick='navigateToSubPanel("panelApprovals")'>
                         <div class='card-icon'>🛡️</div>
                         <h3 style="color: #e11d48;">Pending Approvals <span id="approvalBadge" style="background:#e11d48; color:white; padding:2px 8px; border-radius:12px; font-size:12px; vertical-align:middle; margin-left:5px;">0</span></h3>
@@ -230,88 +197,108 @@
 
                     <div class='portal-module-card card-green-variant' id='cardUpdateNews' onclick='navigateToSubPanel("subUpdateNews")'>
                         <div class='card-icon'>📢</div>
-                        <h3>Broadcast Live News</h3>
+                        <h3 style="color: #10b981;">Broadcast Live News</h3>
                         <p>Update the scrolling marquee text visible to all users at the top of the portal.</p>
                     </div>
 
                     <!-- LOCAL ADMIN ONLY CARD -->
                     <div class='portal-module-card card-teal-variant' id='cardMyRequests' onclick='navigateToSubPanel("panelMyRequests")'>
                         <div class='card-icon'>📨</div>
-                        <h3>View Submitted Requests</h3>
-                        <p>Track the status of modification requests you have submitted to HQ today.</p>
+                        <h3 style="color: #14b8a6;">View Submitted Requests</h3>
+                        <p>Track the status of modification requests you have submitted. (Shows recent 10 requests).</p>
                     </div>
 
                     <!-- UNIVERSAL CARDS -->
                     <div class='portal-module-card card-blue-variant' id='cardCreateUser' onclick='navigateToSubPanel("subCreateUser")'>
                         <div class='card-icon'>👤</div>
-                        <h3>Create New User</h3>
+                        <h3 style="color: #3b82f6;">Create New User</h3>
                         <p>Register a new system user profile and assign their operational role and mapped SOL.</p>
                     </div>
 
-                    <!-- 2FA SETUP: HQ ADMIN ONLY NOW (Handled via JS) -->
                     <div class='portal-module-card card-teal-variant' id='card2FASetup' onclick='navigateToSubPanel("sub2FASetup")'>
                         <div class='card-icon'>📱</div>
-                        <h3>Authenticator 2FA Setup</h3>
+                        <h3 style="color: #14b8a6;">Authenticator 2FA Setup</h3>
                         <p>Generate Google Authenticator QR codes to enroll users in high-security 2FA login.</p>
                     </div>
                     
                     <div class='portal-module-card card-rose-variant' id='cardReset2FA' onclick='navigateToSubPanel("subReset2FA")'>
                         <div class='card-icon'>🔓</div>
-                        <h3>Reset User 2FA</h3>
+                        <h3 style="color: #e11d48;">Reset User 2FA</h3>
                         <p>Clear a user's Two-Factor Authentication secret so they can re-enroll a new device.</p>
                     </div>
 
                     <div class='portal-module-card card-orange-variant' id='cardLockUnlock' onclick='navigateToSubPanel("subLockUnlock")'>
                         <div class='card-icon'>🗝️</div>
-                        <h3>Lock / Unlock User</h3>
+                        <h3 style="color: #f59e0b;">Lock / Unlock User</h3>
                         <p>Temporarily lock or unlock an existing user account for security reasons.</p>
                     </div>
 
                     <div class='portal-module-card card-green-variant' id='cardEnableDisable' onclick='navigateToSubPanel("subEnableDisable")'>
                         <div class='card-icon'>✅</div>
-                        <h3>Enable / Disable User</h3>
+                        <h3 style="color: #10b981;">Enable / Disable User</h3>
                         <p>Completely disable or re-enable an existing user's portal access.</p>
                     </div>
 
                     <div class='portal-module-card card-dark-variant' id='cardResetPass' onclick='navigateToSubPanel("subResetPass")'>
                         <div class='card-icon'>🔄</div>
-                        <h3>Reset Passcode</h3>
+                        <h3 style="color: #475569;">Reset Passcode</h3>
                         <p>Change the login passcode for an existing system user to a default value.</p>
                     </div>
 
                     <div class='portal-module-card card-purple-variant' id='cardChangeRole' onclick='navigateToSubPanel("subChangeRole")'>
                         <div class='card-icon'>🛡️</div>
-                        <h3>Change User Role</h3>
+                        <h3 style="color: #8b5cf6;">Change User Role</h3>
                         <p>Elevate a user to Admin or restrict them down to Maker.</p>
                     </div>
 
                     <div class='portal-module-card card-teal-variant' id='cardCustomizeCards' onclick='navigateToSubPanel("subCustomizeCards")'>
                         <div class='card-icon'>🎛️</div>
-                        <h3>Customize User Cards</h3>
+                        <h3 style="color: #14b8a6;">Customize User Cards</h3>
                         <p>Add or remove specific dashboard modules for individual users.</p>
                     </div>
 
                     <div class='portal-module-card card-rose-variant' id='cardDeleteUser' onclick='navigateToSubPanel("subDeleteUser")'>
                         <div class='card-icon'>🗑️</div>
-                        <h3>Delete User</h3>
+                        <h3 style="color: #e11d48;">Delete User</h3>
                         <p>Permanently remove a user profile from the entire system database.</p>
                     </div>
 
                     <div class='portal-module-card card-orange-variant' id='cardDirectMessage' onclick='navigateToSubPanel("subDirectMessage")'>
                         <div class='card-icon'>✉️</div>
-                        <h3>Send Direct Message</h3>
+                        <h3 style="color: #f59e0b;">Send Direct Message</h3>
                         <p>Send a personalized, self-destructing alert message to a specific staff member.</p>
                     </div>
 
                     <div class='portal-module-card card-indigo-variant' id='cardUserLogs' onclick='navigateToSubPanel("subUserLogs")'>
                         <div class='card-icon'>📊</div>
-                        <h3 id="logsCardTitle">User Status & Login Logs</h3>
+                        <h3 id="logsCardTitle" style="color: #4f46e5;">User Status & Login Logs</h3>
                         <p id="logsCardDesc">View current account registry status, mapped offices, and recent login connection attempts.</p>
                     </div>
                 </div>
                 
-                <!-- EXACT PAGINATION REPLICA -->
                 <div class='pagination-container' id='maintPagination'></div>
+            </div>
+			<!-- ============================================== -->
+            <!-- MASTER ADMIN: TRANSFER STATUS PANEL            -->
+            <!-- ============================================== -->
+            <div class='portal-page-panel' id='subTransferStatus'>
+                <div class='back-nav-link' onclick='returnToMainDashboard()'>⬅️ Back to Hub</div>
+                <h3 style="margin-top:0; color:#1e293b; font-size:24px;">Transfer Assignment Status</h3>
+                <div class='sub-action-card' style="border-top: 4px solid #8b5cf6; overflow-x: auto;">
+                    <p style="color: #64748b; font-size: 14.5px; margin-top: -10px;">Monitor cases assigned to specific HQ Admins. You hold override capability.</p>
+                    <table class='system-log-table' style="min-width: 800px;">
+                        <thead>
+                            <tr>
+                                <th>Date & Time</th>
+                                <th>Initiator</th>
+                                <th>Description</th>
+                                <th>Assigned To</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id='transferStatusTableBody'></tbody>
+                    </table>
+                </div>
             </div>
 
             <!-- ============================================== -->
@@ -340,7 +327,7 @@
             <!-- ============================================== -->
             <div class='portal-page-panel' id='panelMyRequests'>
                 <div class='back-nav-link' onclick='returnToMainDashboard()'>⬅️ Back to Hub</div>
-                <h3 style="margin-top:0; color:#1e293b; font-size:24px;">My Submitted Requests (Last 24 Hrs)</h3>
+                <h3 style="margin-top:0; color:#1e293b; font-size:24px;">My Submitted Requests (Recent)</h3>
                 <div class='sub-action-card' style="border-top: 4px solid #14b8a6; overflow-x: auto;">
                     <table class='system-log-table' style="min-width: 700px;">
                         <thead>
@@ -583,21 +570,22 @@
                 </div>
             </div>
 
-            <!-- MODULE: USER LOGS (EXECUTABLE PROFILES) -->
+            <!-- MODULE: USER LOGS -->
             <div class='portal-page-panel' id='subUserLogs'>
                 <div class='back-nav-link' onclick='returnToMainDashboard()'>⬅️ Back to Hub</div>
                 <h3 style="margin-top:0; color:#1e293b; font-size:24px;" id="logsPanelHeader">User Status & Login Logs</h3>
-                <p style="color:#64748b; margin-top:-15px; margin-bottom:20px;">* Click on any user row to view their executable profile details.</p>
                 
                 <div class='sub-action-card' style='margin-bottom:25px; border-top: 4px solid #4f46e5; overflow-x: auto;'>
                     <h4 style="font-size: 18px;">Registered System Account Registry</h4>
+                    <p style="font-size:13px; color:#64748b; margin-top:-10px;">Click on any row to view full executable profile details.</p>
                     <table class='system-log-table' style="min-width: 800px;">
-                        <thead><tr><th>Full Name</th><th>Username</th><th>Mapped Office (SOL)</th><th>Account Role</th><th>Security State</th></tr></thead>
+                        <thead><tr><th>Full Name</th><th>Username</th><th>Mapped Office (SOL)</th><th>Account Role</th><th>Permission</th><th>Security State</th></tr></thead>
                         <tbody id='muUserRosterTableBody'></tbody>
                     </table>
                 </div>
+                
                 <div class='sub-action-card' style="border-top: 4px solid #4f46e5; overflow-x: auto;">
-                    <h4 style="font-size: 18px;">Live Portal Connection Access History (Last 10 Logs)</h4>
+                    <h4 style="font-size: 18px;">Live Portal Connection Access History (Recent)</h4>
                     <table class='system-log-table' style="min-width: 600px;">
                         <thead><tr><th>Timestamp Ledger Entry</th><th>Connecting User</th><th>Security Event Status</th></tr></thead>
                         <tbody id='muLoginHistoryTableBody'></tbody>
@@ -606,62 +594,59 @@
             </div>
 
         </div>
-    </div> <!-- END OF APP CONTAINER AND STANDALONE VIEWPORT -->
+    </div> 
 
-    <!-- SMART ALERT MODAL (INDEX.HTML STYLE) -->
-    <div class='custom-popup-overlay' id='customAppAlertModal'>
-        <div class='custom-popup-card' id='customAppAlertBox'>
-            <div class='modal-icon' id='popupAlertIcon'>🔔</div>
-            <h3 class='modal-title' id='popupAlertTitle'>System Notice</h3>
-            <p class='modal-text' id='customAlertMsgField'>Security Validation Notice</p>
-            <div class='modal-buttons'>
-                <button class='modal-btn modal-btn-review' onclick='closeCustomAlert()' style="width: 100%;">Acknowledge</button>
-            </div>
+    <!-- EXACT INDEX.HTML ALERT MODAL -->
+    <div class='custom-popup-overlay' id='customAppAlertModal' style="z-index: 60000000;">
+        <div class='custom-popup-card'>
+            <div class='popup-icon-alert' id='popupAlertIcon'>🔔</div>
+            <p class='popup-message-text' id='customAlertMsgField'>Notice</p>
+            <button class='popup-close-btn' onclick='closeCustomAlert()'>Continue</button>
         </div>
     </div>
 
-    <!-- EXECUTABLE USER PROFILE MODAL -->
-    <div class='custom-popup-overlay' id='profile-modal-overlay'>
-        <div class='profile-card' id='profile-modal-box'>
-            <div class='profile-header'>
-                <div class='profile-avatar' id="profileModalAvatar">👤</div>
-                <h3 class='profile-name' id="profileModalName">Name</h3>
-                <div class='profile-username' id="profileModalUser">@username</div>
-                <button onclick="closeUserProfile()" style="position:absolute; top:15px; right:15px; background:rgba(255,255,255,0.2); border:none; color:white; width:35px; height:35px; border-radius:50%; font-size:16px; cursor:pointer; transition: 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.4)'" onmouseout="this.style.background='rgba(255,255,255,0.2)'">❌</button>
-            </div>
-            <div class='profile-body'>
-                <div class='profile-stat-row'><span class='profile-stat-label'>Mapped Office (SOL)</span><span class='profile-stat-val' id="profileModalSol">799120</span></div>
-                <div class='profile-stat-row'><span class='profile-stat-label'>Access Role</span><span class='profile-stat-val' id="profileModalRole" style="text-transform:uppercase;">Admin</span></div>
-                <div class='profile-stat-row'><span class='profile-stat-label'>Account Status</span><span class='profile-stat-val' id="profileModalStatus">Active</span></div>
-                <div class='profile-stat-row'><span class='profile-stat-label'>Security Lock</span><span class='profile-stat-val' id="profileModalLock">Unlocked</span></div>
-                <div class='profile-stat-row'><span class='profile-stat-label'>Failed Attempts</span><span class='profile-stat-val' id="profileModalAttempts" style="color:#ef4444;">0</span></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- VIEW REQUEST DETAILS MODAL (HQ ADMIN & MASTER ADMIN) -->
-    <div class='custom-popup-overlay' id='requestDetailsModal'>
-        <div class='custom-popup-card' style="max-width: 550px; border-top: 6px solid #4f46e5; text-align: left;" id="requestDetailsBox">
-            <h3 class="modal-title" style="margin-bottom: 20px;">Request Audit Details</h3>
-            <div id="requestDetailsContent" class="request-detail-box"></div>
+    <!-- NEW USER PROFILE MODAL -->
+    <div class='custom-popup-overlay' id='userProfileModal' style="z-index: 55000000;">
+        <div class='custom-popup-card' style="max-width: 480px; border-top: 6px solid #3b82f6;">
+            <div style="width: 70px; height: 70px; background: #dbeafe; border-radius: 50%; display: flex; justify-content: center; align-items: center; margin: 0 auto 15px auto; font-size: 32px;">👤</div>
+            <h3 style="margin-top:0; color:#1e293b; font-size: 22px; margin-bottom: 5px;" id="profileModalName">Name</h3>
+            <p style="color: #64748b; font-size: 14px; margin-top:0; margin-bottom: 20px;">@<span id="profileModalUser">username</span></p>
             
-            <!-- Dynamic Action Buttons handled by JavaScript -->
+            <div class="profile-info-grid">
+                <div><div class="profile-info-label">SOL ID</div><div class="profile-info-val" id="profileModalSol">000000</div></div>
+                <div><div class="profile-info-label">Role</div><div class="profile-info-val" id="profileModalRole" style="text-transform: uppercase;">Maker</div></div>
+                <div><div class="profile-info-label">Status</div><div class="profile-info-val" id="profileModalActive">Enabled</div></div>
+                <div><div class="profile-info-label">Security</div><div class="profile-info-val" id="profileModalLock">Unlocked</div></div>
+            </div>
+            
+            <div style="text-align: center; font-size: 13px; color: #64748b; margin-bottom: 20px;">
+                <strong>Last Login: </strong><span id="profileModalLastLogin">Never</span>
+            </div>
+            
+            <button class='popup-close-btn' onclick='closeUserProfileModal()' style='background:#3b82f6;'>Close Profile</button>
+        </div>
+    </div>
+
+    <!-- VIEW REQUEST DETAILS MODAL -->
+    <div class='custom-popup-overlay' id='requestDetailsModal' style="z-index: 50000000;">
+        <div class='custom-popup-card' style="max-width: 550px; border-top: 6px solid #4f46e5;">
+            <h3 style="margin-top:0; color:#1e3a8a; text-align:left; font-size: 22px;">Request Audit Details</h3>
+            <div id="requestDetailsContent" class="request-detail-box"></div>
             <div id="requestModalActionButtons" style="display:flex; gap:12px; flex-wrap: wrap;"></div>
         </div>
     </div>
 
-    <!-- TRANSFER REQUEST MODAL (HQ ADMIN ONLY) -->
-    <div class='custom-popup-overlay' id='transferRequestModal'>
-        <div class='custom-popup-card' style="max-width: 450px; border-top: 6px solid #f59e0b;" id="transferRequestBox">
-            <div class='modal-icon'>🔄</div>
-            <h3 class='modal-title'>Transfer Request</h3>
-            <p class='modal-text'>Select another HQ Admin to route and assign this authorization request.</p>
+    <!-- TRANSFER REQUEST MODAL -->
+    <div class='custom-popup-overlay' id='transferRequestModal' style="z-index: 55000000;">
+        <div class='custom-popup-card' style="max-width: 450px; border-top: 6px solid #f59e0b;">
+            <h3 style="margin-top:0; color:#d97706; text-align:left; font-size: 22px;">Transfer Request</h3>
+            <p style="text-align: left; font-size: 14px; color: #64748b; margin-bottom: 20px;">Select another HQ Admin to review and authorize this request.</p>
             <div class='form-group' style="text-align: left;">
-                <select id="transferAdminSelect" style="width:100%; border: 2px solid #cbd5e1;"></select>
+                <select id="transferAdminSelect" style="width:100%; border: 2px solid #cbd5e1; padding: 12px; border-radius: 8px;"></select>
             </div>
-            <div class='modal-buttons'>
-                <button class='modal-btn modal-btn-cancel' onclick="closeTransferModal()">Cancel</button>
-                <button class='modal-btn modal-btn-review' onclick="executeTransferRequest()" style="background:#f59e0b; box-shadow: 0 4px 12px rgba(245,158,11,0.3);">Transfer</button>
+            <div style="display:flex; gap:12px;">
+                <button onclick="executeTransferRequest()" style="background:#f59e0b; color:white; border:none; padding:15px; border-radius:8px; flex:1; font-weight:900; cursor:pointer; font-size: 14px; transition: 0.2s; text-transform: uppercase;">Confirm</button>
+                <button onclick="closeTransferModal()" style="background:#64748b; color:white; border:none; padding:15px; border-radius:8px; flex:1; font-weight:900; cursor:pointer; font-size: 14px; transition: 0.2s; text-transform: uppercase;">Cancel</button>
             </div>
         </div>
     </div>
@@ -671,9 +656,6 @@
         <div class='loading-status-msg' id="loaderTextMsg">Syncing with Cloud...</div>
     </div>
 	<script type="text/javascript">
-        // ----------------------------------------------------
-        // 1. FIREBASE CONFIGURATION & CORE VARIABLES
-        // ----------------------------------------------------
         const firebaseConfig = {
             apiKey: "AIzaSyArIz9EyuPcbQs0HKvsm0OfxwXKGlbO03c",
             authDomain: "po-staff-utility.firebaseapp.com",
@@ -685,9 +667,6 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
-        // ----------------------------------------------------
-        // 2. GLOBAL VARIABLES
-        // ----------------------------------------------------
         let SYSTEM_USER_REGISTRY = [];
         let SYSTEM_OFFICE_REGISTRY = [];
         let SYSTEM_LOGIN_HISTORY = [];
@@ -697,34 +676,17 @@
         let activeRole = null;
         let activeSolId = null;
         
-        let isMasterAdmin = false; // The Almighty 'admin'
-        let isHQAdmin = false;     // SOL 000000 or 'admin'
+        let isMasterAdmin = false; 
+        let isHQAdmin = false;      
         let canDirectExecute = false;
         let currentlyViewingRequest = null;
         
         let pending2FASecret = "";
         let pending2FAUser = "";
 
-        // Paginator Setup
         let currentMaintPage = 1;
         const maintCardsPerPage = 6;
 
-        // ----------------------------------------------------
-        // 3. LIVE CLOCK
-        // ----------------------------------------------------
-        function updateLiveClock() {
-            const clockEl = document.getElementById('liveClockDisplay');
-            if (!clockEl) return;
-            const now = new Date();
-            const options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
-            clockEl.innerText = now.toLocaleString('en-IN', options);
-        }
-        setInterval(updateLiveClock, 1000);
-        updateLiveClock();
-
-        // ----------------------------------------------------
-        // 4. SECURITY BOUNCER, DATA SYNC & AUTO CLEANUP
-        // ----------------------------------------------------
         window.onload = function() {
             activeUser = sessionStorage.getItem("activeUser");
             activeRole = sessionStorage.getItem("activeRole");
@@ -745,28 +707,37 @@
                     const myProfile = SYSTEM_USER_REGISTRY.find(u => u.user === activeUser);
                     activeSolId = myProfile ? myProfile.solId : null;
                     
+                    // MASTER ADMIN LOGIC (admin user overrides everything)
                     isMasterAdmin = (activeUser === "admin");
                     isHQAdmin = (isMasterAdmin || activeSolId === "000000");
                     canDirectExecute = isHQAdmin;
-
-                    // Execute Auto-Cleanup Routine (Silently removes old logs to save database space)
-                    performSystemAutoCleanup();
                     
-                    // Allow UI filtering based on role
                     if (canDirectExecute) {
                         document.getElementById('cardApprovals').classList.add('allowed-module');
                         document.getElementById('cardUpdateNews').classList.add('allowed-module');
-                        document.getElementById('card2FASetup').classList.add('allowed-module'); // Only HQ can generate 2FA
                         document.getElementById('cardMyRequests').classList.remove('allowed-module');
+                        
                         document.getElementById('logsCardTitle').innerText = "Global System Logs";
                         document.getElementById('logsCardDesc').innerText = "View entire system registry and connection attempts across all SOLs.";
                         
-                        document.querySelectorAll('.btn-dynamic').forEach(btn => { btn.innerText = btn.innerText.replace(/^Request\s/, ''); });
+                        if(isMasterAdmin) {
+                            document.getElementById('cardTransferStatus').style.display = 'block';
+                            document.getElementById('cardTransferStatus').classList.add('allowed-module');
+                        }
+                        
+                        document.querySelectorAll('.btn-dynamic').forEach(btn => {
+                            btn.innerText = btn.innerText.replace(/^Request\s/, '');
+                        });
                     } else {
+                        // LOCAL ADMIN LOGIC
                         document.getElementById('cardApprovals').classList.remove('allowed-module');
                         document.getElementById('cardUpdateNews').classList.remove('allowed-module');
-                        document.getElementById('card2FASetup').classList.remove('allowed-module'); // Local Admin CANNOT generate 2FA
                         document.getElementById('cardMyRequests').classList.add('allowed-module');
+                        
+                        // Hide 2FA Generate from Local Admin
+                        document.getElementById('card2FASetup').style.display = 'none';
+                        document.getElementById('card2FASetup').classList.remove('allowed-module');
+
                         document.getElementById('logsCardTitle').innerText = "My Office (SOL) Logs";
                         document.getElementById('logsCardDesc').innerText = "View account registry and login history strictly for your mapped office.";
                         
@@ -777,9 +748,13 @@
                         });
                     }
 
-                    // Base set of modules available to all admins (except what we hid above)
                     const baseCards = ['cardCreateUser', 'cardReset2FA', 'cardLockUnlock', 'cardEnableDisable', 'cardResetPass', 'cardChangeRole', 'cardCustomizeCards', 'cardDeleteUser', 'cardDirectMessage', 'cardUserLogs'];
-                    baseCards.forEach(id => { document.getElementById(id).classList.add('allowed-module'); });
+                    baseCards.forEach(id => {
+                        let el = document.getElementById(id);
+                        if(el) el.classList.add('allowed-module');
+                    });
+                    
+                    if(canDirectExecute) { document.getElementById('card2FASetup').classList.add('allowed-module'); }
 
                     if(myProfile) {
                         let rank = isMasterAdmin ? "Super Admin" : (isHQAdmin ? "HQ Admin" : `Local Admin - ${activeSolId}`);
@@ -787,12 +762,11 @@
                     }
 
                     refreshUI(); 
-                    filterAndPaginateMaintCards(true); // Trigger Pagination
+                    filterAndPaginateMaintCards(true); 
                 }
                 document.getElementById('globalAppLoader').style.display = 'none';
-
             }, (error) => {
-                displayCustomAlert("Failed to sync with secure database.", "❌", "Connection Error");
+                displayCustomAlert("Failed to sync with secure database.");
                 document.getElementById('globalAppLoader').style.display = 'none';
             });
 
@@ -806,45 +780,10 @@
             }, 1000);
         };
 
-        // AUTO-CLEANUP FUNCTION: Trims Logs to Max 10, Removes Requests older than 24 hours
-        function performSystemAutoCleanup() {
-            let needsSave = false;
-
-            // 1. Maintain Max 10 Logs
-            if (SYSTEM_LOGIN_HISTORY.length > 10) {
-                SYSTEM_LOGIN_HISTORY = SYSTEM_LOGIN_HISTORY.slice(SYSTEM_LOGIN_HISTORY.length - 10);
-                needsSave = true;
-            }
-
-            // 2. Remove Resolved Requests older than 24 Hours
-            const nowTime = Date.now();
-            const oneDayMS = 24 * 60 * 60 * 1000;
-            const originalLength = SYSTEM_PENDING_REQUESTS.length;
-
-            SYSTEM_PENDING_REQUESTS = SYSTEM_PENDING_REQUESTS.filter(req => {
-                if (req.status === 'PENDING') return true; // Keep pending requests forever until actioned
-                if (req.resolvedAt && (nowTime - req.resolvedAt > oneDayMS)) {
-                    return false; // Remove if older than 24 hrs
-                }
-                return true;
-            });
-
-            if (SYSTEM_PENDING_REQUESTS.length !== originalLength) { needsSave = true; }
-            if (needsSave && isMasterAdmin) { saveToCloudSilent(); } // Only Master Admin triggers the actual wipe
-        }
-
-        async function saveToCloudSilent() {
-            try { await db.collection("system").doc("registry").set({ users: SYSTEM_USER_REGISTRY, logs: SYSTEM_LOGIN_HISTORY, offices: SYSTEM_OFFICE_REGISTRY, requests: SYSTEM_PENDING_REQUESTS }, { merge: true }); } catch(e) {}
-        }
-
-        // ----------------------------------------------------
-        // 5. DASHBOARD PAGINATION LOGIC
-        // ----------------------------------------------------
         function filterAndPaginateMaintCards(resetPage = false) {
             if (resetPage) currentMaintPage = 1;
             const query = document.getElementById('maintModuleSearch') ? document.getElementById('maintModuleSearch').value.toLowerCase() : "";
             const allCards = Array.from(document.querySelectorAll('#userModuleGrid .portal-module-card'));
-            
             allCards.forEach(card => card.style.display = "none");
             const allowedCards = allCards.filter(card => card.classList.contains('allowed-module'));
             let filtered = allowedCards.filter(card => card.innerText.toLowerCase().includes(query));
@@ -856,9 +795,10 @@
             const endIndex = startIndex + maintCardsPerPage;
 
             filtered.forEach((card, index) => {
-                if (index >= startIndex && index < endIndex) { card.style.display = "block"; }
+                if (index >= startIndex && index < endIndex) {
+                    card.style.display = "block";
+                }
             });
-
             renderMaintPaginationControls(totalPages);
         }
 
@@ -869,68 +809,74 @@
             if (totalPages <= 1) { container.style.display = 'none'; return; } 
             else { container.style.display = 'flex'; }
             
-            const prevBtn = document.createElement('button'); prevBtn.innerHTML = "&laquo;"; prevBtn.className = "page-nav-btn"; prevBtn.disabled = currentMaintPage === 1;
-            prevBtn.onclick = () => { currentMaintPage--; filterAndPaginateMaintCards(); }; container.appendChild(prevBtn);
+            const prevBtn = document.createElement('button'); 
+            prevBtn.innerHTML = "&laquo;"; prevBtn.className = "page-nav-btn";
+            prevBtn.disabled = currentMaintPage === 1;
+            prevBtn.onclick = () => { currentMaintPage--; filterAndPaginateMaintCards(); };
+            container.appendChild(prevBtn);
             
             for (let i = 1; i <= totalPages; i++) {
-                const pageBtn = document.createElement('button'); pageBtn.innerText = i; pageBtn.className = "page-nav-btn " + (i === currentMaintPage ? "active-page" : "");
-                pageBtn.onclick = () => { currentMaintPage = i; filterAndPaginateMaintCards(); }; container.appendChild(pageBtn);
+                const pageBtn = document.createElement('button'); 
+                pageBtn.innerText = i;
+                pageBtn.className = "page-nav-btn " + (i === currentMaintPage ? "active-page" : "");
+                pageBtn.onclick = () => { currentMaintPage = i; filterAndPaginateMaintCards(); };
+                container.appendChild(pageBtn);
             }
-            
-            const nextBtn = document.createElement('button'); nextBtn.innerHTML = "&raquo;"; nextBtn.className = "page-nav-btn"; nextBtn.disabled = currentMaintPage === totalPages;
-            nextBtn.onclick = () => { currentMaintPage++; filterAndPaginateMaintCards(); }; container.appendChild(nextBtn);
+            const nextBtn = document.createElement('button'); 
+            nextBtn.innerHTML = "&raquo;"; nextBtn.className = "page-nav-btn";
+            nextBtn.disabled = currentMaintPage === totalPages;
+            nextBtn.onclick = () => { currentMaintPage++; filterAndPaginateMaintCards(); };
+            container.appendChild(nextBtn);
         }
 
-        // ----------------------------------------------------
-        // 6. NAVIGATION & INDEX-STYLE SMART ALERTS
-        // ----------------------------------------------------
         function navigateToSubPanel(panelId) {
             document.getElementById('mainDashboardHead').style.display = 'none';
-            const panels = ['subCreateUser', 'subLockUnlock', 'subEnableDisable', 'subResetPass', 'subChangeRole', 'subCustomizeCards', 'subDeleteUser', 'subDirectMessage', 'subUpdateNews', 'subUserLogs', 'panelApprovals', 'panelMyRequests', 'sub2FASetup', 'subReset2FA'];
-            panels.forEach(id => { let el = document.getElementById(id); if(el) el.style.display = 'none'; });
+            const panels = ['subCreateUser', 'subLockUnlock', 'subEnableDisable', 'subResetPass', 'subChangeRole', 'subCustomizeCards', 'subDeleteUser', 'subDirectMessage', 'subUpdateNews', 'subUserLogs', 'panelApprovals', 'panelMyRequests', 'sub2FASetup', 'subReset2FA', 'subTransferStatus'];
+            panels.forEach(id => { 
+                let el = document.getElementById(id);
+                if(el) el.style.display = 'none'; 
+            });
             document.getElementById(panelId).style.display = 'block';
         }
 
         function returnToMainDashboard() {
-            const panels = ['subCreateUser', 'subLockUnlock', 'subEnableDisable', 'subResetPass', 'subChangeRole', 'subCustomizeCards', 'subDeleteUser', 'subDirectMessage', 'subUpdateNews', 'subUserLogs', 'panelApprovals', 'panelMyRequests', 'sub2FASetup', 'subReset2FA'];
-            panels.forEach(id => { let el = document.getElementById(id); if(el) el.style.display = 'none'; });
+            const panels = ['subCreateUser', 'subLockUnlock', 'subEnableDisable', 'subResetPass', 'subChangeRole', 'subCustomizeCards', 'subDeleteUser', 'subDirectMessage', 'subUpdateNews', 'subUserLogs', 'panelApprovals', 'panelMyRequests', 'sub2FASetup', 'subReset2FA', 'subTransferStatus'];
+            panels.forEach(id => { 
+                let el = document.getElementById(id);
+                if(el) el.style.display = 'none'; 
+            });
             document.getElementById('mainDashboardHead').style.display = 'block';
             filterAndPaginateMaintCards(true);
         }
 
-        function displayCustomAlert(msg, icon = '🔔', title = 'System Notice') {
+        // EXACT POPUP ALERT FUNCTION
+        function displayCustomAlert(msg, icon = '🔔') {
             document.getElementById('popupAlertIcon').innerText = icon;
-            document.getElementById('popupAlertTitle').innerText = title;
             document.getElementById('customAlertMsgField').innerHTML = msg;
-            
             const modal = document.getElementById('customAppAlertModal');
-            const box = document.getElementById('customAppAlertBox');
             modal.style.display = 'flex';
-            setTimeout(() => { modal.classList.add('alert-show'); box.style.transform = 'scale(1)'; }, 10);
+            setTimeout(() => { modal.classList.add('active'); }, 10);
         }
 
         function closeCustomAlert() {
             const modal = document.getElementById('customAppAlertModal');
-            const box = document.getElementById('customAppAlertBox');
-            box.style.transform = 'scale(0.9)';
-            setTimeout(() => { modal.classList.remove('alert-show'); modal.style.display = 'none'; }, 300);
+            modal.classList.remove('active');
+            setTimeout(() => { modal.style.display = 'none'; }, 200);
         }
 
         function showLoader(msg) {
             document.getElementById('loaderTextMsg').innerText = msg;
             const loader = document.getElementById('globalAppLoader');
             loader.style.display = 'flex';
-            setTimeout(() => { loader.classList.add('active'); }, 10);
         }
 
         function hideLoader() { 
             const loader = document.getElementById('globalAppLoader');
-            loader.classList.remove('active');
-            setTimeout(() => { loader.style.display = 'none'; }, 300);
+            loader.style.display = 'none';
         }
 
         async function saveToCloud() {
-            await db.collection("system").doc("registry").set({
+            return db.collection("system").doc("registry").set({
                 users: SYSTEM_USER_REGISTRY,
                 logs: SYSTEM_LOGIN_HISTORY,
                 offices: SYSTEM_OFFICE_REGISTRY,
@@ -942,62 +888,28 @@
             let options = { timeZone: 'Asia/Kolkata', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
             let timeStamp = new Date().toLocaleString('en-IN', options);
             SYSTEM_LOGIN_HISTORY.push({ time: timeStamp, user: activeUser, event: eventMsg, solId: activeSolId });
+            // Only keep last 10 global logs to reduce Firebase pressure
             if (SYSTEM_LOGIN_HISTORY.length > 10) SYSTEM_LOGIN_HISTORY = SYSTEM_LOGIN_HISTORY.slice(SYSTEM_LOGIN_HISTORY.length - 10);
         }
 
-        // ----------------------------------------------------
-        // 7. EXECUTABLE USER PROFILE MODAL
-        // ----------------------------------------------------
-        function openUserProfile(targetUsername) {
-            const u = SYSTEM_USER_REGISTRY.find(x => x.user === targetUsername);
-            if (!u) return;
-
-            document.getElementById('profileModalName').innerText = u.fullName || "N/A";
-            document.getElementById('profileModalUser').innerText = "@" + u.user;
-            
-            let solDetails = "<span style='color:#ef4444;'>Unmapped</span>";
-            if (u.solId) {
-                let matchedOffice = SYSTEM_OFFICE_REGISTRY.find(o => o.solId === u.solId);
-                solDetails = matchedOffice ? `${u.solId} - ${matchedOffice.name}` : u.solId;
-            }
-            document.getElementById('profileModalSol').innerHTML = solDetails;
-            document.getElementById('profileModalRole').innerText = u.role.toUpperCase();
-            
-            document.getElementById('profileModalStatus').innerHTML = u.active ? "<span style='color:#10b981;'>Enabled</span>" : "<span style='color:#ef4444;'>Disabled</span>";
-            document.getElementById('profileModalLock').innerHTML = u.locked ? "<span style='color:#f59e0b;'>Locked</span>" : "<span style='color:#10b981;'>Unlocked</span>";
-            document.getElementById('profileModalAttempts').innerText = u.failedAttempts || 0;
-
-            const modal = document.getElementById('profile-modal-overlay');
-            const box = document.getElementById('profile-modal-box');
-            modal.style.display = 'flex';
-            setTimeout(() => { modal.classList.add('profile-show'); box.style.transform = 'scale(1)'; }, 10);
-        }
-
-        function closeUserProfile() {
-            const modal = document.getElementById('profile-modal-overlay');
-            const box = document.getElementById('profile-modal-box');
-            box.style.transform = 'scale(0.9)';
-            setTimeout(() => { modal.classList.remove('profile-show'); modal.style.display = 'none'; }, 300);
-        }
-
-        // ----------------------------------------------------
-        // 8. CUSTOM SEARCHABLE DROPDOWN ENGINE
-        // ----------------------------------------------------
+        // DROP DOWN ENGINE
         function showCustomSelect(id) { document.getElementById('list_' + id).style.display = 'block'; }
-        function hideCustomSelects(e) { if (!e.target.closest('.searchable-dropdown-container')) { document.querySelectorAll('.custom-select-list').forEach(l => l.style.display = 'none'); } }
+        function hideCustomSelects(e) {
+            if (!e.target.closest('.searchable-dropdown-container')) {
+                document.querySelectorAll('.custom-select-list').forEach(l => l.style.display = 'none');
+            }
+        }
         document.addEventListener('click', hideCustomSelects);
 
         function filterCustomSelect(id) {
             let input = document.getElementById('searchInput_' + id).value.toLowerCase();
             let items = document.querySelectorAll('#list_' + id + ' .custom-select-item');
             let hasVisible = false;
-            
             items.forEach(item => {
                 let txt = item.innerText.toLowerCase();
                 if (txt.includes(input)) { item.style.display = 'flex'; hasVisible = true; } 
                 else { item.style.display = 'none'; }
             });
-            
             let emptyMsg = document.getElementById('empty_' + id);
             if(emptyMsg) emptyMsg.style.display = hasVisible ? 'none' : 'block';
         }
@@ -1009,22 +921,58 @@
             if(id === 'muCustomizeSelect') loadUserCurrentCards();
         }
 
-        // ----------------------------------------------------
-        // 9. DYNAMIC UI REFRESH (WITH ISOLATION LOGIC)
-        // ----------------------------------------------------
+        // --- NEW EXECUTABLE USER PROFILE MODAL ---
+        function openUserProfile(username) {
+            const u = SYSTEM_USER_REGISTRY.find(x => x.user === username);
+            if(!u) return;
+
+            document.getElementById('profileModalName').innerText = u.fullName || u.user;
+            document.getElementById('profileModalUser').innerText = u.user;
+            
+            let solName = "Unmapped";
+            if(u.solId) {
+                let off = SYSTEM_OFFICE_REGISTRY.find(o => o.solId === u.solId);
+                solName = off ? `${u.solId} - ${off.name}` : u.solId;
+            }
+            document.getElementById('profileModalSol').innerText = solName;
+            document.getElementById('profileModalRole').innerText = u.role;
+            
+            const aEl = document.getElementById('profileModalActive');
+            aEl.innerText = u.active ? "Enabled" : "Disabled";
+            aEl.style.color = u.active ? "#10b981" : "#ef4444";
+
+            const lEl = document.getElementById('profileModalLock');
+            lEl.innerText = u.locked ? "Locked" : "Unlocked";
+            lEl.style.color = u.locked ? "#f59e0b" : "#10b981";
+
+            let lastLog = SYSTEM_LOGIN_HISTORY.slice().reverse().find(l => l.user === username && l.event.includes("Success"));
+            document.getElementById('profileModalLastLogin').innerText = lastLog ? lastLog.time : "No recent login recorded";
+
+            const modal = document.getElementById('userProfileModal');
+            modal.style.display = 'flex';
+            setTimeout(() => modal.classList.add('active'), 10);
+        }
+
+        function closeUserProfileModal() {
+            const modal = document.getElementById('userProfileModal');
+            modal.classList.remove('active');
+            setTimeout(() => modal.style.display = 'none', 200);
+        }
+
         function refreshUI() {
-            // Master Admin Invisible Logic: Hide Master Admin from everyone else
             const visibleUsers = SYSTEM_USER_REGISTRY.filter(u => {
-                if (isMasterAdmin) return true; // Master sees everyone
-                if (u.user === "admin") return false; // Hide master from everyone else
-                if (isHQAdmin) return true; // HQ Admin sees all except master
-                return u.solId === activeSolId; // Local Admin sees ONLY their own SOL
+                if (isMasterAdmin) return true;
+                if (u.user === "admin") return false; 
+                if (isHQAdmin) return true; 
+                return u.solId === activeSolId; 
             });
 
             const customDropdownIds = ['muLockSelect', 'muEnableSelect', 'muResetSelect', 'muRoleTargetSelect', 'muDeleteSelect', 'muCustomizeSelect', 'muMessageSelect', 'mu2FASelect', 'muReset2FASelect'];
             customDropdownIds.forEach(id => { 
                 let listEl = document.getElementById('list_' + id); 
-                if(listEl) listEl.innerHTML = `<div class="cs-empty" id="empty_${id}" style="display:none;">No user found</div>`;
+                if(listEl) {
+                    listEl.innerHTML = `<div class="cs-empty" id="empty_${id}" style="display:none; padding:15px; color:#64748b; font-size:13px;">No user found</div>`;
+                }
             });
 
             const rosterBody = document.getElementById('muUserRosterTableBody'); 
@@ -1034,39 +982,65 @@
                 let dName = account.fullName || account.user;
                 let displayString = `${dName} (${account.user}) [${account.role.toUpperCase()}]`;
                 
-                customDropdownIds.forEach(id => { 
-                    let listEl = document.getElementById('list_' + id); 
-                    if(listEl) { 
-                        let item = document.createElement('div');
-                        item.className = 'custom-select-item';
-                        item.onclick = function() { selectCustomOption(id, account.user, displayString); };
-                        item.innerHTML = `<span class="cs-name">${dName}</span><span class="cs-detail">@${account.user} • ${account.role.toUpperCase()} • SOL: ${account.solId || 'None'}</span>`;
-                        listEl.appendChild(item);
-                    } 
-                });
+                // Hide master admin from dropdowns so no one edits him
+                if (account.user !== "admin") {
+                    customDropdownIds.forEach(id => { 
+                        let listEl = document.getElementById('list_' + id); 
+                        if(listEl) { 
+                            let item = document.createElement('div');
+                            item.className = 'custom-select-item';
+                            item.onclick = function() { selectCustomOption(id, account.user, displayString); };
+                            item.innerHTML = `<span class="cs-name">${dName}</span><span class="cs-detail">@${account.user} • ${account.role.toUpperCase()} • SOL: ${account.solId || 'None'}</span>`;
+                            listEl.appendChild(item);
+                        } 
+                    });
+                }
                 
                 if(rosterBody) {
                     let solDisplay = account.solId ? account.solId : "<span style='color:#ef4444;'>Unmapped</span>";
                     let row = document.createElement('tr'); 
-                    row.className = "executable-row";
-                    row.onclick = function() { openUserProfile(account.user); };
+                    row.className = 'clickable-row';
+                    row.onclick = () => openUserProfile(account.user);
                     row.innerHTML = `
                         <td>${dName}</td>
                         <td><strong>${account.user}</strong></td>
                         <td>${solDisplay}</td>
                         <td><span style="text-transform:uppercase;">${account.role}</span></td>
                         <td><span class="status-badge ${account.active ? 'badge-active' : 'badge-disabled'}">${account.active ? 'ENABLED' : 'DISABLED'}</span></td>
+                        <td><span class="status-badge ${account.locked ? 'badge-locked' : 'badge-active'}">${account.locked ? 'LOCKED' : 'UNLOCKED'}</span></td>
                     `; 
                     rosterBody.appendChild(row);
                 }
             });
 
-            // Populate Logs
+            const solSelect = document.getElementById('muNewUserSol');
+            if(solSelect) {
+                solSelect.innerHTML = "<option value=''>-- Select Target SOL --</option>";
+                if (isHQAdmin) {
+                    SYSTEM_OFFICE_REGISTRY.forEach(o => {
+                        let opt = document.createElement('option');
+                        opt.value = o.solId;
+                        opt.innerText = `${o.solId} - ${o.name}`;
+                        solSelect.appendChild(opt);
+                    });
+                } else {
+                    let myOffice = SYSTEM_OFFICE_REGISTRY.find(o => o.solId === activeSolId);
+                    if(myOffice) {
+                        let opt = document.createElement('option');
+                        opt.value = myOffice.solId;
+                        opt.innerText = `${myOffice.solId} - ${myOffice.name} (Locked)`;
+                        opt.selected = true;
+                        solSelect.appendChild(opt);
+                        solSelect.disabled = true; 
+                    }
+                }
+            }
+
             const historyBody = document.getElementById('muLoginHistoryTableBody');
             if(historyBody) {
                 historyBody.innerHTML = ""; 
                 const visibleLogs = isHQAdmin ? SYSTEM_LOGIN_HISTORY : SYSTEM_LOGIN_HISTORY.filter(l => l.solId === activeSolId);
-                let operationalStack = [...visibleLogs].reverse().slice(0, 10); // MAX 10 LOGS
+                let operationalStack = [...visibleLogs].reverse().slice(0, 10); // Show max 10
                 
                 operationalStack.forEach(log => { 
                     let r = document.createElement('tr'); 
@@ -1079,9 +1053,7 @@
                 });
             }
 
-            // Approvals / My Requests Table
             if (isHQAdmin) {
-                // HQ Admin sees 'ALL' or assigned to self. Master Admin sees everything pending.
                 const pendingOnly = SYSTEM_PENDING_REQUESTS.filter(r => r.status === 'PENDING' && (isMasterAdmin || r.assignedTo === 'ALL' || r.assignedTo === activeUser));
                 document.getElementById('approvalBadge').innerText = pendingOnly.length;
                 
@@ -1105,28 +1077,50 @@
                         `;
                     });
                 }
-            } else {
-                // Local Admin Dashboard: Show max 10 requests, restricted to 24 hrs
-                let myRequests = SYSTEM_PENDING_REQUESTS.filter(r => r.requestedBy === activeUser).reverse();
-                myRequests = myRequests.slice(0, 10);
+            } 
+            
+            // Limit "My Requests" to recent 10 to save space
+            const myRequests = SYSTEM_PENDING_REQUESTS.filter(r => r.requestedBy === activeUser).reverse().slice(0, 10);
+            const myBody = document.getElementById('myRequestsTableBody');
+            if(myBody) {
+                myBody.innerHTML = "";
+                if (myRequests.length === 0) {
+                    myBody.innerHTML = "<tr><td colspan='4' style='text-align:center; padding: 20px; color: #64748b;'>You have not submitted any recent modification requests.</td></tr>";
+                } else {
+                    myRequests.forEach(req => {
+                        let badgeClass = req.status === 'APPROVED' ? 'badge-active' : (req.status === 'REJECTED' ? 'badge-disabled' : 'badge-pending');
+                        let statusText = req.status;
+                        if(req.status === 'PENDING' && req.assignedTo !== 'ALL') statusText = 'IN REVIEW';
 
-                const myBody = document.getElementById('myRequestsTableBody');
-                if(myBody) {
-                    myBody.innerHTML = "";
-                    if (myRequests.length === 0) {
-                        myBody.innerHTML = "<tr><td colspan='4' style='text-align:center; padding: 20px; color: #64748b;'>You have not submitted any modification requests today.</td></tr>";
+                        myBody.innerHTML += `
+                            <tr>
+                                <td>${req.timestamp}</td>
+                                <td><span style="font-weight:bold; color:#4f46e5;">${req.type.replace('_', ' ')}</span></td>
+                                <td>${req.desc}</td>
+                                <td><span class="status-badge ${badgeClass}">${statusText}</span></td>
+                            </tr>
+                        `;
+                    });
+                }
+            }
+
+            // Transfer Status Logic (Master Admin Only)
+            if (isMasterAdmin) {
+                const tStatusBody = document.getElementById('transferStatusTableBody');
+                if(tStatusBody) {
+                    const transferredReqs = SYSTEM_PENDING_REQUESTS.filter(r => r.status === 'PENDING' && r.assignedTo !== 'ALL').reverse();
+                    tStatusBody.innerHTML = "";
+                    if(transferredReqs.length === 0) {
+                        tStatusBody.innerHTML = "<tr><td colspan='5' style='text-align:center; padding: 20px; color: #64748b;'>No cases are currently assigned/transferred.</td></tr>";
                     } else {
-                        myRequests.forEach(req => {
-                            let badgeClass = req.status === 'APPROVED' ? 'badge-active' : (req.status === 'REJECTED' ? 'badge-disabled' : 'badge-pending');
-                            let statusText = req.status;
-                            if(req.status === 'PENDING' && req.assignedTo !== 'ALL') statusText = 'IN REVIEW';
-
-                            myBody.innerHTML += `
+                        transferredReqs.forEach(req => {
+                            tStatusBody.innerHTML += `
                                 <tr>
                                     <td>${req.timestamp}</td>
-                                    <td><span style="font-weight:bold; color:#4f46e5;">${req.type.replace('_', ' ')}</span></td>
+                                    <td><strong>@${req.requestedBy}</strong></td>
                                     <td>${req.desc}</td>
-                                    <td><span class="status-badge ${badgeClass}">${statusText}</span></td>
+                                    <td><span style="color:#d97706; font-weight:bold;">@${req.assignedTo}</span></td>
+                                    <td><button class="small-action-btn" onclick="viewRequestDetails('${req.id}')" style="background:#8b5cf6;">Manage</button></td>
                                 </tr>
                             `;
                         });
@@ -1135,9 +1129,17 @@
             }
         }
 
-        // ----------------------------------------------------
-        // 10. REQUEST & APPROVAL ENGINE (WITH MASTER OVERRIDE)
-        // ----------------------------------------------------
+        function loadUserCurrentCards() {
+            const selectedUser = document.getElementById('muCustomizeSelect').value; 
+            if(!selectedUser) return;
+            const profile = SYSTEM_USER_REGISTRY.find(acc => acc.user === selectedUser); 
+            if(!profile) return;
+            
+            let currentCards = profile.allowedCards || [];
+            const checkboxes = document.querySelectorAll('.card-checkbox');
+            checkboxes.forEach(box => { box.checked = currentCards.includes(box.value); });
+        }
+
         function createRequest(type, desc, payload) {
             SYSTEM_PENDING_REQUESTS.push({
                 id: Date.now().toString() + Math.random().toString(36).substr(2, 5),
@@ -1147,14 +1149,15 @@
                 requestedBy: activeUser,
                 solId: activeSolId,
                 status: 'PENDING',
-                assignedTo: 'ALL',
-                transferredBy: null,
+                assignedTo: 'ALL', 
+                transferredBy: null, 
                 timestamp: new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true })
             });
             showLoader("Submitting Request to HQ...");
             saveToCloud().then(() => {
-                displayCustomAlert("Request Submitted Successfully!<br/><br/>It is now pending authorization from the HQ Admin.", "✅", "Success");
-            }).catch(e => displayCustomAlert("Failed to submit request.", "❌", "Error"))
+                displayCustomAlert("Request Submitted Successfully!<br/><br/>It is now pending authorization from the HQ Admin.", "✅");
+                refreshUI();
+            }).catch(e => displayCustomAlert("Failed to submit request.", "❌"))
             .finally(() => hideLoader());
         }
 
@@ -1175,36 +1178,36 @@
                 let displayVal = value;
                 if (typeof value === 'object') displayVal = JSON.stringify(value);
                 if (typeof value === 'boolean') displayVal = value ? "True" : "False";
-                html += `<div class="request-detail-row"><span class="req-key">${key.toUpperCase()}:</span><span class="req-val">${displayVal}</span></div>`;
+                html += `<div class="request-detail-row">
+                            <span class="req-key">${key.toUpperCase()}:</span>
+                            <span class="req-val">${displayVal}</span>
+                         </div>`;
             }
             document.getElementById('requestDetailsContent').innerHTML = html;
 
             let buttonHtml = `
-                <button onclick="approveCurrentRequest()" style="background:#10b981; color:white; border:none; padding:15px; border-radius:10px; flex:1; font-weight:900; cursor:pointer; font-size: 13px; transition: 0.2s; text-transform: uppercase;">✅ Approve</button>
-                <button onclick="rejectCurrentRequest()" style="background:#ef4444; color:white; border:none; padding:15px; border-radius:10px; flex:1; font-weight:900; cursor:pointer; font-size: 13px; transition: 0.2s; text-transform: uppercase;">❌ Reject</button>
-                <button onclick="openTransferModal()" style="background:#f59e0b; color:white; border:none; padding:15px; border-radius:10px; flex:1; font-weight:900; cursor:pointer; font-size: 13px; transition: 0.2s; text-transform: uppercase;">🔄 Transfer</button>
+                <button onclick="approveCurrentRequest()" style="background:#10b981; color:white; border:none; padding:12px; border-radius:8px; flex:1; font-weight:800; cursor:pointer; font-size: 13px; transition: 0.2s; text-transform: uppercase;">✅ Approve</button>
+                <button onclick="rejectCurrentRequest()" style="background:#ef4444; color:white; border:none; padding:12px; border-radius:8px; flex:1; font-weight:800; cursor:pointer; font-size: 13px; transition: 0.2s; text-transform: uppercase;">❌ Reject</button>
+                <button onclick="openTransferModal()" style="background:#f59e0b; color:white; border:none; padding:12px; border-radius:8px; flex:1; font-weight:800; cursor:pointer; font-size: 13px; transition: 0.2s; text-transform: uppercase;">🔄 Transfer</button>
             `;
 
-            // Super Admin Revoke Power
             if (isMasterAdmin && req.assignedTo !== 'ALL' && req.status === 'PENDING') {
-                buttonHtml += `<button onclick="revokeTransferRequest()" style="background:#8b5cf6; color:white; border:none; padding:15px; border-radius:10px; flex:1; font-weight:900; cursor:pointer; font-size: 13px; transition: 0.2s; text-transform: uppercase;">🔙 Revoke Transfer</button>`;
+                buttonHtml += `<button onclick="revokeTransferRequest()" style="background:#8b5cf6; color:white; border:none; padding:12px; border-radius:8px; flex:1; font-weight:800; cursor:pointer; font-size: 13px; transition: 0.2s; text-transform: uppercase;">🔙 Revoke</button>`;
             }
 
-            buttonHtml += `<button onclick="closeRequestDetails()" style="background:#64748b; color:white; border:none; padding:15px; border-radius:10px; flex:1; font-weight:900; cursor:pointer; font-size: 13px; transition: 0.2s; text-transform: uppercase;">Cancel</button>`;
+            buttonHtml += `<button onclick="closeRequestDetails()" style="background:#64748b; color:white; border:none; padding:12px; border-radius:8px; flex:1; font-weight:800; cursor:pointer; font-size: 13px; transition: 0.2s; text-transform: uppercase;">Cancel</button>`;
             document.getElementById('requestModalActionButtons').innerHTML = buttonHtml;
 
             const modal = document.getElementById('requestDetailsModal');
-            const box = document.getElementById('requestDetailsBox');
             modal.style.display = 'flex';
-            setTimeout(() => { modal.classList.add('alert-show'); box.style.transform = 'scale(1)'; }, 10);
+            setTimeout(() => modal.classList.add('active'), 10);
         }
 
         function closeRequestDetails() {
             currentlyViewingRequest = null;
             const modal = document.getElementById('requestDetailsModal');
-            const box = document.getElementById('requestDetailsBox');
-            box.style.transform = 'scale(0.9)';
-            setTimeout(() => { modal.classList.remove('alert-show'); modal.style.display = 'none'; }, 300);
+            modal.classList.remove('active');
+            setTimeout(() => modal.style.display = 'none', 200);
         }
 
         function approveCurrentRequest() { if(!currentlyViewingRequest) return; processRequest(currentlyViewingRequest, 'APPROVE'); closeRequestDetails(); }
@@ -1219,16 +1222,51 @@
                 const p = req.payload;
                 switch(req.type) {
                     case 'CREATE_USER': SYSTEM_USER_REGISTRY.push(p); break;
-                    case 'TOGGLE_LOCK': { let u = SYSTEM_USER_REGISTRY.find(x => x.user === p.user); if(u) { u.locked = p.locked; if(!u.locked) u.failedAttempts = 0; } break; }
-                    case 'TOGGLE_ENABLE': { let u = SYSTEM_USER_REGISTRY.find(x => x.user === p.user); if(u) u.active = p.active; break; }
-                    case 'RESET_PASS': { let u = SYSTEM_USER_REGISTRY.find(x => x.user === p.user); if(u) { u.pass = p.pass; u.isFirstTimeDefault = true; } break; }
-                    case 'CHANGE_ROLE': { let u = SYSTEM_USER_REGISTRY.find(x => x.user === p.user); if(u) { u.role = p.role; u.allowedCards = p.allowedCards; } break; }
-                    case 'CUSTOMIZE_CARDS': { let u = SYSTEM_USER_REGISTRY.find(x => x.user === p.user); if(u) u.allowedCards = p.allowedCards; break; }
-                    case 'DELETE_USER': { let uIdx = SYSTEM_USER_REGISTRY.findIndex(x => x.user === p.user); if(uIdx > -1) SYSTEM_USER_REGISTRY.splice(uIdx, 1); break; }
-                    case 'SEND_MSG': { let u = SYSTEM_USER_REGISTRY.find(x => x.user === p.user); if(u) u.pendingMessage = p.msg; break; }
-                    case 'UPDATE_NEWS': { db.collection("system").doc("announcements").set({ tickerText: p.text }, { merge: true }); break; }
-                    case 'ENROLL_2FA': { let u = SYSTEM_USER_REGISTRY.find(x => x.user === p.user); if(u) u.totpSecret = p.secret; break; }
-                    case 'RESET_2FA': { let u = SYSTEM_USER_REGISTRY.find(x => x.user === p.user); if(u) u.totpSecret = ""; break; }
+                    case 'TOGGLE_LOCK': {
+                        let u = SYSTEM_USER_REGISTRY.find(x => x.user === p.user);
+                        if(u) { u.locked = p.locked; if(!u.locked) u.failedAttempts = 0; }
+                        break;
+                    }
+                    case 'TOGGLE_ENABLE': {
+                        let u = SYSTEM_USER_REGISTRY.find(x => x.user === p.user);
+                        if(u) u.active = p.active;
+                        break;
+                    }
+                    case 'RESET_PASS': {
+                        let u = SYSTEM_USER_REGISTRY.find(x => x.user === p.user);
+                        if(u) { u.pass = p.pass; u.isFirstTimeDefault = true; }
+                        break;
+                    }
+                    case 'CHANGE_ROLE': {
+                        let u = SYSTEM_USER_REGISTRY.find(x => x.user === p.user);
+                        if(u) { u.role = p.role; u.allowedCards = p.allowedCards; }
+                        break;
+                    }
+                    case 'CUSTOMIZE_CARDS': {
+                        let u = SYSTEM_USER_REGISTRY.find(x => x.user === p.user);
+                        if(u) u.allowedCards = p.allowedCards;
+                        break;
+                    }
+                    case 'DELETE_USER': {
+                        let uIdx = SYSTEM_USER_REGISTRY.findIndex(x => x.user === p.user);
+                        if(uIdx > -1) SYSTEM_USER_REGISTRY.splice(uIdx, 1);
+                        break;
+                    }
+                    case 'SEND_MSG': {
+                        let u = SYSTEM_USER_REGISTRY.find(x => x.user === p.user);
+                        if(u) u.pendingMessage = p.msg;
+                        break;
+                    }
+                    case 'ENROLL_2FA': {
+                        let u = SYSTEM_USER_REGISTRY.find(x => x.user === p.user);
+                        if(u) u.totpSecret = p.secret;
+                        break;
+                    }
+                    case 'RESET_2FA': {
+                        let u = SYSTEM_USER_REGISTRY.find(x => x.user === p.user);
+                        if(u) u.totpSecret = "";
+                        break;
+                    }
                 }
                 req.status = 'APPROVED';
                 logAdminAction(`Approved Request: ${req.desc}`);
@@ -1237,37 +1275,43 @@
                 logAdminAction(`Rejected Request: ${req.desc}`);
             }
 
-            req.resolvedAt = Date.now(); // Record time for 24-hour cleanup
-
-            showLoader(action === 'APPROVE' ? "Applying Changes & Notifying..." : "Discarding Request...");
+            showLoader(action === 'APPROVE' ? "Applying Changes..." : "Discarding Request...");
             try {
                 await saveToCloud();
-                displayCustomAlert(`Request ${action === 'APPROVE' ? 'Approved' : 'Rejected'} successfully!`, "✅", "Success");
-            } catch(e) { displayCustomAlert("Network Error.", "❌", "Error"); }
+                displayCustomAlert(`Request ${action === 'APPROVE' ? 'Approved' : 'Rejected'} successfully!`, "✅");
+                refreshUI();
+            } catch(e) { displayCustomAlert("Network Error.", "❌"); }
             hideLoader();
         }
 
-        // --- REQUEST TRANSFER LOGIC ---
         function openTransferModal() {
             const selectEl = document.getElementById('transferAdminSelect');
             selectEl.innerHTML = "";
             const hqAdmins = SYSTEM_USER_REGISTRY.filter(u => u.solId === "000000" && u.user !== activeUser && u.user !== "admin");
-            if(hqAdmins.length === 0) { displayCustomAlert("No other HQ Admins are currently available to transfer to.", "⚠️", "Notice"); return; }
-            hqAdmins.forEach(u => { let opt = document.createElement('option'); opt.value = u.user; opt.innerText = `${u.fullName} (@${u.user})`; selectEl.appendChild(opt); });
+            
+            if(hqAdmins.length === 0) {
+                displayCustomAlert("No other HQ Admins are currently available to transfer to.", "⚠️");
+                return;
+            }
+
+            hqAdmins.forEach(u => {
+                let opt = document.createElement('option');
+                opt.value = u.user;
+                opt.innerText = `${u.fullName} (@${u.user})`;
+                selectEl.appendChild(opt);
+            });
 
             closeRequestDetails();
             const modal = document.getElementById('transferRequestModal');
-            const box = document.getElementById('transferRequestBox');
             modal.style.display = 'flex';
-            setTimeout(() => { modal.classList.add('alert-show'); box.style.transform = 'scale(1)'; }, 10);
+            setTimeout(() => modal.classList.add('active'), 10);
         }
 
         function closeTransferModal() {
             currentlyViewingRequest = null;
             const modal = document.getElementById('transferRequestModal');
-            const box = document.getElementById('transferRequestBox');
-            box.style.transform = 'scale(0.9)';
-            setTimeout(() => { modal.classList.remove('alert-show'); modal.style.display = 'none'; }, 300);
+            modal.classList.remove('active');
+            setTimeout(() => modal.style.display = 'none', 200);
         }
 
         async function executeTransferRequest() {
@@ -1285,12 +1329,14 @@
             try {
                 await saveToCloud();
                 closeTransferModal();
-                displayCustomAlert(`Success! Case has been transferred to HQ Admin @${targetAdmin}.`, "🔄", "Case Transferred");
-            } catch(e) { displayCustomAlert("Network Error during transfer.", "❌", "Error"); }
+                refreshUI(); // Refreshes table so it disappears from current view
+                displayCustomAlert(`Success! Case has been transferred to HQ Admin @${targetAdmin}.`, "🔄");
+            } catch(e) {
+                displayCustomAlert("Network Error during transfer.", "❌");
+            }
             hideLoader();
         }
 
-        // --- MASTER ADMIN OVERRIDE (REVOKE TRANSFER) ---
         async function revokeTransferRequest() {
             if(!currentlyViewingRequest) return;
             const reqIdx = SYSTEM_PENDING_REQUESTS.findIndex(r => r.id === currentlyViewingRequest);
@@ -1303,14 +1349,14 @@
             showLoader("Revoking Transfer...");
             try {
                 await saveToCloud();
-                displayCustomAlert("System Override: Transfer revoked. The case is now open to all HQ Admins again.", "🔙", "Transfer Revoked");
-            } catch(e) { displayCustomAlert("Network Error.", "❌", "Error"); }
+                refreshUI();
+                displayCustomAlert("System Override: Transfer revoked. The case is now open to all HQ Admins again.", "🔙");
+            } catch(e) {
+                displayCustomAlert("Network Error.", "❌");
+            }
             hideLoader();
         }
 
-        // ----------------------------------------------------
-        // 11. CRUD ACTIONS
-        // ----------------------------------------------------
         async function executeCreateUserAction() {
             const fullNameInput = document.getElementById('muNewFullName').value.trim(); 
             const usernameInput = document.getElementById('muNewUser').value.trim(); 
@@ -1318,8 +1364,9 @@
             const selectedRole = document.getElementById('muNewRole').value;
             const selectedSol = document.getElementById('muNewUserSol').value;
 
-            if(!fullNameInput || !usernameInput || !passwordInput || !selectedSol) { displayCustomAlert("Error: All fields and SOL mapping required.", "⚠️", "Validation Error"); return; }
-            if(SYSTEM_USER_REGISTRY.some(acc => acc.user.toLowerCase() === usernameInput.toLowerCase())) { displayCustomAlert("Error: Username already exists in the system.", "⚠️", "Validation Error"); return; }
+            if(!fullNameInput || !usernameInput || !passwordInput || !selectedSol) { displayCustomAlert("Error: All fields and SOL mapping required.", "⚠️"); return; }
+            if(usernameInput.toLowerCase() === "admin") { displayCustomAlert("Error: Cannot create 'admin' username. Reserved.", "🛑"); return; }
+            if(SYSTEM_USER_REGISTRY.some(acc => acc.user.toLowerCase() === usernameInput.toLowerCase())) { displayCustomAlert("Error: Username already exists.", "⚠️"); return; }
 
             let defaultCards = [];
             if(selectedRole === 'admin') defaultCards = ['menuCardBulkBooking', 'menuCardBulk', 'menuCardHoliday', 'menuCardDateWise', 'menuCardACG61', 'menuCardGeneralCharge', 'menuCardSR1', 'menuCardCasualLeave', 'menuCardTAAdvance', 'menuCardTATransfer', 'menuCardTABillTour', 'menuCardCEA', 'menuCardAI', 'menuCardMaintenance', 'menuCardSelfPassword', 'menuCardUpdateNews']; 
@@ -1330,13 +1377,15 @@
 
             if (canDirectExecute) {
                 SYSTEM_USER_REGISTRY.push(payload);
-                logAdminAction(`Created User: ${usernameInput}`);
+                logAdminAction(`Created User: ${usernameInput} in SOL ${selectedSol}`);
                 showLoader("Saving to Cloud...");
                 try {
                     await saveToCloud();
-                    document.getElementById('muNewFullName').value = ""; document.getElementById('muNewUser').value = ""; document.getElementById('muNewPass').value = ""; document.getElementById('muNewUserSol').value = "";
-                    displayCustomAlert(`Account Created Successfully!<br/><br/>Username: ${usernameInput}<br/>Mapped SOL: ${selectedSol}`, "✅", "Success");
-                } catch(e) { displayCustomAlert("Network Error", "❌", "Error"); }
+                    document.getElementById('muNewFullName').value = ""; document.getElementById('muNewUser').value = ""; document.getElementById('muNewPass').value = "";
+                    document.getElementById('muNewUserSol').value = "";
+                    displayCustomAlert(`Account Created Successfully!<br/><br/>Username: ${usernameInput}<br/>Mapped SOL: ${selectedSol}`, "✅");
+                    refreshUI();
+                } catch(e) { displayCustomAlert("Network Error", "❌"); }
                 hideLoader();
             } else {
                 createRequest('CREATE_USER', `Create User: ${usernameInput} in SOL ${selectedSol}`, payload);
@@ -1345,8 +1394,8 @@
 
         async function executeToggleUserStatus(toggleType, selectId) {
             const selectedUser = document.getElementById(selectId).value; 
-            if(!selectedUser) { displayCustomAlert("Please search and select a user.", "⚠️", "Notice"); return; }
-            if(selectedUser === "admin") { displayCustomAlert("Restriction: Master Admin cannot be altered.", "🛑", "Access Denied"); return; }
+            if(!selectedUser) { displayCustomAlert("Please search and select a user.", "⚠️"); return; }
+            if(selectedUser.toLowerCase() === "admin") { displayCustomAlert("Restriction: Master Admin cannot be altered.", "🛑"); return; }
             
             const profileIndex = SYSTEM_USER_REGISTRY.findIndex(acc => acc.user === selectedUser); 
             if(profileIndex === -1) return;
@@ -1360,9 +1409,14 @@
                 }
                 logAdminAction(`Toggled ${toggleType} for '${selectedUser}'`);
                 showLoader("Updating Status...");
-                try { await saveToCloud(); displayCustomAlert(`Success: Status updated for '${selectedUser}'.`, "✅", "Updated"); } catch(e) { displayCustomAlert("Network Error", "❌", "Error"); }
+                try { 
+                    await saveToCloud(); 
+                    displayCustomAlert(`Success: Status updated for '${selectedUser}'.`, "✅"); 
+                    refreshUI();
+                } catch(e) { displayCustomAlert("Network Error", "❌"); }
                 hideLoader();
-                document.getElementById('searchInput_'+selectId).value = ""; document.getElementById(selectId).value = "";
+                document.getElementById('searchInput_'+selectId).value = "";
+                document.getElementById(selectId).value = "";
             } else {
                 if(toggleType === "lock") {
                     let newState = !SYSTEM_USER_REGISTRY[profileIndex].locked;
@@ -1377,8 +1431,8 @@
         async function executeResetPasswordAction() {
             const selectedUser = document.getElementById('muResetSelect').value; 
             const newPass = document.getElementById('muResetPassInput').value.trim();
-            if(!selectedUser || !newPass) { displayCustomAlert("Error: Please select a user and provide a passcode.", "⚠️", "Notice"); return; }
-            if(selectedUser === "admin") { displayCustomAlert("Restriction: Cannot reset Master Admin.", "🛑", "Access Denied"); return; }
+            if(!selectedUser || !newPass) { displayCustomAlert("Error: Please select a user and provide a passcode.", "⚠️"); return; }
+            if(selectedUser.toLowerCase() === "admin") { displayCustomAlert("Restriction: Cannot reset Master Admin.", "🛑"); return; }
 
             if (canDirectExecute) {
                 const profileIndex = SYSTEM_USER_REGISTRY.findIndex(acc => acc.user === selectedUser); 
@@ -1388,9 +1442,11 @@
                 logAdminAction(`Reset Passcode for '${selectedUser}'`);
                 showLoader("Updating Passcode...");
                 try { 
-                    await saveToCloud(); displayCustomAlert(`Success: Passcode reset.`, "✅", "Updated"); 
-                    document.getElementById('searchInput_muResetSelect').value = ""; document.getElementById('muResetSelect').value = "";
-                } catch(e) { displayCustomAlert("Network Error", "❌", "Error"); }
+                    await saveToCloud(); 
+                    displayCustomAlert(`Success: Passcode reset.`, "✅"); 
+                    document.getElementById('searchInput_muResetSelect').value = "";
+                    document.getElementById('muResetSelect').value = "";
+                } catch(e) { displayCustomAlert("Network Error", "❌"); }
                 hideLoader();
             } else {
                 createRequest('RESET_PASS', `Reset Passcode for '${selectedUser}'`, { user: selectedUser, pass: newPass });
@@ -1400,8 +1456,8 @@
         async function executeRoleChangeAction() {
             const selectedUser = document.getElementById('muRoleTargetSelect').value; 
             const newRole = document.getElementById('muNewRoleSelect').value;
-            if(!selectedUser) { displayCustomAlert("Error: Please select a user.", "⚠️", "Notice"); return; }
-            if(selectedUser === "admin") { displayCustomAlert("Restriction: Master Admin cannot be altered.", "🛑", "Access Denied"); return; }
+            if(!selectedUser) { displayCustomAlert("Error: Please select a user.", "⚠️"); return; }
+            if(selectedUser.toLowerCase() === "admin") { displayCustomAlert("Restriction: Master Admin cannot be altered.", "🛑"); return; }
 
             let defaultCards = [];
             if(newRole === 'admin') defaultCards = ['menuCardBulkBooking', 'menuCardBulk', 'menuCardHoliday', 'menuCardDateWise', 'menuCardACG61', 'menuCardGeneralCharge', 'menuCardSR1', 'menuCardCasualLeave', 'menuCardTAAdvance', 'menuCardTATransfer', 'menuCardTABillTour', 'menuCardCEA', 'menuCardAI', 'menuCardMaintenance', 'menuCardSelfPassword', 'menuCardUpdateNews']; 
@@ -1412,12 +1468,15 @@
                 const profileIndex = SYSTEM_USER_REGISTRY.findIndex(acc => acc.user === selectedUser); 
                 SYSTEM_USER_REGISTRY[profileIndex].role = newRole;
                 SYSTEM_USER_REGISTRY[profileIndex].allowedCards = defaultCards;
-                logAdminAction(`Changed Role for '${selectedUser}'`);
+                logAdminAction(`Changed Role for '${selectedUser}' to ${newRole}`);
                 showLoader("Updating Role...");
                 try { 
-                    await saveToCloud(); displayCustomAlert(`Success: Role updated.`, "✅", "Updated"); 
-                    document.getElementById('searchInput_muRoleTargetSelect').value = ""; document.getElementById('muRoleTargetSelect').value = "";
-                } catch(e) { displayCustomAlert("Network Error", "❌", "Error"); }
+                    await saveToCloud(); 
+                    displayCustomAlert(`Success: Role updated.`, "✅"); 
+                    refreshUI();
+                    document.getElementById('searchInput_muRoleTargetSelect').value = "";
+                    document.getElementById('muRoleTargetSelect').value = "";
+                } catch(e) { displayCustomAlert("Network Error", "❌"); }
                 hideLoader();
             } else {
                 createRequest('CHANGE_ROLE', `Change Role for '${selectedUser}' to ${newRole}`, { user: selectedUser, role: newRole, allowedCards: defaultCards });
@@ -1426,12 +1485,12 @@
 
         async function executeSaveUserCards() {
             const selectedUser = document.getElementById('muCustomizeSelect').value; 
-            if(!selectedUser) { displayCustomAlert("Error: Please select a user.", "⚠️", "Notice"); return; }
-            if(selectedUser === "admin") { displayCustomAlert("Restriction Notice: Master Admin cards cannot be altered.", "🛑", "Access Denied"); return; }
+            if(!selectedUser) { displayCustomAlert("Error: Please select a user.", "⚠️"); return; }
+            if(selectedUser.toLowerCase() === "admin") { displayCustomAlert("Restriction Notice: Master Admin cards cannot be altered.", "🛑"); return; }
 
             let newAllowedCards = [];
             document.querySelectorAll('.card-checkbox').forEach(box => { if (box.checked) newAllowedCards.push(box.value); });
-            if (newAllowedCards.length === 0) { displayCustomAlert("Operational Error: Must have at least one card.", "⚠️", "Notice"); return; }
+            if (newAllowedCards.length === 0) { displayCustomAlert("Operational Error: Must have at least one card.", "⚠️"); return; }
 
             if (canDirectExecute) {
                 const profileIndex = SYSTEM_USER_REGISTRY.findIndex(acc => acc.user === selectedUser); 
@@ -1439,9 +1498,11 @@
                 logAdminAction(`Customized Cards for '${selectedUser}'`);
                 showLoader("Saving Config...");
                 try { 
-                    await saveToCloud(); displayCustomAlert(`Success: Dashboard card config updated.`, "✅", "Updated"); 
-                    document.getElementById('searchInput_muCustomizeSelect').value = ""; document.getElementById('muCustomizeSelect').value = "";
-                } catch(e) { displayCustomAlert("Network Error", "❌", "Error"); }
+                    await saveToCloud(); 
+                    displayCustomAlert(`Success: Dashboard card config updated.`, "✅"); 
+                    document.getElementById('searchInput_muCustomizeSelect').value = "";
+                    document.getElementById('muCustomizeSelect').value = "";
+                } catch(e) { displayCustomAlert("Network Error", "❌"); }
                 hideLoader();
             } else {
                 createRequest('CUSTOMIZE_CARDS', `Customize Dashboard Cards for '${selectedUser}'`, { user: selectedUser, allowedCards: newAllowedCards });
@@ -1450,8 +1511,8 @@
 
         async function executeDeleteUserAction() {
             const selectedUser = document.getElementById('muDeleteSelect').value; 
-            if(!selectedUser) { displayCustomAlert("Error: Please select a user.", "⚠️", "Notice"); return; }
-            if(selectedUser === "admin") { displayCustomAlert("Restriction: Cannot delete Master Admin.", "🛑", "Access Denied"); return; }
+            if(!selectedUser) { displayCustomAlert("Error: Please select a user.", "⚠️"); return; }
+            if(selectedUser.toLowerCase() === "admin") { displayCustomAlert("Restriction: Cannot delete Master Admin.", "🛑"); return; }
 
             if (canDirectExecute) {
                 const profileIndex = SYSTEM_USER_REGISTRY.findIndex(acc => acc.user === selectedUser); 
@@ -1459,9 +1520,12 @@
                 logAdminAction(`Deleted User '${selectedUser}'`);
                 showLoader("Deleting Profile...");
                 try { 
-                    await saveToCloud(); displayCustomAlert(`Success: Profile deleted.`, "🗑️", "Deleted"); 
-                    document.getElementById('searchInput_muDeleteSelect').value = ""; document.getElementById('muDeleteSelect').value = "";
-                } catch(e) { displayCustomAlert("Network Error", "❌", "Error"); }
+                    await saveToCloud(); 
+                    displayCustomAlert(`Success: Profile deleted.`, "✅"); 
+                    refreshUI();
+                    document.getElementById('searchInput_muDeleteSelect').value = "";
+                    document.getElementById('muDeleteSelect').value = "";
+                } catch(e) { displayCustomAlert("Network Error", "❌"); }
                 hideLoader();
             } else {
                 createRequest('DELETE_USER', `Permanently Delete User '${selectedUser}'`, { user: selectedUser });
@@ -1471,7 +1535,7 @@
         async function executeSendDirectMessage() {
             const selectedUser = document.getElementById('muMessageSelect').value; 
             const messageText = document.getElementById('muMessageInput').value.trim();
-            if(!selectedUser || !messageText) { displayCustomAlert("Error: Target user and message both required.", "⚠️", "Notice"); return; }
+            if(!selectedUser || !messageText) { displayCustomAlert("Error: Target user and message both required.", "⚠️"); return; }
 
             const profileIndex = SYSTEM_USER_REGISTRY.findIndex(acc => acc.user === selectedUser); 
             if(profileIndex === -1) return;
@@ -1481,48 +1545,49 @@
             logAdminAction(`Sent Alert to '${selectedUser}'`);
             showLoader("Sending Message...");
             try { 
-                await saveToCloud(); displayCustomAlert(`Success: Alert queued for next login.`, "✅", "Sent"); 
-                document.getElementById('searchInput_muMessageSelect').value = ""; document.getElementById('muMessageSelect').value = "";
-            } catch(e) { displayCustomAlert("Network Error", "❌", "Error"); }
+                await saveToCloud(); 
+                displayCustomAlert(`Success: Alert queued for next login.`, "✅"); 
+                document.getElementById('searchInput_muMessageSelect').value = "";
+                document.getElementById('muMessageSelect').value = "";
+            } catch(e) { displayCustomAlert("Network Error", "❌"); }
             hideLoader();
         }
 
         async function executeUpdateNewsAction() {
             const newText = document.getElementById('muNewsInput').value.trim(); 
-            if(!newText) { displayCustomAlert("Error: Cannot be empty.", "⚠️", "Notice"); return; }
+            if(!newText) { displayCustomAlert("Error: Cannot be empty.", "⚠️"); return; }
 
             showLoader("Publishing News...");
             try { 
                 await db.collection("system").doc("announcements").set({ tickerText: newText }, { merge: true }); 
                 document.getElementById('muNewsInput').value = "";
                 logAdminAction(`Updated Live News`);
-                displayCustomAlert("Success: Live News Feed updated globally!", "✅", "Published"); 
-            } catch (error) { displayCustomAlert("Network Error", "❌", "Error"); }
+                displayCustomAlert("Success: Live News Feed updated globally!", "✅"); 
+            } catch (error) { displayCustomAlert("Network Error", "❌"); }
             hideLoader();
         }
 
-        // ----------------------------------------------------
-        // 12. GOOGLE AUTHENTICATOR (TOTP) SETUP & RESET
-        // ----------------------------------------------------
-        function generateBase32Secret(length = 16) {
-            const charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
-            let secret = '';
-            for (let i = 0; i < length; i++) { secret += charset.charAt(Math.floor(Math.random() * charset.length)); }
-            return secret;
-        }
-
+        // GENERATE 2FA 
         function generate2FAForUser() {
+            if(typeof QRCode === 'undefined') {
+                displayCustomAlert("System Error: QR Code library missing.", "❌");
+                return;
+            }
             const selectedUser = document.getElementById('mu2FASelect').value;
-            if(!selectedUser) { displayCustomAlert("Please search and select a target user first.", "⚠️", "Notice"); return; }
+            if(!selectedUser) { displayCustomAlert("Please search and select a target user first.", "⚠️"); return; }
             
             const profile = SYSTEM_USER_REGISTRY.find(acc => acc.user === selectedUser);
             if (profile && profile.totpSecret && profile.totpSecret !== "") {
-                if(!confirm(`Warning: User '${selectedUser}' is already enrolled in 2FA.\n\nGenerating a new QR code will OVERWRITE their old code.\n\nProceed?`)) {
+                if(!confirm(`Warning: User '${selectedUser}' is already enrolled in 2FA.\n\nGenerating a new QR code will OVERWRITE their old code and lock them out of their old Authenticator app.\n\nDo you want to proceed?`)) {
                     return;
                 }
             }
             
-            pending2FASecret = generateBase32Secret(16);
+            const charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
+            let secret = '';
+            for (let i = 0; i < 16; i++) secret += charset.charAt(Math.floor(Math.random() * charset.length));
+
+            pending2FASecret = secret;
             pending2FAUser = selectedUser;
             
             const issuerName = "PO Staff Utility";
@@ -1531,11 +1596,10 @@
             const qrContainer = document.getElementById('qrcodeDisplay');
             qrContainer.innerHTML = ""; 
             
-            // Perfected QR logic ensuring element clears before redrawing
             new QRCode(qrContainer, {
                 text: otpUri,
-                width: 160,
-                height: 160,
+                width: 180,
+                height: 180,
                 colorDark : "#0f172a",
                 colorLight : "#ffffff",
                 correctLevel : QRCode.CorrectLevel.H
@@ -1559,12 +1623,15 @@
                 showLoader("Saving 2FA Configuration...");
                 try { 
                     await saveToCloud(); 
-                    displayCustomAlert(`Success! Google Authenticator 2FA is now enabled for '${pending2FAUser}'.`, "✅", "Secured"); 
+                    displayCustomAlert(`Success! Google Authenticator 2FA is now enabled for '${pending2FAUser}'.`, "✅"); 
+                    
                     document.getElementById('qrCodeWrapper').style.display = "none";
                     document.getElementById('save2FABtn').style.display = "none";
-                    document.getElementById('searchInput_mu2FASelect').value = ""; document.getElementById('mu2FASelect').value = "";
-                    pending2FASecret = ""; pending2FAUser = "";
-                } catch(e) { displayCustomAlert("Network Error", "❌", "Error"); }
+                    document.getElementById('searchInput_mu2FASelect').value = "";
+                    document.getElementById('mu2FASelect').value = "";
+                    pending2FASecret = ""; 
+                    pending2FAUser = "";
+                } catch(e) { displayCustomAlert("Network Error", "❌"); }
                 hideLoader();
             } else {
                 createRequest('ENROLL_2FA', `Enroll 2FA Authentication for '${pending2FAUser}'`, { user: pending2FAUser, secret: pending2FASecret });
@@ -1573,8 +1640,8 @@
 
         async function executeReset2FAAction() {
             const selectedUser = document.getElementById('muReset2FASelect').value; 
-            if(!selectedUser) { displayCustomAlert("Error: Please select a user.", "⚠️", "Notice"); return; }
-            if(selectedUser === "admin") { displayCustomAlert("Restriction: Cannot reset Master Admin's 2FA from here.", "🛑", "Access Denied"); return; }
+            if(!selectedUser) { displayCustomAlert("Error: Please select a user.", "⚠️"); return; }
+            if(selectedUser.toLowerCase() === "admin") { displayCustomAlert("Restriction: Cannot reset Master Admin's 2FA from here.", "🛑"); return; }
             
             const profileIndex = SYSTEM_USER_REGISTRY.findIndex(acc => acc.user === selectedUser); 
             if(profileIndex === -1) return;
@@ -1585,9 +1652,10 @@
                 showLoader("Resetting 2FA Security...");
                 try { 
                     await saveToCloud(); 
-                    displayCustomAlert(`Success: 2FA has been reset for '${selectedUser}'.`, "🔓", "Unlocked"); 
-                    document.getElementById('searchInput_muReset2FASelect').value = ""; document.getElementById('muReset2FASelect').value = "";
-                } catch(e) { displayCustomAlert("Network Error", "❌", "Error"); }
+                    displayCustomAlert(`Success: 2FA has been reset for '${selectedUser}'.`, "🔓"); 
+                    document.getElementById('searchInput_muReset2FASelect').value = "";
+                    document.getElementById('muReset2FASelect').value = "";
+                } catch(e) { displayCustomAlert("Network Error", "❌"); }
                 hideLoader();
             } else {
                 createRequest('RESET_2FA', `Reset 2FA device for '${selectedUser}'`, { user: selectedUser });
