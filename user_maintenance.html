@@ -8,7 +8,7 @@
 
 <div id="moduleRenderArea">
     
-    <!-- 100% ISOLATED AND PREMIUM CSS -->
+    <!-- 100% ISOLATED PREMIUM CSS -->
     <style>
         .um-page-panel { max-width: 1200px; margin: 0 auto; background: white; padding: 40px; border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.03); border: 1px solid #e2e8f0; font-family: 'Segoe UI', Arial, sans-serif; animation: umFadeIn 0.4s ease-out forwards; }
         
@@ -16,7 +16,7 @@
         .um-back-nav { display: inline-flex; align-items: center; color: #3b82f6; font-weight: 800; font-size: 15px; text-decoration: none; cursor: pointer; transition: color 0.2s; padding: 8px 16px; background: #eff6ff; border-radius: 8px; float: right; }
         .um-back-nav:hover { color: #1d4ed8; background: #dbeafe; transform: translateX(-2px); }
         
-        /* EXACT 3-COLUMN DASHBOARD CARD DESIGN */
+        /* 3-COLUMN DASHBOARD GRID */
         .um-grid-wrapper { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; margin-top: 30px; }
         @media(max-width: 992px) { .um-grid-wrapper { grid-template-columns: repeat(2, 1fr); } }
         @media(max-width: 768px) { .um-grid-wrapper { grid-template-columns: 1fr; } }
@@ -40,12 +40,12 @@
         .um-module-card h3 { margin: 0 0 10px 0; font-size: 20px; font-weight: 900; color: #1e293b; letter-spacing: -0.3px;}
         .um-module-card p { margin: 0; font-size: 13.5px; color: #64748b; line-height: 1.6; font-weight: 500;}
 
-        /* --- PERFECT CENTERED MODALS (PDF PREVIEW STYLE) --- */
+        /* --- PERFECT CENTERED MODALS (GLASSMORPHISM) --- */
         .um-modal-overlay { position: fixed !important; top: 0 !important; left: 0 !important; width: 100vw !important; height: 100vh !important; background: rgba(15, 23, 42, 0.75) !important; backdrop-filter: blur(8px) !important; z-index: 99999990 !important; display: none; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.3s ease; }
         .um-modal-overlay.active { display: flex !important; opacity: 1; }
         
         .um-modal-card { background: #ffffff; width: 90%; max-width: 550px; max-height: 90vh; border-radius: 16px; box-shadow: 0 25px 50px rgba(0,0,0,0.25); display: flex; flex-direction: column; overflow: hidden; border: 1px solid #cbd5e1; transform: scale(0.95); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); margin: auto; }
-        .um-modal-card.wide-modal { max-width: 1000px; } /* For Tables/Logs */
+        .um-modal-card.wide-modal { max-width: 1000px; }
         .um-modal-overlay.active .um-modal-card { transform: scale(1); }
         
         .um-modal-header { padding: 22px 30px; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; background: #f8fafc; }
@@ -62,8 +62,6 @@
         .um-input { width: 100%; padding: 15px 20px; box-sizing: border-box; border: 2px solid #e2e8f0; border-radius: 10px; font-size: 15px; background: #f8fafc; color: #1e293b !important; transition: all 0.3s ease; font-weight: 600; font-family: 'Segoe UI', Arial, sans-serif;}
         .um-input:focus { border-color: #3b82f6; background: #ffffff; box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15); outline: none;}
         .um-input::placeholder { color: #94a3b8 !important; font-weight: 400 !important; font-style: normal !important; opacity: 1 !important;}
-        
-        select.um-input { cursor: pointer; }
 
         .um-flex-row { display: flex; gap: 20px; flex-wrap: wrap; }
         .um-flex-row > div { flex: 1; min-width: 200px; }
@@ -75,6 +73,8 @@
         .um-action-btn.green:hover { background: #059669; transform: translateY(-2px); }
         .um-action-btn.red { background: #ef4444; box-shadow: 0 8px 20px rgba(239, 68, 68, 0.25); }
         .um-action-btn.red:hover { background: #dc2626; transform: translateY(-2px); }
+        .um-action-btn.orange { background: #f59e0b; box-shadow: 0 8px 20px rgba(245, 158, 11, 0.25); }
+        .um-action-btn.orange:hover { background: #d97706; transform: translateY(-2px); }
 
         /* Custom Checkbox Grid */
         .um-checkbox-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; margin-top: 10px; margin-bottom: 25px; }
@@ -88,18 +88,22 @@
         .um-log-table { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 13.5px; }
         .um-log-table th, .um-log-table td { padding: 15px; text-align: left; color: #334155; border-bottom: 1px solid #e2e8f0; vertical-align: middle; }
         .um-log-table th { background: #f8fafc; font-weight: 800; color: #0f172a; text-transform: uppercase; font-size: 12px; letter-spacing: 0.5px;}
-        .um-log-table tr:hover td { background: #f1f5f9; }
+        .um-log-table tr:hover td { background: #f1f5f9; cursor: pointer; }
         
-        .um-badge { padding: 6px 12px; border-radius: 20px; font-size: 11px; font-weight: 800; color: #fff; letter-spacing: 0.5px; text-transform: uppercase; }
+        .um-badge { padding: 6px 12px; border-radius: 20px; font-size: 11px; font-weight: 800; color: #fff; letter-spacing: 0.5px; text-transform: uppercase; display: inline-block;}
         .um-badge-green { background: #10b981; } .um-badge-red { background: #ef4444; } .um-badge-orange { background: #f59e0b; } .um-badge-purple { background: #8b5cf6; }
 
-        /* QR Code & Alert Boxes */
-        .um-qr-box { text-align: center; background: #f8fafc; padding: 30px; border: 2px dashed #cbd5e1; border-radius: 12px; margin-top: 10px; }
+        /* Profile Action Hub */
+        .profile-action-hub { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px; margin-top: 25px; }
+        .profile-action-hub h4 { margin: 0 0 15px 0; color: #0f172a; font-size: 16px; border-bottom: 2px solid #e2e8f0; padding-bottom: 8px;}
+        .hub-btn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .hub-btn { padding: 12px; border-radius: 8px; font-weight: 800; font-size: 13px; color: white; border: none; cursor: pointer; text-transform: uppercase; transition: 0.2s;}
+        .hub-btn:hover { transform: translateY(-2px); }
+
+        /* Loaders & Alerts */
         .um-alert-icon { font-size: 50px; margin-bottom: 15px; text-align: center; }
         .um-alert-text { color: #1e293b; font-size: 16px; line-height: 1.6; margin: 0 0 25px 0; font-weight: 800; text-align: center; white-space: pre-line;}
-        .um-alert-btn { background: #0f172a; color: white; border: none; padding: 14px 28px; border-radius: 10px; font-size: 14.5px; font-weight: 900; cursor: pointer; text-transform: uppercase; width: 100%; transition: 0.2s;}
-        .um-alert-btn:hover { background: #334155; transform: translateY(-2px); }
-
+        
         .um-loader-overlay { position: fixed !important; top: 0 !important; left: 0 !important; width: 100vw !important; height: 100vh !important; background: rgba(255, 255, 255, 0.9) !important; backdrop-filter: blur(5px) !important; z-index: 100000000 !important; display: none; flex-direction: column; justify-content: center; align-items: center; }
         .um-spinner { width: 50px; height: 50px; border: 5px solid #f1f5f9; border-top: 5px solid #3b82f6; border-radius: 50%; animation: umSpin 0.8s linear infinite; margin-bottom: 20px; }
         .um-loader-text { font-size: 15px; font-weight: 900; color: #0f172a; letter-spacing: 0.5px; }
@@ -108,7 +112,7 @@
         @keyframes umSpin { 100% { transform: rotate(360deg); } }
     </style>
 
-    <!-- MAIN PAGE DASHBOARD -->
+    <!-- MAIN DASHBOARD -->
     <div class='um-page-panel' id="umMainDashboard">
         <div style="margin-bottom: 25px; border-bottom: 2px solid #e2e8f0; padding-bottom: 15px; overflow: hidden;">
             <div class='um-back-nav' onclick='typeof returnToHomeGridSPA === "function" ? returnToHomeGridSPA() : (window.location.href="index.html")'>⬅️ Exit to Portal</div>
@@ -116,7 +120,6 @@
             <p style="color: #64748b; font-size: 15px; margin-top: 8px; font-weight: 500;">Secure Admin Identity & Access Management Platform.</p>
         </div>
 
-        <!-- THE 3-COLUMN PERFECT GRID -->
         <div class="um-grid-wrapper" id="umCardsGrid">
             
             <!-- MASTER ADMIN ONLY -->
@@ -188,6 +191,12 @@
                 <h3>Change User Role</h3>
                 <p>Elevate a user to Admin or restrict them down to Maker permissions.</p>
             </div>
+            
+            <div class="um-module-card um-card-indigo" onclick="umOpenModal('umModal_ChangeSol')">
+                <div class="um-card-icon">🏢</div>
+                <h3>Change User Zone (SOL)</h3>
+                <p>Remap an existing user profile to a completely different office or zone.</p>
+            </div>
 
             <div class="um-module-card um-card-teal" onclick="umOpenModal('umModal_CustomizeCards')">
                 <div class="um-card-icon">🎛️</div>
@@ -215,7 +224,7 @@
         </div>
     </div>
 
-    <!-- INJECTABLE MODALS (Moved to Body by JS) -->
+    <!-- INJECTABLE MODALS (Moved to Body by JS to prevent overlay clipping) -->
     <div id="umInjectableModals" style="display: none;">
 
         <!-- 1. CREATE USER MODAL -->
@@ -311,7 +320,7 @@
                         <label>Select Target User</label>
                         <select id="um_sel_lock" class="um-input um-user-dropdown"></select>
                     </div>
-                    <button class="um-action-btn blue um-btn-dynamic" style="background: #f59e0b;" onclick="umExecuteAction('TOGGLE_LOCK', 'um_sel_lock')">Toggle Lock Status</button>
+                    <button class="um-action-btn orange um-btn-dynamic" onclick="umExecuteAction('TOGGLE_LOCK', 'um_sel_lock')">Toggle Lock Status</button>
                 </div>
             </div>
         </div>
@@ -381,7 +390,28 @@
             </div>
         </div>
 
-        <!-- 8. CUSTOMIZE CARDS MODAL -->
+        <!-- 8. CHANGE ZONE / SOL MODAL -->
+        <div id="umModal_ChangeSol" class="um-modal-overlay">
+            <div class="um-modal-card" style="border-top: 6px solid #4f46e5;">
+                <div class="um-modal-header">
+                    <h3>🏢 Change User Zone (SOL)</h3>
+                    <button class="um-close-btn" onclick="umCloseModal('umModal_ChangeSol')">✖ Close</button>
+                </div>
+                <div class="um-modal-content">
+                    <div class="um-form-group">
+                        <label>Select Target User</label>
+                        <select id="um_sel_change_sol" class="um-input um-user-dropdown"></select>
+                    </div>
+                    <div class="um-form-group">
+                        <label>New Target Office (SOL)</label>
+                        <select id="um_in_sol_val" class="um-input"></select>
+                    </div>
+                    <button class="um-action-btn blue um-btn-dynamic" onclick="umExecuteAction('CHANGE_SOL', 'um_sel_change_sol')">Migrate User SOL</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 9. CUSTOMIZE CARDS MODAL -->
         <div id="umModal_CustomizeCards" class="um-modal-overlay">
             <div class="um-modal-card" style="border-top: 6px solid #14b8a6; max-width: 650px;">
                 <div class="um-modal-header">
@@ -420,7 +450,7 @@
             </div>
         </div>
 
-        <!-- 9. DELETE USER MODAL -->
+        <!-- 10. DELETE USER MODAL -->
         <div id="umModal_DeleteUser" class="um-modal-overlay">
             <div class="um-modal-card" style="border-top: 6px solid #e11d48;">
                 <div class="um-modal-header">
@@ -438,7 +468,7 @@
             </div>
         </div>
 
-        <!-- 10. DIRECT MESSAGE MODAL -->
+        <!-- 11. DIRECT MESSAGE MODAL -->
         <div id="umModal_DirectMessage" class="um-modal-overlay">
             <div class="um-modal-card" style="border-top: 6px solid #f59e0b;">
                 <div class="um-modal-header">
@@ -454,12 +484,12 @@
                         <label>Personalized Message</label>
                         <textarea id="um_in_msg_val" class="um-input" rows="4" placeholder="Type your message here..."></textarea>
                     </div>
-                    <button class="um-action-btn blue um-btn-dynamic" style="background: #f59e0b;" onclick="umExecuteAction('SEND_MSG', 'um_sel_msg')">Send Message</button>
+                    <button class="um-action-btn orange um-btn-dynamic" onclick="umExecuteAction('SEND_MSG', 'um_sel_msg')">Send Message</button>
                 </div>
             </div>
         </div>
 
-        <!-- 11. BROADCAST NEWS MODAL -->
+        <!-- 12. BROADCAST NEWS MODAL -->
         <div id="umModal_BroadcastNews" class="um-modal-overlay">
             <div class="um-modal-card" style="border-top: 6px solid #10b981;">
                 <div class="um-modal-header">
@@ -476,7 +506,7 @@
             </div>
         </div>
 
-        <!-- 12. USER LOGS & ROSTER WIDE MODAL -->
+        <!-- 13. USER LOGS & ROSTER WIDE MODAL -->
         <div id="umModal_UserLogs" class="um-modal-overlay">
             <div class="um-modal-card wide-modal" style="border-top: 6px solid #4f46e5;">
                 <div class="um-modal-header">
@@ -486,14 +516,14 @@
                 <div class="um-modal-content">
                     <div class="um-table-container">
                         <table class="um-log-table">
-                            <thead><tr><th colspan="6" style="background: #e0e7ff; color: #3730a3; font-size: 14px;">Registered Account Registry</th></tr>
+                            <thead><tr><th colspan="6" style="background: #e0e7ff; color: #3730a3; font-size: 14px;">Registered Account Registry <span style="font-size: 11px; color:#64748b; font-weight:normal; float:right;">(Click row to edit)</span></th></tr>
                             <tr><th>Name</th><th>Username</th><th>SOL</th><th>Role</th><th>Status</th><th>Lock</th></tr></thead>
                             <tbody id="umRosterTableBody"></tbody>
                         </table>
                     </div>
                     <div class="um-table-container">
                         <table class="um-log-table">
-                            <thead><tr><th colspan="3" style="background: #f1f5f9; color: #334155; font-size: 14px;">Recent Login Activity</th></tr>
+                            <thead><tr><th colspan="3" style="background: #f1f5f9; color: #334155; font-size: 14px;">Recent Login Activity (Max 10)</th></tr>
                             <tr><th>Timestamp</th><th>Connecting User</th><th>Event Status</th></tr></thead>
                             <tbody id="umLogsTableBody"></tbody>
                         </table>
@@ -502,7 +532,7 @@
             </div>
         </div>
 
-        <!-- 13. PENDING APPROVALS WIDE MODAL -->
+        <!-- 14. PENDING APPROVALS WIDE MODAL -->
         <div id="umModal_Approvals" class="um-modal-overlay">
             <div class="um-modal-card wide-modal" style="border-top: 6px solid #e11d48;">
                 <div class="um-modal-header">
@@ -520,7 +550,7 @@
             </div>
         </div>
 
-        <!-- 14. MY SUBMITTED REQUESTS WIDE MODAL -->
+        <!-- 15. MY SUBMITTED REQUESTS WIDE MODAL -->
         <div id="umModal_MyRequests" class="um-modal-overlay">
             <div class="um-modal-card wide-modal" style="border-top: 6px solid #14b8a6;">
                 <div class="um-modal-header">
@@ -538,7 +568,7 @@
             </div>
         </div>
 
-        <!-- 15. TRANSFER STATUS WIDE MODAL -->
+        <!-- 16. TRANSFER STATUS WIDE MODAL -->
         <div id="umModal_TransferStatus" class="um-modal-overlay">
             <div class="um-modal-card wide-modal" style="border-top: 6px solid #8b5cf6;">
                 <div class="um-modal-header">
@@ -556,7 +586,40 @@
             </div>
         </div>
 
-        <!-- 16. REQUEST AUDIT DETAILS MODAL (Inner Popup) -->
+        <!-- 17. USER PROFILE & ACTION HUB MODAL -->
+        <div id="umModal_UserProfile" class="um-modal-overlay" style="z-index: 99999995 !important;">
+            <div class="um-modal-card" style="max-width: 480px; border-top: 6px solid #3b82f6;">
+                <div class="um-modal-header">
+                    <h3>👤 User Profile</h3>
+                    <button class="um-close-btn" onclick="umCloseModal('umModal_UserProfile')">✖ Close</button>
+                </div>
+                <div class="um-modal-content" style="text-align: center;">
+                    <div style="width: 70px; height: 70px; background: #dbeafe; border-radius: 50%; display: flex; justify-content: center; align-items: center; margin: 0 auto 15px auto; font-size: 32px;">👤</div>
+                    <h3 style="margin:0 0 5px 0; color:#1e293b; font-size: 22px;" id="profileModalName">Name</h3>
+                    <p style="color: #64748b; font-size: 14px; margin:0 0 20px 0;">@<span id="profileModalUser">username</span></p>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; text-align: left; margin-bottom: 20px; background: #f8fafc; padding: 15px; border-radius: 12px; border: 1px solid #e2e8f0;">
+                        <div><div style="font-size:12px; color:#64748b; font-weight:bold;">SOL ID</div><div style="font-size:15px; color:#0f172a; font-weight:bold;" id="profileModalSol">000000</div></div>
+                        <div><div style="font-size:12px; color:#64748b; font-weight:bold;">Role</div><div style="font-size:15px; color:#0f172a; font-weight:bold; text-transform:uppercase;" id="profileModalRole">Maker</div></div>
+                        <div><div style="font-size:12px; color:#64748b; font-weight:bold;">Status</div><div style="font-size:15px; font-weight:bold;" id="profileModalActive">Enabled</div></div>
+                        <div><div style="font-size:12px; color:#64748b; font-weight:bold;">Security</div><div style="font-size:15px; font-weight:bold;" id="profileModalLock">Unlocked</div></div>
+                    </div>
+                    
+                    <!-- ACTION HUB FOR ADMINS -->
+                    <div id="profileActionHub" class="profile-action-hub">
+                        <h4>⚡ Quick Action Hub</h4>
+                        <div class="hub-btn-grid">
+                            <button class="hub-btn" style="background:#475569;" id="btnProfResetPass">🔄 Reset Pass</button>
+                            <button class="hub-btn" style="background:#e11d48;" id="btnProfReset2FA">🔓 Clear 2FA</button>
+                            <button class="hub-btn" style="background:#4f46e5;" id="btnProfChangeSol">🏢 Change SOL</button>
+                            <button class="hub-btn" style="background:#f59e0b;" id="btnProfToggleLock">🗝️ Toggle Lock</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 18. REQUEST AUDIT DETAILS MODAL -->
         <div id="umModal_RequestDetails" class="um-modal-overlay" style="z-index: 99999995 !important;">
             <div class="um-modal-card" style="border-top: 6px solid #0f172a;">
                 <div class="um-modal-header">
@@ -570,7 +633,7 @@
             </div>
         </div>
 
-        <!-- 17. ROUTE/TRANSFER MODAL (Inner Popup) -->
+        <!-- 19. ROUTE/TRANSFER MODAL -->
         <div id="umModal_RouteTransfer" class="um-modal-overlay" style="z-index: 99999995 !important;">
             <div class="um-modal-card" style="border-top: 6px solid #f59e0b;">
                 <div class="um-modal-header">
@@ -582,7 +645,7 @@
                         <label>Select HQ Admin</label>
                         <select id="um_sel_transfer_admin" class="um-input"></select>
                     </div>
-                    <button class="um-action-btn blue um-btn-dynamic" style="background: #f59e0b;" onclick="umExecuteTransfer()">Confirm Transfer</button>
+                    <button class="um-action-btn orange um-btn-dynamic" onclick="umExecuteTransfer()">Confirm Transfer</button>
                 </div>
             </div>
         </div>
@@ -615,8 +678,11 @@
             document.head.appendChild(s2);
         }
 
-        // GLOBALS
-        if (typeof window.SYSTEM_PENDING_REQUESTS === 'undefined') window.SYSTEM_PENDING_REQUESTS = [];
+        // --- GLOBAL SYNC ---
+        let SYSTEM_USER_REGISTRY = window.SYSTEM_USER_REGISTRY || [];
+        let SYSTEM_OFFICE_REGISTRY = window.SYSTEM_OFFICE_REGISTRY || [];
+        let SYSTEM_LOGIN_HISTORY = window.SYSTEM_LOGIN_HISTORY || [];
+        let SYSTEM_PENDING_REQUESTS = window.SYSTEM_PENDING_REQUESTS || [];
 
         let activeUserLocal = null;
         let activeRoleLocal = null;
@@ -691,14 +757,30 @@
         // =====================================
         // INIT & POPULATE UI
         // =====================================
-        function initMaintenanceHub() {
+        async function initMaintenanceHub() {
             activeUserLocal = sessionStorage.getItem("activeUser");
             activeRoleLocal = sessionStorage.getItem("activeRole");
 
             // Absolute Admin Override Bug Fix
-            isMasterAdmin = (activeUserLocal === "admin");
+            isMasterAdmin = (activeUserLocal.toLowerCase() === "admin");
+            
+            // Sync Globals just in case
+            if(typeof db !== 'undefined') {
+                try {
+                    const snap = await db.collection("system").doc("registry").get();
+                    if(snap.exists) {
+                        let d = snap.data();
+                        SYSTEM_USER_REGISTRY = d.users || [];
+                        SYSTEM_OFFICE_REGISTRY = d.offices || [];
+                        SYSTEM_LOGIN_HISTORY = d.logs || [];
+                        SYSTEM_PENDING_REQUESTS = d.requests || [];
+                    }
+                } catch(e) {}
+            }
+
             const myProfile = SYSTEM_USER_REGISTRY.find(u => u.user === activeUserLocal);
             activeSolIdLocal = myProfile ? myProfile.solId : null;
+            
             isHQAdmin = (isMasterAdmin || activeSolIdLocal === "000000");
             
             // "Admin" overrides network errors by direct execution
@@ -727,7 +809,6 @@
         }
 
         function umRefreshUI() {
-            // Populate Dropdowns safely using native <select> (No clipping bugs)
             const visibleUsers = SYSTEM_USER_REGISTRY.filter(u => {
                 if (isMasterAdmin) return true;
                 if (u.user === "admin") return false; 
@@ -735,8 +816,10 @@
                 return u.solId === activeSolIdLocal; 
             });
 
+            // Populate User Dropdowns
             const userDropdowns = document.querySelectorAll('.um-user-dropdown');
             userDropdowns.forEach(dd => {
+                let currentVal = dd.value;
                 dd.innerHTML = "<option value=''>-- Select User --</option>";
                 visibleUsers.forEach(u => {
                     if (u.user === "admin" && !isMasterAdmin) return;
@@ -745,32 +828,35 @@
                     opt.innerText = `${u.fullName} (@${u.user}) - SOL: ${u.solId || 'None'}`;
                     dd.appendChild(opt);
                 });
+                dd.value = currentVal; // preserve selection
             });
 
-            // Populate SOL Dropdown
-            const solSelect = document.getElementById('um_in_create_sol');
-            if(solSelect) {
-                solSelect.innerHTML = "<option value=''>-- Select Target SOL --</option>";
-                if (isHQAdmin) {
-                    SYSTEM_OFFICE_REGISTRY.forEach(o => {
-                        let opt = document.createElement('option');
-                        opt.value = o.solId;
-                        opt.innerText = `${o.solId} - ${o.name}`;
-                        solSelect.appendChild(opt);
-                    });
-                    solSelect.disabled = false;
-                } else {
-                    let myOffice = SYSTEM_OFFICE_REGISTRY.find(o => o.solId === activeSolIdLocal);
-                    if(myOffice) {
-                        let opt = document.createElement('option');
-                        opt.value = myOffice.solId;
-                        opt.innerText = `${myOffice.solId} - ${myOffice.name} (Locked)`;
-                        opt.selected = true;
-                        solSelect.appendChild(opt);
-                        solSelect.disabled = true; 
+            // Populate SOL Dropdowns
+            ['um_in_create_sol', 'um_in_sol_val'].forEach(id => {
+                const solSelect = document.getElementById(id);
+                if(solSelect) {
+                    solSelect.innerHTML = "<option value=''>-- Select Target SOL --</option>";
+                    if (isHQAdmin) {
+                        SYSTEM_OFFICE_REGISTRY.forEach(o => {
+                            let opt = document.createElement('option');
+                            opt.value = o.solId;
+                            opt.innerText = `${o.solId} - ${o.name}`;
+                            solSelect.appendChild(opt);
+                        });
+                        solSelect.disabled = false;
+                    } else {
+                        let myOffice = SYSTEM_OFFICE_REGISTRY.find(o => o.solId === activeSolIdLocal);
+                        if(myOffice) {
+                            let opt = document.createElement('option');
+                            opt.value = myOffice.solId;
+                            opt.innerText = `${myOffice.solId} - ${myOffice.name} (Locked)`;
+                            opt.selected = true;
+                            solSelect.appendChild(opt);
+                            solSelect.disabled = true; 
+                        }
                     }
                 }
-            }
+            });
 
             // Populate User Roster Table
             const rosterBody = document.getElementById('umRosterTableBody'); 
@@ -786,16 +872,17 @@
                         <td><span class="um-badge ${u.active ? 'um-badge-green' : 'um-badge-red'}">${u.active ? 'ENABLED' : 'DISABLED'}</span></td>
                         <td><span class="um-badge ${u.locked ? 'um-badge-orange' : 'um-badge-green'}">${u.locked ? 'LOCKED' : 'UNLOCKED'}</span></td>
                     `;
+                    r.onclick = () => umOpenUserProfile(u.user);
                     rosterBody.appendChild(r);
                 });
             }
 
-            // Populate Logs Table
+            // Populate Logs Table (MAX 10)
             const historyBody = document.getElementById('umLogsTableBody');
             if(historyBody) {
                 historyBody.innerHTML = ""; 
                 const visibleLogs = isHQAdmin ? SYSTEM_LOGIN_HISTORY : SYSTEM_LOGIN_HISTORY.filter(l => l.solId === activeSolIdLocal);
-                let stack = [...visibleLogs].reverse().slice(0, 15);
+                let stack = [...visibleLogs].reverse().slice(0, 10);
                 stack.forEach(log => { 
                     let color = log.event.includes('Failed') || log.event.includes('Rejected') ? '#ef4444' : '#1e293b';
                     historyBody.innerHTML += `<tr><td>${log.time}</td><td><code>${log.user}</code></td><td style="color:${color}; font-weight:bold;">${log.event}</td></tr>`; 
@@ -804,7 +891,7 @@
 
             // Populate HQ Approvals
             if (isHQAdmin) {
-                const pendingOnly = window.SYSTEM_PENDING_REQUESTS.filter(r => r.status === 'PENDING' && (isMasterAdmin || r.assignedTo === 'ALL' || r.assignedTo === activeUserLocal));
+                const pendingOnly = SYSTEM_PENDING_REQUESTS.filter(r => r.status === 'PENDING' && (isMasterAdmin || r.assignedTo === 'ALL' || r.assignedTo === activeUserLocal));
                 const badge = document.getElementById('umApprovalBadge');
                 if(badge) badge.innerText = pendingOnly.length;
                 
@@ -828,7 +915,7 @@
             } 
             
             // Populate My Requests
-            const myRequests = window.SYSTEM_PENDING_REQUESTS.filter(r => r.requestedBy === activeUserLocal).reverse().slice(0, 10);
+            const myRequests = SYSTEM_PENDING_REQUESTS.filter(r => r.requestedBy === activeUserLocal).reverse().slice(0, 10);
             const myBody = document.getElementById('umMyReqTableBody');
             if(myBody) {
                 myBody.innerHTML = "";
@@ -853,7 +940,7 @@
             if (isMasterAdmin) {
                 const tStatusBody = document.getElementById('umTransferTableBody');
                 if(tStatusBody) {
-                    const transReqs = window.SYSTEM_PENDING_REQUESTS.filter(r => r.status === 'PENDING' && r.assignedTo !== 'ALL').reverse();
+                    const transReqs = SYSTEM_PENDING_REQUESTS.filter(r => r.status === 'PENDING' && r.assignedTo !== 'ALL').reverse();
                     tStatusBody.innerHTML = "";
                     if(transReqs.length === 0) {
                         tStatusBody.innerHTML = "<tr><td colspan='5' style='text-align:center; padding:20px; color:#64748b;'>No cases transferred.</td></tr>";
@@ -885,32 +972,74 @@
         }
 
         // =====================================
+        // PROFILE ACTION HUB
+        // =====================================
+        function umOpenUserProfile(username) {
+            const u = SYSTEM_USER_REGISTRY.find(x => x.user === username);
+            if(!u) return;
+
+            document.getElementById('profileModalName').innerText = u.fullName || u.user;
+            document.getElementById('profileModalUser').innerText = u.user;
+            
+            let solName = "Unmapped";
+            if(u.solId) {
+                let off = SYSTEM_OFFICE_REGISTRY.find(o => o.solId === u.solId);
+                solName = off ? `${u.solId} - ${off.name}` : u.solId;
+            }
+            document.getElementById('profileModalSol').innerText = solName;
+            document.getElementById('profileModalRole').innerText = u.role;
+            
+            const aEl = document.getElementById('profileModalActive');
+            aEl.innerText = u.active ? "Enabled" : "Disabled";
+            aEl.style.color = u.active ? "#10b981" : "#ef4444";
+
+            const lEl = document.getElementById('profileModalLock');
+            lEl.innerText = u.locked ? "Locked" : "Unlocked";
+            lEl.style.color = u.locked ? "#f59e0b" : "#10b981";
+
+            if(canDirectExecute) {
+                document.getElementById('profileActionHub').style.display = 'block';
+                
+                document.getElementById('btnProfResetPass').onclick = () => { umCloseModal('umModal_UserProfile'); document.getElementById('um_sel_resetpass').value = u.user; umOpenModal('umModal_ResetPass'); };
+                document.getElementById('btnProfReset2FA').onclick = () => { umCloseModal('umModal_UserProfile'); document.getElementById('um_sel_reset2fa').value = u.user; umOpenModal('umModal_Reset2FA'); };
+                document.getElementById('btnProfChangeSol').onclick = () => { umCloseModal('umModal_UserProfile'); document.getElementById('um_sel_change_sol').value = u.user; umOpenModal('umModal_ChangeSol'); };
+                document.getElementById('btnProfToggleLock').onclick = () => { umCloseModal('umModal_UserProfile'); document.getElementById('um_sel_lock').value = u.user; umOpenModal('umModal_LockUnlock'); };
+            } else {
+                document.getElementById('profileActionHub').style.display = 'none';
+            }
+
+            umOpenModal('umModal_UserProfile');
+        }
+
+        // =====================================
         // CORE FIREBASE ACTION HANDLERS
         // =====================================
         async function umSaveToCloudLocal() {
-            if (typeof window.SYSTEM_PENDING_REQUESTS === 'undefined') window.SYSTEM_PENDING_REQUESTS = [];
             try {
                 if(typeof db === 'undefined') throw new Error("Firebase not initialized");
+                
+                // Enforce Max 10 Logs Globally before saving
+                if(SYSTEM_LOGIN_HISTORY.length > 10) SYSTEM_LOGIN_HISTORY = SYSTEM_LOGIN_HISTORY.slice(-10);
+
                 await db.collection("system").doc("registry").set({
                     users: SYSTEM_USER_REGISTRY,
                     logs: SYSTEM_LOGIN_HISTORY,
                     offices: SYSTEM_OFFICE_REGISTRY,
-                    requests: window.SYSTEM_PENDING_REQUESTS
+                    requests: SYSTEM_PENDING_REQUESTS
                 }, { merge: true });
             } catch (err) {
                 console.error("Firebase Sync Error:", err);
-                throw err; // Crucial for catch blocks to trigger
+                throw err;
             }
         }
 
         function umLogAction(eventMsg) {
             let opts = { timeZone: 'Asia/Kolkata', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
             SYSTEM_LOGIN_HISTORY.push({ time: new Date().toLocaleString('en-IN', opts), user: activeUserLocal, event: eventMsg, solId: activeSolIdLocal });
-            if (SYSTEM_LOGIN_HISTORY.length > 30) SYSTEM_LOGIN_HISTORY.shift();
         }
 
         function umCreateRequest(type, desc, payload) {
-            window.SYSTEM_PENDING_REQUESTS.push({
+            SYSTEM_PENDING_REQUESTS.push({
                 id: Date.now().toString() + Math.random().toString(36).substr(2, 5),
                 type: type, desc: desc, payload: payload,
                 requestedBy: activeUserLocal, solId: activeSolIdLocal,
@@ -924,7 +1053,7 @@
             }).catch(e => umShowAlert("Failed to submit request.", "❌")).finally(() => umHideLoader());
         }
 
-        // GENERIC EXECUTOR FOR DROPDOWN MODALS
+        // GENERIC EXECUTOR
         async function umExecuteAction(actionType, selectId) {
             const selectedUser = document.getElementById(selectId).value; 
             if(!selectedUser) { umShowAlert("Please select a target user.", "⚠️"); return; }
@@ -951,6 +1080,10 @@
                 desc = `Change Role for '${selectedUser}' to ${payload.role}`;
                 if(payload.role === 'admin') payload.allowedCards = ['menuCardDBDE', 'menuCardOfficeHub', 'menuCardBulkBooking', 'menuCardBulk', 'menuCardHoliday', 'menuCardDateWise', 'menuCardACG61', 'menuCardGeneralCharge', 'menuCardSR1', 'menuCardCasualLeave', 'menuCardTAAdvance', 'menuCardTATransfer', 'menuCardTABillTour', 'menuCardCEA', 'menuCardAI', 'menuCardMaintenance', 'menuCardSelfPassword']; 
                 else payload.allowedCards = ['menuCardDBDE', 'menuCardBulkBooking', 'menuCardBulk', 'menuCardHoliday', 'menuCardDateWise', 'menuCardACG61', 'menuCardGeneralCharge', 'menuCardSR1', 'menuCardCasualLeave', 'menuCardTAAdvance', 'menuCardTATransfer', 'menuCardTABillTour', 'menuCardCEA', 'menuCardAI', 'menuCardSelfPassword'];
+            } else if(actionType === 'CHANGE_SOL') {
+                payload.solId = document.getElementById('um_in_sol_val').value;
+                if(!payload.solId) { umShowAlert("New SOL required.", "⚠️"); return; }
+                desc = `Change SOL for '${selectedUser}' to ${payload.solId}`;
             } else if(actionType === 'CUSTOMIZE_CARDS') {
                 let cards = [];
                 document.querySelectorAll('.um-card-check').forEach(box => { if (box.checked) cards.push(box.value); });
@@ -972,6 +1105,7 @@
                 if(actionType === 'TOGGLE_ENABLE') SYSTEM_USER_REGISTRY[profileIndex].active = payload.active;
                 if(actionType === 'RESET_PASS') { SYSTEM_USER_REGISTRY[profileIndex].pass = payload.pass; SYSTEM_USER_REGISTRY[profileIndex].isFirstTimeDefault = true; }
                 if(actionType === 'CHANGE_ROLE') { SYSTEM_USER_REGISTRY[profileIndex].role = payload.role; SYSTEM_USER_REGISTRY[profileIndex].allowedCards = payload.allowedCards; }
+                if(actionType === 'CHANGE_SOL') SYSTEM_USER_REGISTRY[profileIndex].solId = payload.solId;
                 if(actionType === 'CUSTOMIZE_CARDS') SYSTEM_USER_REGISTRY[profileIndex].allowedCards = payload.allowedCards;
                 if(actionType === 'DELETE_USER') SYSTEM_USER_REGISTRY.splice(profileIndex, 1);
                 if(actionType === 'SEND_MSG') SYSTEM_USER_REGISTRY[profileIndex].pendingMessage = payload.msg;
@@ -984,7 +1118,7 @@
                     umCloseModal(document.getElementById(selectId).closest('.um-modal-overlay').id);
                     umShowAlert(`Success: ${desc}`, "✅"); 
                     umRefreshUI();
-                } catch(e) { umShowAlert("Network Error", "❌"); }
+                } catch(e) { umShowAlert("Network Error: Could not save to DB.", "❌"); }
                 umHideLoader();
             } else {
                 umCloseModal(document.getElementById(selectId).closest('.um-modal-overlay').id);
@@ -1044,7 +1178,7 @@
         // =====================================
         function umViewRequest(reqId) {
             currentlyViewingRequest = reqId;
-            const req = window.SYSTEM_PENDING_REQUESTS.find(r => r.id === reqId);
+            const req = SYSTEM_PENDING_REQUESTS.find(r => r.id === reqId);
             if (!req) return;
 
             let html = ``;
@@ -1052,12 +1186,12 @@
             for (const [k, v] of Object.entries(req.payload)) {
                 html += `${k.toUpperCase()}: ${typeof v==='object'?JSON.stringify(v):v}\n`;
             }
-            document.getElementById('umRequestContentHTML').innerText = html;
+            document.getElementById('umRequestContentHTML').innerHTML = html;
 
             let btns = `
                 <button class="sp-action-btn green" style="padding:12px; margin:0; flex:1;" onclick="umProcessReq('APPROVE')">✅ Approve</button>
                 <button class="sp-action-btn red" style="padding:12px; margin:0; flex:1;" onclick="umProcessReq('REJECT')">❌ Reject</button>
-                <button class="sp-action-btn blue" style="background:#f59e0b; padding:12px; margin:0; flex:1;" onclick="umOpenRouteModal()">🔄 Transfer</button>
+                <button class="sp-action-btn orange" style="padding:12px; margin:0; flex:1;" onclick="umOpenRouteModal()">🔄 Transfer</button>
             `;
             if (isMasterAdmin && req.assignedTo !== 'ALL' && req.status === 'PENDING') {
                 btns += `<button class="sp-action-btn blue" style="background:#8b5cf6; padding:12px; margin:0; flex:1;" onclick="umRevokeRoute()">🔙 Revoke</button>`;
@@ -1070,9 +1204,9 @@
         }
 
         async function umProcessReq(action) {
-            const reqIdx = window.SYSTEM_PENDING_REQUESTS.findIndex(r => r.id === currentlyViewingRequest);
+            const reqIdx = SYSTEM_PENDING_REQUESTS.findIndex(r => r.id === currentlyViewingRequest);
             if (reqIdx === -1) return;
-            const req = window.SYSTEM_PENDING_REQUESTS[reqIdx];
+            const req = SYSTEM_PENDING_REQUESTS[reqIdx];
 
             if (action === 'APPROVE') {
                 const p = req.payload;
@@ -1082,6 +1216,7 @@
                     case 'TOGGLE_ENABLE': let u2 = SYSTEM_USER_REGISTRY.find(x => x.user === p.user); if(u2) u2.active = p.active; break;
                     case 'RESET_PASS': let u3 = SYSTEM_USER_REGISTRY.find(x => x.user === p.user); if(u3) { u3.pass = p.pass; u3.isFirstTimeDefault = true; } break;
                     case 'CHANGE_ROLE': let u4 = SYSTEM_USER_REGISTRY.find(x => x.user === p.user); if(u4) { u4.role = p.role; u4.allowedCards = p.allowedCards; } break;
+                    case 'CHANGE_SOL': let uc = SYSTEM_USER_REGISTRY.find(x => x.user === p.user); if(uc) uc.solId = p.solId; break;
                     case 'CUSTOMIZE_CARDS': let u5 = SYSTEM_USER_REGISTRY.find(x => x.user === p.user); if(u5) u5.allowedCards = p.allowedCards; break;
                     case 'DELETE_USER': let u6 = SYSTEM_USER_REGISTRY.findIndex(x => x.user === p.user); if(u6 > -1) SYSTEM_USER_REGISTRY.splice(u6, 1); break;
                     case 'SEND_MSG': let u7 = SYSTEM_USER_REGISTRY.find(x => x.user === p.user); if(u7) u7.pendingMessage = p.msg; break;
@@ -1115,19 +1250,27 @@
 
         async function umExecuteTransfer() {
             const admin = document.getElementById('um_sel_transfer_admin').value;
-            const reqIdx = window.SYSTEM_PENDING_REQUESTS.findIndex(r => r.id === currentlyViewingRequest);
+            const reqIdx = SYSTEM_PENDING_REQUESTS.findIndex(r => r.id === currentlyViewingRequest);
             if(reqIdx === -1 || !admin) return;
-            window.SYSTEM_PENDING_REQUESTS[reqIdx].assignedTo = admin;
-            window.SYSTEM_PENDING_REQUESTS[reqIdx].transferredBy = activeUserLocal;
+            
+            SYSTEM_PENDING_REQUESTS[reqIdx].assignedTo = admin;
+            SYSTEM_PENDING_REQUESTS[reqIdx].transferredBy = activeUserLocal;
+            
             umShowLoader("Routing...");
-            try { await umSaveToCloudLocal(); umCloseModal('umModal_RouteTransfer'); umRefreshUI(); umShowAlert("Routed to " + admin, "🔄"); } catch(e) {} umHideLoader();
+            try { 
+                await umSaveToCloudLocal(); 
+                umCloseModal('umModal_RouteTransfer'); 
+                umRefreshUI(); 
+                umShowAlert("Routed to " + admin, "🔄"); 
+            } catch(e) { umShowAlert("Transfer failed.", "❌"); } 
+            umHideLoader();
         }
         
         async function umRevokeRoute() {
-            const reqIdx = window.SYSTEM_PENDING_REQUESTS.findIndex(r => r.id === currentlyViewingRequest);
+            const reqIdx = SYSTEM_PENDING_REQUESTS.findIndex(r => r.id === currentlyViewingRequest);
             if(reqIdx === -1) return;
-            window.SYSTEM_PENDING_REQUESTS[reqIdx].assignedTo = 'ALL';
-            window.SYSTEM_PENDING_REQUESTS[reqIdx].transferredBy = null;
+            SYSTEM_PENDING_REQUESTS[reqIdx].assignedTo = 'ALL';
+            SYSTEM_PENDING_REQUESTS[reqIdx].transferredBy = null;
             umShowLoader("Revoking...");
             try { await umSaveToCloudLocal(); umCloseModal('umModal_RequestDetails'); umRefreshUI(); umShowAlert("Transfer Revoked.", "🔙"); } catch(e) {} umHideLoader();
         }
@@ -1172,6 +1315,6 @@
             }
         }
 
-        setTimeout(() => { initMaintenanceHub(); }, 200);
+        setTimeout(() => { initMaintenanceHub(); }, 400); // Give 400ms for db config to load from index
     </script>
 </div>
