@@ -1,0 +1,435 @@
+<!-- sr1.html -->
+<!-- Security Check: Prevent Direct URL Access without SPA -->
+<script>
+    if (!document.getElementById("dynamicWorkspace") || window.location.pathname.endsWith("sr1.html")) {
+        window.location.href = "index.html";
+    }
+</script>
+
+<div id="moduleRenderArea">
+    
+    <!-- 100% SELF-CONTAINED PERFECT DESIGN CSS -->
+    <style>
+        .portal-page-panel { max-width: 1200px; margin: 0 auto; background: white; padding: 40px; border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.03); border: 1px solid #e2e8f0; font-family: 'Segoe UI', Arial, sans-serif; }
+        
+        /* Typography & Layout */
+        h3.module-title { margin: 0; color: #1e293b; font-size: 26px; font-weight: 800; letter-spacing: -0.5px; }
+        .back-nav-link { display: inline-flex; align-items: center; color: #3b82f6; font-weight: 800; font-size: 15px; text-decoration: none; cursor: pointer; transition: color 0.2s; padding: 8px 15px; background: #eff6ff; border-radius: 8px; float: right; }
+        .back-nav-link:hover { color: #1d4ed8; background: #dbeafe; }
+        
+        .form-group { margin-bottom: 20px; clear: both; }
+        .form-group label { display: block; font-weight: 700; margin-bottom: 8px; font-size: 14px; color: #334155; }
+        
+        /* Inputs & Textareas */
+        input[type="text"], input[type="number"], input[type="date"], select, textarea { width: 100%; padding: 14px 16px; box-sizing: border-box; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14.5px; background: #f8fafc; color: #1e293b !important; transition: all 0.2s ease; font-family: 'Segoe UI', Arial, sans-serif; }
+        input[type="text"]:focus, input[type="number"]:focus, input[type="date"]:focus, select:focus, textarea:focus { border-color: #d32f2f; background: #ffffff; box-shadow: 0 0 0 4px rgba(211, 47, 47, 0.1); outline: none; }
+        
+        /* NORMAL (NON-ITALIC) PLACEHOLDERS */
+        input::placeholder, textarea::placeholder { color: #94a3b8 !important; font-style: normal !important; opacity: 1 !important; }
+        
+        textarea { resize: vertical; }
+        .flex-row { display: flex; gap: 15px; flex-wrap: wrap; }
+        .flex-row > div { flex: 1; }
+        
+        /* Action Button */
+        button.action-btn { width: 100%; padding: 16px; background: #f59e0b; color: white; border: none; border-radius: 8px; font-size: 15.5px; font-weight: 800; cursor: pointer; text-transform: uppercase; letter-spacing: 0.8px; margin-top: 15px; box-shadow: 0 4px 12px rgba(245, 158, 11, 0.25); transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
+        button.action-btn:hover { background: #d97706; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(217, 119, 6, 0.3); }
+
+        /* --- PERFECT CENTERED MODAL, FULL SCREEN BLUR --- */
+        .pdf-modal-overlay {
+            position: fixed !important; top: 0 !important; left: 0 !important;
+            width: 100vw !important; height: 100vh !important;
+            background: rgba(241, 245, 249, 0.85) !important; 
+            backdrop-filter: blur(8px) !important;
+            z-index: 99999999 !important; 
+            display: none; justify-content: center; align-items: center;
+            opacity: 0; transition: opacity 0.3s ease;
+        }
+        .pdf-modal-overlay.active { display: flex; opacity: 1; }
+        
+        .pdf-modal-card {
+            background: #ffffff; width: 85%; max-width: 900px; height: 85vh;
+            border-radius: 12px; box-shadow: 0 20px 50px rgba(0,0,0,0.2); 
+            display: flex; flex-direction: column; overflow: hidden;
+            border: 1px solid #cbd5e1; border-top: 6px solid #f59e0b;
+            transform: scale(0.95); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            margin: auto;
+        }
+        .pdf-modal-overlay.active .pdf-modal-card { transform: scale(1); }
+        
+        .pdf-modal-header { padding: 15px 25px; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; background: #f8fafc; }
+        .pdf-modal-header h3 { margin: 0; color: #1e293b; font-size: 18px; font-weight: 800; font-family: 'Segoe UI', Arial, sans-serif; }
+        .pdf-close-btn { background: #ef4444; color: white; border: none; padding: 10px 24px; border-radius: 8px; font-weight: 800; cursor: pointer; transition: 0.2s; font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .pdf-close-btn:hover { background: #dc2626; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(220, 38, 38, 0.2);}
+        .pdf-iframe-container { flex: 1; width: 100%; height: 100%; background: #e2e8f0; }
+        #pdfFrameViewerLocal { width: 100%; height: 100%; border: none; display: block; }
+    </style>
+
+    <div class='portal-page-panel' style='display:block;'>
+        
+        <div style="margin-bottom: 35px; border-bottom: 2px solid #e2e8f0; padding-bottom: 15px; overflow: hidden;">
+            <div class='back-nav-link' onclick='typeof returnToHomeGridSPA === "function" ? returnToHomeGridSPA() : (window.location.href="index.html")'>⬅️ Back to Dashboard</div>
+            <h3 class="module-title">Module: Application for Leave (S.R.-1)</h3>
+        </div>
+        
+        <div class='flex-row'>
+            <div class='form-group'>
+                <label>1. Name of the applicant:</label>
+                <input class='text-input-placeholder-gray' id='sr1Name' placeholder='e.g. Official Full Name' type='text'/>
+            </div>
+            <div class='form-group'>
+                <label>2. Leave rules applicable:</label>
+                <input class='text-input-placeholder-gray' id='sr1Rules' placeholder='e.g. CCS Leave Rules 1972' type='text' value='CCS Leave Rules 1972'/>
+            </div>
+        </div>
+        <div class='flex-row'>
+            <div class='form-group'>
+                <label>3. Post held:</label>
+                <input class='text-input-placeholder-gray' id='sr1Post' placeholder='e.g. MTS / Postal Assistant / Postmaster' type='text'/>
+            </div>
+            <div class='form-group'>
+                <label>4. Department, Office and Section:</label>
+                <input class='text-input-placeholder-gray' id='sr1Dept' placeholder='e.g. Dept of Posts, Radhakishorepur HO' type='text'/>
+            </div>
+        </div>
+        <div class='flex-row'>
+            <div class='form-group'>
+                <label>5. Pay (Rs.):</label>
+                <input class='text-input-placeholder-gray' id='sr1Pay' placeholder='e.g. 25500' type='text'/>
+            </div>
+            <div class='form-group'>
+                <label>6. Allowances drawn in the present post:</label>
+                <input class='text-input-placeholder-gray' id='sr1Allowances' placeholder='e.g. HRA, DA, TA' type='text'/>
+            </div>
+        </div>
+        
+        <div style='background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 25px; margin-bottom: 20px;'>
+            <h4 style='margin-top: 0; color: #0f172a; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;'>7. Nature and period of leave applied for</h4>
+            <div class='flex-row'>
+                <div class='form-group'>
+                    <label>Nature of Leave:</label>
+                    <select id='sr1Nature'>
+                        <option value='Casual Leave'>Casual Leave</option>
+                        <option value='Earned Leave'>Earned Leave</option>
+                        <option value='Half Pay Leave'>Half Pay Leave</option>
+                        <option value='Commuted Leave'>Commuted Leave</option>
+                        <option value='Medical Leave'>Medical Leave</option>
+                    </select>
+                </div>
+                <div class='form-group'>
+                    <label>Period (No. of days):</label>
+                    <input class='text-input-placeholder-gray' id='sr1Period' placeholder='e.g. 3' type='number'/>
+                </div>
+            </div>
+            <div class='flex-row'>
+                <div class='form-group'><label>From Date:</label><input id='sr1FromDate' type='date'/></div>
+                <div class='form-group'><label>To Date:</label><input id='sr1ToDate' type='date'/></div>
+            </div>
+        </div>
+        
+        <div class='form-group'>
+            <label>8. Sunday and holidays, if any proposed to be prefixed/suffixed:</label>
+            <input class='text-input-placeholder-gray' id='sr1PrefixSuffix' placeholder='e.g. Prefixed Sunday 14th, Suffixed Holiday 18th' type='text'/>
+        </div>
+        <div class='form-group'>
+            <label>9. Ground on which leave is applied for:</label>
+            <textarea class='text-input-placeholder-gray' id='sr1Grounds' placeholder='e.g. Urgent personal work at home / Medical checkup' rows='2'></textarea>
+        </div>
+        <div class='form-group'>
+            <label>10. Date of return from last leave and nature/period of that leave:</label>
+            <input class='text-input-placeholder-gray' id='sr1LastLeave' placeholder='e.g. Returned on 10/02/2026 after 2 days EL' type='text'/>
+        </div>
+        
+        <div style='background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 25px; margin-bottom: 20px;'>
+            <h4 style='margin-top: 0; color: #0f172a; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;'>11. Leave Travel Concession (LTC) Proposal</h4>
+            <div class='flex-row'>
+                <div class='form-group'>
+                    <label>Do you propose to avail LTC?</label>
+                    <select id='sr1LtcProp'>
+                        <option value='do not propose'>I do NOT propose</option>
+                        <option value='propose'>I propose</option>
+                    </select>
+                </div>
+                <div class='form-group'>
+                    <label>In the block years:</label>
+                    <input class='text-input-placeholder-gray' id='sr1LtcBlock' placeholder='e.g. 2026-2029' type='text'/>
+                </div>
+            </div>
+        </div>
+        
+        <div class='flex-row'>
+            <div class='form-group'>
+                <label>Station:</label>
+                <input class='text-input-placeholder-gray' id='sr1Station' placeholder='e.g. Agartala' type='text'/>
+            </div>
+            <div class='form-group'>
+                <label>Date of Application:</label>
+                <input id='sr1Date' type='date'/>
+            </div>
+        </div>
+        
+        <button class='action-btn' onclick='triggerSmartGenerationSR1()' type='button'>Generate S.R.-1 Leave PDF</button>
+    </div>
+
+    <!-- BEAUTIFUL CENTERED POPUP MODAL FOR PDF PREVIEW -->
+    <div id="pdfModalOverlay" class="pdf-modal-overlay">
+        <div class="pdf-modal-card">
+            <div class="pdf-modal-header">
+                <h3>📄 Generated Document Live Preview</h3>
+                <button class="pdf-close-btn" onclick="closePdfModal()">❌ Close Preview</button>
+            </div>
+            <div class="pdf-iframe-container">
+                <iframe id="pdfFrameViewerLocal"></iframe>
+            </div>
+        </div>
+    </div>
+
+    <!-- 100% UNTOUCHED ORIGINAL PDF LOGIC (Adapted for SR-1) -->
+    <script>
+        // Ensure jsPDF loads if standalone
+        if (typeof window.jspdf === 'undefined') {
+            let script = document.createElement('script');
+            script.src = "https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js";
+            document.head.appendChild(script);
+        }
+
+        function closePdfModal() {
+            const overlay = document.getElementById('pdfModalOverlay');
+            overlay.classList.remove('active');
+            setTimeout(() => { overlay.style.display = 'none'; }, 300);
+        }
+
+        function finalizeLocalViewer(doc) {
+            const blobDataUrl = doc.output('datauristring');
+            const iframe = document.getElementById('pdfFrameViewerLocal');
+            const overlay = document.getElementById('pdfModalOverlay');
+            
+            // Move overlay to body to cover whole screen perfectly
+            if (overlay.parentNode !== document.body) {
+                document.body.appendChild(overlay);
+            }
+
+            iframe.src = blobDataUrl;
+            
+            // Show the modal perfectly centered!
+            overlay.style.display = 'flex';
+            setTimeout(() => { overlay.classList.add('active'); }, 50);
+        }
+
+        function triggerSmartGenerationSR1() {
+            // Validation
+            if (!document.getElementById('sr1Name').value) { 
+                if(typeof displayCustomAlert === "function") {
+                    displayCustomAlert("Form Defect: Name of the applicant is mandatory.");
+                } else {
+                    alert("Form Defect: Name of the applicant is mandatory.");
+                }
+                return; 
+            }
+
+            const loader = document.getElementById('globalAppLoader');
+            if(loader) {
+                loader.style.display = 'flex';
+                document.querySelector('.loading-status-msg').innerText = "Processing S.R.-1 Application...";
+            }
+
+            setTimeout(() => {
+                try {
+                    if (typeof window.jspdf === 'undefined') {
+                        alert("System Notice: Please wait a moment for the PDF engine to load, then click generate again.");
+                        if(loader) loader.style.display = 'none';
+                        return;
+                    }
+
+                    // --- ORIGINAL PDF GENERATION LOGIC ---
+                    const { jsPDF } = window.jspdf;
+                    const doc = new jsPDF('p', 'mm', 'a4');
+
+                    const name = document.getElementById('sr1Name').value || "";
+                    const rules = document.getElementById('sr1Rules').value || "";
+                    const post = document.getElementById('sr1Post').value || "";
+                    const dept = document.getElementById('sr1Dept').value || "";
+                    const pay = document.getElementById('sr1Pay').value || "";
+                    const allowances = document.getElementById('sr1Allowances').value || "";
+                    const nature = document.getElementById('sr1Nature').value || "";
+                    const period = document.getElementById('sr1Period').value || "";
+                    
+                    let fDateRaw = document.getElementById('sr1FromDate').value;
+                    let tDateRaw = document.getElementById('sr1ToDate').value;
+                    let fromDateStr = fDateRaw ? fDateRaw.split("-").reverse().join("/") : "";
+                    let toDateStr = tDateRaw ? tDateRaw.split("-").reverse().join("/") : "";
+                    let natureString = period ? `${nature} for ${period} days (From ${fromDateStr} to ${toDateStr})` : nature;
+
+                    const prefixSuffix = document.getElementById('sr1PrefixSuffix').value || "";
+                    const grounds = document.getElementById('sr1Grounds').value || "";
+                    const lastLeave = document.getElementById('sr1LastLeave').value || "";
+                    
+                    const ltcProp = document.getElementById('sr1LtcProp').value || "";
+                    const ltcBlock = document.getElementById('sr1LtcBlock').value || "";
+                    const station = document.getElementById('sr1Station').value || "";
+                    
+                    let aDateRaw = document.getElementById('sr1Date').value;
+                    let appDateStr = aDateRaw ? aDateRaw.split("-").reverse().join("/") : "";
+
+                    doc.setFont("times", "bold");
+                    doc.setFontSize(14);
+                    doc.text("FORM FOR APPLICATION FOR LEAVE", 105, 20, { align: "center" });
+                    
+                    doc.setFontSize(10);
+                    doc.text("(See Supplementary Rule 216)", 105, 26, { align: "center" });
+                    
+                    doc.setFontSize(12);
+                    doc.text("S.R.-1", 195, 20, { align: "right" });
+
+                    doc.setFontSize(9);
+                    doc.setFont("times", "normal");
+                    doc.text("Note: Items 1 to 11 must be filled in by all applicants whether gazetted or non-gazetted", 105, 36, { align: "center" });
+
+                    let currentY = 46; 
+
+                    const drawRow = (sno, label, val, h) => {
+                        doc.setFont("times", "bold");
+                        doc.text(sno, 15, currentY + 5.5);
+                        
+                        doc.setFont("times", "normal");
+                        let splitLabel = doc.splitTextToSize(label, 75);
+                        doc.text(splitLabel, 22, currentY + 5.5);
+                        
+                        doc.setFont("times", "bold");
+                        let splitVal = doc.splitTextToSize(val, 90);
+                        doc.text(splitVal, 105, currentY + 5.5);
+                        
+                        currentY += h;
+                        doc.line(12, currentY, 198, currentY); 
+                    };
+
+                    doc.line(12, currentY, 198, currentY); 
+
+                    drawRow("1.", "Name of the applicant", name, 10);
+                    drawRow("2.", "Leave rules applicable", rules, 10);
+                    drawRow("3.", "Post held", post, 10);
+                    drawRow("4.", "Department, Office and Section", dept, 10);
+                    drawRow("5.", "Pay", pay ? "Rs. " + pay : "", 10);
+                    drawRow("6.", "House rent allowance, conveyance\nallowance or other compensatory\nallowances drawn in the present post.", allowances, 16);
+                    drawRow("7.", "Nature and period of leave applied for\nand date from which required", natureString, 12);
+                    drawRow("8.", "Sunday and holidays, if any proposed\nto be prefixed/suffixed to leave.", prefixSuffix, 12);
+                    drawRow("9.", "Ground on which leave is applied for", grounds, 10);
+                    drawRow("10.", "Date of return from last leave and the\nnature and period of that leave", lastLeave, 12);
+
+                    let r11StartY = currentY;
+                    doc.setFont("times", "bold");
+                    doc.text("11.", 15, currentY + 5.5);
+                    doc.setFont("times", "normal");
+                    
+                    let ltcString = `I ${ltcProp} to avail myself of leave travel concession in the block years ${ltcBlock} during the ensuing leave.`;
+                    let splitLtc = doc.splitTextToSize(ltcString, 170);
+                    doc.text(splitLtc, 22, currentY + 5.5);
+                    
+                    currentY += 12;
+                    doc.line(12, currentY, 198, currentY); 
+
+                    let r12StartY = currentY;
+                    doc.setFont("times", "bold");
+                    doc.text("12.", 15, currentY + 5.5);
+                    doc.setFont("times", "normal");
+
+                    let ud1 = "(a) I undertake to refund the difference between the leave salary drawn during leave on average pay/commuted leave and that admissible leave on half average pay half leave, which would not have been admissible had the provision to F.R.81(b)(II) Rule 11(c)(III) of the revised Leave Rules, 1933 not been applied in the event of my retirement from service at end or during the currency of the leave.";
+                    let ud2 = "(b) I undertake to refund leave salary drawn during leave not due which would not have been admissible had F.R.81(c) Rule 11(d) of the Revised Leave Rule 1933 not been applied, in the event of my voluntary retirement or resignation from service at any time until I earn half pay leave not less than the amount of leave not due availed of by me.";
+
+                    let splitUd1 = doc.splitTextToSize(ud1, 170);
+                    doc.text(splitUd1, 22, currentY + 5.5);
+                    currentY += (splitUd1.length * 4) + 4;
+                    
+                    let splitUd2 = doc.splitTextToSize(ud2, 170);
+                    doc.text(splitUd2, 22, currentY);
+                    currentY += (splitUd2.length * 4) + 4;
+
+                    doc.text("Date:", 22, currentY + 6);
+                    doc.setFont("times", "bold");
+                    doc.text(appDateStr, 33, currentY + 6);
+                    
+                    doc.setFont("times", "normal");
+                    doc.text("Signature of applicant", 190, currentY + 6, { align: "right" });
+                    currentY += 10;
+                    doc.line(12, currentY, 198, currentY); 
+
+                    doc.line(12, 46, 12, currentY); 
+                    doc.line(198, 46, 198, currentY); 
+                    doc.line(20, 46, 20, r11StartY); 
+                    doc.line(100, 46, 100, r11StartY); 
+                    doc.line(20, r11StartY, 20, currentY); 
+
+                    doc.setFontSize(10);
+                    doc.text("Page 1 of 2", 105, 285, { align: "center" });
+
+                    doc.addPage('a4', 'p');
+                    currentY = 20;
+
+                    let r13StartY = currentY;
+                    doc.line(12, currentY, 198, currentY); 
+                    
+                    doc.setFont("times", "bold");
+                    doc.text("13.", 15, currentY + 6);
+                    doc.setFont("times", "normal");
+                    doc.text("Remarks and/or recommendation of the\ncontrolling Officer.", 22, currentY + 6);
+                    
+                    currentY += 24;
+                    doc.text("Date ....................................................", 22, currentY);
+                    doc.text("Signature ......................................................", 190, currentY - 5, { align: "right" });
+                    doc.text("Designation ....................................................", 190, currentY + 5, { align: "right" });
+                    currentY += 10;
+                    doc.line(12, currentY, 198, currentY);
+
+                    currentY += 12;
+                    doc.setFont("times", "bold");
+                    doc.text("CERTIFICATE REGARDING ADMISSIBILITY OF LEAVE", 105, currentY, { align: "center" });
+                    doc.setFontSize(9);
+                    doc.text("(By Accountant General in the case of gazetted Officers)", 105, currentY + 6, { align: "center" });
+                    doc.setFontSize(10);
+                    
+                    currentY += 20;
+                    doc.setFont("times", "bold");
+                    doc.text("14.", 15, currentY);
+                    doc.setFont("times", "normal");
+                    
+                    let certLine = "Certified that ....................................................................... for ................................... from ...................................\nto ................................... is admissible under rule ................................... of the ........................................................ Rules.";
+                    let splitCert = doc.splitTextToSize(certLine, 170);
+                    doc.text(splitCert, 22, currentY);
+
+                    currentY += 25;
+                    doc.text("Date ....................................................", 22, currentY);
+                    doc.text("Signature ......................................................", 190, currentY - 5, { align: "right" });
+                    doc.text("Designation ....................................................", 190, currentY + 5, { align: "right" });
+
+                    currentY += 15;
+                    doc.line(12, currentY, 198, currentY); 
+                    
+                    doc.setFontSize(8.5);
+                    let footNote = "* If the applicant is drawing any compensatory allowance the sanctioning authority should state whether on the expiry of leave he is likely to return the same post or to another post carrying a similar allowance.";
+                    let splitFoot = doc.splitTextToSize(footNote, 180);
+                    doc.text(splitFoot, 15, currentY + 5);
+                    
+                    doc.line(12, 20, 12, currentY); 
+                    doc.line(198, 20, 198, currentY); 
+                    doc.line(20, 20, 20, currentY); 
+
+                    doc.setFontSize(10);
+                    doc.text("Page 2 of 2", 105, 285, { align: "center" });
+                    
+                    // Display exactly in our centered modal
+                    finalizeLocalViewer(doc);
+
+                } catch (err) {
+                    console.error("PDF generation failure: ", err); 
+                    if(typeof displayCustomAlert === "function") {
+                        displayCustomAlert("Engine Failure Error: Failed to successfully output compile final PDF.");
+                    } else {
+                        alert("Engine Failure Error: Failed to successfully output compile final PDF.");
+                    }
+                } finally {
+                    if(loader) loader.style.display = 'none';
+                }
+            }, 750);
+        }
+    </script>
+</div>

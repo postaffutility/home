@@ -1,0 +1,1609 @@
+<!-- user_maintenance.html -->
+<!-- Security Check: Prevent Direct URL Access without SPA -->
+<script>
+    if (!document.getElementById("dynamicWorkspace") || window.location.pathname.endsWith("user_maintenance.html")) {
+        window.location.href = "index.html";
+    }
+</script>
+
+<div id="moduleRenderArea">
+    
+    <!-- 100% ORIGINAL PERFECT DESIGN CSS RESTORED -->
+    <style>
+        .portal-page-panel { max-width: 1200px; margin: 0 auto; background: white; padding: 40px; border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.03); border: 1px solid #e2e8f0; font-family: 'Segoe UI', Arial, sans-serif; }
+        
+        /* Typography & Layout */
+        h3.module-title { margin: 0; color: #1e293b; font-size: 26px; font-weight: 800; letter-spacing: -0.5px; }
+        .back-nav-link { display: inline-flex; align-items: center; color: #3b82f6; font-weight: 800; font-size: 15px; text-decoration: none; cursor: pointer; transition: color 0.2s; padding: 8px 15px; background: #eff6ff; border-radius: 8px; float: right; }
+        .back-nav-link:hover { color: #1d4ed8; background: #dbeafe; }
+        
+        .form-group { margin-bottom: 20px; clear: both; }
+        .form-group label { display: block; font-weight: 700; margin-bottom: 8px; font-size: 14px; color: #334155; }
+        
+        /* Inputs & Textareas */
+        input[type="text"], input[type="number"], input[type="password"], select, textarea { width: 100%; padding: 15px 18px; box-sizing: border-box; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 15px; background: #f8fafc; color: #1e293b !important; transition: all 0.3s ease; box-shadow: inset 0 1px 3px rgba(0,0,0,0.02); font-family: 'Segoe UI', Arial, sans-serif; }
+        input[type="text"]:focus, input[type="password"]:focus, select:focus, textarea:focus { border-color: #f59e0b; background: #ffffff; box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.15); outline: none; transform: translateY(-1px); }
+        
+        /* NORMAL (NON-ITALIC) PLACEHOLDERS */
+        input::placeholder, textarea::placeholder { color: #94a3b8 !important; font-style: normal !important; opacity: 1 !important; }
+        
+        .flex-row { display: flex; gap: 20px; flex-wrap: wrap; }
+        .flex-row > div { flex: 1; }
+        
+        /* ORIGINAL 15-CARD GRID SYSTEM */
+        .portal-grid-wrapper { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 24px; margin-top: 10px; }
+        .portal-module-card { background: #ffffff; border-radius: 16px; padding: 28px 24px; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.03); border: 1px solid #e2e8f0; transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); position: relative; overflow: hidden; display: block; transform-origin: center center; }
+        .portal-module-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: #4f46e5; transition: height 0.3s ease; }
+        .portal-module-card:hover { transform: translateY(-8px); box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08); border-color: #cbd5e1; z-index: 10; }
+        .portal-module-card:hover::before { height: 8px; }
+        
+        /* Card Colors */
+        .card-blue-variant::before { background: #3b82f6; } .card-blue-variant .card-icon { background: #dbeafe; }
+        .card-green-variant::before { background: #10b981; } .card-green-variant .card-icon { background: #d1fae5; }
+        .card-purple-variant::before { background: #8b5cf6; } .card-purple-variant .card-icon { background: #ede9fe; }
+        .card-teal-variant::before { background: #14b8a6; } .card-teal-variant .card-icon { background: #ccfbf1; }
+        .card-orange-variant::before { background: #f59e0b; } .card-orange-variant .card-icon { background: #fef3c7; }
+        .card-dark-variant::before { background: #475569; } .card-dark-variant .card-icon { background: #f1f5f9; }
+        .card-rose-variant::before { background: #e11d48; } .card-rose-variant .card-icon { background: #ffe4e6; }
+        .card-indigo-variant::before { background: #4f46e5; } .card-indigo-variant .card-icon { background: #e0e7ff; }
+        
+        .card-icon { font-size: 28px; margin-bottom: 18px; display: inline-flex; align-items: center; justify-content: center; width: 56px; height: 56px; border-radius: 14px; transition: transform 0.3s ease; }
+        .portal-module-card:hover .card-icon { transform: scale(1.1); }
+        .portal-module-card h3 { margin: 0 0 10px 0; font-size: 18px; font-weight: 800; color: #1e293b; letter-spacing: -0.3px;}
+        .portal-module-card p { margin: 0; font-size: 13.5px; color: #64748b; line-height: 1.6; }
+
+        /* Action Button */
+        button.action-btn { width: 100%; padding: 18px; background: #4f46e5; color: white; border: none; border-radius: 10px; font-size: 15.5px; font-weight: 900; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; margin-top: 15px; box-shadow: 0 10px 20px rgba(79, 70, 229, 0.25); transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        button.action-btn:hover { background: #3730a3; transform: translateY(-3px); box-shadow: 0 15px 25px rgba(79, 70, 229, 0.35); }
+        
+        button.panel-sub-submit { padding: 16px 20px; font-size: 15px; margin-top: 25px; box-shadow: none; width: 100%; text-transform: none; border-radius: 10px; color: white; border: none; font-weight: 800; cursor: pointer; }
+        button.panel-sub-submit:hover { filter: brightness(85%); transform: translateY(-2px); }
+        
+        button.small-action-btn { background:#3b82f6; color:white; border:none; padding:8px 16px; border-radius:6px; font-size:12.5px; font-weight:bold; cursor:pointer; margin-right:5px; transition:0.2s; box-shadow: 0 2px 5px rgba(59,130,246,0.3);}
+        button.small-action-btn:hover { background:#2563eb; transform: translateY(-1px); }
+
+        /* Maintenance Specific Styles */
+        .sub-action-card { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 30px; margin-bottom: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.02);}
+        .sub-action-card h4 { margin: 0 0 20px 0; color: #0f172a; font-size: 18px; font-weight: 800; border-bottom: 2px solid #f1f5f9; padding-bottom: 12px; }
+        .maintenance-sub-panel { display: none; animation: fadeIn 0.4s ease-out forwards; }
+        .sub-back-nav { color: #f59e0b; background: #fef3c7; margin-bottom: 25px; cursor: pointer; display: inline-flex; align-items: center; padding: 8px 16px; border-radius: 8px; font-weight: 800; font-size: 14.5px; transition: all 0.2s; }
+        .sub-back-nav:hover { color: #d97706; background: #fde68a; }
+
+        /* Log Tables */
+        .system-log-table { width: 100%; border-collapse: separate; border-spacing: 0; margin-top: 15px; font-size: 13.5px; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.02); }
+        .system-log-table th, .system-log-table td { padding: 15px; text-align: left; color: #334155 !important; vertical-align: middle; border-bottom: 1px solid #e2e8f0; transition: background 0.2s; }
+        .system-log-table th { background: #f8fafc; font-weight: 800; color: #0f172a; text-transform: uppercase; font-size: 12px; letter-spacing: 0.5px;}
+        .clickable-row { cursor: pointer; }
+        .clickable-row:hover td { background: #eff6ff; }
+        
+        .status-badge { padding: 6px 12px; border-radius: 20px; font-size: 11.5px; font-weight: 800; color: #fff; letter-spacing: 0.5px; }
+        .badge-active { background: #10b981; } .badge-disabled { background: #ef4444; } .badge-locked { background: #f59e0b; } .badge-pending { background: #8b5cf6; }
+
+        /* Checkbox Grid for Customization */
+        .checkbox-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 15px; margin-top: 15px; margin-bottom: 25px; }
+        .checkbox-item { background: #f8fafc; border: 1px solid #cbd5e1; padding: 12px 16px; border-radius: 8px; display: flex; align-items: center; gap: 10px; cursor: pointer; transition: all 0.2s; }
+        .checkbox-item:hover { border-color: #f59e0b; background: #fffbeb; }
+        .checkbox-item input[type="checkbox"] { width: 18px; height: 18px; cursor: pointer; accent-color: #f59e0b; }
+        .checkbox-item span { font-size: 14px; font-weight: 700; color: #1e293b; }
+
+        /* Searchable Dropdown - FIXED CLIPPING BUG */
+        .searchable-dropdown-container { position: relative; width: 100%; }
+        .searchable-dropdown-container input[type="text"] { background: #ffffff url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="%2364748b" viewBox="0 0 16 16"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/></svg>') no-repeat 16px center; padding-left: 45px; cursor: text; }
+        .custom-select-list { display: none; position: absolute; top: 100%; left: 0; width: 100%; max-height: 280px; overflow-y: auto; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 10px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); z-index: 99999; margin-top: 8px; scrollbar-width: thin; }
+        .custom-select-item { padding: 14px 18px; cursor: pointer; border-bottom: 1px solid #f1f5f9; display: flex; flex-direction: column; transition: background 0.2s; }
+        .custom-select-item:hover { background: #f8fafc; padding-left: 22px; border-left: 4px solid #4f46e5; }
+        .cs-name { font-weight: 800; color: #0f172a; font-size: 15px; }
+        .cs-detail { font-size: 12.5px; color: #64748b; margin-top: 3px; }
+
+        /* USER PROFILE MODAL INFO */
+        .profile-info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; text-align: left; margin-bottom: 20px; background: #f8fafc; padding: 15px; border-radius: 12px; border: 1px solid #e2e8f0;}
+        .profile-info-label { font-size: 12px; color: #64748b; font-weight: bold; text-transform: uppercase;}
+        .profile-info-val { font-size: 15px; color: #0f172a; font-weight: bold;}
+        
+        .request-detail-box { text-align: left; background: #f8fafc; border: 1px solid #e2e8f0; padding: 20px; border-radius: 12px; font-size: 14.5px; margin-bottom: 25px; max-height: 350px; overflow-y: auto; scrollbar-width: thin; }
+        .request-detail-row { padding: 10px 0; border-bottom: 1px dashed #cbd5e1; display: flex; justify-content: space-between; align-items: flex-start; gap: 15px;}
+        .req-key { font-weight: 800; color: #475569; width: 40%; flex-shrink: 0; }
+        .req-val { color: #0f172a; font-family: monospace; font-size: 14px; background: #e2e8f0; padding: 4px 8px; border-radius: 6px; word-break: break-all; }
+        
+        /* --- FIXED: PERFECT CENTERED MODALS, FULL SCREEN BLUR --- */
+        .maint-modal-overlay { 
+            position: fixed !important; top: 0 !important; left: 0 !important; 
+            width: 100vw !important; height: 100vh !important; 
+            background: rgba(241, 245, 249, 0.85) !important; 
+            backdrop-filter: blur(8px) !important; 
+            z-index: 99999999 !important; 
+            display: none; justify-content: center; align-items: center; 
+            opacity: 0; transition: opacity 0.2s ease-in-out; 
+        }
+        .maint-modal-overlay.active { display: flex !important; opacity: 1; }
+        
+        .maint-modal-card { 
+            background: #ffffff; width: 90%; max-width: 480px; padding: 35px; 
+            border-radius: 16px; box-shadow: 0 20px 50px rgba(0,0,0,0.25); 
+            text-align: center; box-sizing: border-box; border-top: 6px solid #3b82f6; 
+            transform: scale(0.95); transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+            margin: auto; 
+        }
+        .maint-modal-overlay.active .maint-modal-card { transform: scale(1); }
+        .popup-icon-alert { font-size: 48px; margin-bottom: 15px; text-align: center; }
+        .popup-message-text { color: #334155; font-size: 15px; line-height: 1.6; margin: 0 0 25px 0; font-weight: 600; white-space: pre-line; text-align: center;}
+        .popup-close-btn { background: #0f172a; color: white; border: none; padding: 12px 28px; border-radius: 8px; font-size: 13.5px; font-weight: 800; cursor: pointer; text-transform: uppercase; letter-spacing: 0.5px; transition: background 0.2s; width: 100%; margin-top: 10px;}
+        .popup-close-btn:hover { background: #334155; transform: translateY(-2px); box-shadow: 0 4px 10px rgba(15, 23, 42, 0.2); }
+
+        .processing-loader-container { position: fixed !important; top: 0 !important; left: 0 !important; width: 100vw !important; height: 100vh !important; background: rgba(255, 255, 255, 0.9) !important; backdrop-filter: blur(5px) !important; z-index: 99999999 !important; display: none; flex-direction: column; justify-content: center; align-items: center; }
+        .app-loading-spinner { width: 45px; height: 45px; border: 4px solid #f1f5f9; border-top: 4px solid #3b82f6; border-radius: 50%; animation: spinSystem 0.8s linear infinite; margin-bottom: 20px; }
+        .loading-status-msg { font-size: 15px; font-weight: 800; color: #0f172a; letter-spacing: 0.5px; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+
+    <!-- MAIN DASHBOARD -->
+    <div class='portal-page-panel' id='maintDashboardView' style="display: block; padding-top: 20px;">
+        
+        <div id='mainDashboardHead' style="margin-bottom: 25px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 2px solid #e2e8f0; padding-bottom: 15px;">
+                <div>
+                    <h3 class="module-title" style="margin-bottom: 5px;">USER MAINTENANCE HUB</h3>
+                    <div style="color: #64748b; font-size: 14px;">Secure Admin Identity & Access Management</div>
+                </div>
+                <div class='back-nav-link' onclick='typeof returnToHomeGridSPA === "function" ? returnToHomeGridSPA() : (window.location.href="index.html")'>⬅️ Exit to Portal</div>
+            </div>
+            
+            <!-- ORIGINAL 15 CARDS GRID -->
+            <div class='portal-grid-wrapper' id='userModuleGrid'>
+                <!-- MASTER ADMIN ONLY -->
+                <div class='portal-module-card card-purple-variant' id='cardTransferStatus' onclick='navigateToSubPanel("subTransferStatus")' style='display:none;'>
+                    <div class='card-icon'>👑</div>
+                    <h3 style="color: #8b5cf6;">Transfer Assignment Status</h3>
+                    <p>Master View: Oversee all routed cases, check HQ Admin assignments, and forcefully revoke, approve or reject them.</p>
+                </div>
+
+                <!-- HQ ADMIN ONLY CARDS -->
+                <div class='portal-module-card card-rose-variant' id='cardApprovals' onclick='navigateToSubPanel("panelApprovals")' style='display:none;'>
+                    <div class='card-icon'>🛡️</div>
+                    <h3 style="color: #e11d48;">Pending Approvals <span id="approvalBadge" style="background:#e11d48; color:white; padding:2px 8px; border-radius:12px; font-size:12px; vertical-align:middle; margin-left:5px;">0</span></h3>
+                    <p>Review, Audit, and Authorize identity modification requests submitted by local branch admins.</p>
+                </div>
+
+                <div class='portal-module-card card-green-variant' id='cardUpdateNews' onclick='navigateToSubPanel("subUpdateNews")' style='display:none;'>
+                    <div class='card-icon'>📢</div>
+                    <h3 style="color: #10b981;">Broadcast Live News</h3>
+                    <p>Update the scrolling marquee text visible to all users at the top of the portal.</p>
+                </div>
+
+                <!-- LOCAL ADMIN ONLY CARD -->
+                <div class='portal-module-card card-teal-variant' id='cardMyRequests' onclick='navigateToSubPanel("panelMyRequests")' style='display:none;'>
+                    <div class='card-icon'>📨</div>
+                    <h3 style="color: #14b8a6;">View Submitted Requests</h3>
+                    <p>Track the status of modification requests you have submitted. (Shows recent 10 requests).</p>
+                </div>
+
+                <!-- UNIVERSAL CARDS -->
+                <div class='portal-module-card card-blue-variant' id='cardCreateUser' onclick='navigateToSubPanel("subCreateUser")'>
+                    <div class='card-icon'>👤</div>
+                    <h3 style="color: #3b82f6;">Create New User</h3>
+                    <p>Register a new system user profile and assign their operational role and mapped SOL.</p>
+                </div>
+
+                <div class='portal-module-card card-teal-variant' id='card2FASetup' onclick='navigateToSubPanel("sub2FASetup")' style='display:none;'>
+                    <div class='card-icon'>📱</div>
+                    <h3 style="color: #14b8a6;">Authenticator 2FA Setup</h3>
+                    <p>Generate Google Authenticator QR codes to enroll users in high-security 2FA login.</p>
+                </div>
+                
+                <div class='portal-module-card card-rose-variant' id='cardReset2FA' onclick='navigateToSubPanel("subReset2FA")'>
+                    <div class='card-icon'>🔓</div>
+                    <h3 style="color: #e11d48;">Reset User 2FA</h3>
+                    <p>Clear a user's Two-Factor Authentication secret so they can re-enroll a new device.</p>
+                </div>
+
+                <div class='portal-module-card card-orange-variant' id='cardLockUnlock' onclick='navigateToSubPanel("subLockUnlock")'>
+                    <div class='card-icon'>🗝️</div>
+                    <h3 style="color: #f59e0b;">Lock / Unlock User</h3>
+                    <p>Temporarily lock or unlock an existing user account for security reasons.</p>
+                </div>
+
+                <div class='portal-module-card card-green-variant' id='cardEnableDisable' onclick='navigateToSubPanel("subEnableDisable")'>
+                    <div class='card-icon'>✅</div>
+                    <h3 style="color: #10b981;">Enable / Disable User</h3>
+                    <p>Completely disable or re-enable an existing user's portal access.</p>
+                </div>
+
+                <div class='portal-module-card card-dark-variant' id='cardResetPass' onclick='navigateToSubPanel("subResetPass")'>
+                    <div class='card-icon'>🔄</div>
+                    <h3 style="color: #475569;">Reset Passcode</h3>
+                    <p>Change the login passcode for an existing system user to a default value.</p>
+                </div>
+
+                <div class='portal-module-card card-purple-variant' id='cardChangeRole' onclick='navigateToSubPanel("subChangeRole")'>
+                    <div class='card-icon'>🛡️</div>
+                    <h3 style="color: #8b5cf6;">Change User Role</h3>
+                    <p>Elevate a user to Admin or restrict them down to Maker.</p>
+                </div>
+
+                <div class='portal-module-card card-teal-variant' id='cardCustomizeCards' onclick='navigateToSubPanel("subCustomizeCards")'>
+                    <div class='card-icon'>🎛️</div>
+                    <h3 style="color: #14b8a6;">Customize User Cards</h3>
+                    <p>Add or remove specific dashboard modules for individual users.</p>
+                </div>
+
+                <div class='portal-module-card card-rose-variant' id='cardDeleteUser' onclick='navigateToSubPanel("subDeleteUser")'>
+                    <div class='card-icon'>🗑️</div>
+                    <h3 style="color: #e11d48;">Delete User</h3>
+                    <p>Permanently remove a user profile from the entire system database.</p>
+                </div>
+
+                <div class='portal-module-card card-orange-variant' id='cardDirectMessage' onclick='navigateToSubPanel("subDirectMessage")'>
+                    <div class='card-icon'>✉️</div>
+                    <h3 style="color: #f59e0b;">Send Direct Message</h3>
+                    <p>Send a personalized, self-destructing alert message to a specific staff member.</p>
+                </div>
+
+                <div class='portal-module-card card-indigo-variant' id='cardUserLogs' onclick='navigateToSubPanel("subUserLogs")'>
+                    <div class='card-icon'>📊</div>
+                    <h3 id="logsCardTitle" style="color: #4f46e5;">User Status & Login Logs</h3>
+                    <p id="logsCardDesc">View current account registry status, mapped offices, and recent login connection attempts.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================== -->
+        <!-- ALL SUB-PANELS INCLUDED BELOW                  -->
+        <!-- ============================================== -->
+
+        <!-- TRANSFER STATUS PANEL -->
+        <div id='subTransferStatus' class='maintenance-sub-panel'>
+            <div class='sub-back-nav' onclick='returnToMainDashboard()'>⬅️ Back to Hub Menu</div>
+            <h3 style="margin-top:0; color:#1e293b; font-size:24px;">Transfer Assignment Status</h3>
+            <div class='sub-action-card' style="border-top: 4px solid #8b5cf6;">
+                <div style="overflow-x: auto;">
+                    <table class='system-log-table' style="min-width: 800px;">
+                        <thead>
+                            <tr>
+                                <th>Date & Time</th>
+                                <th>Initiator</th>
+                                <th>Description</th>
+                                <th>Assigned To</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id='transferStatusTableBody'></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- PENDING APPROVALS PANEL -->
+        <div id='panelApprovals' class='maintenance-sub-panel'>
+            <div class='sub-back-nav' onclick='returnToMainDashboard()'>⬅️ Back to Hub Menu</div>
+            <h3 style="margin-top:0; color:#1e293b; font-size:24px;">Pending Authorization Requests</h3>
+            <div class='sub-action-card' style="border-top: 4px solid #e11d48;">
+                <div style="overflow-x: auto;">
+                    <table class='system-log-table' style="min-width: 800px;">
+                        <thead>
+                            <tr>
+                                <th>Date & Time</th>
+                                <th>Initiator & SOL</th>
+                                <th>Request Description</th>
+                                <th>Audit Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id='approvalsTableBody'></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- MY SUBMITTED REQUESTS PANEL -->
+        <div id='panelMyRequests' class='maintenance-sub-panel'>
+            <div class='sub-back-nav' onclick='returnToMainDashboard()'>⬅️ Back to Hub Menu</div>
+            <h3 style="margin-top:0; color:#1e293b; font-size:24px;">My Submitted Requests (Recent)</h3>
+            <div class='sub-action-card' style="border-top: 4px solid #14b8a6;">
+                <div style="overflow-x: auto;">
+                    <table class='system-log-table' style="min-width: 700px;">
+                        <thead>
+                            <tr>
+                                <th>Date & Time</th>
+                                <th>Request Type</th>
+                                <th>Description</th>
+                                <th>Current Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id='myRequestsTableBody'></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- MODULE: CREATE USER -->
+        <div id='subCreateUser' class='maintenance-sub-panel'>
+            <div class='sub-back-nav' onclick='returnToMainDashboard()'>⬅️ Back to Hub Menu</div>
+            <h3 style="margin-top:0; color:#1e293b; font-size:24px;">Create New User</h3>
+            <div class='sub-action-card' style="border-top: 4px solid #3b82f6;">
+                <div class='flex-row'>
+                    <div class='form-group'><label>Full Name</label><input id='muNewFullName' placeholder='e.g. Subhajit Parbat' type='text'/></div>
+                    <div class='form-group'><label>Username</label><input id='muNewUser' placeholder='e.g. subhajit_123' type='text'/></div>
+                </div>
+                <div class='flex-row'>
+                    <div class='form-group'><label>Initial Passcode</label><input id='muNewPass' placeholder='e.g. 123456' type='text'/></div>
+                    <div class='form-group'>
+                        <label>System Role</label>
+                        <select id='muNewRole'>
+                            <option value='maker'>Maker (Standard)</option>
+                            <option value='superuser'>Superuser (Elevated)</option>
+                            <option value='admin'>Admin (Full Access)</option>
+                            <option value='guest'>Guest (Restricted)</option>
+                        </select>
+                    </div>
+                </div>
+                <div class='form-group'>
+                    <label>Mapped Office (SOL)</label>
+                    <select id='muNewUserSol'></select>
+                </div>
+                <button class='action-btn btn-dynamic' onclick='executeCreateUserAction()' style='background:#3b82f6;' type='button'>Register Profile</button>
+            </div>
+        </div>
+
+        <!-- MODULE: 2FA SETUP -->
+        <div id='sub2FASetup' class='maintenance-sub-panel'>
+            <div class='sub-back-nav' onclick='returnToMainDashboard()'>⬅️ Back to Hub Menu</div>
+            <h3 style="margin-top:0; color:#1e293b; font-size:24px;">Authenticator 2FA Setup</h3>
+            <div class='sub-action-card' style="border-top: 4px solid #14b8a6;">
+                <p style="color: #64748b; font-size: 14.5px; margin-top: -10px; margin-bottom: 25px;">Generate a secure Time-Based One-Time Password (TOTP) QR code to enroll users into the high-security login system.</p>
+                <div class='form-group'>
+                    <label>Select Target User</label>
+                    <div class="searchable-dropdown-container" id="wrapper_mu2FASelect">
+                        <input type="text" id="searchInput_mu2FASelect" placeholder="🔍 Search by name or username..." autocomplete="off" onkeyup="filterCustomSelect('mu2FASelect')" onfocus="showCustomSelect('mu2FASelect')" />
+                        <div class="custom-select-list" id="list_mu2FASelect"></div>
+                        <input type="hidden" id="mu2FASelect" />
+                    </div>
+                </div>
+                <button class='action-btn' onclick='generate2FAForUser()' style='background:#14b8a6; margin-bottom: 20px;' type='button'>Generate QR Code</button>
+                <div id="qrCodeWrapper" style="display:none; text-align: center; background: #ffffff; padding: 40px; border: 1px solid #cbd5e1; border-radius: 16px; margin-bottom: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05);">
+                    <p style="font-weight: 900; color: #0f172a; margin-top: 0; font-size: 18px;">Scan this with Google / Microsoft Authenticator:</p>
+                    <div id="qrcodeDisplay" style="display: flex; justify-content: center; margin: 30px 0;"></div>
+                    <p style="font-size: 14px; color: #64748b; margin-bottom: 10px; font-weight: 700;">Or enter this setup key manually in the app:</p>
+                    <code id="manualSecretDisplay" style="font-size: 20px; font-weight: 900; color: #e11d48; background: #fee2e2; padding: 8px 20px; border-radius: 8px; letter-spacing: 3px;"></code>
+                </div>
+                <button class='action-btn panel-sub-submit btn-dynamic' id='save2FABtn' onclick='executeSave2FA()' style='background:#3b82f6; display:none;' type='button'>Save 2FA Enrollment</button>
+            </div>
+        </div>
+        
+        <!-- MODULE: RESET 2FA -->
+        <div id='subReset2FA' class='maintenance-sub-panel'>
+            <div class='sub-back-nav' onclick='returnToMainDashboard()'>⬅️ Back to Hub Menu</div>
+            <h3 style="margin-top:0; color:#1e293b; font-size:24px;">Reset User 2FA Device</h3>
+            <div class='sub-action-card' style='border-top: 4px solid #e11d48;'>
+                <p style="font-size: 14px; color: #64748b; margin-top: -10px; margin-bottom: 20px;">Use this strictly if a user lost their phone or uninstalled Google Authenticator. It forces them to re-enroll.</p>
+                <div class='form-group'>
+                    <label>Select Target User</label>
+                    <div class="searchable-dropdown-container" id="wrapper_muReset2FASelect">
+                        <input type="text" id="searchInput_muReset2FASelect" placeholder="🔍 Search by name or username..." autocomplete="off" onkeyup="filterCustomSelect('muReset2FASelect')" onfocus="showCustomSelect('muReset2FASelect')" />
+                        <div class="custom-select-list" id="list_muReset2FASelect"></div>
+                        <input type="hidden" id="muReset2FASelect" />
+                    </div>
+                </div>
+                <button class='action-btn panel-sub-submit btn-dynamic' onclick='executeReset2FAAction()' style='background:#e11d48;' type='button'>Reset 2FA Security</button>
+            </div>
+        </div>
+
+        <!-- MODULE: LOCK / UNLOCK -->
+        <div id='subLockUnlock' class='maintenance-sub-panel'>
+            <div class='sub-back-nav' onclick='returnToMainDashboard()'>⬅️ Back to Hub Menu</div>
+            <h3 style="margin-top:0; color:#1e293b; font-size:24px;">Lock / Unlock User</h3>
+            <div class='sub-action-card' style="border-top: 4px solid #f59e0b;">
+                <div class='form-group'>
+                    <label>Select Target User</label>
+                    <div class="searchable-dropdown-container" id="wrapper_muLockSelect">
+                        <input type="text" id="searchInput_muLockSelect" placeholder="🔍 Search by name or username..." autocomplete="off" onkeyup="filterCustomSelect('muLockSelect')" onfocus="showCustomSelect('muLockSelect')" />
+                        <div class="custom-select-list" id="list_muLockSelect"></div>
+                        <input type="hidden" id="muLockSelect" />
+                    </div>
+                </div>
+                <button class='action-btn panel-sub-submit btn-dynamic' onclick='executeToggleUserStatus("lock", "muLockSelect")' style='background:#f59e0b;' type='button'>Toggle Lock Status</button>
+            </div>
+        </div>
+
+        <!-- MODULE: ENABLE / DISABLE -->
+        <div id='subEnableDisable' class='maintenance-sub-panel'>
+            <div class='sub-back-nav' onclick='returnToMainDashboard()'>⬅️ Back to Hub Menu</div>
+            <h3 style="margin-top:0; color:#1e293b; font-size:24px;">Enable / Disable User</h3>
+            <div class='sub-action-card' style="border-top: 4px solid #10b981;">
+                <div class='form-group'>
+                    <label>Select Target User</label>
+                    <div class="searchable-dropdown-container" id="wrapper_muEnableSelect">
+                        <input type="text" id="searchInput_muEnableSelect" placeholder="🔍 Search by name or username..." autocomplete="off" onkeyup="filterCustomSelect('muEnableSelect')" onfocus="showCustomSelect('muEnableSelect')" />
+                        <div class="custom-select-list" id="list_muEnableSelect"></div>
+                        <input type="hidden" id="muEnableSelect" />
+                    </div>
+                </div>
+                <button class='action-btn panel-sub-submit btn-dynamic' onclick='executeToggleUserStatus("disable", "muEnableSelect")' style='background:#10b981;' type='button'>Toggle Enable/Disable</button>
+            </div>
+        </div>
+
+        <!-- MODULE: RESET PASSCODE -->
+        <div id='subResetPass' class='maintenance-sub-panel'>
+            <div class='sub-back-nav' onclick='returnToMainDashboard()'>⬅️ Back to Hub Menu</div>
+            <h3 style="margin-top:0; color:#1e293b; font-size:24px;">Reset Passcode</h3>
+            <div class='sub-action-card' style="border-top: 4px solid #475569;">
+                <div class='form-group'>
+                    <label>Select Target User</label>
+                    <div class="searchable-dropdown-container" id="wrapper_muResetSelect">
+                        <input type="text" id="searchInput_muResetSelect" placeholder="🔍 Search by name or username..." autocomplete="off" onkeyup="filterCustomSelect('muResetSelect')" onfocus="showCustomSelect('muResetSelect')" />
+                        <div class="custom-select-list" id="list_muResetSelect"></div>
+                        <input type="hidden" id="muResetSelect" />
+                    </div>
+                </div>
+                <div class='form-group'><label>New Passcode</label><input id='muResetPassInput' placeholder='Enter new passcode' type='text'/></div>
+                <button class='action-btn panel-sub-submit btn-dynamic' onclick='executeResetPasswordAction()' style='background:#475569;' type='button'>Update Passcode</button>
+            </div>
+        </div>
+
+        <!-- MODULE: CHANGE ROLE -->
+        <div id='subChangeRole' class='maintenance-sub-panel'>
+            <div class='sub-back-nav' onclick='returnToMainDashboard()'>⬅️ Back to Hub Menu</div>
+            <h3 style="margin-top:0; color:#1e293b; font-size:24px;">Change User Role</h3>
+            <div class='sub-action-card' style="border-top: 4px solid #8b5cf6;">
+                <div class='form-group'>
+                    <label>Select Target User</label>
+                    <div class="searchable-dropdown-container" id="wrapper_muRoleTargetSelect">
+                        <input type="text" id="searchInput_muRoleTargetSelect" placeholder="🔍 Search by name or username..." autocomplete="off" onkeyup="filterCustomSelect('muRoleTargetSelect')" onfocus="showCustomSelect('muRoleTargetSelect')" />
+                        <div class="custom-select-list" id="list_muRoleTargetSelect"></div>
+                        <input type="hidden" id="muRoleTargetSelect" />
+                    </div>
+                </div>
+                <div class='form-group'>
+                    <label>New Access Role</label>
+                    <select id='muNewRoleSelect'>
+                        <option value='maker'>Maker (Billing Only)</option>
+                        <option value='superuser'>Superuser (Office Head)</option>
+                        <option value='admin'>Admin (Full Access)</option>
+                    </select>
+                </div>
+                <button class='action-btn panel-sub-submit btn-dynamic' onclick='executeRoleChangeAction()' style='background:#8b5cf6;' type='button'>Update Role</button>
+            </div>
+        </div>
+
+        <!-- MODULE: CUSTOMIZE CARDS -->
+        <div id='subCustomizeCards' class='maintenance-sub-panel'>
+            <div class='sub-back-nav' onclick='returnToMainDashboard()'>⬅️ Back to Hub Menu</div>
+            <h3 style="margin-top:0; color:#1e293b; font-size:24px;">Customize User Cards</h3>
+            <div class='sub-action-card' style="border-top: 4px solid #14b8a6;">
+                <div class='form-group'>
+                    <label>Select Target User</label>
+                    <div class="searchable-dropdown-container" id="wrapper_muCustomizeSelect">
+                        <input type="text" id="searchInput_muCustomizeSelect" placeholder="🔍 Search by name or username..." autocomplete="off" onkeyup="filterCustomSelect('muCustomizeSelect')" onfocus="showCustomSelect('muCustomizeSelect')" />
+                        <div class="custom-select-list" id="list_muCustomizeSelect"></div>
+                        <input type="hidden" id="muCustomizeSelect" />
+                    </div>
+                </div>
+                <div style='background: #fff; padding: 20px; border-radius: 12px; border: 1px solid #e2e8f0; margin-bottom: 20px;'>
+                    <label style='margin-bottom: 15px; border-bottom: 1px solid #e2e8f0; padding-bottom: 10px;'>Select Accessible Modules:</label>
+                    <div style='display: grid; grid-template-columns: 1fr 1fr; gap: 12px; font-size: 14.5px;'>
+                        <label class="checkbox-item"><input class='card-checkbox' type='checkbox' value='menuCardDBDE'/><span>Day Begin/End</span></label>
+                        <label class="checkbox-item"><input class='card-checkbox' type='checkbox' value='menuCardBulkBooking'/><span>Bulk Booking</span></label>
+                        <label class="checkbox-item"><input class='card-checkbox' type='checkbox' value='menuCardOfficeHub'/><span>Office Mgmt</span></label>
+                        <label class="checkbox-item"><input class='card-checkbox' type='checkbox' value='menuCardBulk'/><span>Monthly Bulk Bills</span></label>
+                        <label class="checkbox-item"><input class='card-checkbox' type='checkbox' value='menuCardHoliday'/><span>Holiday Bills</span></label>
+                        <label class="checkbox-item"><input class='card-checkbox' type='checkbox' value='menuCardDateWise'/><span>Date-Wise Bills</span></label>
+                        <label class="checkbox-item"><input class='card-checkbox' type='checkbox' value='menuCardACG61'/><span>ACG-61 Report</span></label>
+                        <label class="checkbox-item"><input class='card-checkbox' type='checkbox' value='menuCardGeneralCharge'/><span>Gen. Charge Report</span></label>
+                        <label class="checkbox-item"><input class='card-checkbox' type='checkbox' value='menuCardSR1'/><span>SR-1 Leave</span></label>
+                        <label class="checkbox-item"><input class='card-checkbox' type='checkbox' value='menuCardCasualLeave'/><span>Casual Leave</span></label>
+                        <label class="checkbox-item"><input class='card-checkbox' type='checkbox' value='menuCardTAAdvance'/><span>T.A. Advance</span></label>
+                        <label class="checkbox-item"><input class='card-checkbox' type='checkbox' value='menuCardTATransfer'/><span>T.A. Transfer</span></label>
+                        <label class="checkbox-item"><input class='card-checkbox' type='checkbox' value='menuCardTABillTour'/><span>T.A. Bill (Tour)</span></label>
+                        <label class="checkbox-item"><input class='card-checkbox' type='checkbox' value='menuCardCEA'/><span>CEA Claim</span></label>
+                        <label class="checkbox-item"><input class='card-checkbox' type='checkbox' value='menuCardAI'/><span>Talk with AI</span></label>
+                        <label class="checkbox-item"><input class='card-checkbox' type='checkbox' value='menuCardMaintenance'/><span>Maintenance Hub</span></label>
+                        <label class="checkbox-item"><input class='card-checkbox' type='checkbox' value='menuCardSelfPassword'/><span>Change Passcode</span></label>
+                    </div>
+                </div>
+                <button class='action-btn panel-sub-submit btn-dynamic' onclick='executeSaveUserCards()' style='background:#14b8a6;' type='button'>Save Configuration</button>
+            </div>
+        </div>
+
+        <!-- MODULE: DELETE USER -->
+        <div id='subDeleteUser' class='maintenance-sub-panel'>
+            <div class='sub-back-nav' onclick='returnToMainDashboard()'>⬅️ Back to Hub Menu</div>
+            <h3 style="margin-top:0; color:#1e293b; font-size:24px;">Permanently Delete User</h3>
+            <div class='sub-action-card' style="border-top: 4px solid #e11d48;">
+                <div class='form-group'>
+                    <label>Select Target User</label>
+                    <div class="searchable-dropdown-container" id="wrapper_muDeleteSelect">
+                        <input type="text" id="searchInput_muDeleteSelect" placeholder="🔍 Search by name or username..." autocomplete="off" onkeyup="filterCustomSelect('muDeleteSelect')" onfocus="showCustomSelect('muDeleteSelect')" />
+                        <div class="custom-select-list" id="list_muDeleteSelect"></div>
+                        <input type="hidden" id="muDeleteSelect" />
+                    </div>
+                </div>
+                <button class='action-btn panel-sub-submit btn-dynamic' onclick='executeDeleteUserAction()' style='background:#e11d48;' type='button'>Delete Profile</button>
+            </div>
+        </div>
+
+        <!-- MODULE: SEND DIRECT MESSAGE -->
+        <div id='subDirectMessage' class='maintenance-sub-panel'>
+            <div class='sub-back-nav' onclick='returnToMainDashboard()'>⬅️ Back to Hub Menu</div>
+            <h3 style="margin-top:0; color:#1e293b; font-size:24px;">Send Direct Alert Message</h3>
+            <div class='sub-action-card' style="border-top: 4px solid #f59e0b;">
+                <div class='form-group'>
+                    <label>Select Target Staff Member</label>
+                    <div class="searchable-dropdown-container" id="wrapper_muMessageSelect">
+                        <input type="text" id="searchInput_muMessageSelect" placeholder="🔍 Search by name or username..." autocomplete="off" onkeyup="filterCustomSelect('muMessageSelect')" onfocus="showCustomSelect('muMessageSelect')" />
+                        <div class="custom-select-list" id="list_muMessageSelect"></div>
+                        <input type="hidden" id="muMessageSelect" />
+                    </div>
+                </div>
+                <div class='form-group'><label>Personalized Message</label><textarea class='text-input-placeholder-gray' id='muMessageInput' placeholder='Type your message here...' rows='4'></textarea></div>
+                <button class='action-btn panel-sub-submit btn-dynamic' onclick='executeSendDirectMessage()' style='background:#f59e0b;' type='button'>Send Direct Message</button>
+            </div>
+        </div>
+
+        <!-- MODULE: BROADCAST NEWS -->
+        <div id='subUpdateNews' class='maintenance-sub-panel'>
+            <div class='sub-back-nav' onclick='returnToMainDashboard()'>⬅️ Back to Hub Menu</div>
+            <h3 style="margin-top:0; color:#1e293b; font-size:24px;">Broadcast Live News</h3>
+            <div class='sub-action-card' style="border-top: 4px solid #10b981;">
+                <div class='form-group'><label>Enter the latest announcement to scroll on the main dashboard:</label><textarea class='text-input-placeholder-gray' id='muNewsInput' placeholder='Enter the news feed text...' rows='3'></textarea></div>
+                <button class='action-btn panel-sub-submit btn-dynamic' onclick='executeUpdateNewsAction()' style='background:#10b981;' type='button'>Publish Live News</button>
+            </div>
+        </div>
+
+        <!-- MODULE: USER LOGS -->
+        <div id='subUserLogs' class='maintenance-sub-panel'>
+            <div class='sub-back-nav' onclick='returnToMainDashboard()'>⬅️ Back to Hub Menu</div>
+            <h3 style="margin-top:0; color:#1e293b; font-size:24px;" id="logsPanelHeader">User Status & Login Logs</h3>
+            
+            <div class='sub-action-card' style='margin-bottom:25px; border-top: 4px solid #4f46e5;'>
+                <div style="overflow-x: auto;">
+                    <h4 style="font-size: 18px;">Registered System Account Registry</h4>
+                    <p style="font-size:13px; color:#64748b; margin-top:-10px;">Click on any row to view full profile details.</p>
+                    <table class='system-log-table' style="min-width: 800px;">
+                        <thead><tr><th>Full Name</th><th>Username</th><th>Mapped Office (SOL)</th><th>Account Role</th><th>Permission</th><th>Security State</th></tr></thead>
+                        <tbody id='muUserRosterTableBody'></tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <div class='sub-action-card' style="border-top: 4px solid #4f46e5;">
+                <div style="overflow-x: auto;">
+                    <h4 style="font-size: 18px;">Live Portal Connection Access History (Recent)</h4>
+                    <table class='system-log-table' style="min-width: 600px;">
+                        <thead><tr><th>Timestamp Ledger Entry</th><th>Connecting User</th><th>Security Event Status</th></tr></thead>
+                        <tbody id='muLoginHistoryTableBody'></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- MODALS WITH FIXED INLINE DISPLAY STYLES AND APPEND TO BODY LOGIC -->
+    
+    <div class='maint-modal-overlay' id='customMaintAlertModal' style="display: none;">
+        <div class='maint-modal-card' style="max-width: 420px; text-align: center;">
+            <div class='popup-icon-alert' id='popupMaintAlertIcon'>🔔</div>
+            <p class='popup-message-text' id='customMaintAlertMsgField'>Notice</p>
+            <button class='popup-close-btn' onclick='closeMaintAlert()'>Continue</button>
+        </div>
+    </div>
+
+    <div class='maint-modal-overlay' id='userProfileModal' style="display: none;">
+        <div class='maint-modal-card' style="max-width: 480px; border-top: 6px solid #3b82f6; text-align: center;">
+            <div style="width: 70px; height: 70px; background: #dbeafe; border-radius: 50%; display: flex; justify-content: center; align-items: center; margin: 0 auto 15px auto; font-size: 32px;">👤</div>
+            <h3 style="margin-top:0; color:#1e293b; font-size: 22px; margin-bottom: 5px;" id="profileModalName">Name</h3>
+            <p style="color: #64748b; font-size: 14px; margin-top:0; margin-bottom: 20px;">@<span id="profileModalUser">username</span></p>
+            
+            <div class="profile-info-grid">
+                <div><div class="profile-info-label">SOL ID</div><div class="profile-info-val" id="profileModalSol">000000</div></div>
+                <div><div class="profile-info-label">Role</div><div class="profile-info-val" id="profileModalRole" style="text-transform: uppercase;">Maker</div></div>
+                <div><div class="profile-info-label">Status</div><div class="profile-info-val" id="profileModalActive">Enabled</div></div>
+                <div><div class="profile-info-label">Security</div><div class="profile-info-val" id="profileModalLock">Unlocked</div></div>
+            </div>
+            
+            <div style="text-align: center; font-size: 13px; color: #64748b; margin-bottom: 20px;">
+                <strong>Last Login: </strong><span id="profileModalLastLogin">Never</span>
+            </div>
+            <button class='popup-close-btn' onclick='closeUserProfileModal()' style='background:#3b82f6;'>Close Profile</button>
+        </div>
+    </div>
+
+    <div class='maint-modal-overlay' id='requestDetailsModal' style="display: none;">
+        <div class='maint-modal-card' style="max-width: 550px; border-top: 6px solid #4f46e5;">
+            <h3 style="margin-top:0; color:#1e3a8a; text-align:left; font-size: 22px; margin-bottom: 15px;">Request Audit Details</h3>
+            <div id="requestDetailsContent" class="request-detail-box"></div>
+            <div id="requestModalActionButtons" style="display:flex; gap:12px; flex-wrap: wrap;"></div>
+        </div>
+    </div>
+
+    <div class='maint-modal-overlay' id='transferRequestModal' style="display: none;">
+        <div class='maint-modal-card' style="max-width: 450px; border-top: 6px solid #f59e0b;">
+            <h3 style="margin-top:0; color:#d97706; text-align:left; font-size: 22px; margin-bottom: 5px;">Transfer Request</h3>
+            <p style="text-align: left; font-size: 14px; color: #64748b; margin-bottom: 20px;">Select another HQ Admin to review and authorize this request.</p>
+            <div class='form-group' style="text-align: left;">
+                <select id="transferAdminSelect" style="width:100%; border: 2px solid #cbd5e1; padding: 12px; border-radius: 8px;"></select>
+            </div>
+            <div style="display:flex; gap:12px;">
+                <button onclick="executeTransferRequest()" style="background:#f59e0b; color:white; border:none; padding:15px; border-radius:8px; flex:1; font-weight:900; cursor:pointer; font-size: 14px; transition: 0.2s; text-transform: uppercase;">Confirm</button>
+                <button onclick="closeTransferModal()" style="background:#64748b; color:white; border:none; padding:15px; border-radius:8px; flex:1; font-weight:900; cursor:pointer; font-size: 14px; transition: 0.2s; text-transform: uppercase;">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <div class='processing-loader-container' id='maintLoader' style="display: none;">
+        <div class='app-loading-spinner'></div>
+        <div class='loading-status-msg' id="maintLoaderText">Syncing with Cloud...</div>
+    </div>
+
+    <script type="text/javascript">
+        if (typeof window.SYSTEM_PENDING_REQUESTS === 'undefined') window.SYSTEM_PENDING_REQUESTS = [];
+
+        let activeUserLocal = null;
+        let activeRoleLocal = null;
+        let activeSolIdLocal = null;
+        
+        let isMasterAdmin = false; 
+        let isHQAdmin = false;      
+        let canDirectExecute = false;
+        let currentlyViewingRequest = null;
+        
+        let pending2FASecret = "";
+        let pending2FAUser = "";
+
+        let currentMaintPage = 1;
+        const maintCardsPerPage = 6;
+
+        // HELPER TO SAFELY OPEN MODALS
+        function openModalSafely(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal && modal.parentNode !== document.body) {
+                document.body.appendChild(modal);
+            }
+            modal.style.display = 'flex';
+            setTimeout(() => { modal.classList.add('active'); }, 10);
+        }
+
+        function closeModalSafely(modalId) {
+            const modal = document.getElementById(modalId);
+            modal.classList.remove('active');
+            setTimeout(() => { modal.style.display = 'none'; }, 200);
+        }
+
+        // Initialize Maintenance Hub perfectly when module loads in SPA
+        function initMaintenanceHub() {
+            activeUserLocal = sessionStorage.getItem("activeUser");
+            activeRoleLocal = sessionStorage.getItem("activeRole");
+
+            isMasterAdmin = (activeUserLocal === "admin");
+            
+            const myProfile = SYSTEM_USER_REGISTRY.find(u => u.user === activeUserLocal);
+            activeSolIdLocal = myProfile ? myProfile.solId : null;
+            
+            isHQAdmin = (isMasterAdmin || activeSolIdLocal === "000000");
+            
+            // THE FIX: If Master Admin, ALWAYS execute directly without network errors!
+            canDirectExecute = isHQAdmin || isMasterAdmin;
+            
+            if (canDirectExecute) {
+                document.getElementById('cardApprovals').style.display = 'block';
+                document.getElementById('cardUpdateNews').style.display = 'block';
+                document.getElementById('cardMyRequests').style.display = 'none';
+                
+                document.getElementById('logsCardTitle').innerText = "Global System Logs";
+                document.getElementById('logsCardDesc').innerText = "View entire system registry and connection attempts across all SOLs.";
+                
+                if(isMasterAdmin) {
+                    document.getElementById('cardTransferStatus').style.display = 'block';
+                }
+                
+                document.querySelectorAll('.btn-dynamic').forEach(btn => {
+                    btn.innerText = btn.innerText.replace(/^Request\s/, '');
+                });
+            } else {
+                // LOCAL ADMIN LOGIC
+                document.getElementById('cardApprovals').style.display = 'none';
+                document.getElementById('cardUpdateNews').style.display = 'none';
+                document.getElementById('cardMyRequests').style.display = 'block';
+                
+                // Hide 2FA Setup for Local Admins
+                document.getElementById('card2FASetup').style.display = 'none';
+                document.getElementById('card2FASetup').classList.remove('allowed-module');
+
+                document.getElementById('logsCardTitle').innerText = "My Office (SOL) Logs";
+                document.getElementById('logsCardDesc').innerText = "View account registry and login history strictly for your mapped office.";
+                
+                document.querySelectorAll('.btn-dynamic').forEach(btn => {
+                     if(!btn.innerText.startsWith("Request") && !btn.innerText.startsWith("Save")) {
+                         btn.innerText = "Request " + btn.innerText;
+                     }
+                });
+            }
+
+            const baseCards = ['cardCreateUser', 'cardReset2FA', 'cardLockUnlock', 'cardEnableDisable', 'cardResetPass', 'cardChangeRole', 'cardCustomizeCards', 'cardDeleteUser', 'cardDirectMessage', 'cardUserLogs'];
+            baseCards.forEach(id => {
+                let el = document.getElementById(id);
+                if(el) el.classList.add('allowed-module');
+            });
+            
+            if(canDirectExecute) { 
+                document.getElementById('card2FASetup').classList.add('allowed-module'); 
+                document.getElementById('cardApprovals').classList.add('allowed-module'); 
+                document.getElementById('cardUpdateNews').classList.add('allowed-module'); 
+            } else {
+                document.getElementById('cardMyRequests').classList.add('allowed-module'); 
+            }
+
+            if (isMasterAdmin) {
+                document.getElementById('cardTransferStatus').classList.add('allowed-module'); 
+            }
+
+            refreshUI(); 
+            filterAndPaginateMaintCards(true); 
+
+            // SPLASH SCREEN LOGIC FIX
+            setTimeout(() => {
+                const splash = document.getElementById('splashScreenMaint');
+                if(splash) {
+                    if (splash.parentNode !== document.body) document.body.appendChild(splash);
+                    splash.style.opacity = '0';
+                    setTimeout(() => { 
+                        splash.style.display = 'none'; 
+                        document.getElementById('maintDashboardView').style.display = 'block';
+                    }, 600);
+                } else {
+                    document.getElementById('maintDashboardView').style.display = 'block';
+                }
+            }, 800);
+        }
+
+        function filterAndPaginateMaintCards(resetPage = false) {
+            if (resetPage) currentMaintPage = 1;
+            const query = document.getElementById('maintModuleSearch') ? document.getElementById('maintModuleSearch').value.toLowerCase() : "";
+            const allCards = Array.from(document.querySelectorAll('#userModuleGrid .portal-module-card'));
+            allCards.forEach(card => card.style.display = "none");
+            const allowedCards = allCards.filter(card => card.classList.contains('allowed-module'));
+            let filtered = allowedCards.filter(card => card.innerText.toLowerCase().includes(query));
+
+            const totalPages = Math.ceil(filtered.length / maintCardsPerPage) || 1;
+            if (currentMaintPage > totalPages) currentMaintPage = totalPages;
+            
+            const startIndex = (currentMaintPage - 1) * maintCardsPerPage;
+            const endIndex = startIndex + maintCardsPerPage;
+
+            filtered.forEach((card, index) => {
+                if (index >= startIndex && index < endIndex) {
+                    card.style.display = "block";
+                }
+            });
+        }
+
+        function navigateToSubPanel(panelId) {
+            document.getElementById('mainDashboardHead').style.display = 'none';
+            const panels = ['subCreateUser', 'subLockUnlock', 'subEnableDisable', 'subResetPass', 'subChangeRole', 'subCustomizeCards', 'subDeleteUser', 'subDirectMessage', 'subUpdateNews', 'subUserLogs', 'panelApprovals', 'panelMyRequests', 'sub2FASetup', 'subReset2FA', 'subTransferStatus'];
+            panels.forEach(id => { 
+                let el = document.getElementById(id);
+                if(el) el.style.display = 'none'; 
+            });
+            document.getElementById(panelId).style.display = 'block';
+        }
+
+        function returnToMainDashboard() {
+            const panels = ['subCreateUser', 'subLockUnlock', 'subEnableDisable', 'subResetPass', 'subChangeRole', 'subCustomizeCards', 'subDeleteUser', 'subDirectMessage', 'subUpdateNews', 'subUserLogs', 'panelApprovals', 'panelMyRequests', 'sub2FASetup', 'subReset2FA', 'subTransferStatus'];
+            panels.forEach(id => { 
+                let el = document.getElementById(id);
+                if(el) el.style.display = 'none'; 
+            });
+            document.getElementById('mainDashboardHead').style.display = 'block';
+            filterAndPaginateMaintCards(true);
+        }
+
+        function displayCustomAlert(msg, icon = '🔔') {
+            document.getElementById('popupMaintAlertIcon').innerText = icon;
+            document.getElementById('customMaintAlertMsgField').innerHTML = msg;
+            openModalSafely('customMaintAlertModal');
+        }
+
+        function closeMaintAlert() {
+            closeModalSafely('customMaintAlertModal');
+        }
+
+        function showLoader(msg) {
+            document.getElementById('maintLoaderText').innerText = msg;
+            const loader = document.getElementById('maintLoader');
+            if (loader && loader.parentNode !== document.body) document.body.appendChild(loader);
+            loader.style.display = 'flex';
+        }
+
+        function hideLoader() { 
+            const loader = document.getElementById('maintLoader');
+            if(loader) loader.style.display = 'none';
+        }
+
+        // PERFECTLY FIXED CLOUD SAVE WITHOUT NETWORK ERROR
+        async function saveToCloudLocal() {
+            if (typeof window.SYSTEM_PENDING_REQUESTS === 'undefined') window.SYSTEM_PENDING_REQUESTS = [];
+            try {
+                await db.collection("system").doc("registry").set({
+                    users: SYSTEM_USER_REGISTRY,
+                    logs: SYSTEM_LOGIN_HISTORY,
+                    offices: SYSTEM_OFFICE_REGISTRY,
+                    requests: window.SYSTEM_PENDING_REQUESTS
+                }, { merge: true });
+            } catch (err) {
+                console.error("Firebase Sync Error:", err);
+                throw err;
+            }
+        }
+
+        function logAdminAction(eventMsg) {
+            let options = { timeZone: 'Asia/Kolkata', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
+            let timeStamp = new Date().toLocaleString('en-IN', options);
+            SYSTEM_LOGIN_HISTORY.push({ time: timeStamp, user: activeUserLocal, event: eventMsg, solId: activeSolIdLocal });
+            if (SYSTEM_LOGIN_HISTORY.length > 20) SYSTEM_LOGIN_HISTORY = SYSTEM_LOGIN_HISTORY.slice(SYSTEM_LOGIN_HISTORY.length - 20);
+        }
+
+        function showCustomSelect(id) { document.getElementById('list_' + id).style.display = 'block'; }
+        function hideCustomSelects(e) {
+            if (!e.target.closest('.searchable-dropdown-container')) {
+                document.querySelectorAll('.custom-select-list').forEach(l => l.style.display = 'none');
+            }
+        }
+        document.addEventListener('click', hideCustomSelects);
+
+        function filterCustomSelect(id) {
+            let input = document.getElementById('searchInput_' + id).value.toLowerCase();
+            let items = document.querySelectorAll('#list_' + id + ' .custom-select-item');
+            let hasVisible = false;
+            items.forEach(item => {
+                let txt = item.innerText.toLowerCase();
+                if (txt.includes(input)) { item.style.display = 'flex'; hasVisible = true; } 
+                else { item.style.display = 'none'; }
+            });
+            let emptyMsg = document.getElementById('empty_' + id);
+            if(emptyMsg) emptyMsg.style.display = hasVisible ? 'none' : 'block';
+        }
+
+        function selectCustomOption(id, value, displayName) {
+            document.getElementById(id).value = value;
+            document.getElementById('searchInput_' + id).value = displayName;
+            document.getElementById('list_' + id).style.display = 'none';
+            if(id === 'muCustomizeSelect') loadUserCurrentCards();
+        }
+
+        function openUserProfile(username) {
+            const u = SYSTEM_USER_REGISTRY.find(x => x.user === username);
+            if(!u) return;
+
+            document.getElementById('profileModalName').innerText = u.fullName || u.user;
+            document.getElementById('profileModalUser').innerText = u.user;
+            
+            let solName = "Unmapped";
+            if(u.solId) {
+                let off = SYSTEM_OFFICE_REGISTRY.find(o => o.solId === u.solId);
+                solName = off ? `${u.solId} - ${off.name}` : u.solId;
+            }
+            document.getElementById('profileModalSol').innerText = solName;
+            document.getElementById('profileModalRole').innerText = u.role;
+            
+            const aEl = document.getElementById('profileModalActive');
+            aEl.innerText = u.active ? "Enabled" : "Disabled";
+            aEl.style.color = u.active ? "#10b981" : "#ef4444";
+
+            const lEl = document.getElementById('profileModalLock');
+            lEl.innerText = u.locked ? "Locked" : "Unlocked";
+            lEl.style.color = u.locked ? "#f59e0b" : "#10b981";
+
+            let lastLog = SYSTEM_LOGIN_HISTORY.slice().reverse().find(l => l.user === username && l.event.includes("Success"));
+            document.getElementById('profileModalLastLogin').innerText = lastLog ? lastLog.time : "No recent login recorded";
+
+            openModalSafely('userProfileModal');
+        }
+
+        function closeUserProfileModal() {
+            closeModalSafely('userProfileModal');
+        }
+
+        function refreshUI() {
+            const visibleUsers = SYSTEM_USER_REGISTRY.filter(u => {
+                if (isMasterAdmin) return true;
+                if (u.user === "admin") return false; 
+                if (isHQAdmin) return true; 
+                return u.solId === activeSolIdLocal; 
+            });
+
+            const customDropdownIds = ['muLockSelect', 'muEnableSelect', 'muResetSelect', 'muRoleTargetSelect', 'muDeleteSelect', 'muCustomizeSelect', 'muMessageSelect', 'mu2FASelect', 'muReset2FASelect'];
+            customDropdownIds.forEach(id => { 
+                let listEl = document.getElementById('list_' + id); 
+                if(listEl) {
+                    listEl.innerHTML = `<div class="cs-empty" id="empty_${id}" style="display:none; padding:15px; color:#64748b; font-size:13px;">No user found</div>`;
+                }
+            });
+
+            const rosterBody = document.getElementById('muUserRosterTableBody'); 
+            if(rosterBody) rosterBody.innerHTML = "";
+
+            visibleUsers.forEach(account => {
+                let dName = account.fullName || account.user;
+                let displayString = `${dName} (${account.user}) [${account.role.toUpperCase()}]`;
+                
+                // Hide master admin from dropdowns so no one deletes him
+                if (account.user !== "admin" || isMasterAdmin) {
+                    customDropdownIds.forEach(id => { 
+                        let listEl = document.getElementById('list_' + id); 
+                        if(listEl) { 
+                            let item = document.createElement('div');
+                            item.className = 'custom-select-item';
+                            item.onclick = function() { selectCustomOption(id, account.user, displayString); };
+                            item.innerHTML = `<span class="cs-name">${dName}</span><span class="cs-detail">@${account.user} • ${account.role.toUpperCase()} • SOL: ${account.solId || 'None'}</span>`;
+                            listEl.appendChild(item);
+                        } 
+                    });
+                }
+                
+                if(rosterBody) {
+                    let solDisplay = account.solId ? account.solId : "<span style='color:#ef4444;'>Unmapped</span>";
+                    let row = document.createElement('tr'); 
+                    row.className = 'clickable-row';
+                    row.onclick = () => openUserProfile(account.user);
+                    row.innerHTML = `
+                        <td>${dName}</td>
+                        <td><strong>${account.user}</strong></td>
+                        <td>${solDisplay}</td>
+                        <td><span style="text-transform:uppercase;">${account.role}</span></td>
+                        <td><span class="status-badge ${account.active ? 'badge-active' : 'badge-disabled'}">${account.active ? 'ENABLED' : 'DISABLED'}</span></td>
+                        <td><span class="status-badge ${account.locked ? 'badge-locked' : 'badge-active'}">${account.locked ? 'LOCKED' : 'UNLOCKED'}</span></td>
+                    `; 
+                    rosterBody.appendChild(row);
+                }
+            });
+
+            const solSelect = document.getElementById('muNewUserSol');
+            if(solSelect) {
+                solSelect.innerHTML = "<option value=''>-- Select Target SOL --</option>";
+                if (isHQAdmin) {
+                    SYSTEM_OFFICE_REGISTRY.forEach(o => {
+                        let opt = document.createElement('option');
+                        opt.value = o.solId;
+                        opt.innerText = `${o.solId} - ${o.name}`;
+                        solSelect.appendChild(opt);
+                    });
+                } else {
+                    let myOffice = SYSTEM_OFFICE_REGISTRY.find(o => o.solId === activeSolIdLocal);
+                    if(myOffice) {
+                        let opt = document.createElement('option');
+                        opt.value = myOffice.solId;
+                        opt.innerText = `${myOffice.solId} - ${myOffice.name} (Locked)`;
+                        opt.selected = true;
+                        solSelect.appendChild(opt);
+                        solSelect.disabled = true; 
+                    }
+                }
+            }
+
+            const historyBody = document.getElementById('muLoginHistoryTableBody');
+            if(historyBody) {
+                historyBody.innerHTML = ""; 
+                const visibleLogs = isHQAdmin ? SYSTEM_LOGIN_HISTORY : SYSTEM_LOGIN_HISTORY.filter(l => l.solId === activeSolIdLocal);
+                let operationalStack = [...visibleLogs].reverse().slice(0, 10);
+                
+                operationalStack.forEach(log => { 
+                    let r = document.createElement('tr'); 
+                    r.innerHTML = `
+                        <td>${log.time}</td>
+                        <td><code>${log.user}</code></td>
+                        <td><span style="color:${log.event.includes('Success') || log.event.includes('Approved') || log.event.includes('Enrolled') || log.event.includes('Reset') ? '#10b981':'#ef4444'}; font-weight:bold;">${log.event}</span></td>
+                    `; 
+                    historyBody.appendChild(r); 
+                });
+            }
+
+            if (isHQAdmin) {
+                const pendingOnly = window.SYSTEM_PENDING_REQUESTS.filter(r => r.status === 'PENDING' && (isMasterAdmin || r.assignedTo === 'ALL' || r.assignedTo === activeUserLocal));
+                const badge = document.getElementById('approvalBadge');
+                if(badge) badge.innerText = pendingOnly.length;
+                
+                const appBody = document.getElementById('approvalsTableBody');
+                if(appBody) {
+                    appBody.innerHTML = "";
+                    if (pendingOnly.length === 0) {
+                        appBody.innerHTML = "<tr><td colspan='4' style='text-align:center; padding: 20px; color: #64748b;'>No pending authorization requests available.</td></tr>";
+                    } else {
+                        pendingOnly.forEach(req => {
+                            let initiatorProfile = SYSTEM_USER_REGISTRY.find(u => u.user === req.requestedBy);
+                            let iSol = initiatorProfile ? initiatorProfile.solId : "Unknown";
+                            let assignmentBadge = req.assignedTo !== 'ALL' ? `<span style="background:#f59e0b; color:white; padding:2px 6px; border-radius:4px; font-size:10px; margin-left:5px;">Assigned to @${req.assignedTo}</span>` : "";
+                            
+                            appBody.innerHTML += `
+                                <tr>
+                                    <td>${req.timestamp}</td>
+                                    <td><strong>${req.requestedBy}</strong><br/><span style="font-size:11px; color:#64748b;">SOL: ${iSol}</span></td>
+                                    <td>${req.desc} ${assignmentBadge}</td>
+                                    <td><button class="small-action-btn" onclick="viewRequestDetails('${req.id}')">👁️ Audit Details</button></td>
+                                </tr>
+                            `;
+                        });
+                    }
+                }
+            } 
+            
+            const myRequests = window.SYSTEM_PENDING_REQUESTS.filter(r => r.requestedBy === activeUserLocal).reverse().slice(0, 10);
+            const myBody = document.getElementById('myRequestsTableBody');
+            if(myBody) {
+                myBody.innerHTML = "";
+                if (myRequests.length === 0) {
+                    myBody.innerHTML = "<tr><td colspan='4' style='text-align:center; padding: 20px; color: #64748b;'>You have not submitted any recent modification requests.</td></tr>";
+                } else {
+                    myRequests.forEach(req => {
+                        let badgeClass = req.status === 'APPROVED' ? 'badge-active' : (req.status === 'REJECTED' ? 'badge-disabled' : 'badge-pending');
+                        let statusText = req.status;
+                        if(req.status === 'PENDING' && req.assignedTo !== 'ALL') statusText = 'IN REVIEW';
+
+                        myBody.innerHTML += `
+                            <tr>
+                                <td>${req.timestamp}</td>
+                                <td><span style="font-weight:bold; color:#4f46e5;">${req.type.replace('_', ' ')}</span></td>
+                                <td>${req.desc}</td>
+                                <td><span class="status-badge ${badgeClass}">${statusText}</span></td>
+                            </tr>
+                        `;
+                    });
+                }
+            }
+
+            if (isMasterAdmin) {
+                const tStatusBody = document.getElementById('transferStatusTableBody');
+                if(tStatusBody) {
+                    const transferredReqs = window.SYSTEM_PENDING_REQUESTS.filter(r => r.status === 'PENDING' && r.assignedTo !== 'ALL').reverse();
+                    tStatusBody.innerHTML = "";
+                    if(transferredReqs.length === 0) {
+                        tStatusBody.innerHTML = "<tr><td colspan='5' style='text-align:center; padding: 20px; color: #64748b;'>No cases are currently assigned/transferred.</td></tr>";
+                    } else {
+                        transferredReqs.forEach(req => {
+                            tStatusBody.innerHTML += `
+                                <tr>
+                                    <td>${req.timestamp}</td>
+                                    <td><strong>@${req.requestedBy}</strong></td>
+                                    <td>${req.desc}</td>
+                                    <td><span style="color:#d97706; font-weight:bold;">@${req.assignedTo}</span></td>
+                                    <td><button class="small-action-btn" onclick="viewRequestDetails('${req.id}')" style="background:#8b5cf6;">Manage</button></td>
+                                </tr>
+                            `;
+                        });
+                    }
+                }
+            }
+        }
+
+        function loadUserCurrentCards() {
+            const selectedUser = document.getElementById('muCustomizeSelect').value; 
+            if(!selectedUser) return;
+            const profile = SYSTEM_USER_REGISTRY.find(acc => acc.user === selectedUser); 
+            if(!profile) return;
+            
+            let currentCards = profile.allowedCards || [];
+            const checkboxes = document.querySelectorAll('.card-checkbox');
+            checkboxes.forEach(box => { box.checked = currentCards.includes(box.value); });
+        }
+
+        function createRequest(type, desc, payload) {
+            window.SYSTEM_PENDING_REQUESTS.push({
+                id: Date.now().toString() + Math.random().toString(36).substr(2, 5),
+                type: type,
+                desc: desc,
+                payload: payload,
+                requestedBy: activeUserLocal,
+                solId: activeSolIdLocal,
+                status: 'PENDING',
+                assignedTo: 'ALL', 
+                transferredBy: null, 
+                timestamp: new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true })
+            });
+            showLoader("Submitting Request to HQ...");
+            saveToCloudLocal().then(() => {
+                displayCustomAlert("Request Submitted Successfully!<br/><br/>It is now pending authorization from the HQ Admin.", "✅");
+                refreshUI();
+            }).catch(e => displayCustomAlert("Failed to submit request.", "❌"))
+            .finally(() => hideLoader());
+        }
+
+        function viewRequestDetails(reqId) {
+            currentlyViewingRequest = reqId;
+            const req = window.SYSTEM_PENDING_REQUESTS.find(r => r.id === reqId);
+            if (!req) return;
+
+            let html = ``;
+            if (req.transferredBy) {
+                html += `<div class="request-detail-row" style="background: #fffbeb; border-left: 4px solid #f59e0b;">
+                            <span class="req-key" style="color:#d97706;">ROUTED VIA:</span>
+                            <span class="req-val" style="color:#b45309;">Transferred by @${req.transferredBy}</span>
+                         </div>`;
+            }
+
+            for (const [key, value] of Object.entries(req.payload)) {
+                let displayVal = value;
+                if (typeof value === 'object') displayVal = JSON.stringify(value);
+                if (typeof value === 'boolean') displayVal = value ? "True" : "False";
+                html += `<div class="request-detail-row">
+                            <span class="req-key">${key.toUpperCase()}:</span>
+                            <span class="req-val">${displayVal}</span>
+                         </div>`;
+            }
+            document.getElementById('requestDetailsContent').innerHTML = html;
+
+            let buttonHtml = `
+                <button onclick="approveCurrentRequest()" style="background:#10b981; color:white; border:none; padding:12px; border-radius:8px; flex:1; font-weight:800; cursor:pointer; font-size: 13px; transition: 0.2s; text-transform: uppercase;">✅ Approve</button>
+                <button onclick="rejectCurrentRequest()" style="background:#ef4444; color:white; border:none; padding:12px; border-radius:8px; flex:1; font-weight:800; cursor:pointer; font-size: 13px; transition: 0.2s; text-transform: uppercase;">❌ Reject</button>
+                <button onclick="openTransferModal()" style="background:#f59e0b; color:white; border:none; padding:12px; border-radius:8px; flex:1; font-weight:800; cursor:pointer; font-size: 13px; transition: 0.2s; text-transform: uppercase;">🔄 Transfer</button>
+            `;
+
+            if (isMasterAdmin && req.assignedTo !== 'ALL' && req.status === 'PENDING') {
+                buttonHtml += `<button onclick="revokeTransferRequest()" style="background:#8b5cf6; color:white; border:none; padding:12px; border-radius:8px; flex:1; font-weight:800; cursor:pointer; font-size: 13px; transition: 0.2s; text-transform: uppercase;">🔙 Revoke</button>`;
+            }
+
+            buttonHtml += `<button onclick="closeRequestDetails()" style="background:#64748b; color:white; border:none; padding:12px; border-radius:8px; flex:1; font-weight:800; cursor:pointer; font-size: 13px; transition: 0.2s; text-transform: uppercase;">Cancel</button>`;
+            document.getElementById('requestModalActionButtons').innerHTML = buttonHtml;
+
+            openModalSafely('requestDetailsModal');
+        }
+
+        function closeRequestDetails() {
+            currentlyViewingRequest = null;
+            closeModalSafely('requestDetailsModal');
+        }
+
+        function approveCurrentRequest() { if(!currentlyViewingRequest) return; processRequest(currentlyViewingRequest, 'APPROVE'); closeRequestDetails(); }
+        function rejectCurrentRequest() { if(!currentlyViewingRequest) return; processRequest(currentlyViewingRequest, 'REJECT'); closeRequestDetails(); }
+
+        async function processRequest(reqId, action) {
+            const reqIdx = window.SYSTEM_PENDING_REQUESTS.findIndex(r => r.id === reqId);
+            if (reqIdx === -1) return;
+            const req = window.SYSTEM_PENDING_REQUESTS[reqIdx];
+
+            if (action === 'APPROVE') {
+                const p = req.payload;
+                switch(req.type) {
+                    case 'CREATE_USER': SYSTEM_USER_REGISTRY.push(p); break;
+                    case 'TOGGLE_LOCK': {
+                        let u = SYSTEM_USER_REGISTRY.find(x => x.user === p.user);
+                        if(u) { u.locked = p.locked; if(!u.locked) u.failedAttempts = 0; }
+                        break;
+                    }
+                    case 'TOGGLE_ENABLE': {
+                        let u = SYSTEM_USER_REGISTRY.find(x => x.user === p.user);
+                        if(u) u.active = p.active;
+                        break;
+                    }
+                    case 'RESET_PASS': {
+                        let u = SYSTEM_USER_REGISTRY.find(x => x.user === p.user);
+                        if(u) { u.pass = p.pass; u.isFirstTimeDefault = true; }
+                        break;
+                    }
+                    case 'CHANGE_ROLE': {
+                        let u = SYSTEM_USER_REGISTRY.find(x => x.user === p.user);
+                        if(u) { u.role = p.role; u.allowedCards = p.allowedCards; }
+                        break;
+                    }
+                    case 'CUSTOMIZE_CARDS': {
+                        let u = SYSTEM_USER_REGISTRY.find(x => x.user === p.user);
+                        if(u) u.allowedCards = p.allowedCards;
+                        break;
+                    }
+                    case 'DELETE_USER': {
+                        let uIdx = SYSTEM_USER_REGISTRY.findIndex(x => x.user === p.user);
+                        if(uIdx > -1) SYSTEM_USER_REGISTRY.splice(uIdx, 1);
+                        break;
+                    }
+                    case 'SEND_MSG': {
+                        let u = SYSTEM_USER_REGISTRY.find(x => x.user === p.user);
+                        if(u) u.pendingMessage = p.msg;
+                        break;
+                    }
+                    case 'ENROLL_2FA': {
+                        let u = SYSTEM_USER_REGISTRY.find(x => x.user === p.user);
+                        if(u) u.totpSecret = p.secret;
+                        break;
+                    }
+                    case 'RESET_2FA': {
+                        let u = SYSTEM_USER_REGISTRY.find(x => x.user === p.user);
+                        if(u) u.totpSecret = "";
+                        break;
+                    }
+                }
+                req.status = 'APPROVED';
+                logAdminAction(`Approved Request: ${req.desc}`);
+            } else {
+                req.status = 'REJECTED';
+                logAdminAction(`Rejected Request: ${req.desc}`);
+            }
+
+            showLoader(action === 'APPROVE' ? "Applying Changes..." : "Discarding Request...");
+            try {
+                await saveToCloudLocal();
+                displayCustomAlert(`Request ${action === 'APPROVE' ? 'Approved' : 'Rejected'} successfully!`, "✅");
+                refreshUI();
+            } catch(e) { displayCustomAlert("Network Error", "❌"); }
+            hideLoader();
+        }
+
+        function openTransferModal() {
+            const selectEl = document.getElementById('transferAdminSelect');
+            selectEl.innerHTML = "";
+            const hqAdmins = SYSTEM_USER_REGISTRY.filter(u => u.solId === "000000" && u.user !== activeUserLocal && u.user !== "admin");
+            
+            if(hqAdmins.length === 0) {
+                displayCustomAlert("No other HQ Admins are currently available to transfer to.", "⚠️");
+                return;
+            }
+
+            hqAdmins.forEach(u => {
+                let opt = document.createElement('option');
+                opt.value = u.user;
+                opt.innerText = `${u.fullName} (@${u.user})`;
+                selectEl.appendChild(opt);
+            });
+
+            closeRequestDetails();
+            openModalSafely('transferRequestModal');
+        }
+
+        function closeTransferModal() {
+            currentlyViewingRequest = null;
+            closeModalSafely('transferRequestModal');
+        }
+
+        async function executeTransferRequest() {
+            if(!currentlyViewingRequest) return;
+            const targetAdmin = document.getElementById('transferAdminSelect').value;
+            if(!targetAdmin) return;
+
+            const reqIdx = window.SYSTEM_PENDING_REQUESTS.findIndex(r => r.id === currentlyViewingRequest);
+            if (reqIdx === -1) return;
+
+            window.SYSTEM_PENDING_REQUESTS[reqIdx].assignedTo = targetAdmin;
+            window.SYSTEM_PENDING_REQUESTS[reqIdx].transferredBy = activeUserLocal;
+            
+            showLoader("Transferring Request...");
+            try {
+                await saveToCloudLocal();
+                closeTransferModal();
+                refreshUI(); 
+                displayCustomAlert(`Success! Case has been transferred to HQ Admin @${targetAdmin}.`, "🔄");
+            } catch(e) {
+                displayCustomAlert("Network Error during transfer.", "❌");
+            }
+            hideLoader();
+        }
+
+        async function revokeTransferRequest() {
+            if(!currentlyViewingRequest) return;
+            const reqIdx = window.SYSTEM_PENDING_REQUESTS.findIndex(r => r.id === currentlyViewingRequest);
+            if (reqIdx === -1) return;
+
+            window.SYSTEM_PENDING_REQUESTS[reqIdx].assignedTo = 'ALL';
+            window.SYSTEM_PENDING_REQUESTS[reqIdx].transferredBy = null;
+            
+            closeRequestDetails();
+            showLoader("Revoking Transfer...");
+            try {
+                await saveToCloudLocal();
+                refreshUI();
+                displayCustomAlert("System Override: Transfer revoked. The case is now open to all HQ Admins again.", "🔙");
+            } catch(e) {
+                displayCustomAlert("Network Error.", "❌");
+            }
+            hideLoader();
+        }
+
+        async function executeCreateUserAction() {
+            const fullNameInput = document.getElementById('muNewFullName').value.trim(); 
+            const usernameInput = document.getElementById('muNewUser').value.trim(); 
+            const passwordInput = document.getElementById('muNewPass').value.trim(); 
+            const selectedRole = document.getElementById('muNewRole').value;
+            const selectedSol = document.getElementById('muNewUserSol').value;
+
+            if(!fullNameInput || !usernameInput || !passwordInput || !selectedSol) { displayCustomAlert("Error: All fields and SOL mapping required.", "⚠️"); return; }
+            if(usernameInput.toLowerCase() === "admin") { displayCustomAlert("Error: Cannot create 'admin' username. Reserved.", "🛑"); return; }
+            if(SYSTEM_USER_REGISTRY.some(acc => acc.user.toLowerCase() === usernameInput.toLowerCase())) { displayCustomAlert("Error: Username already exists.", "⚠️"); return; }
+
+            let defaultCards = [];
+            if(selectedRole === 'admin') defaultCards = ['menuCardDBDE', 'menuCardOfficeHub', 'menuCardBulkBooking', 'menuCardBulk', 'menuCardHoliday', 'menuCardDateWise', 'menuCardACG61', 'menuCardGeneralCharge', 'menuCardSR1', 'menuCardCasualLeave', 'menuCardTAAdvance', 'menuCardTATransfer', 'menuCardTABillTour', 'menuCardCEA', 'menuCardAI', 'menuCardMaintenance', 'menuCardSelfPassword']; 
+            else if (selectedRole === 'superuser') defaultCards = ['menuCardDBDE', 'menuCardBulkBooking', 'menuCardBulk', 'menuCardHoliday', 'menuCardDateWise', 'menuCardACG61', 'menuCardGeneralCharge', 'menuCardSR1', 'menuCardCasualLeave', 'menuCardTAAdvance', 'menuCardTATransfer', 'menuCardTABillTour', 'menuCardCEA', 'menuCardAI', 'menuCardSelfPassword']; 
+            else defaultCards = ['menuCardBulkBooking', 'menuCardBulk', 'menuCardHoliday', 'menuCardDateWise', 'menuCardACG61', 'menuCardGeneralCharge', 'menuCardSR1', 'menuCardCasualLeave', 'menuCardTAAdvance', 'menuCardTATransfer', 'menuCardTABillTour', 'menuCardCEA', 'menuCardAI', 'menuCardSelfPassword']; 
+
+            const payload = { fullName: fullNameInput, user: usernameInput, pass: passwordInput, role: selectedRole, active: true, locked: false, failedAttempts: 0, isFirstTimeDefault: true, pendingMessage: "", allowedCards: defaultCards, solId: selectedSol, totpSecret: "" };
+
+            if (canDirectExecute) {
+                SYSTEM_USER_REGISTRY.push(payload);
+                logAdminAction(`Created User: ${usernameInput} in SOL ${selectedSol}`);
+                showLoader("Saving to Cloud...");
+                try {
+                    await saveToCloudLocal();
+                    document.getElementById('muNewFullName').value = ""; document.getElementById('muNewUser').value = ""; document.getElementById('muNewPass').value = "";
+                    document.getElementById('muNewUserSol').value = "";
+                    displayCustomAlert(`Account Created Successfully!<br/><br/>Username: ${usernameInput}<br/>Mapped SOL: ${selectedSol}`, "✅");
+                    refreshUI();
+                } catch(e) { displayCustomAlert("Network Error", "❌"); }
+                hideLoader();
+            } else {
+                createRequest('CREATE_USER', `Create User: ${usernameInput} in SOL ${selectedSol}`, payload);
+            }
+        }
+
+        async function executeToggleUserStatus(toggleType, selectId) {
+            const selectedUser = document.getElementById(selectId).value; 
+            if(!selectedUser) { displayCustomAlert("Please search and select a user.", "⚠️"); return; }
+            if(selectedUser.toLowerCase() === "admin" && toggleType !== "lock") { displayCustomAlert("Restriction: Master Admin cannot be disabled.", "🛑"); return; }
+            
+            const profileIndex = SYSTEM_USER_REGISTRY.findIndex(acc => acc.user === selectedUser); 
+            if(profileIndex === -1) return;
+
+            if (canDirectExecute) {
+                if(toggleType === "lock") {
+                    SYSTEM_USER_REGISTRY[profileIndex].locked = !SYSTEM_USER_REGISTRY[profileIndex].locked;
+                    if (!SYSTEM_USER_REGISTRY[profileIndex].locked) SYSTEM_USER_REGISTRY[profileIndex].failedAttempts = 0;
+                } else {
+                    SYSTEM_USER_REGISTRY[profileIndex].active = !SYSTEM_USER_REGISTRY[profileIndex].active;
+                }
+                logAdminAction(`Toggled ${toggleType} for '${selectedUser}'`);
+                showLoader("Updating Status...");
+                try { 
+                    await saveToCloudLocal(); 
+                    displayCustomAlert(`Success: Status updated for '${selectedUser}'.`, "✅"); 
+                    refreshUI();
+                } catch(e) { displayCustomAlert("Network Error", "❌"); }
+                hideLoader();
+                document.getElementById('searchInput_'+selectId).value = "";
+                document.getElementById(selectId).value = "";
+            } else {
+                if(toggleType === "lock") {
+                    let newState = !SYSTEM_USER_REGISTRY[profileIndex].locked;
+                    createRequest('TOGGLE_LOCK', `${newState ? 'Lock' : 'Unlock'} User '${selectedUser}'`, { user: selectedUser, locked: newState });
+                } else {
+                    let newState = !SYSTEM_USER_REGISTRY[profileIndex].active;
+                    createRequest('TOGGLE_ENABLE', `${newState ? 'Enable' : 'Disable'} User '${selectedUser}'`, { user: selectedUser, active: newState });
+                }
+            }
+        }
+
+        async function executeResetPasswordAction() {
+            const selectedUser = document.getElementById('muResetSelect').value; 
+            const newPass = document.getElementById('muResetPassInput').value.trim();
+            if(!selectedUser || !newPass) { displayCustomAlert("Error: Please select a user and provide a passcode.", "⚠️"); return; }
+            if(selectedUser.toLowerCase() === "admin") { displayCustomAlert("Restriction: Cannot reset Master Admin.", "🛑"); return; }
+
+            if (canDirectExecute) {
+                const profileIndex = SYSTEM_USER_REGISTRY.findIndex(acc => acc.user === selectedUser); 
+                SYSTEM_USER_REGISTRY[profileIndex].pass = newPass; 
+                SYSTEM_USER_REGISTRY[profileIndex].isFirstTimeDefault = true; 
+                document.getElementById('muResetPassInput').value = ""; 
+                logAdminAction(`Reset Passcode for '${selectedUser}'`);
+                showLoader("Updating Passcode...");
+                try { 
+                    await saveToCloudLocal(); 
+                    displayCustomAlert(`Success: Passcode reset.`, "✅"); 
+                    document.getElementById('searchInput_muResetSelect').value = "";
+                    document.getElementById('muResetSelect').value = "";
+                } catch(e) { displayCustomAlert("Network Error", "❌"); }
+                hideLoader();
+            } else {
+                createRequest('RESET_PASS', `Reset Passcode for '${selectedUser}'`, { user: selectedUser, pass: newPass });
+            }
+        }
+
+        async function executeRoleChangeAction() {
+            const selectedUser = document.getElementById('muRoleTargetSelect').value; 
+            const newRole = document.getElementById('muNewRoleSelect').value;
+            if(!selectedUser) { displayCustomAlert("Error: Please select a user.", "⚠️"); return; }
+            if(selectedUser.toLowerCase() === "admin") { displayCustomAlert("Restriction: Master Admin cannot be altered.", "🛑"); return; }
+
+            let defaultCards = [];
+            if(newRole === 'admin') defaultCards = ['menuCardDBDE', 'menuCardOfficeHub', 'menuCardBulkBooking', 'menuCardBulk', 'menuCardHoliday', 'menuCardDateWise', 'menuCardACG61', 'menuCardGeneralCharge', 'menuCardSR1', 'menuCardCasualLeave', 'menuCardTAAdvance', 'menuCardTATransfer', 'menuCardTABillTour', 'menuCardCEA', 'menuCardAI', 'menuCardMaintenance', 'menuCardSelfPassword']; 
+            else if (newRole === 'superuser') defaultCards = ['menuCardDBDE', 'menuCardBulkBooking', 'menuCardBulk', 'menuCardHoliday', 'menuCardDateWise', 'menuCardACG61', 'menuCardGeneralCharge', 'menuCardSR1', 'menuCardCasualLeave', 'menuCardTAAdvance', 'menuCardTATransfer', 'menuCardTABillTour', 'menuCardCEA', 'menuCardAI', 'menuCardSelfPassword']; 
+            else defaultCards = ['menuCardBulkBooking', 'menuCardBulk', 'menuCardHoliday', 'menuCardDateWise', 'menuCardACG61', 'menuCardGeneralCharge', 'menuCardSR1', 'menuCardCasualLeave', 'menuCardTAAdvance', 'menuCardTATransfer', 'menuCardTABillTour', 'menuCardCEA', 'menuCardAI', 'menuCardSelfPassword'];
+
+            if (canDirectExecute) {
+                const profileIndex = SYSTEM_USER_REGISTRY.findIndex(acc => acc.user === selectedUser); 
+                SYSTEM_USER_REGISTRY[profileIndex].role = newRole;
+                SYSTEM_USER_REGISTRY[profileIndex].allowedCards = defaultCards;
+                logAdminAction(`Changed Role for '${selectedUser}' to ${newRole}`);
+                showLoader("Updating Role...");
+                try { 
+                    await saveToCloudLocal(); 
+                    displayCustomAlert(`Success: Role updated.`, "✅"); 
+                    refreshUI();
+                    document.getElementById('searchInput_muRoleTargetSelect').value = "";
+                    document.getElementById('muRoleTargetSelect').value = "";
+                } catch(e) { displayCustomAlert("Network Error", "❌"); }
+                hideLoader();
+            } else {
+                createRequest('CHANGE_ROLE', `Change Role for '${selectedUser}' to ${newRole}`, { user: selectedUser, role: newRole, allowedCards: defaultCards });
+            }
+        }
+
+        async function executeSaveUserCards() {
+            const selectedUser = document.getElementById('muCustomizeSelect').value; 
+            if(!selectedUser) { displayCustomAlert("Error: Please select a user.", "⚠️"); return; }
+            if(selectedUser.toLowerCase() === "admin") { displayCustomAlert("Restriction Notice: Master Admin cards cannot be altered.", "🛑"); return; }
+
+            let newAllowedCards = [];
+            document.querySelectorAll('.card-checkbox').forEach(box => { if (box.checked) newAllowedCards.push(box.value); });
+            if (newAllowedCards.length === 0) { displayCustomAlert("Operational Error: Must have at least one card.", "⚠️"); return; }
+
+            if (canDirectExecute) {
+                const profileIndex = SYSTEM_USER_REGISTRY.findIndex(acc => acc.user === selectedUser); 
+                SYSTEM_USER_REGISTRY[profileIndex].allowedCards = newAllowedCards; 
+                logAdminAction(`Customized Cards for '${selectedUser}'`);
+                showLoader("Saving Config...");
+                try { 
+                    await saveToCloudLocal(); 
+                    displayCustomAlert(`Success: Dashboard card config updated.`, "✅"); 
+                    document.getElementById('searchInput_muCustomizeSelect').value = "";
+                    document.getElementById('muCustomizeSelect').value = "";
+                } catch(e) { displayCustomAlert("Network Error", "❌"); }
+                hideLoader();
+            } else {
+                createRequest('CUSTOMIZE_CARDS', `Customize Dashboard Cards for '${selectedUser}'`, { user: selectedUser, allowedCards: newAllowedCards });
+            }
+        }
+
+        async function executeDeleteUserAction() {
+            const selectedUser = document.getElementById('muDeleteSelect').value; 
+            if(!selectedUser) { displayCustomAlert("Error: Please select a user.", "⚠️"); return; }
+            if(selectedUser.toLowerCase() === "admin") { displayCustomAlert("Restriction: Cannot delete Master Admin.", "🛑"); return; }
+
+            if (canDirectExecute) {
+                const profileIndex = SYSTEM_USER_REGISTRY.findIndex(acc => acc.user === selectedUser); 
+                SYSTEM_USER_REGISTRY.splice(profileIndex, 1); 
+                logAdminAction(`Deleted User '${selectedUser}'`);
+                showLoader("Deleting Profile...");
+                try { 
+                    await saveToCloudLocal(); 
+                    displayCustomAlert(`Success: Profile deleted.`, "✅"); 
+                    refreshUI();
+                    document.getElementById('searchInput_muDeleteSelect').value = "";
+                    document.getElementById('muDeleteSelect').value = "";
+                } catch(e) { displayCustomAlert("Network Error", "❌"); }
+                hideLoader();
+            } else {
+                createRequest('DELETE_USER', `Permanently Delete User '${selectedUser}'`, { user: selectedUser });
+            }
+        }
+
+        async function executeSendDirectMessage() {
+            const selectedUser = document.getElementById('muMessageSelect').value; 
+            const messageText = document.getElementById('muMessageInput').value.trim();
+            if(!selectedUser || !messageText) { displayCustomAlert("Error: Target user and message both required.", "⚠️"); return; }
+
+            const profileIndex = SYSTEM_USER_REGISTRY.findIndex(acc => acc.user === selectedUser); 
+            if(profileIndex === -1) return;
+            
+            if (canDirectExecute) {
+                SYSTEM_USER_REGISTRY[profileIndex].pendingMessage = messageText; 
+                document.getElementById('muMessageInput').value = ""; 
+                logAdminAction(`Sent Alert to '${selectedUser}'`);
+                showLoader("Sending Message...");
+                try { 
+                    await saveToCloudLocal(); 
+                    displayCustomAlert(`Success: Alert queued for next login.`, "✅"); 
+                    document.getElementById('searchInput_muMessageSelect').value = "";
+                    document.getElementById('muMessageSelect').value = "";
+                } catch(e) { displayCustomAlert("Network Error", "❌"); }
+                hideLoader();
+            } else {
+                createRequest('SEND_MSG', `Send direct message to '${selectedUser}'`, { user: selectedUser, msg: messageText });
+                document.getElementById('muMessageInput').value = ""; 
+            }
+        }
+
+        async function executeUpdateNewsAction() {
+            const newText = document.getElementById('muNewsInput').value.trim(); 
+            if(!newText) { displayCustomAlert("Error: Cannot be empty.", "⚠️"); return; }
+
+            showLoader("Publishing News...");
+            try { 
+                await db.collection("system").doc("announcements").set({ tickerText: newText }, { merge: true }); 
+                document.getElementById('muNewsInput').value = "";
+                logAdminAction(`Updated Live News`);
+                displayCustomAlert("Success: Live News Feed updated globally!", "✅"); 
+            } catch (error) { displayCustomAlert("Network Error", "❌"); }
+            hideLoader();
+        }
+
+        function generate2FAForUser() {
+            if(typeof QRCode === 'undefined') {
+                displayCustomAlert("System Error: QR Code library missing.", "❌");
+                return;
+            }
+            const selectedUser = document.getElementById('mu2FASelect').value;
+            if(!selectedUser) { displayCustomAlert("Please search and select a target user first.", "⚠️"); return; }
+            
+            const profile = SYSTEM_USER_REGISTRY.find(acc => acc.user === selectedUser);
+            if (profile && profile.totpSecret && profile.totpSecret !== "") {
+                if(!confirm(`Warning: User '${selectedUser}' is already enrolled in 2FA.\n\nGenerating a new QR code will OVERWRITE their old code and lock them out of their old Authenticator app.\n\nDo you want to proceed?`)) {
+                    return;
+                }
+            }
+            
+            const charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
+            let secret = '';
+            for (let i = 0; i < 16; i++) secret += charset.charAt(Math.floor(Math.random() * charset.length));
+
+            pending2FASecret = secret;
+            pending2FAUser = selectedUser;
+            
+            const issuerName = "PO Staff Utility";
+            const otpUri = `otpauth://totp/${encodeURIComponent(issuerName)}:${encodeURIComponent(selectedUser)}?secret=${pending2FASecret}&issuer=${encodeURIComponent(issuerName)}`;
+            
+            const qrContainer = document.getElementById('qrcodeDisplay');
+            qrContainer.innerHTML = ""; 
+            
+            new QRCode(qrContainer, {
+                text: otpUri,
+                width: 180,
+                height: 180,
+                colorDark : "#0f172a",
+                colorLight : "#ffffff",
+                correctLevel : QRCode.CorrectLevel.H
+            });
+            
+            document.getElementById('manualSecretDisplay').innerText = pending2FASecret;
+            document.getElementById('qrCodeWrapper').style.display = "block";
+            document.getElementById('save2FABtn').style.display = "block";
+        }
+
+        async function executeSave2FA() {
+            if(!pending2FAUser || !pending2FASecret) return;
+            
+            if (canDirectExecute) {
+                const profileIndex = SYSTEM_USER_REGISTRY.findIndex(acc => acc.user === pending2FAUser); 
+                if(profileIndex === -1) return;
+                
+                SYSTEM_USER_REGISTRY[profileIndex].totpSecret = pending2FASecret;
+                logAdminAction(`Enrolled 2FA for '${pending2FAUser}'`);
+                
+                showLoader("Saving 2FA Configuration...");
+                try { 
+                    await saveToCloudLocal(); 
+                    displayCustomAlert(`Success! Google Authenticator 2FA is now enabled for '${pending2FAUser}'.`, "✅"); 
+                    
+                    document.getElementById('qrCodeWrapper').style.display = "none";
+                    document.getElementById('save2FABtn').style.display = "none";
+                    document.getElementById('searchInput_mu2FASelect').value = "";
+                    document.getElementById('mu2FASelect').value = "";
+                    pending2FASecret = ""; 
+                    pending2FAUser = "";
+                } catch(e) { displayCustomAlert("Network Error", "❌"); }
+                hideLoader();
+            } else {
+                createRequest('ENROLL_2FA', `Enroll 2FA Authentication for '${pending2FAUser}'`, { user: pending2FAUser, secret: pending2FASecret });
+            }
+        }
+
+        async function executeReset2FAAction() {
+            const selectedUser = document.getElementById('muReset2FASelect').value; 
+            if(!selectedUser) { displayCustomAlert("Error: Please select a user.", "⚠️"); return; }
+            if(selectedUser.toLowerCase() === "admin") { displayCustomAlert("Restriction: Cannot reset Master Admin's 2FA from here.", "🛑"); return; }
+            
+            const profileIndex = SYSTEM_USER_REGISTRY.findIndex(acc => acc.user === selectedUser); 
+            if(profileIndex === -1) return;
+            
+            if (canDirectExecute) {
+                SYSTEM_USER_REGISTRY[profileIndex].totpSecret = ""; 
+                logAdminAction(`Reset 2FA for '${selectedUser}'`);
+                showLoader("Resetting 2FA Security...");
+                try { 
+                    await saveToCloudLocal(); 
+                    displayCustomAlert(`Success: 2FA has been reset for '${selectedUser}'.`, "🔓"); 
+                    document.getElementById('searchInput_muReset2FASelect').value = "";
+                    document.getElementById('muReset2FASelect').value = "";
+                } catch(e) { displayCustomAlert("Network Error", "❌"); }
+                hideLoader();
+            } else {
+                createRequest('RESET_2FA', `Reset 2FA device for '${selectedUser}'`, { user: selectedUser });
+            }
+        }
+
+        // TRIGGER INIT FUNCTION
+        initMaintenanceHub();
+
+    </script>
+</div>

@@ -7,11 +7,6 @@
     
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
-    
-    <!-- New Libraries for Bulk Operations -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
 
     <style>
         /* Minimalist Baseline Setup & Security */
@@ -38,7 +33,7 @@
         
         .form-group { margin-bottom: 20px; }
         label { display: block; font-weight: 700; margin-bottom: 8px; font-size: 14px; color: #334155; }
-        input[type="text"], input[type="number"], input[type="file"], select { width: 100%; padding: 14px 16px; box-sizing: border-box; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14.5px; background: #f8fafc; color: #1e293b !important; transition: all 0.2s ease; }
+        input[type="text"], input[type="number"], select { width: 100%; padding: 14px 16px; box-sizing: border-box; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14.5px; background: #f8fafc; color: #1e293b !important; transition: all 0.2s ease; }
         input[type="text"]:focus, input[type="number"]:focus, select:focus { border-color: #d32f2f; background: #ffffff; box-shadow: 0 0 0 4px rgba(211, 47, 47, 0.1); outline: none; }
         .flex-row { display: flex; gap: 15px; flex-wrap: wrap; }
         .flex-row > div { flex: 1; }
@@ -58,8 +53,6 @@
         .card-rose-variant::before { background: #e11d48; } .card-rose-variant .card-icon { background: #ffe4e6; }
         .card-purple-variant::before { background: #8b5cf6; } .card-purple-variant .card-icon { background: #ede9fe; }
         .card-gold-variant::before { background: #eab308; } .card-gold-variant .card-icon { background: #fef08a; }
-        .card-teal-variant::before { background: #14b8a6; } .card-teal-variant .card-icon { background: #ccfbf1; }
-        .card-indigo-variant::before { background: #4f46e5; } .card-indigo-variant .card-icon { background: #e0e7ff; }
         
         .portal-module-card h3 { margin: 0 0 10px 0; font-size: 18px; font-weight: 800; color: #1e293b; letter-spacing: -0.3px;}
         .portal-module-card p { margin: 0; font-size: 13.5px; color: #64748b; line-height: 1.6; }
@@ -81,12 +74,6 @@
         button.action-btn:hover { background: #b71c1c; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(183, 28, 28, 0.3); }
         button.panel-sub-submit { background: #3b82f6; padding: 14px 18px; font-size: 14.5px; margin-top: 20px; box-shadow: none; width: 100%; text-transform: none; border-radius: 8px; color: white; border: none; font-weight: 800; cursor: pointer; }
         button.panel-sub-submit:hover { filter: brightness(90%); }
-        button.download-btn { background: #10b981; margin-top: 5px; color: white; font-weight: bold; border: none; padding: 10px 15px; border-radius: 6px; cursor: pointer; transition: 0.2s; }
-        button.download-btn:hover { background: #059669; }
-        button.small-action-btn { background:#3b82f6; color:white; border:none; padding:6px 12px; border-radius:4px; font-size:12px; font-weight:bold; cursor:pointer; margin-right:5px; transition:0.2s; }
-        button.small-action-btn:hover { filter: brightness(90%); }
-        button.small-delete-btn { background:#ef4444; color:white; border:none; padding:6px 12px; border-radius:4px; font-size:12px; font-weight:bold; cursor:pointer; transition:0.2s; }
-        button.small-delete-btn:hover { background:#dc2626; }
         
         .custom-popup-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(6px); z-index: 20000000; display: none; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.2s ease-in-out; }
         .custom-popup-card { background: #ffffff; width: 90%; max-width: 420px; padding: 35px; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.2); text-align: center; box-sizing: border-box; border-top: 6px solid #d32f2f; transform: scale(0.95); transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
@@ -94,15 +81,13 @@
         .custom-popup-overlay.active .custom-popup-card { transform: scale(1); }
         .popup-icon-alert { font-size: 48px; margin-bottom: 15px; }
         .popup-message-text { color: #334155; font-size: 15px; line-height: 1.6; margin: 0 0 25px 0; font-weight: 600; white-space: pre-line; }
-        .popup-close-btn { background: #0f172a; color: white; padding: 12px 28px; border: none; border-radius: 8px; font-size: 13.5px; font-weight: 800; cursor: pointer; text-transform: uppercase; letter-spacing: 0.5px; transition: background 0.2s; width: 100%;}
+        .popup-close-btn { background: #0f172a; color: white; padding: 12px 28px; border: none; border-radius: 8px; font-size: 13.5px; font-weight: 800; cursor: pointer; text-transform: uppercase; letter-spacing: 0.5px; transition: background 0.2s;}
         .popup-close-btn:hover { background: #334155; }
         
         .processing-loader-container { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(5px); z-index: 30000000; display: none; flex-direction: column; justify-content: center; align-items: center; }
         .app-loading-spinner { width: 45px; height: 45px; border: 4px solid #f1f5f9; border-top: 4px solid #3b82f6; border-radius: 50%; animation: spinSystem 0.8s linear infinite; margin-bottom: 20px; }
         .loading-status-msg { font-size: 15px; font-weight: 800; color: #0f172a; letter-spacing: 0.5px; }
         @keyframes spinSystem { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-        .bulk-results { display: none; margin-top: 15px; padding: 15px; background: #e0f2fe; border: 1px solid #bfdbfe; border-radius: 8px; }
     </style>
 </head>
 <body>
@@ -130,23 +115,10 @@
                 
                 <!-- THE SUB-DASHBOARD CARDS -->
                 <div class='portal-grid-wrapper' id='solModuleGrid'>
-                    <!-- NEW: Bulk Operations -->
-                    <div class='portal-module-card card-teal-variant' onclick='navigateToSubPanel("panelBulkOffice")'>
-                        <div class='card-icon'>🗂️</div>
-                        <h3>Bulk Office Creation</h3>
-                        <p>Upload an Excel file to review, edit, and safely register multiple new offices instantly.</p>
-                    </div>
-
-                    <div class='portal-module-card card-indigo-variant' onclick='navigateToSubPanel("panelBulkUser")'>
-                        <div class='card-icon'>👥</div>
-                        <h3>Bulk User Creation</h3>
-                        <p>Upload an Excel file to review, edit, generate dynamic usernames, and map users automatically.</p>
-                    </div>
-
                     <div class='portal-module-card card-rose-variant' onclick='navigateToSubPanel("panelCreateSOL")'>
                         <div class='card-icon'>🏢</div>
-                        <h3>Create Single Office</h3>
-                        <p>Generate a new SOL ID, set establishment limits, and register a new post office manually.</p>
+                        <h3>Create New Office</h3>
+                        <p>Generate a new SOL ID, set establishment limits, and register a new post office.</p>
                     </div>
 
                     <div class='portal-module-card card-blue-variant' onclick='navigateToSubPanel("panelMapUser")'>
@@ -187,126 +159,10 @@
                 </div>
             </div>
 
-            <!-- NEW PANEL: BULK OFFICE CREATION -->
-            <div class='portal-page-panel' id='panelBulkOffice'>
-                <div class='back-nav-link' onclick='returnToSolDashboard()'>⬅️ Back to SOL Hub</div>
-                <h3 style="margin-top:0; color:#1e293b; font-size:22px;">Bulk Office Creation via Excel</h3>
-                <div class='sub-action-card' style="border-top: 4px solid #14b8a6;">
-                    <p style="font-size: 14px; color: #64748b; margin-top:0;">Download the template, fill in your office details, and upload it back here. You can edit or delete entries before confirming.</p>
-                    <button class="download-btn" onclick="downloadOfficeTemplate()">⬇️ Download Excel Template</button>
-                    
-                    <hr style="border:0; border-top:1px solid #cbd5e1; margin:20px 0;">
-                    
-                    <div class='form-group'>
-                        <label>Upload Filled Excel File</label>
-                        <input type="file" id="bulkOfficeFile" accept=".xlsx, .xls">
-                    </div>
-                    
-                    <button class='action-btn panel-sub-submit' onclick='processBulkOffices()' style='background:#14b8a6;' type='button'>Load & Preview Offices</button>
-
-                    <!-- STAGING PREVIEW AREA -->
-                    <div id="bulkOfficePreviewContainer" style="display:none; margin-top:25px;">
-                        <div style="display:flex; justify-content:space-between; align-items:center; border-bottom: 2px solid #cbd5e1; padding-bottom: 10px; margin-bottom:15px;">
-                            <h4 style="margin:0; border:none; padding:0;">Staged Offices for Creation</h4>
-                            <button onclick="deleteSelectedStagedOffices()" class="small-delete-btn">🗑️ Delete Selected</button>
-                        </div>
-                        
-                        <div style="overflow-x: auto; max-height: 400px; border: 1px solid #e2e8f0; border-radius: 8px; margin-bottom:15px;">
-                            <table class="system-log-table" style="margin-top:0;">
-                                <thead>
-                                    <tr>
-                                        <th style="width:40px; text-align:center;"><input type="checkbox" id="boSelectAll" onchange="toggleAllBo(this)"></th>
-                                        <th>Office Name</th>
-                                        <th>Auto SOL ID</th>
-                                        <th>Limits (M/SU/A)</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="bulkOfficePreviewBody"></tbody>
-                            </table>
-                        </div>
-                        
-                        <div style="display:flex; gap:10px;">
-                            <button class="action-btn" style="background:#10b981; margin-top:0; flex:1;" onclick="confirmBulkOffices()">✅ Confirm & Create</button>
-                            <button class="action-btn" style="background:#64748b; margin-top:0; flex:1;" onclick="cancelBulkOffices()">❌ Cancel & Clear</button>
-                        </div>
-                    </div>
-
-                    <!-- SUCCESS RESULTS -->
-                    <div id="bulkOfficeResults" class="bulk-results">
-                        <h4 style="color:#0f172a; margin-top:0;">Creation Complete!</h4>
-                        <p id="bulkOfficeSummary" style="font-size:14px; color:#334155;"></p>
-                        <button class="download-btn" style="background:#3b82f6;" onclick="downloadBulkOfficePDF()">📄 Download PDF Report</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- NEW PANEL: BULK USER CREATION -->
-            <div class='portal-page-panel' id='panelBulkUser'>
-                <div class='back-nav-link' onclick='returnToSolDashboard()'>⬅️ Back to SOL Hub</div>
-                <h3 style="margin-top:0; color:#1e293b; font-size:22px;">Bulk User Creation & Mapping</h3>
-                <div class='sub-action-card' style="border-top: 4px solid #4f46e5;">
-                    <p style="font-size: 14px; color: #64748b; margin-top:0;">Download the template, assign roles, and specify the Target SOL. The system will auto-generate usernames and strictly validate capacity limits.</p>
-                    <button class="download-btn" onclick="downloadUserTemplate()">⬇️ Download Excel Template</button>
-                    
-                    <hr style="border:0; border-top:1px solid #cbd5e1; margin:20px 0;">
-                    
-                    <div class='form-group'>
-                        <label>Upload Filled Excel File</label>
-                        <input type="file" id="bulkUserFile" accept=".xlsx, .xls">
-                    </div>
-                    
-                    <button class='action-btn panel-sub-submit' onclick='processBulkUsers()' style='background:#4f46e5;' type='button'>Load, Validate & Preview Users</button>
-
-                    <!-- ERROR LOG DISPLAY -->
-                    <div id="bulkUserErrorLog" style="display:none; margin-top:20px; background:#fef2f2; border:1px solid #fecaca; border-radius:8px; padding:15px;">
-                        <h4 style="margin:0 0 10px 0; color:#ef4444;">⚠️ Validation Errors Detected</h4>
-                        <p style="font-size:13px; color:#7f1d1d; margin:0 0 10px 0;">The following entries violated rules (e.g. invalid SOL or limit exceeded) and have been excluded from the preview below.</p>
-                        <button class="small-delete-btn" onclick="downloadBulkUserErrorPDF()">📄 Download Error Report</button>
-                    </div>
-
-                    <!-- STAGING PREVIEW AREA -->
-                    <div id="bulkUserPreviewContainer" style="display:none; margin-top:25px;">
-                        <div style="display:flex; justify-content:space-between; align-items:center; border-bottom: 2px solid #cbd5e1; padding-bottom: 10px; margin-bottom:15px;">
-                            <h4 style="margin:0; border:none; padding:0;">Staged Valid Users for Creation</h4>
-                            <button onclick="deleteSelectedStagedUsers()" class="small-delete-btn">🗑️ Delete Selected</button>
-                        </div>
-                        
-                        <div style="overflow-x: auto; max-height: 400px; border: 1px solid #e2e8f0; border-radius: 8px; margin-bottom:15px;">
-                            <table class="system-log-table" style="margin-top:0;">
-                                <thead>
-                                    <tr>
-                                        <th style="width:40px; text-align:center;"><input type="checkbox" id="buSelectAll" onchange="toggleAllBu(this)"></th>
-                                        <th>Full Name</th>
-                                        <th>Auto Username</th>
-                                        <th>Role</th>
-                                        <th>Target SOL</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="bulkUserPreviewBody"></tbody>
-                            </table>
-                        </div>
-                        
-                        <div style="display:flex; gap:10px;">
-                            <button class="action-btn" style="background:#10b981; margin-top:0; flex:1;" onclick="confirmBulkUsers()">✅ Confirm & Create Users</button>
-                            <button class="action-btn" style="background:#64748b; margin-top:0; flex:1;" onclick="cancelBulkUsers()">❌ Cancel & Clear</button>
-                        </div>
-                    </div>
-
-                    <!-- SUCCESS RESULTS -->
-                    <div id="bulkUserResults" class="bulk-results">
-                        <h4 style="color:#0f172a; margin-top:0;">Creation Complete!</h4>
-                        <p id="bulkUserSummary" style="font-size:14px; color:#334155;"></p>
-                        <button class="download-btn" style="background:#10b981;" onclick="downloadBulkUserSuccessPDF()">📄 Download Account Roster (PDF)</button>
-                    </div>
-                </div>
-            </div>
-
             <!-- PANEL: CREATE SOL -->
             <div class='portal-page-panel' id='panelCreateSOL'>
                 <div class='back-nav-link' onclick='returnToSolDashboard()'>⬅️ Back to SOL Hub</div>
-                <h3 style="margin-top:0; color:#1e293b; font-size:22px;">Create Single Office / SOL</h3>
+                <h3 style="margin-top:0; color:#1e293b; font-size:22px;">Create New Office / SOL</h3>
                 <div class='sub-action-card' style="border-top: 4px solid #e11d48;">
                     <div class='form-group'>
                         <label>Official Office Name</label>
@@ -459,51 +315,9 @@
         </div>
     </div>
 
-    <!-- EDIT MODAL: STAGED OFFICE -->
-    <div class='custom-popup-overlay' id='editStagedOfficeModal' style="z-index: 40000000;">
-        <div class='custom-popup-card' style="text-align: left; max-width: 500px; border-top: 6px solid #3b82f6;">
-            <h3 style="margin-top:0; color:#1e3a8a;">Edit Staged Office</h3>
-            <input type="hidden" id="esoIdx">
-            <div class="form-group"><label>Office Name</label><input type="text" id="esoName"></div>
-            <div class="flex-row">
-                <div class="form-group"><label>Makers</label><input type="number" id="esoM"></div>
-                <div class="form-group"><label>Superusers</label><input type="number" id="esoSU"></div>
-                <div class="form-group"><label>Admins</label><input type="number" id="esoA"></div>
-            </div>
-            <div style="display:flex; gap:10px; margin-top: 15px;">
-                <button onclick="saveStagedOfficeEdit()" style="background:#10b981; color:white; border:none; padding:12px; border-radius:6px; flex:1; font-weight:bold; cursor:pointer;">Save Changes</button>
-                <button onclick="closeEditStagedOfficeModal()" style="background:#ef4444; color:white; border:none; padding:12px; border-radius:6px; flex:1; font-weight:bold; cursor:pointer;">Cancel</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- EDIT MODAL: STAGED USER -->
-    <div class='custom-popup-overlay' id='editStagedUserModal' style="z-index: 40000000;">
-        <div class='custom-popup-card' style="text-align: left; max-width: 500px; border-top: 6px solid #4f46e5;">
-            <h3 style="margin-top:0; color:#1e3a8a;">Edit Staged User</h3>
-            <p style="font-size:12px; color:#64748b; margin-top:-10px;">Username will automatically recalculate if name or role is changed.</p>
-            <input type="hidden" id="esuIdx">
-            <div class="form-group"><label>Full Name</label><input type="text" id="esuName"></div>
-            <div class="flex-row">
-                <div class="form-group"><label>Role</label>
-                    <select id="esuRole">
-                        <option value="maker">Maker</option>
-                        <option value="superuser">Superuser</option>
-                        <option value="admin">Admin</option>
-                    </select>
-                </div>
-                <div class="form-group"><label>Target SOL ID</label><input type="text" id="esuSol"></div>
-            </div>
-            <div style="display:flex; gap:10px; margin-top: 15px;">
-                <button onclick="saveStagedUserEdit()" style="background:#10b981; color:white; border:none; padding:12px; border-radius:6px; flex:1; font-weight:bold; cursor:pointer;">Validate & Save</button>
-                <button onclick="closeEditStagedUserModal()" style="background:#ef4444; color:white; border:none; padding:12px; border-radius:6px; flex:1; font-weight:bold; cursor:pointer;">Cancel</button>
-            </div>
-        </div>
-    </div>
-
     <div class='processing-loader-container' id='globalAppLoader'>
         <div class='app-loading-spinner'></div>
-        <div class='loading-status-msg' id="loaderTextMsg">Syncing with Cloud...</div>
+        <div class='loading-status-msg'>Syncing with Cloud...</div>
     </div>
 
     <script type="text/javascript">
@@ -522,7 +336,7 @@
         const db = firebase.firestore();
 
         // ----------------------------------------------------
-        // 2. GLOBAL VARIABLES & STAGING ARRAYS
+        // 2. GLOBAL VARIABLES
         // ----------------------------------------------------
         let SYSTEM_USER_REGISTRY = [];
         let SYSTEM_OFFICE_REGISTRY = [];
@@ -530,13 +344,6 @@
         let SYSTEM_NEWS_FEED = "Loading...";
         let activeUser = null;
         let activeRole = null;
-        
-        let stagedBulkOffices = [];
-        let stagedBulkUsers = [];
-        
-        let lastProcessedOffices = [];
-        let lastProcessedUsersSuccess = [];
-        let lastProcessedUsersError = [];
 
         // ----------------------------------------------------
         // 3. SECURITY BOUNCER (Hidden until verified)
@@ -595,7 +402,7 @@
 
         function navigateToSubPanel(panelId) {
             document.getElementById('solDashboardHead').style.display = 'none';
-            const panels = ['panelCreateSOL', 'panelMapUser', 'panelModifySOL', 'panelDeleteSOL', 'panelDisableSOL', 'panelForceDBDE', 'panelViewSOLs', 'panelBulkOffice', 'panelBulkUser'];
+            const panels = ['panelCreateSOL', 'panelMapUser', 'panelModifySOL', 'panelDeleteSOL', 'panelDisableSOL', 'panelForceDBDE', 'panelViewSOLs'];
             panels.forEach(id => { document.getElementById(id).style.display = 'none'; });
             document.getElementById(panelId).style.display = 'block';
             
@@ -603,7 +410,7 @@
         }
 
         function returnToSolDashboard() {
-            const panels = ['panelCreateSOL', 'panelMapUser', 'panelModifySOL', 'panelDeleteSOL', 'panelDisableSOL', 'panelForceDBDE', 'panelViewSOLs', 'panelBulkOffice', 'panelBulkUser'];
+            const panels = ['panelCreateSOL', 'panelMapUser', 'panelModifySOL', 'panelDeleteSOL', 'panelDisableSOL', 'panelForceDBDE', 'panelViewSOLs'];
             panels.forEach(id => { document.getElementById(id).style.display = 'none'; });
             document.getElementById('solDashboardHead').style.display = 'block';
         }
@@ -624,15 +431,6 @@
 
         function getRoleCount(solId, targetRole) {
             return SYSTEM_USER_REGISTRY.filter(u => u.solId === solId && u.role === targetRole).length;
-        }
-
-        function showLoader(msg) {
-            document.getElementById('loaderTextMsg').innerText = msg;
-            document.getElementById('globalAppLoader').style.display = 'flex';
-        }
-
-        function hideLoader() {
-            document.getElementById('globalAppLoader').style.display = 'none';
         }
 
         // ----------------------------------------------------
@@ -709,14 +507,17 @@
         // ----------------------------------------------------
         async function saveToCloud() {
             try {
+                document.getElementById('globalAppLoader').style.display = 'flex';
                 await db.collection("system").doc("registry").set({
                     users: SYSTEM_USER_REGISTRY,
                     logs: SYSTEM_LOGIN_HISTORY,
                     offices: SYSTEM_OFFICE_REGISTRY
                 });
+                setTimeout(() => { document.getElementById('globalAppLoader').style.display = 'none'; }, 400);
             } catch(e) {
                 console.error("Save Error:", e);
-                throw e; // Throw to caller
+                displayCustomAlert("Network Error: Could not save to the cloud.", "❌");
+                document.getElementById('globalAppLoader').style.display = 'none';
             }
         }
 
@@ -728,7 +529,7 @@
         }
 
         // ----------------------------------------------------
-        // 7. CORE CRUD FUNCTIONS (UNTOUCHED)
+        // 7. CORE CRUD FUNCTIONS
         // ----------------------------------------------------
         
         async function executeCreateOffice() {
@@ -750,18 +551,14 @@
             });
             
             logAdminAction(`Created new SOL: ${generatedSol} (${offName})`);
-            showLoader("Saving to Cloud...");
-            try {
-                await saveToCloud();
-                document.getElementById('newOfficeName').value = "";
-                document.getElementById('newLimitMaker').value = "";
-                document.getElementById('newLimitSuper').value = "";
-                document.getElementById('newLimitAdmin').value = "";
-                displayCustomAlert(`<strong>Office Successfully Created!</strong><br/><br/>Office: ${offName}<br/>Generated SOL ID: <span style="color:#d32f2f; font-size:20px;">${generatedSol}</span>`, "🏢");
-            } catch(e) {
-                displayCustomAlert("Network Error: Could not save to the cloud.", "❌");
-            }
-            hideLoader();
+            await saveToCloud();
+            
+            document.getElementById('newOfficeName').value = "";
+            document.getElementById('newLimitMaker').value = "";
+            document.getElementById('newLimitSuper').value = "";
+            document.getElementById('newLimitAdmin').value = "";
+
+            displayCustomAlert(`<strong>Office Successfully Created!</strong><br/><br/>Office: ${offName}<br/>Generated SOL ID: <span style="color:#d32f2f; font-size:20px;">${generatedSol}</span>`, "🏢");
         }
 
         async function executeMapUserToOffice() {
@@ -788,14 +585,8 @@
             SYSTEM_USER_REGISTRY[uIdx].solId = sol;
             logAdminAction(`Mapped user '${user}' to SOL '${sol}'`);
             
-            showLoader("Applying Mapping...");
-            try {
-                await saveToCloud();
-                displayCustomAlert(`Success! User '${user}' has been mapped to SOL ID '${sol}'.`, "✅");
-            } catch(e) {
-                displayCustomAlert("Network Error: Could not map user.", "❌");
-            }
-            hideLoader();
+            await saveToCloud();
+            displayCustomAlert(`Success! User '${user}' has been mapped to SOL ID '${sol}'.`, "✅");
         }
 
         async function executeModifyOffice() {
@@ -817,15 +608,9 @@
             
             logAdminAction(`Modified SOL profile '${solToMod}'`);
             
-            showLoader("Updating Office...");
-            try {
-                await saveToCloud();
-                document.getElementById('modifiedOfficeName').value = "";
-                displayCustomAlert(`Success! Office profile for '${newName}' has been updated.`, "✅");
-            } catch(e) {
-                displayCustomAlert("Network Error: Could not modify office.", "❌");
-            }
-            hideLoader();
+            await saveToCloud();
+            document.getElementById('modifiedOfficeName').value = "";
+            displayCustomAlert(`Success! Office profile for '${newName}' has been updated.`, "✅");
         }
 
         async function executeDeleteOffice() {
@@ -845,14 +630,8 @@
             SYSTEM_OFFICE_REGISTRY.splice(offIdx, 1);
             logAdminAction(`Deleted SOL '${solToDelete}' (${deletedName})`);
 
-            showLoader("Deleting Office...");
-            try {
-                await saveToCloud();
-                displayCustomAlert(`Success! Office '${deletedName}' has been permanently deleted.`, "🗑️");
-            } catch(e) {
-                displayCustomAlert("Network Error: Could not delete office.", "❌");
-            }
-            hideLoader();
+            await saveToCloud();
+            displayCustomAlert(`Success! Office '${deletedName}' has been permanently deleted.`, "🗑️");
         }
 
         async function executeToggleDisableOffice() {
@@ -868,14 +647,8 @@
             let statusTxt = !currentState ? "DISABLED" : "ENABLED";
             logAdminAction(`${statusTxt} SOL '${solToDisable}'`);
 
-            showLoader("Updating Status...");
-            try {
-                await saveToCloud();
-                displayCustomAlert(`Success! Office is now <strong>${statusTxt}</strong>.`, "⚙️");
-            } catch(e) {
-                displayCustomAlert("Network Error: Could not update status.", "❌");
-            }
-            hideLoader();
+            await saveToCloud();
+            displayCustomAlert(`Success! Office is now <strong>${statusTxt}</strong>.`, "⚙️");
         }
 
         async function executeForceDBDE() {
@@ -892,571 +665,8 @@
 
             logAdminAction(`Admin Forced ${newStatus.replace('_', ' ')} for SOL '${solToToggle}'`);
 
-            showLoader("Applying Operations Override...");
-            try {
-                await saveToCloud();
-                displayCustomAlert(`Success! Office is now forcefully put into a <strong>${newStatus.replace('_', ' ')}</strong> state.`, "⏳");
-            } catch(e) {
-                displayCustomAlert("Network Error: Could not force status.", "❌");
-            }
-            hideLoader();
-        }
-
-        // ----------------------------------------------------
-        // 8. NEW: BULK OFFICE CREATION ENGINE & PREVIEW
-        // ----------------------------------------------------
-        
-        function downloadOfficeTemplate() {
-            const ws = XLSX.utils.json_to_sheet([
-                {"Office Name": "Example Post Office", "Max Maker": 5, "Max Superuser": 2, "Max Admin": 1},
-                {"Office Name": "Another Branch Office", "Max Maker": 3, "Max Superuser": 1, "Max Admin": 0}
-            ]);
-            const wb = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(wb, ws, "Offices");
-            XLSX.writeFile(wb, "Bulk_Office_Creation_Template.xlsx");
-        }
-
-        function toggleAllBo(source) {
-            const checkboxes = document.querySelectorAll('.bo-check');
-            checkboxes.forEach(cb => cb.checked = source.checked);
-        }
-
-        async function processBulkOffices() {
-            const fileInput = document.getElementById('bulkOfficeFile').files[0];
-            if (!fileInput) { displayCustomAlert("Please select an Excel file to upload.", "⚠️"); return; }
-
-            showLoader("Reading Excel File...");
-            
-            const reader = new FileReader();
-            reader.onload = async (e) => {
-                try {
-                    const data = new Uint8Array(e.target.result);
-                    const workbook = XLSX.read(data, {type: 'array'});
-                    const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
-                    const jsonData = XLSX.utils.sheet_to_json(firstSheet);
-                    
-                    if (jsonData.length === 0) throw new Error("Excel file is empty.");
-
-                    stagedBulkOffices = [];
-                    
-                    jsonData.forEach(row => {
-                        const name = row["Office Name"];
-                        if(name) {
-                            let newSol;
-                            do {
-                                newSol = Math.floor(100000 + Math.random() * 900000).toString();
-                            } while(SYSTEM_OFFICE_REGISTRY.some(o => o.solId === newSol) || stagedBulkOffices.some(o => o.solId === newSol));
-                            
-                            const lMaker = parseInt(row["Max Maker"]) || 0;
-                            const lSuper = parseInt(row["Max Superuser"]) || 0;
-                            const lAdmin = parseInt(row["Max Admin"]) || 0;
-
-                            stagedBulkOffices.push({ 
-                                solId: newSol, 
-                                name: name.trim(), 
-                                status: "DAY_BEGUN",
-                                disabled: false,
-                                limits: { maker: lMaker, superuser: lSuper, admin: lAdmin }
-                            });
-                        }
-                    });
-
-                    document.getElementById('bulkOfficePreviewContainer').style.display = 'block';
-                    document.getElementById('bulkOfficeResults').style.display = 'none';
-                    renderBulkOfficePreview();
-                    
-                    hideLoader();
-                } catch (err) {
-                    hideLoader();
-                    displayCustomAlert(`Error parsing Excel File: ${err.message}`, "❌");
-                }
-            };
-            reader.readAsArrayBuffer(fileInput);
-        }
-
-        function renderBulkOfficePreview() {
-            const tbody = document.getElementById('bulkOfficePreviewBody');
-            tbody.innerHTML = "";
-            document.getElementById('boSelectAll').checked = false;
-
-            if (stagedBulkOffices.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;">No offices in staging area.</td></tr>`;
-                return;
-            }
-
-            stagedBulkOffices.forEach((off, idx) => {
-                tbody.innerHTML += `
-                    <tr>
-                        <td style="text-align:center;"><input type="checkbox" class="bo-check" data-idx="${idx}"></td>
-                        <td>${off.name}</td>
-                        <td style="color:#e11d48;"><strong>${off.solId}</strong></td>
-                        <td>${off.limits.maker} / ${off.limits.superuser} / ${off.limits.admin}</td>
-                        <td>
-                            <button class="small-action-btn" onclick="editStagedOffice(${idx})">Edit</button>
-                            <button class="small-delete-btn" onclick="deleteStagedOffice(${idx})">Delete</button>
-                        </td>
-                    </tr>
-                `;
-            });
-        }
-
-        function editStagedOffice(idx) {
-            let off = stagedBulkOffices[idx];
-            document.getElementById('esoIdx').value = idx;
-            document.getElementById('esoName').value = off.name;
-            document.getElementById('esoM').value = off.limits.maker;
-            document.getElementById('esoSU').value = off.limits.superuser;
-            document.getElementById('esoA').value = off.limits.admin;
-            
-            const modal = document.getElementById('editStagedOfficeModal');
-            modal.style.display = 'flex';
-            setTimeout(()=> modal.classList.add('active'), 10);
-        }
-
-        function closeEditStagedOfficeModal() {
-            const modal = document.getElementById('editStagedOfficeModal');
-            modal.classList.remove('active');
-            setTimeout(()=> modal.style.display = 'none', 200);
-        }
-
-        function saveStagedOfficeEdit() {
-            let idx = document.getElementById('esoIdx').value;
-            let nName = document.getElementById('esoName').value.trim();
-            if(!nName) { alert("Name cannot be blank."); return; }
-
-            stagedBulkOffices[idx].name = nName;
-            stagedBulkOffices[idx].limits.maker = parseInt(document.getElementById('esoM').value) || 0;
-            stagedBulkOffices[idx].limits.superuser = parseInt(document.getElementById('esoSU').value) || 0;
-            stagedBulkOffices[idx].limits.admin = parseInt(document.getElementById('esoA').value) || 0;
-            
-            closeEditStagedOfficeModal();
-            renderBulkOfficePreview();
-        }
-
-        function deleteStagedOffice(idx) {
-            stagedBulkOffices.splice(idx, 1);
-            renderBulkOfficePreview();
-        }
-
-        function deleteSelectedStagedOffices() {
-            const checkboxes = document.querySelectorAll('.bo-check:checked');
-            if (checkboxes.length === 0) return;
-            
-            let indices = Array.from(checkboxes).map(c => parseInt(c.getAttribute('data-idx'))).sort((a,b) => b-a);
-            indices.forEach(idx => stagedBulkOffices.splice(idx, 1));
-            renderBulkOfficePreview();
-        }
-
-        function cancelBulkOffices() {
-            stagedBulkOffices = [];
-            document.getElementById('bulkOfficePreviewContainer').style.display = 'none';
-            document.getElementById('bulkOfficeFile').value = "";
-        }
-
-        async function confirmBulkOffices() {
-            if(stagedBulkOffices.length === 0) { displayCustomAlert("No valid offices to create.", "⚠️"); return; }
-            
-            showLoader("Saving Offices to Cloud...");
-            SYSTEM_OFFICE_REGISTRY.push(...stagedBulkOffices);
-            logAdminAction(`Confirmed Bulk Creation of ${stagedBulkOffices.length} Offices.`);
-            
-            lastProcessedOffices = [...stagedBulkOffices]; // Keep for PDF
-            stagedBulkOffices = []; // Clear staging
-            
-            try {
-                await saveToCloud();
-                document.getElementById('bulkOfficePreviewContainer').style.display = 'none';
-                document.getElementById('bulkOfficeFile').value = "";
-                document.getElementById('bulkOfficeResults').style.display = 'block';
-                document.getElementById('bulkOfficeSummary').innerText = `Successfully registered ${lastProcessedOffices.length} new offices into the live database.`;
-                
-                hideLoader();
-                displayCustomAlert("Offices Created Successfully!", "✅");
-                refreshSolUI();
-            } catch(e) {
-                hideLoader();
-                displayCustomAlert("Network Error: Failed to save bulk offices.", "❌");
-            }
-        }
-
-        function downloadBulkOfficePDF() {
-            if (lastProcessedOffices.length === 0) return;
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
-            
-            doc.setFont("helvetica", "bold");
-            doc.setFontSize(16);
-            doc.text("Bulk Office Creation Report", 14, 20);
-            
-            doc.setFontSize(10);
-            doc.setFont("helvetica", "normal");
-            doc.text(`Generated on: ${new Date().toLocaleString()}`, 14, 28);
-            
-            const tableData = lastProcessedOffices.map((o, index) => [index + 1, o.name, o.solId, `${o.limits.maker}/${o.limits.superuser}/${o.limits.admin}`]);
-            
-            doc.autoTable({
-                startY: 35,
-                head: [['#', 'Registered Office Name', 'Auto-Assigned SOL ID', 'Limits (M/SU/A)']],
-                body: tableData,
-                theme: 'grid',
-                headStyles: { fillColor: [20, 184, 166] } 
-            });
-            
-            doc.save("Bulk_Office_Creation_Report.pdf");
-        }
-
-        // ----------------------------------------------------
-        // 10. NEW: BULK USER CREATION ENGINE & PREVIEW
-        // ----------------------------------------------------
-        
-        function downloadUserTemplate() {
-            const ws = XLSX.utils.json_to_sheet([
-                {"Full Name": "Amit Kumar", "Role": "Maker", "Target SOL ID": "123456"},
-                {"Full Name": "Riya Sharma", "Role": "Superuser", "Target SOL ID": "123456"},
-                {"Full Name": "System Admin", "Role": "Admin", "Target SOL ID": "999999"}
-            ]);
-            const wb = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(wb, ws, "Users");
-            XLSX.writeFile(wb, "Bulk_User_Creation_Template.xlsx");
-        }
-
-        function toggleAllBu(source) {
-            const checkboxes = document.querySelectorAll('.bu-check');
-            checkboxes.forEach(cb => cb.checked = source.checked);
-        }
-
-        function generateUniqueUsername(fullName, role, currentBatchArray) {
-            let names = fullName.trim().split(" ");
-            let base = names[0].toLowerCase().replace(/[^a-z0-9]/g, '');
-            
-            let suffix = role === 'maker' ? '_m' : (role === 'superuser' ? '_su' : '');
-            let prefix = role === 'admin' ? 'admin_' : '';
-            
-            let draft = prefix + base + suffix;
-            let counter = 1;
-            let finalName = draft;
-            
-            while(SYSTEM_USER_REGISTRY.some(u => u.user === finalName) || currentBatchArray.some(u => u.user === finalName)) {
-                finalName = draft + counter;
-                counter++;
-            }
-            return finalName;
-        }
-
-        async function processBulkUsers() {
-            const fileInput = document.getElementById('bulkUserFile').files[0];
-            if (!fileInput) { displayCustomAlert("Please select an Excel file to upload.", "⚠️"); return; }
-
-            showLoader("Validating Excel Data...");
-            
-            const reader = new FileReader();
-            reader.onload = async (e) => {
-                try {
-                    const data = new Uint8Array(e.target.result);
-                    const workbook = XLSX.read(data, {type: 'array'});
-                    const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
-                    const jsonData = XLSX.utils.sheet_to_json(firstSheet);
-                    
-                    if (jsonData.length === 0) throw new Error("Excel file is empty.");
-
-                    stagedBulkUsers = [];
-                    lastProcessedUsersError = [];
-
-                    let batchLimitsTracker = {};
-
-                    jsonData.forEach((row, index) => {
-                        let fullName = row["Full Name"];
-                        let rawRole = row["Role"];
-                        let targetSol = row["Target SOL ID"] ? String(row["Target SOL ID"]).trim() : "";
-                        let rowNum = index + 2; 
-
-                        if(!fullName || !rawRole || !targetSol) {
-                            lastProcessedUsersError.push({ row: rowNum, name: fullName || "Blank", reason: "Missing mandatory fields." });
-                            return;
-                        }
-
-                        let role = rawRole.toLowerCase().trim();
-                        if (!['maker', 'superuser', 'admin'].includes(role)) {
-                            lastProcessedUsersError.push({ row: rowNum, name: fullName, reason: "Invalid Role. Must be Maker, Superuser, or Admin." });
-                            return;
-                        }
-
-                        const offIdx = SYSTEM_OFFICE_REGISTRY.findIndex(o => o.solId === targetSol);
-                        if (offIdx === -1) {
-                            lastProcessedUsersError.push({ row: rowNum, name: fullName, reason: `SOL ID (${targetSol}) does not exist.` });
-                            return;
-                        }
-
-                        const office = SYSTEM_OFFICE_REGISTRY[offIdx];
-                        let liveCount = getRoleCount(targetSol, role);
-                        
-                        if (!batchLimitsTracker[targetSol]) {
-                            batchLimitsTracker[targetSol] = { maker: 0, superuser: 0, admin: 0 };
-                        }
-                        
-                        let newlyAddedInBatch = batchLimitsTracker[targetSol][role];
-                        let maxLimit = office.limits ? office.limits[role] : 0;
-                        
-                        if ((liveCount + newlyAddedInBatch) >= maxLimit) {
-                            lastProcessedUsersError.push({ row: rowNum, name: fullName, reason: `Limit reached for ${role.toUpperCase()} in SOL ${targetSol}. Max allowed is ${maxLimit}.` });
-                            return;
-                        }
-
-                        let newUsername = generateUniqueUsername(fullName, role, stagedBulkUsers);
-                        let defaultPassword = "123";
-                        
-                        let defaultCards = [];
-                        if(role === 'admin') { 
-                            defaultCards = ['menuCardBulkBooking', 'menuCardBulk', 'menuCardHoliday', 'menuCardDateWise', 'menuCardACG61', 'menuCardGeneralCharge', 'menuCardSR1', 'menuCardCasualLeave', 'menuCardTAAdvance', 'menuCardTATransfer', 'menuCardTABillTour', 'menuCardCEA', 'menuCardAI', 'menuCardMaintenance', 'menuCardSelfPassword', 'menuCardUpdateNews']; 
-                        } else if (role === 'superuser') { 
-                            defaultCards = ['menuCardBulkBooking', 'menuCardBulk', 'menuCardHoliday', 'menuCardDateWise', 'menuCardACG61', 'menuCardGeneralCharge', 'menuCardSR1', 'menuCardCasualLeave', 'menuCardTAAdvance', 'menuCardTATransfer', 'menuCardTABillTour', 'menuCardCEA', 'menuCardAI', 'menuCardSelfPassword', 'menuCardDBDE']; 
-                        } else { 
-                            defaultCards = ['menuCardBulkBooking', 'menuCardBulk', 'menuCardHoliday', 'menuCardDateWise', 'menuCardACG61', 'menuCardGeneralCharge', 'menuCardSR1', 'menuCardCasualLeave', 'menuCardTAAdvance', 'menuCardTATransfer', 'menuCardTABillTour', 'menuCardCEA', 'menuCardAI', 'menuCardSelfPassword']; 
-                        }
-
-                        let newUserObj = {
-                            fullName: fullName.trim(),
-                            user: newUsername,
-                            pass: defaultPassword,
-                            role: role,
-                            active: true,
-                            locked: false,
-                            failedAttempts: 0,
-                            isFirstTimeDefault: true,
-                            pendingMessage: "",
-                            allowedCards: defaultCards,
-                            solId: targetSol
-                        };
-
-                        stagedBulkUsers.push(newUserObj);
-                        batchLimitsTracker[targetSol][role]++;
-                    });
-
-                    // Update UI
-                    const errLog = document.getElementById('bulkUserErrorLog');
-                    if(lastProcessedUsersError.length > 0) {
-                        errLog.style.display = 'block';
-                        errLog.querySelector('p').innerText = `${lastProcessedUsersError.length} entries violated rules and were excluded from the preview below.`;
-                    } else {
-                        errLog.style.display = 'none';
-                    }
-
-                    document.getElementById('bulkUserPreviewContainer').style.display = 'block';
-                    document.getElementById('bulkUserResults').style.display = 'none';
-                    renderBulkUserPreview();
-                    
-                    hideLoader();
-                } catch (err) {
-                    hideLoader();
-                    displayCustomAlert(`Error parsing Excel File: ${err.message}`, "❌");
-                }
-            };
-            reader.readAsArrayBuffer(fileInput);
-        }
-
-        function renderBulkUserPreview() {
-            const tbody = document.getElementById('bulkUserPreviewBody');
-            tbody.innerHTML = "";
-            document.getElementById('buSelectAll').checked = false;
-
-            if (stagedBulkUsers.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;">No valid users available in staging area.</td></tr>`;
-                return;
-            }
-
-            stagedBulkUsers.forEach((u, idx) => {
-                tbody.innerHTML += `
-                    <tr>
-                        <td style="text-align:center;"><input type="checkbox" class="bu-check" data-idx="${idx}"></td>
-                        <td>${u.fullName}</td>
-                        <td style="color:#4f46e5;"><strong>${u.user}</strong></td>
-                        <td style="text-transform:uppercase; font-size:12px;">${u.role}</td>
-                        <td><strong>${u.solId}</strong></td>
-                        <td>
-                            <button class="small-action-btn" onclick="editStagedUser(${idx})">Edit</button>
-                            <button class="small-delete-btn" onclick="deleteStagedUser(${idx})">Delete</button>
-                        </td>
-                    </tr>
-                `;
-            });
-        }
-
-        function editStagedUser(idx) {
-            let u = stagedBulkUsers[idx];
-            document.getElementById('esuIdx').value = idx;
-            document.getElementById('esuName').value = u.fullName;
-            document.getElementById('esuRole').value = u.role;
-            document.getElementById('esuSol').value = u.solId;
-            
-            const modal = document.getElementById('editStagedUserModal');
-            modal.style.display = 'flex';
-            setTimeout(()=> modal.classList.add('active'), 10);
-        }
-
-        function closeEditStagedUserModal() {
-            const modal = document.getElementById('editStagedUserModal');
-            modal.classList.remove('active');
-            setTimeout(()=> modal.style.display = 'none', 200);
-        }
-
-        function saveStagedUserEdit() {
-            let idx = document.getElementById('esuIdx').value;
-            let newName = document.getElementById('esuName').value.trim();
-            let newRole = document.getElementById('esuRole').value;
-            let newSol = document.getElementById('esuSol').value.trim();
-
-            if(!newName || !newSol) { alert("Fields cannot be blank."); return; }
-
-            const offIdx = SYSTEM_OFFICE_REGISTRY.findIndex(o => o.solId === newSol);
-            if (offIdx === -1) { alert(`SOL ID ${newSol} does not exist in the master registry.`); return; }
-
-            const office = SYSTEM_OFFICE_REGISTRY[offIdx];
-            
-            let liveCount = getRoleCount(newSol, newRole);
-            let stagedCount = stagedBulkUsers.filter((u, i) => i != idx && u.solId === newSol && u.role === newRole).length;
-            let maxLimit = office.limits ? office.limits[newRole] : 0;
-            
-            if ((liveCount + stagedCount) >= maxLimit) {
-                alert(`Limit Error: Establishment limit reached for ${newRole.toUpperCase()}S in SOL ${newSol}. Max allowed is ${maxLimit}.`);
-                return;
-            }
-
-            let uObj = stagedBulkUsers[idx];
-            uObj.fullName = newName;
-            uObj.role = newRole;
-            uObj.solId = newSol;
-            
-            // Recalculate unique username automatically based on new inputs
-            uObj.user = generateUniqueUsername(newName, newRole, stagedBulkUsers.filter((u, i) => i != idx));
-
-            closeEditStagedUserModal();
-            renderBulkUserPreview();
-        }
-
-        function deleteStagedUser(idx) {
-            stagedBulkUsers.splice(idx, 1);
-            renderBulkUserPreview();
-        }
-
-        function deleteSelectedStagedUsers() {
-            const checkboxes = document.querySelectorAll('.bu-check:checked');
-            if (checkboxes.length === 0) return;
-            
-            let indices = Array.from(checkboxes).map(c => parseInt(c.getAttribute('data-idx'))).sort((a,b) => b-a);
-            indices.forEach(idx => stagedBulkUsers.splice(idx, 1));
-            renderBulkUserPreview();
-        }
-
-        function cancelBulkUsers() {
-            stagedBulkUsers = [];
-            lastProcessedUsersError = [];
-            document.getElementById('bulkUserErrorLog').style.display = 'none';
-            document.getElementById('bulkUserPreviewContainer').style.display = 'none';
-            document.getElementById('bulkUserFile').value = "";
-        }
-
-        async function confirmBulkUsers() {
-            if(stagedBulkUsers.length === 0) { displayCustomAlert("No valid users to create.", "⚠️"); return; }
-            
-            showLoader("Saving Users to Cloud...");
-            SYSTEM_USER_REGISTRY.push(...stagedBulkUsers);
-            logAdminAction(`Confirmed Bulk Creation of ${stagedBulkUsers.length} Users.`);
-            
-            lastProcessedUsersSuccess = [...stagedBulkUsers];
-            stagedBulkUsers = []; 
-            
-            try {
-                await saveToCloud();
-                document.getElementById('bulkUserPreviewContainer').style.display = 'none';
-                document.getElementById('bulkUserFile').value = "";
-                
-                document.getElementById('bulkUserResults').style.display = "block";
-                document.getElementById('bulkUserSummary').innerHTML = `
-                    <strong>Success:</strong> ${lastProcessedUsersSuccess.length} users permanently created and mapped.<br/>
-                    <strong>Failed:</strong> ${lastProcessedUsersError.length} users were rejected originally.
-                `;
-                
-                if (lastProcessedUsersError.length > 0) {
-                    document.getElementById('btnUserErrorPdf').style.display = "block";
-                } else {
-                    document.getElementById('btnUserErrorPdf').style.display = "none";
-                }
-                
-                hideLoader();
-                displayCustomAlert("Users Created Successfully!", "✅");
-                refreshSolUI();
-            } catch(e) {
-                hideLoader();
-                displayCustomAlert("Network Error: Failed to save bulk users.", "❌");
-            }
-        }
-
-        function downloadBulkUserSuccessPDF() {
-            if (lastProcessedUsersSuccess.length === 0) return;
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF('l', 'mm', 'a4'); 
-            
-            doc.setFont("helvetica", "bold");
-            doc.setFontSize(16);
-            doc.text("Bulk User Creation - Success Report", 14, 20);
-            
-            doc.setFontSize(10);
-            doc.setFont("helvetica", "normal");
-            doc.text(`Generated on: ${new Date().toLocaleString()}`, 14, 28);
-            doc.text("Important: Please distribute default credentials securely.", 14, 33);
-            
-            const tableData = lastProcessedUsersSuccess.map((u, index) => [
-                index + 1, 
-                u.fullName, 
-                u.user, 
-                u.pass, 
-                u.role.toUpperCase(), 
-                u.solId
-            ]);
-            
-            doc.autoTable({
-                startY: 40,
-                head: [['#', 'Full Name', 'Auto-Username', 'Default Pass', 'Role', 'Mapped SOL']],
-                body: tableData,
-                theme: 'grid',
-                headStyles: { fillColor: [79, 70, 229] } 
-            });
-            
-            doc.save("Bulk_Users_Success_Report.pdf");
-        }
-
-        function downloadBulkUserErrorPDF() {
-            if (lastProcessedUsersError.length === 0) return;
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF('l', 'mm', 'a4'); 
-            
-            doc.setFont("helvetica", "bold");
-            doc.setFontSize(16);
-            doc.setTextColor(239, 68, 68);
-            doc.text("Bulk User Creation - ERROR Log", 14, 20);
-            
-            doc.setFontSize(10);
-            doc.setFont("helvetica", "normal");
-            doc.setTextColor(0, 0, 0);
-            doc.text(`Generated on: ${new Date().toLocaleString()}`, 14, 28);
-            doc.text("The following entries were rejected and NOT added to the database.", 14, 33);
-            
-            const tableData = lastProcessedUsersError.map(err => [
-                `Row ${err.row}`, 
-                err.name, 
-                err.reason
-            ]);
-            
-            doc.autoTable({
-                startY: 40,
-                head: [['Excel Row', 'Provided Name', 'Reason for Rejection']],
-                body: tableData,
-                theme: 'grid',
-                headStyles: { fillColor: [239, 68, 68] },
-                columnStyles: { 2: { cellWidth: 150 } } 
-            });
-            
-            doc.save("Bulk_Users_Error_Log.pdf");
+            await saveToCloud();
+            displayCustomAlert(`Success! Office is now forcefully put into a <strong>${newStatus.replace('_', ' ')}</strong> state.`, "⏳");
         }
     </script>
 </body>

@@ -1,0 +1,406 @@
+<!-- monthly_bulk.html -->
+<!-- Security Check: Prevent Direct URL Access without SPA -->
+<script>
+    if (!document.getElementById("dynamicWorkspace") || window.location.pathname.endsWith("monthly_bulk.html")) {
+        window.location.href = "index.html";
+    }
+</script>
+
+<div id="moduleRenderArea">
+    
+    <!-- 100% SELF-CONTAINED ORIGINAL DESIGN CSS -->
+    <style>
+        .portal-page-panel { max-width: 1200px; margin: 0 auto; background: white; padding: 40px; border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.03); border: 1px solid #e2e8f0; font-family: 'Segoe UI', Arial, sans-serif; }
+        
+        /* Typography & Layout */
+        h3.module-title { margin: 0; color: #1e293b; font-size: 26px; font-weight: 800; letter-spacing: -0.5px; }
+        .back-nav-link { display: inline-flex; align-items: center; color: #3b82f6; font-weight: 800; font-size: 15px; text-decoration: none; cursor: pointer; transition: color 0.2s; padding: 8px 15px; background: #eff6ff; border-radius: 8px; float: right; }
+        .back-nav-link:hover { color: #1d4ed8; background: #dbeafe; }
+        
+        .form-group { margin-bottom: 20px; clear: both; }
+        .form-group label { display: block; font-weight: 700; margin-bottom: 8px; font-size: 14px; color: #334155; }
+        
+        /* Inputs & Textareas exactly like original */
+        input[type="text"], input[type="number"], select, textarea { width: 100%; padding: 14px 16px; box-sizing: border-box; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14.5px; background: #f8fafc; color: #1e293b !important; transition: all 0.2s ease; font-family: 'Segoe UI', Arial, sans-serif; }
+        input[type="text"]:focus, input[type="number"]:focus, select:focus, textarea:focus { border-color: #d32f2f; background: #ffffff; box-shadow: 0 0 0 4px rgba(211, 47, 47, 0.1); outline: none; }
+        
+        /* NORMAL (NON-ITALIC) & PROFESSIONAL PLACEHOLDERS */
+        input::placeholder, textarea::placeholder { 
+            color: #94a3b8 !important; 
+            font-style: normal !important; 
+            opacity: 1 !important; 
+        }
+        
+        textarea { resize: vertical; }
+        .flex-row { display: flex; gap: 15px; flex-wrap: wrap; }
+        .flex-row > div { flex: 1; }
+        .help-note { font-size: 12px; color: #64748b; margin-top: 6px; display: block; }
+        
+        /* Exact Original Action Button */
+        button.action-btn { width: 100%; padding: 16px; background: #d32f2f; color: white; border: none; border-radius: 8px; font-size: 15.5px; font-weight: 800; cursor: pointer; text-transform: uppercase; letter-spacing: 0.8px; margin-top: 15px; box-shadow: 0 4px 12px rgba(211, 47, 47, 0.25); transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
+        button.action-btn:hover { background: #b71c1c; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(183, 28, 28, 0.3); }
+
+        /* --- PERFECT CENTERED MODAL, FULL SCREEN BLUR --- */
+        .pdf-modal-overlay {
+            position: fixed !important; top: 0 !important; left: 0 !important;
+            width: 100vw !important; height: 100vh !important;
+            /* Full screen clean glass effect */
+            background: rgba(241, 245, 249, 0.85) !important; 
+            backdrop-filter: blur(8px) !important;
+            z-index: 99999999 !important; 
+            display: none; justify-content: center; align-items: center;
+            opacity: 0; transition: opacity 0.3s ease;
+        }
+        .pdf-modal-overlay.active { display: flex; opacity: 1; }
+        
+        .pdf-modal-card {
+            background: #ffffff; 
+            width: 85%; /* Moderate width */
+            max-width: 900px; 
+            height: 85vh; /* Moderate height */
+            border-radius: 12px; 
+            box-shadow: 0 20px 50px rgba(0,0,0,0.2); /* Soft shadow */
+            display: flex; flex-direction: column; overflow: hidden;
+            border: 1px solid #cbd5e1; 
+            border-top: 6px solid #d32f2f;
+            transform: scale(0.95); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .pdf-modal-overlay.active .pdf-modal-card { transform: scale(1); }
+        
+        .pdf-modal-header {
+            padding: 15px 25px; border-bottom: 1px solid #e2e8f0; display: flex;
+            justify-content: space-between; align-items: center; background: #f8fafc;
+        }
+        .pdf-modal-header h3 { margin: 0; color: #1e293b; font-size: 18px; font-weight: 800; font-family: 'Segoe UI', Arial, sans-serif; }
+        .pdf-close-btn {
+            background: #ef4444; color: white; border: none; padding: 10px 24px;
+            border-radius: 8px; font-weight: 800; cursor: pointer; transition: 0.2s; font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px;
+        }
+        .pdf-close-btn:hover { background: #dc2626; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(220, 38, 38, 0.2);}
+        
+        .pdf-iframe-container { flex: 1; width: 100%; height: 100%; background: #e2e8f0; }
+        #pdfFrameViewerLocal { width: 100%; height: 100%; border: none; display: block; }
+    </style>
+
+    <div class='portal-page-panel'>
+        
+        <div style="margin-bottom: 35px; border-bottom: 2px solid #e2e8f0; padding-bottom: 15px; overflow: hidden;">
+            <div class='back-nav-link' onclick='typeof returnToHomeGridSPA === "function" ? returnToHomeGridSPA() : (window.location.href="index.html")'>⬅️ Back to Dashboard</div>
+            <h3 class="module-title">Module: Monthly Bulk Bill Compiler</h3>
+        </div>
+        
+        <div class='form-group'>
+            <label>Received From:</label>
+            <input class='text-input-placeholder-gray' id='receivedFromBulk' placeholder='e.g. The Superintendent of Post Offices / Sanctioning Authority' type='text'/>
+        </div>
+        <div class='form-group'>
+            <label>Amount Per Voucher (Rs.):</label>
+            <input class='text-input-placeholder-gray' id='amount' placeholder='e.g. 450' type='number'/>
+        </div>
+        <div class='form-group'>
+            <label>Voucher Account Purpose:</label>
+            <textarea class='text-input-placeholder-gray' id='monthlyVoucherPurpose' placeholder='e.g. Towards the payment of monthly contingency bill for the office...' rows='4'></textarea>
+        </div>
+        
+        <div class='form-group'>
+            <div class='flex-row'>
+                <div>
+                    <label>Month:</label>
+                    <select id='selectMonth'>
+                        <option value='01'>January</option><option value='02'>February</option><option value='03' selected>March</option>
+                        <option value='04'>April</option><option value='05'>May</option><option value='06'>June</option>
+                        <option value='07'>July</option><option value='08'>August</option><option value='09'>September</option>
+                        <option value='10'>October</option><option value='11'>November</option><option value='12'>December</option>
+                    </select>
+                </div>
+                <div>
+                    <label>Year:</label>
+                    <select id='selectYear'>
+                        <option value='2024'>2024</option><option value='2025'>2025</option><option value='2026' selected>2026</option>
+                        <option value='2027'>2027</option><option value='2028'>2028</option><option value='2029'>2029</option>
+                        <option value='2030'>2030</option><option value='2031'>2031</option><option value='2032'>2032</option>
+                        <option value='2033'>2033</option><option value='2034'>2034</option><option value='2035'>2035</option>
+                        <option value='2036'>2036</option><option value='2037'>2037</option><option value='2038'>2038</option>
+                        <option value='2039'>2039</option><option value='2040'>2040</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        
+        <div class='form-group'>
+            <label>Exceptional Holiday Dates to Omit:</label>
+            <input class='text-input-placeholder-gray' id='exceptionsInput' placeholder='e.g. 5, 12, 23 (Enter dates separated by commas)' type='text'/>
+            <span class='help-note'>Sundays drop automatically.</span>
+        </div>
+        
+        <button class='action-btn' onclick='triggerSmartGenerationBulk()' type='button'>Generate Bulk Print Vouchers</button>
+    </div>
+
+    <!-- BEAUTIFUL CENTERED POPUP MODAL FOR PDF PREVIEW -->
+    <div id="pdfModalOverlay" class="pdf-modal-overlay">
+        <div class="pdf-modal-card">
+            <div class="pdf-modal-header">
+                <h3>📄 Generated Document Live Preview</h3>
+                <button class="pdf-close-btn" onclick="closePdfModal()">❌ Close Preview</button>
+            </div>
+            <div class="pdf-iframe-container">
+                <iframe id="pdfFrameViewerLocal"></iframe>
+            </div>
+        </div>
+    </div>
+
+    <!-- 100% UNTOUCHED ORIGINAL PDF LOGIC -->
+    <script>
+        // Ensure jsPDF loads if standalone
+        if (typeof window.jspdf === 'undefined') {
+            let script = document.createElement('script');
+            script.src = "https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js";
+            document.head.appendChild(script);
+        }
+
+        const LOCAL_INDIA_POST_LOGO_URL = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXlVwmm2OUFIPv_sRjEtehJrDPqIS-nbUCLNZU8i4LT-O-V14Wp6hpQGw&s=10";
+
+        function parseNumberToWordsLocal(num) {
+            const units = ['','One ','Two ','Three ','Four ','Five ','Six ','Seven ','Eight ','Nine ','Ten ','Eleven ','Twelve ','Thirteen ','Fourteen ','Fifteen ','Sixteen ','Seventeen ','Eighteen ','Nineteen '];
+            const tens = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
+            let val = parseInt(num, 10); 
+            if (isNaN(val) || val === 0) return "Zero only";
+            let words = "";
+            if (Math.floor(val / 10000000) > 0) { words += parseNumberToWordsLocal(Math.floor(val / 10000000)) + " Crore "; val %= 10000000; }
+            if (Math.floor(val / 100000) > 0) { words += parseNumberToWordsLocal(Math.floor(val / 100000)) + " Lakh "; val %= 100000; }
+            if (Math.floor(val / 1000) > 0) { words += parseNumberToWordsLocal(Math.floor(val / 1000)) + " Thousand "; val %= 1000; }
+            if (Math.floor(val / 100) > 0) { words += parseNumberToWordsLocal(Math.floor(val / 100)) + " Hundred "; val %= 100; }
+            if (val > 0) { 
+                if (val < 20) { words += units[val]; } 
+                else { words += tens[Math.floor(val / 10)]; if (val % 10 > 0) { words += " " + units[val % 10]; } } 
+            }
+            return words.replace(/\s+/g, ' ').trim();
+        }
+
+        // ORIGINAL ENGINE - 100% UNTOUCHED
+        function drawStandardVoucherPageLocal(doc, sender, dateString, voucherIndex, amountNum, purposeText) {
+            const leftMidX = 73; 
+            const amountText = parseNumberToWordsLocal(amountNum) + " only";
+
+            try { 
+                doc.addImage(LOCAL_INDIA_POST_LOGO_URL, 'PNG', 132, 5, 10, 10); 
+            } catch (err) {
+                console.error("Voucher Logo asset render skip background: ", err);
+            }
+
+            doc.setFont("times", "bold"); 
+            doc.setFontSize(10.5); 
+            doc.text("ACG-17", 12, 15); 
+            
+            doc.setFontSize(11); 
+            doc.setFont("times", "bold"); 
+            doc.text("DEPARTMENT OF POSTS - INDIA", leftMidX, 15, { align: "center" });
+            
+            doc.setFont("times", "normal"); 
+            doc.setFontSize(7.5); 
+            doc.text("(See Note below Rules 6 (b) of Appendix II to Posts and Telegraphs Financial Handbook Volume I)", leftMidX, 20, { align: "center" });
+            doc.text("2nd Edition 2nd Reprinting)", leftMidX, 24, { align: "center" });
+            
+            doc.setFont("times", "bold"); 
+            doc.setFontSize(9); 
+            doc.text("/Receipt", leftMidX, 30, { align: "center" });
+            
+            doc.setFont("times", "normal"); 
+            doc.setFontSize(9.5); 
+            doc.text("The " + dateString, 12, 42); 
+            doc.text("Voucher No-" + voucherIndex, 85, 42);
+
+            doc.setFont("times", "bold"); 
+            doc.text("Received from", 12, 51); 
+            doc.setFont("times", "normal"); 
+            doc.text(sender, 45, 51); 
+            doc.line(45, 52, 140, 52);
+
+            doc.setFont("times", "bold"); 
+            doc.text("The Sum of Rupees", 12, 61); 
+            doc.setFont("times", "normal"); 
+            doc.text(amountText, 52, 61); 
+            doc.line(52, 62, 140, 62);
+
+            doc.setFont("times", "bold"); 
+            doc.text("On Account of", 12, 71); 
+            doc.setFont("times", "normal");
+            
+            const wrappedPurpose = doc.splitTextToSize(purposeText, 95);
+            for (let i = 0; i < wrappedPurpose.length; i++) { 
+                doc.text(wrappedPurpose[i], 44, 71 + (i * 5)); 
+                doc.line(44, 72 + (i * 5), 140, 72 + (i * 5)); 
+            }
+
+            let offsetHeight = (wrappedPurpose.length - 1) * 5;
+            let currentLeftY = 91 + offsetHeight; 
+            
+            doc.setFont("times", "bold"); 
+            doc.setFontSize(10.5); 
+            doc.text("/Rs. " + amountNum + "/-", 12, currentLeftY);
+
+            currentLeftY += 15; 
+            doc.setFont("times", "bold"); 
+            doc.setFontSize(8.5); 
+            doc.text("Witnessed Payment", 12, currentLeftY);
+            
+            currentLeftY += 12; 
+            doc.text("Signature of Witness", 12, currentLeftY); 
+            doc.text("Signature of Payee", 100, currentLeftY);
+
+            currentLeftY += 10; 
+            doc.setFont("times", "normal"); 
+            doc.setFontSize(6.5);
+            
+            let legalText1 = "Note :- If the receipt be not written or not signed in English/Hindi the whole of the portion not in English/Hindi must be translated by the Paying Officer.";
+            let legalText2 = "A person signing such receipt in Hindi should be required to indicate his full name in block letters within brackets below his signature.";
+            let legalText3 = "If the person paid cannot sign, the payment must be certified by the paying officer and atleast one witness.";
+            let legalText4 = "If the amount be paid more than Rs. 5000/- a Receipt Stamp of 1/- must be affixed and this stamp must be paid for by the person to whom the amount of receipt is paid.";
+            let legalText5 = "1. Certified that the amount included in the voucher has been disbursed to the proper person.";
+
+            const w1 = doc.splitTextToSize(legalText1, 128); 
+            const w2 = doc.splitTextToSize(legalText2, 128);
+            const w3 = doc.splitTextToSize(legalText3, 128); 
+            const w4 = doc.splitTextToSize(legalText4, 128);
+            const w5 = doc.splitTextToSize(legalText5, 128);
+
+            for(let k=0; k<w1.length; k++) { doc.text(w1[k], 12, currentLeftY); currentLeftY += 3.5; }
+            for(let k=0; k<w2.length; k++) { doc.text(w2[k], 12, currentLeftY); currentLeftY += 3.5; }
+            for(let k=0; k<w3.length; k++) { doc.text(w3[k], 12, currentLeftY); currentLeftY += 3.5; }
+            for(let k=0; k<w4.length; k++) { doc.text(w4[k], 12, currentLeftY); currentLeftY += 3.5; }
+            
+            currentLeftY += 2; 
+            doc.line(12, currentLeftY, 140, currentLeftY); 
+            currentLeftY += 4;
+            
+            for(let k=0; k<w5.length; k++) { doc.text(w5[k], 12, currentLeftY); currentLeftY += 3.5; }
+
+            const rightEdgeX = 285; 
+            doc.setFontSize(8.5); 
+            doc.setFont("times", "bold");
+            
+            doc.text("Paying", rightEdgeX, 15, { align: "right" }); 
+            doc.text("Officer", rightEdgeX, 19, { align: "right" });
+            doc.text("Counter", rightEdgeX, 35, { align: "right" }); 
+            doc.text("Signed", rightEdgeX, 39, { align: "right" });
+            doc.text("Disbursing", rightEdgeX, 54, { align: "right" }); 
+            doc.text("Officer", rightEdgeX, 58, { align: "right" });
+
+            let currentRightY = 74; 
+            doc.setFont("times", "normal");
+            
+            let termsText = "2. Received contents and certified that I have satisfied myself that all advances included in receipt form A.C.G. 17 drawn 1 month / 2 months / 3 months previous to this date with the exception of those detailed below (of which the total has been refunded from this receipt) has been disbursed to the proper persons and that their acceptances have been taken & filed in my office with receipt stamps duly cancelled for every payment in excess of Rs. 5000/-";
+            
+            const wTerms = doc.splitTextToSize(termsText, 132);
+            for(let m=0; m<wTerms.length; m++) { 
+                doc.text(wTerms[m], 152, currentRightY + (m * 4)); 
+            }
+
+            currentRightY += (wTerms.length * 4) + 15;
+            doc.setFont("times", "bold");
+            doc.text("Disbursing", rightEdgeX, currentRightY, { align: "right" }); 
+            doc.text("Officer", rightEdgeX, currentRightY + 4, { align: "right" });
+
+            doc.setDrawColor(180, 180, 180); 
+            doc.setLineDashPattern([2, 2], 0); 
+            doc.line(146, 5, 146, 205);
+            doc.setDrawColor(0, 0, 0); 
+            doc.setLineDashPattern([], 0);
+        }
+
+        function closePdfModal() {
+            const overlay = document.getElementById('pdfModalOverlay');
+            overlay.classList.remove('active');
+            setTimeout(() => { overlay.style.display = 'none'; }, 300);
+        }
+
+        function finalizeLocalViewer(doc) {
+            const blobDataUrl = doc.output('datauristring');
+            const iframe = document.getElementById('pdfFrameViewerLocal');
+            const overlay = document.getElementById('pdfModalOverlay');
+            
+            // KEY FIX: Move the overlay to the top-level body so it covers everything including the header!
+            if (overlay.parentNode !== document.body) {
+                document.body.appendChild(overlay);
+            }
+
+            iframe.src = blobDataUrl;
+            
+            // Show the modal perfectly centered!
+            overlay.style.display = 'flex';
+            setTimeout(() => { overlay.classList.add('active'); }, 50);
+        }
+
+        function triggerSmartGenerationBulk() {
+            if (!document.getElementById('receivedFromBulk').value || !document.getElementById('amount').value || !document.getElementById('monthlyVoucherPurpose').value) { 
+                if(typeof displayCustomAlert === "function") {
+                    displayCustomAlert("Form Defect: All fields in the monthly bulk panel must be filled."); 
+                } else {
+                    alert("Form Defect: All fields must be filled.");
+                }
+                return; 
+            }
+
+            const loader = document.getElementById('globalAppLoader');
+            if(loader) {
+                loader.style.display = 'flex';
+                document.querySelector('.loading-status-msg').innerText = "Processing Document...";
+            }
+
+            setTimeout(() => {
+                try {
+                    // Check if jsPDF exists, wait if not
+                    if (typeof window.jspdf === 'undefined') {
+                        alert("System Notice: Please wait a moment for the PDF engine to load, then click generate again.");
+                        if(loader) loader.style.display = 'none';
+                        return;
+                    }
+
+                    const { jsPDF } = window.jspdf; 
+                    const doc = new jsPDF('l', 'mm', 'a4'); 
+                    
+                    const sender = document.getElementById('receivedFromBulk').value; 
+                    const amountNum = document.getElementById('amount').value;
+                    const mVal = document.getElementById('selectMonth').value; 
+                    const yVal = document.getElementById('selectYear').value;
+                    const exceptions = document.getElementById('exceptionsInput').value; 
+                    const currentPurpose = document.getElementById('monthlyVoucherPurpose').value;
+
+                    // Perfect calculation for leap years and 30/31 days months
+                    const maxDays = new Date(parseInt(yVal, 10), parseInt(mVal, 10), 0).getDate();
+                    let omittedDates = exceptions.split(",").map(tok => parseInt(tok.trim(), 10)).filter(num => !isNaN(num));
+
+                    let voucherIndex = 1; 
+                    let isChainedPage = false;
+
+                    for (let processingDay = 1; processingDay <= maxDays; processingDay++) {
+                        const targetDate = new Date(parseInt(yVal, 10), parseInt(mVal, 10) - 1, processingDay);
+                        if (targetDate.getDay() === 0 || omittedDates.includes(processingDay)) continue; 
+
+                        if (isChainedPage) { doc.addPage('a4', 'l'); } 
+                        isChainedPage = true;
+
+                        const finalDateString = (processingDay < 10 ? "0" + processingDay : processingDay) + "/" + mVal + "/" + yVal;
+                        
+                        // Exact original rendering engine call
+                        drawStandardVoucherPageLocal(doc, sender, finalDateString, voucherIndex, amountNum, currentPurpose);
+                        voucherIndex++;
+                    }
+
+                    // Send to the centered modal preview
+                    finalizeLocalViewer(doc);
+                    
+                } catch (err) {
+                    console.error("PDF generation failure: ", err); 
+                    if(typeof displayCustomAlert === "function") {
+                        displayCustomAlert("Engine Failure Error: Failed to successfully output compile final PDF.");
+                    } else {
+                        alert("Engine Failure Error: Failed to successfully output compile final PDF.");
+                    }
+                } finally {
+                    if(loader) loader.style.display = 'none';
+                }
+            }, 750);
+        }
+    </script>
+</div>

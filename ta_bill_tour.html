@@ -1,0 +1,883 @@
+<!-- ta_bill_tour.html -->
+<!-- Security Check: Prevent Direct URL Access without SPA -->
+<script>
+    if (!document.getElementById("dynamicWorkspace") || window.location.pathname.endsWith("ta_bill_tour.html")) {
+        window.location.href = "index.html";
+    }
+</script>
+
+<div id="moduleRenderArea">
+    
+    <!-- 100% SELF-CONTAINED PERFECT DESIGN CSS -->
+    <style>
+        .portal-page-panel { max-width: 1200px; margin: 0 auto; background: white; padding: 40px; border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.03); border: 1px solid #e2e8f0; font-family: 'Segoe UI', Arial, sans-serif; }
+        
+        /* Typography & Layout */
+        h3.module-title { margin: 0; color: #1e293b; font-size: 26px; font-weight: 800; letter-spacing: -0.5px; }
+        .back-nav-link { display: inline-flex; align-items: center; color: #3b82f6; font-weight: 800; font-size: 15px; text-decoration: none; cursor: pointer; transition: color 0.2s; padding: 8px 15px; background: #eff6ff; border-radius: 8px; float: right; }
+        .back-nav-link:hover { color: #1d4ed8; background: #dbeafe; }
+        
+        .form-group { margin-bottom: 20px; clear: both; }
+        .form-group label { display: block; font-weight: 700; margin-bottom: 8px; font-size: 14px; color: #334155; }
+        
+        /* Inputs & Textareas */
+        input[type="text"], input[type="number"], input[type="date"], input[type="datetime-local"], select, textarea { width: 100%; padding: 14px 16px; box-sizing: border-box; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14.5px; background: #f8fafc; color: #1e293b !important; transition: all 0.2s ease; font-family: 'Segoe UI', Arial, sans-serif; }
+        input[type="text"]:focus, input[type="number"]:focus, input[type="date"]:focus, input[type="datetime-local"]:focus, select:focus, textarea:focus { border-color: #f59e0b; background: #ffffff; box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.1); outline: none; }
+        
+        /* NORMAL (NON-ITALIC) PLACEHOLDERS */
+        input::placeholder, textarea::placeholder { color: #94a3b8 !important; font-style: normal !important; opacity: 1 !important; }
+        
+        textarea { resize: vertical; }
+        .flex-row { display: flex; gap: 15px; flex-wrap: wrap; }
+        .flex-row > div { flex: 1; }
+        .help-note { font-size: 12px; color: #64748b; margin-top: 6px; display: block; }
+        
+        /* Dynamic Row Container styling */
+        .dynamic-date-row { display: flex; gap: 15px; background: #ffffff; border: 1px solid #e2e8f0; padding: 20px; border-radius: 12px; margin-bottom: 15px; align-items: flex-end; flex-wrap: wrap; box-shadow: 0 2px 8px rgba(0,0,0,0.02); }
+        .delete-row-btn { background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; padding: 14px; border-radius: 8px; cursor: pointer; font-weight: bold; transition: all 0.2s; }
+        .delete-row-btn:hover { background: #fee2e2; color: #dc2626; border-color: #fca5a5; }
+        .add-more-row-container { margin: 20px 0 30px 0; }
+        .secondary-action-btn { background: #f1f5f9; color: #334155; padding: 12px 20px; border: 1px solid #cbd5e1; border-radius: 8px; font-weight: 800; font-size: 13.5px; cursor: pointer; transition: all 0.2s; }
+        .secondary-action-btn:hover { background: #e2e8f0; color: #0f172a; }
+
+        /* Action Button */
+        button.action-btn { width: 100%; padding: 16px; background: #f59e0b; color: white; border: none; border-radius: 8px; font-size: 15.5px; font-weight: 800; cursor: pointer; text-transform: uppercase; letter-spacing: 0.8px; margin-top: 15px; box-shadow: 0 4px 12px rgba(245, 158, 11, 0.25); transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
+        button.action-btn:hover { background: #d97706; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(217, 119, 6, 0.3); }
+
+        /* Summary Box Calculation Highlights */
+        .summary-box { background: #fffbeb; border: 1px solid #fde68a; border-radius: 12px; padding: 20px; margin-top: 15px; }
+        .summary-box label { color: #b45309; }
+        .summary-box input { background: #ffffff !important; font-weight: bold; color: #d97706 !important; border-color: #fcd34d; }
+
+        /* --- PERFECT CENTERED MODAL, FULL SCREEN BLUR --- */
+        .pdf-modal-overlay {
+            position: fixed !important; top: 0 !important; left: 0 !important;
+            width: 100vw !important; height: 100vh !important;
+            background: rgba(241, 245, 249, 0.85) !important; 
+            backdrop-filter: blur(8px) !important;
+            z-index: 99999999 !important; 
+            display: none; justify-content: center; align-items: center;
+            opacity: 0; transition: opacity 0.3s ease;
+        }
+        .pdf-modal-overlay.active { display: flex; opacity: 1; }
+        
+        .pdf-modal-card {
+            background: #ffffff; width: 85%; max-width: 900px; height: 85vh;
+            border-radius: 12px; box-shadow: 0 20px 50px rgba(0,0,0,0.2); 
+            display: flex; flex-direction: column; overflow: hidden;
+            border: 1px solid #cbd5e1; border-top: 6px solid #f59e0b;
+            transform: scale(0.95); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            margin: auto;
+        }
+        .pdf-modal-overlay.active .pdf-modal-card { transform: scale(1); }
+        
+        .pdf-modal-header { padding: 15px 25px; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; background: #f8fafc; }
+        .pdf-modal-header h3 { margin: 0; color: #1e293b; font-size: 18px; font-weight: 800; font-family: 'Segoe UI', Arial, sans-serif; }
+        .pdf-close-btn { background: #ef4444; color: white; border: none; padding: 10px 24px; border-radius: 8px; font-weight: 800; cursor: pointer; transition: 0.2s; font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .pdf-close-btn:hover { background: #dc2626; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(220, 38, 38, 0.2);}
+        .pdf-iframe-container { flex: 1; width: 100%; height: 100%; background: #e2e8f0; }
+        #pdfFrameViewerLocal { width: 100%; height: 100%; border: none; display: block; }
+    </style>
+
+    <div class='portal-page-panel' style='display:block;'>
+        
+        <div style="margin-bottom: 35px; border-bottom: 2px solid #e2e8f0; padding-bottom: 15px; overflow: hidden;">
+            <div class='back-nav-link' onclick='typeof returnToHomeGridSPA === "function" ? returnToHomeGridSPA() : (window.location.href="index.html")'>⬅️ Back to Dashboard</div>
+            <h3 class="module-title">Module: Travelling Allowance Bill for Tour (T.R. 25)</h3>
+        </div>
+        
+        <div class='flex-row'>
+            <div class='form-group'>
+                <label>Name of the Official:</label>
+                <input class='text-input-placeholder-gray' id='tabName' placeholder='e.g. Subhajit Parbat' type='text'/>
+            </div>
+            <div class='form-group'>
+                <label>Designation:</label>
+                <input class='text-input-placeholder-gray' id='tabDesig' placeholder='e.g. MTS / Postal Assistant' type='text'/>
+            </div>
+        </div>
+        <div class='flex-row'>
+            <div class='form-group'>
+                <label>Basic Pay (Rs.):</label>
+                <input class='text-input-placeholder-gray' id='tabPay' placeholder='e.g. 25500' type='number'/>
+            </div>
+            <div class='form-group'>
+                <label>Headquarters:</label>
+                <input class='text-input-placeholder-gray' id='tabHQ' placeholder='e.g. Radhakishorepur HO' type='text'/>
+            </div>
+        </div>
+
+        <div style='background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 25px; margin-bottom: 20px;'>
+            <h4 style='margin-top: 0; color: #0f172a; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;'>Point 5: Journey Details & Fares</h4>
+            <div id='tabJourneyContainer'></div>
+            <div class='add-more-row-container' style='margin-bottom: 10px;'>
+                <button class='secondary-action-btn' onclick='addNewTABillRowLocal()' type='button'>+ Add Journey Leg</button>
+            </div>
+        </div>
+
+        <div style='background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 25px; margin-bottom: 20px;'>
+            <h4 style='margin-top: 0; color: #0f172a; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;'>Point 6: Mode of Journey</h4>
+            <div class='flex-row'>
+                <div class='form-group'>
+                    <label>(i) Air - Exchange voucher arranged by office?</label>
+                    <select id='tab6AirA'>
+                        <option value=''>- Select -</option>
+                        <option value='Yes'>Yes</option>
+                        <option value='No'>No</option>
+                    </select>
+                </div>
+                <div class='form-group'>
+                    <label>Ticket arranged by:</label>
+                    <input class='text-input-placeholder-gray' id='tab6AirB' type='text' placeholder='e.g. Self/Office'/>
+                </div>
+            </div>
+            <div class='flex-row'>
+                <div class='form-group'>
+                    <label>(ii) Rail - Travelled by Train Type:</label>
+                    <select id='tab6RailA'>
+                        <option value=''>- Select -</option>
+                        <option value='Mail'>Mail</option>
+                        <option value='Express'>Express</option>
+                        <option value='Ordinary'>Ordinary</option>
+                    </select>
+                </div>
+                <div class='form-group'>
+                    <label>Return ticket available?</label>
+                    <select id='tab6RailB'>
+                        <option value=''>- Select -</option>
+                        <option value='Yes'>Yes</option>
+                        <option value='No'>No</option>
+                    </select>
+                </div>
+                <div class='form-group'>
+                    <label>If available, purchased? (Or reasons):</label>
+                    <input class='text-input-placeholder-gray' id='tab6RailC' type='text' placeholder='e.g. Yes / N.A.'/>
+                </div>
+            </div>
+            <div class='form-group'>
+                <label>(iii) Road - Mode of conveyance used:</label>
+                <input class='text-input-placeholder-gray' id='tab6Road' type='text' placeholder='e.g. Single seat in public bus'/>
+            </div>
+        </div>
+
+        <div class='flex-row'>
+            <div style='flex: 1; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 25px; margin-bottom: 20px;'>
+                <h4 style='margin-top: 0; color: #0f172a; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;'>Point 7: Dates of Absence</h4>
+                <div class='form-group'>
+                    <label>(i) RH and C.L.:</label>
+                    <input class='text-input-placeholder-gray' id='tab7i' type='text' placeholder='e.g. Nil'/>
+                </div>
+                <div class='form-group'>
+                    <label>(ii) Not in camp on Sun/Holidays:</label>
+                    <input class='text-input-placeholder-gray' id='tab7ii' type='text' placeholder='e.g. Nil'/>
+                </div>
+            </div>
+            <div style='flex: 1; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 25px; margin-bottom: 20px;'>
+                <h4 style='margin-top: 0; color: #0f172a; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;'>Point 8: Free Board/Lodging</h4>
+                <div class='form-group'>
+                    <label>(a) Board only:</label>
+                    <input class='text-input-placeholder-gray' id='tab8a' type='text' placeholder='e.g. Nil'/>
+                </div>
+                <div class='form-group'>
+                    <label>(b) Lodging only:</label>
+                    <input class='text-input-placeholder-gray' id='tab8b' type='text' placeholder='e.g. Nil'/>
+                </div>
+                <div class='form-group'>
+                    <label>(c) Board & Lodging:</label>
+                    <input class='text-input-placeholder-gray' id='tab8c' type='text' placeholder='e.g. Nil'/>
+                </div>
+            </div>
+        </div>
+
+        <div style='background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 25px; margin-bottom: 20px;'>
+            <h4 style='margin-top: 0; color: #0f172a; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;'>Point 9: Hotel Particulars</h4>
+            <div class='flex-row'>
+                <div class='form-group'><label>From Date:</label><input id='tab9From' type='date'/></div>
+                <div class='form-group'><label>To Date:</label><input id='tab9To' type='date'/></div>
+                <div class='form-group'><label>Name of Hotel:</label><input class='text-input-placeholder-gray' id='tab9Hotel' type='text' placeholder='e.g. Hotel Taj'/></div>
+                <div class='form-group'><label>Daily Rate (Rs):</label><input class='text-input-placeholder-gray' id='tab9Rate' type='number' placeholder='0'/></div>
+                <div class='form-group'><label>Total Paid (Rs):</label><input class='text-input-placeholder-gray' id='tab9Total' type='number' placeholder='0'/></div>
+            </div>
+        </div>
+
+        <div style='background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 25px; margin-bottom: 20px;'>
+            <h4 style='margin-top: 0; color: #0f172a; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;'>Point 10: Higher Class Acc.</h4>
+            <div class='flex-row'>
+                <div class='form-group'><label>Date:</label><input id='tab10Date' type='date'/></div>
+                <div class='form-group'><label>From:</label><input class='text-input-placeholder-gray' id='tab10From' type='text' placeholder='e.g. Station A'/></div>
+                <div class='form-group'><label>To:</label><input class='text-input-placeholder-gray' id='tab10To' type='text' placeholder='e.g. Station B'/></div>
+                <div class='form-group'><label>Mode Used:</label><input class='text-input-placeholder-gray' id='tab10Mode' type='text' placeholder='e.g. Air/Train'/></div>
+            </div>
+            <div class='flex-row'>
+                <div class='form-group'><label>Class Entitled:</label><input class='text-input-placeholder-gray' id='tab10EntClass' type='text' placeholder='e.g. Sleeper'/></div>
+                <div class='form-group'><label>Class Travelled:</label><input class='text-input-placeholder-gray' id='tab10TravClass' type='text' placeholder='e.g. 3AC'/></div>
+                <div class='form-group'><label>Entitled Fare (Rs):</label><input class='text-input-placeholder-gray' id='tab10Fare' type='number' placeholder='0'/></div>
+                <div class='form-group'><label>Approval No/Date:</label><input class='text-input-placeholder-gray' id='tab10Approval' type='text' placeholder='e.g. Memo No. 123 Dt. 12/05/2026'/></div>
+            </div>
+        </div>
+
+        <div style='background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 25px; margin-bottom: 20px;'>
+            <h4 style='margin-top: 0; color: #0f172a; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;'>Point 11: Road Journey connected by Rail</h4>
+            <div class='flex-row'>
+                <div class='form-group'><label>Date:</label><input id='tab11Date' type='date'/></div>
+                <div class='form-group'><label>From:</label><input class='text-input-placeholder-gray' id='tab11From' type='text' placeholder='e.g. Station'/></div>
+                <div class='form-group'><label>To:</label><input class='text-input-placeholder-gray' id='tab11To' type='text' placeholder='e.g. Office'/></div>
+                <div class='form-group'><label>Fare (Rs):</label><input class='text-input-placeholder-gray' id='tab11FareRs' type='number' placeholder='0'/></div>
+                <div class='form-group'><label>Fare (Ps):</label><input class='text-input-placeholder-gray' id='tab11FarePs' type='number' placeholder='00'/></div>
+            </div>
+        </div>
+
+        <div style='background: #fff8f8; border: 1px solid #ffcdd2; border-radius: 12px; padding: 25px; margin-bottom: 20px;'>
+            <h4 style='margin-top: 0; color: #d32f2f; border-bottom: 2px solid #ffcdd2; padding-bottom: 10px;'>Certificate Auto-Fill Declarations (Page 4)</h4>
+            <div class='flex-row'>
+                <div class='form-group'><label>Cert 4 - Mail/Express Date:</label><input id='cert4Date' type='date'/></div>
+                <div class='form-group'><label>Cert 11 - Distance by Road (Kms):</label><input class='text-input-placeholder-gray' id='cert11Dist' type='number' placeholder='e.g. 50'/></div>
+            </div>
+            <div class='flex-row'>
+                <div class='form-group'><label>Cert 7 - Halt Place:</label><input class='text-input-placeholder-gray' id='cert7Place' type='text' placeholder='e.g. Agartala'/></div>
+                <div class='form-group'><label>Cert 7 - From Date:</label><input id='cert7From' type='date'/></div>
+                <div class='form-group'><label>Cert 7 - To Date:</label><input id='cert7To' type='date'/></div>
+            </div>
+            <div class='flex-row'>
+                <div class='form-group'><label>Cert 14 - Luggage (Kg):</label><input class='text-input-placeholder-gray' id='cert14Kg' type='number' placeholder='e.g. 500'/></div>
+                <div class='form-group'><label>Cert 14 - Luggage (Gms):</label><input class='text-input-placeholder-gray' id='cert14Gms' type='number' placeholder='e.g. 0'/></div>
+                <div class='form-group'><label>Cert 14 - Transfer From:</label><input class='text-input-placeholder-gray' id='cert14From' type='text' placeholder='e.g. Station A'/></div>
+                <div class='form-group'><label>Cert 14 - Transfer To:</label><input class='text-input-placeholder-gray' id='cert14To' type='text' placeholder='e.g. Station B'/></div>
+            </div>
+        </div>
+
+        <div style='background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 25px; margin-bottom: 20px;'>
+            <h4 style='margin-top: 0; color: #0f172a; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;'>Point 12: Claim Summary & Net Calculation</h4>
+            <div class='flex-row'>
+                <div class='form-group'>
+                    <label>Total Fares Paid (Auto-sum):</label>
+                    <input class='text-input-placeholder-gray' id='tabTotalFares' style='background:#e2e8f0;' readonly type='number' value="0" />
+                </div>
+                <div class='form-group'>
+                    <label>Total D.A. Claimed (Rs.):</label>
+                    <input class='text-input-placeholder-gray' id='tabDA' oninput='calculateTABillTotalLocal()' placeholder='e.g. 1500' type='number'/>
+                </div>
+                <div class='form-group'>
+                    <label>Hotel/Transit Claimed (Rs.):</label>
+                    <input class='text-input-placeholder-gray' id='tabHotel' oninput='calculateTABillTotalLocal()' placeholder='e.g. 500' type='number'/>
+                </div>
+            </div>
+            <div class='flex-row summary-box'>
+                <div class='form-group' style='margin-bottom: 0;'>
+                    <label>Gross Claim Total (Rs.):</label>
+                    <input id='tabGrossTotal' readonly type='number' value="0" />
+                </div>
+                <div class='form-group' style='margin-bottom: 0;'>
+                    <label>Less: Advance Drawn (Rs.):</label>
+                    <input id='tabAdvance' oninput='calculateTABillTotalLocal()' placeholder='e.g. 1000' type='number'/>
+                </div>
+                <div class='form-group' style='margin-bottom: 0;'>
+                    <label>Net Claim / (Refund):</label>
+                    <input id='tabNetClaim' readonly type='number' value="0" />
+                </div>
+            </div>
+        </div>
+
+        <button class='action-btn' onclick='triggerSmartGenerationTABillTour()' type='button'>Generate T.A. Bill (Tour) PDF</button>
+    </div>
+
+    <!-- BEAUTIFUL CENTERED POPUP MODAL FOR PDF PREVIEW -->
+    <div id="pdfModalOverlay" class="pdf-modal-overlay">
+        <div class="pdf-modal-card">
+            <div class="pdf-modal-header">
+                <h3>📄 Generated Document Live Preview</h3>
+                <button class="pdf-close-btn" onclick="closePdfModal()">❌ Close Preview</button>
+            </div>
+            <div class="pdf-iframe-container">
+                <iframe id="pdfFrameViewerLocal"></iframe>
+            </div>
+        </div>
+    </div>
+
+    <!-- 100% UNTOUCHED ORIGINAL PDF LOGIC (Adapted for TA Bill Tour) -->
+    <script>
+        // Ensure jsPDF loads if standalone
+        if (typeof window.jspdf === 'undefined') {
+            let script = document.createElement('script');
+            script.src = "https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js";
+            document.head.appendChild(script);
+        }
+
+        function parseNumberToWordsLocal(num) {
+            const units = ['','One ','Two ','Three ','Four ','Five ','Six ','Seven ','Eight ','Nine ','Ten ','Eleven ','Twelve ','Thirteen ','Fourteen ','Fifteen ','Sixteen ','Seventeen ','Eighteen ','Nineteen '];
+            const tens = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
+            let val = parseInt(num, 10); 
+            if (isNaN(val) || val === 0) return "Zero only";
+            let words = "";
+            if (Math.floor(val / 10000000) > 0) { words += parseNumberToWordsLocal(Math.floor(val / 10000000)) + " Crore "; val %= 10000000; }
+            if (Math.floor(val / 100000) > 0) { words += parseNumberToWordsLocal(Math.floor(val / 100000)) + " Lakh "; val %= 100000; }
+            if (Math.floor(val / 1000) > 0) { words += parseNumberToWordsLocal(Math.floor(val / 1000)) + " Thousand "; val %= 1000; }
+            if (Math.floor(val / 100) > 0) { words += parseNumberToWordsLocal(Math.floor(val / 100)) + " Hundred "; val %= 100; }
+            if (val > 0) { 
+                if (val < 20) { words += units[val]; } 
+                else { words += tens[Math.floor(val / 10)]; if (val % 10 > 0) { words += " " + units[val % 10]; } } 
+            }
+            return words.replace(/\s+/g, ' ').trim();
+        }
+
+        // Add dynamic Journey Leg Row Function
+        function addNewTABillRowLocal() {
+            const container = document.getElementById('tabJourneyContainer'); 
+            const newRow = document.createElement('div'); 
+            newRow.className = 'dynamic-date-row'; 
+            newRow.style.flexWrap = 'wrap';
+            
+            newRow.innerHTML = `
+                <div style="flex: 1; min-width: 120px;">
+                    <label>Dep. Date & Time</label>
+                    <input type="datetime-local" class="tab-dep-dt" />
+                </div>
+                <div style="flex: 1; min-width: 100px;">
+                    <label>Dep. Station</label>
+                    <input type="text" class="tab-dep-st text-input-placeholder-gray" placeholder="From" />
+                </div>
+                <div style="flex: 1; min-width: 120px;">
+                    <label>Arr. Date & Time</label>
+                    <input type="datetime-local" class="tab-arr-dt" />
+                </div>
+                <div style="flex: 1; min-width: 100px;">
+                    <label>Arr. Station</label>
+                    <input type="text" class="tab-arr-st text-input-placeholder-gray" placeholder="To" />
+                </div>
+                <div style="flex: 1; min-width: 100px;">
+                    <label>Mode/Class</label>
+                    <input type="text" class="tab-mode text-input-placeholder-gray" placeholder="e.g. Bus/AC" />
+                </div>
+                <div style="flex: 1; min-width: 80px;">
+                    <label>Fare (Rs.)</label>
+                    <input type="number" class="tab-fare text-input-placeholder-gray" oninput="calculateTABillTotalLocal()" placeholder="0" />
+                </div>
+                <div style="flex: 1; min-width: 80px;">
+                    <label>Distance(Km)</label>
+                    <input type="number" class="tab-dist text-input-placeholder-gray" placeholder="e.g. 15" />
+                </div>
+                <div style="flex: 1; min-width: 80px;">
+                    <label>Halt Duration</label>
+                    <input type="text" class="tab-halt text-input-placeholder-gray" placeholder="e.g. 2 Days" />
+                </div>
+                <div style="flex: 1.5; min-width: 120px;">
+                    <label>Purpose</label>
+                    <input type="text" class="tab-purpose text-input-placeholder-gray" placeholder="e.g. Inspection" />
+                </div>
+                <div style="flex: 0.5; min-width: 50px; display:flex; align-items:flex-end;">
+                    <button type="button" class="delete-row-btn" onclick="this.parentElement.parentElement.remove(); calculateTABillTotalLocal();">❌</button>
+                </div>
+            `; 
+            container.appendChild(newRow);
+        }
+
+        // Auto-add first row if empty
+        setTimeout(() => {
+            if(document.getElementById('tabJourneyContainer').children.length === 0) {
+                addNewTABillRowLocal();
+            }
+        }, 100);
+
+        function calculateTABillTotalLocal() {
+            let totalFares = 0; 
+            const fareInputs = document.querySelectorAll('.tab-fare');
+            
+            fareInputs.forEach(input => { 
+                let val = parseFloat(input.value); 
+                if(!isNaN(val)) {
+                    totalFares += val; 
+                }
+            });
+            
+            document.getElementById('tabTotalFares').value = totalFares;
+            
+            const da = parseFloat(document.getElementById('tabDA').value) || 0; 
+            const hotel = parseFloat(document.getElementById('tabHotel').value) || 0; 
+            const advance = parseFloat(document.getElementById('tabAdvance').value) || 0;
+            
+            const gross = totalFares + da + hotel; 
+            document.getElementById('tabGrossTotal').value = gross; 
+            document.getElementById('tabNetClaim').value = gross - advance;
+        }
+
+        function closePdfModal() {
+            const overlay = document.getElementById('pdfModalOverlay');
+            overlay.classList.remove('active');
+            setTimeout(() => { overlay.style.display = 'none'; }, 300);
+        }
+
+        function finalizeLocalViewer(doc) {
+            const blobDataUrl = doc.output('datauristring');
+            const iframe = document.getElementById('pdfFrameViewerLocal');
+            const overlay = document.getElementById('pdfModalOverlay');
+            
+            // Move overlay to body to cover whole screen perfectly
+            if (overlay.parentNode !== document.body) {
+                document.body.appendChild(overlay);
+            }
+
+            iframe.src = blobDataUrl;
+            
+            // Show the modal perfectly centered!
+            overlay.style.display = 'flex';
+            setTimeout(() => { overlay.classList.add('active'); }, 50);
+        }
+
+        function triggerSmartGenerationTABillTour() {
+            if (!document.getElementById('tabName').value) { 
+                if(typeof displayCustomAlert === "function") {
+                    displayCustomAlert("Form Defect: Name of the Official is mandatory for T.A. Bill.");
+                } else {
+                    alert("Form Defect: Name of the Official is mandatory for T.A. Bill.");
+                }
+                return; 
+            }
+
+            const loader = document.getElementById('globalAppLoader');
+            if(loader) {
+                loader.style.display = 'flex';
+                document.querySelector('.loading-status-msg').innerText = "Processing T.A. Bill Claim (Tour)...";
+            }
+
+            setTimeout(() => {
+                try {
+                    if (typeof window.jspdf === 'undefined') {
+                        alert("System Notice: Please wait a moment for the PDF engine to load, then click generate again.");
+                        if(loader) loader.style.display = 'none';
+                        return;
+                    }
+
+                    // --- EXACT ORIGINAL PDF GENERATION LOGIC ---
+                    const { jsPDF } = window.jspdf;
+                    const doc = new jsPDF('p', 'mm', 'a4');
+                    doc.setFont("helvetica");
+
+                    const tabName = document.getElementById('tabName').value || "";
+                    const tabDesig = document.getElementById('tabDesig').value || "";
+                    const tabPay = document.getElementById('tabPay').value || "";
+                    const tabHQ = document.getElementById('tabHQ').value || "";
+                    
+                    const t6AirA = document.getElementById('tab6AirA').value || "";
+                    const t6AirB = document.getElementById('tab6AirB').value || "";
+                    const t6RailA = document.getElementById('tab6RailA').value || "";
+                    const t6RailB = document.getElementById('tab6RailB').value || "";
+                    const t6RailC = document.getElementById('tab6RailC').value || "";
+                    const t6Road = document.getElementById('tab6Road').value || "";
+                    
+                    const t7i = document.getElementById('tab7i').value || "";
+                    const t7ii = document.getElementById('tab7ii').value || "";
+                    
+                    const t8a = document.getElementById('tab8a').value || "";
+                    const t8b = document.getElementById('tab8b').value || "";
+                    const t8c = document.getElementById('tab8c').value || "";
+                    
+                    const t9From = document.getElementById('tab9From').value || "";
+                    const t9To = document.getElementById('tab9To').value || "";
+                    const t9Hotel = document.getElementById('tab9Hotel').value || "";
+                    const t9Rate = document.getElementById('tab9Rate').value || "";
+                    const t9Total = document.getElementById('tab9Total').value || "";
+                    
+                    const t10Date = document.getElementById('tab10Date').value || "";
+                    const t10From = document.getElementById('tab10From').value || "";
+                    const t10To = document.getElementById('tab10To').value || "";
+                    const t10Mode = document.getElementById('tab10Mode').value || "";
+                    const t10Ent = document.getElementById('tab10EntClass').value || "";
+                    const t10Trav = document.getElementById('tab10TravClass').value || "";
+                    const t10Fare = document.getElementById('tab10Fare').value || "";
+                    const t10App = document.getElementById('tab10Approval').value || "";
+                    
+                    const t11Date = document.getElementById('tab11Date').value || "";
+                    const t11From = document.getElementById('tab11From').value || "";
+                    const t11To = document.getElementById('tab11To').value || "";
+                    const t11Rs = document.getElementById('tab11FareRs').value || "";
+                    const t11Ps = document.getElementById('tab11FarePs').value || "";
+
+                    const tabAdvance = document.getElementById('tabAdvance').value || "0";
+                    const totalFares = document.getElementById('tabTotalFares').value || "0";
+                    const da = document.getElementById('tabDA').value || "0";
+                    const hotel = document.getElementById('tabHotel').value || "0";
+                    const gross = document.getElementById('tabGrossTotal').value || "0";
+                    const netClaim = document.getElementById('tabNetClaim').value || "0";
+
+                    const c4Dt = document.getElementById('cert4Date').value || "";
+                    const c11Dist = document.getElementById('cert11Dist').value || "";
+                    const c7Place = document.getElementById('cert7Place').value || "";
+                    const c7From = document.getElementById('cert7From').value || "";
+                    const c7To = document.getElementById('cert7To').value || "";
+                    const c14Kg = document.getElementById('cert14Kg').value || "";
+                    const c14Gms = document.getElementById('cert14Gms').value || "";
+                    const c14From = document.getElementById('cert14From').value || "";
+                    const c14To = document.getElementById('cert14To').value || "";
+
+                    let today = new Date();
+                    let appDateStr = ("0" + today.getDate()).slice(-2) + "/" + ("0" + (today.getMonth() + 1)).slice(-2) + "/" + today.getFullYear();
+
+                    const rows = document.querySelectorAll('#tabJourneyContainer .dynamic-date-row');
+                    const journeyData = [];
+                    rows.forEach(r => {
+                        journeyData.push({
+                            depDt: r.querySelector('.tab-dep-dt').value || "",
+                            depSt: r.querySelector('.tab-dep-st').value || "",
+                            arrDt: r.querySelector('.tab-arr-dt').value || "",
+                            arrSt: r.querySelector('.tab-arr-st').value || "",
+                            mode: r.querySelector('.tab-mode').value || "",
+                            fare: r.querySelector('.tab-fare').value || "",
+                            dist: r.querySelector('.tab-dist').value || "",
+                            halt: r.querySelector('.tab-halt').value || "",
+                            purpose: r.querySelector('.tab-purpose').value || ""
+                        });
+                    });
+
+                    const fmtDt = (val) => {
+                        if(!val) return "";
+                        let d = new Date(val);
+                        if(isNaN(d)) return val;
+                        let datePart = ("0" + d.getDate()).slice(-2) + "/" + ("0" + (d.getMonth() + 1)).slice(-2) + "/" + d.getFullYear();
+                        let hrs = d.getHours(); let ampm = hrs >= 12 ? 'PM' : 'AM';
+                        hrs = hrs % 12; hrs = hrs ? hrs : 12;
+                        let timePart = ("0" + hrs).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2) + " " + ampm;
+                        return datePart + "\n" + timePart;
+                    };
+
+                    const fmtDtOnly = (val) => {
+                        if(!val) return "";
+                        let d = new Date(val);
+                        if(isNaN(d)) return val;
+                        return ("0" + d.getDate()).slice(-2) + "/" + ("0" + (d.getMonth() + 1)).slice(-2) + "/" + d.getFullYear();
+                    };
+
+                    // ==========================================
+                    // PAGE 1: PART-A & JOURNEY TABLE
+                    // ==========================================
+                    doc.setFont("helvetica", "bold"); doc.setFontSize(10); doc.text("G.A.R.-14-A", 12, 15);
+                    doc.setFontSize(8); doc.text("[See Rules 66 (I) & 90 (I) (i)]", 12, 19);
+                    doc.setFontSize(10); doc.text("Sub-bill No...................................", 140, 15);
+                    doc.setFontSize(12); doc.text("TRAVELLING ALLOWANCE BILL FOR TOUR", 105, 30, { align: "center" });
+
+                    doc.setFontSize(9); doc.setFont("helvetica", "italic");
+                    doc.text("NOTE:- This bill should be prepared in duplicate-one for payment and the others as office copy.", 105, 36, { align: "center" });
+
+                    doc.setFont("helvetica", "bold"); doc.setFontSize(11);
+                    doc.text("PART-A (To be filled up by Government servant)", 105, 45, { align: "center" });
+
+                    doc.setFontSize(10);
+                    doc.text("1. Name", 15, 55); doc.setFont("helvetica", "normal"); doc.text(": " + tabName, 45, 55);
+                    doc.setFont("helvetica", "bold");
+                    doc.text("2. Designation", 15, 63); doc.setFont("helvetica", "normal"); doc.text(": " + tabDesig, 45, 63);
+                    doc.setFont("helvetica", "bold");
+                    doc.text("3. Pay", 15, 71); doc.setFont("helvetica", "normal"); doc.text(": " + (tabPay ? "Rs. " + tabPay : ""), 45, 71);
+                    doc.setFont("helvetica", "bold");
+                    doc.text("4. Headquarters", 15, 79); doc.setFont("helvetica", "normal"); doc.text(": " + tabHQ, 45, 79);
+
+                    doc.setFont("helvetica", "bold");
+                    doc.text("5. Details and purpose of journey (s) performed.", 15, 90);
+
+                    doc.rect(12, 95, 186, 21);
+                    let colX = [12, 33, 54, 75, 96, 122, 138, 154, 170, 198];
+                    doc.line(12, 116, 198, 116); doc.line(12, 103, 198, 103); doc.line(12, 110, 198, 110); 
+                    doc.line(54, 95, 54, 116); doc.line(96, 95, 96, 116); doc.line(122, 95, 122, 116); 
+                    doc.line(138, 95, 138, 116); doc.line(154, 95, 154, 116); doc.line(170, 95, 170, 116); 
+                    doc.line(33, 103, 33, 116); doc.line(75, 103, 75, 116); 
+
+                    doc.setFontSize(8.5);
+                    doc.text("Departure", 33, 99.5, { align: "center" }); doc.text("Arrival", 75, 99.5, { align: "center" });
+                    doc.text("Mode of", 109, 98, { align: "center" }); doc.text("travel & class", 109, 101.5, { align: "center" });
+                    doc.text("Fare", 130, 98, { align: "center" }); doc.text("Paid", 130, 101.5, { align: "center" });
+                    doc.text("Distance", 146, 98, { align: "center" }); doc.text("in Kms", 146, 101.5, { align: "center" });
+                    doc.text("Duration", 162, 98, { align: "center" }); doc.text("of Halt", 162, 101.5, { align: "center" });
+                    doc.text("Purpose of", 184, 98, { align: "center" }); doc.text("Journey", 184, 101.5, { align: "center" });
+
+                    doc.setFontSize(8);
+                    doc.text("Date & Time", 22.5, 107.5, { align: "center" }); doc.text("From", 43.5, 107.5, { align: "center" });
+                    doc.text("Date & Time", 64.5, 107.5, { align: "center" }); doc.text("To", 85.5, 107.5, { align: "center" });
+
+                    doc.setFont("helvetica", "bold");
+                    doc.text("1.", 22.5, 114, { align: "center" }); doc.text("2.", 43.5, 114, { align: "center" });
+                    doc.text("3.", 64.5, 114, { align: "center" }); doc.text("4.", 85.5, 114, { align: "center" });
+                    doc.text("5.", 109, 114, { align: "center" }); doc.text("6.", 130, 114, { align: "center" });
+                    doc.text("7.", 146, 114, { align: "center" }); doc.text("8.", 162, 114, { align: "center" });
+                    doc.text("9.", 184, 114, { align: "center" });
+
+                    let currentY = 116;
+                    doc.setFontSize(8); doc.setFont("helvetica", "normal");
+
+                    if (journeyData.length === 0) {
+                        currentY += 15; doc.line(12, currentY, 198, currentY); colX.forEach(x => doc.line(x, 116, x, currentY));
+                    } else {
+                        journeyData.forEach(row => {
+                            let yOffset = 4;
+                            let spl1 = doc.splitTextToSize(fmtDt(row.depDt), 19); let spl2 = doc.splitTextToSize(row.depSt, 19);
+                            let spl3 = doc.splitTextToSize(fmtDt(row.arrDt), 19); let spl4 = doc.splitTextToSize(row.arrSt, 19);
+                            let spl5 = doc.splitTextToSize(row.mode, 24); let spl6 = doc.splitTextToSize(row.fare, 14);
+                            let spl7 = doc.splitTextToSize(row.dist, 14); let spl8 = doc.splitTextToSize(row.halt, 14);
+                            let spl9 = doc.splitTextToSize(row.purpose, 26);
+
+                            let maxLines = Math.max(spl1.length, spl2.length, spl3.length, spl4.length, spl5.length, spl6.length, spl7.length, spl8.length, spl9.length, 1);
+                            let rowH = (maxLines * 4) + 3;
+
+                            doc.text(spl1, 22.5, currentY + yOffset, { align: "center" }); doc.text(spl2, 43.5, currentY + yOffset, { align: "center" });
+                            doc.text(spl3, 64.5, currentY + yOffset, { align: "center" }); doc.text(spl4, 85.5, currentY + yOffset, { align: "center" });
+                            doc.text(spl5, 109, currentY + yOffset, { align: "center" }); doc.text(spl6, 130, currentY + yOffset, { align: "center" });
+                            doc.text(spl7, 146, currentY + yOffset, { align: "center" }); doc.text(spl8, 162, currentY + yOffset, { align: "center" });
+                            doc.text(spl9, 184, currentY + yOffset, { align: "center" });
+
+                            currentY += rowH; doc.line(12, currentY, 198, currentY); colX.forEach(x => doc.line(x, currentY - rowH, x, currentY));
+                        });
+                    }
+
+                    currentY += 10; doc.setFont("helvetica", "bold"); doc.setFontSize(10); doc.text("6. Mode of journey:-", 12, currentY);
+                    currentY += 6; doc.text("(i) Air", 17, currentY);
+                    currentY += 6; doc.setFont("helvetica", "normal"); doc.text("(a) Exchange voucher arranged by office", 22, currentY); doc.text(t6AirA || "........................", 130, currentY);
+                    currentY += 6; doc.text("(b) Ticket/Exchange voucher arranged by", 22, currentY); doc.text(t6AirB || "...................................................", 130, currentY);
+                    currentY += 8; doc.setFont("helvetica", "bold"); doc.text("(ii) Rail", 17, currentY);
+                    currentY += 6; doc.setFont("helvetica", "normal"); doc.text("(a) Whether travelled by Mail/Express/Ordinary train?", 22, currentY); doc.text(t6RailA || "........................", 130, currentY);
+                    currentY += 6; doc.text("(b) Whether return ticket was available?", 22, currentY); doc.text(t6RailB || "........................", 130, currentY);
+                    currentY += 6; doc.text("(c) If available, whether return ticket purchased? If not, state reasons", 22, currentY); doc.text(t6RailC || "........................", 130, currentY);
+
+                    doc.text("Page 1 of 4", 105, 285, { align: "center" });
+
+                    // ==========================================
+                    // PAGE 2: ROAD DETAILS & HOTEL PARTICULARS
+                    // ==========================================
+                    doc.addPage();
+                    let p2Y = 20;
+                    doc.setFont("helvetica", "bold"); doc.text("(iii) Road", 17, p2Y);
+                    p2Y += 6; doc.setFont("helvetica", "normal");
+                    doc.text("Mode of conveyance used i.e. by Govt. transport/by taking a taxi, single seat in a bus or other public conveyance/by sharing with another Govt. servant in car belonging to him or to a third person, to be mentioned.", 22, p2Y, { maxWidth: 170, align: "justify" });
+                    p2Y += 12;
+                    doc.text(t6Road || "........................................................................................................................................................................", 22, p2Y);
+
+                    p2Y += 12; doc.setFont("helvetica", "bold"); doc.text("7. Dates of absent from place of halt on account of:-", 12, p2Y);
+                    p2Y += 6; doc.setFont("helvetica", "normal"); doc.text("(i) RH. and C.L.", 22, p2Y); doc.text(t7i || "....................................................................", 90, p2Y);
+                    p2Y += 6; doc.text("(ii) Not being actually in camp on Sunday and holidays.", 22, p2Y); doc.text(t7ii || "....................................................................", 115, p2Y);
+
+                    p2Y += 10; doc.setFont("helvetica", "bold"); doc.text("8. Dates on which free board and/or lodging provided by the State or any organisation financed", 12, p2Y);
+                    p2Y += 5; doc.text("   by State funds:-", 12, p2Y);
+                    p2Y += 6; doc.setFont("helvetica", "normal"); doc.text("(a) Board only", 22, p2Y); doc.text(t8a || "....................................................................", 80, p2Y);
+                    p2Y += 6; doc.text("(b) Lodging only", 22, p2Y); doc.text(t8b || "....................................................................", 80, p2Y);
+                    p2Y += 6; doc.text("(c) Board and lodging", 22, p2Y); doc.text(t8c || "....................................................................", 80, p2Y);
+
+                    p2Y += 12; doc.setFont("helvetica", "bold");
+                    let hotelTxt = "9. Particulars to be furnished alongwith hotel receipt etc. in cases where higher rate of D.A. is claimed for stay in hotel other establishments providing board and/or lodging at scheduled tariffs-";
+                    doc.text(hotelTxt, 12, p2Y, { maxWidth: 175, align: "justify" });
+                    p2Y += 10;
+
+                    doc.rect(12, p2Y, 186, 25);
+                    let hCols = [12, 55, 115, 155, 198];
+                    doc.line(12, p2Y + 8, 55, p2Y + 8);
+                    hCols.forEach(x => doc.line(x, p2Y, x, p2Y + 25)); 
+                    doc.setFontSize(9);
+                    doc.text("Period of Stay", 33.5, p2Y + 5, { align: "center" });
+                    doc.text("From", 23.5, p2Y + 12, { align: "center" }); doc.text("To", 44.5, p2Y + 12, { align: "center" }); doc.line(33.5, p2Y + 8, 33.5, p2Y + 25);
+                    doc.text("Name of the Hotel", 85, p2Y + 8, { align: "center" });
+                    doc.text("Daily rate of", 135, p2Y + 6, { align: "center" }); doc.text("Lodging charged", 135, p2Y + 10, { align: "center" });
+                    doc.text("Total Amount", 176.5, p2Y + 6, { align: "center" }); doc.text("paid", 176.5, p2Y + 10, { align: "center" });
+                    doc.line(12, p2Y + 15, 198, p2Y + 15);
+                    
+                    doc.setFont("helvetica", "normal");
+                    doc.text(fmtDtOnly(t9From), 23.5, p2Y + 21, { align: "center" });
+                    doc.text(fmtDtOnly(t9To), 44.5, p2Y + 21, { align: "center" });
+                    doc.text(t9Hotel, 85, p2Y + 21, { align: "center" });
+                    doc.text(t9Rate, 135, p2Y + 21, { align: "center" });
+                    doc.text(t9Total, 176.5, p2Y + 21, { align: "center" });
+
+                    p2Y += 35; doc.setFontSize(10); doc.setFont("helvetica", "bold");
+                    let jTxt = "10. Particulars of journey(s) for which higher class of accommodation than the one to which the Government servant is entitled was used:-";
+                    doc.text(jTxt, 12, p2Y, { maxWidth: 175, align: "justify" });
+                    p2Y += 10;
+
+                    doc.rect(12, p2Y, 186, 25);
+                    let jCols = [12, 27, 67, 97, 127, 157, 198];
+                    doc.line(27, p2Y + 8, 67, p2Y + 8);
+                    jCols.forEach(x => doc.line(x, p2Y, x, p2Y + 25));
+
+                    doc.setFontSize(8.5);
+                    doc.text("Date", 19.5, p2Y + 6, { align: "center" }); doc.text("1.", 19.5, p2Y + 12, { align: "center" });
+                    doc.text("Period of Stay & Places", 47, p2Y + 5, { align: "center" });
+                    doc.text("From", 37, p2Y + 12, { align: "center" }); doc.text("To", 57, p2Y + 12, { align: "center" }); doc.line(47, p2Y + 8, 47, p2Y + 25);
+                    doc.text("Mode of", 82, p2Y + 5, { align: "center" }); doc.text("conveyance used", 82, p2Y + 9, { align: "center" }); doc.text("4.", 82, p2Y + 13, { align: "center" });
+                    doc.text("Class to which", 112, p2Y + 5, { align: "center" }); doc.text("entitled", 112, p2Y + 9, { align: "center" }); doc.text("5.", 112, p2Y + 13, { align: "center" });
+                    doc.text("Class to which", 142, p2Y + 5, { align: "center" }); doc.text("travelled", 142, p2Y + 9, { align: "center" }); doc.text("6.", 142, p2Y + 13, { align: "center" });
+                    doc.text("Fare of the", 177.5, p2Y + 5, { align: "center" }); doc.text("entitled class/Rs", 177.5, p2Y + 9, { align: "center" }); doc.text("7.", 177.5, p2Y + 13, { align: "center" });
+                    doc.line(12, p2Y + 15, 198, p2Y + 15);
+
+                    doc.setFont("helvetica", "normal");
+                    doc.text(fmtDtOnly(t10Date), 19.5, p2Y + 21, { align: "center" });
+                    doc.text(t10From, 37, p2Y + 21, { align: "center" });
+                    doc.text(t10To, 57, p2Y + 21, { align: "center" });
+                    doc.text(t10Mode, 82, p2Y + 21, { align: "center" });
+                    doc.text(t10Ent, 112, p2Y + 21, { align: "center" });
+                    doc.text(t10Trav, 142, p2Y + 21, { align: "center" });
+                    doc.text(t10Fare, 177.5, p2Y + 21, { align: "center" });
+
+                    p2Y += 35; doc.setFontSize(10); doc.setFont("helvetica", "normal");
+                    doc.text("If the journey(s) by higher class accommodation has been performed with the approval of the competent authority.", 12, p2Y);
+                    p2Y += 6;
+                    doc.text("No. and date of sanction may be quoted. " + (t10App || "............................................................................."), 12, p2Y);
+
+                    doc.text("Page 2 of 4", 105, 285, { align: "center" });
+
+                    // ==========================================
+                    // PAGE 3: CLAIM SUMMARY & PART-B (OFFICE USE)
+                    // ==========================================
+                    doc.addPage();
+                    let p3Y = 20;
+                    doc.setFont("helvetica", "bold");
+                    doc.text("11. Details of Journey (s) performed by road between places connected by rail:-", 12, p3Y);
+                    p3Y += 8;
+
+                    doc.rect(12, p3Y, 150, 25);
+                    let rCols = [12, 42, 102, 162];
+                    doc.line(42, p3Y + 8, 162, p3Y + 8);
+                    rCols.forEach(x => doc.line(x, p3Y, x, p3Y + 25));
+                    doc.line(72, p3Y + 8, 72, p3Y + 25); 
+                    doc.line(132, p3Y + 8, 132, p3Y + 25); 
+
+                    doc.text("Date", 27, p3Y + 5, { align: "center" }); doc.text("1.", 27, p3Y + 12, { align: "center" });
+                    doc.text("Name of places", 72, p3Y + 5, { align: "center" });
+                    doc.text("From", 57, p3Y + 12, { align: "center" }); doc.text("To", 87, p3Y + 12, { align: "center" });
+                    doc.text("Fare paid", 132, p3Y + 5, { align: "center" });
+                    doc.text("Rs.", 117, p3Y + 12, { align: "center" }); doc.text("Ps.", 147, p3Y + 12, { align: "center" });
+                    doc.line(12, p3Y + 15, 162, p3Y + 15);
+
+                    doc.setFont("helvetica", "normal");
+                    doc.text(fmtDtOnly(t11Date), 27, p3Y + 21, { align: "center" });
+                    doc.text(t11From, 57, p3Y + 21, { align: "center" });
+                    doc.text(t11To, 87, p3Y + 21, { align: "center" });
+                    doc.text(t11Rs, 117, p3Y + 21, { align: "center" });
+                    doc.text(t11Ps, 147, p3Y + 21, { align: "center" });
+
+                    p3Y += 35; doc.setFont("helvetica", "bold");
+                    doc.text("12. Amount of T.A. advance. If any, drawn.        Rs. " + (tabAdvance || ".................."), 12, p3Y);
+
+                    p3Y += 10;
+                    // Detailed Net Claim Calculation
+                    doc.rect(12, p3Y, 186, 35);
+                    doc.setFillColor(240, 240, 240);
+                    doc.rect(12, p3Y, 186, 8, "F");
+                    doc.setFont("helvetica", "bold");
+                    doc.text("CLAIM SUMMARY & NET CALCULATION", 105, p3Y + 5.5, { align: "center" });
+                    
+                    doc.setFont("helvetica", "normal");
+                    doc.text("Total Fares Paid: Rs. " + totalFares, 15, p3Y + 14);
+                    doc.text("Total D.A. Claimed: Rs. " + da, 80, p3Y + 14);
+                    doc.text("Hotel / Transit: Rs. " + hotel, 140, p3Y + 14);
+                    
+                    doc.setFont("helvetica", "bold");
+                    doc.text("Gross Claim: Rs. " + gross, 15, p3Y + 22);
+                    doc.text("Less: Advance Drawn: Rs. " + tabAdvance, 80, p3Y + 22);
+                    
+                    doc.text("Net Claim Payable: Rs. " + netClaim, 15, p3Y + 31);
+                    let netWords = "Rupees " + parseNumberToWordsLocal(Math.abs(parseFloat(netClaim) || 0)) + " only";
+                    doc.setFont("helvetica", "normal"); doc.setFontSize(9);
+                    doc.text("(In words: " + netWords + ")", 65, p3Y + 31);
+
+                    p3Y += 45; doc.setFontSize(10);
+                    doc.text("Certified that the information as given above, is true to the best of my knowledge and belief.", 12, p3Y);
+
+                    p3Y += 15;
+                    doc.text("Date: " + appDateStr, 12, p3Y);
+                    doc.setFont("helvetica", "bold");
+                    doc.text("Signature of the Govt. servant ..............................", 195, p3Y, { align: "right" });
+
+                    p3Y += 15; doc.setFontSize(12); doc.setFont("helvetica", "bold");
+                    doc.text("PART-B (To be filled in the Bill Section)", 105, p3Y, { align: "center" });
+
+                    p3Y += 10; doc.setFontSize(10); doc.setFont("helvetica", "normal");
+                    doc.text("1. The net entitlement on account of travelling allowance works out to Rs. ....................................", 12, p3Y);
+                    p3Y += 6; doc.text("as detailed below:-", 17, p3Y);
+
+                    p3Y += 8; doc.text("a) Railway/air/bus/steamer fare", 22, p3Y); doc.text("Rs. ...........................", 140, p3Y);
+                    p3Y += 6; doc.text("b) Road mileage for ........ Kms @ Rs. ........ Per/Km.", 22, p3Y); doc.text("Rs. ...........................", 140, p3Y);
+                    p3Y += 6; doc.text("c) Daily allowance", 22, p3Y);
+                    p3Y += 6; doc.text("(i) ........ Days @ Rs. ........ /Per Days", 32, p3Y); doc.text("Rs. ...........................", 140, p3Y);
+                    p3Y += 6; doc.text("(ii) ........ Days @ Rs. ........ Per Days", 32, p3Y); doc.text("Rs. ...........................", 140, p3Y);
+                    p3Y += 6; doc.text("(iii) ........ Days @ Rs. ........ /Per Days", 32, p3Y); doc.text("Rs. ...........................", 140, p3Y);
+                    p3Y += 6; doc.text("d) Actual expenses", 22, p3Y); doc.text("Rs. ...........................", 140, p3Y);
+
+                    p3Y += 4; doc.line(140, p3Y, 180, p3Y);
+                    p3Y += 5; doc.setFont("helvetica", "bold"); doc.text("Gross Amount", 100, p3Y); doc.text("Rs. ...........................", 140, p3Y);
+                    p3Y += 6; doc.setFont("helvetica", "normal"); doc.text("Less amount of T.A. advance. If any, drawn vide", 60, p3Y);
+                    p3Y += 5; doc.text("Voucher No. ........................ Dated ........................", 60, p3Y); doc.text("Rs. ...........................", 140, p3Y);
+
+                    p3Y += 4; doc.line(140, p3Y, 180, p3Y);
+                    p3Y += 5; doc.setFont("helvetica", "bold"); doc.text("Net amount", 100, p3Y); doc.text("Rs. ...........................", 140, p3Y);
+
+                    p3Y += 10; doc.setFont("helvetica", "normal");
+                    doc.text("2. The expenditure is debitable to ..........................................................................................................", 12, p3Y);
+
+                    p3Y += 20; doc.setFont("helvetica", "bold");
+                    doc.text("Initial Bill Clerk", 30, p3Y, { align: "center" }); doc.text("Signature of D.D.O", 175, p3Y, { align: "center" });
+                    p3Y += 15; doc.text("Countersigned", 105, p3Y, { align: "center" });
+                    p3Y += 15; doc.text("Signature of Controlling Officer", 105, p3Y, { align: "center" });
+
+                    doc.setFont("helvetica", "normal"); doc.text("Page 3 of 4", 105, 285, { align: "center" });
+
+                    // ==========================================
+                    // PAGE 4: CERTIFICATES & FINAL SIGNATURES
+                    // ==========================================
+                    doc.addPage();
+                    let p4Y = 20;
+                    doc.setFont("helvetica", "bold"); doc.setFontSize(12);
+                    doc.text("CERTIFICATE FOR TOUR T.A. BILLS", 105, p4Y, { align: "center" });
+
+                    p4Y += 15; doc.setFontSize(10); doc.setFont("helvetica", "normal");
+                    
+                    let fillDt4 = c4Dt ? fmtDtOnly(c4Dt) : "..............................";
+                    let fillPl7 = c7Place || "..............................";
+                    let fillFr7 = c7From ? fmtDtOnly(c7From) : "..............................";
+                    let fillTo7 = c7To ? fmtDtOnly(c7To) : "..............................";
+                    let fillDist11 = c11Dist || "..............................";
+                    let fillKg14 = c14Kg || "................";
+                    let fillGms14 = c14Gms || "................";
+                    let fillFr14 = c14From || "..............................";
+                    let fillTo14 = c14To || "..............................";
+
+                    const rulesLines = [
+                        "1. Certified that I/my family was neither allowed free transit by Rail under free pass or otherwise provided with means of communication at expense of the state or local round journey for the which T.A. has been claimed in the bill.",
+                        "2. Certified that I/my family actually travelled by the class for the T.A. claimed in this bill.",
+                        "3. Certified that number of kilometers shown in this bill is in accordance with the poly metenal tables of the establishment.",
+                        `4. Certified that journey on ${fillDt4} was performed by Mail/Express train in the interest of public service.`,
+                        "5. Certified that I was actually not merely contrusively in camp on Sundays and holidays for which daily allowance is claimed.",
+                        "6. Certified that I was not absent on casual leave during the period for which daily allowance has been claimed.",
+                        `7. Certified that during my halt at ${fillPl7} from ${fillFr7} to ${fillTo7} while on inspection duty continue to be in our expenditure after the first 10 days.`,
+                        "8. Certified that I did not perform the road journey for which the kilometer allowance has been claimed at the higher rates prescribed in Rule 46 of the supplementary Rule by taking a single sent in a taxi motor or mini bus or lorry plying for hire.",
+                        "9. Certified that I incurred running expenses on a car in this journey.",
+                        "10. Certified that the road journeys for which kilometer has been claimed at the higher prescribed in supplementary Rule 46 were performed in my own car.",
+                        `11. Certified that the road journeys for which mileage is claimed were performed by road but were charged by rail. The number of kilometers actually travelled by road being ${fillDist11} Kms.`,
+                        "12. Certified that the family members for whom T.A. has been claimed actually travelled with me or followed me on transfer.",
+                        "13. Certified that actual expenses incurred as cost of transportation of personal was not less than the sum claimed in the bill.",
+                        `14. Certified that I have transported ${fillKg14} Kg ${fillGms14} gms of luggage on my transfer from ${fillFr14} to ${fillTo14}.`
+                    ];
+
+                    rulesLines.forEach(r => {
+                        doc.text(r, 12, p4Y, { maxWidth: 180, align: "justify" });
+                        let linesArr = doc.splitTextToSize(r, 180);
+                        p4Y += (linesArr.length * 5) + 3;
+                    });
+
+                    p4Y += 25; doc.setFont("helvetica", "bold");
+                    doc.text("Signature of the claimant", 195, p4Y, { align: "right" });
+                    p4Y += 20; doc.text("Countersigned", 12, p4Y);
+                    p4Y += 15; doc.text("(Signature & Designation of the controlling officer)", 12, p4Y);
+
+                    doc.setFont("helvetica", "normal");
+                    doc.text("Page 4 of 4", 105, 285, { align: "center" });
+
+                    // Send to the centered modal preview
+                    finalizeLocalViewer(doc);
+
+                } catch (err) {
+                    console.error("PDF generation failure: ", err); 
+                    if(typeof displayCustomAlert === "function") {
+                        displayCustomAlert("Engine Failure Error: Failed to successfully output compile final PDF.");
+                    } else {
+                        alert("Engine Failure Error: Failed to successfully output compile final PDF.");
+                    }
+                } finally {
+                    if(loader) loader.style.display = 'none';
+                }
+            }, 750);
+        }
+    </script>
+</div>

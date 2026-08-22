@@ -1,0 +1,326 @@
+<!-- casual_leave.html -->
+<!-- Security Check: Prevent Direct URL Access without SPA -->
+<script>
+    if (!document.getElementById("dynamicWorkspace") || window.location.pathname.endsWith("casual_leave.html")) {
+        window.location.href = "index.html";
+    }
+</script>
+
+<div id="moduleRenderArea">
+    
+    <!-- 100% SELF-CONTAINED PERFECT DESIGN CSS -->
+    <style>
+        .portal-page-panel { max-width: 1200px; margin: 0 auto; background: white; padding: 40px; border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.03); border: 1px solid #e2e8f0; font-family: 'Segoe UI', Arial, sans-serif; }
+        
+        /* Typography & Layout */
+        h3.module-title { margin: 0; color: #1e293b; font-size: 26px; font-weight: 800; letter-spacing: -0.5px; }
+        .back-nav-link { display: inline-flex; align-items: center; color: #3b82f6; font-weight: 800; font-size: 15px; text-decoration: none; cursor: pointer; transition: color 0.2s; padding: 8px 15px; background: #eff6ff; border-radius: 8px; float: right; }
+        .back-nav-link:hover { color: #1d4ed8; background: #dbeafe; }
+        
+        .form-group { margin-bottom: 20px; clear: both; }
+        .form-group label { display: block; font-weight: 700; margin-bottom: 8px; font-size: 14px; color: #334155; }
+        
+        /* Inputs & Textareas */
+        input[type="text"], input[type="number"], input[type="date"], select, textarea { width: 100%; padding: 14px 16px; box-sizing: border-box; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14.5px; background: #f8fafc; color: #1e293b !important; transition: all 0.2s ease; font-family: 'Segoe UI', Arial, sans-serif; }
+        input[type="text"]:focus, input[type="number"]:focus, input[type="date"]:focus, select:focus, textarea:focus { border-color: #0ea5e9; background: #ffffff; box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.1); outline: none; }
+        
+        /* NORMAL (NON-ITALIC) PLACEHOLDERS */
+        input::placeholder, textarea::placeholder { color: #94a3b8 !important; font-style: normal !important; opacity: 1 !important; }
+        
+        textarea { resize: vertical; }
+        .flex-row { display: flex; gap: 15px; flex-wrap: wrap; }
+        .flex-row > div { flex: 1; }
+        
+        /* Action Button */
+        button.action-btn { width: 100%; padding: 16px; background: #0ea5e9; color: white; border: none; border-radius: 8px; font-size: 15.5px; font-weight: 800; cursor: pointer; text-transform: uppercase; letter-spacing: 0.8px; margin-top: 15px; box-shadow: 0 4px 12px rgba(14, 165, 233, 0.25); transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
+        button.action-btn:hover { background: #0284c7; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(2, 132, 199, 0.3); }
+
+        /* --- PERFECT CENTERED MODAL, FULL SCREEN BLUR --- */
+        .pdf-modal-overlay {
+            position: fixed !important; top: 0 !important; left: 0 !important;
+            width: 100vw !important; height: 100vh !important;
+            background: rgba(241, 245, 249, 0.85) !important; 
+            backdrop-filter: blur(8px) !important;
+            z-index: 99999999 !important; 
+            display: none; justify-content: center; align-items: center;
+            opacity: 0; transition: opacity 0.3s ease;
+        }
+        .pdf-modal-overlay.active { display: flex; opacity: 1; }
+        
+        .pdf-modal-card {
+            background: #ffffff; width: 85%; max-width: 900px; height: 85vh;
+            border-radius: 12px; box-shadow: 0 20px 50px rgba(0,0,0,0.2); 
+            display: flex; flex-direction: column; overflow: hidden;
+            border: 1px solid #cbd5e1; border-top: 6px solid #0ea5e9;
+            transform: scale(0.95); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            margin: auto;
+        }
+        .pdf-modal-overlay.active .pdf-modal-card { transform: scale(1); }
+        
+        .pdf-modal-header { padding: 15px 25px; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; background: #f8fafc; }
+        .pdf-modal-header h3 { margin: 0; color: #1e293b; font-size: 18px; font-weight: 800; font-family: 'Segoe UI', Arial, sans-serif; }
+        .pdf-close-btn { background: #ef4444; color: white; border: none; padding: 10px 24px; border-radius: 8px; font-weight: 800; cursor: pointer; transition: 0.2s; font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .pdf-close-btn:hover { background: #dc2626; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(220, 38, 38, 0.2);}
+        .pdf-iframe-container { flex: 1; width: 100%; height: 100%; background: #e2e8f0; }
+        #pdfFrameViewerLocal { width: 100%; height: 100%; border: none; display: block; }
+    </style>
+
+    <div class='portal-page-panel' style='display:block;'>
+        
+        <div style="margin-bottom: 35px; border-bottom: 2px solid #e2e8f0; padding-bottom: 15px; overflow: hidden;">
+            <div class='back-nav-link' onclick='typeof returnToHomeGridSPA === "function" ? returnToHomeGridSPA() : (window.location.href="index.html")'>⬅️ Back to Dashboard</div>
+            <h3 class="module-title">Module: Casual Leave Application Letter</h3>
+        </div>
+        
+        <div class='flex-row'>
+            <div class='form-group'>
+                <label>Authority Designation:</label>
+                <input class='text-input-placeholder-gray' id='clAuthDesig' placeholder='e.g. The Superintendent of Post Offices' type='text'/>
+            </div>
+            <div class='form-group'>
+                <label>Authority Address / Office Name:</label>
+                <input class='text-input-placeholder-gray' id='clAuthAddress' placeholder='e.g. Udaipur Division, Tripura' type='text'/>
+            </div>
+        </div>
+        <div class='flex-row'>
+            <div class='form-group'>
+                <label>Applicant Name (Employee):</label>
+                <input class='text-input-placeholder-gray' id='clName' placeholder='e.g. Subhajit Parbat' type='text'/>
+            </div>
+            <div class='form-group'>
+                <label>Employee ID:</label>
+                <input class='text-input-placeholder-gray' id='clEmpId' placeholder='e.g. 10012345' type='text'/>
+            </div>
+        </div>
+        <div class='flex-row'>
+            <div class='form-group'>
+                <label>Employee Designation:</label>
+                <input class='text-input-placeholder-gray' id='clEmpDesig' placeholder='e.g. MTS / Postal Assistant / Postman' type='text'/>
+            </div>
+            <div class='form-group'>
+                <label>Office in which working:</label>
+                <input class='text-input-placeholder-gray' id='clEmpOffice' placeholder='e.g. Radhakishorepur HO' type='text'/>
+            </div>
+        </div>
+        <div class='flex-row'>
+            <div class='form-group'>
+                <label>Leave From Date:</label>
+                <input id='clStartDate' type='date'/>
+            </div>
+            <div class='form-group'>
+                <label>Leave To Date:</label>
+                <input id='clEndDate' type='date'/>
+            </div>
+        </div>
+        <div class='flex-row'>
+            <div class='form-group'>
+                <label>Reason for Casual Leave:</label>
+                <select id='clReason' onchange='document.getElementById("clOtherReasonGroup").style.display = this.value === "Other" ? "block" : "none"'>
+                    <option value='Personal affairs'>Personal affairs</option>
+                    <option value='Medical reasons'>Medical reasons</option>
+                    <option value='Urgent family matters'>Urgent family matters</option>
+                    <option value='Other'>Other (Specify)</option>
+                </select>
+            </div>
+            <div class='form-group'>
+                <label>Station Leave Required?</label>
+                <select id='clStationLeave'>
+                    <option value='No'>No</option>
+                    <option value='Yes'>Yes</option>
+                </select>
+            </div>
+        </div>
+        <div class='form-group' id='clOtherReasonGroup' style='display: none;'>
+            <label>Specify Other Reason:</label>
+            <input class='text-input-placeholder-gray' id='clOtherReason' placeholder='Type your specific detailed reason here...' type='text'/>
+        </div>
+        <div class='flex-row'>
+            <div class='form-group'>
+                <label>Application Place:</label>
+                <input class='text-input-placeholder-gray' id='clPlace' placeholder='e.g. Agartala' type='text'/>
+            </div>
+            <div class='form-group'>
+                <label>Application Date:</label>
+                <input id='clAppDate' type='date'/>
+            </div>
+        </div>
+        <button class='action-btn' onclick='triggerSmartGenerationCasualLeave()' type='button'>Generate CL Application PDF</button>
+    </div>
+
+    <!-- BEAUTIFUL CENTERED POPUP MODAL FOR PDF PREVIEW -->
+    <div id="pdfModalOverlay" class="pdf-modal-overlay">
+        <div class="pdf-modal-card">
+            <div class="pdf-modal-header">
+                <h3>📄 Generated Document Live Preview</h3>
+                <button class="pdf-close-btn" onclick="closePdfModal()">❌ Close Preview</button>
+            </div>
+            <div class="pdf-iframe-container">
+                <iframe id="pdfFrameViewerLocal"></iframe>
+            </div>
+        </div>
+    </div>
+
+    <!-- 100% UNTOUCHED ORIGINAL PDF LOGIC (Adapted for Casual Leave) -->
+    <script>
+        // Ensure jsPDF loads if standalone
+        if (typeof window.jspdf === 'undefined') {
+            let script = document.createElement('script');
+            script.src = "https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js";
+            document.head.appendChild(script);
+        }
+
+        function closePdfModal() {
+            const overlay = document.getElementById('pdfModalOverlay');
+            overlay.classList.remove('active');
+            setTimeout(() => { overlay.style.display = 'none'; }, 300);
+        }
+
+        function finalizeLocalViewer(doc) {
+            const blobDataUrl = doc.output('datauristring');
+            const iframe = document.getElementById('pdfFrameViewerLocal');
+            const overlay = document.getElementById('pdfModalOverlay');
+            
+            // Move overlay to body to cover whole screen perfectly
+            if (overlay.parentNode !== document.body) {
+                document.body.appendChild(overlay);
+            }
+
+            iframe.src = blobDataUrl;
+            
+            // Show the modal perfectly centered!
+            overlay.style.display = 'flex';
+            setTimeout(() => { overlay.classList.add('active'); }, 50);
+        }
+
+        function triggerSmartGenerationCasualLeave() {
+            // Original Validation
+            if (!document.getElementById('clAuthDesig').value || !document.getElementById('clName').value) { 
+                if(typeof displayCustomAlert === "function") {
+                    displayCustomAlert("Form Defect: Authority Designation and Applicant Name are mandatory.");
+                } else {
+                    alert("Form Defect: Authority Designation and Applicant Name are mandatory.");
+                }
+                return; 
+            }
+
+            const loader = document.getElementById('globalAppLoader');
+            if(loader) {
+                loader.style.display = 'flex';
+                document.querySelector('.loading-status-msg').innerText = "Drafting Application...";
+            }
+
+            setTimeout(() => {
+                try {
+                    if (typeof window.jspdf === 'undefined') {
+                        alert("System Notice: Please wait a moment for the PDF engine to load, then click generate again.");
+                        if(loader) loader.style.display = 'none';
+                        return;
+                    }
+
+                    // --- EXACT ORIGINAL PDF GENERATION LOGIC ---
+                    const { jsPDF } = window.jspdf;
+                    const doc = new jsPDF('p', 'mm', 'a4');
+
+                    const authDesig = document.getElementById('clAuthDesig').value || "";
+                    const authAdd = document.getElementById('clAuthAddress').value || "";
+                    const name = document.getElementById('clName').value || "";
+                    const empId = document.getElementById('clEmpId').value || "";
+                    const empDesig = document.getElementById('clEmpDesig').value || "";
+                    const empOffice = document.getElementById('clEmpOffice').value || "";
+                    const reasonDrop = document.getElementById('clReason').value;
+                    const otherReason = document.getElementById('clOtherReason').value || "";
+                    const stationLeave = document.getElementById('clStationLeave').value;
+                    const place = document.getElementById('clPlace').value || "";
+
+                    const formatD = (d) => { if(!d) return ""; const p = d.split("-"); return p[2] + "/" + p[1] + "/" + p[0]; };
+
+                    let startStr = formatD(document.getElementById('clStartDate').value);
+                    let endStr = formatD(document.getElementById('clEndDate').value);
+                    let appDateStr = formatD(document.getElementById('clAppDate').value);
+
+                    let finalReason = reasonDrop === "Other" ? otherReason : reasonDrop;
+
+                    let diffDays = 1;
+                    if (document.getElementById('clStartDate').value && document.getElementById('clEndDate').value) {
+                        let sD = new Date(document.getElementById('clStartDate').value);
+                        let eD = new Date(document.getElementById('clEndDate').value);
+                        if (sD <= eD) {
+                            const diffTime = Math.abs(eD - sD);
+                            diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+                        }
+                    }
+
+                    doc.setFont("times", "normal");
+                    doc.setFontSize(12);
+
+                    let currentY = 30;
+
+                    doc.text("To,", 20, currentY); 
+                    currentY += 7;
+                    
+                    doc.setFont("times", "bold");
+                    doc.text(authDesig + ",", 20, currentY); 
+                    currentY += 7;
+                    
+                    doc.text(authAdd + ".", 20, currentY); 
+                    currentY += 15;
+
+                    doc.setFont("times", "normal");
+                    if (appDateStr) { doc.text("Date: " + appDateStr, 20, currentY); }
+                    if (place) { doc.text("Place: " + place, 140, currentY); }
+                    currentY += 15;
+
+                    doc.setFont("times", "bold");
+                    doc.text("Subject: Prayer for Casual Leave.", 20, currentY); 
+                    currentY += 15;
+
+                    doc.setFont("times", "normal");
+                    doc.text("Respected Sir,", 20, currentY); 
+                    currentY += 10;
+
+                    // Automatically calculates exact days and writes the perfect application body
+                    let bodyText = `With due respect, I, ${name}, working as ${empDesig} at ${empOffice} (Emp ID: ${empId}), humbly request you to grant me Casual Leave for ${diffDays} day(s) from ${startStr} to ${endStr}. I require this leave due to ${finalReason.toLowerCase()}.`;
+
+                    if(stationLeave === "Yes") {
+                        bodyText += ` I also request your kind permission to leave the headquarters (Station Leave) during this period.`;
+                    }
+
+                    let splitBody = doc.splitTextToSize(bodyText, 170);
+                    doc.text(bodyText, 20, currentY, { maxWidth: 170, align: "justify" });
+                    currentY += (splitBody.length * 6) + 5;
+
+                    let closingText = "I shall be highly obliged if you kindly consider my application and grant me the leave for the above-mentioned period.";
+                    let splitClosing = doc.splitTextToSize(closingText, 170);
+                    doc.text(closingText, 20, currentY, { maxWidth: 170, align: "justify" });
+                    currentY += (splitClosing.length * 6) + 15;
+
+                    doc.text("Thanking you,", 20, currentY); 
+                    currentY += 15;
+
+                    doc.text("Yours faithfully,", 140, currentY); 
+                    currentY += 15;
+                    
+                    doc.setFont("times", "bold");
+                    doc.text(name, 140, currentY);
+                    
+                    doc.setFont("times", "normal");
+                    doc.text(`Designation: ${empDesig}`, 140, currentY + 6);
+                    doc.text(`Emp ID: ${empId}`, 140, currentY + 12);
+
+                    // Display exactly in our centered modal
+                    finalizeLocalViewer(doc);
+
+                } catch (err) {
+                    console.error("PDF generation failure: ", err); 
+                    if(typeof displayCustomAlert === "function") {
+                        displayCustomAlert("Engine Failure Error: Failed to successfully output compile final PDF.");
+                    } else {
+                        alert("Engine Failure Error: Failed to successfully output compile final PDF.");
+                    }
+                } finally {
+                    if(loader) loader.style.display = 'none';
+                }
+            }, 750);
+        }
+    </script>
+</div>
