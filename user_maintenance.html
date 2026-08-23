@@ -8,7 +8,7 @@
 
 <div id="moduleRenderArea">
     
-    <!-- 100% ISOLATED PREMIUM CSS -->
+    <!-- 100% ISOLATED AND PREMIUM CSS -->
     <style>
         .um-page-panel { max-width: 1200px; margin: 0 auto; background: white; padding: 40px; border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.03); border: 1px solid #e2e8f0; font-family: 'Segoe UI', Arial, sans-serif; animation: umFadeIn 0.4s ease-out forwards; }
         
@@ -54,7 +54,8 @@
         .um-close-btn { background: #ef4444; color: white; border: none; padding: 10px 22px; border-radius: 8px; font-weight: 800; cursor: pointer; transition: 0.2s; font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px; }
         .um-close-btn:hover { background: #dc2626; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(220, 38, 38, 0.2);}
         
-        .um-modal-content { padding: 30px; overflow-y: auto; text-align: left; scrollbar-width: thin; }
+        .um-modal-content { padding: 30px; overflow-y: auto; text-align: left; scrollbar-width: none; }
+        .um-modal-content::-webkit-scrollbar { display: none; }
 
         /* FORM ELEMENTS */
         .um-form-group { margin-bottom: 22px; text-align: left; }
@@ -62,6 +63,8 @@
         .um-input { width: 100%; padding: 15px 20px; box-sizing: border-box; border: 2px solid #e2e8f0; border-radius: 10px; font-size: 15px; background: #f8fafc; color: #1e293b !important; transition: all 0.3s ease; font-weight: 600; font-family: 'Segoe UI', Arial, sans-serif;}
         .um-input:focus { border-color: #3b82f6; background: #ffffff; box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15); outline: none;}
         .um-input::placeholder { color: #94a3b8 !important; font-weight: 400 !important; font-style: normal !important; opacity: 1 !important;}
+        
+        select.um-input { cursor: pointer; }
 
         .um-flex-row { display: flex; gap: 20px; flex-wrap: wrap; }
         .um-flex-row > div { flex: 1; min-width: 200px; }
@@ -115,11 +118,12 @@
     <!-- MAIN DASHBOARD -->
     <div class='um-page-panel' id="umMainDashboard">
         <div style="margin-bottom: 25px; border-bottom: 2px solid #e2e8f0; padding-bottom: 15px; overflow: hidden;">
-            <div class='um-back-nav' onclick='typeof returnToHomeGridSPA === "function" ? returnToHomeGridSPA() : (window.location.href="index.html")'>⬅️ Exit to Portal</div>
+            <div class='um-back-nav' onclick='umCleanExit()'>⬅️ Exit to Portal</div>
             <h3 class="um-module-title">User Maintenance Hub</h3>
             <p style="color: #64748b; font-size: 15px; margin-top: 8px; font-weight: 500;">Secure Admin Identity & Access Management Platform.</p>
         </div>
 
+        <!-- THE 3-COLUMN PERFECT GRID -->
         <div class="um-grid-wrapper" id="umCardsGrid">
             
             <!-- MASTER ADMIN ONLY -->
@@ -276,8 +280,8 @@
                         <button class="um-action-btn green" onclick="umGenerate2FA()">Generate QR Code</button>
                     </div>
                     
-                    <div id="um_2fa_step_qr" style="display:none;">
-                        <h4 style="color: #0f172a; margin-top:0; font-size:18px; text-align:center;">Scan with Authenticator App</h4>
+                    <div id="um_2fa_step_qr" style="display:none; text-align:center;">
+                        <h4 style="color: #0f172a; margin-top:0; font-size:18px;">Scan with Authenticator App</h4>
                         <div class="um-qr-box">
                             <div id="um_qrcodeDisplay" style="display: flex; justify-content: center; margin-bottom: 20px;"></div>
                             <p style="font-size: 13px; color: #64748b; margin-bottom: 10px; font-weight: 700;">Manual Setup Key:</p>
@@ -333,7 +337,7 @@
                     <button class="um-close-btn" onclick="umCloseModal('umModal_EnableDisable')">✖ Close</button>
                 </div>
                 <div class="um-modal-content">
-                    <p style="color: #64748b; font-size: 14.5px; margin-top: 0; margin-bottom: 25px;">Completely disable or re-enable an existing user's portal access.</p>
+                    <p style="color: #64748b; font-size: 14.5px; margin-top: 0; margin-bottom: 25px;">Completely disable or re-enable an existing user's portal access globally.</p>
                     <div class="um-form-group">
                         <label>Select Target User</label>
                         <select id="um_sel_enable" class="um-input um-user-dropdown"></select>
@@ -358,7 +362,7 @@
                     </div>
                     <div class="um-form-group">
                         <label>New Passcode</label>
-                        <input type="text" id="um_in_resetpass_val" class="um-input" placeholder="Enter new passcode">
+                        <input type="text" id="um_in_resetpass_val" class="um-input" placeholder="Enter new passcode" autocomplete="off">
                     </div>
                     <button class="um-action-btn blue um-btn-dynamic" style="background: #475569;" onclick="umExecuteAction('RESET_PASS', 'um_sel_resetpass')">Update Passcode</button>
                 </div>
@@ -424,7 +428,7 @@
                         <select id="um_sel_custom" class="um-input um-user-dropdown" onchange="umLoadCustomCards()"></select>
                     </div>
                     <div style="background: #fff; padding: 20px; border-radius: 12px; border: 1px solid #e2e8f0; margin-bottom: 20px;">
-                        <label style="margin-bottom: 15px; border-bottom: 1px solid #e2e8f0; padding-bottom: 10px; font-weight: 800; color: #1e293b;">Select Accessible Modules:</label>
+                        <label style="margin-bottom: 15px; border-bottom: 1px solid #e2e8f0; padding-bottom: 10px; font-weight: 800; color: #1e293b; display: block;">Select Accessible Modules:</label>
                         <div class="um-checkbox-grid">
                             <label class="um-checkbox-item"><input class="um-card-check" type="checkbox" value="menuCardDBDE"><span>Day Begin/End</span></label>
                             <label class="um-checkbox-item"><input class="um-card-check" type="checkbox" value="menuCardBulkBooking"><span>Bulk Booking</span></label>
@@ -516,7 +520,7 @@
                 <div class="um-modal-content">
                     <div class="um-table-container">
                         <table class="um-log-table">
-                            <thead><tr><th colspan="6" style="background: #e0e7ff; color: #3730a3; font-size: 14px;">Registered Account Registry <span style="font-size: 11px; color:#64748b; font-weight:normal; float:right;">(Click row to edit)</span></th></tr>
+                            <thead><tr><th colspan="6" style="background: #e0e7ff; color: #3730a3; font-size: 14px;">Registered Account Registry <span style="font-size: 11px; color:#64748b; font-weight:normal; float:right;">(Click row to view profile)</span></th></tr>
                             <tr><th>Name</th><th>Username</th><th>SOL</th><th>Role</th><th>Status</th><th>Lock</th></tr></thead>
                             <tbody id="umRosterTableBody"></tbody>
                         </table>
@@ -607,7 +611,7 @@
                     
                     <!-- ACTION HUB FOR ADMINS -->
                     <div id="profileActionHub" class="profile-action-hub">
-                        <h4>⚡ Quick Action Hub</h4>
+                        <h4 style="margin: 0 0 15px 0; color: #0f172a; font-size: 16px; border-bottom: 2px solid #e2e8f0; padding-bottom: 8px; text-align:left;">⚡ Quick Action Hub</h4>
                         <div class="hub-btn-grid">
                             <button class="hub-btn" style="background:#475569;" id="btnProfResetPass">🔄 Reset Pass</button>
                             <button class="hub-btn" style="background:#e11d48;" id="btnProfReset2FA">🔓 Clear 2FA</button>
@@ -619,7 +623,7 @@
             </div>
         </div>
 
-        <!-- 18. REQUEST AUDIT DETAILS MODAL -->
+        <!-- 18. REQUEST AUDIT DETAILS MODAL (Inner Popup) -->
         <div id="umModal_RequestDetails" class="um-modal-overlay" style="z-index: 99999995 !important;">
             <div class="um-modal-card" style="border-top: 6px solid #0f172a;">
                 <div class="um-modal-header">
@@ -633,7 +637,7 @@
             </div>
         </div>
 
-        <!-- 19. ROUTE/TRANSFER MODAL -->
+        <!-- 19. ROUTE/TRANSFER MODAL (Inner Popup) -->
         <div id="umModal_RouteTransfer" class="um-modal-overlay" style="z-index: 99999995 !important;">
             <div class="um-modal-card" style="border-top: 6px solid #f59e0b;">
                 <div class="um-modal-header">
@@ -695,17 +699,35 @@
         let pending2FASecret = "";
 
         // =====================================
-        // SPA FIX: Move modals to body
+        // SPA FIX: Self-Executing DOM Move
         // =====================================
-        setTimeout(() => {
+        (function initUMModalsSync() {
+            const modals = ['umModal_TransferStatus', 'umModal_Approvals', 'umModal_BroadcastNews', 'umModal_MyRequests', 'umModal_CreateUser', 'umModal_2FASetup', 'umModal_Reset2FA', 'umModal_LockUnlock', 'umModal_EnableDisable', 'umModal_ResetPass', 'umModal_ChangeRole', 'umModal_ChangeSol', 'umModal_CustomizeCards', 'umModal_DeleteUser', 'umModal_DirectMessage', 'umModal_UserLogs', 'umModal_UserProfile', 'umModal_RequestDetails', 'umModal_RouteTransfer', 'umAlertModal', 'umGlobalLoader'];
+            
+            // Clean any old orphaned modals
+            modals.forEach(id => {
+                document.querySelectorAll(`body > #${id}`).forEach(el => el.remove());
+            });
+
+            // Move new modals to body
+            modals.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) document.body.appendChild(el);
+            });
+
+            // Cleanup container
             const inj = document.getElementById('umInjectableModals');
-            if(inj) {
-                while(inj.children.length > 0) {
-                    document.body.appendChild(inj.children[0]);
-                }
-                inj.remove();
-            }
-        }, 100);
+            if(inj) inj.remove();
+        })();
+
+        function umCleanExit() {
+            const modals = ['umModal_TransferStatus', 'umModal_Approvals', 'umModal_BroadcastNews', 'umModal_MyRequests', 'umModal_CreateUser', 'umModal_2FASetup', 'umModal_Reset2FA', 'umModal_LockUnlock', 'umModal_EnableDisable', 'umModal_ResetPass', 'umModal_ChangeRole', 'umModal_ChangeSol', 'umModal_CustomizeCards', 'umModal_DeleteUser', 'umModal_DirectMessage', 'umModal_UserLogs', 'umModal_UserProfile', 'umModal_RequestDetails', 'umModal_RouteTransfer', 'umAlertModal', 'umGlobalLoader'];
+            modals.forEach(id => {
+                document.querySelectorAll(`body > #${id}`).forEach(el => el.remove());
+            });
+            if (typeof returnToHomeGridSPA === "function") returnToHomeGridSPA();
+            else window.location.href="index.html";
+        }
 
         // =====================================
         // UI HELPERS
@@ -714,7 +736,6 @@
             document.getElementById('umAlertIcon').innerText = icon;
             document.getElementById('umAlertMessage').innerHTML = msg;
             const modal = document.getElementById('umAlertModal');
-            if (modal.parentNode !== document.body) document.body.appendChild(modal);
             modal.style.display = 'flex';
             setTimeout(() => { modal.classList.add('active'); }, 10);
         }
@@ -722,7 +743,6 @@
         function umShowLoader(msg) {
             document.getElementById('umLoaderText').innerText = msg;
             const loader = document.getElementById('umGlobalLoader');
-            if (loader.parentNode !== document.body) document.body.appendChild(loader);
             loader.style.display = 'flex';
         }
         function umHideLoader() {
@@ -732,7 +752,6 @@
         function umOpenModal(modalId) {
             const modal = document.getElementById(modalId);
             if(modal) {
-                if (modal.parentNode !== document.body) document.body.appendChild(modal);
                 modal.style.display = 'flex';
                 setTimeout(() => { modal.classList.add('active'); }, 10);
 
@@ -761,10 +780,7 @@
             activeUserLocal = sessionStorage.getItem("activeUser");
             activeRoleLocal = sessionStorage.getItem("activeRole");
 
-            // Absolute Admin Override Bug Fix
-            isMasterAdmin = (activeUserLocal.toLowerCase() === "admin");
-            
-            // Sync Globals just in case
+            // Fetch Fresh Data from Cloud if possible
             if(typeof db !== 'undefined') {
                 try {
                     const snap = await db.collection("system").doc("registry").get();
@@ -778,9 +794,10 @@
                 } catch(e) {}
             }
 
+            // Absolute Admin Override Bug Fix
+            isMasterAdmin = (activeUserLocal.toLowerCase() === "admin");
             const myProfile = SYSTEM_USER_REGISTRY.find(u => u.user === activeUserLocal);
             activeSolIdLocal = myProfile ? myProfile.solId : null;
-            
             isHQAdmin = (isMasterAdmin || activeSolIdLocal === "000000");
             
             // "Admin" overrides network errors by direct execution
@@ -816,7 +833,7 @@
                 return u.solId === activeSolIdLocal; 
             });
 
-            // Populate User Dropdowns
+            // Populate User Dropdowns safely
             const userDropdowns = document.querySelectorAll('.um-user-dropdown');
             userDropdowns.forEach(dd => {
                 let currentVal = dd.value;
@@ -828,7 +845,7 @@
                     opt.innerText = `${u.fullName} (@${u.user}) - SOL: ${u.solId || 'None'}`;
                     dd.appendChild(opt);
                 });
-                dd.value = currentVal; // preserve selection
+                dd.value = currentVal; 
             });
 
             // Populate SOL Dropdowns
@@ -877,7 +894,7 @@
                 });
             }
 
-            // Populate Logs Table (MAX 10)
+            // Populate Logs Table (MAX 10 Fix)
             const historyBody = document.getElementById('umLogsTableBody');
             if(historyBody) {
                 historyBody.innerHTML = ""; 
@@ -891,6 +908,7 @@
 
             // Populate HQ Approvals
             if (isHQAdmin) {
+                // FLawless transfer hide logic
                 const pendingOnly = SYSTEM_PENDING_REQUESTS.filter(r => r.status === 'PENDING' && (isMasterAdmin || r.assignedTo === 'ALL' || r.assignedTo === activeUserLocal));
                 const badge = document.getElementById('umApprovalBadge');
                 if(badge) badge.innerText = pendingOnly.length;
@@ -1315,6 +1333,6 @@
             }
         }
 
-        setTimeout(() => { initMaintenanceHub(); }, 400); // Give 400ms for db config to load from index
+        setTimeout(() => { initMaintenanceHub(); }, 200); 
     </script>
 </div>
