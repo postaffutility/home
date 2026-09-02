@@ -14,7 +14,7 @@
     <script src="https://unpkg.com/@otplib/preset-browser@^12.0.0/buffer.js"></script>
     <script src="https://unpkg.com/@otplib/preset-browser@^12.0.0/index.js"></script>
 
-    <!-- jsPDF Engine (Kept in index so sub-modules can use it instantly without loading twice) -->
+    <!-- jsPDF Engine -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
     <style>
@@ -67,8 +67,7 @@
         .action-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; justify-content: flex-end; }
         
         .live-clock-widget { background: #f8fafc; color: #334155; padding: 8px 16px; border-radius: 8px; font-family: 'Segoe UI', Arial, sans-serif; font-weight: 700; font-size: 14px; display: flex; align-items: center; gap: 8px; border: 1px solid #e2e8f0; }
-        .clock-icon { font-size: 16px; }
-
+        
         .portal-logout-btn { background: #ffffff; color: #d32f2f; border: 1px solid #ffcdd2; padding: 8px 16px; font-size: 14px; font-weight: 800; border-radius: 8px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s ease; box-shadow: 0 2px 5px rgba(211,47,47,0.05); }
         .portal-logout-btn:hover { background: #d32f2f; color: #ffffff; border-color: #b71c1c; box-shadow: 0 4px 12px rgba(211, 47, 47, 0.2); }
         
@@ -83,13 +82,22 @@
         .search-module-input { width: 100%; min-width: 280px; padding: 14px 20px 14px 45px; border: 1px solid #cbd5e1; border-radius: 50px; font-size: 15px; background: #f8fafc url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="%2364748b" viewBox="0 0 16 16"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/></svg>') no-repeat 18px center; transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); color: #1e293b; box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
         .search-module-input:focus { border-color: #8b5cf6; box-shadow: 0 8px 25px rgba(139, 92, 246, 0.15); background-color: #ffffff; outline: none; transform: translateY(-2px); }
         
-        .form-group { margin-bottom: 20px; }
+        .form-group { margin-bottom: 20px; position: relative; }
         label { display: block; font-weight: 700; margin-bottom: 8px; font-size: 14px; color: #334155; }
         input[type="text"], input[type="password"] { width: 100%; padding: 14px 16px; box-sizing: border-box; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14.5px; background: #f8fafc; color: #1e293b; transition: all 0.2s ease; }
         input[type="text"]:focus, input[type="password"]:focus { border-color: #d32f2f; background: #ffffff; box-shadow: 0 0 0 4px rgba(211, 47, 47, 0.1); outline: none; }
         .secure-mask { -webkit-text-security: disc; }
         
-        /* PERFECT 6-CARD GRID SYSTEM */
+        /* Floating Error Bubbles & SVG Eye Icon */
+        .input-error-bubble { position: absolute; right: 0; top: -38px; background: #ef4444; color: white; padding: 6px 14px; border-radius: 8px; font-size: 12.5px; font-weight: 700; box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3); opacity: 0; visibility: hidden; transform: translateY(10px); transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); z-index: 10; pointer-events: none; white-space: nowrap; }
+        .input-error-bubble::after { content: ''; position: absolute; bottom: -6px; right: 20px; border-width: 6px 6px 0; border-style: solid; border-color: #ef4444 transparent transparent transparent; }
+        .input-error-bubble.show { opacity: 1; visibility: visible; transform: translateY(0); }
+        
+        .eye-icon-btn { position: absolute; right: 14px; top: 40px; cursor: pointer; color: #64748b; transition: color 0.2s; user-select: none; display: flex; align-items: center; justify-content: center; }
+        .eye-icon-btn:hover { color: #0f172a; }
+        .eye-svg { width: 22px; height: 22px; }
+
+        /* PERFECT GRID SYSTEM */
         #dashboardGridView { animation: fadeIn 0.4s ease-out forwards; }
         .portal-grid-wrapper { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; margin-top: 10px; }
         @media (min-width: 1024px) { .portal-grid-wrapper { grid-template-columns: repeat(3, 1fr); } }
@@ -132,7 +140,11 @@
         button.action-btn:hover { background: #b71c1c; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(183, 28, 28, 0.3); }
 
         .custom-popup-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(6px); z-index: 20000000; display: none; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.2s ease-in-out; }
-        .custom-popup-card { background: #ffffff; width: 90%; max-width: 420px; padding: 35px; border-radius: 20px; text-align: center; box-sizing: border-box; border-top: 6px solid #d32f2f; transform: scale(0.95); transition: transform 0.2s; }
+        
+        /* Special Screen Background (2FA & Goodbye) */
+        #twoFactorScreen, #goodbyeScreen { background: linear-gradient(to right, rgba(30, 41, 59, 0.8), rgba(211, 47, 47, 0.6)), url('https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiLukHUcccahQ6Bfcb_7aqvdjF2xnC7xdpIKJUywZiVsxduw79-FCwwuOGlU34vjrWquTNJblVmu3xAY1eFSTMMbDYlVkjR_v0xwrcyqKwdTTr8SfiWRhYVTNFa3wT01tLQTwIsHp3LfpNOJ3smkqTe3eEqtl8zM-kRDGCBnFMOpWkpsNhbsRhdBldFKBQ/s1535/1000205806.png') no-repeat center center; background-size: cover; backdrop-filter: blur(10px); }
+        
+        .custom-popup-card { background: #ffffff; width: 90%; max-width: 420px; padding: 35px; border-radius: 20px; text-align: center; box-sizing: border-box; border-top: 6px solid #d32f2f; transform: scale(0.95); transition: transform 0.2s; box-shadow: 0 25px 50px rgba(0,0,0,0.4); }
         .custom-popup-overlay.active { display: flex; opacity: 1; }
         .custom-popup-overlay.active .custom-popup-card { transform: scale(1); }
         .popup-icon-alert { font-size: 48px; margin-bottom: 15px; }
@@ -145,12 +157,30 @@
         .loading-status-msg { font-size: 15px; font-weight: 800; color: #0f172a; }
         @keyframes spinSystem { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
-        
-        /* Back to Dashboard Link Styling */
-        .back-nav-link { display: inline-flex; align-items: center; color: #3b82f6; font-weight: 800; font-size: 15px; text-decoration: none; margin-bottom: 25px; cursor: pointer; transition: all 0.2s; padding: 8px 15px; background: #eff6ff; border-radius: 8px; }
-        .back-nav-link:hover { color: #1d4ed8; background: #dbeafe; }
-        
-        #dbdeModal .custom-popup-card { max-width: 500px; border-top: 6px solid #eab308; }
+
+        /* Premium Light Theme Timeout Modal */
+        .timeout-timer-display { font-size: 72px; font-weight: 900; font-family: 'Arial Black', 'Segoe UI Black', Impact, sans-serif; margin: 15px 0; color: #ef4444; letter-spacing: -2px; text-shadow: 0 10px 25px rgba(239, 68, 68, 0.2); line-height: 1; }
+        .timeout-btn-row { display: flex; gap: 15px; margin-top: 25px; }
+        .timeout-btn-extend { flex: 1; background: #10b981; color: white; border: none; padding: 14px; border-radius: 10px; font-weight: 800; font-size: 15px; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3); text-transform: uppercase; }
+        .timeout-btn-extend:hover { background: #059669; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4); }
+        .timeout-btn-logout { flex: 1; background: #f8fafc; border: 2px solid #ef4444; color: #ef4444; padding: 14px; border-radius: 10px; font-weight: 800; font-size: 15px; cursor: pointer; transition: 0.2s; text-transform: uppercase; }
+        .timeout-btn-logout:hover { background: #fee2e2; transform: translateY(-2px); }
+
+        /* Session Extended Toast */
+        .floating-toast { position: fixed; bottom: -100px; left: 50%; transform: translateX(-50%); background: #10b981; color: white; padding: 12px 24px; border-radius: 30px; font-weight: 700; font-size: 15px; box-shadow: 0 10px 25px rgba(16, 185, 129, 0.4); z-index: 60000000; transition: bottom 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); display: flex; align-items: center; gap: 10px; }
+        .floating-toast.show { bottom: 40px; }
+
+        /* Animated Goodbye Screen (Premium Template Style) */
+        .goodbye-screen { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 99999999; display: none; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.5s ease; }
+        .goodbye-screen.active { display: flex; opacity: 1; }
+        .goodbye-template-card { background: #ffffff; width: 90%; max-width: 450px; padding: 50px 40px; border-radius: 20px; text-align: center; box-shadow: 0 25px 50px rgba(0,0,0,0.5); border-top: 6px solid #3b82f6; }
+        .goodbye-icon { font-size: 70px; margin-bottom: 15px; animation: floatIcon 3s ease-in-out infinite; }
+        .goodbye-template-card h1 { font-size: 32px; font-weight: 900; margin-bottom: 10px; color: #0f172a; letter-spacing: -0.5px; }
+        .goodbye-template-card p { font-size: 15px; color: #64748b; margin-bottom: 35px; line-height: 1.6; }
+        .relogin-btn { background: #3b82f6; color: white; border: none; padding: 16px 40px; border-radius: 12px; font-size: 15px; font-weight: 800; cursor: pointer; transition: 0.2s; box-shadow: 0 8px 25px rgba(59, 130, 246, 0.35); width: 100%; text-transform: uppercase; }
+        .relogin-btn:hover { background: #2563eb; transform: translateY(-2px); box-shadow: 0 12px 35px rgba(59, 130, 246, 0.45); }
+        @keyframes floatIcon { 0% { transform: translateY(0); } 50% { transform: translateY(-10px); } 100% { transform: translateY(0); } }
+
     </style>
     
     <script>
@@ -183,22 +213,42 @@
                 
                 <div class='form-group'>
                     <label>Username</label>
-                    <input id='sysUser' placeholder='Enter your username' type='text' autocomplete='off' spellcheck='false'/>
+                    <input id='sysUser' placeholder='Enter your username' type='text' autocomplete='off' spellcheck='false' 
+                           oncopy="return false" onpaste="return false" oncut="return false"
+                           onkeydown="handleLoginNav(event, 'sysUser', 'sysPass', 'userErrorBubble', 'Username field is mandatory.')"
+                           oninput="clearErrorBubble('userErrorBubble')"/>
+                    <div id="userErrorBubble" class="input-error-bubble"></div>
                 </div>
+                
                 <div class='form-group'>
                     <label>Secure Passcode</label>
-                    <input class='secure-mask' id='sysPass' placeholder='Enter your passcode' type='password' autocomplete='off' spellcheck='false'/>
+                    <input class='secure-mask' id='sysPass' placeholder='Enter your passcode' type='password' autocomplete='off' spellcheck='false'
+                           oncopy="return false" onpaste="return false" oncut="return false"
+                           onkeydown="handleLoginNav(event, 'sysPass', 'captchaInput', 'passErrorBubble', 'Password field is mandatory.')"
+                           oninput="clearErrorBubble('passErrorBubble')" style="padding-right: 45px;"/>
+                    
+                    <!-- Clean SVG Eye Icon -->
+                    <span id="toggleEye" class="eye-icon-btn" onclick="togglePasswordVisibility()">
+                        <svg id="toggleEyeSvg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="eye-svg">
+                            <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path><circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                    </span>
+                    <div id="passErrorBubble" class="input-error-bubble"></div>
                 </div>
+                
                 <!-- CAPTCHA -->
                 <div class='form-group'>
                     <label>Security CAPTCHA</label>
-                    <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+                    <div style="display: flex; gap: 10px; margin-bottom: 5px;">
                         <div id="captchaDisplay" style="flex: 1; height: 50px; background: repeating-linear-gradient(45deg, #f8fafc, #f8fafc 10px, #f1f5f9 10px, #f1f5f9 20px); border: 1px solid #cbd5e1; border-radius: 8px; display: flex; justify-content: center; align-items: center; font-family: 'Courier New', Courier, monospace; font-size: 26px; font-weight: 900; letter-spacing: 8px; color: #1e293b; text-decoration: line-through; user-select: none; box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);">
                             <!-- Captcha injects here -->
                         </div>
                         <button type="button" onclick="generateCaptcha()" style="height: 50px; padding: 0 20px; background: #1e293b; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 20px; font-weight: bold; transition: all 0.2s;" onmouseover="this.style.background='#334155'; this.style.transform='translateY(-2px)';" onmouseout="this.style.background='#1e293b'; this.style.transform='translateY(0)';">↻</button>
                     </div>
-                    <input id='captchaInput' placeholder='Enter the security code above' type='text' autocomplete='off' spellcheck='false'/>
+                    <input id='captchaInput' placeholder='Enter the security code above' type='text' autocomplete='off' spellcheck='false'
+                           onkeydown="handleLoginNav(event, 'captchaInput', 'SUBMIT', 'captchaErrorBubble', 'Captcha is mandatory.')"
+                           oninput="clearErrorBubble('captchaErrorBubble')"/>
+                    <div id="captchaErrorBubble" class="input-error-bubble"></div>
                 </div>
                 
                 <button class='primary-login-btn' onclick='verifyBloggerAuth()' type='button'>Secure Login</button>
@@ -247,7 +297,7 @@
                 </div>
             </div>
 
-            <!-- STATIC HEADER (Never reloads) -->
+            <!-- STATIC HEADER -->
             <div class='dashboard-top-nav' id='appHeader'>
                 <div class='header-titles'>
                     <h2>PO STAFF UTILITY SYSTEM</h2>
@@ -266,23 +316,22 @@
                             <span class="clock-icon">🕒</span> 
                             <span id="liveClockDisplay">Loading time...</span>
                         </div>
-                        <button class='portal-logout-btn' onclick='executePortalLogout()'>🚪 Logout</button>
+                        <button class='portal-logout-btn' onclick='triggerManualLogout()'>🚪 Logout</button>
                     </div>
                     <input class='search-module-input' id='moduleSearch' onkeyup='filterAndPaginateCards(true)' placeholder='Search modules...' type='text'/>
                 </div>
             </div>
             
-            <!-- GRID VIEW (Hides when a module is loaded) -->
+            <!-- GRID VIEW -->
             <div id="dashboardGridView">
                 <div class='portal-grid-wrapper' id='mainModuleGrid'>
                     
                     <div class='portal-module-card card-gold-variant' id='menuCardDBDE' onclick='openDBDEModal()' style='display:none;'>
                         <div class='card-icon'>⏳</div>
-                        <h3>Day Begin / Day End</h3>
+                        <h3 >Day Begin / Day End</h3>
                         <p>Control the operational status of your mapped office. Executing Day End locks the system for makers.</p>
                     </div>
 
-                    <!-- NEW SPA ROUTING ARCHITECTURE WITH CUSTOM MESSAGES -->
                     <div class='portal-module-card card-indigo-variant' id='menuCardBulkBooking' onclick='loadModuleSPA("bulkBooking.html", this, "Opening Bulk Article Booking...")'>
                         <div class='card-icon'>📥</div>
                         <h3>Bulk Article Booking</h3>
@@ -361,7 +410,14 @@
                         <p>Generate exact official formats for CEA/Hostel Subsidy claims automatically.</p>
                     </div>
 
-                    <div class='portal-module-card card-teal-variant' id='menuCardAI' onclick='loadModuleSPA("aichat.html", this, "Connecting to PO Assistant AI...")'>
+                    <!-- PAYROLL MODULE -->
+                    <div class='portal-module-card card-teal-variant' id='menuCardPayroll' onclick='loadModuleSPA("payroll.html", this, "Loading Payroll System...")' style='display:none;'>
+                        <div class='card-icon'>💵</div>
+                        <h3>Payroll System</h3>
+                        <p>Manage staff salaries, process deductions, and generate automated monthly pay slips.</p>
+                    </div>
+
+                    <div class='portal-module-card card-indigo-variant' id='menuCardAI' onclick='loadModuleSPA("aichat.html", this, "Connecting to PO Assistant AI...")'>
                         <div class='card-icon'>🤖</div>
                         <h3>Talk with AI</h3>
                         <p>Access your built-in simulated postal assistant to help you draft regulations.</p>
@@ -383,14 +439,44 @@
                 <div class='pagination-container' id='dashboardPagination'></div>
             </div>
 
-            <!-- DYNAMIC WORKSPACE (This is where external HTML will be injected seamlessly) -->
+            <!-- DYNAMIC WORKSPACE -->
             <div id="dynamicWorkspace"></div>
 
         </div>
     </div>
 
+    <!-- TIMEOUT LIGHT THEME MODAL (FIXED LOCK) -->
+    <div class="custom-popup-overlay" id="timeoutModalOverlay" style="z-index: 50000000;">
+        <div class="custom-popup-card" style="border-top: 6px solid #ef4444; max-width: 440px;">
+            <div style="font-size: 54px; margin-bottom: 5px;">⏱️</div>
+            <h2 style="color: #1e293b; font-size: 26px; margin: 10px 0; font-weight: 900; letter-spacing: -0.5px;">Session Timeout</h2>
+            <p style="color: #64748b; font-size: 15px; margin: 0 0 15px 0; line-height: 1.5;">Your session is about to expire due to inactivity.</p>
+            
+            <div class="timeout-timer-display" id="timeoutCountdown">60</div>
+            
+            <div class="timeout-btn-row">
+                <button class="timeout-btn-extend" onclick="extendSession()">Extend Session</button>
+                <button class="timeout-btn-logout" onclick="executePortalLogout()">Logout</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- FLOATING TOAST -->
+    <div class="floating-toast" id="systemToast">
+        <span>✅</span> <span id="toastMessage">Your session has been extended</span>
+    </div>
+
+    <!-- GOODBYE SCREEN (Premium Template Style) -->
+    <div class="goodbye-screen" id="goodbyeScreen">
+        <div class="goodbye-template-card">
+            <div class="goodbye-icon">👋</div>
+            <h1>Session Ended</h1>
+            <p>You have been securely logged out of the PO Staff Utility System.</p>
+            <button class="relogin-btn" onclick="window.location.reload()">Return to Login</button>
+        </div>
+    </div>
+
     <!-- MODALS AND OVERLAYS -->
-    
     <div class='custom-popup-overlay' id='dbdeModal'>
         <div class='custom-popup-card'>
             <div id="dbdeStatusIcon" style="font-size: 64px; margin-bottom: 15px;">⏳</div>
@@ -437,7 +523,7 @@
     
     <script type="text/javascript">
         // ----------------------------------------------------
-        // 1. FIREBASE CONFIGURATION & CORE VARIABLES
+        // FIREBASE CONFIG & CORE VARIABLES
         // ----------------------------------------------------
         const firebaseConfig = {
             apiKey: "AIzaSyArIz9EyuPcbQs0HKvsm0OfxwXKGlbO03c",
@@ -464,6 +550,67 @@
 
         let tempSetupSecret = "";
         let isEnrollmentMode = false;
+
+        // ENTER KEY POPUP CLOSURE LOGIC
+        document.addEventListener('keydown', function(event) {
+            if ((event.key === 'Enter' || event.key === ' ') && document.getElementById('customAppAlertModal').classList.contains('active')) {
+                event.preventDefault();
+                closeCustomAlert();
+            }
+        });
+
+        // SMART INLINE NAVIGATION & ERROR LOGIC
+        function handleLoginNav(event, currentFieldId, nextFieldId, errorBubbleId, errorMsg) {
+            if(event.key === 'Enter') {
+                event.preventDefault();
+                const currentVal = document.getElementById(currentFieldId).value.trim();
+                
+                if (currentVal === "") {
+                    const bubble = document.getElementById(errorBubbleId);
+                    bubble.innerText = errorMsg;
+                    bubble.classList.add('show');
+                    return; 
+                }
+                
+                if(nextFieldId === 'SUBMIT') {
+                    verifyBloggerAuth();
+                } else {
+                    document.getElementById(nextFieldId).focus();
+                }
+            }
+        }
+        
+        function clearErrorBubble(errorBubbleId) {
+            const bubble = document.getElementById(errorBubbleId);
+            if (bubble) bubble.classList.remove('show');
+        }
+
+        // SVG PASSWORD VISIBILITY TOGGLE
+        function togglePasswordVisibility() {
+            const passInput = document.getElementById('sysPass');
+            const eyeSvg = document.getElementById('toggleEyeSvg');
+            if (passInput.type === 'password') {
+                passInput.type = 'text';
+                passInput.classList.remove('secure-mask');
+                // Eye Off Icon
+                eyeSvg.innerHTML = '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line>';
+            } else {
+                passInput.type = 'password';
+                passInput.classList.add('secure-mask');
+                // Eye Open Icon
+                eyeSvg.innerHTML = '<path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path><circle cx="12" cy="12" r="3"></circle>';
+            }
+        }
+
+        function fillDemoCredentials() {
+            document.getElementById('sysUser').value = "GUEST";
+            document.getElementById('sysPass').value = "123";
+            // Hide Eye Icon & Clear Errors for Guest
+            document.getElementById('toggleEye').style.display = 'none';
+            clearErrorBubble('userErrorBubble');
+            clearErrorBubble('passErrorBubble');
+            clearErrorBubble('captchaErrorBubble');
+        }
 
         function updateLiveClock() {
             const clockEl = document.getElementById('liveClockDisplay');
@@ -493,6 +640,9 @@
                 document.getElementById("appDashboardView").style.display = "none";
                 document.getElementById("sceneryBackground").style.display = "block";
                 document.getElementById("loginScreen").style.display = "flex";
+                
+                // Show Eye Icon initially for manual login
+                document.getElementById('toggleEye').style.display = 'flex';
             } else {
                 document.getElementById("appDashboardView").style.display = "block";
                 document.getElementById("sceneryBackground").style.display = "none";
@@ -501,6 +651,7 @@
             await synchronizeSystemDatabase(true);
         };
 
+        // --- DATABASE SYNC LOGIC ---
         async function synchronizeSystemDatabase(isInitialBoot) {
             const systemLoader = document.getElementById('globalAppLoader');
             if (systemLoader) systemLoader.style.display = 'flex';
@@ -559,11 +710,6 @@
                     offices: SYSTEM_OFFICE_REGISTRY
                 }, { merge: true });
             } catch(e) {}
-        }
-
-        function fillDemoCredentials() {
-            document.getElementById('sysUser').value = "GUEST";
-            document.getElementById('sysPass').value = "123";
         }
 
         let currentCaptchaCode = "";
@@ -787,6 +933,7 @@
             }
         }
 
+        // ACCESS CONTROL & MODULE ROUTING LOGIC
         function verifyBloggerAuth_Reentry() {
             if(!authenticatedUserSession) return;
             const profile = authenticatedUserSession;
@@ -800,20 +947,21 @@
                     officeStatus = mappedOffice.status;
                     if (mappedOffice.disabled && profile.role !== "admin") {
                         displayCustomAlert("This office is temporarily disabled.");
-                        setTimeout(() => { executePortalLogout(); }, 3000); return;
+                        setTimeout(() => { triggerManualLogout(); }, 3000); return;
                     }
                 }
             }
 
             let userAllowedList = [];
             if (profile.role === "admin" || u.toLowerCase().startsWith("admin")) {
-                userAllowedList = ['menuCardDBDE', 'menuCardOfficeHub', 'menuCardBulkBooking', 'menuCardBulk', 'menuCardHoliday', 'menuCardDateWise', 'menuCardACG61', 'menuCardGeneralCharge', 'menuCardSR1', 'menuCardCasualLeave', 'menuCardTAAdvance', 'menuCardTATransfer', 'menuCardTABillTour', 'menuCardCEA', 'menuCardAI', 'menuCardMaintenance', 'menuCardSelfPassword'];
+                userAllowedList = ['menuCardDBDE', 'menuCardOfficeHub', 'menuCardBulkBooking', 'menuCardBulk', 'menuCardHoliday', 'menuCardDateWise', 'menuCardACG61', 'menuCardGeneralCharge', 'menuCardSR1', 'menuCardCasualLeave', 'menuCardTAAdvance', 'menuCardTATransfer', 'menuCardTABillTour', 'menuCardCEA', 'menuCardAI', 'menuCardMaintenance', 'menuCardSelfPassword', 'menuCardPayroll'];
             } else if (u === "GUEST" || profile.role === "guest") {
                 userAllowedList = ['menuCardBulkBooking', 'menuCardBulk', 'menuCardHoliday', 'menuCardDateWise', 'menuCardACG61', 'menuCardGeneralCharge', 'menuCardSR1', 'menuCardCasualLeave', 'menuCardTAAdvance', 'menuCardTATransfer', 'menuCardTABillTour', 'menuCardCEA', 'menuCardAI'];
             } else {
                 userAllowedList = profile.allowedCards || [];
                 if (userAllowedList.length === 0) userAllowedList = ['menuCardSelfPassword'];
                 if (profile.role === "superuser" && !userAllowedList.includes('menuCardDBDE')) userAllowedList.push('menuCardDBDE');
+                if (profile.role === "superuser" && !userAllowedList.includes('menuCardPayroll')) userAllowedList.push('menuCardPayroll');
             }
 
             if (officeStatus === "DAY_ENDED" && profile.role !== "admin") {
@@ -855,23 +1003,82 @@
             }
         }
 
-        let idleTimer;
+        // --- FIXED LOCKED TIMEOUT LOGIC ---
+        let idleWarningTimer;
+        let countdownInterval;
+        let timeLeft = 60;
+        let isTimeoutModalActive = false; // NEW FLAG
+
         function resetIdleTimer() {
-            clearTimeout(idleTimer);
+            if (isTimeoutModalActive) return; // Ignore mouse movements if modal is showing
+
+            clearTimeout(idleWarningTimer);
+            clearInterval(countdownInterval);
+            
             if (sessionStorage.getItem("activeUser") && sessionStorage.getItem("2faVerified") === "true") {
-                idleTimer = setTimeout(() => {
-                    displayCustomAlert("Security Timeout: Logged out due to inactivity.");
-                    setTimeout(executePortalLogout, 3000); 
-                }, 5 * 60 * 1000);
+                idleWarningTimer = setTimeout(() => {
+                    showTimeoutWarning();
+                }, 4 * 60 * 1000); 
             }
         }
         ['mousemove', 'keypress', 'click', 'scroll'].forEach(evt => document.addEventListener(evt, resetIdleTimer, false));
 
+        function showTimeoutWarning() {
+            isTimeoutModalActive = true; // Lock timer
+            timeLeft = 60;
+            document.getElementById('timeoutCountdown').innerText = timeLeft;
+            const modal = document.getElementById('timeoutModalOverlay');
+            modal.style.display = 'flex';
+            setTimeout(() => modal.classList.add('active'), 10);
+
+            countdownInterval = setInterval(() => {
+                timeLeft--;
+                document.getElementById('timeoutCountdown').innerText = timeLeft;
+                if(timeLeft <= 0){
+                    clearInterval(countdownInterval);
+                    executePortalLogout();
+                }
+            }, 1000);
+        }
+
+        function extendSession() {
+            isTimeoutModalActive = false; // Unlock timer
+            const modal = document.getElementById('timeoutModalOverlay');
+            modal.classList.remove('active');
+            setTimeout(() => modal.style.display = 'none', 300);
+            
+            resetIdleTimer();
+            showFloatingToast();
+        }
+
+        function showFloatingToast() {
+            const toast = document.getElementById('systemToast');
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        function triggerManualLogout(){
+            executePortalLogout();
+        }
+
         function executePortalLogout() {
             sessionStorage.clear();
             authenticatedUserSession = null;
-            if (typeof idleTimer !== 'undefined') clearTimeout(idleTimer);
-            window.location.reload();
+            clearTimeout(idleWarningTimer);
+            clearInterval(countdownInterval);
+            isTimeoutModalActive = false;
+            
+            // Hide everything except Goodbye Screen
+            const timeoutModal = document.getElementById('timeoutModalOverlay');
+            timeoutModal.classList.remove('active');
+            timeoutModal.style.display = 'none';
+            
+            document.getElementById('appDashboardView').style.display = 'none';
+            const gbScreen = document.getElementById('goodbyeScreen');
+            gbScreen.style.display = 'flex';
+            setTimeout(() => { gbScreen.classList.add('active'); }, 50);
         }
 
         function displayCustomAlert(messageContent, icon = "🔔") {
@@ -978,20 +1185,15 @@
         }
 
         // =========================================================================
-        // ★ THE NEW SPA (SINGLE PAGE APPLICATION) ENGINE ★
+        // ★ THE NEW SPA ENGINE (ULTIMATE ISOLATION & GARBAGE COLLECTION) ★
         // =========================================================================
         
-        // -------------------------------------------------------------------------
-        // আপডেট করা হলো: customLoadingMsg প্যারামিটার যোগ করা হয়েছে
-        // -------------------------------------------------------------------------
         async function loadModuleSPA(targetUrl, clickedCard = null, customLoadingMsg = "Connecting to Workspace...") {
-            // 1. Verify Login State seamlessly
             if (!sessionStorage.getItem("activeUser")) {
                 executePortalLogout(); 
                 return;
             }
 
-            // 2. Card Visual Effect
             if (clickedCard) {
                 const siblingCards = document.querySelectorAll('.portal-module-card');
                 siblingCards.forEach(card => {
@@ -1000,39 +1202,39 @@
                 });
             }
 
-            // 3. Show Loading Screen (Custom Message)
             const loader = document.getElementById('globalAppLoader');
             loader.style.display = 'flex';
             document.querySelector('.loading-status-msg').innerText = customLoadingMsg;
 
             try {
-                // 4. Fetch the target HTML file silently in background
                 const response = await fetch(targetUrl);
                 if (!response.ok) throw new Error("Module file not found on server.");
                 const htmlText = await response.text();
 
-                // 5. Parse the HTML and extract ONLY the required content
                 const parser = new DOMParser();
                 const doc = parser.parseFromString(htmlText, 'text/html');
 
-                // NOTE: The external HTML file MUST have its content wrapped inside <div id="moduleRenderArea">
                 const newContent = doc.getElementById('moduleRenderArea');
                 
                 if (!newContent) {
                     throw new Error("Invalid Format: Target file must contain <div id='moduleRenderArea'>.");
                 }
 
-                // 6. Transition to new view
+                const moduleStyles = doc.querySelectorAll('style');
+                moduleStyles.forEach(style => {
+                    const newStyle = document.createElement('style');
+                    newStyle.innerHTML = style.innerHTML;
+                    newStyle.setAttribute('data-spa-injected', 'true'); 
+                    document.head.appendChild(newStyle);
+                });
+
                 setTimeout(() => {
-                    // Hide Dashboard Grid & Pagination
                     document.getElementById('dashboardGridView').style.display = 'none';
                     
-                    // Put the extracted HTML into our Dynamic Workspace
                     const workspace = document.getElementById('dynamicWorkspace');
                     workspace.innerHTML = newContent.innerHTML;
                     workspace.style.display = 'block';
 
-                    // 7. Re-execute Scripts (innerHTML does not run <script> tags automatically)
                     const scripts = workspace.querySelectorAll('script');
                     scripts.forEach(oldScript => {
                         const newScript = document.createElement('script');
@@ -1045,54 +1247,55 @@
                         oldScript.parentNode.replaceChild(newScript, oldScript);
                     });
 
-                    // 8. Magically Change the Browser URL without reloading!
                     window.history.pushState({ module: targetUrl }, "PO Staff Utility Module", targetUrl);
 
-                    // 9. Reset Card Styles in background
                     if (clickedCard) {
                         const siblingCards = document.querySelectorAll('.portal-module-card');
                         siblingCards.forEach(card => card.classList.remove('fade-out', 'expand-active'));
                     }
 
-                    // Done! Hide Loader
                     loader.style.display = 'none';
-                }, 600); // স্মুথ ট্রানজিশনের জন্য 600ms করা হলো
+                }, 600);
 
             } catch (error) {
                 console.error("SPA Engine Error:", error);
-                
-                // Revert Card Styles
                 if (clickedCard) {
                     const siblingCards = document.querySelectorAll('.portal-module-card');
                     siblingCards.forEach(card => card.classList.remove('fade-out', 'expand-active'));
                 }
-                
                 loader.style.display = 'none';
                 displayCustomAlert(`Development Notice:\n\nCannot open '${targetUrl}'. Make sure the file is created and its code is inside a <div id="moduleRenderArea"> tag.`, "⚠️");
             }
         }
 
-        // Return to Dashboard (Called from the 'Back to Dashboard' button in sub-modules)
         function returnToHomeGridSPA() {
-            // Hide and clear the workspace
             const workspace = document.getElementById('dynamicWorkspace');
             workspace.style.display = 'none';
-            workspace.innerHTML = ''; // Clear RAM
+            workspace.innerHTML = ''; 
 
-            // Show Grid
+            const protectedSystemIds = ['twoFactorScreen', 'goodbyeScreen', 'dbdeModal', 'directMessageModal', 'forcedPasswordResetOverlay', 'customAppAlertModal', 'globalAppLoader', 'timeoutModalOverlay'];
+            
+            document.querySelectorAll('.spa-modal-overlay, .custom-popup-overlay, .forced-password-overlay, .processing-loader-container, .glass-modal-overlay').forEach(el => {
+                if (!protectedSystemIds.includes(el.id)) {
+                    el.remove();
+                }
+            });
+
+            document.querySelectorAll('style[data-spa-injected="true"]').forEach(styleTag => {
+                styleTag.remove();
+            });
+
             document.getElementById('dashboardGridView').style.display = 'block';
             filterAndPaginateCards(true);
 
-            // Change URL back to index seamlessly
             window.history.pushState({ module: 'index.html' }, "PO Staff Utility", "index.html");
         }
 
-        // Catch Browser's "Back" and "Forward" Arrows
         window.onpopstate = function(event) {
             if (event.state && event.state.module && event.state.module !== 'index.html') {
-                loadModuleSPA(event.state.module); // Load the previous module automatically
+                loadModuleSPA(event.state.module); 
             } else {
-                returnToHomeGridSPA(); // If no state, go to home
+                returnToHomeGridSPA(); 
             }
         };
 
