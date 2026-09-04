@@ -1,0 +1,101 @@
+<!-- ess.html (Employee Self Service Hub - Dynamic Sub-Card Renderer) -->
+<script>
+    if (!document.getElementById("dynamicWorkspace") || window.location.pathname.endsWith("ess.html")) {
+        window.location.href = "index.html";
+    }
+</script>
+
+<div id="moduleRenderArea">
+    <style>
+        .sp-page-panel { max-width: 1200px; margin: 0 auto; background: white; padding: 40px; border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.03); border: 1px solid #e2e8f0; font-family: 'Segoe UI', Arial, sans-serif; animation: spFadeIn 0.3s ease-out forwards; }
+        .sp-module-title { margin: 0; color: #1e293b; font-size: 26px; font-weight: 900; letter-spacing: -0.5px; }
+        .sp-back-nav { display: inline-flex; align-items: center; color: #3b82f6; font-weight: 800; font-size: 15px; text-decoration: none; cursor: pointer; transition: color 0.2s; padding: 8px 16px; background: #eff6ff; border-radius: 8px; float: right; border: 1px solid #bfdbfe; }
+        .sp-back-nav:hover { color: #1d4ed8; background: #dbeafe; transform: translateX(-2px); }
+        
+        .sp-grid-wrapper { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 25px; margin-top: 30px; }
+        .sp-module-card { background: #ffffff; border-radius: 16px; padding: 30px 25px; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.03); border: 1px solid #e2e8f0; transition: all 0.3s ease; display: block; text-align: left; position: relative; overflow: hidden; }
+        .sp-module-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 5px; transition: height 0.3s ease; }
+        .sp-module-card:hover { transform: translateY(-8px); box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08); border-color: #cbd5e1; }
+        .sp-module-card:hover::before { height: 8px; }
+        
+        .card-blue-variant::before { background: #3b82f6; } .card-blue-variant .sp-card-icon { background: #dbeafe; color: #1d4ed8; }
+        .card-green-variant::before { background: #10b981; } .card-green-variant .sp-card-icon { background: #d1fae5; color: #047857; }
+        .card-rose-variant::before { background: #e11d48; } .card-rose-variant .sp-card-icon { background: #ffe4e6; color: #be123c; }
+        .card-purple-variant::before { background: #8b5cf6; } .card-purple-variant .sp-card-icon { background: #ede9fe; color: #6d28d9; }
+        .card-orange-variant::before { background: #f59e0b; } .card-orange-variant .sp-card-icon { background: #fef3c7; color: #b45309; }
+        .card-dark-variant::before { background: #475569; } .card-dark-variant .sp-card-icon { background: #f1f5f9; color: #334155; }
+        
+        .sp-card-icon { font-size: 28px; margin-bottom: 20px; display: inline-flex; align-items: center; justify-content: center; width: 60px; height: 60px; border-radius: 16px; transition: transform 0.3s ease; }
+        .sp-module-card:hover .sp-card-icon { transform: scale(1.1); }
+        .sp-module-card h3 { margin: 0 0 10px 0; font-size: 19px; font-weight: 900; color: #1e293b; letter-spacing: -0.3px;}
+        .sp-module-card p { margin: 0; font-size: 14px; color: #64748b; line-height: 1.6; font-weight: 500;}
+
+        @keyframes spFadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+
+    <div class='sp-page-panel' id="essMainDashboard">
+        <div style="margin-bottom: 30px; border-bottom: 2px solid #e2e8f0; padding-bottom: 20px; overflow: hidden;">
+            <div class='sp-back-nav' onclick='typeof returnToHomeGridSPA === "function" ? returnToHomeGridSPA() : window.history.back()'>⬅️ Back to Portal</div>
+            <h3 class="sp-module-title">Employee Self Service</h3>
+            <p style="color: #64748b; font-size: 15px; margin-top: 8px; font-weight: 500;">Manage your personal records, salary slips, and HR services.</p>
+        </div>
+
+        <div class="sp-grid-wrapper" id="essDynamicCardGrid">
+            <!-- Sub Cards Will Inject Here Automatically -->
+        </div>
+    </div>
+
+    <script>
+        (function initESSHub() {
+            let db = typeof firebase !== 'undefined' ? firebase.firestore() : null;
+            if(!db) return;
+
+            // Real-time listener for Sub-Cards assigned to 'menuCardESS'
+            if(window.essUnsubDyn) window.essUnsubDyn();
+            
+            window.essUnsubDyn = db.collection("system").doc("dashboard").onSnapshot(doc => {
+                if(doc.exists) {
+                    const grid = document.getElementById('essDynamicCardGrid');
+                    if(!grid) return;
+                    grid.innerHTML = "";
+
+                    let cards = doc.data().cards || [];
+                    let myRole = sessionStorage.getItem("activeRole") || "maker";
+                    let activeUser = sessionStorage.getItem("activeUser") || "";
+                    let isHQorAdmin = (activeUser === 'admin' || sessionStorage.getItem("activeSolId") === '000000');
+
+                    // Filter only sub-cards that belong to THIS hub (menuCardESS)
+                    let essSubCards = cards.filter(c => c.parentId === 'menuCardESS' && c.cardType === 'sub');
+
+                    if(essSubCards.length === 0) {
+                        grid.innerHTML = "<div style='grid-column: 1/-1; text-align:center; padding: 40px; background:#f8fafc; border-radius:12px; border:1px dashed #cbd5e1;'><span style='font-size:30px;'>📂</span><h4 style='color:#475569; margin:10px 0 0 0;'>No sub-modules deployed here yet.</h4><p style='color:#94a3b8; font-size:13px; margin-top:5px;'>Use the Dashboard Card Engine to assign sub-cards to this parent module.</p></div>";
+                        return;
+                    }
+
+                    essSubCards.forEach(c => {
+                        if (!c.active && !isHQorAdmin) return;
+                        if (!c.roles[myRole] && activeUser !== 'admin') return;
+
+                        let opacityStyle = (!c.active) ? "opacity: 0.5;" : ""; 
+
+                        let cardDiv = document.createElement('div');
+                        cardDiv.className = `sp-module-card ${c.theme}`;
+                        cardDiv.style.cssText = opacityStyle;
+                        cardDiv.onclick = () => {
+                            if(typeof loadModuleSPA === 'function') {
+                                loadModuleSPA(c.targetFile, cardDiv, `Opening ${c.title}...`);
+                            }
+                        };
+                        
+                        cardDiv.innerHTML = `
+                            <div class='sp-card-icon'>${c.icon}</div>
+                            <h3>${c.title} ${!c.active ? '<span style="color:red; font-size:12px;">(DISABLED)</span>' : ''}</h3>
+                            <p>${c.desc}</p>
+                        `;
+                        grid.appendChild(cardDiv);
+                    });
+                }
+            });
+        })();
+    </script>
+</div>

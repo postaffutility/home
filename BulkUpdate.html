@@ -1,0 +1,405 @@
+<!-- BulkUpdate.html (Bulk Employee Profile Update Module) -->
+<script>
+    if (!document.getElementById("dynamicWorkspace") || window.location.pathname.endsWith("BulkUpdate.html")) {
+        window.location.href = "index.html";
+    }
+</script>
+
+<div id="moduleRenderArea">
+    
+    <!-- External Libraries for Excel Export/Import -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+    <style>
+        .sp-page-panel { max-width: 1200px; margin: 0 auto; background: white; padding: 40px; border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.03); border: 1px solid #e2e8f0; font-family: 'Segoe UI', Arial, sans-serif; animation: spFadeIn 0.3s ease-out forwards; }
+        
+        .sp-module-title { margin: 0; color: #1e293b; font-size: 26px; font-weight: 900; letter-spacing: -0.5px; }
+        .sp-back-nav { display: inline-flex; align-items: center; color: #3b82f6; font-weight: 800; font-size: 15px; text-decoration: none; cursor: pointer; transition: color 0.2s; padding: 8px 16px; background: #eff6ff; border-radius: 8px; float: right; border: 1px solid #bfdbfe; }
+        .sp-back-nav:hover { color: #1d4ed8; background: #dbeafe; transform: translateX(-2px); }
+
+        .sp-form-group { margin-bottom: 22px; text-align: left; }
+        .sp-form-group label { display: block; font-weight: 800; margin-bottom: 10px; font-size: 14.5px; color: #334155; }
+        
+        .sp-input { width: 100%; padding: 16px 20px; box-sizing: border-box; border: 2px solid #e2e8f0; border-radius: 12px; font-size: 15px; background: #f8fafc; color: #1e293b !important; transition: all 0.3s ease; font-weight: 700; font-family: 'Segoe UI', Arial, sans-serif; }
+        .sp-input:focus { border-color: #3b82f6; background: #ffffff; box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15); outline: none;}
+        
+        .sp-action-btn { width: 100%; padding: 18px; color: white; border: none; border-radius: 12px; font-size: 15.5px; font-weight: 900; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; margin-top: 10px; transition: all 0.3s; }
+        .sp-action-btn.blue { background: #3b82f6; box-shadow: 0 8px 20px rgba(59, 130, 246, 0.25); }
+        .sp-action-btn.blue:hover { background: #2563eb; transform: translateY(-3px); box-shadow: 0 10px 25px rgba(37, 99, 235, 0.35); }
+        .sp-action-btn.green { background: #10b981; box-shadow: 0 8px 20px rgba(16, 185, 129, 0.25); }
+        .sp-action-btn.green:hover { background: #059669; transform: translateY(-3px); box-shadow: 0 10px 25px rgba(16, 185, 129, 0.35); }
+        .sp-action-btn.dark { background: #0f172a; box-shadow: 0 8px 20px rgba(15, 23, 42, 0.25); }
+        .sp-action-btn.dark:hover { background: #1e293b; transform: translateY(-3px); box-shadow: 0 10px 25px rgba(30, 41, 59, 0.35); }
+
+        .download-btn { background: #10b981; margin-top: 5px; color: white; font-weight: 900; border: none; padding: 14px 24px; border-radius: 10px; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25); display: inline-flex; align-items: center; gap: 8px; font-size: 15px;}
+        .download-btn:hover { background: #059669; transform: translateY(-2px); }
+
+        /* CLEAN PREMIUM TABLES */
+        .clean-table-container { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 0; overflow-x: auto; box-shadow: 0 4px 6px rgba(0,0,0,0.02); margin-top: 20px; }
+        .clean-table { width: 100%; border-collapse: collapse; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 14px; }
+        .clean-table th { background: #f8fafc; color: #1e293b; font-weight: 900; text-transform: uppercase; font-size: 12px; letter-spacing: 0.5px; padding: 18px 24px; border-bottom: 1px solid #e2e8f0; text-align: left; white-space: nowrap; }
+        .clean-table td { padding: 16px 24px; color: #334155; border-bottom: 1px solid #e2e8f0; vertical-align: middle; }
+        .clean-table tr:last-child td { border-bottom: none; }
+        .clean-table tr:hover { background: #f8fafc; }
+
+        .clean-badge { padding: 6px 12px; border-radius: 8px; font-size: 11px; font-weight: 900; letter-spacing: 0.5px; text-transform: uppercase; display: inline-flex; align-items: center; justify-content: center; }
+        .bg-green { background: #d1fae5; color: #047857; border: 1px solid #a7f3d0; } 
+        .bg-red { background: #ffe4e6; color: #be123c; border: 1px solid #fecdd3; }
+
+        /* Modals and Loaders */
+        .bu-modal-overlay { position: fixed !important; top: 0 !important; left: 0 !important; width: 100vw !important; height: 100vh !important; background: rgba(15, 23, 42, 0.75) !important; backdrop-filter: blur(5px) !important; z-index: 99999999 !important; display: none; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.2s ease-in-out; }
+        .bu-modal-overlay.active { display: flex !important; opacity: 1; }
+        .bu-modal-card { background: #ffffff; width: 90%; max-width: 420px; border-radius: 16px; box-shadow: 0 25px 50px rgba(0,0,0,0.25); text-align: center; padding: 35px 25px; transform: scale(0.95); transition: transform 0.2s; }
+        .bu-modal-overlay.active .bu-modal-card { transform: scale(1); }
+
+        .bu-loader-container { position: fixed !important; top: 0 !important; left: 0 !important; width: 100vw !important; height: 100vh !important; background: rgba(255, 255, 255, 0.9) !important; backdrop-filter: blur(5px) !important; z-index: 100000000 !important; display: none; flex-direction: column; justify-content: center; align-items: center; }
+        .bu-spinner { width: 45px; height: 45px; border: 4px solid #f1f5f9; border-top: 4px solid #3b82f6; border-radius: 50%; animation: spSpin 0.8s linear infinite; margin-bottom: 20px; }
+
+        @keyframes spFadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes spSpin { 100% { transform: rotate(360deg); } }
+    </style>
+
+    <!-- Main Upload Dashboard -->
+    <div class='sp-page-panel' id="buMainDashboard">
+        <div style="margin-bottom: 30px; border-bottom: 2px solid #e2e8f0; padding-bottom: 20px; overflow: hidden;">
+            <div class='sp-back-nav' onclick='typeof returnToHomeGridSPA === "function" ? returnToHomeGridSPA() : window.history.back()'>⬅️ Back to Hub</div>
+            <h3 class="sp-module-title">📂 Bulk Employee Profile Update</h3>
+            <p style="color: #64748b; font-size: 15px; margin-top: 8px; font-weight: 500;">Download template, fill data, and securely bulk update records.</p>
+        </div>
+
+        <div style="border-top: 4px solid #3b82f6; background: #ffffff; border-radius: 16px; padding: 35px; box-shadow: 0 4px 15px rgba(0,0,0,0.02); border: 1px solid #e2e8f0;">
+            
+            <button class="download-btn" onclick="window.buDownloadTemplate()">
+                <span>⬇️</span> Download Update Template
+            </button>
+            <hr style="border:0; border-top:1px solid #cbd5e1; margin:25px 0;">
+            
+            <div class='sp-form-group'>
+                <label>Upload Filled Excel Template</label>
+                <input type="file" id="buExcelFile" class="sp-input" accept=".xlsx, .xls" style="padding: 12px 20px;">
+            </div>
+            
+            <button class='sp-action-btn blue' onclick='window.buProcessExcel()' type='button'>Load & Validate Data</button>
+        </div>
+    </div>
+
+    <!-- Preview & Validation Screen -->
+    <div class='sp-page-panel' id="buPreviewDashboard" style="display: none;">
+        <div style="margin-bottom: 25px; border-bottom: 2px solid #e2e8f0; padding-bottom: 15px; overflow: hidden;">
+            <div class='sp-back-nav' onclick='window.buReturnToUpload()'>⬅️ Cancel & Back</div>
+            <h3 class="sp-module-title">Validation & Staging</h3>
+            <p style="color: #64748b; font-size: 14px; margin-top: 5px;">Review the validation results before executing the update.</p>
+        </div>
+
+        <div style="background: #fffbeb; border: 1px solid #fef3c7; border-left: 4px solid #f59e0b; padding: 15px 20px; border-radius: 8px; margin-bottom: 25px;">
+            <strong style="color: #b45309; font-size: 15px;">Rule Enforcement Notice</strong>
+            <p style="margin: 5px 0 0 0; color: #d97706; font-size: 13.5px; font-weight: 600;">
+                Only rows marked as <span class="clean-badge bg-green" style="padding: 2px 6px; font-size:10px;">Eligible</span> will be updated in the system. Rows with errors will be completely ignored.
+            </p>
+        </div>
+
+        <div class="clean-table-container">
+            <table class="clean-table">
+                <thead>
+                    <tr>
+                        <th style="width: 40px;"><input type="checkbox" id="buSelectAll" onchange="window.buToggleAllChecks(this)" style="width:16px; height:16px; cursor:pointer;" checked></th>
+                        <th>Username (ID)</th>
+                        <th>Employee Name</th>
+                        <th>Validation Status</th>
+                        <th>Rejection Reason</th>
+                    </tr>
+                </thead>
+                <tbody id="buPreviewTableBody"></tbody>
+            </table>
+        </div>
+
+        <div style="margin-top: 30px; display: flex; gap: 15px;">
+            <button class="sp-action-btn green" style="flex: 2; margin-top: 0;" onclick="window.buConfirmUpdate()">✅ Confirm & Execute Update</button>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <div class='bu-loader-container' id='buGlobalLoader'>
+        <div class='bu-spinner'></div>
+        <div class='loading-status-msg' id="buLoaderText" style="font-size: 15px; font-weight: 900; color: #0f172a;">Processing Data...</div>
+    </div>
+
+    <div id="buAlertModal" class="bu-modal-overlay">
+        <div class="bu-modal-card" style="border-top: 6px solid #3b82f6;">
+            <div style="font-size: 50px; margin-bottom: 15px;" id="buAlertIcon">✅</div>
+            <h3 style="margin-top:0; color:#1e293b; font-weight:900;" id="buAlertTitle">Notice</h3>
+            <p style="color: #64748b; font-size: 14.5px; font-weight: 600; margin-bottom: 25px;" id="buAlertMsg">Operation successful.</p>
+            <button class="sp-action-btn blue" style="margin-top:0;" onclick="window.buCloseAlert()">Understood</button>
+        </div>
+    </div>
+
+    <script>
+        // =========================================================
+        // SAFE MODAL ENGINE
+        // =========================================================
+        window.safeOpenModal = function(modalId) {
+            let m = document.getElementById(modalId);
+            if(m) {
+                if(m.parentNode !== document.body) document.body.appendChild(m);
+                m.style.display = 'flex';
+                setTimeout(() => m.classList.add('active'), 10);
+            }
+        };
+
+        window.buShowLoader = function(msg) {
+            let loader = document.getElementById('buGlobalLoader');
+            if(loader) {
+                if(loader.parentNode !== document.body) document.body.appendChild(loader);
+                document.getElementById('buLoaderText').innerText = msg || "Processing...";
+                loader.style.display = 'flex';
+            }
+        };
+        window.buHideLoader = function() {
+            let loader = document.getElementById('buGlobalLoader');
+            if(loader) loader.style.display = 'none';
+        };
+
+        window.buAlert = function(msg, title="Notice", icon="🔔", color="#3b82f6") {
+            document.getElementById('buAlertMsg').innerText = msg;
+            document.getElementById('buAlertTitle').innerText = title;
+            document.getElementById('buAlertIcon').innerText = icon;
+            document.querySelector('#buAlertModal .bu-modal-card').style.borderTopColor = color;
+            let btn = document.querySelector('#buAlertModal button');
+            btn.className = 'sp-action-btn'; btn.style.backgroundColor = color;
+            window.safeOpenModal('buAlertModal');
+        };
+
+        window.buCloseAlert = function() {
+            let m = document.getElementById('buAlertModal');
+            m.classList.remove('active'); setTimeout(() => m.style.display = 'none', 200);
+        };
+
+        // =========================================================
+        // CORE LOGIC & VARIABLES
+        // =========================================================
+        window.buData = {
+            users: [],
+            activeUser: sessionStorage.getItem("activeUser"),
+            activeSolId: sessionStorage.getItem("activeSolId") || "UNMAPPED"
+        };
+        window.buStagedRows = []; // Holds processed excel rows
+
+        window.initBulkUpdate = function() {
+            let db = typeof firebase !== 'undefined' ? firebase.firestore() : null;
+            if(!db) { window.buAlert("Database connection error.", "Error", "❌", "#ef4444"); return; }
+
+            // Fetch live registry
+            db.collection("system").doc("registry").onSnapshot(doc => {
+                if(doc.exists) {
+                    window.buData.users = doc.data().users || [];
+                    // Ensure active Sol ID is correct for master admin
+                    if(window.buData.activeUser === 'admin') window.buData.activeSolId = '000000';
+                }
+            });
+        };
+
+        // Initialize script immediately
+        window.initBulkUpdate();
+
+        // 1. Download Template
+        window.buDownloadTemplate = function() {
+            const templateData = [
+                {
+                    "Username (ID)": "amit_ma",
+                    "Employee Name": "Amit Kumar",
+                    "Gender": "Male",
+                    "Phone Number": "9876543210",
+                    "Address": "123 Park Street, Kolkata",
+                    "PIN Code": "700016",
+                    "Basic Pay": 25500,
+                    "Pay Level": "Level 1",
+                    "Increment Date": "2026-07-01"
+                }
+            ];
+            const ws = XLSX.utils.json_to_sheet(templateData);
+            const wb = XLSX.utils.book_new(); 
+            XLSX.utils.book_append_sheet(wb, ws, "ProfileUpdate"); 
+            XLSX.writeFile(wb, "Bulk_Profile_Update_Template.xlsx");
+        };
+
+        // 2. Process Excel File
+        window.buProcessExcel = function() {
+            const fileInput = document.getElementById('buExcelFile').files[0];
+            if (!fileInput) { window.buAlert("Please select an Excel file to upload.", "File Missing", "⚠️", "#f59e0b"); return; }
+            
+            window.buShowLoader("Validating Excel Data...");
+            const reader = new FileReader();
+            
+            reader.onload = (e) => {
+                try {
+                    const data = new Uint8Array(e.target.result);
+                    const workbook = XLSX.read(data, {type: 'array'});
+                    const jsonData = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]);
+                    
+                    if (jsonData.length === 0) throw new Error("The uploaded Excel file is empty.");
+
+                    window.buStagedRows = [];
+                    let isHQ = (window.buData.activeSolId === '000000' || window.buData.activeUser === 'admin');
+
+                    jsonData.forEach((row, index) => {
+                        let rawUser = (row["Username (ID)"] || "").toString().trim().toUpperCase();
+                        let newName = (row["Employee Name"] || "").toString().trim().toUpperCase();
+                        
+                        let isValid = false;
+                        let reason = "";
+                        let uIndex = -1;
+
+                        if (!rawUser) {
+                            isValid = false;
+                            reason = "Username (ID) is blank.";
+                        } else {
+                            uIndex = window.buData.users.findIndex(u => u.user.toUpperCase() === rawUser);
+                            
+                            if(uIndex === -1) {
+                                isValid = false;
+                                reason = "User not found in registry.";
+                            } else {
+                                let dbUser = window.buData.users[uIndex];
+                                
+                                if (dbUser.user === 'admin') {
+                                    isValid = false;
+                                    reason = "Master Admin cannot be modified.";
+                                } else if (!isHQ && dbUser.solId !== window.buData.activeSolId) {
+                                    isValid = false;
+                                    reason = "Doesn't pertain to your SOL.";
+                                } else {
+                                    isValid = true;
+                                    reason = "Eligible for update.";
+                                }
+                            }
+                        }
+
+                        window.buStagedRows.push({
+                            id: index,
+                            username: rawUser,
+                            empName: newName,
+                            isValid: isValid,
+                            reason: reason,
+                            dbIndex: uIndex,
+                            newData: {
+                                fullName: newName,
+                                gender: row["Gender"],
+                                phone: row["Phone Number"],
+                                addressLine1: row["Address"],
+                                pinCode: row["PIN Code"],
+                                basicPay: row["Basic Pay"],
+                                payLevel: row["Pay Level"],
+                                incrementDate: row["Increment Date"]
+                            }
+                        });
+                    });
+
+                    window.buRenderPreview();
+                    window.buHideLoader();
+
+                    document.getElementById('buMainDashboard').style.display = 'none';
+                    document.getElementById('buPreviewDashboard').style.display = 'block';
+
+                } catch(err) {
+                    window.buHideLoader();
+                    window.buAlert(`Failed to process file: ${err.message}`, "Processing Error", "❌", "#ef4444");
+                }
+            };
+            reader.readAsArrayBuffer(fileInput);
+        };
+
+        // 3. Render Preview Table
+        window.buRenderPreview = function() {
+            let tbody = document.getElementById('buPreviewTableBody');
+            tbody.innerHTML = "";
+
+            if (window.buStagedRows.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding: 25px; font-weight:bold; color:#64748b;">No data found in the template.</td></tr>`;
+                return;
+            }
+
+            window.buStagedRows.forEach(row => {
+                let badgeClass = row.isValid ? "bg-green" : "bg-red";
+                let statusText = row.isValid ? "Eligible" : "Ineligible";
+                
+                // Disable checkbox if invalid
+                let checkHtml = row.isValid 
+                    ? `<input type="checkbox" class="bu-row-check" value="${row.id}" style="width:16px; height:16px; cursor:pointer; accent-color:#3b82f6;" checked>`
+                    : `<input type="checkbox" disabled style="width:16px; height:16px; opacity:0.5;">`;
+
+                tbody.innerHTML += `
+                    <tr>
+                        <td style="text-align:center;">${checkHtml}</td>
+                        <td style="font-weight:900; color:#1e293b; font-family:monospace;">@${row.username}</td>
+                        <td style="color:#475569; font-weight:700;">${row.empName || '--'}</td>
+                        <td><span class="clean-badge ${badgeClass}">${statusText}</span></td>
+                        <td style="color: ${row.isValid ? '#10b981' : '#ef4444'}; font-weight:700; font-size:13px;">${row.reason}</td>
+                    </tr>
+                `;
+            });
+        };
+
+        window.buToggleAllChecks = function(source) {
+            let checkboxes = document.querySelectorAll('.bu-row-check');
+            checkboxes.forEach(cb => cb.checked = source.checked);
+        };
+
+        window.buReturnToUpload = function() {
+            document.getElementById('buPreviewDashboard').style.display = 'none';
+            document.getElementById('buMainDashboard').style.display = 'block';
+            document.getElementById('buExcelFile').value = ""; // Reset file
+        };
+
+        // 4. Confirm & Update to Firebase
+        window.buConfirmUpdate = async function() {
+            let selectedCheckboxes = document.querySelectorAll('.bu-row-check:checked');
+            if(selectedCheckboxes.length === 0) {
+                return window.buAlert("No eligible rows selected for update.", "Empty Selection", "⚠️", "#f59e0b");
+            }
+
+            window.buShowLoader("Writing Updates to Database...");
+            
+            let updateCount = 0;
+            
+            // Loop through selected rows and update window.buData.users
+            selectedCheckboxes.forEach(cb => {
+                let rowId = parseInt(cb.value);
+                let stagingRecord = window.buStagedRows.find(r => r.id === rowId);
+                
+                if(stagingRecord && stagingRecord.isValid && stagingRecord.dbIndex > -1) {
+                    let uIdx = stagingRecord.dbIndex;
+                    let n = stagingRecord.newData;
+                    
+                    // Only overwrite fields if they are provided in Excel (not undefined)
+                    if(n.fullName) window.buData.users[uIdx].fullName = n.fullName;
+                    if(n.gender !== undefined) window.buData.users[uIdx].gender = n.gender;
+                    if(n.phone !== undefined) window.buData.users[uIdx].phone = n.phone;
+                    if(n.addressLine1 !== undefined) window.buData.users[uIdx].addressLine1 = n.addressLine1;
+                    if(n.pinCode !== undefined) window.buData.users[uIdx].pinCode = n.pinCode;
+                    if(n.basicPay !== undefined) window.buData.users[uIdx].basicPay = n.basicPay;
+                    if(n.payLevel !== undefined) window.buData.users[uIdx].payLevel = n.payLevel;
+                    if(n.incrementDate !== undefined) window.buData.users[uIdx].incrementDate = n.incrementDate;
+
+                    updateCount++;
+                }
+            });
+
+            // Save to Cloud
+            let db = typeof firebase !== 'undefined' ? firebase.firestore() : null;
+            if(db) {
+                try {
+                    await db.collection("system").doc("registry").set({ users: window.buData.users }, { merge: true });
+                    window.buHideLoader();
+                    window.buReturnToUpload();
+                    window.buAlert(`Successfully updated ${updateCount} employee profiles in the live registry.`, "Bulk Update Complete", "✅", "#10b981");
+                } catch(e) {
+                    window.buHideLoader();
+                    window.buAlert("Network Error: Failed to save changes.", "Database Error", "❌", "#ef4444");
+                }
+            } else {
+                window.buHideLoader();
+            }
+        };
+
+    </script>
+</div>

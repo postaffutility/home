@@ -1,0 +1,271 @@
+<!-- UpdateProfile.html (Employee Profile Update Module) -->
+<script>
+    if (!document.getElementById("dynamicWorkspace") || window.location.pathname.endsWith("UpdateProfile.html")) {
+        window.location.href = "index.html";
+    }
+</script>
+
+<div id="moduleRenderArea">
+    <style>
+        .sp-page-panel { max-width: 1000px; margin: 0 auto; background: white; padding: 40px; border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.03); border: 1px solid #e2e8f0; font-family: 'Segoe UI', Arial, sans-serif; animation: spFadeIn 0.3s ease-out forwards; }
+        
+        .sp-module-title { margin: 0; color: #1e293b; font-size: 26px; font-weight: 900; letter-spacing: -0.5px; }
+        .sp-back-nav { display: inline-flex; align-items: center; color: #3b82f6; font-weight: 800; font-size: 15px; text-decoration: none; cursor: pointer; transition: color 0.2s; padding: 8px 16px; background: #eff6ff; border-radius: 8px; float: right; border: 1px solid #bfdbfe; }
+        .sp-back-nav:hover { color: #1d4ed8; background: #dbeafe; transform: translateX(-2px); }
+
+        .sp-form-group { margin-bottom: 22px; text-align: left; }
+        .sp-form-group label { display: block; font-weight: 800; margin-bottom: 10px; font-size: 14.5px; color: #334155; }
+        
+        .sp-input { width: 100%; padding: 16px 20px; box-sizing: border-box; border: 2px solid #e2e8f0; border-radius: 12px; font-size: 15px; background: #f8fafc; color: #1e293b !important; transition: all 0.3s ease; font-weight: 700; font-family: 'Segoe UI', Arial, sans-serif; }
+        .sp-input:focus { border-color: #3b82f6; background: #ffffff; box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15); outline: none;}
+        .sp-input::placeholder { color: #94a3b8 !important; font-weight: 600 !important; }
+        
+        select.sp-input { -webkit-appearance: none; -moz-appearance: none; appearance: none; background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e"); background-repeat: no-repeat; background-position: right 18px center; background-size: 16px; padding-right: 50px; cursor: pointer; }
+        
+        .sp-flex-row { display: flex; gap: 20px; flex-wrap: wrap; }
+        .sp-flex-row > div { flex: 1; }
+
+        .sp-action-btn { width: 100%; padding: 18px; color: white; border: none; border-radius: 12px; font-size: 15.5px; font-weight: 900; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; margin-top: 10px; transition: all 0.3s; }
+        .sp-action-btn.blue { background: #3b82f6; box-shadow: 0 8px 20px rgba(59, 130, 246, 0.25); }
+        .sp-action-btn.blue:hover { background: #2563eb; transform: translateY(-3px); box-shadow: 0 10px 25px rgba(37, 99, 235, 0.35); }
+        .sp-action-btn.dark { background: #0f172a; box-shadow: 0 8px 20px rgba(15, 23, 42, 0.25); }
+        .sp-action-btn.dark:hover { background: #1e293b; transform: translateY(-3px); box-shadow: 0 10px 25px rgba(30, 41, 59, 0.35); }
+
+        /* Local Modal Elements */
+        .pu-modal-overlay { position: fixed !important; top: 0 !important; left: 0 !important; width: 100vw !important; height: 100vh !important; background: rgba(15, 23, 42, 0.75) !important; backdrop-filter: blur(5px) !important; z-index: 99999999 !important; display: none; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.2s ease-in-out; }
+        .pu-modal-overlay.active { display: flex !important; opacity: 1; }
+        .pu-modal-card { background: #ffffff; width: 90%; max-width: 420px; border-radius: 16px; box-shadow: 0 25px 50px rgba(0,0,0,0.25); text-align: center; padding: 35px 25px; transform: scale(0.95); transition: transform 0.2s; }
+        .pu-modal-overlay.active .pu-modal-card { transform: scale(1); }
+
+        .pu-loader-container { position: fixed !important; top: 0 !important; left: 0 !important; width: 100vw !important; height: 100vh !important; background: rgba(255, 255, 255, 0.9) !important; backdrop-filter: blur(5px) !important; z-index: 100000000 !important; display: none; flex-direction: column; justify-content: center; align-items: center; }
+        .pu-spinner { width: 45px; height: 45px; border: 4px solid #f1f5f9; border-top: 4px solid #3b82f6; border-radius: 50%; animation: spSpin 0.8s linear infinite; margin-bottom: 20px; }
+
+        @keyframes spFadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes spSpin { 100% { transform: rotate(360deg); } }
+    </style>
+
+    <div class='sp-page-panel' id="puMainDashboard">
+        <div style="margin-bottom: 30px; border-bottom: 2px solid #e2e8f0; padding-bottom: 20px; overflow: hidden;">
+            <div class='sp-back-nav' onclick='typeof returnToHomeGridSPA === "function" ? returnToHomeGridSPA() : window.history.back()'>⬅️ Back to Hub</div>
+            <h3 class="sp-module-title">🔄 Employee Profile Update</h3>
+            <p style="color: #64748b; font-size: 15px; margin-top: 8px; font-weight: 500;">Update administrative, demographic, and payroll data for employees.</p>
+        </div>
+
+        <div style="border-top: 4px solid #3b82f6; background: #ffffff; border-radius: 16px; padding: 35px; box-shadow: 0 4px 15px rgba(0,0,0,0.02); border: 1px solid #e2e8f0;">
+            
+            <!-- Employee Selector -->
+            <div class='sp-form-group' style="background: #eff6ff; padding: 20px; border-radius: 12px; border: 1px solid #bfdbfe;">
+                <label style="color: #1e40af;">Select Employee to Update</label>
+                <select id="puTargetUser" class="sp-input" style="border-color: #93c5fd;" onchange="window.puAutofillForm()">
+                    <option value="">-- Loading Directory --</option>
+                </select>
+                <p id="puAccessNote" style="margin: 8px 0 0 0; font-size: 12.5px; color: #3b82f6; font-weight: 600;"></p>
+            </div>
+
+            <div id="puFormContainer" style="display: none; margin-top: 30px; animation: spFadeIn 0.3s ease-out;">
+                
+                <h4 style="margin: 0 0 15px 0; color: #0f172a; font-size: 16px; border-bottom: 2px solid #f1f5f9; padding-bottom: 10px;">👤 Demographic Details</h4>
+                <div class='sp-flex-row'>
+                    <div class='sp-form-group'>
+                        <label>Gender</label>
+                        <select id="puGender" class="sp-input">
+                            <option value="">-- Select Gender --</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class='sp-form-group'>
+                        <label>Phone Number</label>
+                        <input id="puPhone" type="text" class="sp-input" placeholder="e.g. 9876543210">
+                    </div>
+                </div>
+
+                <div class='sp-form-group'>
+                    <label>Address Line 1</label>
+                    <input id="puAddress" type="text" class="sp-input" placeholder="House No, Street, Village/City">
+                </div>
+                
+                <div class='sp-form-group' style="max-width: 50%;">
+                    <label>PIN Code</label>
+                    <input id="puPin" type="text" class="sp-input" placeholder="e.g. 700001">
+                </div>
+
+                <h4 style="margin: 25px 0 15px 0; color: #0f172a; font-size: 16px; border-bottom: 2px solid #f1f5f9; padding-bottom: 10px;">💵 Payroll Parameters</h4>
+                <div class='sp-flex-row'>
+                    <div class='sp-form-group'>
+                        <label>Basic Pay (₹)</label>
+                        <input id="puBasicPay" type="number" class="sp-input" placeholder="e.g. 25500">
+                    </div>
+                    <div class='sp-form-group'>
+                        <label>Pay Level (Matrix)</label>
+                        <input id="puPayLevel" type="text" class="sp-input" placeholder="e.g. Level 1">
+                    </div>
+                </div>
+
+                <div class='sp-form-group' style="max-width: 50%;">
+                    <label>Date of Next Increment</label>
+                    <input id="puIncrementDate" type="date" class="sp-input">
+                </div>
+
+                <div style="margin-top: 35px; display: flex; gap: 15px;">
+                    <button class='sp-action-btn blue' style="margin-top: 0; flex: 2;" onclick='window.puExecuteUpdate()'>💾 Save & Update Profile</button>
+                    <button class='sp-action-btn dark' style="margin-top: 0; flex: 1; box-shadow: none;" onclick='window.puResetForm()'>Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Local Loader & Alert Modal -->
+    <div class='pu-loader-container' id='puGlobalLoader'>
+        <div class='pu-spinner'></div>
+        <div class='loading-status-msg' style="font-size: 15px; font-weight: 900; color: #0f172a;">Updating Database...</div>
+    </div>
+
+    <div id="puAlertModal" class="pu-modal-overlay">
+        <div class="pu-modal-card" style="border-top: 6px solid #3b82f6;">
+            <div style="font-size: 50px; margin-bottom: 15px;" id="puAlertIcon">✅</div>
+            <h3 style="margin-top:0; color:#1e293b; font-weight:900;" id="puAlertTitle">Success</h3>
+            <p style="color: #64748b; font-size: 14.5px; font-weight: 600; margin-bottom: 25px;" id="puAlertMsg">Profile updated successfully.</p>
+            <button class="sp-action-btn blue" style="margin-top:0;" onclick="window.puCloseAlert()">Understood</button>
+        </div>
+    </div>
+
+    <script>
+        // Move modals to body for safe Z-index
+        (function() {
+            ['puGlobalLoader', 'puAlertModal'].forEach(id => {
+                let el = document.getElementById(id);
+                if(el && el.parentNode !== document.body) document.body.appendChild(el);
+            });
+        })();
+
+        window.puData = {
+            users: [],
+            activeUser: sessionStorage.getItem("activeUser"),
+            activeSolId: sessionStorage.getItem("activeSolId")
+        };
+
+        window.puShowLoader = function() { document.getElementById('puGlobalLoader').style.display = 'flex'; };
+        window.puHideLoader = function() { document.getElementById('puGlobalLoader').style.display = 'none'; };
+        
+        window.puAlert = function(msg, title="Notice", icon="🔔", color="#3b82f6") {
+            document.getElementById('puAlertMsg').innerText = msg;
+            document.getElementById('puAlertTitle').innerText = title;
+            document.getElementById('puAlertIcon').innerText = icon;
+            document.querySelector('#puAlertModal .pu-modal-card').style.borderTopColor = color;
+            let btn = document.querySelector('#puAlertModal button');
+            btn.className = 'sp-action-btn'; btn.style.backgroundColor = color;
+            
+            let m = document.getElementById('puAlertModal');
+            m.style.display = 'flex'; setTimeout(() => m.classList.add('active'), 10);
+        };
+        
+        window.puCloseAlert = function() {
+            let m = document.getElementById('puAlertModal');
+            m.classList.remove('active'); setTimeout(() => m.style.display = 'none', 200);
+        };
+
+        window.initProfileUpdate = function() {
+            let db = typeof firebase !== 'undefined' ? firebase.firestore() : null;
+            if(!db) { window.puAlert("Database connection error.", "Error", "❌", "#ef4444"); return; }
+
+            // Listen to registry for users
+            db.collection("system").doc("registry").onSnapshot(doc => {
+                if(doc.exists) {
+                    window.puData.users = doc.data().users || [];
+                    window.puPopulateDropdown();
+                }
+            });
+        };
+
+        window.puPopulateDropdown = function() {
+            let sel = document.getElementById('puTargetUser');
+            sel.innerHTML = "<option value=''>-- Select Employee --</option>";
+            
+            let isHQ = (window.puData.activeSolId === '000000' || window.puData.activeUser === 'admin');
+            let note = document.getElementById('puAccessNote');
+            
+            if(isHQ) {
+                note.innerText = "HQ Access: You can update any employee across all branches.";
+                note.style.color = "#8b5cf6"; // Purple for HQ
+            } else {
+                note.innerText = `Branch Access: You can only update employees mapped to SOL [${window.puData.activeSolId}].`;
+                note.style.color = "#3b82f6"; // Blue for Branch
+            }
+
+            let visibleUsers = window.puData.users.filter(u => {
+                if (u.user === 'admin') return false; // Hide master admin from editing
+                if (!isHQ && u.solId !== window.puData.activeSolId) return false; // Branch restriction
+                return true;
+            });
+
+            visibleUsers.forEach(u => {
+                sel.innerHTML += `<option value="${u.user}">${u.fullName} (@${u.user}) - SOL: ${u.solId || 'Unmapped'}</option>`;
+            });
+        };
+
+        window.puAutofillForm = function() {
+            let username = document.getElementById('puTargetUser').value;
+            let container = document.getElementById('puFormContainer');
+            
+            if(!username) {
+                container.style.display = 'none';
+                return;
+            }
+
+            let u = window.puData.users.find(x => x.user === username);
+            if(u) {
+                document.getElementById('puGender').value = u.gender || "";
+                document.getElementById('puPhone').value = u.phone || "";
+                document.getElementById('puAddress').value = u.addressLine1 || "";
+                document.getElementById('puPin').value = u.pinCode || "";
+                document.getElementById('puBasicPay').value = u.basicPay || "";
+                document.getElementById('puPayLevel').value = u.payLevel || "";
+                document.getElementById('puIncrementDate').value = u.incrementDate || "";
+                
+                container.style.display = 'block';
+            }
+        };
+
+        window.puResetForm = function() {
+            document.getElementById('puTargetUser').value = "";
+            document.getElementById('puFormContainer').style.display = 'none';
+        };
+
+        window.puExecuteUpdate = async function() {
+            let username = document.getElementById('puTargetUser').value;
+            if(!username) return;
+
+            window.puShowLoader();
+
+            let uIdx = window.puData.users.findIndex(x => x.user === username);
+            if(uIdx > -1) {
+                // Update specific fields
+                window.puData.users[uIdx].gender = document.getElementById('puGender').value;
+                window.puData.users[uIdx].phone = document.getElementById('puPhone').value.trim();
+                window.puData.users[uIdx].addressLine1 = document.getElementById('puAddress').value.trim();
+                window.puData.users[uIdx].pinCode = document.getElementById('puPin').value.trim();
+                window.puData.users[uIdx].basicPay = document.getElementById('puBasicPay').value.trim();
+                window.puData.users[uIdx].payLevel = document.getElementById('puPayLevel').value.trim();
+                window.puData.users[uIdx].incrementDate = document.getElementById('puIncrementDate').value;
+
+                let db = typeof firebase !== 'undefined' ? firebase.firestore() : null;
+                if(db) {
+                    try {
+                        await db.collection("system").doc("registry").set({ users: window.puData.users }, { merge: true });
+                        window.puHideLoader();
+                        window.puResetForm();
+                        window.puAlert(`Profile for @${username} has been successfully updated in the database.`, "Update Successful", "✅", "#10b981");
+                    } catch(e) {
+                        window.puHideLoader();
+                        window.puAlert("Failed to save data. Check your network connection.", "Network Error", "❌", "#ef4444");
+                    }
+                }
+            }
+        };
+
+        // Initialize script
+        window.initProfileUpdate();
+    </script>
+</div>

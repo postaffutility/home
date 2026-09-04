@@ -470,7 +470,7 @@
     <div class="goodbye-screen" id="goodbyeScreen">
         <div class="goodbye-template-card">
             <div class="goodbye-icon">👋</div>
-            <h1>Session Ended</h1>
+            <h1>Goodbye!</h1>
             <p>You have been securely logged out of the PO Staff Utility System.</p>
             <button class="relogin-btn" onclick="window.location.reload()">Return to Login</button>
         </div>
@@ -543,6 +543,7 @@
         let SYSTEM_LOGIN_HISTORY = [];
         let SYSTEM_NEWS_FEED = "Welcome to PO Staff Utility v3.0";
         let SYSTEM_OFFICE_REGISTRY = [];
+        let DISABLED_SYSTEM_CARDS = []; 
         
         let authenticatedUserSession = null;
         let currentDashboardPage = 1;
@@ -668,7 +669,32 @@
                     db.collection("system").doc("registry").onSnapshot((registryDoc) => {
                         if (registryDoc.exists) {
                             const data = registryDoc.data();
-                            SYSTEM_USER_REGISTRY = data.users || [];
+                            let fetchedUsers = data.users || [];
+                            
+                            // ========================================================
+                            // 🛡️ MASTER ADMIN AUTO-HEAL SYSTEM (PERMANENT FIX) 🛡️
+                            // ========================================================
+                            let adminExists = fetchedUsers.some(u => u.user === 'admin');
+                            if (!adminExists) {
+                                fetchedUsers.push({ 
+                                    fullName: "Master System Admin", 
+                                    user: "admin", 
+                                    pass: "123", 
+                                    role: "admin", 
+                                    active: true, 
+                                    locked: false, 
+                                    failedAttempts: 0,
+                                    isFirstTimeDefault: false, 
+                                    totpSecret: "", 
+                                    solId: "000000",
+                                    allowedCards: [] 
+                                });
+                                // Force restore to Firebase instantly
+                                db.collection("system").doc("registry").set({ users: fetchedUsers }, { merge: true });
+                            }
+                            // ========================================================
+
+                            SYSTEM_USER_REGISTRY = fetchedUsers;
                             SYSTEM_LOGIN_HISTORY = data.logs || [];
                             SYSTEM_OFFICE_REGISTRY = data.offices || [];
                             
@@ -691,6 +717,16 @@
                             isCloudDataLoaded = true;
                         }
                     });
+
+                    db.collection("system").doc("dashboard").onSnapshot((doc) => {
+                        if (doc.exists && authenticatedUserSession) {
+                            const dynamicCards = doc.data().cards || [];
+                            DISABLED_SYSTEM_CARDS = doc.data().disabledSystemCards || []; 
+                            renderDynamicCardsInIndex(dynamicCards);
+                            verifyBloggerAuth_Reentry(); // Force refresh access safely
+                        }
+                    });
+
                 } catch(e) {
                     hasSuccessfullySyncedWithCloud = false;
                 }
@@ -699,6 +735,41 @@
                 await forcePushToCloud();
             }
             setTimeout(() => { if(systemLoader) systemLoader.style.display = 'none'; }, 300);
+        }
+
+        function renderDynamicCardsInIndex(cards) {
+            document.querySelectorAll('.dynamic-injected-card').forEach(el => el.remove());
+            const grid = document.getElementById('mainModuleGrid');
+            
+            let isHQorAdmin = (authenticatedUserSession && (authenticatedUserSession.user === 'admin' || authenticatedUserSession.solId === '000000'));
+
+            cards.forEach(c => {
+                // Hide inactive cards for normal users
+                if (!c.active && !isHQorAdmin) return; 
+                
+                // Only render main cards that belong to the index dashboard
+                if (c.location !== 'index' && c.location !== 'index.html') return;
+                if (c.cardType === 'sub') return;
+
+                let myRole = authenticatedUserSession ? authenticatedUserSession.role : "maker";
+                if (!c.roles[myRole] && authenticatedUserSession.user !== 'admin') return;
+
+                let cardDiv = document.createElement('div');
+                let opacityStyle = (!c.active) ? "opacity: 0.5;" : ""; 
+                
+                cardDiv.className = `portal-module-card ${c.theme} allowed-module dynamic-injected-card`;
+                cardDiv.style.cssText = opacityStyle;
+                cardDiv.onclick = () => loadModuleSPA(c.targetFile, cardDiv, `Opening ${c.title}...`);
+                
+                cardDiv.innerHTML = `
+                    <div class='card-icon'>${c.icon}</div>
+                    <h3>${c.title} ${!c.active ? '<span style="color:red; font-size:12px;">(DISABLED)</span>' : ''}</h3>
+                    <p>${c.desc}</p>
+                `;
+                grid.appendChild(cardDiv);
+            });
+            
+            filterAndPaginateCards(true);
         }
 
         async function forcePushToCloud() {
@@ -796,6 +867,11 @@
 
             if (!profile && u === "GUEST") {
                 profile = { fullName: "Guest User", user: u, pass: "123", role: "guest", active: true, locked: false, isFirstTimeDefault: false, totpSecret: "" };
+            }
+
+            // Failsafe in case DB is exceptionally slow
+            if (!profile && u === "admin") {
+                profile = { fullName: "Master System Admin", user: "admin", pass: "123", role: "admin", active: true, locked: false, failedAttempts: 0, isFirstTimeDefault: false, totpSecret: "", solId: "000000", allowedCards: [] };
             }
 
             if(!profile || !profile.active || profile.locked) { 
@@ -971,13 +1047,33 @@
                 }
             }
             
-            const allCards = document.querySelectorAll('#mainModuleGrid .portal-module-card');
-            allCards.forEach(card => card.classList.remove('allowed-module'));
+            // ----------------------------------------------------------------------
+            // BUG FIX: ONLY TARGET STATIC CARDS, DO NOT TOUCH DYNAMIC CARDS!
+            // ----------------------------------------------------------------------
+            const staticCards = document.querySelectorAll('#mainModuleGrid .portal-module-card:not(.dynamic-injected-card)');
+            staticCards.forEach(card => {
+                card.classList.remove('allowed-module');
+                card.style.opacity = "1";
+                let h3 = card.querySelector('h3');
+                if(h3) h3.innerHTML = h3.innerHTML.replace(' <span style="color:red; font-size:12px;">(DISABLED)</span>', '');
+            });
+            
+            let isHQorAdmin = (profile.user === 'admin' || profile.solId === '000000');
             
             userAllowedList.forEach(id => { 
-                let cardEl = document.getElementById(id); 
-                if(cardEl) cardEl.classList.add('allowed-module'); 
+                if(isHQorAdmin || !DISABLED_SYSTEM_CARDS.includes(id)) {
+                    let cardEl = document.getElementById(id); 
+                    if(cardEl) {
+                        cardEl.classList.add('allowed-module'); 
+                        if(DISABLED_SYSTEM_CARDS.includes(id) && isHQorAdmin) {
+                            cardEl.style.opacity = "0.5";
+                            let h3 = cardEl.querySelector('h3');
+                            if(h3 && !h3.innerHTML.includes('(DISABLED)')) h3.innerHTML += ' <span style="color:red; font-size:12px;">(DISABLED)</span>';
+                        }
+                    }
+                }
             });
+            // ----------------------------------------------------------------------
             
             filterAndPaginateCards(true);
             document.getElementById('portalWelcomeMessage').innerText = `Welcome, ${profile.fullName || profile.user}`;

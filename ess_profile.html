@@ -1,0 +1,258 @@
+<!-- ess_profile.html (Employee Self Service - Profile Viewer) -->
+<script>
+    if (!document.getElementById("dynamicWorkspace") || window.location.pathname.endsWith("ess_profile.html")) {
+        window.location.href = "index.html";
+    }
+</script>
+
+<div id="moduleRenderArea">
+    <style>
+        .sp-page-panel { max-width: 1000px; margin: 0 auto; background: white; padding: 40px; border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.03); border: 1px solid #e2e8f0; font-family: 'Segoe UI', Arial, sans-serif; animation: spFadeIn 0.3s ease-out forwards; }
+        
+        .sp-module-title { margin: 0; color: #1e293b; font-size: 26px; font-weight: 900; letter-spacing: -0.5px; }
+        .sp-back-nav { display: inline-flex; align-items: center; color: #3b82f6; font-weight: 800; font-size: 15px; text-decoration: none; cursor: pointer; transition: color 0.2s; padding: 8px 16px; background: #eff6ff; border-radius: 8px; float: right; border: 1px solid #bfdbfe; }
+        .sp-back-nav:hover { color: #1d4ed8; background: #dbeafe; transform: translateX(-2px); }
+
+        .sp-input { width: 100%; padding: 14px 20px; box-sizing: border-box; border: 2px solid #e2e8f0; border-radius: 12px; font-size: 15px; background: #f8fafc; color: #1e293b; transition: all 0.3s ease; font-weight: 700; }
+        .sp-input:focus { border-color: #3b82f6; background: #ffffff; box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15); outline: none;}
+        
+        select.sp-input { -webkit-appearance: none; -moz-appearance: none; appearance: none; background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e"); background-repeat: no-repeat; background-position: right 18px center; background-size: 16px; padding-right: 50px; cursor: pointer; }
+
+        /* Premium Profile Layout */
+        .profile-card-wrapper { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.04); margin-top: 25px; position: relative; }
+        .profile-banner { height: 160px; background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%); position: relative; }
+        
+        .profile-avatar-container { text-align: center; margin-top: -65px; position: relative; z-index: 2; }
+        .profile-avatar { width: 130px; height: 130px; background: #f1f5f9; border: 6px solid #ffffff; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 65px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        
+        .profile-header-info { text-align: center; padding: 20px 20px 30px 20px; border-bottom: 1px solid #e2e8f0; }
+        .profile-header-info h2 { margin: 0; font-size: 28px; color: #0f172a; font-weight: 900; letter-spacing: -0.5px; text-transform: uppercase; }
+        .profile-header-info p { margin: 5px 0 15px 0; color: #64748b; font-size: 16px; font-weight: 600; font-family: monospace; }
+        .role-badge { display: inline-block; background: #eff6ff; color: #2563eb; padding: 6px 16px; border-radius: 20px; font-size: 13.5px; font-weight: 800; border: 1px solid #bfdbfe; text-transform: uppercase; letter-spacing: 0.5px; }
+
+        .profile-body-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; padding: 30px; background: #f8fafc; }
+        
+        .info-group-card { background: #ffffff; padding: 25px; border-radius: 16px; border: 1px solid #e2e8f0; box-shadow: 0 2px 10px rgba(0,0,0,0.02); }
+        .info-group-card h4 { margin: 0 0 20px 0; color: #1e293b; font-size: 16px; font-weight: 900; display: flex; align-items: center; gap: 8px; border-bottom: 2px solid #f1f5f9; padding-bottom: 10px; }
+        
+        .info-item { margin-bottom: 18px; }
+        .info-item:last-child { margin-bottom: 0; }
+        .info-label { display: block; font-size: 12px; color: #64748b; font-weight: 800; text-transform: uppercase; margin-bottom: 4px; letter-spacing: 0.5px; }
+        .info-value { display: block; font-size: 16px; color: #0f172a; font-weight: 700; word-break: break-word; }
+        .info-value.not-set { color: #94a3b8; font-style: italic; font-weight: 500; }
+
+        @keyframes spFadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Loader */
+        .ess-loader { text-align: center; padding: 50px; font-size: 18px; font-weight: bold; color: #64748b; }
+    </style>
+
+    <div class='sp-page-panel' id="essProfilePanel">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px;">
+            <div>
+                <h3 class="sp-module-title">Employee Portal</h3>
+                <p style="margin: 5px 0 0 0; color: #64748b; font-size: 14.5px; font-weight: 500;">Review your official establishment and payroll details.</p>
+            </div>
+            <!-- Change 'menuCardESS' to your actual parent card ID if different -->
+            <div class='sp-back-nav' onclick="typeof returnToHomeGridSPA === 'function' ? returnToHomeGridSPA() : window.history.back()">⬅️ Exit Profile</div>
+        </div>
+
+        <!-- Admin View User Selector -->
+        <div id="adminUserSelector" style="display: none; background: #fffbeb; padding: 20px; border-radius: 12px; border: 1px solid #fef3c7; margin-top: 20px;">
+            <label style="display: block; font-weight: 800; margin-bottom: 8px; font-size: 14px; color: #b45309;">👑 System Admin View: Search & Load Employee Profile</label>
+            <select id="profileUserDropdown" class="sp-input" style="border-color: #fcd34d;" onchange="window.renderEmployeeProfile(this.value)">
+                <option value="">-- Loading Directory --</option>
+            </select>
+        </div>
+
+        <div id="essProfileLoader" class="ess-loader">Loading Profile Data...</div>
+
+        <!-- Profile Display Area -->
+        <div id="essProfileContent" class="profile-card-wrapper" style="display: none;">
+            <div class="profile-banner"></div>
+            <div class="profile-avatar-container">
+                <div class="profile-avatar" id="dispAvatar">👤</div>
+            </div>
+            
+            <div class="profile-header-info">
+                <h2 id="dispName">Employee Name</h2>
+                <p id="dispUser">@username</p>
+                <div class="role-badge" id="dispRole">MAKER</div>
+            </div>
+
+            <div class="profile-body-grid">
+                <!-- Placement & Office Details -->
+                <div class="info-group-card" style="border-top: 4px solid #3b82f6;">
+                    <h4>🏢 Placement Registry</h4>
+                    <div class="info-item">
+                        <span class="info-label">Attached Office (SOL)</span>
+                        <span class="info-value" id="dispSolName">Loading...</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">SOL ID</span>
+                        <span class="info-value" id="dispSolId" style="font-family: monospace; color: #3b82f6;">000000</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Gender</span>
+                        <span class="info-value" id="dispGender">Not Updated</span>
+                    </div>
+                </div>
+
+                <!-- Payroll Details -->
+                <div class="info-group-card" style="border-top: 4px solid #10b981;">
+                    <h4>💰 Payroll & Salary Information</h4>
+                    <div class="info-item">
+                        <span class="info-label">Basic Pay</span>
+                        <span class="info-value" id="dispBasicPay">Not Updated</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Pay Level (Matrix)</span>
+                        <span class="info-value" id="dispPayLevel">Not Updated</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Last Salary Draw Date</span>
+                        <span class="info-value" id="dispLastSalary">Not Updated</span>
+                    </div>
+                </div>
+
+                <!-- Contact & Address Details -->
+                <div class="info-group-card" style="border-top: 4px solid #f59e0b;">
+                    <h4>📍 Contact & Address</h4>
+                    <div class="info-item">
+                        <span class="info-label">Phone Number</span>
+                        <span class="info-value" id="dispPhone">Not Updated</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Address Line 1</span>
+                        <span class="info-value" id="dispAddress">Not Updated</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">PIN Code</span>
+                        <span class="info-value" id="dispPin">Not Updated</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        window.essData = {
+            users: [],
+            offices: [],
+            activeUser: sessionStorage.getItem("activeUser"),
+            activeSolId: sessionStorage.getItem("activeSolId")
+        };
+
+        window.initEssProfile = function() {
+            let db = typeof firebase !== 'undefined' ? firebase.firestore() : null;
+            if(!db) {
+                document.getElementById('essProfileLoader').innerText = "Firebase not connected. Please reload.";
+                return;
+            }
+
+            // Fetch live registry data
+            db.collection("system").doc("registry").onSnapshot(doc => {
+                if(doc.exists) {
+                    let data = doc.data();
+                    window.essData.users = data.users || [];
+                    window.essData.offices = data.offices || [];
+                    
+                    // Setup current user context safely
+                    let activeProfile = window.essData.users.find(u => u.user === window.essData.activeUser);
+                    if(window.essData.activeUser === "admin") {
+                        window.essData.activeSolId = "000000";
+                    } else if (activeProfile) {
+                        window.essData.activeSolId = activeProfile.solId;
+                    }
+
+                    window.setupProfileView();
+                }
+            });
+        };
+
+        window.setupProfileView = function() {
+            let isHQorAdmin = (window.essData.activeUser === 'admin' || window.essData.activeSolId === '000000');
+
+            if (isHQorAdmin) {
+                // Show Admin Dropdown
+                let selectorDiv = document.getElementById('adminUserSelector');
+                let dropdown = document.getElementById('profileUserDropdown');
+                
+                selectorDiv.style.display = 'block';
+                dropdown.innerHTML = "<option value=''>-- Select an Employee to View --</option>";
+                
+                window.essData.users.forEach(u => {
+                    if(u.user !== 'admin') {
+                        dropdown.innerHTML += `<option value="${u.user}">${u.fullName} (@${u.user}) - SOL: ${u.solId || 'N/A'}</option>`;
+                    }
+                });
+
+                // Default load the admin's own profile or hide until selected
+                if(window.essData.activeUser !== 'admin') {
+                    dropdown.value = window.essData.activeUser;
+                    window.renderEmployeeProfile(window.essData.activeUser);
+                } else {
+                    document.getElementById('essProfileLoader').style.display = 'none';
+                }
+            } else {
+                // Normal User: Direct load
+                window.renderEmployeeProfile(window.essData.activeUser);
+            }
+        };
+
+        window.renderEmployeeProfile = function(username) {
+            if(!username) {
+                document.getElementById('essProfileContent').style.display = 'none';
+                return;
+            }
+
+            let profile = window.essData.users.find(u => u.user === username);
+            if(!profile) return;
+
+            document.getElementById('essProfileLoader').style.display = 'none';
+            document.getElementById('essProfileContent').style.display = 'block';
+
+            // Find Office Name
+            let officeName = "Unmapped Office";
+            if(profile.solId) {
+                let off = window.essData.offices.find(o => o.solId === profile.solId);
+                if(off) officeName = off.name;
+            }
+
+            // Set Values (Using fallback logic since some fields might not be in DB yet)
+            const setValue = (id, val, isCurrency = false) => {
+                let el = document.getElementById(id);
+                if(!val || val === "") {
+                    el.innerText = "Not Updated";
+                    el.classList.add('not-set');
+                } else {
+                    el.innerText = isCurrency ? `₹ ${val}` : val;
+                    el.classList.remove('not-set');
+                }
+            };
+
+            // Avatar & Gender Logic
+            let gender = profile.gender || "";
+            document.getElementById('dispAvatar').innerText = gender.toLowerCase() === 'female' ? '👩‍💼' : (gender.toLowerCase() === 'male' ? '👨‍💼' : '👤');
+
+            document.getElementById('dispName').innerText = profile.fullName || "Unknown Name";
+            document.getElementById('dispUser').innerText = "@" + profile.user;
+            document.getElementById('dispRole').innerText = (profile.role || "Unknown Role").toUpperCase();
+            
+            document.getElementById('dispSolId').innerText = profile.solId || "N/A";
+            document.getElementById('dispSolName').innerText = officeName.toUpperCase();
+            
+            setValue('dispGender', profile.gender);
+            setValue('dispPhone', profile.phone);
+            setValue('dispAddress', profile.addressLine1);
+            setValue('dispPin', profile.pinCode);
+            
+            setValue('dispBasicPay', profile.basicPay, true);
+            setValue('dispPayLevel', profile.payLevel);
+            setValue('dispLastSalary', profile.lastSalaryDate);
+        };
+
+        // Initialize on load
+        window.initEssProfile();
+    </script>
+</div>

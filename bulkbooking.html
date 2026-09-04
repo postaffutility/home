@@ -1,0 +1,2394 @@
+<!-- bulkBooking.html (SPA Module Format) -->
+<div id="moduleRenderArea">
+    
+    <!-- OFFLINE LIBRARIES (Loaded locally in the SPA) -->
+    <script src="xlsx.full.min.js"></script>
+    <script src="jspdf.umd.min.js"></script>
+    <script src="pincode_database.js"></script>
+
+    <style>
+        /* Minimalist Corporate Baseline & Scrollbar Assassin */
+        * { box-sizing: border-box; scrollbar-width: none; } 
+        ::-webkit-scrollbar { width: 0px; height: 0px; background: transparent; } 
+        
+        input, textarea, select { user-select: text !important; -webkit-user-select: text !important; }
+
+        /* --- BULLETPROOF APP VIEWS --- */
+        .bb-app-view { display: none; opacity: 0; animation: bbFadeInView 0.3s ease forwards; height: 100vh; overflow: hidden; background-color: #f4f6f9; font-family: 'Segoe UI', Arial, sans-serif;}
+        .bb-app-view.active-view { display: block; }
+        #bbHubView.active-view { display: flex; }
+        @keyframes bbFadeInView { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* --- ANIMATED POSTMAN SPLASH SCREEN --- */
+        #bbSplashScreen { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #f4f6f9; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 999990; color: #1e293b; text-align: center; }
+        .bb-splash-card { background: #ffffff; padding: 30px 50px 40px 50px; border-radius: 20px; box-shadow: 0 15px 40px rgba(0, 0, 0, 0.05); max-width: 550px; width: 90%; border-top: 6px solid #d32f2f; border-bottom: 1px solid #e2e8f0; border-left: 1px solid #e2e8f0; border-right: 1px solid #e2e8f0; }
+
+        .road-anim { animation: roadDash 0.8s linear infinite; }
+        @keyframes roadDash { to { stroke-dashoffset: -45; } }
+        .bike-bounce { animation: bounce 0.4s ease-in-out infinite alternate; }
+        @keyframes bounce { from { transform: translateY(0); } to { transform: translateY(4px); } }
+        .wheel-spin { animation: spin 0.8s linear infinite; }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        .arm-wave { animation: wave 0.3s ease-in-out infinite alternate; }
+        @keyframes wave { from { transform: rotate(-10deg); } to { transform: rotate(25deg); } }
+        .speech-bubble { opacity: 0; animation: popBubble 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) 1.2s forwards; }
+        @keyframes popBubble { 0% { opacity: 0; transform: scale(0.5); } 100% { opacity: 1; transform: scale(1); } }
+
+        .bb-splash-title { font-size: 28px; font-weight: 900; margin: 15px 0 5px 0; color: #0f172a; letter-spacing: -0.5px;}
+        .bb-splash-badge { display: inline-block; background: #d32f2f; color: white; padding: 5px 16px; border-radius: 20px; font-size: 12px; font-weight: 800; letter-spacing: 0.8px; margin-bottom: 15px; }
+        .bb-splash-author { font-size: 11.5px; color: #64748b; text-transform: uppercase; letter-spacing: 1.5px; margin-top: 15px;}
+        .bb-splash-name { font-size: 22px; color: #d32f2f; margin: 4px 0; font-weight: 800; }
+        .bb-splash-desig { font-size: 12.5px; color: #475569; font-weight: 600; margin-bottom: 25px;}
+
+        .begin-journey-btn { background: #d32f2f; color: white; border: none; padding: 15px 32px; font-size: 15px; font-weight: 800; border-radius: 12px; cursor: pointer; text-transform: uppercase; letter-spacing: 0.8px; box-shadow: 0 6px 20px rgba(211, 47, 47, 0.25); transition: all 0.2s; width: 100%; }
+        .begin-journey-btn:hover { background: #b71c1c; transform: translateY(-2px); box-shadow: 0 8px 25px rgba(211, 47, 47, 0.35); }
+
+        /* HUB MENU VIEW */
+        #bbHubView { justify-content: center; align-items: center; background: #f4f6f9; }
+        .bb-hub-container { width: 100%; max-width: 1050px; padding: 40px; background: white; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.06); border-top: 6px solid #d32f2f; text-align: center; }
+        .bb-hub-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-top: 30px; }
+        .bb-hub-card { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 35px 25px; cursor: pointer; transition: all 0.3s; box-shadow: 0 4px 15px rgba(0,0,0,0.02); text-align: center; }
+        .bb-hub-card:hover { transform: translateY(-6px); border-color: #d32f2f; box-shadow: 0 15px 30px rgba(211, 47, 47, 0.12); }
+        .bb-hub-icon { font-size: 48px; margin-bottom: 15px; }
+        .bb-hub-card h3 { margin: 0 0 10px 0; color: #1e293b; font-size: 18px; font-weight: 800; }
+        .bb-hub-card p { margin: 0; color: #64748b; font-size: 13px; line-height: 1.6; }
+
+        /* SPLIT LAYOUT */
+        .bb-split-layout { display: flex; height: 100vh; overflow: hidden; }
+
+        .bb-left-panel { flex: 2.8; background: #ffffff; padding: 25px; box-shadow: 2px 0 15px rgba(0,0,0,0.05); z-index: 10; overflow-y: auto; border-right: 1px solid #e2e8f0; border-top: 6px solid #d32f2f; transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); display: flex; flex-direction: column; }
+        .bb-right-panel { flex: 7.2; padding: 25px; background: #f8fafc; overflow: hidden; position: relative; transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);}
+
+        .bb-hamburger-btn { cursor: pointer; font-size: 22px; color: #1e293b; user-select: none; padding: 4px 8px; border-radius: 6px; }
+        .bb-hamburger-btn:hover { background: #f1f5f9; }
+        .bb-left-panel.collapsed { flex: 0 0 65px; padding: 25px 12px; overflow: hidden; cursor: pointer; }
+        .bb-left-panel.collapsed .bb-senderFormWrapper { display: none; }
+        .bb-left-panel.collapsed .bb-hamburger-btn { margin: 0 auto; display: block; text-align: center; }
+        .bb-left-panel.collapsed h2 { display: none; }
+
+        .bb-split-layout h2 { color: #1e293b; margin: 0 0 5px 0; font-size: 20px; font-weight: 800; display: inline-block; vertical-align: middle;}
+        .bb-split-layout p.subtitle { color: #64748b; font-size: 12.5px; margin-top: 0; margin-bottom: 15px; }
+
+        .bb-senderFormWrapper { display: flex; flex-direction: column; flex: 1; gap: clamp(8px, 1.5vh, 25px); }
+
+        .bb-form-group { display: flex; flex-direction: column; width: 100%; }
+        .bb-form-group label { font-weight: 700; margin-bottom: 5px; font-size: 12.5px; color: #334155; }
+        .mandatory { color: #ef4444; }
+        
+        .bb-form-group input[type="text"], .bb-form-group input[type="number"], .bb-form-group input[type="date"], .bb-form-group select, .bb-form-group input[type="email"], .bb-form-group input[type="file"] {
+            width: 100%; padding: clamp(10px, 1.2vh, 16px) 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: clamp(13.5px, 1.2vh, 15px); background: #f1f5f9; color: #1e293b; transition: all 0.2s; box-sizing: border-box;
+        }
+        .bb-form-group input[type="text"]:focus, .bb-form-group input[type="number"]:focus, .bb-form-group input[type="email"]:focus, .bb-form-group select:focus { border-color: #d32f2f; background: #ffffff; box-shadow: 0 0 0 3px rgba(211, 47, 47, 0.1); outline: none; }
+        
+        .bb-two-column-layout { display: flex; gap: clamp(20px, 4vw, 50px); flex: 1; width: 100%; }
+        .bb-form-column { display: flex; flex-direction: column; flex: 1; gap: clamp(12px, 2vh, 25px); justify-content: space-evenly; }
+        
+        .bb-liquid-grid-small { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: clamp(12px, 2vh, 35px) 15px; align-content: space-evenly; }
+
+        .bb-right-panel-header { position: sticky; top: -25px; background: rgba(248, 250, 252, 0.95); backdrop-filter: blur(8px); padding: 10px 0 15px 0; z-index: 50; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #e2e8f0; margin-bottom: 15px; margin-top: -10px;}
+        .bb-action-buttons-group { display: flex; gap: 12px; }
+
+        .bb-data-entry-workspace { display: flex; gap: 20px; align-items: flex-start; height: calc(100vh - 120px); }
+
+        .bb-active-form-area { flex: 7.5; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 25px; box-shadow: 0 4px 12px rgba(0,0,0,0.02); height: 100%; overflow-y: auto; display: flex; flex-direction: column; }
+        .bb-articleContainer { width: 100%; display: flex; flex-direction: column; flex: 1; }
+
+        .bb-mini-ledger-area { flex: 2.5; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 18px; height: 100%; overflow-y: auto; position: relative; }
+        
+        .article-card, .emo-card { display: none; width: 100%; flex-direction: column; animation: bbFadeIn 0.2s ease-out forwards; flex: 1; }
+        .active-card { display: flex; }
+
+        .ledger-list-item { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 10px 14px; margin-bottom: 8px; cursor: pointer; transition: all 0.2s; }
+        .ledger-list-item:hover { background: #fef2f2; border-color: #fca5a5; transform: translateX(-3px); }
+        .ledger-list-item.active-item { background: #d32f2f; color: white; border-color: #b71c1c; box-shadow: 0 4px 10px rgba(211, 47, 47, 0.3); }
+        .ledger-item-title { font-size: 13.5px; font-weight: 800; margin-bottom: 2px; }
+        .ledger-item-sub { font-size: 11.5px; font-family: monospace; font-weight: bold; color: #64748b; }
+        .active-item .ledger-item-sub { color: #fecaca; }
+
+        .delete-btn { background: #fee2e2; color: #ef4444; border: none; padding: 10px; border-radius: 8px; font-size: 13px; font-weight: bold; cursor: pointer; transition: 0.2s; width: 100%; margin-top: auto !important; flex-shrink: 0;}
+        .delete-btn:hover { background: #ef4444; color: white; }
+        .emo-card > div[style*="text-align: right"] { margin-top: auto !important; padding-top: 20px; }
+
+        button.bb-generate-btn { background: #10b981; color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 900; font-size: 13.5px; cursor: pointer; text-transform: uppercase; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3); transition: all 0.2s; }
+        button.bb-generate-btn:hover { background: #059669; transform: translateY(-1px); }
+        button.bb-preview-btn { background: #3b82f6; color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 900; font-size: 13.5px; cursor: pointer; text-transform: uppercase; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3); transition: all 0.2s; }
+        button.bb-preview-btn:hover { background: #2563eb; transform: translateY(-1px); }
+        button.bb-refresh-btn { background: #f59e0b; color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 900; font-size: 13.5px; cursor: pointer; text-transform: uppercase; box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3); transition: all 0.2s; }
+        button.bb-refresh-btn:hover { background: #d97706; transform: translateY(-1px); }
+
+        .api-loader { font-size: 10px; color: #f59e0b; font-weight: bold; display: none; margin-top: 4px; position:absolute; right:10px; top:35px; }
+        .global-settings-box { background: #fffbeb; border: 1px solid #fde68a; padding: 12px; border-radius: 8px; margin-bottom: 15px; }
+        .checkbox-label { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; color: #92400e; cursor: pointer; }
+        select.po-dropdown { background-color: #fef9c3; border-color: #f59e0b; font-weight: bold; }
+
+        /* INVOICE VIEW */
+        #invoiceView { background: #f4f6f9; }
+        .invoice-container { max-width: 800px; margin: 40px auto; padding: 40px; background: white; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.06); border-top: 6px solid #10b981; }
+
+        /* MODALS */
+        .bb-custom-popup-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(6px); display: none; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.2s ease-in-out; z-index: 9999999; }
+        .bb-custom-popup-card { background: #ffffff; width: 90%; max-width: 420px; padding: 35px; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.2); text-align: center; border-top: 6px solid #d32f2f; transform: scale(0.95); transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .bb-custom-popup-overlay.active { display: flex; opacity: 1; }
+        .bb-custom-popup-overlay.active .bb-custom-popup-card { transform: scale(1); }
+        .bb-popup-icon-alert { font-size: 48px; margin-bottom: 15px; }
+        .bb-popup-message-text { color: #334155; font-size: 15px; line-height: 1.6; margin: 0 0 25px 0; font-weight: 600; white-space: pre-line; }
+        .bb-popup-close-btn { background: #0f172a; color: white; padding: 12px 28px; border: none; border-radius: 8px; font-size: 13.5px; font-weight: 800; cursor: pointer; text-transform: uppercase; width: 100%; transition: background 0.2s;}
+        .bb-popup-close-btn:hover { background: #334155; }
+
+        .bb-preview-modal-card { max-width: 95%; width: 1150px; padding: 30px; text-align: left; border-top: 6px solid #3b82f6; }
+        .bb-preview-table-wrapper { max-height: 60vh; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 8px; margin-bottom: 20px; }
+        .bb-preview-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+        .bb-preview-table th { background: #f8fafc; padding: 12px; border-bottom: 2px solid #cbd5e1; position: sticky; top: 0; color: #0f172a; }
+        .bb-preview-table td { padding: 10px 12px; border-bottom: 1px solid #e2e8f0; color: #334155; }
+        .bb-preview-table tr:hover { background: #f1f5f9; }
+
+        /* PURE OFFLINE CSS CONFETTI */
+        .party-confetti { position: fixed; width: 10px; height: 10px; background-color: #f2d74e; z-index: 99999999; top: -20px; opacity: 0; pointer-events: none; animation: confettiFall linear forwards; }
+        @keyframes confettiFall { 0% { transform: translateY(0) rotate(0deg); opacity: 1; } 100% { transform: translateY(110vh) rotate(720deg); opacity: 0; } }
+        @keyframes bbFadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+
+    <!-- ANIMATED POSTMAN SPLASH SCREEN -->
+    <div id="bbSplashScreen">
+        <div class="bb-splash-card">
+            <div style="width: 100%; height: 180px; margin-bottom: 10px;">
+                <svg viewBox="0 0 350 200" width="100%" height="100%">
+                    <line x1="0" y1="170" x2="350" y2="170" stroke="#cbd5e1" stroke-width="4" stroke-dasharray="30 15" class="road-anim"/>
+                    <g class="bike-bounce">
+                        <g class="wheel-spin" style="transform-origin: 90px 135px;">
+                            <circle cx="90" cy="135" r="32" fill="none" stroke="#1e293b" stroke-width="6"/>
+                            <circle cx="90" cy="135" r="25" fill="none" stroke="#94a3b8" stroke-width="2"/>
+                            <line x1="90" y1="103" x2="90" y2="167" stroke="#94a3b8" stroke-width="2"/>
+                            <line x1="58" y1="135" x2="122" y2="135" stroke="#94a3b8" stroke-width="2"/>
+                            <circle cx="90" cy="135" r="6" fill="#1e293b"/>
+                        </g>
+                        <g class="wheel-spin" style="transform-origin: 230px 135px;">
+                            <circle cx="230" cy="135" r="32" fill="none" stroke="#1e293b" stroke-width="6"/>
+                            <circle cx="230" cy="135" r="25" fill="none" stroke="#94a3b8" stroke-width="2"/>
+                            <line x1="230" y1="103" x2="230" y2="167" stroke="#94a3b8" stroke-width="2"/>
+                            <line x1="198" y1="135" x2="262" y2="135" stroke="#94a3b8" stroke-width="2"/>
+                            <circle cx="230" cy="135" r="6" fill="#1e293b"/>
+                        </g>
+                        <path d="M90 135 L135 80 L205 80 L230 135" fill="none" stroke="#d32f2f" stroke-width="7" stroke-linejoin="round"/>
+                        <path d="M135 80 L165 135 L205 80 M135 80 L125 60" fill="none" stroke="#d32f2f" stroke-width="7" stroke-linejoin="round"/>
+                        <path d="M110 60 L140 60" stroke="#1e293b" stroke-width="8" stroke-linecap="round"/>
+                        <path d="M205 80 L215 55 L240 50" fill="none" stroke="#1e293b" stroke-width="7" stroke-linecap="round"/>
+                        <path d="M165 135 L175 95 L145 70" fill="none" stroke="#1e293b" stroke-width="14" stroke-linejoin="round" stroke-linecap="round"/>
+                        <path d="M145 70 Q160 30 180 55" fill="none" stroke="#3b82f6" stroke-width="26" stroke-linecap="round"/>
+                        <circle cx="185" cy="18" r="15" fill="#fcd34d"/>
+                        <path d="M170 8 Q185 -5 200 8 L215 8" fill="none" stroke="#d32f2f" stroke-width="9" stroke-linecap="round"/>
+                        <rect x="130" y="65" width="40" height="30" rx="6" fill="#f59e0b"/>
+                        <text x="136" y="84" font-size="10" font-family="Arial" font-weight="900" fill="#fff">POST</text>
+                        <g class="arm-wave" style="transform-origin: 175px 45px;">
+                            <path d="M175 45 L195 25 L215 15" fill="none" stroke="#3b82f6" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+                            <circle cx="215" cy="15" r="5" fill="#fcd34d"/>
+                        </g>
+                    </g>
+                    <g class="speech-bubble" style="transform-origin: 220px 40px;">
+                        <path d="M225 15 Q225 -10 260 -10 Q295 -10 295 15 Q295 40 260 40 L235 50 L240 35 Q225 30 225 15" fill="white" stroke="#cbd5e1" stroke-width="2"/>
+                        <text x="247" y="22" font-size="16" font-family="Arial" font-weight="900" fill="#d32f2f">Hi!</text>
+                    </g>
+                </svg>
+            </div>
+            <h1 class="bb-splash-title">PO Bulk Booking Software</h1>
+            <div class="bb-splash-badge">SPA Integrated Edition v3.0</div>
+            <p class="bb-splash-author">Developed by</p>
+            <h2 class="bb-splash-name">Subhajit Parbat</h2>
+            <p class="bb-splash-desig">Multi Tasking Staff, Radhakishorepur HO</p>
+            <button class="begin-journey-btn" onclick="bbDismissSplash()">Let's Begin the Journey 🚀</button>
+        </div>
+    </div>
+
+    <!-- HUB MENU VIEW -->
+    <div class="bb-app-view" id="bbHubView">
+        <div class="bb-hub-container">
+            <!-- BACK TO MAIN SPA HUB -->
+            <div onclick="bbExecuteExitApplication()" style="cursor:pointer; color:#d32f2f; font-weight:bold; margin-bottom:15px; display:inline-block; border: 1px solid #ffcdd2; padding: 8px 16px; border-radius: 8px; background: #fff1f2;">⬅️ Exit & Return to Main Portal</div>
+            
+            <h2 style="color: #1e293b; font-size: 24px; margin-top: 10px;">PO Bulk Booking Hub</h2>
+            <p style="color: #64748b; font-size: 14px;">Select an interface below to begin your operations.</p>
+            <div class="bb-hub-grid">
+                <div class="bb-hub-card" style="border-top: 4px solid #f59e0b;" onclick="bbSwitchAppView('dataEntryView')">
+                    <div class="bb-hub-icon">📥</div>
+                    <h3>Bulk Article Data Entry</h3>
+                    <p>Enter bulk article details, manage consignments, and export India Post spreadsheets.</p>
+                </div>
+                <div class="bb-hub-card" style="border-top: 4px solid #8b5cf6;" onclick="bbSwitchAppView('emoDataEntryView')">
+                    <div class="bb-hub-icon">💸</div>
+                    <h3>Bulk eMO Data Entry</h3>
+                    <p>Enter bulk electronic money orders, validate limits, and export direct EMO portal spreadsheets.</p>
+                </div>
+                <div class="bb-hub-card" style="border-top: 4px solid #0ea5e9;" onclick="bbSwitchAppView('invoiceView')">
+                    <div class="bb-hub-icon">🧾</div>
+                    <h3>Invoice Generation</h3>
+                    <p>Upload software and portal export files to instantly compile formal PDF tax invoices.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================== -->
+    <!-- MODULE 1: ARTICLE DATA ENTRY VIEW              -->
+    <!-- ============================================== -->
+    <div class="bb-app-view" id="dataEntryView">
+        <div class="bb-split-layout">
+            <div class="bb-left-panel" id="senderPanel">
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
+                    <span class="bb-hamburger-btn" onclick="bbToggleSenderPanel('senderPanel', 'senderTitleBlock', 'bb-senderFormWrapper')" title="Toggle Sender Options">☰</span>
+                    <div id="senderTitleBlock">
+                        <div onclick='bbSwitchAppView("bbHubView")' style="margin-bottom:0; cursor:pointer; color:#3b82f6; font-weight:bold; font-size: 14px;">⬅️ Back to Hub</div>
+                        <h2 style="margin:5px 0 0 0; font-size:20px;">Sender Details</h2>
+                    </div>
+                </div>
+
+                <div class="bb-senderFormWrapper" id="bb-senderFormWrapper">
+                    <div class="global-settings-box">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="gUseDefaultMob" checked onchange="bbToggleDefaultMobile('gUseDefaultMob', 'gSenderMobile', '.a-mobile', bbAutoSaveCurrentBatch)">
+                            Force Default Mobile (1234567890) everywhere
+                        </label>
+                    </div>
+
+                    <!-- AUTO-POPULATE BARCODE SETTING -->
+                    <div class="global-settings-box" style="margin-top: 10px; background: #f0fdf4; border-color: #bbf7d0;">
+                        <label class="checkbox-label" style="color: #166534;">
+                            <input type="checkbox" id="gAutoBarcode" onchange="bbToggleAutoBarcodeSettings()">
+                            Auto-Populate Sequential Barcodes
+                        </label>
+                        <div id="autoBarcodeConfig" style="display: none; margin-top: 8px;">
+                            <label style="font-size: 11.5px; color: #166534;">Enter First Barcode (e.g., EE412289515IN)</label>
+                            <input type="text" id="gStartBarcode" placeholder="EE412289515IN" maxlength="13" oninput="bbHandleStartBarcodeChange(this)" style="background: #fff; font-family: monospace; font-weight: bold; border-color: #86efac; width: 100%; padding: 8px; border-radius: 6px; border-width: 1px;">
+                        </div>
+                    </div>
+
+                    <div class="bb-liquid-grid-small">
+                        <div class="bb-form-group">
+                            <label>Article Category <span class="mandatory">*</span></label>
+                            <select id="gArticleType">
+                                <option value="Parcel & Gyan Post">Parcel & Gyan Post</option>
+                                <option value="Speed Post">Speed Post</option>
+                                <option value="Speed Post Parcel">Speed Post Parcel</option>
+                            </select>
+                        </div>
+                        <div class="bb-form-group">
+                            <label>Payment Mode <span class="mandatory">*</span></label>
+                            <select id="gPaymentMethod">
+                                <option value="Cash/Cheque">Cash/Cheque</option>
+                                <option value="Service">Service</option>
+                                <option value="BNPL">BNPL</option>
+                                <option value="FM">FM</option>
+                                <option value="PS">PS</option>
+                                <option value="SS">SS</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="bb-form-group">
+                        <label>Sender Name / Company <span class="mandatory">*</span></label>
+                        <input type="text" id="gSenderName" list="savedSendersList" placeholder="Sender's Full Name or Organization" oninput="bbAutoSaveCurrentBatch()" onchange="bbHandleSenderSelection(this)">
+                        <datalist id="savedSendersList"></datalist>
+                    </div>
+
+                    <div class="bb-liquid-grid-small">
+                        <div class="bb-form-group" style="position:relative;">
+                            <label>Sender PIN <span class="mandatory">*</span></label>
+                            <input type="text" id="gSenderPin" placeholder="6-Digit PIN" maxlength="6" oninput="bbEnforce10Digits(this)" onkeyup="bbSmartPinFetch(this, 'sender')">
+                            <div class="api-loader" id="senderLoader">Checking...</div>
+                        </div>
+                        <div class="bb-form-group">
+                            <label>Sender Mob No <span class="mandatory">*</span></label>
+                            <input type="text" id="gSenderMobile" placeholder="10-Digit Mobile" maxlength="10" value="1234567890" oninput="bbEnforce10Digits(this); bbAutoSaveCurrentBatch()">
+                        </div>
+                    </div>
+
+                    <div class="bb-form-group" id="senderPoContainer">
+                        <label>Sender Post Office <span class="mandatory">*</span></label>
+                        <select id="gSenderPoSelect" class="po-dropdown" disabled>
+                            <option>Enter PIN first</option>
+                        </select>
+                    </div>
+
+                    <div class="bb-liquid-grid-small">
+                        <div class="bb-form-group">
+                            <label>Sender Add1 <span class="mandatory">*</span></label>
+                            <input type="text" id="gSenderAdd1" placeholder="Street, Building, Area" oninput="bbAutoSaveCurrentBatch()">
+                        </div>
+                        <div class="bb-form-group">
+                            <label>Sender Add2 <span class="mandatory">*</span></label>
+                            <input type="text" id="gSenderAdd2" placeholder="Locality, Village" oninput="bbAutoSaveCurrentBatch()">
+                        </div>
+                    </div>
+
+                    <div class="bb-liquid-grid-small">
+                        <div class="bb-form-group">
+                            <label>Sender City (Auto)</label>
+                            <input type="text" id="gSenderCity" placeholder="City Name" readonly style="background:#e2e8f0;">
+                        </div>
+                        <div class="bb-form-group">
+                            <label>Sender State (Auto)</label>
+                            <input type="text" id="gSenderState" placeholder="State Name" readonly style="background:#e2e8f0;">
+                        </div>
+                    </div>
+
+                    <div class="bb-form-group" style="margin-top: 10px;">
+                        <label>Booking Reference Date</label>
+                        <input type="date" id="gFileDate" onchange="bbAutoSaveCurrentBatch()">
+                    </div>
+                    
+                    <p style="font-size: 11px; color:#64748b; text-align:center; margin-top:15px; font-style:italic;">Press Enter on any field above to auto-save and begin data entry.</p>
+                </div>
+            </div>
+
+            <div class="bb-right-panel">
+                <div class="bb-right-panel-header">
+                    <div>
+                        <h2 style="margin:0; font-size:20px;">Bulk Data Entry Interface</h2>
+                        <p class="subtitle" style="margin:0;">Hit Enter to auto-save and launch the next article instantly.</p>
+                    </div>
+                    <div class="bb-action-buttons-group">
+                        <button class="bb-refresh-btn" onclick="bbConfirmRefreshScreen('article')">🔄 Refresh</button>
+                        <button class="bb-preview-btn" onclick="bbOpenPreviewModal()">👁️ Preview Data</button>
+                        <button class="bb-generate-btn" onclick="bbGenerateBatchPackage()" style="margin:0;">⬇️ Generate Excel</button>
+                        <button class="bb-preview-btn" style="background:#f59e0b;" onclick="bbSwitchAppView('bbHubView')">🏠 Hub</button>
+                    </div>
+                </div>
+
+                <div class="bb-data-entry-workspace">
+                    <div class="bb-active-form-area">
+                        <div class="bb-articleContainer" id="articleContainer">
+                            <!-- Active Card Form Populates Here -->
+                        </div>
+                    </div>
+
+                    <div class="bb-mini-ledger-area">
+                        <div style="font-weight: 900; font-size: 15px; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 2px solid #e2e8f0; display:flex; justify-content:space-between; align-items:center;">
+                            <span>Live Ledger</span>
+                            <span id="miniLedgerCount" style="color:#d32f2f; background:#fef2f2; padding:3px 8px; border-radius:10px; font-size:12px;">0</span>
+                        </div>
+                        <div id="miniLedgerList"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================== -->
+    <!-- MODULE 2: EMO DATA ENTRY VIEW                  -->
+    <!-- ============================================== -->
+    <div class="bb-app-view" id="emoDataEntryView">
+        <div class="bb-split-layout">
+            <div class="bb-left-panel" id="emoSenderPanel">
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
+                    <span class="bb-hamburger-btn" onclick="bbToggleSenderPanel('emoSenderPanel', 'emoSenderTitleBlock', 'emoSenderFormWrapper')" title="Toggle Sender Options">☰</span>
+                    <div id="emoSenderTitleBlock">
+                        <div onclick='bbSwitchAppView("bbHubView")' style="margin-bottom:0; cursor:pointer; color:#3b82f6; font-weight:bold; font-size: 14px;">⬅️ Back to Hub</div>
+                        <h2 style="margin:5px 0 0 0; font-size:20px;">Sender Details</h2>
+                    </div>
+                </div>
+
+                <div class="bb-senderFormWrapper" id="emoSenderFormWrapper">
+                    <div class="global-settings-box">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="eUseDefaultMob" checked onchange="bbToggleDefaultMobile('eUseDefaultMob', 'eSenderMobile', '.e-mobile', bbAutoSaveEmoBatch)">
+                            Force Default Mobile (1234567890) everywhere
+                        </label>
+                    </div>
+                    
+                    <div class="bb-liquid-grid-small">
+                        <div class="bb-form-group">
+                            <label>Booking Type <span class="mandatory">*</span></label>
+                            <select id="eBookingType" disabled style="background:#e2e8f0; font-weight:bold; color:#1e293b;">
+                                <option value="eMO" selected>eMo</option>
+                            </select>
+                        </div>
+                        <div class="bb-form-group">
+                            <label>Payment Mode <span class="mandatory">*</span></label>
+                            <select id="ePaymentMethod" onchange="bbAutoSaveEmoBatch()">
+                                <option value="Cash/Cheque">Cash/Cheque</option>
+                                <option value="Service">Service</option>
+                                <option value="BNPL">BNPL</option>
+                                <option value="FM">FM</option>
+                                <option value="PS">PS</option>
+                                <option value="SS">SS</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="bb-form-group">
+                        <label>Sender Name / Company <span class="mandatory">*</span></label>
+                        <input type="text" id="eSenderName" list="savedSendersList" placeholder="Sender's Full Name or Organization" oninput="bbAutoSaveEmoBatch()" onchange="bbHandleSenderSelection(this)">
+                    </div>
+
+                    <div class="bb-form-group" style="position:relative;">
+                        <label>Sender PIN <span class="mandatory">*</span></label>
+                        <input type="text" id="eSenderPin" placeholder="6-Digit PIN" maxlength="6" oninput="bbEnforce10Digits(this)" onkeyup="bbSmartPinFetch(this, 'emo_sender')">
+                        <div class="api-loader" id="emoSenderLoader">Wait...</div>
+                    </div>
+
+                    <div class="bb-form-group" id="emoSenderPoContainer">
+                        <label>Post Office <span class="mandatory">*</span></label>
+                        <select id="eSenderPoSelect" class="po-dropdown" disabled>
+                            <option>Enter PIN first</option>
+                        </select>
+                    </div>
+
+                    <div class="bb-liquid-grid-small">
+                        <div class="bb-form-group">
+                            <label>Sender Add1 <span class="mandatory">*</span></label>
+                            <input type="text" id="eSenderAdd1" placeholder="Street, Building, Area" oninput="bbAutoSaveEmoBatch()">
+                        </div>
+                        <div class="bb-form-group">
+                            <label>Sender Add2 <span class="mandatory">*</span></label>
+                            <input type="text" id="eSenderAdd2" placeholder="Locality, Village" oninput="bbAutoSaveEmoBatch()">
+                        </div>
+                    </div>
+
+                    <div class="bb-liquid-grid-small">
+                        <div class="bb-form-group">
+                            <label>Sender City</label>
+                            <input type="text" id="eSenderCity" placeholder="City Name" readonly style="background:#e2e8f0;">
+                        </div>
+                        <div class="bb-form-group">
+                            <label>Sender State</label>
+                            <input type="text" id="eSenderState" placeholder="State Name" readonly style="background:#e2e8f0;">
+                        </div>
+                    </div>
+
+                    <div class="bb-form-group">
+                        <label>Sender Mob No <span class="mandatory">*</span></label>
+                        <input type="text" id="eSenderMobile" placeholder="10-Digit Mobile" maxlength="10" value="1234567890" oninput="bbEnforce10Digits(this); bbAutoSaveEmoBatch()">
+                    </div>
+
+                    <div class="bb-form-group" style="margin-top: 10px;">
+                        <label>Booking Reference Date</label>
+                        <input type="date" id="eFileDate" onchange="bbAutoSaveEmoBatch()">
+                    </div>
+
+                    <p style="font-size: 11px; color:#64748b; text-align:center; margin-top:15px; font-style:italic;">Press Enter on any field above to auto-save and begin data entry.</p>
+                </div>
+            </div>
+
+            <div class="bb-right-panel">
+                <div class="bb-right-panel-header">
+                    <div>
+                        <h2 style="margin:0; font-size:20px; color:#3b82f6;">Bulk eMO Data Entry Interface</h2>
+                        <p class="subtitle" style="margin:0;">Hit Enter to auto-save and launch the next eMO instantly.</p>
+                    </div>
+                    <div class="bb-action-buttons-group">
+                        <button class="bb-refresh-btn" onclick="bbConfirmRefreshScreen('emo')">🔄 Refresh</button>
+                        <button class="bb-preview-btn" onclick="bbOpenEmoPreviewModal()">👁️ Preview Data</button>
+                        <button class="bb-generate-btn" style="background:#3b82f6;" onclick="bbGenerateEmoBatchPackage()" style="margin:0;">⬇️ Generate Excel</button>
+                        <button class="bb-preview-btn" style="background:#f59e0b;" onclick="bbSwitchAppView('bbHubView')">🏠 Hub</button>
+                    </div>
+                </div>
+
+                <div class="bb-data-entry-workspace">
+                    <div class="bb-active-form-area" style="border-top: 4px solid #3b82f6;">
+                        <div class="bb-articleContainer" id="emoArticleContainer">
+                            <!-- Active eMO Card Form Populates Here -->
+                        </div>
+                    </div>
+
+                    <div class="bb-mini-ledger-area">
+                        <div style="font-weight: 900; font-size: 15px; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 2px solid #e2e8f0; display:flex; justify-content:space-between; align-items:center;">
+                            <span>eMO Ledger</span>
+                            <span id="emoLedgerCount" style="color:#3b82f6; background:#eff6ff; padding:3px 8px; border-radius:10px; font-size:12px;">0</span>
+                        </div>
+                        <div id="emoLedgerList"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================== -->
+    <!-- MODULE 3: INVOICE VIEW                         -->
+    <!-- ============================================== -->
+    <div class="bb-app-view" id="invoiceView">
+        <div class="invoice-container">
+            <div onclick='bbSwitchAppView("bbHubView")' style="cursor:pointer; color:#3b82f6; font-weight:bold; margin-bottom:15px; font-size: 14px;">⬅️ Back to Hub</div>
+            <h2 style="color: #1e293b; margin:0 0 5px 0;">PO Bulk Booking Invoice Generation</h2>
+            <p class="subtitle" style="color: #64748b; margin-bottom: 25px;">Upload the files below to generate a consolidated formal PDF invoice.</p>
+
+            <div style="background: #eff6ff; border: 1px solid #bfdbfe; padding: 20px; border-radius: 12px; margin-bottom: 20px;">
+                <h4 style="margin: 0 0 12px 0; color: #1e3a8a;">Step 1: Upload Source Files</h4>
+                <div class="bb-form-group">
+                    <label>1. Upload Excel File Generated by OUR Software (.xlsx) <span class="mandatory">*</span></label>
+                    <input type="file" id="invOurFile" accept=".xlsx, .xls, .csv">
+                </div>
+                <div class="bb-form-group">
+                    <label>2. Upload Final Export File from INDIA POST PORTAL (.xls / .csv) <span class="mandatory">*</span></label>
+                    <input type="file" id="invIndiaPostFile" accept=".xlsx, .xls, .csv">
+                    <span style="font-size:11px; color:#64748b;">(The system will use A.I. fuzzy-matching to find the Postage and Barcode columns automatically).</span>
+                </div>
+            </div>
+
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 20px; border-radius: 12px; margin-bottom: 20px;">
+                <h4 style="margin: 0 0 12px 0; color: #0f172a;">Step 2: Receipt Metadata</h4>
+                <div class="bb-liquid-grid-small">
+                    <div class="bb-form-group">
+                        <label>Office of Booking <span class="mandatory">*</span></label>
+                        <input type="text" id="invOfficeName" placeholder="e.g. Radhakishorepur HO">
+                    </div>
+                    <div class="bb-form-group">
+                        <label>Date of Booking</label>
+                        <input type="date" id="invDate">
+                    </div>
+                </div>
+            </div>
+
+            <button class="bb-generate-btn" onclick="bbProcessAndGenerateInvoice()" style="width:100%; padding: 14px;">🧾 Generate Formal PDF Invoice</button>
+        </div>
+    </div>
+
+    <!-- ============================================== -->
+    <!-- MODALS (Renamed IDs to prevent SPA conflicts)  -->
+    <!-- ============================================== -->
+    <div class='bb-custom-popup-overlay' id='bb_customAppAlertModal'>
+        <div class='bb-custom-popup-card'>
+            <div class='bb-popup-icon-alert' id='bb_popupAlertIcon'>🔔</div>
+            <p class='bb-popup-message-text' id='bb_customAlertMsgField'></p>
+            <button class='bb-popup-close-btn' onclick='bbCloseCustomAlert()'>Continue</button>
+        </div>
+    </div>
+
+    <div class='bb-custom-popup-overlay' id='bb_refreshConfirmModal'>
+        <div class='bb-custom-popup-card' style="border-top: 6px solid #f59e0b;">
+            <div class='bb-popup-icon-alert'>⚠️</div>
+            <p class='bb-popup-message-text'>
+                Do you want to continue?<br/><br/>The data will be refreshed, lost, and cannot be recovered.
+            </p>
+            <div style="display: flex; gap: 10px;">
+                <button class='bb-popup-close-btn' style='background:#10b981; flex:1;' id="btnConfirmRefresh">Continue</button>
+                <button class='bb-popup-close-btn' style='background:#ef4444; flex:1;' onclick='bbCloseRefreshConfirmModal()'>Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <div class='bb-custom-popup-overlay' id='bb_recoveryPromptModal'>
+        <div class='bb-custom-popup-card' style="border-top: 6px solid #d32f2f;">
+            <div class='bb-popup-icon-alert'>📂</div>
+            <h3 style="margin:0 0 10px 0; color:#1e293b; font-size:20px;">Previous Session Found</h3>
+            <p class='bb-popup-message-text' id='recoveryDetailsText'>Do you want to continue with the previous batch entry?</p>
+            <div style="display: flex; gap: 10px;">
+                <button class='bb-popup-close-btn' style='background:#10b981; flex:1;' id="btnRestoreBatch">Continue Batch</button>
+                <button class='bb-popup-close-btn' style='background:#ef4444; flex:1;' id="btnDiscardBatch">Discard & Start Fresh</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PREVIEW MODAL (ARTICLES) -->
+    <div class='bb-custom-popup-overlay' id='bb_previewDataModal'>
+        <div class='bb-custom-popup-card bb-preview-modal-card'>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+                <h2 style="margin:0; color:#1e3a8a; font-size:20px;">Data Entry Preview</h2>
+                <button onclick="bbClosePreviewModal('bb_previewDataModal')" style="background:#ef4444; color:white; border:none; padding:6px 14px; border-radius:6px; font-weight:bold; cursor:pointer;">Close</button>
+            </div>
+            <div class="bb-preview-table-wrapper">
+                <table class="bb-preview-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Barcode & Ref</th>
+                            <th>Receiver Name</th>
+                            <th>PIN Code</th>
+                            <th>Address Block</th>
+                            <th>Mobile & Email</th>
+                            <th>Weight</th>
+                            <th>Extras</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="previewTableBody"></tbody>
+                </table>
+            </div>
+            <div style="text-align: right;">
+                <button onclick="bbClosePreviewModal('bb_previewDataModal'); bbGenerateBatchPackage();" style="background:#10b981; color:white; border:none; padding:10px 20px; border-radius:8px; font-weight:bold; cursor:pointer;">Looks Good - Generate Excel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PREVIEW MODAL (eMO) -->
+    <div class='bb-custom-popup-overlay' id='bb_emoPreviewDataModal'>
+        <div class='bb-custom-popup-card bb-preview-modal-card' style="border-top: 6px solid #3b82f6;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+                <h2 style="margin:0; color:#3b82f6; font-size:20px;">eMO Data Entry Preview</h2>
+                <button onclick="bbClosePreviewModal('bb_emoPreviewDataModal')" style="background:#ef4444; color:white; border:none; padding:6px 14px; border-radius:6px; font-weight:bold; cursor:pointer;">Close</button>
+            </div>
+            <div class="bb-preview-table-wrapper">
+                <table class="bb-preview-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Amount & Ref</th>
+                            <th>Receiver Name</th>
+                            <th>PIN Code</th>
+                            <th>Address Block</th>
+                            <th>Mobile</th>
+                            <th>Message</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="emoPreviewTableBody"></tbody>
+                </table>
+            </div>
+            <div style="text-align: right;">
+                <button onclick="bbClosePreviewModal('bb_emoPreviewDataModal'); bbGenerateEmoBatchPackage();" style="background:#3b82f6; color:white; border:none; padding:10px 20px; border-radius:8px; font-weight:bold; cursor:pointer;">Looks Good - Generate eMO Excel</button>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        // =========================================================================
+        // PO BULK BOOKING - SPA INTEGRATED JAVASCRIPT LOGIC
+        // =========================================================================
+
+        // --- GLOBAL VARIABLES ---
+        window.lastEnteredWeight = "";
+        window.articleCount = 0;
+        window.emoCount = 0;
+        window.currentMode = "article";
+        window.lastPinPrefix = "";
+        window.nextAutoBarcode = null;
+
+        // --- MODULE INITIALIZATION (Runs Automatically upon SPA Injection) ---
+        setTimeout(() => {
+            try {
+                if(document.getElementById('gFileDate')) document.getElementById('gFileDate').valueAsDate = new Date();
+                if(document.getElementById('eFileDate')) document.getElementById('eFileDate').valueAsDate = new Date();
+                if(document.getElementById('invDate')) document.getElementById('invDate').valueAsDate = new Date();
+                
+                bbUpdateSenderDatalist();
+                
+                let hasArticleBatch = localStorage.getItem('po_bulk_recovery_batch');
+                let hasEmoBatch = localStorage.getItem('po_emo_recovery_batch');
+                
+                if (hasArticleBatch) {
+                    bbCheckForRecoveryBatch('article');
+                } else {
+                    bbAddArticleRow(); 
+                    bbToggleDefaultMobile('gUseDefaultMob', 'gSenderMobile', '.a-mobile');
+                }
+
+                if (hasEmoBatch && !hasArticleBatch) {
+                    bbCheckForRecoveryBatch('emo');
+                } else {
+                    bbAddEmoRow(); 
+                    bbToggleDefaultMobile('eUseDefaultMob', 'eSenderMobile', '.e-mobile');
+                }
+            } catch (err) { console.error("Init Error", err); }
+        }, 150);
+
+        // --- CORE NAVIGATION & UI ---
+        window.bbDismissSplash = function() {
+            const splash = document.getElementById('bbSplashScreen');
+            if(splash) {
+                splash.style.opacity = '0';
+                setTimeout(() => { splash.style.display = 'none'; bbSwitchAppView('bbHubView'); }, 500);
+            }
+        };
+
+        window.bbSwitchAppView = function(viewId) {
+            document.querySelectorAll('.bb-app-view').forEach(v => { v.classList.remove('active-view'); });
+            let target = document.getElementById(viewId);
+            if(target) target.classList.add('active-view');
+            
+            if (viewId === 'dataEntryView') {
+                window.currentMode = 'article';
+                const container = document.getElementById('articleContainer');
+                if (container && container.children.length === 0) bbAddArticleRow();
+            }
+            if (viewId === 'emoDataEntryView') {
+                window.currentMode = 'emo';
+                const container = document.getElementById('emoArticleContainer');
+                if (container && container.children.length === 0) bbAddEmoRow();
+            }
+        };
+
+        window.bbExecuteExitApplication = function() {
+            if(typeof returnToHomeGridSPA === 'function') {
+                returnToHomeGridSPA();
+            } else {
+                window.location.href = "index.html"; // Fallback
+            }
+        };
+
+        // --- ALERTS & MODALS ---
+        window.bbDisplayCustomAlert = function(msg, icon = '🔔') {
+            document.getElementById('bb_popupAlertIcon').innerText = icon;
+            document.getElementById('bb_customAlertMsgField').innerHTML = msg;
+            const modal = document.getElementById('bb_customAppAlertModal');
+            if(modal) { modal.style.display = 'flex'; setTimeout(() => { modal.classList.add('active'); }, 10); }
+        };
+
+        window.bbCloseCustomAlert = function() {
+            const modal = document.getElementById('bb_customAppAlertModal');
+            if(modal) { modal.classList.remove('active'); setTimeout(() => { modal.style.display = 'none'; }, 200); }
+        };
+
+        window.bbClosePreviewModal = function(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) { modal.classList.remove('active'); setTimeout(() => { modal.style.display = 'none'; }, 200); }
+        };
+
+        // --- PARTY SPRINKLER ---
+        window.bbFirePartySprinkler = function() {
+            const colors = ['#d32f2f', '#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#ec4899', '#06b6d4'];
+            for (let i = 0; i < 150; i++) {
+                let confetti = document.createElement('div');
+                confetti.className = 'party-confetti';
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                if (Math.random() > 0.5) {
+                    confetti.style.height = (Math.random() * 10 + 10) + 'px';
+                    confetti.style.width = (Math.random() * 5 + 5) + 'px';
+                } else {
+                    confetti.style.borderRadius = '50%';
+                    confetti.style.height = (Math.random() * 8 + 6) + 'px';
+                    confetti.style.width = confetti.style.height;
+                }
+                confetti.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                confetti.style.animationDelay = (Math.random() * 0.5) + 's';
+                document.body.appendChild(confetti);
+                setTimeout(() => { confetti.remove(); }, 5000);
+            }
+        };
+
+        // --- AUTO-UPPERCASE ---
+        document.addEventListener('input', function(e) {
+            if (e.target.closest('#moduleRenderArea') && e.target.tagName === 'INPUT' && e.target.type === 'text') {
+                let start = e.target.selectionStart;
+                let end = e.target.selectionEnd;
+                e.target.value = e.target.value.toUpperCase();
+                try { e.target.setSelectionRange(start, end); } catch(err) {}
+            }
+        });
+
+        // --- SMART PIN ENGINE ---
+        window.bbExpandPinShorthand = function(inputEl, mode, cardId) {
+            if (!inputEl) return;
+            let val = inputEl.value.trim();
+            if (val.length === 3 && window.lastPinPrefix) {
+                inputEl.value = window.lastPinPrefix + val;
+                bbSmartPinFetch(inputEl, mode, cardId); 
+                if (mode.startsWith('emo')) bbAutoSaveEmoBatch(); 
+                else bbAutoSaveCurrentBatch();
+            }
+        };
+
+        window.bbEnforce10Digits = function(el) {
+            el.value = el.value.replace(/[^0-9]/g, '').substring(0, 10);
+        };
+
+        // --- AUTO-BARCODE ENGINE ---
+        window.bbToggleAutoBarcodeSettings = function() {
+            const chk = document.getElementById('gAutoBarcode');
+            const configBox = document.getElementById('autoBarcodeConfig');
+            if (chk.checked) {
+                configBox.style.display = 'block';
+                let startInput = document.getElementById('gStartBarcode');
+                if (startInput && startInput.value.length === 13) bbHandleStartBarcodeChange(startInput);
+            } else {
+                configBox.style.display = 'none';
+                window.nextAutoBarcode = null;
+            }
+            bbAutoSaveCurrentBatch();
+        };
+
+        window.bbHandleStartBarcodeChange = function(inputEl) {
+            inputEl.value = inputEl.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+            let val = inputEl.value;
+            if (val.length === 13) {
+                const activeCard = document.querySelector('.article-card.active-card');
+                if (activeCard) {
+                    const barcodeField = activeCard.querySelector('.a-barcode');
+                    if (barcodeField) {
+                        barcodeField.value = val;
+                        bbValidateAndNormalizeCard(activeCard.id);
+                        window.nextAutoBarcode = bbGetNextBarcode(val);
+                    }
+                } else { window.nextAutoBarcode = val; }
+            } else { window.nextAutoBarcode = null; }
+            bbAutoSaveCurrentBatch();
+        };
+
+        window.bbGetCheckDigit = function(numStr) {
+            const weights = [8, 6, 4, 2, 3, 5, 9, 7];
+            const numArr = Array.from(String(numStr), Number);
+            let sum = 0;
+            numArr.forEach((n, i) => sum = sum + (n * weights[i]));
+            sum = 11 - (sum % 11);
+            if (sum === 10) sum = 0;
+            else if (sum === 11) sum = 5;
+            return sum;
+        };
+
+        window.bbGetNextBarcode = function(currentBarcode) {
+            let clean = currentBarcode.replace(/\s+/g, '').toUpperCase();
+            if (clean.length !== 13) return currentBarcode;
+            let prefix = clean.substring(0, 2);
+            let serialStr = clean.substring(2, 10);
+            let suffix = clean.substring(11, 13);
+            let serialNum = parseInt(serialStr, 10);
+            if (isNaN(serialNum)) return currentBarcode;
+            serialNum++;
+            let newSerialStr = String(serialNum).padStart(8, '0');
+            let newCheckDigit = bbGetCheckDigit(newSerialStr);
+            return prefix + newSerialStr + newCheckDigit + suffix;
+        };
+
+        // --- SENDER & UI CONTROLS ---
+        window.bbToggleDefaultMobile = function(chkId, senderMobId, loopClass, saveCallback) {
+            const chkEl = document.getElementById(chkId);
+            if(!chkEl) return;
+            const isChecked = chkEl.checked;
+            const defMob = "1234567890";
+            if (isChecked) {
+                document.getElementById(senderMobId).value = defMob;
+                document.querySelectorAll(loopClass).forEach(el => el.value = defMob);
+            } else {
+                document.getElementById(senderMobId).value = "";
+                document.querySelectorAll(loopClass).forEach(el => el.value = "");
+            }
+            if(saveCallback) saveCallback();
+        };
+
+        window.bbToggleSenderPanel = function(panelId, titleId, wrapperClass) {
+            const panel = document.getElementById(panelId);
+            const titleBlock = document.getElementById(titleId);
+            if (panel.classList.contains('collapsed')) {
+                panel.classList.remove('collapsed');
+                titleBlock.style.display = 'block';
+            } else {
+                panel.classList.add('collapsed');
+                titleBlock.style.display = 'none';
+            }
+        };
+
+        window.bbCollapseActiveSenderPanel = function() {
+            const mode = window.currentMode;
+            const panelId = mode === 'article' ? 'senderPanel' : 'emoSenderPanel';
+            const titleId = mode === 'article' ? 'senderTitleBlock' : 'emoSenderTitleBlock';
+            const panel = document.getElementById(panelId);
+            if (panel && !panel.classList.contains('collapsed')) {
+                panel.classList.add('collapsed');
+                let tBlock = document.getElementById(titleId);
+                if(tBlock) tBlock.style.display = 'none';
+            }
+        };
+
+        window.bbToggleInsAmount = function(selectEl) {
+            const card = selectEl.closest('.article-card, .emo-card');
+            const container = card.querySelector('.a-ins-container');
+            if (selectEl.value === 'Yes') {
+                container.style.visibility = 'visible'; container.style.opacity = '1';
+            } else {
+                container.style.visibility = 'hidden'; container.style.opacity = '0';
+                card.querySelector('.a-ins').value = '';
+            }
+        };
+
+        window.bbUpdateSenderDatalist = function() {
+            const datalist = document.getElementById('savedSendersList');
+            if (!datalist) return;
+            const savedSenders = JSON.parse(localStorage.getItem('po_saved_senders') || '[]');
+            datalist.innerHTML = '';
+            savedSenders.forEach(s => {
+                const opt = document.createElement('option');
+                opt.value = s.name;
+                datalist.appendChild(opt);
+            });
+        };
+
+        window.bbHandleSenderSelection = function(inputEl) {
+            const val = inputEl.value.trim();
+            const savedSenders = JSON.parse(localStorage.getItem('po_saved_senders') || '[]');
+            const found = savedSenders.find(s => s.name.toLowerCase() === val.toLowerCase());
+            if (found) {
+                if(window.currentMode === 'article') {
+                    document.getElementById('gSenderPin').value = found.pin;
+                    document.getElementById('gSenderMobile').value = found.mobile;
+                    bbSmartPinFetch(document.getElementById('gSenderPin'), 'sender');
+                    setTimeout(() => {
+                        const poSelect = document.getElementById('gSenderPoSelect');
+                        if (poSelect && found.po) { poSelect.value = found.po; bbHandlePoSelection(poSelect, 'sender'); }
+                        if (found.add1) document.getElementById('gSenderAdd1').value = found.add1;
+                        if (found.add2) document.getElementById('gSenderAdd2').value = found.add2;
+                        bbAutoSaveCurrentBatch();
+                    }, 350);
+                } else {
+                    document.getElementById('eSenderPin').value = found.pin;
+                    document.getElementById('eSenderMobile').value = found.mobile;
+                    bbSmartPinFetch(document.getElementById('eSenderPin'), 'emo_sender');
+                    setTimeout(() => {
+                        const poSelect = document.getElementById('eSenderPoSelect');
+                        if (poSelect && found.po) { poSelect.value = found.po; bbHandlePoSelection(poSelect, 'emo_sender'); }
+                        if (found.add1) document.getElementById('eSenderAdd1').value = found.add1;
+                        if (found.add2) document.getElementById('eSenderAdd2').value = found.add2;
+                        bbAutoSaveEmoBatch();
+                    }, 350);
+                }
+            }
+        };
+
+        window.bbSaveCurrentSenderProfile = function(sName, sPin, finalSenderMob, sAdd1, sAdd2, sCity, sState, mode) {
+            let savedSenders = JSON.parse(localStorage.getItem('po_saved_senders') || '[]');
+            const poSelectId = mode === 'emo' ? 'eSenderPoSelect' : 'gSenderPoSelect';
+            const poSelect = document.getElementById(poSelectId);
+            const currentProfile = { name: sName, pin: sPin, mobile: finalSenderMob, add1: sAdd1, add2: sAdd2, city: sCity, state: sState, po: poSelect ? poSelect.value : '' };
+            savedSenders = savedSenders.filter(s => s.name.toLowerCase() !== sName.toLowerCase());
+            savedSenders.unshift(currentProfile);
+            localStorage.setItem('po_saved_senders', JSON.stringify(savedSenders));
+            bbUpdateSenderDatalist();
+        };
+
+        // --- RECOVERY ENGINE ---
+        window.bbCheckForRecoveryBatch = function(type) {
+            const storageKey = type === 'article' ? 'po_bulk_recovery_batch' : 'po_emo_recovery_batch';
+            const savedBatch = localStorage.getItem(storageKey);
+            if (savedBatch) {
+                try {
+                    const parsed = JSON.parse(savedBatch);
+                    const hasRealArticles = parsed && parsed.articles && parsed.articles.some(art => art.barcode || art.name || art.pin || art.amount);
+                    if (hasRealArticles) {
+                        let senderDisplay = parsed.senderName ? `Sender: <b>${parsed.senderName}</b>` : "Unspecified Sender";
+                        let countDisplay = `Type: <b>${type === 'article' ? 'Articles' : 'eMOs'}</b> | Staged: <b>${parsed.articles.length}</b>`;
+                        let timeDisplay = `Last Saved: <b>${parsed.timestamp}</b>`;
+
+                        document.getElementById('recoveryDetailsText').innerHTML = `Do you want to continue with the previous ${type} batch entry?<br/><br/>${senderDisplay}<br/>${countDisplay}<br/>${timeDisplay}`;
+                        
+                        const btnRestore = document.getElementById('btnRestoreBatch');
+                        const btnDiscard = document.getElementById('btnDiscardBatch');
+                        btnRestore.replaceWith(btnRestore.cloneNode(true));
+                        btnDiscard.replaceWith(btnDiscard.cloneNode(true));
+                        
+                        document.getElementById('btnRestoreBatch').onclick = () => bbRestorePreviousBatch(type);
+                        document.getElementById('btnDiscardBatch').onclick = () => bbDiscardPreviousBatch(type);
+
+                        const modal = document.getElementById('bb_recoveryPromptModal');
+                        if(modal) { modal.style.display = 'flex'; setTimeout(() => { modal.classList.add('active'); }, 10); }
+                        return;
+                    } else { localStorage.removeItem(storageKey); }
+                } catch(e) { localStorage.removeItem(storageKey); }
+            }
+            if(type === 'article') { bbAddArticleRow(); bbToggleDefaultMobile('gUseDefaultMob', 'gSenderMobile', '.a-mobile'); }
+            if(type === 'emo') { bbAddEmoRow(); bbToggleDefaultMobile('eUseDefaultMob', 'eSenderMobile', '.e-mobile'); }
+        };
+
+        window.bbRestorePreviousBatch = function(type) {
+            const modal = document.getElementById('bb_recoveryPromptModal');
+            if(modal) { modal.classList.remove('active'); setTimeout(() => { modal.style.display = 'none'; }, 200); }
+
+            const storageKey = type === 'article' ? 'po_bulk_recovery_batch' : 'po_emo_recovery_batch';
+            const savedBatch = localStorage.getItem(storageKey);
+            if (!savedBatch) { if(type === 'article') bbAddArticleRow(); else bbAddEmoRow(); return; }
+
+            const parsed = JSON.parse(savedBatch);
+
+            if(type === 'article') {
+                if(parsed.senderName) document.getElementById('gSenderName').value = parsed.senderName;
+                if(parsed.senderPin) { document.getElementById('gSenderPin').value = parsed.senderPin; bbSmartPinFetch(document.getElementById('gSenderPin'), 'sender'); }
+                if(parsed.senderMobile) document.getElementById('gSenderMobile').value = parsed.senderMobile;
+                if(parsed.fileDate) document.getElementById('gFileDate').value = parsed.fileDate;
+                if(parsed.articleType) document.getElementById('gArticleType').value = parsed.articleType;
+                if(parsed.paymentMethod) document.getElementById('gPaymentMethod').value = parsed.paymentMethod;
+
+                document.getElementById('articleContainer').innerHTML = '';
+                document.getElementById('miniLedgerList').innerHTML = '';
+                window.articleCount = 0;
+
+                parsed.articles.forEach(art => {
+                    bbAddArticleRow();
+                    const currentCard = document.querySelector('.article-card.active-card');
+                    if (currentCard) {
+                        currentCard.querySelector('.a-barcode').value = art.barcode || "";
+                        currentCard.querySelector('.a-pin').value = art.pin || "";
+                        currentCard.querySelector('.a-weight').value = art.weight || "";
+                        currentCard.querySelector('.a-name').value = art.name || "";
+                        currentCard.querySelector('.a-mobile').value = art.mobile || "";
+                        currentCard.querySelector('.a-add1').value = art.add1 || "";
+                        currentCard.querySelector('.a-add2').value = art.add2 || "";
+                        currentCard.querySelector('.a-add3').value = art.add3 || "";
+                        currentCard.querySelector('.a-city').value = art.city || "";
+                        currentCard.querySelector('.a-state').value = art.state || "";
+                        currentCard.querySelector('.a-ref').value = art.ref || "";
+                        currentCard.querySelector('.a-email').value = art.email || "";
+                        currentCard.querySelector('.a-length').value = art.len || "";
+                        currentCard.querySelector('.a-breadth').value = art.bre || "";
+                        currentCard.querySelector('.a-height').value = art.hei || "";
+                        currentCard.querySelector('.a-pod').value = art.pod || "No";
+                        currentCard.querySelector('.a-priority').value = art.pri || "No";
+                        
+                        const insSelect = currentCard.querySelector('.a-insured');
+                        insSelect.value = art.insured || "No";
+                        bbToggleInsAmount(insSelect);
+                        currentCard.querySelector('.a-ins').value = art.insAmt || "";
+
+                        if(art.pin && art.pin.length === 6) bbSmartPinFetch(currentCard.querySelector('.a-pin'), 'receiver', currentCard.id);
+                        bbUpdateHeaderSummary(currentCard.id, 'article');
+                    }
+                });
+            } else {
+                if(parsed.senderName) document.getElementById('eSenderName').value = parsed.senderName;
+                if(parsed.senderPin) { document.getElementById('eSenderPin').value = parsed.senderPin; bbSmartPinFetch(document.getElementById('eSenderPin'), 'emo_sender'); }
+                if(parsed.senderMobile) document.getElementById('eSenderMobile').value = parsed.senderMobile;
+                if(parsed.fileDate) document.getElementById('eFileDate').value = parsed.fileDate;
+                if(parsed.paymentMethod) document.getElementById('ePaymentMethod').value = parsed.paymentMethod;
+
+                document.getElementById('emoArticleContainer').innerHTML = '';
+                document.getElementById('emoLedgerList').innerHTML = '';
+                window.emoCount = 0;
+
+                parsed.articles.forEach(art => {
+                    bbAddEmoRow();
+                    const currentCard = document.querySelector('.emo-card.active-card');
+                    if (currentCard) {
+                        currentCard.querySelector('.e-amount').value = art.amount || "";
+                        currentCard.querySelector('.e-message').value = art.message || "";
+                        currentCard.querySelector('.e-ref').value = art.ref || "";
+                        currentCard.querySelector('.e-pin').value = art.pin || "";
+                        currentCard.querySelector('.e-mobile').value = art.mobile || "";
+                        currentCard.querySelector('.e-name').value = art.name || "";
+                        currentCard.querySelector('.e-add1').value = art.add1 || "";
+                        currentCard.querySelector('.e-add2').value = art.add2 || "";
+                        currentCard.querySelector('.e-add3').value = art.add3 || "";
+                        currentCard.querySelector('.e-city').value = art.city || "";
+                        currentCard.querySelector('.e-state').value = art.state || "";
+
+                        if(art.pin && art.pin.length === 6) bbSmartPinFetch(currentCard.querySelector('.e-pin'), 'emo_receiver', currentCard.id);
+                        bbUpdateHeaderSummary(currentCard.id, 'emo');
+                    }
+                });
+            }
+            bbDisplayCustomAlert("Previous batch successfully restored! You can continue right where you left off.", "📂");
+        };
+
+        window.bbDiscardPreviousBatch = function(type) {
+            const storageKey = type === 'article' ? 'po_bulk_recovery_batch' : 'po_emo_recovery_batch';
+            localStorage.removeItem(storageKey);
+            const modal = document.getElementById('bb_recoveryPromptModal');
+            if(modal) {
+                modal.classList.remove('active');
+                setTimeout(() => {
+                    modal.style.display = 'none';
+                    if(type === 'article') { bbAddArticleRow(); bbToggleDefaultMobile('gUseDefaultMob', 'gSenderMobile', '.a-mobile'); }
+                    if(type === 'emo') { bbAddEmoRow(); bbToggleDefaultMobile('eUseDefaultMob', 'eSenderMobile', '.e-mobile'); }
+                }, 200);
+            }
+        };
+
+        // --- REFRESH SCREEN ENGINE ---
+        window.bbConfirmRefreshScreen = function(type) {
+            const modal = document.getElementById('bb_refreshConfirmModal');
+            const btn = document.getElementById('btnConfirmRefresh');
+            if (btn) {
+                btn.replaceWith(btn.cloneNode(true));
+                document.getElementById('btnConfirmRefresh').onclick = () => bbExecuteScreenRefresh(type);
+            }
+            if(modal) { modal.style.display = 'flex'; setTimeout(() => { modal.classList.add('active'); }, 10); }
+        };
+
+        window.bbCloseRefreshConfirmModal = function() {
+            const modal = document.getElementById('bb_refreshConfirmModal');
+            if(modal) { modal.classList.remove('active'); setTimeout(() => { modal.style.display = 'none'; }, 200); }
+        };
+
+        window.bbExecuteScreenRefresh = function(type) {
+            bbCloseRefreshConfirmModal();
+            if(type === 'article') {
+                localStorage.removeItem('po_bulk_recovery_batch');
+                document.getElementById('articleContainer').innerHTML = '';
+                document.getElementById('miniLedgerList').innerHTML = '';
+                window.articleCount = 0; window.lastEnteredWeight = ""; window.nextAutoBarcode = null; 
+                bbAddArticleRow();
+            } else {
+                localStorage.removeItem('po_emo_recovery_batch');
+                document.getElementById('emoArticleContainer').innerHTML = '';
+                document.getElementById('emoLedgerList').innerHTML = '';
+                window.emoCount = 0;
+                bbAddEmoRow();
+            }
+            bbDisplayCustomAlert("Screen refreshed successfully. Fresh data entry ledger initialized.", "✅");
+        };
+
+        // --- ARTICLE MODULE LOGIC ---
+        window.bbAutoSaveCurrentBatch = function() {
+            const articles = document.querySelectorAll('.article-card');
+            let articlesData = [];
+            articles.forEach(card => {
+                articlesData.push({
+                    barcode: card.querySelector('.a-barcode').value,
+                    pin: card.querySelector('.a-pin').value,
+                    weight: card.querySelector('.a-weight').value,
+                    name: card.querySelector('.a-name').value,
+                    mobile: card.querySelector('.a-mobile').value,
+                    add1: card.querySelector('.a-add1').value,
+                    add2: card.querySelector('.a-add2').value,
+                    add3: card.querySelector('.a-add3').value,
+                    city: card.querySelector('.a-city').value,
+                    state: card.querySelector('.a-state').value,
+                    poSelect: card.querySelector('.a-po-select') ? card.querySelector('.a-po-select').value : "",
+                    ref: card.querySelector('.a-ref').value,
+                    email: card.querySelector('.a-email').value,
+                    len: card.querySelector('.a-length').value,
+                    bre: card.querySelector('.a-breadth').value,
+                    hei: card.querySelector('.a-height').value,
+                    pod: card.querySelector('.a-pod').value,
+                    pri: card.querySelector('.a-priority').value,
+                    insured: card.querySelector('.a-insured').value,
+                    insAmt: card.querySelector('.a-ins').value
+                });
+            });
+
+            const batchData = {
+                senderName: document.getElementById('gSenderName').value,
+                senderPin: document.getElementById('gSenderPin').value,
+                senderMobile: document.getElementById('gSenderMobile').value,
+                senderAdd1: document.getElementById('gSenderAdd1').value,
+                senderAdd2: document.getElementById('gSenderAdd2').value,
+                senderCity: document.getElementById('gSenderCity').value,
+                senderState: document.getElementById('gSenderState').value,
+                fileDate: document.getElementById('gFileDate').value,
+                articleType: document.getElementById('gArticleType').value,
+                paymentMethod: document.getElementById('gPaymentMethod').value,
+                articles: articlesData,
+                timestamp: new Date().toLocaleTimeString()
+            };
+
+            if (articlesData.length > 0) { localStorage.setItem('po_bulk_recovery_batch', JSON.stringify(batchData)); }
+        };
+
+        window.bbUpdateWeightMemory = function(val) { window.lastEnteredWeight = val; bbAutoSaveCurrentBatch(); };
+
+        window.bbDeactivateAllArticles = function() {
+            document.querySelectorAll('.article-card').forEach(c => c.classList.remove('active-card'));
+            document.querySelectorAll('#miniLedgerList .ledger-list-item').forEach(l => l.classList.remove('active-item'));
+        };
+
+        window.bbActivateArticle = function(cardId) {
+            bbDeactivateAllArticles();
+            const card = document.getElementById(cardId);
+            const lItem = document.getElementById(`ledger_${cardId}`);
+            if (card) {
+                card.classList.add('active-card');
+                setTimeout(() => { card.querySelector('.a-barcode').focus(); }, 50);
+            }
+            if (lItem) lItem.classList.add('active-item');
+        };
+
+        window.bbAddArticleRow = function() {
+            window.articleCount++;
+            bbDeactivateAllArticles();
+
+            const container = document.getElementById('articleContainer');
+            const card = document.createElement('div');
+            card.className = 'article-card active-card';
+            card.id = `article_${window.articleCount}`;
+
+            let defCheckbox = document.getElementById('gUseDefaultMob');
+            let initMobile = defCheckbox && defCheckbox.checked ? "1234567890" : "";
+
+            let autoBarcodeChk = document.getElementById('gAutoBarcode');
+            let initBarcode = "";
+            let targetFocusField = '.a-barcode';
+
+            if (autoBarcodeChk && autoBarcodeChk.checked) {
+                if (window.nextAutoBarcode && window.nextAutoBarcode.length === 13) {
+                    initBarcode = window.nextAutoBarcode;
+                    window.nextAutoBarcode = bbGetNextBarcode(window.nextAutoBarcode);
+                    targetFocusField = '.a-pin'; 
+                }
+            }
+
+            card.innerHTML = `
+            <div class="bb-two-column-layout">
+                <div class="bb-form-column">
+                    <div class="bb-form-group">
+                        <label style="color:#d32f2f;">Barcode (13) <span class="mandatory">*</span></label>
+                        <input type="text" class="a-barcode" value="${initBarcode}" placeholder="13-Character Alphanumeric" maxlength="13" tabindex="1" style="border-width:2px; border-color:#fca5a5; font-family:monospace; font-weight:bold; letter-spacing:1px;" oninput="bbValidateAndNormalizeCard('${card.id}'); bbAutoSaveCurrentBatch();">
+                    </div>
+                    <div class="bb-form-group" style="position:relative;">
+                        <label>Receiver PIN <span class="mandatory">*</span></label>
+                        <input type="text" class="a-pin" placeholder="6-Digit PIN" maxlength="6" tabindex="2" style="font-weight:bold; letter-spacing:1px;" oninput="bbEnforce10Digits(this)" onblur="bbExpandPinShorthand(this, 'receiver', '${card.id}')" onkeyup="bbSmartPinFetch(this, 'receiver', '${card.id}'); bbAutoSaveCurrentBatch();">
+                        <div class="api-loader" id="loader_${card.id}">Checking...</div>
+                    </div>
+                    <div class="bb-form-group" id="poContainer_${card.id}">
+                        <label>Destination PO <span class="mandatory">*</span></label>
+                        <select class="a-po-select po-dropdown" tabindex="3" disabled><option>Enter PIN first</option></select>
+                    </div>
+                    <div class="bb-form-group">
+                        <label>Addressee Name <span class="mandatory">*</span></label>
+                        <input type="text" class="a-name" placeholder="Addressee Full Name" tabindex="4" oninput="bbUpdateHeaderSummary('${card.id}', 'article'); bbAutoSaveCurrentBatch();">
+                    </div>
+                    <div class="bb-form-group">
+                        <label>Address Line 1 <span class="mandatory">*</span></label>
+                        <input type="text" class="a-add1" placeholder="House No / Street Name" tabindex="5" oninput="bbAutoSaveCurrentBatch()">
+                    </div>
+                    <div class="bb-form-group">
+                        <label>Address Line 2 <span class="mandatory">*</span></label>
+                        <input type="text" class="a-add2" placeholder="Locality / Village" tabindex="6" oninput="bbAutoSaveCurrentBatch()">
+                    </div>
+                    <div class="bb-form-group">
+                        <label>Address Line 3</label>
+                        <input type="text" class="a-add3" placeholder="Landmark (Optional)" tabindex="7" oninput="bbAutoSaveCurrentBatch()">
+                    </div>
+                    <div class="bb-form-group">
+                        <label>City (Auto)</label>
+                        <input type="text" class="a-city" placeholder="City Name" readonly tabindex="-1" style="background:#e2e8f0;">
+                    </div>
+                    <div class="bb-form-group">
+                        <label>State (Auto)</label>
+                        <input type="text" class="a-state" placeholder="State Name" readonly tabindex="-1" style="background:#e2e8f0;">
+                    </div>
+                </div>
+                <div class="bb-form-column">
+                    <div class="bb-form-group">
+                        <label>Weight (g) <span class="mandatory">*</span></label>
+                        <input type="number" class="a-weight" placeholder="Weight in Grams" value="${window.lastEnteredWeight}" tabindex="8" oninput="bbUpdateWeightMemory(this.value)">
+                    </div>
+                    <div class="bb-form-group">
+                        <label>Mobile Number <span class="mandatory">*</span></label>
+                        <input type="text" class="a-mobile" placeholder="10-Digit Mobile" maxlength="10" value="${initMobile}" tabindex="9" oninput="bbEnforce10Digits(this); bbAutoSaveCurrentBatch()">
+                    </div>
+                    <div class="bb-form-group">
+                        <label>Email ID</label>
+                        <input type="email" class="a-email" placeholder="Email Address (Optional)" tabindex="10" oninput="bbAutoSaveCurrentBatch()">
+                    </div>
+                    <div class="bb-form-group">
+                        <label>Ref Number</label>
+                        <input type="text" class="a-ref" placeholder="Reference / Order No" tabindex="11" oninput="bbAutoSaveCurrentBatch()">
+                    </div>
+                    <div class="bb-form-group">
+                        <label>Length (cm)</label>
+                        <input type="number" class="a-length" placeholder="Length" tabindex="12" oninput="bbAutoSaveCurrentBatch()">
+                    </div>
+                    <div class="bb-form-group">
+                        <label>Breadth (cm)</label>
+                        <input type="number" class="a-breadth" placeholder="Breadth" tabindex="13" oninput="bbAutoSaveCurrentBatch()">
+                    </div>
+                    <div class="bb-form-group">
+                        <label>Height (cm)</label>
+                        <input type="number" class="a-height" placeholder="Height" tabindex="14" oninput="bbAutoSaveCurrentBatch()">
+                    </div>
+                    <div class="bb-form-group">
+                        <label>POD Status</label>
+                        <select class="a-pod" tabindex="15" onchange="bbAutoSaveCurrentBatch()">
+                            <option value="No" selected>No</option>
+                            <option value="Yes">Yes</option>
+                        </select>
+                    </div>
+                    <div class="bb-form-group">
+                        <label>Priority</label>
+                        <select class="a-priority" tabindex="16" onchange="bbAutoSaveCurrentBatch()">
+                            <option value="No" selected>No</option>
+                            <option value="Yes">Yes</option>
+                        </select>
+                    </div>
+                    <div class="bb-form-group">
+                        <label>Insured Status</label>
+                        <select class="a- insured" tabindex="17" onchange="bbToggleInsAmount(this); bbAutoSaveCurrentBatch()">
+                            <option value="No" selected>No</option>
+                            <option value="Yes">Yes</option>
+                        </select>
+                    </div>
+                    <div class="bb-form-group a-ins-container" style="visibility: hidden; opacity: 0; transition: opacity 0.2s;">
+                        <label style="color:#f59e0b;">Insured Amt (₹)</label>
+                        <input type="number" class="a-ins" placeholder="Insured Value" tabindex="18" oninput="bbAutoSaveCurrentBatch()">
+                    </div>
+                </div>
+            </div>
+            <div style="margin-top: auto !important; padding-top: 20px;">
+                <button type="button" class="delete-btn" onclick="bbRemoveArticle('${card.id}', event)">🗑️ Delete This Article</button>
+            </div>
+            `;
+            container.appendChild(card);
+
+            const ledgerList = document.getElementById('miniLedgerList');
+            const lItem = document.createElement('div');
+            lItem.className = 'ledger-list-item active-item';
+            lItem.id = `ledger_${card.id}`;
+            lItem.onclick = () => bbActivateArticle(card.id);
+            lItem.innerHTML = `
+            <div class="ledger-item-title">
+                <span>#${window.articleCount} <span id="ledger_name_${card.id}" style="margin-left:4px;">Drafting...</span></span>
+            </div>
+            <div class="ledger-item-sub" id="ledger_barcode_${card.id}">[ No Barcode Entered ]</div>
+            `;
+            ledgerList.appendChild(lItem);
+
+            document.getElementById('miniLedgerCount').innerText = document.querySelectorAll('.article-card').length;
+            bbAutoSaveCurrentBatch();
+            setTimeout(() => { let tg = document.querySelector(`#${card.id} ${targetFocusField}`); if(tg) tg.focus(); }, 50);
+        };
+
+        window.bbRemoveArticle = function(cardId, event) {
+            if(event) event.stopPropagation();
+            const card = document.getElementById(cardId);
+            const lItem = document.getElementById(`ledger_${cardId}`);
+            if(card) card.remove();
+            if(lItem) lItem.remove();
+
+            document.getElementById('miniLedgerCount').innerText = document.querySelectorAll('.article-card').length;
+            bbAutoSaveCurrentBatch();
+
+            const remaining = document.querySelectorAll('.article-card');
+            if(remaining.length > 0) { bbActivateArticle(remaining[remaining.length - 1].id); } 
+            else { bbAddArticleRow(); }
+        };
+
+        // --- eMO MODULE LOGIC ---
+        window.bbAutoSaveEmoBatch = function() {
+            const articles = document.querySelectorAll('.emo-card');
+            let articlesData = [];
+            articles.forEach(card => {
+                articlesData.push({
+                    amount: card.querySelector('.e-amount').value,
+                    message: card.querySelector('.e-message').value,
+                    ref: card.querySelector('.e-ref').value,
+                    pin: card.querySelector('.e-pin').value,
+                    mobile: card.querySelector('.e-mobile').value,
+                    name: card.querySelector('.e-name').value,
+                    add1: card.querySelector('.e-add1').value,
+                    add2: card.querySelector('.e-add2').value,
+                    add3: card.querySelector('.e-add3').value,
+                    city: card.querySelector('.e-city').value,
+                    state: card.querySelector('.e-state').value,
+                    poSelect: card.querySelector('.e-po-select') ? card.querySelector('.e-po-select').value : ""
+                });
+            });
+
+            const batchData = {
+                senderName: document.getElementById('eSenderName').value,
+                senderPin: document.getElementById('eSenderPin').value,
+                senderMobile: document.getElementById('eSenderMobile').value,
+                senderAdd1: document.getElementById('eSenderAdd1').value,
+                senderAdd2: document.getElementById('eSenderAdd2').value,
+                senderCity: document.getElementById('eSenderCity').value,
+                senderState: document.getElementById('eSenderState').value,
+                fileDate: document.getElementById('eFileDate').value,
+                paymentMethod: document.getElementById('ePaymentMethod').value,
+                articles: articlesData,
+                timestamp: new Date().toLocaleTimeString()
+            };
+
+            if (articlesData.length > 0) { localStorage.setItem('po_emo_recovery_batch', JSON.stringify(batchData)); }
+        };
+
+        window.bbDeactivateAllEmoArticles = function() {
+            document.querySelectorAll('.emo-card').forEach(c => c.classList.remove('active-card'));
+            document.querySelectorAll('#emoLedgerList .ledger-list-item').forEach(l => l.classList.remove('active-item'));
+        };
+
+        window.bbActivateEmoArticle = function(cardId) {
+            bbDeactivateAllEmoArticles();
+            const card = document.getElementById(cardId);
+            const lItem = document.getElementById(`eledger_${cardId}`);
+            if (card) {
+                card.classList.add('active-card');
+                setTimeout(() => { card.querySelector('.e-amount').focus(); }, 50);
+            }
+            if (lItem) lItem.classList.add('active-item');
+        };
+
+        window.bbAddEmoRow = function() {
+            window.emoCount++;
+            bbDeactivateAllEmoArticles();
+
+            const container = document.getElementById('emoArticleContainer');
+            const card = document.createElement('div');
+            card.className = 'emo-card active-card';
+            card.id = `emocard_${window.emoCount}`;
+
+            let defCheckbox = document.getElementById('eUseDefaultMob');
+            let initMobile = defCheckbox && defCheckbox.checked ? "1234567890" : "";
+
+            card.innerHTML = `
+            <div class="bb-two-column-layout">
+                <div class="bb-form-column">
+                    <div class="bb-form-group">
+                        <label style="color:#d32f2f;">Amount (₹) <span class="mandatory">*</span></label>
+                        <input type="number" class="e-amount" placeholder="Amount in INR" tabindex="1" style="border-width:2px; border-color:#fca5a5; font-weight:bold; font-size:15px;" oninput="bbAutoSaveEmoBatch();">
+                    </div>
+                    <div class="bb-form-group">
+                        <label>Addressee <span class="mandatory">*</span></label>
+                        <input type="text" class="e-name" placeholder="Addressee Full Name" tabindex="2" oninput="bbUpdateHeaderSummary('${card.id}', 'emo'); bbAutoSaveEmoBatch();">
+                    </div>
+                    <div class="bb-form-group" style="position:relative;">
+                        <label>Receiver PIN <span class="mandatory">*</span></label>
+                        <input type="text" class="e-pin" placeholder="6-Digit PIN" maxlength="6" tabindex="3" style="font-weight:bold; letter-spacing:1px;" oninput="bbEnforce10Digits(this)" onblur="bbExpandPinShorthand(this, 'emo_receiver', '${card.id}')" onkeyup="bbSmartPinFetch(this, 'emo_receiver', '${card.id}'); bbAutoSaveEmoBatch();">
+                        <div class="api-loader" id="eloader_${card.id}">Checking...</div>
+                    </div>
+                    <div class="bb-form-group" id="epoContainer_${card.id}">
+                        <label>Post Office <span class="mandatory">*</span></label>
+                        <select class="e-po-select po-dropdown" tabindex="4" disabled><option>Enter PIN first</option></select>
+                    </div>
+                    <div class="bb-form-group">
+                        <label>Add-1 <span class="mandatory">*</span></label>
+                        <input type="text" class="e-add1" placeholder="House No / Street Name" tabindex="5" oninput="bbAutoSaveEmoBatch()">
+                    </div>
+                    <div class="bb-form-group">
+                        <label>Add-2 <span class="mandatory">*</span></label>
+                        <input type="text" class="e-add2" placeholder="Locality / Village" tabindex="6" oninput="bbAutoSaveEmoBatch()">
+                    </div>
+                </div>
+                <div class="bb-form-column">
+                    <div class="bb-form-group">
+                        <label>Add-3 <span class="mandatory">*</span></label>
+                        <input type="text" class="e-add3" placeholder="Landmark (Optional)" tabindex="7" oninput="bbAutoSaveEmoBatch()">
+                    </div>
+                    <div class="bb-form-group">
+                        <label>City (Auto)</label>
+                        <input type="text" class="e-city" placeholder="City Name" readonly tabindex="-1" style="background:#e2e8f0;">
+                    </div>
+                    <div class="bb-form-group">
+                        <label>State (Auto)</label>
+                        <input type="text" class="e-state" placeholder="State Name" readonly tabindex="-1" style="background:#e2e8f0;">
+                    </div>
+                    <div class="bb-form-group">
+                        <label style="color:#3b82f6;">Message <span class="mandatory">*</span></label>
+                        <input type="text" class="e-message" placeholder="Message to Payee" tabindex="8" oninput="bbAutoSaveEmoBatch()">
+                    </div>
+                    <div class="bb-form-group">
+                        <label style="color:#3b82f6;">Ref Number <span class="mandatory">*</span></label>
+                        <input type="text" class="e-ref" placeholder="Order / Inv Reference" tabindex="9" oninput="bbAutoSaveEmoBatch()">
+                    </div>
+                    <div class="bb-form-group">
+                        <label style="color:#3b82f6;">Addr. Mobile <span class="mandatory">*</span></label>
+                        <input type="text" class="e-mobile" placeholder="10-Digit Mobile" maxlength="10" tabindex="10" value="${initMobile}" oninput="bbEnforce10Digits(this); bbAutoSaveEmoBatch()">
+                    </div>
+                </div>
+            </div>
+            <div style="text-align: right; margin-top: auto !important; padding-top: 20px; display:flex; justify-content:flex-end; gap: 10px;">
+                <button type="button" class="delete-btn" style="margin-top:0; max-width:200px;" onclick="bbRemoveEmoArticle('${card.id}', event)">🗑️ Delete eMO</button>
+                <button type="button" tabindex="-1" style="background:#10b981; color:white; border:none; padding:12px 40px; border-radius:8px; font-weight:900; cursor:pointer; font-size:14px;" onclick="bbProcessEmoSubmission(document.getElementById('${card.id}'))">Save & Next</button>
+            </div>
+            `;
+            container.appendChild(card);
+
+            const ledgerList = document.getElementById('emoLedgerList');
+            const lItem = document.createElement('div');
+            lItem.className = 'ledger-list-item active-item';
+            lItem.id = `eledger_${card.id}`;
+            lItem.onclick = () => bbActivateEmoArticle(card.id);
+            lItem.innerHTML = `
+            <div class="ledger-item-title">
+                <span>#${window.emoCount} <span id="eledger_name_${card.id}" style="margin-left:4px;">Drafting...</span></span>
+            </div>
+            <div class="ledger-item-sub" id="eledger_barcode_${card.id}">[ No Amount Entered ]</div>
+            `;
+            ledgerList.appendChild(lItem);
+
+            document.getElementById('emoLedgerCount').innerText = document.querySelectorAll('.emo-card').length;
+            bbAutoSaveEmoBatch();
+            setTimeout(() => { document.querySelector(`#${card.id} .e-amount`).focus(); }, 50);
+        };
+
+        window.bbRemoveEmoArticle = function(cardId, event) {
+            if(event) event.stopPropagation();
+            const card = document.getElementById(cardId);
+            const lItem = document.getElementById(`eledger_${cardId}`);
+            if(card) card.remove();
+            if(lItem) lItem.remove();
+
+            document.getElementById('emoLedgerCount').innerText = document.querySelectorAll('.emo-card').length;
+            bbAutoSaveEmoBatch();
+
+            const remaining = document.querySelectorAll('.emo-card');
+            if(remaining.length > 0) { bbActivateEmoArticle(remaining[remaining.length - 1].id); } 
+            else { bbAddEmoRow(); }
+        };
+
+        // --- SHARED UTILS ---
+        window.bbValidateAndNormalizeCard = function(cardId) {
+            const barcodeInput = document.querySelector(`#${cardId} .a-barcode`);
+            if(!barcodeInput) return;
+            barcodeInput.value = barcodeInput.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+
+            let currentVal = barcodeInput.value;
+            if (currentVal.length === 13) {
+                const allInputs = document.querySelectorAll('.a-barcode');
+                for (let i = 0; i < allInputs.length; i++) {
+                    let otherInput = allInputs[i];
+                    if (otherInput !== barcodeInput && otherInput.value === currentVal) {
+                        barcodeInput.value = "";
+                        bbDisplayCustomAlert(`Duplicate Barcode Detected!<br/><br/>The barcode <b>${currentVal}</b> has already been scanned or entered in another article on this list.<br/><br/>Please provide a unique barcode.`, "🛑");
+                        break;
+                    }
+                }
+            }
+            bbUpdateHeaderSummary(cardId, 'article');
+        };
+
+        window.bbUpdateHeaderSummary = function(cardId, type) {
+            if (type === 'article') {
+                const nameInput = document.querySelector(`#${cardId} .a-name`).value.trim();
+                const barcodeInput = document.querySelector(`#${cardId} .a-barcode`).value.trim();
+                const ledgerName = document.getElementById(`ledger_name_${cardId}`);
+                const ledgerBarcode = document.getElementById(`ledger_barcode_${cardId}`);
+
+                if (ledgerName && ledgerBarcode) {
+                    let shortName = nameInput ? nameInput.split(" ")[0].toUpperCase() : "Drafting...";
+                    ledgerName.innerText = shortName;
+                    ledgerBarcode.innerText = barcodeInput ? `[${barcodeInput}]` : "[ No Barcode Entered ]";
+                }
+            } else {
+                const nameInput = document.querySelector(`#${cardId} .e-name`).value.trim();
+                const amtInput = document.querySelector(`#${cardId} .e-amount`).value.trim();
+                const ledgerName = document.getElementById(`eledger_name_${cardId}`);
+                const ledgerBarcode = document.getElementById(`eledger_barcode_${cardId}`);
+
+                if (ledgerName && ledgerBarcode) {
+                    let shortName = nameInput ? nameInput.split(" ")[0].toUpperCase() : "Drafting...";
+                    ledgerName.innerText = shortName;
+                    ledgerBarcode.innerText = amtInput ? `[ ₹${amtInput} ]` : "[ No Amount Entered ]";
+                }
+            }
+        };
+
+        window.bbValidateSenderParametersAndFocus = function(mode) {
+            if(mode === 'article') {
+                let sName = document.getElementById('gSenderName');
+                if(!sName.value.trim()) { sName.focus(); return false; }
+                let sPin = document.getElementById('gSenderPin');
+                if(sPin.value.trim().length !== 6) { sPin.focus(); return false; }
+                let sAdd1 = document.getElementById('gSenderAdd1');
+                if(!sAdd1.value.trim()) { sAdd1.focus(); return false; }
+                let sAdd2 = document.getElementById('gSenderAdd2');
+                if(!sAdd2.value.trim()) { sAdd2.focus(); return false; }
+                let sMob = document.getElementById('gSenderMobile');
+                if(sMob.value.trim().length !== 10) { 
+                    bbDisplayCustomAlert("Strict Policy: Sender Mobile Number must be exactly 10 digits!", "⚠️");
+                    sMob.focus(); return false; 
+                }
+            } else {
+                let eName = document.getElementById('eSenderName');
+                if(!eName.value.trim()) { eName.focus(); return false; }
+                let ePin = document.getElementById('eSenderPin');
+                if(ePin.value.trim().length !== 6) { ePin.focus(); return false; }
+                let eAdd1 = document.getElementById('eSenderAdd1');
+                if(!eAdd1.value.trim()) { eAdd1.focus(); return false; }
+                let eAdd2 = document.getElementById('eSenderAdd2');
+                if(!eAdd2.value.trim()) { eAdd2.focus(); return false; }
+                let eMob = document.getElementById('eSenderMobile');
+                if(eMob.value.trim().length !== 10) { 
+                    bbDisplayCustomAlert("Strict Policy: Sender Mobile Number must be exactly 10 digits!", "⚠️");
+                    eMob.focus(); return false; 
+                }
+            }
+            return true;
+        };
+
+        window.bbProcessArticleSubmission = function(activeCard) {
+            let barcodeInput = activeCard.querySelector('.a-barcode');
+            if (document.activeElement === barcodeInput) {
+                let barcodeVal = barcodeInput.value.trim();
+                if (barcodeVal.length === 13) { activeCard.querySelector('.a-pin').focus(); return; }
+            }
+
+            let pinInput = activeCard.querySelector('.a-pin');
+            bbExpandPinShorthand(pinInput, 'receiver', activeCard.id);
+            
+            if (barcodeInput.value.trim().length !== 13) { barcodeInput.focus(); return; }
+            if (pinInput.value.trim().length !== 6) { pinInput.focus(); return; }
+            
+            let nameInput = activeCard.querySelector('.a-name');
+            if (!nameInput.value.trim()) { nameInput.focus(); return; }
+            
+            let add1Input = activeCard.querySelector('.a-add1');
+            if (!add1Input.value.trim()) { add1Input.focus(); return; }
+            
+            let weightInput = activeCard.querySelector('.a-weight');
+            if (!weightInput.value.trim()) { weightInput.focus(); return; }
+            
+            let mobInput = activeCard.querySelector('.a-mobile');
+            if (mobInput.value.trim().length !== 10) {
+                bbDisplayCustomAlert(`Strict Policy: Receiver Mobile Number must be exactly 10 digits!`, "⚠️");
+                mobInput.focus(); return;
+            }
+
+            let artCategory = document.getElementById('gArticleType').value;
+            let reqDim = (artCategory === 'Parcel & Gyan Post' || artCategory === 'Speed Post Parcel');
+            if (reqDim) {
+                let lenInput = activeCard.querySelector('.a-length');
+                if (!lenInput.value.trim()) { lenInput.focus(); return; }
+                let breInput = activeCard.querySelector('.a-breadth');
+                if (!breInput.value.trim()) { breInput.focus(); return; }
+                let heiInput = activeCard.querySelector('.a-height');
+                if (!heiInput.value.trim()) { heiInput.focus(); return; }
+            }
+
+            const allCards = Array.from(document.querySelectorAll('.article-card'));
+            const isLastCard = activeCard === allCards[allCards.length - 1];
+            
+            if(isLastCard) { bbAddArticleRow(); } 
+            else { const nextCard = allCards[allCards.indexOf(activeCard) + 1]; bbActivateArticle(nextCard.id); }
+        };
+
+        window.bbProcessEmoSubmission = function(emoCard) {
+            let pinInput = emoCard.querySelector('.e-pin');
+            bbExpandPinShorthand(pinInput, 'emo_receiver', emoCard.id);
+
+            let amtInput = emoCard.querySelector('.e-amount');
+            let rAmt = parseFloat(amtInput.value) || 0;
+            if (!amtInput.value.trim() || rAmt <= 0) { amtInput.focus(); return; }
+
+            let ePayMode = document.getElementById('ePaymentMethod').value;
+            if (ePayMode === 'Cash/Cheque' && rAmt > 10000) {
+                bbDisplayCustomAlert("Maximum remitted amount for Cash/Cheque is ₹10,000.<br><br>Please rectify the amount before continuing.", "🛑");
+                amtInput.focus(); return;
+            }
+
+            let nameInput = emoCard.querySelector('.e-name');
+            if (!nameInput.value.trim()) { nameInput.focus(); return; }
+            if (pinInput.value.trim().length !== 6) { pinInput.focus(); return; }
+
+            let add1Input = emoCard.querySelector('.e-add1');
+            if (!add1Input.value.trim()) { add1Input.focus(); return; }
+            let add2Input = emoCard.querySelector('.e-add2');
+            if (!add2Input.value.trim()) { add2Input.focus(); return; }
+            let add3Input = emoCard.querySelector('.e-add3');
+            if (!add3Input.value.trim()) { add3Input.focus(); return; }
+
+            let msgInput = emoCard.querySelector('.e-message');
+            if (!msgInput.value.trim()) { msgInput.focus(); return; }
+            let refInput = emoCard.querySelector('.e-ref');
+            if (!refInput.value.trim()) { refInput.focus(); return; }
+
+            let mobInput = emoCard.querySelector('.e-mobile');
+            if (mobInput.value.trim().length !== 10) {
+                bbDisplayCustomAlert(`Strict Policy: Receiver Mobile Number must be exactly 10 digits!`, "⚠️");
+                mobInput.focus(); return;
+            }
+
+            const allCards = Array.from(document.querySelectorAll('.emo-card'));
+            const isLastCard = emoCard === allCards[allCards.length - 1];
+            
+            if(isLastCard) { bbAddEmoRow(); } 
+            else { const nextCard = allCards[allCards.indexOf(emoCard) + 1]; bbActivateEmoArticle(nextCard.id); }
+        };
+
+        // GLOBAL ENTER KEY LISTENER
+        document.addEventListener('keydown', function(e) {
+            if(e.key === 'Enter') {
+                const alertModal = document.getElementById('bb_customAppAlertModal');
+                if (alertModal && alertModal.classList.contains('active')) {
+                    e.preventDefault(); bbCloseCustomAlert(); return;
+                }
+                
+                if(e.target.closest('.bb-custom-popup-card')) return;
+
+                const senderWrapper = e.target.closest('.bb-senderFormWrapper');
+                if (senderWrapper) {
+                    e.preventDefault();
+                    if(bbValidateSenderParametersAndFocus(window.currentMode)) {
+                        bbCollapseActiveSenderPanel();
+                        if (window.currentMode === 'article') {
+                            const actIn = document.querySelector('.article-card.active-card .a-barcode');
+                            if(actIn) actIn.focus();
+                        } else {
+                            const actIn = document.querySelector('.emo-card.active-card .e-amount');
+                            if(actIn) actIn.focus();
+                        }
+                    }
+                    return;
+                }
+
+                const activeArt = e.target.closest('.article-card');
+                if(activeArt) { e.preventDefault(); bbProcessArticleSubmission(activeArt); return; }
+
+                const activeEmo = e.target.closest('.emo-card');
+                if(activeEmo) { e.preventDefault(); bbProcessEmoSubmission(activeEmo); return; }
+            }
+        });
+
+        window.bbSmartPinFetch = function(inputEl, mode, cardId = null) {
+            let pin = inputEl.value.trim();
+            let loaderId;
+            
+            if (mode === 'sender') loaderId = 'senderLoader';
+            else if (mode === 'emo_sender') loaderId = 'emoSenderLoader';
+            else if (mode === 'emo_receiver') loaderId = `eloader_${cardId}`;
+            else loaderId = `loader_${cardId}`;
+
+            const loader = document.getElementById(loaderId);
+
+            if (pin.length !== 6) {
+                bbResetPinFields(mode, cardId);
+                if(loader) loader.style.display = "none";
+                return;
+            }
+
+            window.lastPinPrefix = pin.substring(0, 3);
+
+            if(loader) { loader.style.display = "block"; loader.style.color = "#f59e0b"; loader.innerText = "Checking DB..."; }
+
+            if (typeof OFFLINE_PIN_MATRIX !== 'undefined' && OFFLINE_PIN_MATRIX[pin]) {
+                if(loader) { loader.innerText = "Loaded Local Database"; loader.style.color = "#10b981"; }
+                bbApplyPinData(OFFLINE_PIN_MATRIX[pin], mode, cardId);
+                if(mode.startsWith('emo')) bbAutoSaveEmoBatch(); else bbAutoSaveCurrentBatch();
+            } else {
+                if(loader) { loader.style.color = "#ef4444"; loader.innerText = "PIN Not Found in DB."; }
+                bbResetPinFields(mode, cardId, true);
+            }
+            setTimeout(() => { if(loader) loader.style.display = "none"; }, 1500);
+        };
+
+        window.bbApplyPinData = function(data, mode, cardId) {
+            let cityEl, stateEl, containerEl, selectClass, selectId, labelText;
+            if (mode === 'sender') {
+                cityEl = document.getElementById('gSenderCity'); stateEl = document.getElementById('gSenderState');
+                containerEl = document.getElementById('senderPoContainer'); selectClass = 'po-dropdown'; selectId = 'gSenderPoSelect'; labelText = 'Sender Post Office <span class="mandatory">*</span>';
+            } else if (mode === 'emo_sender') {
+                cityEl = document.getElementById('eSenderCity'); stateEl = document.getElementById('eSenderState');
+                containerEl = document.getElementById('emoSenderPoContainer'); selectClass = 'po-dropdown'; selectId = 'eSenderPoSelect'; labelText = 'Sender Post Office <span class="mandatory">*</span>';
+            } else if (mode === 'emo_receiver') {
+                cityEl = document.querySelector(`#${cardId} .e-city`); stateEl = document.querySelector(`#${cardId} .e-state`);
+                containerEl = document.getElementById(`epoContainer_${cardId}`); selectClass = 'e-po-select po-dropdown'; selectId = ''; labelText = 'Post Office <span class="mandatory">*</span>';
+            } else {
+                cityEl = document.querySelector(`#${cardId} .a-city`); stateEl = document.querySelector(`#${cardId} .a-state`);
+                containerEl = document.getElementById(`poContainer_${cardId}`); selectClass = 'a-po-select po-dropdown'; selectId = ''; labelText = 'Destination PO <span class="mandatory">*</span>';
+            }
+
+            if(cityEl) cityEl.value = data.city.toUpperCase();
+            if(stateEl) stateEl.value = data.state.toUpperCase();
+
+            let sortedOffices = [...data.offices].sort((a, b) => {
+                const getRank = n => n.toUpperCase().match(/\b(HO|GPO|H\.O)\b/) ? 1 : (n.toUpperCase().match(/\b(SO|S\.O)\b/) ? 2 : (n.toUpperCase().match(/\b(BO|B\.O)\b/) ? 3 : 4));
+                return getRank(a) - getRank(b);
+            });
+
+            let selectHTML = `<select class="${selectClass}" id="${selectId}" onchange="bbHandlePoSelection(this, '${mode}', '${cardId}')">`;
+            sortedOffices.forEach(office => {
+                let cleanName = office.replace(/\s+(H\.O|S\.O|B\.O|HO|SO|BO)$/i, '').trim();
+                selectHTML += `<option value="${cleanName.toUpperCase()}">${office.toUpperCase()}</option>`;
+            });
+            selectHTML += `</select>`;
+
+            if(containerEl) {
+                containerEl.innerHTML = `<label>${labelText}</label>` + selectHTML;
+                let newlyCreatedSelect = document.getElementById(selectId) || containerEl.querySelector('select');
+                bbHandlePoSelection(newlyCreatedSelect, mode, cardId);
+            }
+        };
+
+        window.bbHandlePoSelection = function(selectEl, mode, cardId) {
+            if(!selectEl) return;
+            let rawPoName = selectEl.value;
+            let cleanName = rawPoName.replace(/\s+(H\.O|S\.O|B\.O|HO|SO|BO)$/i, '').trim().toUpperCase();
+
+            if (mode === 'sender') {
+                document.getElementById('gSenderAdd1').value = cleanName; document.getElementById('gSenderAdd2').value = cleanName;
+                bbAutoSaveCurrentBatch();
+            } else if (mode === 'emo_sender') {
+                document.getElementById('eSenderAdd1').value = cleanName; document.getElementById('eSenderAdd2').value = cleanName;
+                bbAutoSaveEmoBatch();
+            } else if (mode === 'emo_receiver') {
+                document.querySelector(`#${cardId} .e-add1`).value = cleanName; document.querySelector(`#${cardId} .e-add2`).value = cleanName;
+                bbAutoSaveEmoBatch();
+            } else {
+                document.querySelector(`#${cardId} .a-add1`).value = cleanName; document.querySelector(`#${cardId} .a-add2`).value = cleanName;
+                bbAutoSaveCurrentBatch();
+            }
+        };
+
+        window.bbResetPinFields = function(mode, cardId, isError = false) {
+            let cityEl, stateEl, containerEl, selectClass, selectId, labelText;
+            if (mode === 'sender') {
+                cityEl = document.getElementById('gSenderCity'); stateEl = document.getElementById('gSenderState');
+                containerEl = document.getElementById('senderPoContainer'); selectClass = 'po-dropdown'; selectId = 'gSenderPoSelect'; labelText = 'Sender Post Office <span class="mandatory">*</span>';
+            } else if (mode === 'emo_sender') {
+                cityEl = document.getElementById('eSenderCity'); stateEl = document.getElementById('eSenderState');
+                containerEl = document.getElementById('emoSenderPoContainer'); selectClass = 'po-dropdown'; selectId = 'eSenderPoSelect'; labelText = 'Sender Post Office <span class="mandatory">*</span>';
+            } else if (mode === 'emo_receiver') {
+                cityEl = document.querySelector(`#${cardId} .e-city`); stateEl = document.querySelector(`#${cardId} .e-state`);
+                containerEl = document.getElementById(`epoContainer_${cardId}`); selectClass = 'e-po-select po-dropdown'; selectId = ''; labelText = 'Post Office <span class="mandatory">*</span>';
+            } else {
+                cityEl = document.querySelector(`#${cardId} .a-city`); stateEl = document.querySelector(`#${cardId} .a-state`);
+                containerEl = document.getElementById(`poContainer_${cardId}`); selectClass = 'a-po-select po-dropdown'; selectId = ''; labelText = 'Destination PO <span class="mandatory">*</span>';
+            }
+
+            if(cityEl) cityEl.value = isError ? "ERROR/MANUAL" : "";
+            if(stateEl) stateEl.value = "";
+            if(containerEl) {
+                containerEl.innerHTML = `<label>${labelText}</label><select class="${selectClass}" id="${selectId}" disabled><option>Enter PIN first</option></select>`;
+            }
+        };
+
+        // --- PREVIEW & EXCEL GENERATION (ARTICLES) ---
+        window.bbOpenPreviewModal = function() {
+            const tbody = document.getElementById('previewTableBody');
+            tbody.innerHTML = '';
+            const articles = document.querySelectorAll('.article-card');
+            let validCount = 0;
+
+            articles.forEach(card => {
+                let rName = card.querySelector('.a-name').value.trim(); let rPin = card.querySelector('.a-pin').value.trim(); let rMob = card.querySelector('.a-mobile').value.trim();
+                let rWeight = card.querySelector('.a-weight').value.trim(); let rCity = card.querySelector('.a-city').value.trim() || "NA";
+                let rAdd1 = card.querySelector('.a-add1').value.trim(); let rAdd2 = card.querySelector('.a-add2').value.trim(); let rAdd3 = card.querySelector('.a-add3').value.trim();
+                let barcode = card.querySelector('.a-barcode').value.trim(); let rRef = card.querySelector('.a-ref').value.trim(); let rEmail = card.querySelector('.a-email').value.trim();
+                let rPod = card.querySelector('.a-pod').value; let isInsured = card.querySelector('.a-insured').value === 'Yes'; let rInsAmt = card.querySelector('.a-ins').value.trim();
+
+                if (!barcode || barcode.length < 13 || !rName || !rPin || !rAdd1 || !rWeight) return; 
+
+                validCount++;
+                let fullAddr = [rAdd1, rAdd2, rAdd3].filter(Boolean).join(", ");
+                let podBadge = rPod === 'Yes' ? '<span style="background:#10b981; color:white; padding:2px 4px; border-radius:4px; font-size:10px;">POD</span>' : '';
+                let insBadge = (isInsured && rInsAmt) ? `<span style="background:#f59e0b; color:white; padding:2px 4px; border-radius:4px; font-size:10px; margin-left:4px;">Ins: ₹${rInsAmt}</span>` : '';
+
+                let tr = document.createElement('tr');
+                tr.innerHTML = `
+                <td><strong>${validCount}</strong></td>
+                <td style="color:#d32f2f; font-family:monospace; font-weight:bold;">${barcode}<br><span style="font-size:10px; color:#64748b; font-family:sans-serif;">Ref: ${rRef || 'N/A'}</span></td>
+                <td>${rName}</td>
+                <td>${rPin}</td>
+                <td style="font-size:12px;">${fullAddr}</td>
+                <td style="font-size:11px;">${rMob}<br><span style="color:#64748b;">${rEmail || 'No Email'}</span></td>
+                <td><strong>${rWeight}g</strong></td>
+                <td>${podBadge}${insBadge}</td>
+                <td>
+                    <button onclick="bbEditArticleFromPreview('${card.id}', 'article')" style="background:#3b82f6; color:white; border:none; padding:5px 10px; border-radius:4px; font-size:11px; font-weight:bold; cursor:pointer; margin-right:4px;">Edit</button>
+                    <button onclick="bbDeleteArticleFromPreview('${card.id}', 'article')" style="background:#ef4444; color:white; border:none; padding:5px 10px; border-radius:4px; font-size:11px; font-weight:bold; cursor:pointer;">Del</button>
+                </td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            if (validCount === 0) { bbDisplayCustomAlert("No fully completed articles found yet. Please ensure all * mandatory fields are filled out.", "⚠️"); return; }
+
+            const modal = document.getElementById('bb_previewDataModal');
+            if(modal) { modal.style.display = 'flex'; setTimeout(() => { modal.classList.add('active'); }, 10); }
+        };
+
+        window.bbEditArticleFromPreview = function(cardId, type) {
+            if(type === 'article') {
+                bbClosePreviewModal('bb_previewDataModal');
+                setTimeout(() => { bbActivateArticle(cardId); }, 200);
+            } else if (type === 'emo') {
+                bbClosePreviewModal('bb_emoPreviewDataModal');
+                setTimeout(() => { bbActivateEmoArticle(cardId); }, 200);
+            }
+        };
+
+        window.bbDeleteArticleFromPreview = function(cardId, type) {
+            if(type === 'article') {
+                bbRemoveArticle(cardId);
+                bbOpenPreviewModal();
+            } else if (type === 'emo') {
+                bbRemoveEmoArticle(cardId);
+                bbOpenEmoPreviewModal();
+            }
+        };
+
+        window.bbGenerateBatchPackage = function() {
+            try {
+                let sheetJS = window.XLSX || (typeof require !== 'undefined' ? require('xlsx') : null);
+                if (!sheetJS) throw new Error("Excel Engine is loading. Please wait a second and try again.");
+
+                let sAdd1El = document.getElementById('gSenderAdd1');
+                let sAdd1 = sAdd1El ? sAdd1El.value.trim() : "";
+                const sName = document.getElementById('gSenderName').value.trim();
+                const sMob = document.getElementById('gSenderMobile').value.trim();
+                const sPin = document.getElementById('gSenderPin').value.trim();
+                const sCity = document.getElementById('gSenderCity').value.trim() || "NA";
+                const sState = document.getElementById('gSenderState').value.trim() || "NA";
+                const sAdd2 = document.getElementById('gSenderAdd2').value.trim();
+                const artCategory = document.getElementById('gArticleType').value;
+                let reqDim = (artCategory === 'Parcel & Gyan Post' || artCategory === 'Speed Post Parcel');
+
+                let defCheckbox = document.getElementById('gUseDefaultMob');
+                let finalSenderMob = (defCheckbox && defCheckbox.checked) ? "1234567890" : sMob;
+
+                if (!sName || sPin.length !== 6 || finalSenderMob.length !== 10 || !sAdd1 || !sAdd2) {
+                    bbDisplayCustomAlert("Form Defect: All Sender identity parameters are required. Ensure PIN is 6 digits and Mobile is 10 digits.", "🛑"); return;
+                }
+
+                bbSaveCurrentSenderProfile(sName, sPin, finalSenderMob, sAdd1, sAdd2, sCity, sState, 'article');
+
+                const rawDate = document.getElementById('gFileDate').value;
+                let fileDateStr = rawDate ? rawDate.split("-").reverse().join("-") : "";
+
+                const articles = document.querySelectorAll('.article-card');
+                let excelData = [];
+                let validCount = 0;
+                let hasError = false;
+                const barcodePattern = /^[A-Z]{2}\d{9}[A-Z]{2}$/i;
+
+                articles.forEach((card, i) => {
+                    if(hasError) return;
+
+                    let rName = card.querySelector('.a-name').value.trim(); let rPin = card.querySelector('.a-pin').value.trim(); let rMob = card.querySelector('.a-mobile').value.trim();
+                    let rWeight = card.querySelector('.a-weight').value.trim(); let rCity = card.querySelector('.a-city').value.trim() || "NA"; let rState = card.querySelector('.a-state').value.trim() || "NA";
+                    let rAdd1 = card.querySelector('.a-add1').value.trim(); let rAdd2 = card.querySelector('.a-add2').value.trim(); let rAdd3 = card.querySelector('.a-add3').value.trim();
+                    let barcode = card.querySelector('.a-barcode').value.trim(); let rRef = card.querySelector('.a-ref').value.trim(); let rEmail = card.querySelector('.a-email').value.trim();
+                    let rLen = card.querySelector('.a-length').value.trim(); let rBre = card.querySelector('.a-breadth').value.trim(); let rHei = card.querySelector('.a-height').value.trim();
+                    let rPod = card.querySelector('.a-pod').value === 'Yes'; let rPri = card.querySelector('.a-priority').value === 'Yes';
+                    let isInsured = card.querySelector('.a-insured').value === 'Yes'; let rInsAmt = card.querySelector('.a-ins').value.trim();
+
+                    let finalReceiverMob = (defCheckbox && defCheckbox.checked) ? "1234567890" : (rMob || "1234567890");
+                    if (!barcode || !rName || !rPin || !rAdd1 || !rWeight) return;
+
+                    if (!barcodePattern.test(barcode)) {
+                        bbActivateArticle(card.id);
+                        bbDisplayCustomAlert(`Structure Defect at Entry #${i+1}:<br/><br/>Barcode [${barcode}] violates India Post rules.`, "🛑");
+                        hasError = true; return;
+                    }
+
+                    if (finalReceiverMob.length !== 10) {
+                        bbActivateArticle(card.id);
+                        bbDisplayCustomAlert(`Mobile Number Defect at Entry #${i+1}:<br/><br/>Receiver Mobile must strictly be 10 Digits.`, "🛑");
+                        hasError = true; return;
+                    }
+
+                    if (reqDim && (!rLen || !rBre || !rHei)) {
+                        bbActivateArticle(card.id);
+                        bbDisplayCustomAlert(`Structure Defect at Entry #${i+1}:<br/><br/>Dimensions (Length, Breadth, Height) are MANDATORY for ${artCategory}.`, "🛑");
+                        hasError = true; return;
+                    }
+
+                    validCount++;
+                    barcode = barcode.toUpperCase();
+                    let finalInsAmt = (isInsured && rInsAmt) ? parseFloat(rInsAmt) : "";
+                    let finalInsType = (isInsured && rInsAmt) ? "DOP" : "";
+
+                    excelData.push({
+                        "SERIAL NUMBER": validCount, "BARCODE NO": barcode, "PHYSICAL WEIGHT": parseInt(rWeight), "REG": false, "OTP": false, "RECEIVER CITY": rCity, "RECEIVER PINCODE": rPin, "RECEIVER NAME": rName, "RECEIVER ADD LINE 1": rAdd1, "RECEIVER ADD LINE 2": rAdd2, "RECEIVER ADD LINE 3": rAdd3, "ACK": rPod, "SENDER MOBILE NO": finalSenderMob, "RECEIVER MOBILE NO": finalReceiverMob, "PREPAYMENT CODE": "", "VALUE OF PREPAYMENT": "", "CODR/COD": "", "VALUE FOR CODR/COD": "", "INSURANCE TYPE": finalInsType, "VALUE OF INSURANCE": finalInsAmt, "SHAPE OF ARTICLE": "", "LENGTH ": rLen, "BREADTH/DIAMETER": rBre, "HEIGHT": rHei, "PRIORITY FLAG": rPri, "DELIVERY INSTRUCTION": "", "DELIVERY SLOT": "", "INSTRUCTION RTS": "", "SENDER NAME": sName, "SENDER COMPANY NAME": "", "SENDER CITY": sCity, "SENDER STATE/UT": sState, "SENDER PINCODE": sPin, "SENDER EMAILID": "", "SENDER ALT CONTACT": "", "SENDER KYC": "", "SENDER TAX": "", "RECEIVER COMPANY NAME": "", "RECEIVER STATE/UT": rState, "RECEIVER EMAILID": rEmail, "RECEIVER ALT CONTACT": "", "RECEIVER KYC": "", "RECEIVER TAX REF": "", "ALT ADDRESS FLAG": false, "BULK REFERENCE": rRef || `${validCount}/BATCH`, "SENDER ADD LINE 1": sAdd1, "SENDER ADD LINE 2": sAdd2, "SENDER ADD LINE 3": ""
+                    });
+                });
+
+                if (hasError) return;
+                if (validCount === 0) { bbDisplayCustomAlert("Operation Aborted: No valid articles found.", "⚠️"); return; }
+
+                const worksheet = sheetJS.utils.json_to_sheet(excelData);
+                const workbook = sheetJS.utils.book_new();
+                sheetJS.utils.book_append_sheet(workbook, worksheet, "ArticleDetails");
+                let cleanSender = sName.replace(/[\\/:*?"<>|]/g, '');
+
+                sheetJS.writeFile(workbook, `Bulk_SP_Cash_${cleanSender}_${fileDateStr}.xlsx`);
+                localStorage.removeItem('po_bulk_recovery_batch');
+                
+                bbDisplayCustomAlert(`Process Complete!<br/><br/>Exported ${validCount} valid articles securely.`, "✅");
+                bbFirePartySprinkler();
+                
+            } catch (err) { bbDisplayCustomAlert("System Error: " + err.message, "❌"); }
+        };
+
+        // --- PREVIEW & EXCEL GENERATION (eMO) ---
+        window.bbOpenEmoPreviewModal = function() {
+            const tbody = document.getElementById('emoPreviewTableBody');
+            tbody.innerHTML = '';
+            const articles = document.querySelectorAll('.emo-card');
+            let validCount = 0;
+
+            articles.forEach(card => {
+                let rAmt = parseFloat(card.querySelector('.e-amount').value) || 0;
+                let rMsg = card.querySelector('.e-message').value.trim();
+                let rRef = card.querySelector('.e-ref').value.trim();
+                let rPin = card.querySelector('.e-pin').value.trim();
+                let rMob = card.querySelector('.e-mobile').value.trim();
+                let rName = card.querySelector('.e-name').value.trim();
+                let rAdd1 = card.querySelector('.e-add1').value.trim();
+                let rAdd2 = card.querySelector('.e-add2').value.trim();
+                let rAdd3 = card.querySelector('.e-add3').value.trim();
+
+                if (!rAmt || !rMsg || !rRef || !rPin || !rMob || !rName || !rAdd1 || !rAdd2 || !rAdd3) return; 
+
+                validCount++;
+                let fullAddr = [rAdd1, rAdd2, rAdd3].filter(Boolean).join(", ");
+                
+                let tr = document.createElement('tr');
+                tr.innerHTML = `
+                <td><strong>${validCount}</strong></td>
+                <td style="color:#d32f2f; font-weight:bold;">₹${rAmt}<br><span style="font-size:10px; color:#64748b; font-family:sans-serif;">Ref: ${rRef}</span></td>
+                <td>${rName}</td>
+                <td>${rPin}</td>
+                <td style="font-size:12px;">${fullAddr}</td>
+                <td style="font-size:11px;">${rMob}</td>
+                <td style="font-size:11px; font-style:italic;">"${rMsg}"</td>
+                <td>
+                    <button onclick="bbEditArticleFromPreview('${card.id}', 'emo')" style="background:#3b82f6; color:white; border:none; padding:5px 10px; border-radius:4px; font-size:11px; font-weight:bold; cursor:margin-right:4px;">Edit</button>
+                    <button onclick="bbDeleteArticleFromPreview('${card.id}', 'emo')" style="background:#ef4444; color:white; border:none; padding:5px 10px; border-radius:4px; font-size:11px; font-weight:bold; cursor:pointer;">Del</button>
+                </td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            if (validCount === 0) { bbDisplayCustomAlert("No fully completed eMOs found yet. Please ensure all fields are filled out.", "⚠️"); return; }
+
+            const modal = document.getElementById('bb_emoPreviewDataModal');
+            if(modal) { modal.style.display = 'flex'; setTimeout(() => { modal.classList.add('active'); }, 10); }
+        };
+
+        window.bbGenerateEmoBatchPackage = function() {
+            try {
+                let sheetJS = window.XLSX || (typeof require !== 'undefined' ? require('xlsx') : null);
+                if (!sheetJS) throw new Error("Excel Engine is loading. Please wait a second and try again.");
+
+                const sName = document.getElementById('eSenderName').value.trim();
+                const sMob = document.getElementById('eSenderMobile').value.trim();
+                const sPin = document.getElementById('eSenderPin').value.trim();
+                const sAdd1 = document.getElementById('eSenderAdd1').value.trim();
+                const sAdd2 = document.getElementById('eSenderAdd2').value.trim();
+                const sCity = document.getElementById('eSenderCity').value.trim() || "";
+                const sState = document.getElementById('eSenderState').value.trim() || "";
+                const pMethod = document.getElementById('ePaymentMethod').value;
+
+                let defCheckbox = document.getElementById('eUseDefaultMob');
+                let finalSenderMob = (defCheckbox && defCheckbox.checked) ? "1234567890" : sMob;
+
+                if (!sName || sPin.length !== 6 || finalSenderMob.length !== 10 || !sAdd1 || !sAdd2) {
+                    bbDisplayCustomAlert("Form Defect: All sender identity parameters are required. Ensure PIN is 6 digits and Mobile is 10 digits.", "🛑"); return;
+                }
+
+                bbSaveCurrentSenderProfile(sName, sPin, finalSenderMob, sAdd1, sAdd2, sCity, sState, 'emo');
+
+                const rawDate = document.getElementById('eFileDate').value;
+                let fileDateStr = rawDate ? rawDate.split("-").reverse().join("-") : "";
+
+                const articles = document.querySelectorAll('.emo-card');
+                let excelData = [];
+                let validCount = 0;
+                let hasError = false;
+
+                articles.forEach((card, i) => {
+                    if(hasError) return;
+
+                    let rAmt = parseFloat(card.querySelector('.e-amount').value) || 0;
+                    let rMsg = card.querySelector('.e-message').value.trim();
+                    let rRef = card.querySelector('.e-ref').value.trim();
+                    let rPin = card.querySelector('.e-pin').value.trim();
+                    let rMob = card.querySelector('.e-mobile').value.trim();
+                    let rName = card.querySelector('.e-name').value.trim();
+                    let rAdd1 = card.querySelector('.e-add1').value.trim();
+                    let rAdd2 = card.querySelector('.e-add2').value.trim();
+                    let rAdd3 = card.querySelector('.e-add3').value.trim();
+                    let rCity = card.querySelector('.e-city').value.trim() || "";
+                    let rState = card.querySelector('.e-state').value.trim() || "";
+
+                    let finalReceiverMob = (defCheckbox && defCheckbox.checked) ? "1234567890" : rMob;
+                    if (!rAmt || !rMsg || !rRef || !rPin || !rName || !rAdd1 || !rAdd2 || !rAdd3) return;
+
+                    if (pMethod === 'Cash/Cheque' && rAmt > 10000) {
+                        bbActivateEmoArticle(card.id);
+                        bbDisplayCustomAlert(`Structure Defect at Entry #${i+1}:<br/><br/>Maximum amount for Cash/Cheque is ₹10,000.`, "🛑");
+                        hasError = true; return;
+                    }
+
+                    if (finalReceiverMob.length !== 10) {
+                        bbActivateEmoArticle(card.id);
+                        bbDisplayCustomAlert(`Mobile Number Defect at Entry #${i+1}:<br/><br/>Receiver Mobile must strictly be 10 Digits.`, "🛑");
+                        hasError = true; return;
+                    }
+
+                    validCount++;
+
+                    excelData.push({
+                        "SERIAL NO": validCount, 
+                        "MO VALUE": rAmt, 
+                        "MESSAGE CODE": 22, 
+                        "MESSAGE CONTENT": rMsg, 
+                        "FIRST REFERENCE": rRef, 
+                        "OTHER REFERENCE ": 1, 
+                        "RECEIVER NAME": rName, 
+                        "RECEIVER COMPANY NAME": "", 
+                        "RECEIVER ADD LINE 1": rAdd1, 
+                        "RECEIVER ADD LINE 2": rAdd2, 
+                        "RECEIVER ADD LINE 3": rAdd3, 
+                        "RECEIVER CITY": rCity, 
+                        "RECEIVER STATE": rState, 
+                        "RECEIVER PINCODE": parseInt(rPin), 
+                        "RECEIVER EMAIL": "", 
+                        "RECEIVER ALT CONTACT": "", 
+                        "RECEIVER KYC REF": "", 
+                        "RECEIVER TAX REF": "", 
+                        "RECEIVER MOBILE": parseInt(finalReceiverMob), 
+                        "BULF REF": `BFG-${validCount}`
+                    });
+                });
+
+                if (hasError) return;
+                if (validCount === 0) { bbDisplayCustomAlert("Operation Aborted: No valid eMOs found.", "⚠️"); return; }
+
+                const worksheet = sheetJS.utils.json_to_sheet(excelData);
+                const workbook = sheetJS.utils.book_new();
+                sheetJS.utils.book_append_sheet(workbook, worksheet, "ArticleDetails");
+                let cleanSender = sName.replace(/[\\/:*?"<>|]/g, '');
+                let filePayMode = pMethod === 'Cash/Cheque' ? 'Cash' : pMethod;
+
+                sheetJS.writeFile(workbook, `Bulk_eMO_${filePayMode}_${cleanSender}_${fileDateStr}.xlsx`);
+                localStorage.removeItem('po_emo_recovery_batch');
+                
+                bbDisplayCustomAlert(`Process Complete!<br/><br/>Exported ${validCount} valid eMOs securely.`, "✅");
+                bbFirePartySprinkler();
+                
+            } catch (err) { bbDisplayCustomAlert("System Error: " + err.message, "❌"); }
+        };
+
+        // --- INVOICE ENGINE ---
+        window.bbReadFileAsJSON = function(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    try {
+                        const data = new Uint8Array(e.target.result);
+                        let sheetJS = window.XLSX || (typeof require !== 'undefined' ? require('xlsx') : null);
+                        const workbook = sheetJS.read(data, {type: 'array'});
+                        const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+                        resolve(sheetJS.utils.sheet_to_json(firstSheet));
+                    } catch(err) { reject(err); }
+                };
+                reader.onerror = reject; reader.readAsArrayBuffer(file);
+            });
+        };
+
+        window.bbFindMatchingColumn = function(row, keywords) {
+            const keys = Object.keys(row);
+            for(let key of keys) {
+                const lowerKey = key.toLowerCase();
+                for(let kw of keywords) { if(lowerKey.includes(kw)) return key; }
+            } return null;
+        };
+
+        window.bbNumberToWords = function(num) {
+            if (num === 0) return "Zero";
+            const a = ["", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen"];
+            const b = ["", "", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"];
+            const format = (n) => {
+                if (n < 20) return a[n];
+                let digit = n % 10;
+                if (n < 100) return b[Math.floor(n / 10)] + (digit ? "-" + a[digit] : "");
+                if (n < 1000) return a[Math.floor(n / 100)] + " Hundred" + (n % 100 === 0 ? "" : " and " + format(n % 100));
+                if (n < 100000) return format(Math.floor(n / 1000)) + " Thousand" + (n % 1000 === 0 ? "" : " " + format(n % 1000));
+                if (n < 10000000) return format(Math.floor(n / 100000)) + " Lakh" + (n % 100000 === 0 ? "" : " " + format(n % 100000));
+                return format(Math.floor(n / 10000000)) + " Crore" + (n % 10000000 === 0 ? "" : " " + format(n % 10000000));
+            };
+            return format(Math.floor(num)).toUpperCase();
+        };
+
+        window.bbProcessAndGenerateInvoice = async function() {
+            const ourFileInput = document.getElementById('invOurFile').files[0];
+            const ipFileInput = document.getElementById('invIndiaPostFile').files[0];
+            const officeName = document.getElementById('invOfficeName').value.trim() || "UNKNOWN HO";
+            const dateStrRaw = document.getElementById('invDate').value;
+
+            if (!ourFileInput || !ipFileInput) {
+                bbDisplayCustomAlert("Please upload both Excel files.", "🛑"); return;
+            }
+
+            let dateStr = dateStrRaw ? dateStrRaw.split("-").reverse().join("/") : new Date().toLocaleDateString('en-GB');
+
+            try {
+                const ourData = await bbReadFileAsJSON(ourFileInput);
+                const ipData = await bbReadFileAsJSON(ipFileInput);
+
+                if(ourData.length === 0 || ipData.length === 0) throw new Error("One or both uploaded files are empty.");
+
+                const sampleIPRow = ipData[0];
+                const ipBarcodeCol = bbFindMatchingColumn(sampleIPRow, ['barcode', 'article', 'track', 'item']);
+                const ipPostageCol = bbFindMatchingColumn(sampleIPRow, ['postage', 'charge', 'amount', 'total', 'tariff', 'fee']);
+                const ipCategoryCol = bbFindMatchingColumn(sampleIPRow, ['category', 'service', 'type', 'product']);
+
+                if (!ipBarcodeCol || !ipPostageCol) throw new Error("Could not automatically identify Barcode or Postage columns in the India Post Excel.");
+
+                const ipDictionary = {};
+                let bookingCategory = "Bulk Booking Service";
+
+                ipData.forEach(row => {
+                    if(row[ipBarcodeCol]) {
+                        let b = String(row[ipBarcodeCol]).trim().toUpperCase();
+                        let rawPostage = parseFloat(row[ipPostageCol]) || 0;
+                        ipDictionary[b] = {
+                            postage: Math.round(rawPostage * 100) / 100, 
+                            category: row[ipCategoryCol] || bookingCategory
+                        };
+                        if (row[ipCategoryCol]) bookingCategory = row[ipCategoryCol]; 
+                    }
+                });
+
+                let invoiceItems = [];
+                let grandTotal = 0;
+                
+                const senderName = ourData[0]["SENDER NAME"] || "UNKNOWN SENDER";
+                const senderMob = ourData[0]["SENDER MOBILE NO"] || "N/A";
+                const senderPin = ourData[0]["SENDER PINCODE"] || "";
+                const senderAdd1 = ourData[0]["SENDER ADD LINE 1"] || "";
+                const senderAdd2 = ourData[0]["SENDER ADD LINE 2"] || "";
+                const senderCity = ourData[0]["SENDER CITY"] || "";
+                const senderState = ourData[0]["SENDER STATE/UT"] || "";
+
+                ourData.forEach(row => {
+                    let barcode = String(row["BARCODE NO"]).trim().toUpperCase();
+                    let rName = row["RECEIVER NAME"] || "UNKNOWN";
+                    let rCity = row["RECEIVER CITY"] || "";
+                    let rState = row["RECEIVER STATE/UT"] || "";
+                    let rAdd1 = row["RECEIVER ADD LINE 1"] || "";
+                    let rAdd2 = row["RECEIVER ADD LINE 2"] || "";
+                    let rAdd3 = row["RECEIVER ADD LINE 3"] || "";
+                    let rPin = row["RECEIVER PINCODE"] || "";
+                    let weight = row["PHYSICAL WEIGHT"] || 0;
+                    
+                    let ipMatch = ipDictionary[barcode];
+
+                    if (ipMatch !== undefined) {
+                        let postage = ipMatch.postage;
+                        grandTotal += postage;
+                        
+                        let fullAddr = [rAdd1, rAdd2, rAdd3, rCity, rState].filter(Boolean).join(", ");
+                        
+                        invoiceItems.push({ 
+                            sno: (invoiceItems.length + 1).toString().padStart(2, '0'), 
+                            barcode: barcode, 
+                            rName: rName, 
+                            address: fullAddr, 
+                            pin: rPin, 
+                            weight: weight, 
+                            postage: postage 
+                        });
+                    }
+                });
+
+                if (invoiceItems.length === 0) throw new Error("No matching articles found between the two files.");
+
+                const { jsPDF } = window.jspdf; 
+                if(!jsPDF) throw new Error("jsPDF library not found in the environment.");
+                const pdf = new jsPDF('p', 'mm', 'a4');
+
+                // If logo exists globally (from main index.html or elsewhere)
+                if (typeof INDIA_POST_LOGO_BASE64 !== 'undefined') {
+                    try { pdf.addImage(INDIA_POST_LOGO_BASE64, 'JPEG', 15, 7, 24, 24); } catch(e) { console.warn("Logo skipped"); }
+                }
+
+                pdf.setFont("times", "bold"); 
+                pdf.setFontSize(12);
+                pdf.text("INDIA POST", 105, 16, { align: "center" });
+                pdf.text("BULK BOOKING RECEIPT", 105, 23, { align: "center" });
+                pdf.line(15, 28, 195, 28);
+
+                pdf.setFontSize(11);
+                pdf.setFont("times", "bold");
+                
+                let startY = 36;
+                let colX = 62; 
+                
+                pdf.text("Date of Booking", 15, startY);
+                pdf.text(`: ${dateStr}`, colX, startY);
+                
+                pdf.text("Booking Office", 15, startY + 6);
+                pdf.text(`: ${officeName.toUpperCase()}`, colX, startY + 6);
+
+                pdf.text("Booking Category", 15, startY + 12);
+                pdf.text(`: ${bookingCategory.toUpperCase()}`, colX, startY + 12);
+
+                let wordCount = bbNumberToWords(invoiceItems.length);
+                pdf.text("Total Articles Booked", 15, startY + 18);
+                pdf.text(`: ${invoiceItems.length} (${wordCount})`, colX, startY + 18);
+
+                pdf.text(`Sender's Name & Address`, 15, startY + 30);
+                pdf.text(`: ${senderName.toUpperCase()}`, colX, startY + 30);
+                
+                pdf.setFont("times", "normal");
+                pdf.text(`${senderAdd1}, PO: ${senderAdd2}`, colX + 2, startY + 35);
+                pdf.text(`${senderCity}, ${senderState}, Pin - ${senderPin}`, colX + 2, startY + 40);
+                pdf.text(`Mobile No: ${senderMob}`, colX + 2, startY + 45);
+
+                let y = 100;
+                pdf.setFont("times", "bold"); 
+                pdf.setFontSize(10);
+                
+                pdf.rect(15, y-6, 180, 10); 
+                pdf.line(22, y-6, 22, y+4);   
+                pdf.line(50, y-6, 50, y+4);   
+                pdf.line(86, y-6, 86, y+4);   
+                pdf.line(139, y-6, 139, y+4); 
+                pdf.line(153, y-6, 153, y+4); 
+                pdf.line(172, y-6, 172, y+4); 
+
+                pdf.text("Sl", 16.5, y); 
+                pdf.text("Article Number", 23.5, y); 
+                pdf.text("Addressee Name", 51.5, y);
+                pdf.text("Address", 88, y); 
+                pdf.text("PIN", 141, y); 
+                pdf.text("Article Wt", 154.5, y-1.5); 
+                pdf.text("(in gm)", 156, y+2); 
+                pdf.text("Booking Amt", 173.5, y-1.5);
+                pdf.text("(Inc. Tax)", 174, y+2);
+                
+                y += 4;
+                pdf.setFont("times", "normal"); 
+
+                invoiceItems.forEach(e => {
+                    let nameLines = pdf.splitTextToSize(e.rName.toUpperCase(), 34); 
+                    let addrLines = pdf.splitTextToSize(e.address.toUpperCase(), 51); 
+                    
+                    let maxLines = Math.max(nameLines.length, addrLines.length, 1);
+                    let rowHeight = (maxLines * 4) + 4; 
+
+                    if (y + rowHeight > 260) { 
+                        pdf.addPage(); 
+                        y = 20; 
+                        pdf.rect(15, y-6, 180, 10);
+                        pdf.line(22, y-6, 22, y+4); pdf.line(50, y-6, 50, y+4); pdf.line(86, y-6, 86, y+4); pdf.line(139, y-6, 139, y+4); pdf.line(153, y-6, 153, y+4); pdf.line(172, y-6, 172, y+4);
+                        pdf.setFont("times", "bold");
+                        pdf.text("Sl", 16.5, y); pdf.text("Article Number", 23.5, y); pdf.text("Addressee Name", 51.5, y); pdf.text("Address", 88, y); pdf.text("PIN", 141, y); pdf.text("Article Wt", 154.5, y-1.5); pdf.text("(in gm)", 156, y+2); pdf.text("Booking Amt", 173.5, y-1.5); pdf.text("(Inc. Tax)", 174, y+2);
+                        y += 4;
+                        pdf.setFont("times", "normal"); 
+                    }
+                    
+                    pdf.rect(15, y, 180, rowHeight); 
+                    pdf.line(22, y, 22, y+rowHeight);
+                    pdf.line(50, y, 50, y+rowHeight);
+                    pdf.line(86, y, 86, y+rowHeight);
+                    pdf.line(139, y, 139, y+rowHeight);
+                    pdf.line(153, y, 153, y+rowHeight);
+                    pdf.line(172, y, 172, y+rowHeight);
+
+                    pdf.text(e.sno.toString(), 16.5, y + 5); 
+                    pdf.text(e.barcode, 23.5, y + 5); 
+                    pdf.text(nameLines, 51.5, y + 5); 
+                    pdf.text(addrLines, 88, y + 5); 
+                    pdf.text(e.pin.toString(), 141, y + 5);
+                    pdf.text(`${e.weight}`, 156, y + 5); 
+                    pdf.text(`${e.postage.toFixed(2)}`, 174, y + 5);
+                    
+                    y += rowHeight;
+                });
+
+                pdf.setFont("times", "bold");
+                pdf.rect(15, y, 180, 7);
+                pdf.line(172, y, 172, y+7);
+                pdf.text("Grand Total", 17, y + 5);
+                pdf.text(`${grandTotal.toFixed(2)}`, 174, y + 5); 
+                
+                y += 18;
+
+                if (y + 30 > 280) { pdf.addPage(); y = 20; }
+
+                let paddedCount = invoiceItems.length.toString().padStart(2, '0');
+                let wordsString = bbNumberToWords(Math.round(grandTotal)); 
+                wordsString = wordsString.toLowerCase().replace(/\b\w/g, s => s.toUpperCase());
+
+                pdf.setFont("times", "bold"); 
+                pdf.setFontSize(11);
+                pdf.text(`Total Article Count: ${paddedCount}`, 15, y);
+                pdf.text(`Total Amount Paid: ${grandTotal.toFixed(2)} (${wordsString} Rupees Only)`, 15, y + 6);
+                
+                pdf.text("Signature of the official with Date Stamp", 130, y + 25);
+
+                const totalPages = pdf.internal.getNumberOfPages();
+                for (let i = 1; i <= totalPages; i++) {
+                    pdf.setPage(i);
+                    pdf.setFont("times", "normal");
+                    pdf.setFontSize(10);
+                    pdf.text(`Page ${i} of ${totalPages}`, 105, 287, { align: "center" });
+                }
+
+                window.open(pdf.output('bloburl'), '_blank');
+                
+                bbDisplayCustomAlert(`Invoice Successfully Generated for ${invoiceItems.length} articles!`, "✅");
+                bbFirePartySprinkler();
+                
+            } catch (err) { bbDisplayCustomAlert(`Failed to Generate Invoice:<br/><br/>${err.message}`, "🛑"); }
+        };
+
+    </script>
+</div>
