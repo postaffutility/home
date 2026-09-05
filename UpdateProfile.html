@@ -31,14 +31,16 @@
         .sp-action-btn.dark { background: #0f172a; box-shadow: 0 8px 20px rgba(15, 23, 42, 0.25); }
         .sp-action-btn.dark:hover { background: #1e293b; transform: translateY(-3px); box-shadow: 0 10px 25px rgba(30, 41, 59, 0.35); }
 
-        /* Local Modal Elements */
-        .pu-modal-overlay { position: fixed !important; top: 0 !important; left: 0 !important; width: 100vw !important; height: 100vh !important; background: rgba(15, 23, 42, 0.75) !important; backdrop-filter: blur(5px) !important; z-index: 99999999 !important; display: none; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.2s ease-in-out; }
-        .pu-modal-overlay.active { display: flex !important; opacity: 1; }
-        .pu-modal-card { background: #ffffff; width: 90%; max-width: 420px; border-radius: 16px; box-shadow: 0 25px 50px rgba(0,0,0,0.25); text-align: center; padding: 35px 25px; transform: scale(0.95); transition: transform 0.2s; }
-        .pu-modal-overlay.active .pu-modal-card { transform: scale(1); }
-
+        /* Loader */
         .pu-loader-container { position: fixed !important; top: 0 !important; left: 0 !important; width: 100vw !important; height: 100vh !important; background: rgba(255, 255, 255, 0.9) !important; backdrop-filter: blur(5px) !important; z-index: 100000000 !important; display: none; flex-direction: column; justify-content: center; align-items: center; }
         .pu-spinner { width: 45px; height: 45px; border: 4px solid #f1f5f9; border-top: 4px solid #3b82f6; border-radius: 50%; animation: spSpin 0.8s linear infinite; margin-bottom: 20px; }
+
+        /* Floating Toast Notification CSS */
+        .pu-toast-container { position: fixed; top: 30px; right: 30px; z-index: 100000000; display: flex; flex-direction: column; gap: 15px; pointer-events: none; }
+        .pu-toast { background: #ffffff; border-left: 6px solid #3b82f6; box-shadow: 0 10px 40px rgba(0,0,0,0.15); padding: 18px 25px; border-radius: 10px; font-family: 'Segoe UI', Arial, sans-serif; font-size: 15px; font-weight: 800; color: #1e293b; display: flex; align-items: center; gap: 14px; transform: translateX(120%); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); pointer-events: auto; }
+        .pu-toast.show { transform: translateX(0); }
+        .pu-toast.success { border-left-color: #10b981; }
+        .pu-toast.error { border-left-color: #ef4444; }
 
         @keyframes spFadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes spSpin { 100% { transform: rotate(360deg); } }
@@ -53,18 +55,37 @@
 
         <div style="border-top: 4px solid #3b82f6; background: #ffffff; border-radius: 16px; padding: 35px; box-shadow: 0 4px 15px rgba(0,0,0,0.02); border: 1px solid #e2e8f0;">
             
-            <!-- Employee Selector -->
-            <div class='sp-form-group' style="background: #eff6ff; padding: 20px; border-radius: 12px; border: 1px solid #bfdbfe;">
-                <label style="color: #1e40af;">Select Employee to Update</label>
-                <select id="puTargetUser" class="sp-input" style="border-color: #93c5fd;" onchange="window.puAutofillForm()">
-                    <option value="">-- Loading Directory --</option>
-                </select>
-                <p id="puAccessNote" style="margin: 8px 0 0 0; font-size: 12.5px; color: #3b82f6; font-weight: 600;"></p>
+            <!-- Employee Selector Area -->
+            <div style="background: #eff6ff; padding: 25px; border-radius: 12px; border: 1px solid #bfdbfe;">
+                <p id="puAccessNote" style="margin: 0 0 15px 0; font-size: 13.5px; color: #3b82f6; font-weight: 800;"></p>
+                
+                <div class="sp-flex-row" style="align-items: flex-end;">
+                    <!-- Dropdown -->
+                    <div class="sp-form-group" style="flex: 1; margin-bottom: 0;">
+                        <label style="color: #1e40af;">Quick Select (Dropdown)</label>
+                        <select id="puTargetUser" class="sp-input" style="border-color: #93c5fd;" onchange="window.puSyncSearchBox()">
+                            <option value="">-- Loading Directory --</option>
+                        </select>
+                    </div>
+                    
+                    <div style="font-weight: 900; color: #94a3b8; padding-bottom: 15px; text-align: center; width: 40px;">OR</div>
+                    
+                    <!-- Search Text Box -->
+                    <div class="sp-form-group" style="flex: 1.5; margin-bottom: 0;">
+                        <label style="color: #1e40af;">Search by Username / Employee ID</label>
+                        <div style="display: flex; gap: 10px;">
+                            <input id="puSearchId" type="text" class="sp-input" placeholder="Enter Employee ID..." style="border-color: #93c5fd; text-transform: uppercase;">
+                            <button class="sp-action-btn blue" style="margin-top: 0; width: auto; padding: 0 25px;" onclick="window.puValidateAndFetch()">Validate</button>
+                        </div>
+                    </div>
+                </div>
             </div>
 
+            <!-- Hidden field to keep track of the validated user -->
+            <input type="hidden" id="puEditingUser">
+
             <div id="puFormContainer" style="display: none; margin-top: 30px; animation: spFadeIn 0.3s ease-out;">
-                
-                <h4 style="margin: 0 0 15px 0; color: #0f172a; font-size: 16px; border-bottom: 2px solid #f1f5f9; padding-bottom: 10px;">👤 Demographic Details</h4>
+                <h4 style="margin: 0 0 15px 0; color: #0f172a; font-size: 16px; border-bottom: 2px solid #f1f5f9; padding-bottom: 10px;">👤 Demographic Details for <span id="puEditingUserNameDisplay" style="color:#3b82f6;"></span></h4>
                 <div class='sp-flex-row'>
                     <div class='sp-form-group'>
                         <label>Gender</label>
@@ -116,28 +137,17 @@
         </div>
     </div>
 
-    <!-- Local Loader & Alert Modal -->
+    <!-- Local Loader Container -->
     <div class='pu-loader-container' id='puGlobalLoader'>
         <div class='pu-spinner'></div>
         <div class='loading-status-msg' style="font-size: 15px; font-weight: 900; color: #0f172a;">Updating Database...</div>
     </div>
 
-    <div id="puAlertModal" class="pu-modal-overlay">
-        <div class="pu-modal-card" style="border-top: 6px solid #3b82f6;">
-            <div style="font-size: 50px; margin-bottom: 15px;" id="puAlertIcon">✅</div>
-            <h3 style="margin-top:0; color:#1e293b; font-weight:900;" id="puAlertTitle">Success</h3>
-            <p style="color: #64748b; font-size: 14.5px; font-weight: 600; margin-bottom: 25px;" id="puAlertMsg">Profile updated successfully.</p>
-            <button class="sp-action-btn blue" style="margin-top:0;" onclick="window.puCloseAlert()">Understood</button>
-        </div>
-    </div>
-
     <script>
-        // Move modals to body for safe Z-index
+        // Move loader to body for safe Z-index
         (function() {
-            ['puGlobalLoader', 'puAlertModal'].forEach(id => {
-                let el = document.getElementById(id);
-                if(el && el.parentNode !== document.body) document.body.appendChild(el);
-            });
+            let loader = document.getElementById('puGlobalLoader');
+            if(loader && loader.parentNode !== document.body) document.body.appendChild(loader);
         })();
 
         window.puData = {
@@ -149,26 +159,38 @@
         window.puShowLoader = function() { document.getElementById('puGlobalLoader').style.display = 'flex'; };
         window.puHideLoader = function() { document.getElementById('puGlobalLoader').style.display = 'none'; };
         
-        window.puAlert = function(msg, title="Notice", icon="🔔", color="#3b82f6") {
-            document.getElementById('puAlertMsg').innerText = msg;
-            document.getElementById('puAlertTitle').innerText = title;
-            document.getElementById('puAlertIcon').innerText = icon;
-            document.querySelector('#puAlertModal .pu-modal-card').style.borderTopColor = color;
-            let btn = document.querySelector('#puAlertModal button');
-            btn.className = 'sp-action-btn'; btn.style.backgroundColor = color;
+        // ===================================================================
+        // FLOATING TOAST NOTIFICATION ENGINE (Replaced Modal Alerts)
+        // ===================================================================
+        window.puShowToast = function(msg, type="success") {
+            let container = document.getElementById('puToastContainer');
+            if(!container) {
+                container = document.createElement('div');
+                container.id = 'puToastContainer';
+                container.className = 'pu-toast-container';
+                document.body.appendChild(container);
+            }
             
-            let m = document.getElementById('puAlertModal');
-            m.style.display = 'flex'; setTimeout(() => m.classList.add('active'), 10);
-        };
-        
-        window.puCloseAlert = function() {
-            let m = document.getElementById('puAlertModal');
-            m.classList.remove('active'); setTimeout(() => m.style.display = 'none', 200);
+            let toast = document.createElement('div');
+            toast.className = `pu-toast ${type}`;
+            let icon = type === 'success' ? '✅' : '❌';
+            toast.innerHTML = `<span style="font-size:22px;">${icon}</span> <span>${msg}</span>`;
+            
+            container.appendChild(toast);
+            
+            // Trigger animation
+            setTimeout(() => toast.classList.add('show'), 10);
+            
+            // Remove after 4 seconds automatically
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 400);
+            }, 4000);
         };
 
         window.initProfileUpdate = function() {
             let db = typeof firebase !== 'undefined' ? firebase.firestore() : null;
-            if(!db) { window.puAlert("Database connection error.", "Error", "❌", "#ef4444"); return; }
+            if(!db) { window.puShowToast("Database connection error.", "error"); return; }
 
             // Listen to registry for users
             db.collection("system").doc("registry").onSnapshot(doc => {
@@ -187,7 +209,7 @@
             let note = document.getElementById('puAccessNote');
             
             if(isHQ) {
-                note.innerText = "HQ Access: You can update any employee across all branches.";
+                note.innerText = "HQ Access: You can search and update any employee across all branches.";
                 note.style.color = "#8b5cf6"; // Purple for HQ
             } else {
                 note.innerText = `Branch Access: You can only update employees mapped to SOL [${window.puData.activeSolId}].`;
@@ -195,8 +217,8 @@
             }
 
             let visibleUsers = window.puData.users.filter(u => {
-                if (u.user === 'admin') return false; // Hide master admin from editing
-                if (!isHQ && u.solId !== window.puData.activeSolId) return false; // Branch restriction
+                if (u.user === 'admin') return false; 
+                if (!isHQ && u.solId !== window.puData.activeSolId) return false;
                 return true;
             });
 
@@ -205,36 +227,73 @@
             });
         };
 
-        window.puAutofillForm = function() {
-            let username = document.getElementById('puTargetUser').value;
+        // When dropdown changes, put value into search box
+        window.puSyncSearchBox = function() {
+            let sel = document.getElementById('puTargetUser').value;
+            document.getElementById('puSearchId').value = sel;
+            document.getElementById('puFormContainer').style.display = 'none'; // Hide form until validated
+        };
+
+        // VALIDATION LOGIC
+        window.puValidateAndFetch = function() {
+            let searchId = document.getElementById('puSearchId').value.trim().toUpperCase();
             let container = document.getElementById('puFormContainer');
             
-            if(!username) {
+            if(!searchId) {
+                window.puShowToast("Please enter an Employee ID to validate.", "error");
                 container.style.display = 'none';
                 return;
             }
 
-            let u = window.puData.users.find(x => x.user === username);
-            if(u) {
-                document.getElementById('puGender').value = u.gender || "";
-                document.getElementById('puPhone').value = u.phone || "";
-                document.getElementById('puAddress').value = u.addressLine1 || "";
-                document.getElementById('puPin').value = u.pinCode || "";
-                document.getElementById('puBasicPay').value = u.basicPay || "";
-                document.getElementById('puPayLevel').value = u.payLevel || "";
-                document.getElementById('puIncrementDate').value = u.incrementDate || "";
-                
-                container.style.display = 'block';
+            let u = window.puData.users.find(x => x.user.toUpperCase() === searchId);
+            
+            if(!u) {
+                window.puShowToast("Employee not found in the registry.", "error");
+                container.style.display = 'none';
+                return;
             }
+
+            // Access validation check
+            let isHQ = (window.puData.activeSolId === '000000' || window.puData.activeUser === 'admin');
+            
+            if(u.user === 'admin') {
+                window.puShowToast("Master Admin profile cannot be modified.", "error");
+                container.style.display = 'none';
+                return;
+            }
+
+            if(!isHQ && u.solId !== window.puData.activeSolId) {
+                window.puShowToast("This employee doesn't pertain to your SOL. Please contact system admin at Headquarter to update further.", "error");
+                container.style.display = 'none';
+                return;
+            }
+
+            // Success! Populate the form
+            document.getElementById('puGender').value = u.gender || "";
+            document.getElementById('puPhone').value = u.phone || "";
+            document.getElementById('puAddress').value = u.addressLine1 || "";
+            document.getElementById('puPin').value = u.pinCode || "";
+            document.getElementById('puBasicPay').value = u.basicPay || "";
+            document.getElementById('puPayLevel').value = u.payLevel || "";
+            document.getElementById('puIncrementDate').value = u.incrementDate || "";
+            
+            // Set hidden field to securely track which user is being edited
+            document.getElementById('puEditingUser').value = u.user;
+            document.getElementById('puEditingUserNameDisplay').innerText = `@${u.user}`;
+
+            window.puShowToast("Employee profile fetched successfully.", "success");
+            container.style.display = 'block';
         };
 
         window.puResetForm = function() {
             document.getElementById('puTargetUser').value = "";
+            document.getElementById('puSearchId').value = "";
+            document.getElementById('puEditingUser').value = "";
             document.getElementById('puFormContainer').style.display = 'none';
         };
 
         window.puExecuteUpdate = async function() {
-            let username = document.getElementById('puTargetUser').value;
+            let username = document.getElementById('puEditingUser').value;
             if(!username) return;
 
             window.puShowLoader();
@@ -256,10 +315,10 @@
                         await db.collection("system").doc("registry").set({ users: window.puData.users }, { merge: true });
                         window.puHideLoader();
                         window.puResetForm();
-                        window.puAlert(`Profile for @${username} has been successfully updated in the database.`, "Update Successful", "✅", "#10b981");
+                        window.puShowToast(`Profile for @${username} has been successfully updated.`, "success");
                     } catch(e) {
                         window.puHideLoader();
-                        window.puAlert("Failed to save data. Check your network connection.", "Network Error", "❌", "#ef4444");
+                        window.puShowToast("Failed to save data. Check your network connection.", "error");
                     }
                 }
             }
