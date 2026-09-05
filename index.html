@@ -17,7 +17,8 @@
     <!-- jsPDF Engine -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
-    <style>
+    <!-- 🛡️ BULLETPROOF FIX: Core Style Definition 🛡️ -->
+    <style data-core-style="true">
         /* Minimalist Baseline Setup & Security */
         body, html { margin: 0 !important; padding: 0 !important; width: 100% !important; height: 100% !important; background-color: #ffffff !important; font-family: 'Segoe UI', Arial, sans-serif; overflow-x: hidden; }
         
@@ -544,6 +545,7 @@
         let SYSTEM_NEWS_FEED = "Welcome to PO Staff Utility v3.0";
         let SYSTEM_OFFICE_REGISTRY = [];
         let DISABLED_SYSTEM_CARDS = []; 
+        let LATEST_DASHBOARD_CARDS = []; 
         
         let authenticatedUserSession = null;
         let currentDashboardPage = 1;
@@ -719,11 +721,13 @@
                     });
 
                     db.collection("system").doc("dashboard").onSnapshot((doc) => {
-                        if (doc.exists && authenticatedUserSession) {
-                            const dynamicCards = doc.data().cards || [];
+                        if (doc.exists) {
+                            LATEST_DASHBOARD_CARDS = doc.data().cards || [];
                             DISABLED_SYSTEM_CARDS = doc.data().disabledSystemCards || []; 
-                            renderDynamicCardsInIndex(dynamicCards);
-                            verifyBloggerAuth_Reentry(); // Force refresh access safely
+                            if (authenticatedUserSession) {
+                                renderDynamicCardsInIndex(LATEST_DASHBOARD_CARDS);
+                                verifyBloggerAuth_Reentry(); // Force refresh access safely
+                            }
                         }
                     });
 
@@ -740,6 +744,7 @@
         function renderDynamicCardsInIndex(cards) {
             document.querySelectorAll('.dynamic-injected-card').forEach(el => el.remove());
             const grid = document.getElementById('mainModuleGrid');
+            if(!grid) return;
             
             let isHQorAdmin = (authenticatedUserSession && (authenticatedUserSession.user === 'admin' || authenticatedUserSession.solId === '000000'));
 
@@ -752,7 +757,7 @@
                 if (c.cardType === 'sub') return;
 
                 let myRole = authenticatedUserSession ? authenticatedUserSession.role : "maker";
-                if (!c.roles[myRole] && authenticatedUserSession.user !== 'admin') return;
+                if (!c.roles[myRole] && (!authenticatedUserSession || authenticatedUserSession.user !== 'admin')) return;
 
                 let cardDiv = document.createElement('div');
                 let opacityStyle = (!c.active) ? "opacity: 0.5;" : ""; 
@@ -906,6 +911,7 @@
                 sessionStorage.setItem("2faVerified", "true");
                 document.getElementById('loginScreen').style.display = 'none';
                 document.getElementById('appDashboardView').style.display = 'block';
+                renderDynamicCardsInIndex(LATEST_DASHBOARD_CARDS);
                 verifyBloggerAuth_Reentry();
                 return;
             }
@@ -1000,6 +1006,7 @@
                 setTimeout(() => {
                     document.getElementById('twoFactorScreen').style.display = 'none';
                     document.getElementById('appDashboardView').style.display = 'block';
+                    renderDynamicCardsInIndex(LATEST_DASHBOARD_CARDS);
                     verifyBloggerAuth_Reentry();
                     if (typeof resetIdleTimer === "function") resetIdleTimer();
                 }, 200);
@@ -1012,6 +1019,10 @@
         // ACCESS CONTROL & MODULE ROUTING LOGIC
         function verifyBloggerAuth_Reentry() {
             if(!authenticatedUserSession) return;
+            
+            // Force render dynamic cards immediately after auth
+            renderDynamicCardsInIndex(LATEST_DASHBOARD_CARDS);
+            
             const profile = authenticatedUserSession;
             const u = profile.user;
             
@@ -1369,17 +1380,34 @@
             workspace.style.display = 'none';
             workspace.innerHTML = ''; 
 
-            const protectedSystemIds = ['twoFactorScreen', 'goodbyeScreen', 'dbdeModal', 'directMessageModal', 'forcedPasswordResetOverlay', 'customAppAlertModal', 'globalAppLoader', 'timeoutModalOverlay'];
+            // ---------------------------------------------------------
+            // 🛡️ ULTIMATE DOM & CSS LEAK-PROOF MECHANISM 🛡️
+            // ---------------------------------------------------------
             
-            document.querySelectorAll('.spa-modal-overlay, .custom-popup-overlay, .forced-password-overlay, .processing-loader-container, .glass-modal-overlay').forEach(el => {
-                if (!protectedSystemIds.includes(el.id)) {
-                    el.remove();
+            // 1. DOM NUKE: Remove any modal/loader divs injected into the body by other modules
+            const protectedSystemIds = ['sceneryBackground', 'loginScreen', 'twoFactorScreen', 'appDashboardView', 'timeoutModalOverlay', 'systemToast', 'goodbyeScreen', 'dbdeModal', 'directMessageModal', 'forcedPasswordResetOverlay', 'customAppAlertModal', 'globalAppLoader'];
+            
+            Array.from(document.body.children).forEach(el => {
+                if (el.tagName.toLowerCase() === 'div') {
+                    // If it has an ID and it's not protected, OR if it has NO ID but looks like an overlay
+                    if ((el.id && !protectedSystemIds.includes(el.id)) || (!el.id && (el.className.includes('overlay') || el.className.includes('modal')))) {
+                        el.remove();
+                    }
                 }
             });
 
-            document.querySelectorAll('style[data-spa-injected="true"]').forEach(styleTag => {
+            // 2. CSS NUKE: Remove any style or stylesheet that is NOT marked as core
+            document.querySelectorAll('style:not([data-core-style="true"])').forEach(styleTag => {
                 styleTag.remove();
             });
+            document.querySelectorAll('link[rel="stylesheet"]:not([data-core-style="true"])').forEach(linkTag => {
+                linkTag.remove();
+            });
+
+            // 3. Reset body to prevent inline style or class leaks
+            document.body.removeAttribute('style');
+            document.body.className = '';
+            // ---------------------------------------------------------
 
             document.getElementById('dashboardGridView').style.display = 'block';
             filterAndPaginateCards(true);
