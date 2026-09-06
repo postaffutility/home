@@ -18,10 +18,10 @@
         .sp-back-nav { display: inline-flex; align-items: center; color: #3b82f6; font-weight: 800; font-size: 15px; text-decoration: none; cursor: pointer; transition: color 0.2s; padding: 8px 16px; background: #eff6ff; border-radius: 8px; float: right; border: 1px solid #bfdbfe; }
         .sp-back-nav:hover { color: #1d4ed8; background: #dbeafe; transform: translateX(-2px); }
         
-        /* DASHBOARD CARDS */
+        /* DASHBOARD CARDS (BUG FIX: Removed opacity:0, kept display:none for proper FOUC protection) */
         .sp-grid-wrapper { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 25px; margin-top: 30px; }
         
-        .sp-module-card { background: #ffffff; border-radius: 16px; padding: 30px 25px; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.03); border: 1px solid #e2e8f0; transition: all 0.3s ease; display: block; text-align: left; position: relative; overflow: hidden; }
+        .sp-module-card { background: #ffffff; border-radius: 16px; padding: 30px 25px; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.03); border: 1px solid #e2e8f0; transition: all 0.3s ease; display: none; text-align: left; position: relative; overflow: hidden; animation: spFadeIn 0.4s ease-out; }
         .sp-module-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 5px; transition: height 0.3s ease; }
         .sp-module-card:hover { transform: translateY(-8px); box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08); border-color: #cbd5e1; }
         .sp-module-card:hover::before { height: 8px; }
@@ -126,6 +126,7 @@
         .et-title { font-size: 16px; font-weight: 900; color: #0f172a; letter-spacing: -0.3px; display: flex; align-items: center; gap: 8px; }
         .et-time { font-size: 12px; color: #64748b; font-weight: 700; background: #f8fafc; border: 1px solid #e2e8f0; padding: 4px 10px; border-radius: 20px; }
         .et-desc { font-size: 14.5px; color: #475569; font-weight: 500; line-height: 1.5; margin-top: 2px; }
+        .et-footer-note { margin-top: 25px; padding: 14px 18px; background: #fff1f2; border-left: 4px solid #e11d48; border-radius: 6px; font-size: 13.5px; color: #be123c; font-weight: 700; line-height: 1.5; text-align: left; }
         
         .specialist-badge { display: inline-flex; background: #fdf4ff; border: 1px solid #e879f9; color: #a21caf; padding: 8px 15px; border-radius: 20px; font-weight: 800; font-size: 13px; align-items: center; gap: 6px; margin-top: 15px; }
         .bulk-results { display: none; margin-top: 15px; padding: 25px; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 12px; }
@@ -430,7 +431,7 @@
                 <input type="file" id="bulkUserFile" class="sp-input" accept=".xlsx, .xls">
             </div>
             
-            <button class='sp-action-btn indigo' onclick='window.processBulkUsers()' type='button'>Load, Validate & Preview Users</button>
+            <button class='sp-action-btn dark' onclick='window.processBulkUsers()' type='button'>Load, Validate & Preview Users</button>
 
             <!-- ERROR LOG DISPLAY -->
             <div id="bulkUserErrorLog" style="display:none; margin-top:25px; background:#fef2f2; border:1px solid #fecaca; border-radius:12px; padding:20px;">
@@ -948,7 +949,7 @@
             <div class='sp-form-group'><select id="solSearch_Transfer" class="sp-input"></select></div>
             <div style="display:flex; gap:12px; margin-top:30px;">
                 <button onclick="window.solExecTransfer()" class="sp-action-btn orange" style="margin-top:0; flex:1;">Transfer</button>
-                <button onclick="window.closeSolTransferModal()" class="sp-action-btn dark" style="margin-top:0; flex:1; box-shadow:none;" onclick="window.closeSolTransferModal()">Cancel</button>
+                <button onclick="window.closeSolTransferModal()" class="sp-action-btn dark" style="margin-top:0; flex:1; box-shadow:none;">Cancel</button>
             </div>
         </div>
     </div>
@@ -2071,6 +2072,7 @@
             });
         };
 
+        window.editStagedUser = function(idx) { let u = window.stagedBulkUsers[idx]; document.getElementById('esuIdx').value = idx; document.getElementById('esuName').value = u.fullName; document.getElementById('esuRole').value = u.role; document.getElementById('esuSol').value = u.solId; window.safeOpenModal('editStagedUserModal'); };
         window.closeEditStagedUserModal = function() { let m = document.getElementById('editStagedUserModal'); m.classList.remove('active'); setTimeout(()=> m.style.display = 'none', 200); };
         window.saveStagedUserEdit = function() {
             let idx = document.getElementById('esuIdx').value; let nName = document.getElementById('esuName').value.trim().toUpperCase(); let nRole = document.getElementById('esuRole').value; let nSol = document.getElementById('esuSol').value.trim();
@@ -2122,13 +2124,18 @@
             doc.autoTable({ startY: 40, head: [['Row', 'Name', 'Reason']], body: tData, theme: 'grid', headStyles: { fillColor: [239, 68, 68] }, columnStyles: { 2: { cellWidth: 150 } } }); doc.save("Error_Log.pdf");
         };
 
-       // BLANK PAGE BUG FIX: Instantly render cards if data is already present in cache
+       // BLANK PAGE BUG FIX: Instantly render cards from Global SPA Cache
         setTimeout(() => {
-            if(window.solData && window.solData.users && window.solData.users.length > 0) {
+            if(typeof SYSTEM_USER_REGISTRY !== 'undefined' && SYSTEM_USER_REGISTRY.length > 0) {
+                window.solData.users = SYSTEM_USER_REGISTRY;
+                if(typeof SYSTEM_OFFICE_REGISTRY !== 'undefined') window.solData.offices = SYSTEM_OFFICE_REGISTRY;
+                window.solInitializeCards();
+                window.solRefreshUI();
+            } else if(window.solData && window.solData.users && window.solData.users.length > 0) {
                 window.solInitializeCards();
                 window.solRefreshUI();
             }
-        }, 100);
+        }, 20); // Extremely fast execution
 
     </script>
 </div>

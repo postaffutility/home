@@ -57,7 +57,7 @@
             
             <!-- Employee Selector Area -->
             <div style="background: #eff6ff; padding: 25px; border-radius: 12px; border: 1px solid #bfdbfe;">
-                <p id="puAccessNote" style="margin: 0 0 15px 0; font-size: 13.5px; color: #3b82f6; font-weight: 800;"></p>
+                <p id="puAccessNote" style="margin: 0 0 15px 0; font-size: 13.5px; color: #3b82f6; font-weight: 800;">Verifying Access Rights...</p>
                 
                 <div class="sp-flex-row" style="align-items: flex-end;">
                     <!-- Dropdown -->
@@ -153,14 +153,14 @@
         window.puData = {
             users: [],
             activeUser: sessionStorage.getItem("activeUser"),
-            activeSolId: sessionStorage.getItem("activeSolId")
+            activeSolId: null // We will fetch this dynamically to prevent the [null] bug
         };
 
         window.puShowLoader = function() { document.getElementById('puGlobalLoader').style.display = 'flex'; };
         window.puHideLoader = function() { document.getElementById('puGlobalLoader').style.display = 'none'; };
         
         // ===================================================================
-        // FLOATING TOAST NOTIFICATION ENGINE (Replaced Modal Alerts)
+        // FLOATING TOAST NOTIFICATION ENGINE 
         // ===================================================================
         window.puShowToast = function(msg, type="success") {
             let container = document.getElementById('puToastContainer');
@@ -196,6 +196,17 @@
             db.collection("system").doc("registry").onSnapshot(doc => {
                 if(doc.exists) {
                     window.puData.users = doc.data().users || [];
+                    
+                    // FIX: Dynamically assign active SOL ID to fix the [null] bug for Branch Admins
+                    if(window.puData.activeUser === "admin") {
+                        window.puData.activeSolId = "000000";
+                    } else {
+                        let activeProfile = window.puData.users.find(u => u.user === window.puData.activeUser);
+                        if(activeProfile) {
+                            window.puData.activeSolId = activeProfile.solId;
+                        }
+                    }
+
                     window.puPopulateDropdown();
                 }
             });
@@ -217,8 +228,8 @@
             }
 
             let visibleUsers = window.puData.users.filter(u => {
-                if (u.user === 'admin') return false; 
-                if (!isHQ && u.solId !== window.puData.activeSolId) return false;
+                if (u.user === 'admin') return false; // Exclude Master Admin
+                if (!isHQ && u.solId !== window.puData.activeSolId) return false; // Apply Branch restriction
                 return true;
             });
 
@@ -263,7 +274,7 @@
             }
 
             if(!isHQ && u.solId !== window.puData.activeSolId) {
-                window.puShowToast("This employee doesn't pertain to your SOL. Please contact system admin at Headquarter to update further.", "error");
+                window.puShowToast(`This employee doesn't pertain to your SOL [${window.puData.activeSolId}]. Please contact System Admin HQ to update further.`, "error");
                 container.style.display = 'none';
                 return;
             }

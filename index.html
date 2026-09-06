@@ -524,6 +524,11 @@
     
     <script type="text/javascript">
         // ----------------------------------------------------
+        // INITIAL SETUP 
+        // ----------------------------------------------------
+        let hasRestoredView = false; 
+
+        // ----------------------------------------------------
         // FIREBASE CONFIG & CORE VARIABLES
         // ----------------------------------------------------
         const firebaseConfig = {
@@ -924,6 +929,11 @@
             authenticatedUserSession = profile;
             sessionStorage.setItem("activeUser", profile.user);
             sessionStorage.setItem("activeRole", profile.role);
+            
+            // Set solId directly to session storage for sub-modules to use globally
+            let mySol = profile.solId || (profile.user === 'admin' ? '000000' : 'UNMAPPED');
+            sessionStorage.setItem("activeSolId", mySol);
+
             logSystemEvent(u, "Authentication Success");
             
             if(u === "GUEST") {
@@ -1127,6 +1137,18 @@
                 dmModal.style.display = "flex"; 
                 setTimeout(() => { dmModal.classList.add('active'); }, 10);
             }
+
+            // ---------------------------------------------------------
+            // 🛡️ PROFESSIONAL CLEAN URL ROUTING (RESTORE SESSION) 🛡️
+            // ---------------------------------------------------------
+            const urlParams = new URLSearchParams(window.location.search);
+            const requestedView = urlParams.get('view');
+            if (requestedView && !window.hasRestoredView) {
+                window.hasRestoredView = true;
+                setTimeout(() => {
+                    loadModuleSPA(requestedView + ".html", null, "Restoring Workspace...");
+                }, 400);
+            }
         }
 
         // --- FIXED LOCKED TIMEOUT LOGIC ---
@@ -1201,6 +1223,12 @@
             timeoutModal.classList.remove('active');
             timeoutModal.style.display = 'none';
             
+            // ---------------------------------------------------------
+            // 🛡️ RESET TO CLEAN URL ON LOGOUT 🛡️
+            // ---------------------------------------------------------
+            let rootPath = window.location.pathname.replace('index.html', '');
+            window.history.pushState({ module: 'index.html' }, "PO Staff Utility", rootPath);
+
             document.getElementById('appDashboardView').style.display = 'none';
             const gbScreen = document.getElementById('goodbyeScreen');
             gbScreen.style.display = 'flex';
@@ -1373,7 +1401,12 @@
                         oldScript.parentNode.replaceChild(newScript, oldScript);
                     });
 
-                    window.history.pushState({ module: targetUrl }, "PO Staff Utility Module", targetUrl);
+                    // ---------------------------------------------------------
+                    // 🛡️ PROFESSIONAL CLEAN URL ROUTING 🛡️
+                    // ---------------------------------------------------------
+                    let cleanUrlPath = "?view=" + targetUrl.replace('.html', '');
+                    let rootPath = window.location.pathname.replace('index.html', '');
+                    window.history.pushState({ module: targetUrl }, "PO Staff Utility Module", rootPath + cleanUrlPath);
 
                     if (clickedCard) {
                         const siblingCards = document.querySelectorAll('.portal-module-card');
@@ -1409,7 +1442,7 @@
             Array.from(document.body.children).forEach(el => {
                 if (el.tagName.toLowerCase() === 'div') {
                     // If it has an ID and it's not protected, OR if it has NO ID but looks like an overlay
-                    if ((el.id && !protectedSystemIds.includes(el.id)) || (!el.id && (el.className.includes('overlay') || el.className.includes('modal')))) {
+                    if ((el.id && !protectedSystemIds.includes(el.id)) || (!el.id && (el.className.includes('overlay') || el.className.includes('modal') || el.className.includes('toast')))) {
                         el.remove();
                     }
                 }
@@ -1426,12 +1459,15 @@
             // 3. Reset body to prevent inline style or class leaks
             document.body.removeAttribute('style');
             document.body.className = '';
+            
             // ---------------------------------------------------------
+            // 🛡️ BACK TO CLEAN ROOT URL 🛡️
+            // ---------------------------------------------------------
+            let rootPath = window.location.pathname.replace('index.html', '');
+            window.history.pushState({ module: 'index.html' }, "PO Staff Utility", rootPath);
 
             document.getElementById('dashboardGridView').style.display = 'block';
             filterAndPaginateCards(true);
-
-            window.history.pushState({ module: 'index.html' }, "PO Staff Utility", "index.html");
         }
 
         window.onpopstate = function(event) {
