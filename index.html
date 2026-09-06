@@ -628,8 +628,27 @@
         function logSystemEvent(username, eventMsg) {
             let options = { timeZone: 'Asia/Kolkata', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
             let timeStamp = new Date().toLocaleString('en-IN', options);
+            
+            // 🔥 BUG FIX: timeStamp থেকেই সরাসরি ডেট কেটে নেওয়া হলো যাতে 100% ম্যাচ হয় 🔥
+            let todayStr = timeStamp.split(',')[0].trim();
+
+            // ১. সিস্টেমে নতুন লগ সেভ করা
             SYSTEM_LOGIN_HISTORY.push({ time: timeStamp, user: username, event: eventMsg });
-            if (SYSTEM_LOGIN_HISTORY.length > 15) SYSTEM_LOGIN_HISTORY = SYSTEM_LOGIN_HISTORY.slice(SYSTEM_LOGIN_HISTORY.length - 15);
+            
+            // ২. Smart Garbage Collection (এখন শুধু সঠিক ডেটাই রাখবে)
+            SYSTEM_LOGIN_HISTORY = SYSTEM_LOGIN_HISTORY.filter(log => log.time.includes(todayStr));
+
+            // ৩. ইমার্জেন্সি লিমিট
+            if (SYSTEM_LOGIN_HISTORY.length > 1000) { 
+                SYSTEM_LOGIN_HISTORY = SYSTEM_LOGIN_HISTORY.slice(SYSTEM_LOGIN_HISTORY.length - 1000); 
+            }
+
+            // ৪. ফায়ারবেসে সরাসরি সেভ করা
+            if (typeof db !== 'undefined') {
+                db.collection("system").doc("registry").set({ 
+                    logs: SYSTEM_LOGIN_HISTORY 
+                }, { merge: true }).catch(err => console.log("Log sync error:", err));
+            }
         }
 
         window.onload = async function() {
