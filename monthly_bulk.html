@@ -7,155 +7,912 @@
 </script>
 
 <div id="moduleRenderArea">
-    
-    <!-- 100% SELF-CONTAINED ORIGINAL DESIGN CSS -->
-    <style>
-        .portal-page-panel { max-width: 1200px; margin: 0 auto; background: white; padding: 40px; border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.03); border: 1px solid #e2e8f0; font-family: 'Segoe UI', Arial, sans-serif; }
-        
-        /* Typography & Layout */
-        h3.module-title { margin: 0; color: #1e293b; font-size: 26px; font-weight: 800; letter-spacing: -0.5px; }
-        .back-nav-link { display: inline-flex; align-items: center; color: #3b82f6; font-weight: 800; font-size: 15px; text-decoration: none; cursor: pointer; transition: color 0.2s; padding: 8px 15px; background: #eff6ff; border-radius: 8px; float: right; }
-        .back-nav-link:hover { color: #1d4ed8; background: #dbeafe; }
-        
-        .form-group { margin-bottom: 20px; clear: both; }
-        .form-group label { display: block; font-weight: 700; margin-bottom: 8px; font-size: 14px; color: #334155; }
-        
-        /* Inputs & Textareas exactly like original */
-        input[type="text"], input[type="number"], select, textarea { width: 100%; padding: 14px 16px; box-sizing: border-box; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14.5px; background: #f8fafc; color: #1e293b !important; transition: all 0.2s ease; font-family: 'Segoe UI', Arial, sans-serif; }
-        input[type="text"]:focus, input[type="number"]:focus, select:focus, textarea:focus { border-color: #d32f2f; background: #ffffff; box-shadow: 0 0 0 4px rgba(211, 47, 47, 0.1); outline: none; }
-        
-        /* NORMAL (NON-ITALIC) & PROFESSIONAL PLACEHOLDERS */
-        input::placeholder, textarea::placeholder { 
-            color: #94a3b8 !important; 
-            font-style: normal !important; 
-            opacity: 1 !important; 
-        }
-        
-        textarea { resize: vertical; }
-        .flex-row { display: flex; gap: 15px; flex-wrap: wrap; }
-        .flex-row > div { flex: 1; }
-        .help-note { font-size: 12px; color: #64748b; margin-top: 6px; display: block; }
-        
-        /* Exact Original Action Button */
-        button.action-btn { width: 100%; padding: 16px; background: #d32f2f; color: white; border: none; border-radius: 8px; font-size: 15.5px; font-weight: 800; cursor: pointer; text-transform: uppercase; letter-spacing: 0.8px; margin-top: 15px; box-shadow: 0 4px 12px rgba(211, 47, 47, 0.25); transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
-        button.action-btn:hover { background: #b71c1c; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(183, 28, 28, 0.3); }
 
-        /* --- PERFECT CENTERED MODAL, FULL SCREEN BLUR --- */
+    <!-- 100% FLUID RESPONSIVE, THEME-AWARE GLASSMORPHISM CSS (SYNCED WITH INDEX.HTML V3.0) -->
+    <style>
+        #dynamicWorkspace {
+            scroll-behavior: smooth !important;
+            -webkit-overflow-scrolling: touch !important;
+        }
+
+        .mb-viewport-wrapper {
+            width: 100%;
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: clamp(4px, 0.8vw, 12px);
+            font-family: var(--font-main, 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif);
+            color: var(--text-primary, #0f172a);
+            animation: mbFadeIn 0.32s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+            box-sizing: border-box;
+        }
+
+        .portal-page-panel {
+            width: 100%;
+            background: var(--surface-glass, rgba(255, 255, 255, 0.86));
+            backdrop-filter: blur(22px);
+            -webkit-backdrop-filter: blur(22px);
+            padding: clamp(18px, 2.5vw, 34px);
+            border-radius: 22px;
+            box-shadow: var(--shadow-soft, 0 8px 28px rgba(15, 23, 42, 0.06));
+            border: 1px solid var(--border-glass, rgba(255, 255, 255, 0.9));
+            transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Decorative top accent line */
+        .portal-page-panel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, #f59e0b 0%, #ef4444 50%, #7c3aed 100%);
+        }
+
+        /* HEADER BAR */
+        .mb-header-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            padding-bottom: clamp(14px, 1.8vw, 22px);
+            margin-bottom: clamp(16px, 2vw, 24px);
+            border-bottom: 1px solid var(--border-subtle, rgba(203, 213, 225, 0.8));
+            flex-wrap: wrap;
+        }
+
+        .mb-header-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            min-width: 0;
+        }
+
+        .mb-hero-icon {
+            width: clamp(44px, 3.6vw, 52px);
+            height: clamp(44px, 3.6vw, 52px);
+            border-radius: 15px;
+            background: linear-gradient(135deg, #f59e0b 0%, #e11d48 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            box-shadow: 0 8px 22px rgba(225, 29, 72, 0.32);
+            flex-shrink: 0;
+        }
+
+        .mb-title-block {
+            min-width: 0;
+        }
+
+        h3.module-title {
+            margin: 0;
+            color: var(--text-primary, #0f172a);
+            font-size: clamp(18px, 1.8vw, 24px);
+            font-weight: 900;
+            letter-spacing: -0.5px;
+            line-height: 1.2;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .mb-form-badge {
+            font-size: 11px;
+            font-weight: 800;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(245, 158, 11, 0.15);
+            color: #d97706;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            letter-spacing: 0.4px;
+            text-transform: uppercase;
+        }
+        html[data-theme="dark"] .mb-form-badge {
+            color: #fbbf24;
+            background: rgba(245, 158, 11, 0.2);
+        }
+
+        .mb-subtitle {
+            margin: 4px 0 0 0;
+            font-size: clamp(12px, 1vw, 13.5px);
+            color: var(--text-muted, #64748b);
+            font-weight: 500;
+        }
+
+        .back-nav-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-primary, #0f172a);
+            font-weight: 800;
+            font-size: 13.5px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.22s ease;
+            padding: 10px 18px;
+            background: var(--surface-input, #eef3fb);
+            border: 1px solid var(--border-subtle, rgba(203, 213, 225, 0.8));
+            border-radius: 12px;
+            flex-shrink: 0;
+        }
+
+        .back-nav-link:hover {
+            border-color: var(--accent-primary, #2563eb);
+            color: var(--accent-primary, #2563eb);
+            background: var(--surface-card-hover, #ffffff);
+            transform: translateX(-3px);
+            box-shadow: var(--shadow-card, 0 4px 18px rgba(15, 23, 42, 0.05));
+        }
+
+        /* LIVE COMPILER TELEMETRY STRIP */
+        .mb-telemetry-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: clamp(10px, 1.4vw, 16px);
+            margin-bottom: clamp(18px, 2.2vw, 26px);
+        }
+
+        .mb-stat-pill {
+            background: var(--surface-card, rgba(255, 255, 255, 0.92));
+            border: 1px solid var(--border-glass, rgba(255, 255, 255, 0.9));
+            border-radius: 15px;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: var(--shadow-card, 0 4px 18px rgba(15, 23, 42, 0.04));
+            min-width: 0;
+            transition: transform 0.2s ease, border-color 0.2s ease;
+        }
+
+        .mb-stat-pill:hover {
+            transform: translateY(-2px);
+            border-color: rgba(59, 130, 246, 0.35);
+        }
+
+        .mb-stat-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 11px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .mb-stat-icon.blue { background: rgba(37, 99, 235, 0.13); color: #2563eb; }
+        .mb-stat-icon.amber { background: rgba(245, 158, 11, 0.14); color: #d97706; }
+        .mb-stat-icon.emerald { background: rgba(16, 185, 129, 0.14); color: #059669; }
+        html[data-theme="dark"] .mb-stat-icon.blue { color: #60a5fa; }
+        html[data-theme="dark"] .mb-stat-icon.amber { color: #fbbf24; }
+        html[data-theme="dark"] .mb-stat-icon.emerald { color: #34d399; }
+
+        .mb-stat-text {
+            min-width: 0;
+            flex: 1;
+        }
+
+        .mb-stat-label {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-muted, #64748b);
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            margin-bottom: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .mb-stat-val {
+            font-size: clamp(14px, 1.3vw, 17px);
+            font-weight: 900;
+            color: var(--text-primary, #0f172a);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* RESPONSIVE FORM GRID LAYOUT */
+        .mb-form-grid {
+            display: grid;
+            grid-template-columns: repeat(12, minmax(0, 1fr));
+            gap: clamp(14px, 1.8vw, 20px);
+        }
+
+        .mb-col-8 { grid-column: span 8; }
+        .mb-col-4 { grid-column: span 4; }
+        .mb-col-6 { grid-column: span 6; }
+        .mb-col-12 { grid-column: span 12; }
+
+        .form-group {
+            margin-bottom: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            font-weight: 800;
+            margin-bottom: 8px;
+            font-size: 13px;
+            color: var(--text-primary, #0f172a);
+            letter-spacing: -0.1px;
+        }
+
+        .form-group label svg {
+            color: var(--accent-primary, #2563eb);
+            flex-shrink: 0;
+        }
+
+        .mb-input-wrapper {
+            position: relative;
+            width: 100%;
+        }
+
+        .portal-page-panel input[type="text"],
+        .portal-page-panel input[type="number"],
+        .portal-page-panel select,
+        .portal-page-panel textarea {
+            width: 100%;
+            padding: 13px 16px;
+            box-sizing: border-box;
+            border: 1.5px solid var(--border-subtle, rgba(203, 213, 225, 0.85));
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            background: var(--surface-input, #eef3fb);
+            color: var(--text-primary, #0f172a) !important;
+            transition: all 0.22s ease;
+            font-family: var(--font-main, 'Inter', 'Segoe UI', sans-serif);
+        }
+
+        .portal-page-panel select {
+            cursor: pointer;
+            appearance: none;
+            -webkit-appearance: none;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="%2364748b" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>');
+            background-repeat: no-repeat;
+            background-position: right 14px center;
+            padding-right: 40px;
+        }
+
+        .portal-page-panel input[type="text"]:focus,
+        .portal-page-panel input[type="number"]:focus,
+        .portal-page-panel select:focus,
+        .portal-page-panel textarea:focus {
+            border-color: var(--accent-primary, #2563eb);
+            background: var(--surface-input-focus, #ffffff);
+            box-shadow: 0 0 0 3.5px rgba(37, 99, 235, 0.15);
+            outline: none;
+        }
+
+        .portal-page-panel input::placeholder,
+        .portal-page-panel textarea::placeholder {
+            color: var(--text-muted, #94a3b8) !important;
+            font-style: normal !important;
+            font-weight: 400 !important;
+            opacity: 1 !important;
+        }
+
+        .portal-page-panel textarea {
+            resize: vertical;
+            min-height: 92px;
+            line-height: 1.5;
+        }
+
+        .flex-row {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 14px;
+            width: 100%;
+        }
+
+        .help-note {
+            font-size: 11.8px;
+            color: var(--text-muted, #64748b);
+            margin-top: 7px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 600;
+        }
+
+        .mb-words-preview {
+            font-size: 11.8px;
+            color: #10b981;
+            margin-top: 7px;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            min-height: 18px;
+        }
+
+        /* HIGH-TECH ACTION BUTTON */
+        .mb-action-footer {
+            margin-top: clamp(20px, 2.4vw, 28px);
+            padding-top: clamp(16px, 2vw, 22px);
+            border-top: 1px solid var(--border-subtle, rgba(203, 213, 225, 0.8));
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .mb-footer-hint {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12.5px;
+            color: var(--text-muted, #64748b);
+            font-weight: 600;
+        }
+
+        button.action-btn {
+            flex: 1;
+            min-width: 260px;
+            padding: 15px 26px;
+            background: linear-gradient(90deg, #e11d48 0%, #f01e3c 50%, #2563eb 100%);
+            background-size: 200% auto;
+            color: #ffffff;
+            border: none;
+            border-radius: 13px;
+            font-size: 14.5px;
+            font-weight: 800;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 0.7px;
+            box-shadow: 0 10px 25px rgba(225, 29, 72, 0.32);
+            transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        button.action-btn:hover {
+            background-position: right center;
+            transform: translateY(-2px);
+            box-shadow: 0 14px 30px rgba(37, 99, 235, 0.35);
+        }
+
+        button.action-btn:active {
+            transform: translateY(0);
+        }
+
+        /* --- HIGH-TECH FULL-SCREEN GLASS MODAL FOR PDF PREVIEW --- */
         .pdf-modal-overlay {
-            position: fixed !important; top: 0 !important; left: 0 !important;
-            width: 100vw !important; height: 100vh !important;
-            /* Full screen clean glass effect */
-            background: rgba(241, 245, 249, 0.85) !important; 
-            backdrop-filter: blur(8px) !important;
-            z-index: 99999999 !important; 
-            display: none; justify-content: center; align-items: center;
-            opacity: 0; transition: opacity 0.3s ease;
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100vw !important;
+            height: 100vh !important;
+            background: rgba(15, 23, 42, 0.72) !important;
+            backdrop-filter: blur(12px) !important;
+            -webkit-backdrop-filter: blur(12px) !important;
+            z-index: 99999999 !important;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.25s ease;
+            padding: clamp(10px, 2vw, 24px);
+            box-sizing: border-box;
+            font-family: var(--font-main, 'Inter', 'Segoe UI', sans-serif);
         }
-        .pdf-modal-overlay.active { display: flex; opacity: 1; }
-        
+
+        .pdf-modal-overlay.active {
+            display: flex !important;
+            opacity: 1;
+        }
+
         .pdf-modal-card {
-            background: #ffffff; 
-            width: 85%; /* Moderate width */
-            max-width: 900px; 
-            height: 85vh; /* Moderate height */
-            border-radius: 12px; 
-            box-shadow: 0 20px 50px rgba(0,0,0,0.2); /* Soft shadow */
-            display: flex; flex-direction: column; overflow: hidden;
-            border: 1px solid #cbd5e1; 
-            border-top: 6px solid #d32f2f;
-            transform: scale(0.95); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            background: var(--surface-glass-strong, #ffffff);
+            color: var(--text-primary, #0f172a);
+            width: 94%;
+            max-width: 1080px;
+            height: 88vh;
+            border-radius: 20px;
+            box-shadow: 0 28px 70px rgba(0, 0, 0, 0.45);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            border: 1px solid var(--border-glass, rgba(255, 255, 255, 0.85));
+            border-top: 5px solid #e11d48;
+            transform: scale(0.95);
+            transition: transform 0.28s cubic-bezier(0.175, 0.885, 0.32, 1.275), background 0.3s ease;
         }
-        .pdf-modal-overlay.active .pdf-modal-card { transform: scale(1); }
-        
+
+        .pdf-modal-overlay.active .pdf-modal-card {
+            transform: scale(1);
+        }
+
         .pdf-modal-header {
-            padding: 15px 25px; border-bottom: 1px solid #e2e8f0; display: flex;
-            justify-content: space-between; align-items: center; background: #f8fafc;
+            padding: 14px 22px;
+            border-bottom: 1px solid var(--border-subtle, #e2e8f0);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--surface-input, #f8fafc);
+            gap: 12px;
+            flex-wrap: wrap;
         }
-        .pdf-modal-header h3 { margin: 0; color: #1e293b; font-size: 18px; font-weight: 800; font-family: 'Segoe UI', Arial, sans-serif; }
+
+        .pdf-modal-title-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .pdf-modal-header h3 {
+            margin: 0;
+            color: var(--text-primary, #1e293b);
+            font-size: 16.5px;
+            font-weight: 900;
+            letter-spacing: -0.3px;
+            display: flex;
+            align-items: center;
+            gap: 9px;
+        }
+
+        .pdf-modal-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .pdf-download-btn {
+            background: linear-gradient(90deg, #2563eb, #4f46e5);
+            color: #ffffff;
+            border: none;
+            padding: 9px 18px;
+            border-radius: 10px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 12.5px;
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+
+        .pdf-download-btn:hover {
+            transform: translateY(-1px);
+            filter: brightness(1.08);
+        }
+
         .pdf-close-btn {
-            background: #ef4444; color: white; border: none; padding: 10px 24px;
-            border-radius: 8px; font-weight: 800; cursor: pointer; transition: 0.2s; font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px;
+            background: rgba(239, 68, 68, 0.12);
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            padding: 9px 18px;
+            border-radius: 10px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 12.5px;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
         }
-        .pdf-close-btn:hover { background: #dc2626; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(220, 38, 38, 0.2);}
-        
-        .pdf-iframe-container { flex: 1; width: 100%; height: 100%; background: #e2e8f0; }
-        #pdfFrameViewerLocal { width: 100%; height: 100%; border: none; display: block; }
+
+        .pdf-close-btn:hover {
+            background: #ef4444;
+            color: #ffffff;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(220, 38, 38, 0.28);
+        }
+
+        .pdf-iframe-container {
+            flex: 1;
+            width: 100%;
+            height: 100%;
+            background: #334155;
+            position: relative;
+        }
+
+        #pdfFrameViewerLocal {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
+        }
+
+        @keyframes mbFadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* FLUID BREAKPOINTS FOR ALL SCREEN SIZES */
+        @media (max-width: 960px) {
+            .mb-col-8, .mb-col-4, .mb-col-6 {
+                grid-column: span 12;
+            }
+            .mb-telemetry-grid {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 680px) {
+            .mb-telemetry-grid {
+                grid-template-columns: 1fr;
+            }
+            .flex-row {
+                grid-template-columns: 1fr;
+            }
+            .mb-header-bar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .back-nav-link {
+                width: 100%;
+                justify-content: center;
+            }
+            .mb-action-footer {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            button.action-btn {
+                width: 100%;
+                min-width: 0;
+            }
+            .pdf-modal-card {
+                width: 98%;
+                height: 92vh;
+            }
+        }
     </style>
 
-    <div class='portal-page-panel'>
-        
-        <div style="margin-bottom: 35px; border-bottom: 2px solid #e2e8f0; padding-bottom: 15px; overflow: hidden;">
-            <div class='back-nav-link' onclick='typeof returnToHomeGridSPA === "function" ? returnToHomeGridSPA() : (window.location.href="index.html")'>⬅️ Back to Dashboard</div>
-            <h3 class="module-title">Module: Monthly Bulk Bill Compiler</h3>
-        </div>
-        
-        <div class='form-group'>
-            <label>Received From:</label>
-            <input class='text-input-placeholder-gray' id='receivedFromBulk' placeholder='e.g. The Superintendent of Post Offices / Sanctioning Authority' type='text'/>
-        </div>
-        <div class='form-group'>
-            <label>Amount Per Voucher (Rs.):</label>
-            <input class='text-input-placeholder-gray' id='amount' placeholder='e.g. 450' type='number'/>
-        </div>
-        <div class='form-group'>
-            <label>Voucher Account Purpose:</label>
-            <textarea class='text-input-placeholder-gray' id='monthlyVoucherPurpose' placeholder='e.g. Towards the payment of monthly contingency bill for the office...' rows='4'></textarea>
-        </div>
-        
-        <div class='form-group'>
-            <div class='flex-row'>
-                <div>
-                    <label>Month:</label>
-                    <select id='selectMonth'>
-                        <option value='01'>January</option><option value='02'>February</option><option value='03' selected>March</option>
-                        <option value='04'>April</option><option value='05'>May</option><option value='06'>June</option>
-                        <option value='07'>July</option><option value='08'>August</option><option value='09'>September</option>
-                        <option value='10'>October</option><option value='11'>November</option><option value='12'>December</option>
-                    </select>
+    <div class="mb-viewport-wrapper">
+        <div class="portal-page-panel">
+
+            <!-- TOP HEADER BAR -->
+            <div class="mb-header-bar">
+                <div class="mb-header-left">
+                    <div class="mb-hero-icon">
+                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"/>
+                            <path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/>
+                            <path d="M12 17.5v-11"/>
+                        </svg>
+                    </div>
+                    <div class="mb-title-block">
+                        <h3 class="module-title">
+                            <span>Monthly Bulk Bill Compiler</span>
+                            <span class="mb-form-badge">Form ACG-17</span>
+                        </h3>
+                        <p class="mb-subtitle">Automated A4 landscape voucher compiler with leap-year, Sunday &amp; holiday exclusion.</p>
+                    </div>
                 </div>
-                <div>
-                    <label>Year:</label>
-                    <select id='selectYear'>
-                        <option value='2024'>2024</option><option value='2025'>2025</option><option value='2026' selected>2026</option>
-                        <option value='2027'>2027</option><option value='2028'>2028</option><option value='2029'>2029</option>
-                        <option value='2030'>2030</option><option value='2031'>2031</option><option value='2032'>2032</option>
-                        <option value='2033'>2033</option><option value='2034'>2034</option><option value='2035'>2035</option>
-                        <option value='2036'>2036</option><option value='2037'>2037</option><option value='2038'>2038</option>
-                        <option value='2039'>2039</option><option value='2040'>2040</option>
-                    </select>
+
+                <div class="back-nav-link" onclick="mbCleanExit()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="19" y1="12" x2="5" y2="12"/>
+                        <polyline points="12 19 5 12 12 5"/>
+                    </svg>
+                    <span>Back to Dashboard</span>
                 </div>
             </div>
+
+            <!-- LIVE TELEMETRY / SUMMARY BAR -->
+            <div class="mb-telemetry-grid">
+                <div class="mb-stat-pill">
+                    <div class="mb-stat-icon blue">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                            <line x1="16" y1="2" x2="16" y2="6"/>
+                            <line x1="8" y1="2" x2="8" y2="6"/>
+                            <line x1="3" y1="10" x2="21" y2="10"/>
+                        </svg>
+                    </div>
+                    <div class="mb-stat-text">
+                        <div class="mb-stat-label">Active Vouchers</div>
+                        <div class="mb-stat-val" id="mbStatActiveVouchers">26 Working Days</div>
+                    </div>
+                </div>
+
+                <div class="mb-stat-pill">
+                    <div class="mb-stat-icon amber">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"/>
+                            <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/>
+                        </svg>
+                    </div>
+                    <div class="mb-stat-text">
+                        <div class="mb-stat-label">Excluded Days</div>
+                        <div class="mb-stat-val" id="mbStatOmittedDays">5 Sundays / Holidays</div>
+                    </div>
+                </div>
+
+                <div class="mb-stat-pill">
+                    <div class="mb-stat-icon emerald">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="12" y1="1" x2="12" y2="23"/>
+                            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                        </svg>
+                    </div>
+                    <div class="mb-stat-text">
+                        <div class="mb-stat-label">Estimated Monthly Total</div>
+                        <div class="mb-stat-val" id="mbStatTotalAmount">Rs. 0/-</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MAIN FORM GRID -->
+            <div class="mb-form-grid">
+
+                <!-- Received From -->
+                <div class="form-group mb-col-8">
+                    <label for="receivedFromBulk">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="4" y="2" width="16" height="20" rx="2" ry="2"/>
+                            <path d="M9 22v-4h6v4"/>
+                            <path d="M8 6h.01"/><path d="M16 6h.01"/><path d="M12 6h.01"/>
+                        </svg>
+                        <span>Received From:</span>
+                    </label>
+                    <input class="text-input-placeholder-gray" id="receivedFromBulk" placeholder="e.g. The Superintendent of Post Offices / Sanctioning Authority" type="text" autocomplete="off"/>
+                </div>
+
+                <!-- Amount Per Voucher -->
+                <div class="form-group mb-col-4">
+                    <label for="amount">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="2" y="5" width="20" height="14" rx="2"/>
+                            <line x1="2" y1="10" x2="22" y2="10"/>
+                        </svg>
+                        <span>Amount Per Voucher (Rs.):</span>
+                    </label>
+                    <input class="text-input-placeholder-gray" id="amount" placeholder="e.g. 450" type="number" min="1" oninput="mbUpdateLiveTelemetry()"/>
+                    <span class="mb-words-preview" id="mbAmountWordsPreview">Enter daily voucher rate</span>
+                </div>
+
+                <!-- Month & Year Selection -->
+                <div class="form-group mb-col-6">
+                    <div class="flex-row">
+                        <div>
+                            <label for="selectMonth">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                                    <line x1="16" y1="2" x2="16" y2="6"/>
+                                    <line x1="8" y1="2" x2="8" y2="6"/>
+                                    <line x1="3" y1="10" x2="21" y2="10"/>
+                                </svg>
+                                <span>Month:</span>
+                            </label>
+                            <select id="selectMonth" onchange="mbUpdateLiveTelemetry()">
+                                <option value="01">January</option>
+                                <option value="02">February</option>
+                                <option value="03" selected>March</option>
+                                <option value="04">April</option>
+                                <option value="05">May</option>
+                                <option value="06">June</option>
+                                <option value="07">July</option>
+                                <option value="08">August</option>
+                                <option value="09">September</option>
+                                <option value="10">October</option>
+                                <option value="11">November</option>
+                                <option value="12">December</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="selectYear">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="10"/>
+                                    <polyline points="12 6 12 12 16 14"/>
+                                </svg>
+                                <span>Year:</span>
+                            </label>
+                            <select id="selectYear" onchange="mbUpdateLiveTelemetry()">
+                                <option value="2024">2024</option>
+                                <option value="2025">2025</option>
+                                <option value="2026" selected>2026</option>
+                                <option value="2027">2027</option>
+                                <option value="2028">2028</option>
+                                <option value="2029">2029</option>
+                                <option value="2030">2030</option>
+                                <option value="2031">2031</option>
+                                <option value="2032">2032</option>
+                                <option value="2033">2033</option>
+                                <option value="2034">2034</option>
+                                <option value="2035">2035</option>
+                                <option value="2036">2036</option>
+                                <option value="2037">2037</option>
+                                <option value="2038">2038</option>
+                                <option value="2039">2039</option>
+                                <option value="2040">2040</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Exceptional Holiday Dates -->
+                <div class="form-group mb-col-6">
+                    <label for="exceptionsInput">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                            <line x1="12" y1="9" x2="12" y2="13"/>
+                            <line x1="12" y1="17" x2="12.01" y2="17"/>
+                        </svg>
+                        <span>Exceptional Holiday Dates to Omit:</span>
+                    </label>
+                    <input class="text-input-placeholder-gray" id="exceptionsInput" placeholder="e.g. 5, 12, 23 (Enter dates separated by commas)" type="text" oninput="mbUpdateLiveTelemetry()" autocomplete="off"/>
+                    <span class="help-note">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                            <polyline points="22 4 12 14.01 9 11.01"/>
+                        </svg>
+                        <span>Sundays drop automatically.</span>
+                    </span>
+                </div>
+
+                <!-- Voucher Account Purpose -->
+                <div class="form-group mb-col-12">
+                    <label for="monthlyVoucherPurpose">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                            <polyline points="14 2 14 8 20 8"/>
+                            <line x1="16" y1="13" x2="8" y2="13"/>
+                            <line x1="16" y1="17" x2="8" y2="17"/>
+                        </svg>
+                        <span>Voucher Account Purpose:</span>
+                    </label>
+                    <textarea class="text-input-placeholder-gray" id="monthlyVoucherPurpose" placeholder="e.g. Towards the payment of monthly contingency bill for the office..." rows="3"></textarea>
+                </div>
+
+            </div>
+
+            <!-- ACTION FOOTER -->
+            <div class="mb-action-footer">
+                <div class="mb-footer-hint">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                    </svg>
+                    <span>A4 Landscape • Department of Posts ACG-17 Standard Format</span>
+                </div>
+
+                <button class="action-btn" onclick="triggerSmartGenerationBulk()" type="button">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="6 9 6 2 18 2 18 9"/>
+                        <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
+                        <rect x="6" y="14" width="12" height="8"/>
+                    </svg>
+                    <span>Generate Bulk Print Vouchers</span>
+                </button>
+            </div>
+
         </div>
-        
-        <div class='form-group'>
-            <label>Exceptional Holiday Dates to Omit:</label>
-            <input class='text-input-placeholder-gray' id='exceptionsInput' placeholder='e.g. 5, 12, 23 (Enter dates separated by commas)' type='text'/>
-            <span class='help-note'>Sundays drop automatically.</span>
-        </div>
-        
-        <button class='action-btn' onclick='triggerSmartGenerationBulk()' type='button'>Generate Bulk Print Vouchers</button>
     </div>
 
-    <!-- BEAUTIFUL CENTERED POPUP MODAL FOR PDF PREVIEW -->
+    <!-- HIGH-TECH CENTERED POPUP MODAL FOR PDF PREVIEW (PURE SVG) -->
     <div id="pdfModalOverlay" class="pdf-modal-overlay">
         <div class="pdf-modal-card">
             <div class="pdf-modal-header">
-                <h3>📄 Generated Document Live Preview</h3>
-                <button class="pdf-close-btn" onclick="closePdfModal()">❌ Close Preview</button>
+                <div class="pdf-modal-title-group">
+                    <h3>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#e11d48" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                            <polyline points="14 2 14 8 20 8"/>
+                            <line x1="16" y1="13" x2="8" y2="13"/>
+                            <line x1="16" y1="17" x2="8" y2="17"/>
+                        </svg>
+                        <span>Generated Document Live Preview</span>
+                    </h3>
+                    <span class="mb-form-badge" id="mbPreviewCountBadge">ACG-17 Ready</span>
+                </div>
+                <div class="pdf-modal-actions">
+                    <button type="button" class="pdf-download-btn" onclick="mbDownloadGeneratedPdf()">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                            <polyline points="7 10 12 15 17 10"/>
+                            <line x1="12" y1="15" x2="12" y2="3"/>
+                        </svg>
+                        <span>Download PDF</span>
+                    </button>
+                    <button type="button" class="pdf-close-btn" onclick="closePdfModal()">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                            <line x1="18" y1="6" x2="6" y2="18"/>
+                            <line x1="6" y1="6" x2="18" y2="18"/>
+                        </svg>
+                        <span>Close Preview</span>
+                    </button>
+                </div>
             </div>
             <div class="pdf-iframe-container">
-                <iframe id="pdfFrameViewerLocal"></iframe>
+                <iframe id="pdfFrameViewerLocal" title="ACG-17 Bulk Vouchers PDF Preview"></iframe>
             </div>
         </div>
     </div>
 
-    <!-- 100% UNTOUCHED ORIGINAL PDF LOGIC -->
+    <!-- 100% UNTOUCHED ORIGINAL PDF LOGIC + MODERN UI ENHANCEMENTS -->
     <script>
         // Ensure jsPDF loads if standalone
         if (typeof window.jspdf === 'undefined') {
             let script = document.createElement('script');
             script.src = "https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js";
             document.head.appendChild(script);
+        }
+
+        let mbLastCompiledDoc = null;
+
+        // ====================================================
+        // AUTO-COLLAPSE HAMBURGER MENU & MODAL CLEANUP ON INIT
+        // ====================================================
+        (function initMonthlyBulkModule() {
+            // 1. Automatically collapse the hamburger sidebar when entering this module
+            const sidebar = document.getElementById('appSidebar');
+            if (sidebar) {
+                sidebar.classList.add('collapsed');
+                sidebar.classList.remove('mobile-open');
+            }
+
+            // 2. Remove any duplicate/orphan PDF modal overlays from previous SPA loads
+            document.querySelectorAll('body > #pdfModalOverlay').forEach(el => el.remove());
+
+            // 3. Move fresh modal overlay to document.body for full-viewport coverage
+            const overlay = document.getElementById('pdfModalOverlay');
+            if (overlay && overlay.parentNode !== document.body) {
+                document.body.appendChild(overlay);
+            }
+
+            // 4. Initialize Live Telemetry
+            setTimeout(() => {
+                if (typeof mbUpdateLiveTelemetry === "function") mbUpdateLiveTelemetry();
+            }, 30);
+        })();
+
+        // Escape key support to close PDF Preview Modal cleanly
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                const overlay = document.getElementById('pdfModalOverlay');
+                if (overlay && overlay.classList.contains('active')) {
+                    closePdfModal();
+                }
+            }
+        });
+
+        // Clean SPA Exit
+        function mbCleanExit() {
+            document.querySelectorAll('body > #pdfModalOverlay').forEach(el => el.remove());
+            if (typeof returnToHomeGridSPA === "function") {
+                returnToHomeGridSPA();
+            } else {
+                window.location.href = "index.html";
+            }
+        }
+
+        // Floating Notification Helper (Synced with index.html)
+        function mbNotify(title, message, type = "info") {
+            if (typeof window.spawnFloatingNotification === "function") {
+                window.spawnFloatingNotification(title, message, type);
+            } else if (typeof window.displayCustomAlert === "function") {
+                window.displayCustomAlert(`${title}: ${message}`, type);
+            } else {
+                alert(`${title}\n${message}`);
+            }
+        }
+
+        // Download Helper for the PDF Preview Modal
+        function mbDownloadGeneratedPdf() {
+            if (!mbLastCompiledDoc) return;
+            const mSelect = document.getElementById('selectMonth');
+            const ySelect = document.getElementById('selectYear');
+            const mName = mSelect ? mSelect.options[mSelect.selectedIndex].text : 'Month';
+            const yVal = ySelect ? ySelect.value : 'Year';
+            mbLastCompiledDoc.save(`ACG17_Monthly_Bulk_Bills_${mName}_${yVal}.pdf`);
+            mbNotify("Download Started", `Saved ACG-17 Bulk Vouchers for ${mName} ${yVal}.`, "success");
         }
 
         const LOCAL_INDIA_POST_LOGO_URL = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXlVwmm2OUFIPv_sRjEtehJrDPqIS-nbUCLNZU8i4LT-O-V14Wp6hpQGw&s=10";
@@ -175,6 +932,56 @@
                 else { words += tens[Math.floor(val / 10)]; if (val % 10 > 0) { words += " " + units[val % 10]; } } 
             }
             return words.replace(/\s+/g, ' ').trim();
+        }
+
+        // LIVE TELEMETRY CALCULATOR
+        function mbUpdateLiveTelemetry() {
+            const mEl = document.getElementById('selectMonth');
+            const yEl = document.getElementById('selectYear');
+            const excEl = document.getElementById('exceptionsInput');
+            const amtEl = document.getElementById('amount');
+
+            if (!mEl || !yEl) return;
+
+            const mVal = parseInt(mEl.value, 10);
+            const yVal = parseInt(yEl.value, 10);
+            const maxDays = new Date(yVal, mVal, 0).getDate();
+            const omittedDates = (excEl ? excEl.value : "")
+                .split(",")
+                .map(tok => parseInt(tok.trim(), 10))
+                .filter(num => !isNaN(num) && num >= 1 && num <= maxDays);
+
+            let workingDays = 0;
+            let excludedDays = 0;
+
+            for (let d = 1; d <= maxDays; d++) {
+                const dt = new Date(yVal, mVal - 1, d);
+                if (dt.getDay() === 0 || omittedDates.includes(d)) {
+                    excludedDays++;
+                } else {
+                    workingDays++;
+                }
+            }
+
+            const rate = amtEl && amtEl.value ? parseInt(amtEl.value, 10) : 0;
+            const totalOutlay = (!isNaN(rate) && rate > 0) ? workingDays * rate : 0;
+
+            const activeEl = document.getElementById('mbStatActiveVouchers');
+            const omittedEl = document.getElementById('mbStatOmittedDays');
+            const totalEl = document.getElementById('mbStatTotalAmount');
+            const wordsEl = document.getElementById('mbAmountWordsPreview');
+
+            if (activeEl) activeEl.innerText = `${workingDays} Working Vouchers`;
+            if (omittedEl) omittedEl.innerText = `${excludedDays} Excluded (${maxDays}d Month)`;
+            if (totalEl) totalEl.innerText = `Rs. ${totalOutlay.toLocaleString('en-IN')}/-`;
+
+            if (wordsEl) {
+                if (!isNaN(rate) && rate > 0) {
+                    wordsEl.innerText = `Rupees ${parseNumberToWordsLocal(rate)} only`;
+                } else {
+                    wordsEl.innerText = "Enter daily voucher rate";
+                }
+            }
         }
 
         // ORIGINAL ENGINE - 100% UNTOUCHED
@@ -310,97 +1117,103 @@
 
         function closePdfModal() {
             const overlay = document.getElementById('pdfModalOverlay');
+            if (!overlay) return;
             overlay.classList.remove('active');
-            setTimeout(() => { overlay.style.display = 'none'; }, 300);
+            setTimeout(() => { overlay.style.display = 'none'; }, 250);
         }
 
-        function finalizeLocalViewer(doc) {
+        function finalizeLocalViewer(doc, totalGeneratedCount = 0) {
+            mbLastCompiledDoc = doc;
             const blobDataUrl = doc.output('datauristring');
             const iframe = document.getElementById('pdfFrameViewerLocal');
             const overlay = document.getElementById('pdfModalOverlay');
-            
-            // KEY FIX: Move the overlay to the top-level body so it covers everything including the header!
+            const badge = document.getElementById('mbPreviewCountBadge');
+
+            if (badge && totalGeneratedCount > 0) {
+                badge.innerText = `${totalGeneratedCount} Vouchers Compiled`;
+            }
+
             if (overlay.parentNode !== document.body) {
                 document.body.appendChild(overlay);
             }
 
             iframe.src = blobDataUrl;
-            
-            // Show the modal perfectly centered!
+
             overlay.style.display = 'flex';
-            setTimeout(() => { overlay.classList.add('active'); }, 50);
+            requestAnimationFrame(() => {
+                setTimeout(() => { overlay.classList.add('active'); }, 20);
+            });
         }
 
         function triggerSmartGenerationBulk() {
-            if (!document.getElementById('receivedFromBulk').value || !document.getElementById('amount').value || !document.getElementById('monthlyVoucherPurpose').value) { 
-                if(typeof displayCustomAlert === "function") {
-                    displayCustomAlert("Form Defect: All fields in the monthly bulk panel must be filled."); 
-                } else {
-                    alert("Form Defect: All fields must be filled.");
-                }
-                return; 
+            const receivedVal = document.getElementById('receivedFromBulk').value.trim();
+            const amountVal = document.getElementById('amount').value.trim();
+            const purposeVal = document.getElementById('monthlyVoucherPurpose').value.trim();
+
+            if (!receivedVal || !amountVal || !purposeVal) {
+                mbNotify("Validation Notice", "All fields in the monthly bulk panel must be filled before generating vouchers.", "warning");
+                return;
             }
 
             const loader = document.getElementById('globalAppLoader');
-            if(loader) {
+            const loaderMsg = document.querySelector('#globalAppLoader .loading-status-msg');
+            if (loader) {
+                if (loaderMsg) loaderMsg.innerText = "Compiling Monthly ACG-17 Vouchers...";
                 loader.style.display = 'flex';
-                document.querySelector('.loading-status-msg').innerText = "Processing Document...";
             }
 
-            setTimeout(() => {
-                try {
-                    // Check if jsPDF exists, wait if not
-                    if (typeof window.jspdf === 'undefined') {
-                        alert("System Notice: Please wait a moment for the PDF engine to load, then click generate again.");
-                        if(loader) loader.style.display = 'none';
-                        return;
-                    }
+            requestAnimationFrame(() => {
+                setTimeout(() => {
+                    try {
+                        if (typeof window.jspdf === 'undefined') {
+                            mbNotify("PDF Engine Loading", "Please wait a moment for the PDF engine to initialize, then click generate again.", "info");
+                            if (loader) loader.style.display = 'none';
+                            return;
+                        }
 
-                    const { jsPDF } = window.jspdf; 
-                    const doc = new jsPDF('l', 'mm', 'a4'); 
-                    
-                    const sender = document.getElementById('receivedFromBulk').value; 
-                    const amountNum = document.getElementById('amount').value;
-                    const mVal = document.getElementById('selectMonth').value; 
-                    const yVal = document.getElementById('selectYear').value;
-                    const exceptions = document.getElementById('exceptionsInput').value; 
-                    const currentPurpose = document.getElementById('monthlyVoucherPurpose').value;
-
-                    // Perfect calculation for leap years and 30/31 days months
-                    const maxDays = new Date(parseInt(yVal, 10), parseInt(mVal, 10), 0).getDate();
-                    let omittedDates = exceptions.split(",").map(tok => parseInt(tok.trim(), 10)).filter(num => !isNaN(num));
-
-                    let voucherIndex = 1; 
-                    let isChainedPage = false;
-
-                    for (let processingDay = 1; processingDay <= maxDays; processingDay++) {
-                        const targetDate = new Date(parseInt(yVal, 10), parseInt(mVal, 10) - 1, processingDay);
-                        if (targetDate.getDay() === 0 || omittedDates.includes(processingDay)) continue; 
-
-                        if (isChainedPage) { doc.addPage('a4', 'l'); } 
-                        isChainedPage = true;
-
-                        const finalDateString = (processingDay < 10 ? "0" + processingDay : processingDay) + "/" + mVal + "/" + yVal;
+                        const { jsPDF } = window.jspdf; 
+                        const doc = new jsPDF('l', 'mm', 'a4'); 
                         
-                        // Exact original rendering engine call
-                        drawStandardVoucherPageLocal(doc, sender, finalDateString, voucherIndex, amountNum, currentPurpose);
-                        voucherIndex++;
-                    }
+                        const sender = receivedVal; 
+                        const amountNum = amountVal;
+                        const mVal = document.getElementById('selectMonth').value; 
+                        const yVal = document.getElementById('selectYear').value;
+                        const exceptions = document.getElementById('exceptionsInput').value; 
+                        const currentPurpose = purposeVal;
 
-                    // Send to the centered modal preview
-                    finalizeLocalViewer(doc);
-                    
-                } catch (err) {
-                    console.error("PDF generation failure: ", err); 
-                    if(typeof displayCustomAlert === "function") {
-                        displayCustomAlert("Engine Failure Error: Failed to successfully output compile final PDF.");
-                    } else {
-                        alert("Engine Failure Error: Failed to successfully output compile final PDF.");
+                        // Perfect calculation for leap years and 30/31 days months
+                        const maxDays = new Date(parseInt(yVal, 10), parseInt(mVal, 10), 0).getDate();
+                        let omittedDates = exceptions.split(",").map(tok => parseInt(tok.trim(), 10)).filter(num => !isNaN(num));
+
+                        let voucherIndex = 1; 
+                        let isChainedPage = false;
+
+                        for (let processingDay = 1; processingDay <= maxDays; processingDay++) {
+                            const targetDate = new Date(parseInt(yVal, 10), parseInt(mVal, 10) - 1, processingDay);
+                            if (targetDate.getDay() === 0 || omittedDates.includes(processingDay)) continue; 
+
+                            if (isChainedPage) { doc.addPage('a4', 'l'); } 
+                            isChainedPage = true;
+
+                            const finalDateString = (processingDay < 10 ? "0" + processingDay : processingDay) + "/" + mVal + "/" + yVal;
+                            
+                            // Exact original rendering engine call
+                            drawStandardVoucherPageLocal(doc, sender, finalDateString, voucherIndex, amountNum, currentPurpose);
+                            voucherIndex++;
+                        }
+
+                        const compiledCount = voucherIndex - 1;
+                        finalizeLocalViewer(doc, compiledCount);
+                        mbNotify("Vouchers Compiled", `Successfully generated ${compiledCount} ACG-17 vouchers.`, "success");
+
+                    } catch (err) {
+                        console.error("PDF generation failure: ", err);
+                        mbNotify("Compilation Error", "Failed to compile the final PDF document.", "error");
+                    } finally {
+                        if (loader) loader.style.display = 'none';
                     }
-                } finally {
-                    if(loader) loader.style.display = 'none';
-                }
-            }, 750);
+                }, 420);
+            });
         }
     </script>
 </div>
