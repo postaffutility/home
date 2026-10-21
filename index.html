@@ -8,7 +8,7 @@
     <!-- Google Fonts: Inter & JetBrains Mono -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@700;800&display=swap" rel="stylesheet" data-core-style="true">
 
     <!-- Firebase Core -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
@@ -22,40 +22,39 @@
     <!-- jsPDF Engine -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
-    <!-- 🛡️ BULLETPROOF FIX: Core Style Definition 🛡️ -->
+    <!-- Core Style Definition -->
     <style data-core-style="true">
         :root {
             --font-main: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
-            --bg-app: #eef2f9;
-            --bg-mesh: radial-gradient(at 15% 15%, rgba(59, 130, 246, 0.14) 0px, transparent 50%),
-                       radial-gradient(at 85% 20%, rgba(139, 92, 246, 0.12) 0px, transparent 50%),
-                       radial-gradient(at 50% 85%, rgba(16, 185, 129, 0.08) 0px, transparent 50%),
-                       linear-gradient(135deg, #e8eef7 0%, #f3f6fc 50%, #e5ebf5 100%);
-            --surface-glass: rgba(255, 255, 255, 0.82);
-            --surface-glass-strong: rgba(255, 255, 255, 0.94);
-            --surface-card: rgba(255, 255, 255, 0.88);
+            --bg-app: #edf2f9;
+            --bg-mesh: radial-gradient(at 12% 12%, rgba(59, 130, 246, 0.13) 0px, transparent 50%),
+                       radial-gradient(at 88% 18%, rgba(139, 92, 246, 0.11) 0px, transparent 50%),
+                       radial-gradient(at 50% 88%, rgba(16, 185, 129, 0.08) 0px, transparent 50%),
+                       linear-gradient(135deg, #e7edf8 0%, #f2f6fc 50%, #e4ebf6 100%);
+            --surface-glass: rgba(255, 255, 255, 0.84);
+            --surface-glass-strong: rgba(255, 255, 255, 0.96);
+            --surface-card: rgba(255, 255, 255, 0.92);
             --surface-card-hover: #ffffff;
-            --surface-input: #f1f5f9;
+            --surface-input: #eef3fb;
             --surface-input-focus: #ffffff;
-            --border-glass: rgba(255, 255, 255, 0.85);
-            --border-subtle: rgba(203, 213, 225, 0.75);
+            --border-glass: rgba(255, 255, 255, 0.9);
+            --border-subtle: rgba(203, 213, 225, 0.8);
             --text-primary: #0f172a;
-            --text-secondary: #475569;
+            --text-secondary: #334155;
             --text-muted: #64748b;
             --accent-primary: #2563eb;
             --accent-secondary: #7c3aed;
-            --accent-red: #e11d48;
-            --accent-red-hover: #be123c;
-            --sidebar-bg: linear-gradient(180deg, #0b1528 0%, #101f3c 55%, #0d182e 100%);
+            --accent-red: #ef233c;
+            --sidebar-bg: linear-gradient(180deg, #091326 0%, #0f1e3a 55%, #0a1529 100%);
             --sidebar-text: #cbd5e1;
-            --sidebar-active-bg: linear-gradient(90deg, rgba(37, 99, 235, 0.92) 0%, rgba(59, 130, 246, 0.35) 100%);
-            --shadow-soft: 0 8px 30px rgba(15, 23, 42, 0.06);
-            --shadow-card: 0 4px 20px rgba(15, 23, 42, 0.05);
-            --shadow-elevated: 0 20px 50px rgba(15, 23, 42, 0.14);
-            --login-card-bg: rgba(255, 255, 255, 0.96);
-            --login-btn-bg: linear-gradient(90deg, #ef233c 0%, #e11d48 100%);
-            --login-btn-shadow: 0 10px 25px rgba(225, 29, 72, 0.35);
-            --toast-bg: rgba(255, 255, 255, 0.92);
+            --sidebar-active-bg: linear-gradient(90deg, #2563eb 0%, rgba(59, 130, 246, 0.45) 100%);
+            --shadow-soft: 0 8px 28px rgba(15, 23, 42, 0.06);
+            --shadow-card: 0 4px 18px rgba(15, 23, 42, 0.045);
+            --shadow-elevated: 0 18px 45px rgba(15, 23, 42, 0.12);
+            --login-card-bg: #ffffff;
+            --login-btn-bg: linear-gradient(90deg, #f01e3c 0%, #e11d48 100%);
+            --login-btn-shadow: 0 10px 24px rgba(239, 35, 60, 0.34);
+            --toast-bg: rgba(255, 255, 255, 0.94);
         }
 
         html[data-theme="dark"] {
@@ -64,14 +63,14 @@
                        radial-gradient(at 85% 20%, rgba(124, 58, 237, 0.22) 0px, transparent 50%),
                        radial-gradient(at 50% 85%, rgba(16, 185, 129, 0.12) 0px, transparent 50%),
                        linear-gradient(135deg, #060b16 0%, #0b1325 50%, #091020 100%);
-            --surface-glass: rgba(15, 23, 42, 0.72);
-            --surface-glass-strong: rgba(15, 23, 42, 0.90);
-            --surface-card: rgba(30, 41, 59, 0.68);
-            --surface-card-hover: rgba(30, 41, 59, 0.92);
-            --surface-input: rgba(15, 23, 42, 0.75);
-            --surface-input-focus: rgba(30, 41, 59, 0.95);
+            --surface-glass: rgba(15, 23, 42, 0.76);
+            --surface-glass-strong: rgba(15, 23, 42, 0.94);
+            --surface-card: rgba(30, 41, 59, 0.72);
+            --surface-card-hover: rgba(30, 41, 59, 0.95);
+            --surface-input: rgba(15, 23, 42, 0.78);
+            --surface-input-focus: rgba(30, 41, 59, 0.98);
             --border-glass: rgba(148, 163, 184, 0.18);
-            --border-subtle: rgba(148, 163, 184, 0.2);
+            --border-subtle: rgba(148, 163, 184, 0.22);
             --text-primary: #f8fafc;
             --text-secondary: #cbd5e1;
             --text-muted: #94a3b8;
@@ -81,10 +80,10 @@
             --shadow-soft: 0 8px 32px rgba(0, 0, 0, 0.45);
             --shadow-card: 0 6px 24px rgba(0, 0, 0, 0.35);
             --shadow-elevated: 0 25px 60px rgba(0, 0, 0, 0.65);
-            --login-card-bg: rgba(15, 23, 42, 0.84);
+            --login-card-bg: rgba(15, 23, 42, 0.88);
             --login-btn-bg: linear-gradient(90deg, #2563eb 0%, #7c3aed 100%);
             --login-btn-shadow: 0 10px 25px rgba(99, 102, 241, 0.4);
-            --toast-bg: rgba(15, 23, 42, 0.90);
+            --toast-bg: rgba(15, 23, 42, 0.92);
         }
 
         * {
@@ -116,38 +115,38 @@
         #sceneryBackground { display: none; }
 
         /* =========================================================
-           THEME TOGGLE SWITCH PILL (SHARED ACROSS LOGIN, 2FA, DASH)
+           THEME TOGGLE SWITCH PILL (100% PURE SVG SUN & MOON)
            ========================================================= */
         .theme-switch-pill {
             display: inline-flex;
             align-items: center;
-            background: rgba(226, 232, 240, 0.75);
-            border: 1px solid rgba(203, 213, 225, 0.8);
+            background: #f1f5f9;
+            border: 1px solid #e2e8f0;
             border-radius: 999px;
             padding: 3px;
             cursor: pointer;
             position: relative;
-            width: 68px;
-            height: 34px;
+            width: 66px;
+            height: 32px;
             justify-content: space-between;
             transition: all 0.3s ease;
-            box-shadow: inset 0 2px 5px rgba(0,0,0,0.06);
+            box-shadow: 0 2px 6px rgba(15, 23, 42, 0.06);
             flex-shrink: 0;
         }
         html[data-theme="dark"] .theme-switch-pill {
-            background: rgba(30, 41, 59, 0.85);
+            background: rgba(30, 41, 59, 0.9);
             border-color: rgba(148, 163, 184, 0.25);
         }
         .theme-switch-pill .switch-knob {
             position: absolute;
             top: 3px;
             left: 3px;
-            width: 30px;
-            height: 26px;
+            width: 28px;
+            height: 24px;
             border-radius: 999px;
             background: #ef233c;
             transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-            box-shadow: 0 2px 8px rgba(239, 35, 60, 0.45);
+            box-shadow: 0 2px 8px rgba(239, 35, 60, 0.4);
             z-index: 1;
         }
         html[data-theme="dark"] .theme-switch-pill .switch-knob {
@@ -156,14 +155,13 @@
             box-shadow: 0 2px 8px rgba(59, 130, 246, 0.5);
         }
         .theme-switch-pill .switch-icon {
-            width: 30px;
-            height: 26px;
+            width: 28px;
+            height: 24px;
             display: flex;
             align-items: center;
             justify-content: center;
             z-index: 2;
-            font-size: 14px;
-            transition: color 0.3s ease, opacity 0.3s ease;
+            transition: color 0.3s ease;
         }
         .theme-switch-pill .sun-ic { color: #ffffff; }
         .theme-switch-pill .moon-ic { color: #64748b; }
@@ -171,7 +169,7 @@
         html[data-theme="dark"] .theme-switch-pill .moon-ic { color: #ffffff; }
 
         /* =========================================================
-           1. SPLIT-SCREEN LOGIN UI (EXACT REFERENCE MATCH)
+           1. SPLIT-SCREEN LOGIN UI (EXACT IMAGE 1 & 2 MASTERPIECE)
            ========================================================= */
         .login-split-container {
             display: flex;
@@ -181,72 +179,81 @@
             top: 0;
             left: 0;
             z-index: 1000000;
-            background:
-                linear-gradient(105deg, rgba(10, 25, 65, 0.90) 0%, rgba(16, 42, 96, 0.72) 42%, rgba(245, 158, 11, 0.25) 72%, rgba(30, 58, 138, 0.55) 100%),
-                url('https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiLukHUcccahQ6Bfcb_7aqvdjF2xnC7xdpIKJUywZiVsxduw79-FCwwuOGlU34vjrWquTNJblVmu3xAY1eFSTMMbDYlVkjR_v0xwrcyqKwdTTr8SfiWRhYVTNFa3wT01tLQTwIsHp3LfpNOJ3smkqTe3eEqtl8zM-kRDGCBnFMOpWkpsNhbsRhdBldFKBQ/s1535/1000205806.png') no-repeat center center;
+            background-color: #0b2254;
+            background-image:
+                radial-gradient(circle at 4% 28%, rgba(8, 30, 84, 0.95) 0%, rgba(11, 38, 98, 0.82) 30%, rgba(15, 38, 87, 0.18) 50%, transparent 64%),
+                linear-gradient(90deg, rgba(7, 26, 74, 0.94) 0%, rgba(12, 39, 96, 0.75) 30%, rgba(15, 38, 87, 0.12) 48%, rgba(255, 255, 255, 0.0) 62%),
+                url('https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiLukHUcccahQ6Bfcb_7aqvdjF2xnC7xdpIKJUywZiVsxduw79-FCwwuOGlU34vjrWquTNJblVmu3xAY1eFSTMMbDYlVkjR_v0xwrcyqKwdTTr8SfiWRhYVTNFa3wT01tLQTwIsHp3LfpNOJ3smkqTe3eEqtl8zM-kRDGCBnFMOpWkpsNhbsRhdBldFKBQ/s1535/1000205806.png');
+            background-repeat: no-repeat;
+            background-position: center center;
             background-size: cover;
             overflow: hidden;
             align-items: center;
             justify-content: space-between;
-            padding: 0 5vw;
+            padding: 0 5.5vw;
         }
         html[data-theme="dark"] .login-split-container {
-            background:
-                linear-gradient(105deg, rgba(6, 12, 30, 0.94) 0%, rgba(15, 23, 42, 0.85) 48%, rgba(30, 27, 75, 0.82) 100%),
-                url('https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiLukHUcccahQ6Bfcb_7aqvdjF2xnC7xdpIKJUywZiVsxduw79-FCwwuOGlU34vjrWquTNJblVmu3xAY1eFSTMMbDYlVkjR_v0xwrcyqKwdTTr8SfiWRhYVTNFa3wT01tLQTwIsHp3LfpNOJ3smkqTe3eEqtl8zM-kRDGCBnFMOpWkpsNhbsRhdBldFKBQ/s1535/1000205806.png') no-repeat center center;
-            background-size: cover;
+            background-image:
+                radial-gradient(circle at 0% 25%, rgba(4, 12, 36, 0.97) 0%, rgba(8, 19, 52, 0.90) 38%, rgba(15, 23, 42, 0.65) 65%, rgba(15, 23, 42, 0.75) 100%),
+                url('https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiLukHUcccahQ6Bfcb_7aqvdjF2xnC7xdpIKJUywZiVsxduw79-FCwwuOGlU34vjrWquTNJblVmu3xAY1eFSTMMbDYlVkjR_v0xwrcyqKwdTTr8SfiWRhYVTNFa3wT01tLQTwIsHp3LfpNOJ3smkqTe3eEqtl8zM-kRDGCBnFMOpWkpsNhbsRhdBldFKBQ/s1535/1000205806.png');
         }
 
-        /* Decorative top-left circles & bottom wave from Image 1 */
+        /* Top-left concentric blue arcs matching Image 1 */
         .login-decor-circle-1 {
             position: absolute;
-            top: -120px;
-            left: -120px;
-            width: 380px;
-            height: 380px;
+            top: -130px;
+            left: -110px;
+            width: 390px;
+            height: 390px;
             border-radius: 50%;
-            background: radial-gradient(circle, rgba(37, 99, 235, 0.38) 0%, rgba(29, 78, 216, 0.05) 70%);
+            background: rgba(29, 78, 216, 0.32);
+            box-shadow: 0 0 0 65px rgba(30, 64, 175, 0.18);
             pointer-events: none;
             z-index: 1;
         }
+
+        /* Bottom sweeping S-curve wave matching Image 1 */
         .login-bottom-wave {
             position: absolute;
             bottom: 0;
             left: 0;
             width: 100%;
-            height: 210px;
+            height: 300px;
             pointer-events: none;
             z-index: 2;
         }
-        html[data-theme="dark"] .login-bottom-wave path.wave-white {
-            fill: rgba(15, 23, 42, 0.88);
+        html[data-theme="dark"] .login-bottom-wave path.wave-main-fill {
+            fill: #091122;
+        }
+        html[data-theme="dark"] .login-bottom-wave path.wave-blue-rim {
+            fill: rgba(37, 99, 235, 0.32);
         }
 
         .login-left-pane {
             flex: 1.15;
-            max-width: 630px;
+            max-width: 610px;
             z-index: 5;
             color: #ffffff;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            height: 86vh;
-            padding: 2vh 0;
+            height: 88vh;
+            padding: 5vh 0 1vh 0;
+        }
+        .login-brand-hero {
+            margin-top: 2vh;
         }
         .login-brand-hero h1 {
-            font-size: clamp(40px, 4.4vw, 64px);
+            font-size: clamp(42px, 4.3vw, 62px);
             font-weight: 900;
             margin: 0 0 12px 0;
-            letter-spacing: -1.5px;
+            letter-spacing: -1.4px;
             line-height: 1.05;
             color: #ffffff;
-            text-shadow: 0 6px 24px rgba(0, 0, 0, 0.25);
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.22);
         }
         .login-brand-hero h1 span.utility-highlight {
             color: #ff6b6b;
-            background: linear-gradient(90deg, #ff6b6b, #ff8787);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
         }
         html[data-theme="dark"] .login-brand-hero h1 span.utility-highlight {
             background: linear-gradient(90deg, #60a5fa, #c084fc);
@@ -254,11 +261,11 @@
             -webkit-text-fill-color: transparent;
         }
         .login-brand-hero p {
-            font-size: clamp(15px, 1.35vw, 19px);
-            line-height: 1.55;
-            color: rgba(255, 255, 255, 0.92);
+            font-size: clamp(15px, 1.25vw, 18.5px);
+            line-height: 1.5;
+            color: rgba(255, 255, 255, 0.94);
             margin: 0 0 28px 0;
-            max-width: 520px;
+            max-width: 490px;
             font-weight: 400;
         }
 
@@ -266,25 +273,25 @@
         .login-feature-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 16px;
-            max-width: 570px;
+            gap: 15px;
+            max-width: 550px;
         }
         .login-feature-card {
-            background: rgba(15, 23, 42, 0.48);
+            background: rgba(30, 41, 75, 0.56);
             backdrop-filter: blur(14px);
             -webkit-backdrop-filter: blur(14px);
-            border: 1px solid rgba(255, 255, 255, 0.18);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 16px;
             padding: 16px 18px;
             display: flex;
             align-items: flex-start;
             gap: 14px;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+            box-shadow: 0 10px 28px rgba(0, 0, 0, 0.18);
             transition: transform 0.25s ease, border-color 0.25s ease;
         }
         .login-feature-card:hover {
             transform: translateY(-3px);
-            border-color: rgba(255, 255, 255, 0.38);
+            border-color: rgba(255, 255, 255, 0.42);
         }
         .feat-icon-box {
             width: 46px;
@@ -295,24 +302,23 @@
             justify-content: center;
             flex-shrink: 0;
             color: #ffffff;
-            font-size: 20px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
         }
-        .feat-indigo { background: linear-gradient(135deg, #4f46e5, #6366f1); }
-        .feat-emerald { background: linear-gradient(135deg, #10b981, #059669); }
-        .feat-amber { background: linear-gradient(135deg, #f59e0b, #d97706); }
-        .feat-rose { background: linear-gradient(135deg, #ec4899, #e11d48); }
+        .feat-indigo { background: #4f46e5; }
+        .feat-emerald { background: #10b981; }
+        .feat-amber { background: #f59e0b; }
+        .feat-rose { background: #ec2a6b; }
         .feat-text h4 {
             margin: 0 0 4px 0;
-            font-size: 15px;
+            font-size: 14.5px;
             font-weight: 700;
             color: #ffffff;
         }
         .feat-text p {
             margin: 0;
             font-size: 12.5px;
-            line-height: 1.4;
-            color: rgba(255, 255, 255, 0.78);
+            line-height: 1.42;
+            color: rgba(255, 255, 255, 0.82);
         }
 
         /* Bottom-left "Tools for Smarter Work and Better Service" */
@@ -321,39 +327,45 @@
             z-index: 6;
             display: flex;
             align-items: flex-start;
-            gap: 14px;
+            gap: 12px;
             margin-top: auto;
-            padding-bottom: 8px;
+            padding-bottom: 6px;
         }
         .slogan-dots {
             display: flex;
             flex-direction: column;
             align-items: center;
             gap: 6px;
-            padding-top: 6px;
+            padding-top: 5px;
         }
         .slogan-dots span {
-            width: 7px;
-            height: 7px;
+            width: 6px;
+            height: 6px;
             border-radius: 50%;
-            background: #e11d48;
+            background: #ef233c;
         }
         .slogan-dots span:nth-child(2) { opacity: 0.65; }
         .slogan-dots span:nth-child(3) { opacity: 0.4; }
-        .slogan-dots span:nth-child(4) { opacity: 0.25; }
+        .slogan-dots span:nth-child(4) { opacity: 0.22; }
+        .slogan-dots .slogan-line {
+            width: 1.5px;
+            height: 22px;
+            background: #cbd5e1;
+            margin-top: 2px;
+        }
         .slogan-text-block {
-            color: #0f172a;
-            line-height: 1.22;
+            color: #1e293b;
+            line-height: 1.24;
         }
         html[data-theme="dark"] .slogan-text-block {
             color: #f8fafc;
         }
-        .slogan-text-block .t-line1 { font-size: 22px; font-weight: 500; }
-        .slogan-text-block .t-line2 { font-size: 25px; font-weight: 800; color: #1d4ed8; }
+        .slogan-text-block .t-line1 { font-size: 20px; font-weight: 400; }
+        .slogan-text-block .t-line2 { font-size: 23px; font-weight: 800; color: #0b46a0; }
         html[data-theme="dark"] .slogan-text-block .t-line2 { color: #60a5fa; }
-        .slogan-text-block .t-line3 { font-size: 22px; font-weight: 500; }
+        .slogan-text-block .t-line3 { font-size: 20px; font-weight: 400; }
         .slogan-red-bar {
-            width: 44px;
+            width: 42px;
             height: 4px;
             background: #ef233c;
             border-radius: 4px;
@@ -370,14 +382,14 @@
         }
         .login-form-wrapper {
             width: 100%;
-            max-width: 440px;
+            max-width: 435px;
             background: var(--login-card-bg);
             backdrop-filter: blur(22px);
             -webkit-backdrop-filter: blur(22px);
             border: 1px solid var(--border-glass);
             border-radius: 24px;
-            padding: 32px 34px;
-            box-shadow: 0 25px 60px rgba(10, 20, 45, 0.32);
+            padding: 24px 32px 26px 32px;
+            box-shadow: 0 24px 60px rgba(8, 20, 48, 0.28);
             position: relative;
             transition: all 0.3s ease;
         }
@@ -385,11 +397,11 @@
             display: flex;
             justify-content: flex-end;
             align-items: center;
-            margin-bottom: 4px;
+            margin-bottom: 2px;
         }
         .welcome-title {
             text-align: left;
-            font-size: 30px;
+            font-size: 31px;
             color: var(--text-primary);
             margin: 0 0 6px 0;
             font-weight: 900;
@@ -398,8 +410,8 @@
         .architect-tag {
             text-align: left;
             color: var(--text-muted);
-            font-size: 13.5px;
-            line-height: 1.45;
+            font-size: 13px;
+            line-height: 1.5;
             margin-bottom: 22px;
         }
 
@@ -418,7 +430,7 @@
             align-items: center;
             gap: 7px;
             font-weight: 700;
-            font-size: 13.5px;
+            font-size: 13px;
             color: var(--text-primary);
             margin-bottom: 7px;
         }
@@ -444,12 +456,11 @@
         input[type="text"]:focus, input[type="password"]:focus {
             border-color: var(--accent-primary);
             background: var(--surface-input-focus);
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.14);
             outline: none;
         }
         .secure-mask { -webkit-text-security: disc; }
 
-        /* Floating Error Bubbles & SVG Eye Icon */
         .input-error-bubble {
             position: absolute;
             right: 0;
@@ -503,33 +514,34 @@
         .captcha-refresh-link {
             background: transparent;
             border: none;
-            color: var(--accent-primary);
+            color: #1d4ed8;
             font-size: 12.5px;
             font-weight: 700;
             cursor: pointer;
             display: inline-flex;
             align-items: center;
-            gap: 4px;
+            gap: 5px;
             padding: 2px 6px;
             border-radius: 6px;
             transition: background 0.2s;
         }
+        html[data-theme="dark"] .captcha-refresh-link { color: #60a5fa; }
         .captcha-refresh-link:hover {
             background: rgba(37, 99, 235, 0.1);
         }
         .captcha-box-display {
             width: 100%;
             height: 48px;
-            background: repeating-linear-gradient(135deg, var(--surface-input), var(--surface-input) 10px, rgba(148, 163, 184, 0.12) 10px, rgba(148, 163, 184, 0.12) 20px);
+            background: repeating-linear-gradient(135deg, var(--surface-input), var(--surface-input) 12px, rgba(148, 163, 184, 0.11) 12px, rgba(148, 163, 184, 0.11) 24px);
             border: 1px solid var(--border-subtle);
             border-radius: 10px;
             display: flex;
             justify-content: center;
             align-items: center;
             font-family: 'JetBrains Mono', 'Courier New', monospace;
-            font-size: 23px;
+            font-size: 22px;
             font-weight: 800;
-            letter-spacing: 7px;
+            letter-spacing: 6px;
             color: var(--text-primary);
             text-decoration: line-through;
             user-select: none;
@@ -545,6 +557,8 @@
             transform: translateY(-50%);
             color: var(--text-muted);
             pointer-events: none;
+            display: flex;
+            align-items: center;
         }
         .captcha-input-wrap input {
             padding-left: 40px !important;
@@ -554,7 +568,7 @@
             background: var(--login-btn-bg);
             padding: 14px 20px;
             border-radius: 10px;
-            font-size: 14.5px;
+            font-size: 14px;
             margin-top: 4px;
             width: 100%;
             text-transform: uppercase;
@@ -581,8 +595,8 @@
             gap: 12px;
             margin: 14px 0;
             color: var(--text-muted);
-            font-size: 12px;
-            font-weight: 700;
+            font-size: 11.5px;
+            font-weight: 800;
         }
         .login-or-divider::before, .login-or-divider::after {
             content: '';
@@ -592,13 +606,13 @@
         }
 
         .guest-login-btn {
-            background: var(--surface-input);
-            border: 1.5px solid rgba(59, 130, 246, 0.35);
-            color: var(--accent-primary);
+            background: rgba(238, 243, 251, 0.8);
+            border: 1.5px solid #93c5fd;
+            color: #1d4ed8;
             padding: 12px 18px;
             border-radius: 10px;
             font-weight: 800;
-            font-size: 14px;
+            font-size: 13.5px;
             width: 100%;
             cursor: pointer;
             transition: all 0.2s;
@@ -607,8 +621,13 @@
             justify-content: center;
             gap: 10px;
         }
+        html[data-theme="dark"] .guest-login-btn {
+            background: rgba(30, 41, 59, 0.7);
+            border-color: rgba(96, 165, 250, 0.4);
+            color: #60a5fa;
+        }
         .guest-login-btn:hover {
-            background: rgba(37, 99, 235, 0.08);
+            background: rgba(37, 99, 235, 0.1);
             border-color: var(--accent-primary);
             transform: translateY(-1px);
         }
@@ -801,7 +820,7 @@
         }
 
         /* =========================================================
-           4. FULL-VIEWPORT APPLICATION DASHBOARD SHELL
+           4. FULL-VIEWPORT APPLICATION DASHBOARD SHELL (ZERO OVERFLOW FIX)
            ========================================================= */
         .standalone-viewport {
             display: none;
@@ -821,7 +840,7 @@
 
         /* --- DYNAMIC LEFT SIDEBAR / HAMBURGER MENU --- */
         .app-sidebar {
-            width: 250px;
+            width: 242px;
             height: 100vh;
             background: var(--sidebar-bg);
             color: var(--sidebar-text);
@@ -829,54 +848,66 @@
             flex-direction: column;
             flex-shrink: 0;
             border-right: 1px solid rgba(255, 255, 255, 0.08);
-            transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s ease;
+            transition: width 0.28s cubic-bezier(0.4, 0, 0.2, 1), transform 0.28s ease;
             z-index: 100;
-            box-shadow: 6px 0 24px rgba(0, 0, 0, 0.18);
+            box-shadow: 6px 0 24px rgba(0, 0, 0, 0.16);
+            overflow: hidden;
         }
         .app-sidebar.collapsed {
-            width: 74px;
+            width: 68px;
         }
-        .app-sidebar.collapsed .sb-brand-text,
+        .app-sidebar.collapsed .sb-brand,
         .app-sidebar.collapsed .sb-item-label,
         .app-sidebar.collapsed .sb-item-chevron,
         .app-sidebar.collapsed .sb-section-label {
             display: none !important;
         }
+        .app-sidebar.collapsed .sb-header {
+            justify-content: center;
+            padding: 16px 8px;
+        }
         .app-sidebar.collapsed .sb-nav-item {
             justify-content: center;
-            padding: 12px 0;
+            padding: 11px 0;
+        }
+        .app-sidebar.collapsed .sb-item-left {
+            justify-content: center;
+            gap: 0;
         }
 
         .sb-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 18px 16px;
+            padding: 16px 14px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            flex-shrink: 0;
         }
         .sb-brand {
             display: flex;
             align-items: center;
-            gap: 11px;
+            gap: 10px;
+            min-width: 0;
             overflow: hidden;
         }
         .sb-logo-box {
-            width: 38px;
-            height: 38px;
+            width: 36px;
+            height: 36px;
             border-radius: 10px;
             background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
             display: flex;
             align-items: center;
             justify-content: center;
             color: #ffffff;
-            font-weight: 900;
-            font-size: 18px;
             flex-shrink: 0;
             box-shadow: 0 4px 14px rgba(59, 130, 246, 0.45);
         }
+        .sb-brand-text {
+            min-width: 0;
+        }
         .sb-brand-text h3 {
             margin: 0;
-            font-size: 15.5px;
+            font-size: 15px;
             font-weight: 800;
             color: #ffffff;
             white-space: nowrap;
@@ -887,18 +918,18 @@
         }
         .sb-brand-text span.ver-tag {
             display: block;
-            font-size: 11px;
+            font-size: 10.5px;
             color: #94a3b8;
             font-weight: 600;
-            margin-top: 2px;
+            margin-top: 1px;
         }
         .hamburger-toggle-btn {
             background: rgba(255, 255, 255, 0.07);
             border: 1px solid rgba(255, 255, 255, 0.12);
             color: #e2e8f0;
-            width: 32px;
-            height: 32px;
-            border-radius: 8px;
+            width: 34px;
+            height: 34px;
+            border-radius: 9px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -907,38 +938,40 @@
             flex-shrink: 0;
         }
         .hamburger-toggle-btn:hover {
-            background: rgba(59, 130, 246, 0.3);
+            background: rgba(59, 130, 246, 0.32);
             color: #ffffff;
         }
 
         .sb-nav-scroll {
             flex: 1;
             overflow-y: auto;
-            padding: 12px 10px;
+            padding: 10px 9px;
             display: flex;
             flex-direction: column;
-            gap: 4px;
+            gap: 3px;
         }
         .sb-section-label {
-            font-size: 10.5px;
+            font-size: 10px;
             font-weight: 800;
             text-transform: uppercase;
             letter-spacing: 0.8px;
             color: #64748b;
-            padding: 8px 12px 4px 12px;
+            padding: 8px 10px 4px 10px;
+            white-space: nowrap;
         }
         .sb-nav-item {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 10px 13px;
-            border-radius: 11px;
+            padding: 9px 11px;
+            border-radius: 10px;
             color: #cbd5e1;
-            font-size: 13.5px;
+            font-size: 13px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.2s ease;
             border: 1px solid transparent;
+            min-width: 0;
         }
         .sb-nav-item:hover {
             background: rgba(255, 255, 255, 0.07);
@@ -949,45 +982,59 @@
             color: #ffffff;
             font-weight: 700;
             border-color: rgba(96, 165, 250, 0.4);
-            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.35);
+            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.32);
         }
         .sb-item-left {
             display: flex;
             align-items: center;
-            gap: 11px;
+            gap: 10px;
             min-width: 0;
+            flex: 1;
         }
         .sb-item-icon {
-            font-size: 16px;
             width: 22px;
-            text-align: center;
+            height: 22px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
             flex-shrink: 0;
+            color: currentColor;
+        }
+        .sb-item-icon svg {
+            width: 18px;
+            height: 18px;
         }
         .sb-item-label {
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            flex: 1;
         }
         .sb-item-chevron {
-            font-size: 14px;
+            display: inline-flex;
+            align-items: center;
             opacity: 0.55;
             flex-shrink: 0;
+            margin-left: 4px;
         }
 
         .sb-footer {
-            padding: 12px;
+            padding: 10px;
             border-top: 1px solid rgba(255, 255, 255, 0.08);
+            flex-shrink: 0;
         }
 
-        /* --- MAIN DASHBOARD RIGHT CONTENT AREA --- */
+        /* --- MAIN DASHBOARD RIGHT CONTENT AREA (CRITICAL MIN-WIDTH: 0 FIX) --- */
         .app-main-area {
-            flex: 1;
+            flex: 1 1 0%;
+            min-width: 0 !important;
+            max-width: 100%;
             height: 100vh;
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            padding: 14px 22px 16px 22px;
-            gap: 12px;
+            padding: 12px 18px 14px 18px;
+            gap: 10px;
         }
 
         /* TOP BAR (SEARCH, CLOCK, THEME, NOTIFICATIONS, PROFILE) */
@@ -995,63 +1042,69 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 16px;
+            gap: 12px;
             background: var(--surface-glass);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
             border: 1px solid var(--border-glass);
-            border-radius: 16px;
-            padding: 10px 18px;
+            border-radius: 15px;
+            padding: 8px 16px;
             box-shadow: var(--shadow-soft);
             flex-shrink: 0;
+            min-width: 0;
+            width: 100%;
             z-index: 40;
         }
 
         .top-search-wrap {
             display: flex;
             align-items: center;
-            gap: 12px;
-            flex: 1;
-            max-width: 420px;
+            gap: 10px;
+            flex: 1 1 200px;
+            min-width: 0;
+            max-width: 390px;
         }
         .mobile-menu-btn {
             display: none;
             background: var(--surface-input);
             border: 1px solid var(--border-subtle);
             color: var(--text-primary);
-            width: 38px;
-            height: 38px;
+            width: 36px;
+            height: 36px;
             border-radius: 10px;
             align-items: center;
             justify-content: center;
             cursor: pointer;
+            flex-shrink: 0;
         }
         .search-module-input {
             width: 100%;
-            padding: 10px 16px 10px 40px !important;
+            padding: 9px 14px 9px 38px !important;
             border: 1px solid var(--border-subtle) !important;
             border-radius: 999px !important;
-            font-size: 13.5px !important;
-            background: var(--surface-input) url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="%2364748b" viewBox="0 0 16 16"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/></svg>') no-repeat 15px center !important;
+            font-size: 13px !important;
+            background: var(--surface-input) url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="%2364748b" viewBox="0 0 16 16"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/></svg>') no-repeat 14px center !important;
             color: var(--text-primary) !important;
         }
 
         .top-right-controls {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
+            flex-shrink: 0;
         }
 
         /* Date & Time Pill */
         .live-clock-widget {
             background: var(--surface-input);
             border: 1px solid var(--border-subtle);
-            padding: 6px 14px;
-            border-radius: 12px;
+            padding: 5px 12px;
+            border-radius: 11px;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 9px;
             color: var(--text-primary);
+            flex-shrink: 0;
         }
         .clock-cal-icon {
             color: var(--accent-primary);
@@ -1061,27 +1114,30 @@
         .clock-lines {
             display: flex;
             flex-direction: column;
-            line-height: 1.2;
+            line-height: 1.18;
         }
         .clock-date-line {
-            font-size: 11px;
+            font-size: 10.5px;
             font-weight: 600;
             color: var(--text-muted);
+            white-space: nowrap;
         }
         .clock-time-line {
-            font-size: 12.5px;
+            font-size: 12px;
             font-weight: 800;
             color: var(--text-primary);
+            white-space: nowrap;
         }
 
         /* Notification Bell Button & Dropdown */
         .notif-bell-wrapper {
             position: relative;
+            flex-shrink: 0;
         }
         .notif-bell-btn {
-            width: 38px;
-            height: 38px;
-            border-radius: 12px;
+            width: 36px;
+            height: 36px;
+            border-radius: 11px;
             background: var(--surface-input);
             border: 1px solid var(--border-subtle);
             color: var(--text-primary);
@@ -1117,7 +1173,7 @@
         /* 24-Hour Role Notifications Dropdown Panel */
         .notif-dropdown-panel {
             position: absolute;
-            top: 48px;
+            top: 46px;
             right: 0;
             width: 340px;
             background: var(--surface-glass-strong);
@@ -1145,14 +1201,14 @@
         }
         .notif-panel-header h4 {
             margin: 0;
-            font-size: 14px;
+            font-size: 13.5px;
             font-weight: 800;
             display: flex;
             align-items: center;
             gap: 7px;
         }
         .notif-panel-header span.ttl-tag {
-            font-size: 11px;
+            font-size: 10.5px;
             color: var(--accent-primary);
             font-weight: 700;
             background: rgba(37, 99, 235, 0.1);
@@ -1180,13 +1236,17 @@
         }
         .notif-role-item h5 {
             margin: 0 0 3px 0;
-            font-size: 13px;
+            font-size: 12.5px;
             font-weight: 800;
             color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
+        .notif-role-item h5 svg { width: 15px; height: 15px; color: var(--accent-primary); flex-shrink: 0; }
         .notif-role-item p {
             margin: 0 0 5px 0;
-            font-size: 12px;
+            font-size: 11.5px;
             color: var(--text-secondary);
         }
         .notif-role-item .notif-meta {
@@ -1201,26 +1261,27 @@
         .profile-trigger-pill {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 9px;
             background: var(--surface-input);
             border: 1px solid var(--border-subtle);
-            padding: 5px 12px 5px 6px;
+            padding: 4px 11px 4px 5px;
             border-radius: 999px;
             cursor: pointer;
             transition: all 0.2s ease;
+            flex-shrink: 0;
         }
         .profile-trigger-pill:hover {
             border-color: var(--accent-primary);
             background: var(--surface-card-hover);
         }
         .profile-avatar-circle {
-            width: 32px;
-            height: 32px;
+            width: 30px;
+            height: 30px;
             border-radius: 50%;
             background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
             color: #ffffff;
             font-weight: 800;
-            font-size: 14px;
+            font-size: 13.5px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -1233,12 +1294,12 @@
             text-align: left;
         }
         .profile-pill-name {
-            font-size: 13px;
+            font-size: 12.5px;
             font-weight: 800;
             color: var(--text-primary);
         }
         .profile-pill-role {
-            font-size: 11px;
+            font-size: 10.5px;
             font-weight: 600;
             color: var(--text-muted);
         }
@@ -1246,7 +1307,7 @@
         /* --- SLIDE-OVER PROFILE DRAWER PANEL --- */
         .profile-slide-drawer {
             position: fixed;
-            top: 74px;
+            top: 68px;
             right: -380px;
             width: 340px;
             background: var(--surface-glass-strong);
@@ -1255,28 +1316,28 @@
             border: 1px solid var(--border-glass);
             border-radius: 22px;
             box-shadow: var(--shadow-elevated);
-            padding: 22px;
+            padding: 20px;
             z-index: 900;
-            transition: right 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+            transition: right 0.32s cubic-bezier(0.25, 1, 0.5, 1);
         }
         .profile-slide-drawer.open {
-            right: 22px;
+            right: 18px;
         }
         .profile-drawer-top {
             display: flex;
             align-items: center;
             gap: 14px;
-            padding-bottom: 16px;
+            padding-bottom: 14px;
             border-bottom: 1px solid var(--border-subtle);
             margin-bottom: 14px;
         }
         .profile-drawer-avatar {
-            width: 54px;
-            height: 54px;
-            border-radius: 16px;
+            width: 50px;
+            height: 50px;
+            border-radius: 15px;
             background: linear-gradient(135deg, #2563eb, #7c3aed);
             color: #ffffff;
-            font-size: 24px;
+            font-size: 22px;
             font-weight: 900;
             display: flex;
             align-items: center;
@@ -1286,17 +1347,17 @@
         .profile-detail-list {
             display: flex;
             flex-direction: column;
-            gap: 10px;
-            margin-bottom: 18px;
+            gap: 8px;
+            margin-bottom: 16px;
         }
         .profile-detail-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
             background: var(--surface-input);
-            padding: 9px 12px;
+            padding: 8px 12px;
             border-radius: 10px;
-            font-size: 12.5px;
+            font-size: 12px;
         }
         .profile-detail-row span.p-lbl {
             color: var(--text-muted);
@@ -1308,61 +1369,69 @@
             text-align: right;
         }
 
-        /* --- LATEST NEWS TICKER (EXACT IMAGE 2 DESIGN) --- */
+        /* --- LATEST NEWS TICKER (SMOOTH CONTINUOUS GPU MARQUEE, ZERO CLIPPING) --- */
         .news-ticker-container {
             background: var(--surface-glass);
             backdrop-filter: blur(12px);
             border: 1px solid var(--border-glass);
-            border-radius: 14px;
-            padding: 8px 14px;
+            border-radius: 13px;
+            padding: 7px 12px;
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
             box-shadow: var(--shadow-soft);
             flex-shrink: 0;
+            min-width: 0 !important;
+            width: 100%;
+            overflow: hidden;
         }
         .ticker-label {
             background: linear-gradient(90deg, #ef233c, #e11d48);
             color: white;
             font-weight: 800;
-            font-size: 11px;
-            padding: 5px 12px;
+            font-size: 10.5px;
+            padding: 5px 11px;
             border-radius: 7px;
             letter-spacing: 0.6px;
             white-space: nowrap;
-            box-shadow: 0 2px 8px rgba(225, 29, 72, 0.35);
+            flex-shrink: 0;
+            box-shadow: 0 2px 8px rgba(225, 29, 72, 0.32);
         }
         .ticker-speaker {
             color: #e11d48;
-            font-size: 15px;
             display: flex;
             align-items: center;
+            justify-content: center;
             flex-shrink: 0;
         }
         .ticker-scroll {
-            flex-grow: 1;
+            flex: 1 1 0%;
+            min-width: 0 !important;
             overflow: hidden;
             white-space: nowrap;
+            position: relative;
         }
         .ticker-text {
             display: inline-block;
-            padding-left: 40%;
-            animation: scrollTicker 26s linear infinite;
+            padding-left: 8px;
+            padding-right: 80px;
+            will-change: transform;
+            animation: scrollTicker 24s linear infinite;
             font-weight: 700;
             color: #e11d48;
-            font-size: 13.5px;
+            font-size: 13px;
         }
         html[data-theme="dark"] .ticker-text {
-            color: #f43f5e;
+            color: #fb7185;
         }
         @keyframes scrollTicker {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-100%); }
+            0% { transform: translate3d(15%, 0, 0); }
+            100% { transform: translate3d(-100%, 0, 0); }
         }
         .ticker-nav-btns {
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 4px;
             flex-shrink: 0;
         }
         .ticker-ctrl-btn {
@@ -1372,47 +1441,50 @@
             border: 1px solid var(--border-subtle);
             background: var(--surface-input);
             color: var(--text-secondary);
-            font-size: 12px;
-            font-weight: 800;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
+            padding: 0;
         }
         .ticker-ctrl-btn:hover {
             background: var(--accent-primary);
             color: #ffffff;
         }
 
-        /* --- KPI SUMMARY CARDS ROW (4 CARDS FOR HQ ADMIN / 1 SYSTEM STATUS FOR OTHERS) --- */
+        /* --- KPI SUMMARY CARDS ROW (FLUID AUTO-FIT WITHOUT OVERFLOW WHEN SIDEBAR EXPANDS) --- */
         .kpi-row-grid {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 14px;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 12px;
             flex-shrink: 0;
+            min-width: 0 !important;
+            width: 100%;
         }
         .kpi-row-grid.single-status-mode {
-            grid-template-columns: repeat(2, minmax(260px, 420px));
+            grid-template-columns: minmax(280px, 460px);
         }
         .kpi-stat-card {
             background: var(--surface-card);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
             border: 1px solid var(--border-glass);
-            border-radius: 16px;
-            padding: 14px 18px;
+            border-radius: 15px;
+            padding: 12px 14px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 12px;
+            gap: 8px;
             box-shadow: var(--shadow-card);
-            transition: all 0.25s ease;
+            transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+            min-width: 0 !important;
+            overflow: hidden;
         }
         .kpi-stat-card.clickable-kpi {
             cursor: pointer;
         }
         .kpi-stat-card.clickable-kpi:hover {
-            transform: translateY(-3px);
+            transform: translateY(-2px);
             background: var(--surface-card-hover);
             border-color: rgba(59, 130, 246, 0.45);
             box-shadow: var(--shadow-elevated);
@@ -1420,61 +1492,79 @@
         .kpi-left-group {
             display: flex;
             align-items: center;
-            gap: 14px;
+            gap: 11px;
+            min-width: 0;
+            flex: 1;
         }
         .kpi-icon-box {
-            width: 48px;
-            height: 48px;
-            border-radius: 14px;
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 22px;
             flex-shrink: 0;
+        }
+        .kpi-icon-box svg {
+            width: 22px;
+            height: 22px;
         }
         .kpi-blue { background: rgba(59, 130, 246, 0.14); color: #2563eb; }
         .kpi-purple { background: rgba(139, 92, 246, 0.14); color: #7c3aed; }
         .kpi-emerald { background: rgba(16, 185, 129, 0.14); color: #10b981; }
         .kpi-cyan { background: rgba(14, 165, 233, 0.14); color: #0284c7; }
 
+        .kpi-info {
+            min-width: 0;
+            flex: 1;
+        }
         .kpi-info h4 {
-            margin: 0 0 3px 0;
-            font-size: 12px;
+            margin: 0 0 2px 0;
+            font-size: 11.5px;
             font-weight: 700;
             color: var(--text-muted);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
         .kpi-info .kpi-val {
-            font-size: 23px;
+            font-size: clamp(16px, 1.35vw, 21px);
             font-weight: 900;
             color: var(--text-primary);
-            letter-spacing: -0.6px;
-            line-height: 1.1;
+            letter-spacing: -0.5px;
+            line-height: 1.15;
+            white-space: nowrap;
         }
         .kpi-sub-pill {
-            font-size: 11px;
+            font-size: 10.5px;
             font-weight: 700;
-            padding: 4px 9px;
+            padding: 4px 8px;
             border-radius: 99px;
             display: inline-flex;
             align-items: center;
-            gap: 5px;
+            gap: 4px;
             white-space: nowrap;
+            flex-shrink: 0;
         }
-        .pill-green { background: rgba(16, 185, 129, 0.14); color: #10b981; }
+        .pill-green { background: rgba(16, 185, 129, 0.14); color: #059669; }
+        html[data-theme="dark"] .pill-green { color: #34d399; }
         .pill-red { background: rgba(239, 68, 68, 0.14); color: #ef4444; }
-        .pill-blue { background: rgba(59, 130, 246, 0.14); color: #3b82f6; }
+        .pill-blue { background: rgba(59, 130, 246, 0.14); color: #2563eb; }
+        html[data-theme="dark"] .pill-blue { color: #60a5fa; }
 
         /* --- QUICK ACCESS MODULES SECTION --- */
         #dashboardGridView {
-            flex: 1;
+            flex: 1 1 0%;
             display: flex;
             flex-direction: column;
             min-height: 0;
+            min-width: 0 !important;
+            width: 100%;
             background: var(--surface-glass);
             backdrop-filter: blur(16px);
             border: 1px solid var(--border-glass);
-            border-radius: 20px;
-            padding: 16px 20px;
+            border-radius: 18px;
+            padding: 14px 18px;
             box-shadow: var(--shadow-soft);
             overflow: hidden;
         }
@@ -1483,7 +1573,7 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 14px;
+            margin-bottom: 12px;
             flex-shrink: 0;
             flex-wrap: wrap;
             gap: 10px;
@@ -1491,8 +1581,8 @@
         .modules-sec-title {
             display: flex;
             align-items: center;
-            gap: 10px;
-            font-size: 17px;
+            gap: 9px;
+            font-size: 16px;
             font-weight: 800;
             color: var(--text-primary);
             margin: 0;
@@ -1500,7 +1590,7 @@
         .modules-sec-title::before {
             content: '';
             width: 4px;
-            height: 20px;
+            height: 18px;
             border-radius: 4px;
             background: linear-gradient(180deg, #2563eb, #7c3aed);
         }
@@ -1522,10 +1612,10 @@
             border: none;
             background: transparent;
             color: var(--text-secondary);
-            font-size: 12.5px;
+            font-size: 12px;
             font-weight: 700;
-            padding: 6px 12px;
-            border-radius: 8px;
+            padding: 5px 11px;
+            border-radius: 7px;
             cursor: pointer;
             display: inline-flex;
             align-items: center;
@@ -1541,9 +1631,9 @@
             background: var(--surface-card-hover);
             border: 1px solid var(--border-subtle);
             color: var(--text-primary);
-            font-size: 12.5px;
+            font-size: 12px;
             font-weight: 700;
-            padding: 8px 14px;
+            padding: 7px 13px;
             border-radius: 10px;
             cursor: pointer;
             display: inline-flex;
@@ -1556,99 +1646,106 @@
             color: var(--accent-primary);
         }
 
-        /* MODULE CARDS GRID & LIST VIEW */
+        /* MODULE CARDS GRID & LIST VIEW (RESPONSIVE & SELF-ADJUSTING) */
         .portal-grid-wrapper {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 14px;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 12px;
             flex: 1;
             align-content: start;
             overflow-y: auto;
             padding: 2px;
+            min-width: 0;
         }
         .portal-grid-wrapper.list-mode {
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: repeat(2, minmax(0, 1fr));
             gap: 10px;
         }
 
         .portal-module-card {
             background: var(--surface-card);
-            border-radius: 16px;
-            padding: 16px 16px;
+            border-radius: 15px;
+            padding: 14px 14px;
             cursor: pointer;
             box-shadow: var(--shadow-card);
             border: 1px solid var(--border-glass);
-            transition: all 0.28s cubic-bezier(0.25, 0.8, 0.25, 1);
+            transition: all 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
             position: relative;
             overflow: hidden;
             display: none;
             align-items: center;
-            gap: 14px;
+            gap: 12px;
+            min-width: 0;
         }
         .portal-module-card::after {
             content: '›';
-            font-size: 22px;
+            font-size: 20px;
             font-weight: 700;
             color: var(--text-muted);
             margin-left: auto;
-            transition: transform 0.25s ease, color 0.25s ease;
+            transition: transform 0.22s ease, color 0.22s ease;
             flex-shrink: 0;
         }
         .portal-module-card:hover {
-            transform: translateY(-4px);
+            transform: translateY(-3px);
             background: var(--surface-card-hover);
             box-shadow: var(--shadow-elevated);
-            border-color: rgba(59, 130, 246, 0.4);
+            border-color: rgba(59, 130, 246, 0.42);
         }
         .portal-module-card:hover::after {
-            transform: translateX(4px);
+            transform: translateX(3px);
             color: var(--accent-primary);
         }
         .portal-module-card.fade-out { opacity: 0; transform: scale(0.92); pointer-events: none; }
         .portal-module-card.expand-active { transform: scale(1.03); border-color: var(--accent-primary); }
 
         .card-icon {
-            font-size: 24px;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            width: 48px;
-            height: 48px;
-            border-radius: 13px;
-            background: rgba(239, 68, 68, 0.12);
+            width: 40px;
+            height: 40px;
+            border-radius: 11px;
+            background: rgba(59, 130, 246, 0.14);
+            color: #2563eb;
             flex-shrink: 0;
             transition: transform 0.25s ease;
         }
-        .portal-module-card:hover .card-icon { transform: scale(1.08); }
-        .card-blue-variant .card-icon { background: rgba(59, 130, 246, 0.15); }
-        .card-green-variant .card-icon { background: rgba(16, 185, 129, 0.15); }
-        .card-purple-variant .card-icon { background: rgba(139, 92, 246, 0.15); }
-        .card-teal-variant .card-icon { background: rgba(20, 184, 166, 0.15); }
-        .card-orange-variant .card-icon { background: rgba(245, 158, 11, 0.16); }
-        .card-dark-variant .card-icon { background: rgba(100, 116, 139, 0.16); }
-        .card-rose-variant .card-icon { background: rgba(225, 29, 72, 0.14); }
-        .card-indigo-variant .card-icon { background: rgba(79, 70, 229, 0.15); }
-        .card-gold-variant .card-icon { background: rgba(16, 185, 129, 0.16); }
+        .card-icon svg {
+            width: 22px;
+            height: 22px;
+        }
+        .portal-module-card:hover .card-icon { transform: scale(1.07); }
+        .card-blue-variant .card-icon { background: rgba(59, 130, 246, 0.14); color: #2563eb; }
+        .card-green-variant .card-icon { background: rgba(16, 185, 129, 0.14); color: #059669; }
+        .card-purple-variant .card-icon { background: rgba(139, 92, 246, 0.14); color: #7c3aed; }
+        .card-teal-variant .card-icon { background: rgba(20, 184, 166, 0.14); color: #0d9488; }
+        .card-orange-variant .card-icon { background: rgba(245, 158, 11, 0.15); color: #d97706; }
+        .card-dark-variant .card-icon { background: rgba(100, 116, 139, 0.15); color: #475569; }
+        .card-rose-variant .card-icon { background: rgba(225, 29, 72, 0.13); color: #e11d48; }
+        .card-indigo-variant .card-icon { background: rgba(79, 70, 229, 0.14); color: #4f46e5; }
+        .card-gold-variant .card-icon { background: rgba(16, 185, 129, 0.15); color: #10b981; }
+        html[data-theme="dark"] .card-dark-variant .card-icon { color: #cbd5e1; }
 
         .card-body-text {
             min-width: 0;
             flex: 1;
         }
         .portal-module-card h3 {
-            margin: 0 0 4px 0;
-            font-size: 14.5px;
+            margin: 0 0 3px 0;
+            font-size: 12.8px;
             font-weight: 800;
             color: var(--text-primary);
-            letter-spacing: -0.2px;
+            letter-spacing: -0.25px;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
         .portal-module-card p {
             margin: 0;
-            font-size: 12px;
+            font-size: 11.5px;
             color: var(--text-muted);
-            line-height: 1.4;
+            line-height: 1.38;
             display: -webkit-box;
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
@@ -1660,18 +1757,18 @@
             justify-content: center;
             align-items: center;
             gap: 6px;
-            margin-top: 10px;
+            margin-top: 8px;
             flex-shrink: 0;
         }
         .page-nav-btn {
             background: var(--surface-input);
             border: 1px solid var(--border-subtle);
             color: var(--text-primary);
-            padding: 5px 13px;
+            padding: 4px 12px;
             border-radius: 99px;
             cursor: pointer;
             font-weight: 800;
-            font-size: 12.5px;
+            font-size: 12px;
             transition: all 0.2s;
         }
         .page-nav-btn:hover:not(:disabled) {
@@ -1695,8 +1792,9 @@
             overflow-y: auto;
             background: var(--surface-glass);
             border: 1px solid var(--border-glass);
-            border-radius: 20px;
+            border-radius: 18px;
             padding: 18px;
+            min-width: 0;
         }
 
         /* =========================================================
@@ -1749,8 +1847,6 @@
             align-items: center;
             justify-content: center;
             color: #ffffff;
-            font-size: 18px;
-            font-weight: 900;
             flex-shrink: 0;
         }
         .toast-success .toast-status-orb { background: #10b981; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.35); }
@@ -1811,7 +1907,7 @@
         }
 
         /* =========================================================
-           6. MODALS & OVERLAYS (DEVELOPMENT NOTICE, DBDE, STATUS VIEWS)
+           6. MODALS & OVERLAYS (100% PURE SVG ICONS)
            ========================================================= */
         .forced-password-overlay, .custom-popup-overlay {
             position: fixed;
@@ -1861,7 +1957,18 @@
         }
         button.action-btn:hover { transform: translateY(-2px); }
 
-        .popup-icon-alert { font-size: 46px; margin-bottom: 12px; }
+        .popup-icon-alert {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: rgba(59, 130, 246, 0.12);
+            color: #2563eb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 14px auto;
+        }
+        .popup-icon-alert svg { width: 30px; height: 30px; }
         .popup-message-text {
             color: var(--text-secondary);
             font-size: 14.5px;
@@ -1881,7 +1988,7 @@
             width: 100%;
         }
 
-        /* Live Status Modal Table (For HQ Admin User Status & Office System Status) */
+        /* Live Status Modal Table */
         .status-inspector-card {
             max-width: 720px !important;
             width: 94% !important;
@@ -1932,6 +2039,15 @@
             background: var(--surface-input);
             border: 1px solid var(--border-subtle);
         }
+        .status-dot-inline {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 4px;
+        }
+        .dot-online { background: #10b981; box-shadow: 0 0 8px rgba(16, 185, 129, 0.6); }
+        .dot-offline { background: #ef4444; }
 
         /* Loader */
         .processing-loader-container {
@@ -1992,9 +2108,12 @@
         }
 
         /* Responsive Adaptation */
-        @media (max-width: 1150px) {
-            .portal-grid-wrapper { grid-template-columns: repeat(3, 1fr); }
-            .kpi-row-grid { grid-template-columns: repeat(2, 1fr); }
+        @media (max-width: 1200px) {
+            .portal-grid-wrapper { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+        }
+        @media (max-width: 980px) {
+            .kpi-row-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .portal-grid-wrapper { grid-template-columns: repeat(2, minmax(0, 1fr)); }
         }
         @media (max-width: 900px) {
             .login-split-container {
@@ -2016,7 +2135,6 @@
                 transform: translateX(0);
             }
             .mobile-menu-btn { display: inline-flex; }
-            .portal-grid-wrapper { grid-template-columns: repeat(2, 1fr); }
         }
         @media (max-width: 600px) {
             .portal-grid-wrapper, .portal-grid-wrapper.list-mode, .kpi-row-grid {
@@ -2046,25 +2164,23 @@
     <div class="floating-notif-stack" id="floatingNotifStack"></div>
     
     <!-- =========================================================
-         1. SPLIT-SCREEN LOGIN SCREEN (EXACT REFERENCE DESIGN)
+         1. SPLIT-SCREEN LOGIN SCREEN (EXACT REFERENCE DESIGN, 100% SVG)
          ========================================================= -->
     <div class='login-split-container' id='loginScreen'>
         <div class="login-decor-circle-1"></div>
 
-        <!-- Bottom Curved Wave (Matching Image 1) -->
-        <svg class="login-bottom-wave" viewBox="0 0 1440 220" preserveAspectRatio="none">
-            <path fill="rgba(59, 130, 246, 0.25)" d="M0,40 C320,60 520,190 920,180 C1180,175 1320,120 1440,95 L1440,220 L0,220 Z"></path>
-            <path fill="rgba(244, 63, 94, 0.25)" d="M480,180 C820,210 1120,130 1440,70 L1440,220 L480,220 Z"></path>
-            <path class="wave-white" fill="#f8fafc" d="M0,65 C280,75 480,210 920,215 C1190,218 1340,175 1440,150 L1440,220 L0,220 Z"></path>
+        <!-- Bottom Sweeping S-Curve Wave (Matching Reference Image 1) -->
+        <svg class="login-bottom-wave" viewBox="0 0 1440 320" preserveAspectRatio="none">
+            <path class="wave-blue-rim" fill="rgba(59, 130, 246, 0.35)" d="M0,38 C240,35 420,255 820,285 C1120,305 1290,220 1440,175 L1440,320 L0,320 Z"></path>
+            <path fill="rgba(244, 63, 94, 0.32)" d="M520,275 C860,310 1150,210 1440,125 L1440,320 L520,320 Z"></path>
+            <path class="wave-main-fill" fill="#f8fafc" d="M0,68 C230,65 410,275 830,305 C1130,322 1310,255 1440,215 L1440,320 L0,320 Z"></path>
         </svg>
 
         <!-- Left Branding & 4 Glass Feature Cards -->
         <div class='login-left-pane'>
-            <div>
-                <div class="login-brand-hero">
-                    <h1>PO Staff <span class="utility-highlight">Utility</span></h1>
-                    <p>A unified, secure, and intelligent portal for various postal operations.</p>
-                </div>
+            <div class="login-brand-hero">
+                <h1>PO Staff <span class="utility-highlight">Utility</span></h1>
+                <p>A unified, secure, and intelligent portal for various operations.</p>
 
                 <div class="login-feature-grid">
                     <div class="login-feature-card">
@@ -2112,6 +2228,7 @@
             <div class="login-bottom-slogan">
                 <div class="slogan-dots">
                     <span></span><span></span><span></span><span></span>
+                    <div class="slogan-line"></div>
                 </div>
                 <div class="slogan-text-block">
                     <div class="t-line1">Tools for</div>
@@ -2128,8 +2245,12 @@
                 <div class="login-card-top-row">
                     <div class="theme-switch-pill" onclick="toggleSystemTheme()" title="Switch Light / Dark Mode">
                         <div class="switch-knob"></div>
-                        <div class="switch-icon sun-ic">☀️</div>
-                        <div class="switch-icon moon-ic">🌙</div>
+                        <div class="switch-icon sun-ic">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+                        </div>
+                        <div class="switch-icon moon-ic">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+                        </div>
                     </div>
                 </div>
 
@@ -2158,7 +2279,6 @@
                            onkeydown="handleLoginNav(event, 'sysPass', 'captchaInput', 'passErrorBubble', 'Password field is mandatory.')"
                            oninput="clearErrorBubble('passErrorBubble')" style="padding-right: 45px;"/>
                     
-                    <!-- Clean SVG Eye Icon -->
                     <span id="toggleEye" class="eye-icon-btn" onclick="togglePasswordVisibility()">
                         <svg id="toggleEyeSvg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="eye-svg">
                             <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path><circle cx="12" cy="12" r="3"></circle>
@@ -2194,7 +2314,7 @@
                 <button class='primary-login-btn' onclick='verifyBloggerAuth()' type='button'>
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
                     <span>SECURE LOGIN</span>
-                    <span>→</span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
                 </button>
 
                 <div class="login-or-divider">OR</div>
@@ -2202,22 +2322,26 @@
                 <button class='guest-login-btn' onclick='fillDemoCredentials()' type='button'>
                     <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
                     <span>Use Guest Access</span>
-                    <span style="margin-left: 4px;">›</span>
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
                 </button>
             </div>
         </div>
     </div>
 
     <!-- =========================================================
-         2. 2FA VERIFICATION SCREEN (IMAGE 2 TOP-MIDDLE MATCH)
+         2. 2FA VERIFICATION SCREEN (100% PURE SVG)
          ========================================================= -->
     <div class="custom-popup-overlay" id="twoFactorScreen" style="z-index: 9999999;">
         <div class="tfa-glass-card">
             <div style="display:flex; justify-content:flex-end; margin-bottom: 4px;">
                 <div class="theme-switch-pill" onclick="toggleSystemTheme()" title="Switch Light / Dark Mode">
                     <div class="switch-knob"></div>
-                    <div class="switch-icon sun-ic">☀️</div>
-                    <div class="switch-icon moon-ic">🌙</div>
+                    <div class="switch-icon sun-ic">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+                    </div>
+                    <div class="switch-icon moon-ic">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+                    </div>
                 </div>
             </div>
 
@@ -2247,19 +2371,22 @@
             <button class="tfa-verify-btn" onclick="verifyTwoFactorAuth()">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
                 <span>Verify &amp; Login</span>
-                <span style="margin-left:auto;">→</span>
+                <svg style="margin-left:auto;" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
             </button>
 
             <div class="login-or-divider" style="margin: 16px 0 12px 0;">OR</div>
 
             <p style="margin: 0; font-size: 13.5px;">
-                <span onclick="cancelTwoFactor()" style="color: var(--accent-primary); font-weight: 800; cursor: pointer;">← Cancel &amp; Return</span>
+                <span onclick="cancelTwoFactor()" style="color: var(--accent-primary); font-weight: 800; cursor: pointer; display:inline-flex; align-items:center; gap:6px;">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+                    Cancel &amp; Return
+                </span>
             </p>
         </div>
     </div>
 
     <!-- =========================================================
-         3. MAIN APPLICATION DASHBOARD VIEWPORT (ZERO SCROLLBAR FIT)
+         3. MAIN APPLICATION DASHBOARD VIEWPORT (100% PURE SVG)
          ========================================================= -->
     <div class='standalone-viewport' id='appDashboardView'>
         <div class="dashboard-shell">
@@ -2285,28 +2412,36 @@
                 <div class="sb-nav-scroll" id="dynamicSidebarNav">
                     <div class="sb-nav-item active" id="sbNavDashboard" onclick="returnToHomeGridSPA()">
                         <div class="sb-item-left">
-                            <span class="sb-item-icon">🏠</span>
+                            <span class="sb-item-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                            </span>
                             <span class="sb-item-label">Dashboard</span>
                         </div>
                     </div>
                     <div class="sb-nav-item" id="sbNavProfile" onclick="toggleProfileDrawer(event)">
                         <div class="sb-item-left">
-                            <span class="sb-item-icon">👤</span>
+                            <span class="sb-item-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                            </span>
                             <span class="sb-item-label">My Profile</span>
                         </div>
-                        <span class="sb-item-chevron">›</span>
+                        <span class="sb-item-chevron">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                        </span>
                     </div>
 
                     <div class="sb-section-label">Available Modules</div>
-                    <div id="sidebarDynamicModulesList" style="display:flex; flex-direction:column; gap:4px;">
-                        <!-- Dynamically populated with allowed cards for the logged-in user -->
+                    <div id="sidebarDynamicModulesList" style="display:flex; flex-direction:column; gap:3px;">
+                        <!-- Dynamically populated with pure SVG icons -->
                     </div>
                 </div>
 
                 <div class="sb-footer">
                     <div class="sb-nav-item" onclick="triggerManualLogout()" style="color:#f87171;">
                         <div class="sb-item-left">
-                            <span class="sb-item-icon">🚪</span>
+                            <span class="sb-item-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                            </span>
                             <span class="sb-item-label">Secure Logout</span>
                         </div>
                     </div>
@@ -2319,7 +2454,9 @@
                 <!-- TOP HEADER BAR -->
                 <header class='dashboard-top-nav' id='appHeader'>
                     <div class="top-search-wrap">
-                        <button class="mobile-menu-btn" onclick="toggleMobileSidebar()">☰</button>
+                        <button class="mobile-menu-btn" onclick="toggleMobileSidebar()">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                        </button>
                         <input class='search-module-input' id='moduleSearch' onkeyup='filterAndPaginateCards(true)' placeholder='Search modules, features...' type='text'/>
                     </div>
 
@@ -2341,11 +2478,15 @@
                             </div>
                         </div>
 
-                        <!-- Light / Dark Theme Switch -->
+                        <!-- Light / Dark Theme Switch (Pure SVG) -->
                         <div class="theme-switch-pill" onclick="toggleSystemTheme()" title="Switch Light / Dark Mode">
                             <div class="switch-knob"></div>
-                            <div class="switch-icon sun-ic">☀️</div>
-                            <div class="switch-icon moon-ic">🌙</div>
+                            <div class="switch-icon sun-ic">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+                            </div>
+                            <div class="switch-icon moon-ic">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+                            </div>
                         </div>
 
                         <!-- 24-Hour Role Notification Bell -->
@@ -2357,7 +2498,10 @@
 
                             <div class="notif-dropdown-panel" id="notifDropdownPanel" onclick="event.stopPropagation()">
                                 <div class="notif-panel-header">
-                                    <h4>🔔 Module Alerts</h4>
+                                    <h4>
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" style="color:var(--accent-primary);"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                                        Module Alerts
+                                    </h4>
                                     <span class="ttl-tag">Auto-expires in 24h</span>
                                 </div>
                                 <div class="notif-items-list" id="notifItemsList">
@@ -2373,7 +2517,7 @@
                                 <span class="profile-pill-name" id="headerProfileName">Admin</span>
                                 <span class="profile-pill-role" id="headerProfileRole">Master User</span>
                             </div>
-                            <span style="color:var(--text-muted); font-size:12px; margin-left:2px;">⌄</span>
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="color:var(--text-muted); margin-left:2px;"><polyline points="6 9 12 15 18 9"/></svg>
                         </div>
                     </div>
                 </header>
@@ -2383,7 +2527,7 @@
                     <div class="profile-drawer-top">
                         <div class="profile-drawer-avatar" id="drawerAvatarInitial">A</div>
                         <div>
-                            <h3 id="drawerFullName" style="margin:0 0 3px 0; font-size:16.5px; font-weight:900;">Master System Admin</h3>
+                            <h3 id="drawerFullName" style="margin:0 0 3px 0; font-size:16px; font-weight:900;">Master System Admin</h3>
                             <span id="drawerRoleBadge" class="kpi-sub-pill pill-blue">ADMIN</span>
                         </div>
                     </div>
@@ -2410,30 +2554,44 @@
                         </div>
                     </div>
                     <div style="display:flex; gap:8px;">
-                        <button class="manage-modules-btn" style="flex:1; justify-content:center;" onclick="closeProfileDrawer(); loadModuleSPA('self_password.html', null, 'Opening Security Center...')">🔒 Passcode</button>
-                        <button class="manage-modules-btn" style="flex:1; justify-content:center; color:#ef4444; border-color:rgba(239,68,68,0.35);" onclick="triggerManualLogout()">🚪 Logout</button>
+                        <button class="manage-modules-btn" style="flex:1; justify-content:center;" onclick="closeProfileDrawer(); loadModuleSPA('self_password.html', null, 'Opening Security Center...')">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                            Passcode
+                        </button>
+                        <button class="manage-modules-btn" style="flex:1; justify-content:center; color:#ef4444; border-color:rgba(239,68,68,0.35);" onclick="triggerManualLogout()">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                            Logout
+                        </button>
                     </div>
                 </div>
 
-                <!-- LIVE NEWS TICKER (UNCHANGED CORE + EXACT VISUAL MATCH) -->
+                <!-- LIVE NEWS TICKER (PURE SVG SPEAKER + CONTINUOUS GPU SCROLL) -->
                 <div class='news-ticker-container' id='mainNewsTicker'>
                     <div class='ticker-label'>LATEST NEWS</div>
-                    <div class="ticker-speaker">🔊</div>
+                    <div class="ticker-speaker">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
+                    </div>
                     <div class='ticker-scroll'>
                         <div class='ticker-text' id='scrollingNewsText'>Issued by DoP • Verify all information before official use • Portal under continuous development • Use at your own discretion • Stay updated...</div>
                     </div>
                     <div class="ticker-nav-btns">
-                        <button class="ticker-ctrl-btn" onclick="restartNewsTicker()" title="Rewind News">‹</button>
-                        <button class="ticker-ctrl-btn" onclick="togglePauseNewsTicker()" title="Pause/Resume News">›</button>
+                        <button class="ticker-ctrl-btn" onclick="restartNewsTicker()" title="Rewind News">
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+                        </button>
+                        <button class="ticker-ctrl-btn" onclick="togglePauseNewsTicker()" title="Pause/Resume News">
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                        </button>
                     </div>
                 </div>
 
-                <!-- 4 KPI SUMMARY CARDS ROW -->
+                <!-- 4 KPI SUMMARY CARDS ROW (100% PURE SVG ICONS & FLUID SINGLE-LINE FIT) -->
                 <div class="kpi-row-grid" id="kpiSummaryRow">
                     <!-- 1. Total Offices (HQ Admin only) -->
                     <div class="kpi-stat-card" id="kpiCardTotalOffices">
                         <div class="kpi-left-group">
-                            <div class="kpi-icon-box kpi-blue">🏢</div>
+                            <div class="kpi-icon-box kpi-blue">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"/><path d="M9 22v-4h6v4"/><path d="M8 6h.01"/><path d="M16 6h.01"/><path d="M12 6h.01"/><path d="M12 10h.01"/><path d="M12 14h.01"/><path d="M16 10h.01"/><path d="M16 14h.01"/><path d="M8 10h.01"/><path d="M8 14h.01"/></svg>
+                            </div>
                             <div class="kpi-info">
                                 <h4>Total Offices</h4>
                                 <div class="kpi-val" id="kpiTotalOfficesVal">0</div>
@@ -2445,7 +2603,9 @@
                     <!-- 2. Total Users (HQ Admin only) -->
                     <div class="kpi-stat-card" id="kpiCardTotalUsers">
                         <div class="kpi-left-group">
-                            <div class="kpi-icon-box kpi-purple">👥</div>
+                            <div class="kpi-icon-box kpi-purple">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                            </div>
                             <div class="kpi-info">
                                 <h4>Total Users</h4>
                                 <div class="kpi-val" id="kpiTotalUsersVal">0</div>
@@ -2457,7 +2617,9 @@
                     <!-- 3. User Status (HQ Admin only - Live Online/Offline Users on Click) -->
                     <div class="kpi-stat-card clickable-kpi" id="kpiCardUserStatus" onclick="openUserStatusModal()" title="Click to inspect Online & Offline Users">
                         <div class="kpi-left-group">
-                            <div class="kpi-icon-box kpi-emerald">🟢</div>
+                            <div class="kpi-icon-box kpi-emerald">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+                            </div>
                             <div class="kpi-info">
                                 <h4>User Status</h4>
                                 <div class="kpi-val" id="kpiOnlineUsersVal">1 Online</div>
@@ -2466,20 +2628,22 @@
                         <span class="kpi-sub-pill pill-green" id="kpiOfflineUsersBadge">0 Offline ›</span>
                     </div>
 
-                    <!-- 4. System Status (Shown to ALL users; HQ Admin clicks to inspect Online/Offline offices; Others see Office Status + Business Date) -->
+                    <!-- 4. System Status (Shown to ALL users) -->
                     <div class="kpi-stat-card clickable-kpi" id="kpiCardSystemStatus" onclick="handleSystemStatusCardClick()">
                         <div class="kpi-left-group">
-                            <div class="kpi-icon-box kpi-cyan">🛡️</div>
+                            <div class="kpi-icon-box kpi-cyan">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
+                            </div>
                             <div class="kpi-info">
                                 <h4 id="kpiSysStatusTitle">System Status</h4>
                                 <div class="kpi-val" id="kpiSysStatusMainVal">Online</div>
                             </div>
                         </div>
-                        <span class="kpi-sub-pill pill-green" id="kpiSysStatusSubVal">● All systems operational</span>
+                        <span class="kpi-sub-pill pill-green" id="kpiSysStatusSubVal">All systems operational</span>
                     </div>
                 </div>
 
-                <!-- QUICK ACCESS MODULES GRID & LIST CONTAINER -->
+                <!-- QUICK ACCESS MODULES GRID & LIST CONTAINER (100% PURE SVG ICONS) -->
                 <div id="dashboardGridView">
                     <div class="modules-Toolbar-row">
                         <h3 class="modules-sec-title">Quick Access Modules</h3>
@@ -2495,7 +2659,8 @@
                                 </button>
                             </div>
                             <button class="manage-modules-btn" id="btnManageModulesTop" onclick="loadModuleSPA('user_maintenance.html', null, 'Loading User Maintenance Hub...')" style="display:none;">
-                                ✏️ Manage Modules
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                                Manage Modules
                             </button>
                         </div>
                     </div>
@@ -2503,7 +2668,9 @@
                     <div class='portal-grid-wrapper' id='mainModuleGrid'>
                         
                         <div class='portal-module-card card-gold-variant' id='menuCardDBDE' onclick='openDBDEModal()' style='display:none;'>
-                            <div class='card-icon'>⏳</div>
+                            <div class='card-icon'>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M5 22h14"/><path d="M5 2h14"/><path d="M17 22v-4.172a2 2 0 0 0-.586-1.414L12 12l-4.414 4.414A2 2 0 0 0 7 17.828V22"/><path d="M7 2v4.172a2 2 0 0 0 .586 1.414L12 12l4.414-4.414A2 2 0 0 0 17 6.172V2"/></svg>
+                            </div>
                             <div class="card-body-text">
                                 <h3>Day Begin / Day End</h3>
                                 <p>Control operational status of your office.</p>
@@ -2511,7 +2678,9 @@
                         </div>
 
                         <div class='portal-module-card card-indigo-variant' id='menuCardBulkBooking' onclick='loadModuleSPA("bulkBooking.html", this, "Opening Bulk Article Booking...")'>
-                            <div class='card-icon'>📦</div>
+                            <div class='card-icon'>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+                            </div>
                             <div class="card-body-text">
                                 <h3>Bulk Article Booking</h3>
                                 <p>Generate bulk article bookings &amp; upload files.</p>
@@ -2519,7 +2688,9 @@
                         </div>
 
                         <div class='portal-module-card card-rose-variant' id='menuCardOfficeHub' onclick='loadModuleSPA("management.html", this, "Loading Office Hub...")' style='display:none;'>
-                            <div class='card-icon'>🏢</div>
+                            <div class='card-icon'>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"/><path d="M9 22v-4h6v4"/><path d="M8 6h.01"/><path d="M16 6h.01"/><path d="M12 6h.01"/><path d="M12 10h.01"/><path d="M12 14h.01"/><path d="M16 10h.01"/><path d="M16 14h.01"/><path d="M8 10h.01"/><path d="M8 14h.01"/></svg>
+                            </div>
                             <div class="card-body-text">
                                 <h3>Office &amp; SOL Management</h3>
                                 <p>Map offices, SOLs and manage users.</p>
@@ -2527,7 +2698,9 @@
                         </div>
 
                         <div class='portal-module-card card-orange-variant' id='menuCardBulk' onclick='loadModuleSPA("monthly_bulk.html", this, "Welcome to Monthly Bulk Bill Generation...")'>
-                            <div class='card-icon'>🧾</div>
+                            <div class='card-icon'>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 17.5v-11"/></svg>
+                            </div>
                             <div class="card-body-text">
                                 <h3>Monthly Bulk Bills (ACG-17)</h3>
                                 <p>Generate automated monthly bulk bills.</p>
@@ -2535,7 +2708,9 @@
                         </div>
                         
                         <div class='portal-module-card card-rose-variant' id='menuCardHoliday' onclick='loadModuleSPA("holiday_bulk.html", this, "Opening Holiday & Sunday Bills...")'>
-                            <div class='card-icon'>🗓️</div>
+                            <div class='card-icon'>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/></svg>
+                            </div>
                             <div class="card-body-text">
                                 <h3>Holiday &amp; Sunday Bills</h3>
                                 <p>Generate targeted vouchers for holidays.</p>
@@ -2543,7 +2718,9 @@
                         </div>
 
                         <div class='portal-module-card card-blue-variant' id='menuCardDateWise' onclick='loadModuleSPA("datewise.html", this, "Opening Date Based Bills...")'>
-                            <div class='card-icon'>📅</div>
+                            <div class='card-icon'>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><path d="m9 16 2 2 4-4"/></svg>
+                            </div>
                             <div class="card-body-text">
                                 <h3>Date Based Bills (ACG-17)</h3>
                                 <p>Create custom vouchers by specific dates.</p>
@@ -2551,7 +2728,9 @@
                         </div>
                         
                         <div class='portal-module-card card-green-variant' id='menuCardACG61' onclick='loadModuleSPA("acg61.html", this, "Preparing ACG-61 Charge Report...")'>
-                            <div class='card-icon'>📄</div>
+                            <div class='card-icon'>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg>
+                            </div>
                             <div class="card-body-text">
                                 <h3>Charge Report (Cash/Stamp)</h3>
                                 <p>Compile official ACG-61 charge reports.</p>
@@ -2559,7 +2738,9 @@
                         </div>
 
                         <div class='portal-module-card card-dark-variant' id='menuCardGeneralCharge' onclick='loadModuleSPA("general_charge.html", this, "Preparing General Charge Report...")'>
-                            <div class='card-icon'>📋</div>
+                            <div class='card-icon'>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/><path d="M9 14h6"/><path d="M9 10h6"/><path d="M9 18h4"/></svg>
+                            </div>
                             <div class="card-body-text">
                                 <h3>Charge Report (General)</h3>
                                 <p>Simplified charge reports for general staff.</p>
@@ -2567,7 +2748,9 @@
                         </div>
 
                         <div class='portal-module-card card-orange-variant' id='menuCardSR1' onclick='loadModuleSPA("sr1.html", this, "Loading S.R.-1 Leave Application...")'>
-                            <div class='card-icon'>📝</div>
+                            <div class='card-icon'>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                            </div>
                             <div class="card-body-text">
                                 <h3>S.R.-1 Leave Application</h3>
                                 <p>Generate official S.R.-1 leave forms instantly.</p>
@@ -2575,7 +2758,9 @@
                         </div>
                         
                         <div class='portal-module-card card-blue-variant' id='menuCardCasualLeave' onclick='loadModuleSPA("casual_leave.html", this, "Loading Casual Leave Application...")'>
-                            <div class='card-icon'>✉️</div>
+                            <div class='card-icon'>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                            </div>
                             <div class="card-body-text">
                                 <h3>Casual Leave Application</h3>
                                 <p>Draft formal Casual Leave (CL) applications.</p>
@@ -2583,7 +2768,9 @@
                         </div>
 
                         <div class='portal-module-card card-rose-variant' id='menuCardTAAdvance' onclick='loadModuleSPA("ta_advance.html", this, "Opening T.A. Tour Advance...")'>
-                            <div class='card-icon'>🧳</div>
+                            <div class='card-icon'>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+                            </div>
                             <div class="card-body-text">
                                 <h3>T.A. Tour Advance Application</h3>
                                 <p>Draft official T.A. on Tour advance forms.</p>
@@ -2591,7 +2778,9 @@
                         </div>
                         
                         <div class='portal-module-card card-indigo-variant' id='menuCardTATransfer' onclick='loadModuleSPA("ta_transfer.html", this, "Opening T.A. Transfer Advance...")'>
-                            <div class='card-icon'>🚚</div>
+                            <div class='card-icon'>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+                            </div>
                             <div class="card-body-text">
                                 <h3>T.A. Advance on Transfer</h3>
                                 <p>Generate T.A. on Transfer applications.</p>
@@ -2599,7 +2788,9 @@
                         </div>
 
                         <div class='portal-module-card card-orange-variant' id='menuCardTABillTour' onclick='loadModuleSPA("ta_bill_tour.html", this, "Opening T.A. Bill Claim...")'>
-                            <div class='card-icon'>🎫</div>
+                            <div class='card-icon'>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/><path d="M13 5v2"/><path d="M13 17v2"/><path d="M13 11v2"/></svg>
+                            </div>
                             <div class="card-body-text">
                                 <h3>T.A. Bill Claim (Tour)</h3>
                                 <p>Generate Travelling Allowance Bill (T.R. 25).</p>
@@ -2607,7 +2798,9 @@
                         </div>
                         
                         <div class='portal-module-card card-purple-variant' id='menuCardCEA' onclick='loadModuleSPA("cea.html", this, "Loading Children Education Allowance...")'>
-                            <div class='card-icon'>🎓</div>
+                            <div class='card-icon'>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+                            </div>
                             <div class="card-body-text">
                                 <h3>Children Education Allowance</h3>
                                 <p>Official formats for CEA/Hostel claims.</p>
@@ -2615,7 +2808,9 @@
                         </div>
 
                         <div class='portal-module-card card-teal-variant' id='menuCardPayroll' onclick='loadModuleSPA("payroll.html", this, "Loading Payroll System...")' style='display:none;'>
-                            <div class='card-icon'>💵</div>
+                            <div class='card-icon'>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+                            </div>
                             <div class="card-body-text">
                                 <h3>Payroll System</h3>
                                 <p>Manage staff salaries and monthly pay slips.</p>
@@ -2623,7 +2818,9 @@
                         </div>
 
                         <div class='portal-module-card card-indigo-variant' id='menuCardAI' onclick='loadModuleSPA("aichat.html", this, "Connecting to PO Assistant AI...")'>
-                            <div class='card-icon'>🤖</div>
+                            <div class='card-icon'>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="5" r="2"/><path d="M12 7v4"/><line x1="8" y1="16" x2="8.01" y2="16"/><line x1="16" y1="16" x2="16.01" y2="16"/></svg>
+                            </div>
                             <div class="card-body-text">
                                 <h3>Talk with AI</h3>
                                 <p>Built-in intelligent postal assistant.</p>
@@ -2631,7 +2828,9 @@
                         </div>
 
                         <div class='portal-module-card card-blue-variant' id='menuCardMaintenance' onclick='loadModuleSPA("user_maintenance.html", this, "Loading User Maintenance Hub...")'>
-                            <div class='card-icon'>⚙️</div>
+                            <div class='card-icon'>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                            </div>
                             <div class="card-body-text">
                                 <h3>System Settings &amp; Users</h3>
                                 <p>Manage system configurations &amp; user access.</p>
@@ -2639,7 +2838,9 @@
                         </div>
                         
                         <div class='portal-module-card card-dark-variant' id='menuCardSelfPassword' onclick='loadModuleSPA("self_password.html", this, "Opening Security Center...")'>
-                            <div class='card-icon'>🔒</div>
+                            <div class='card-icon'>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                            </div>
                             <div class="card-body-text">
                                 <h3>Change Passcode</h3>
                                 <p>Update your system passcode anytime.</p>
@@ -2658,23 +2859,26 @@
     </div>
 
     <!-- =========================================================
-         4. HQ ADMIN LIVE USER STATUS & SYSTEM STATUS MODALS
+         4. HQ ADMIN LIVE USER STATUS & SYSTEM STATUS MODALS (PURE SVG)
          ========================================================= -->
     <div class="custom-popup-overlay" id="userStatusInspectorModal">
         <div class="custom-popup-card status-inspector-card">
             <div style="display:flex; justify-content:space-between; align-items:center;">
-                <h2 style="margin:0; font-size:20px; font-weight:900;">👥 Live User Activity Status</h2>
+                <h2 style="margin:0; font-size:19px; font-weight:900; display:flex; align-items:center; gap:8px;">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="color:var(--accent-primary);"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                    Live User Activity Status
+                </h2>
                 <button onclick="closeUserStatusModal()" style="background:transparent; border:none; font-size:22px; color:var(--text-muted); cursor:pointer;">×</button>
             </div>
             <p style="margin:4px 0 0 0; font-size:13px; color:var(--text-muted);">Real-time tracking of active logged-in users and offline accounts.</p>
 
             <div class="status-tabs-row">
                 <div class="status-tab-pill active" id="tabBtnOnlineUsers" onclick="switchUserStatusTab('online')">
-                    <span>🟢 Online Users</span>
+                    <span><span class="status-dot-inline dot-online"></span>Online Users</span>
                     <span id="modalOnlineCountBadge" class="kpi-sub-pill pill-green">0</span>
                 </div>
                 <div class="status-tab-pill" id="tabBtnOfflineUsers" onclick="switchUserStatusTab('offline')">
-                    <span>⚪ Offline Users</span>
+                    <span><span class="status-dot-inline dot-offline"></span>Offline Users</span>
                     <span id="modalOfflineCountBadge" class="kpi-sub-pill pill-red">0</span>
                 </div>
             </div>
@@ -2688,18 +2892,21 @@
     <div class="custom-popup-overlay" id="officeStatusInspectorModal">
         <div class="custom-popup-card status-inspector-card">
             <div style="display:flex; justify-content:space-between; align-items:center;">
-                <h2 style="margin:0; font-size:20px; font-weight:900;">🏢 Live Office System Status (Day Begin / End)</h2>
+                <h2 style="margin:0; font-size:19px; font-weight:900; display:flex; align-items:center; gap:8px;">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="color:var(--accent-primary);"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"/><path d="M9 22v-4h6v4"/><path d="M8 6h.01"/><path d="M16 6h.01"/><path d="M12 6h.01"/><path d="M12 10h.01"/><path d="M12 14h.01"/></svg>
+                    Live Office System Status (Day Begin / End)
+                </h2>
                 <button onclick="closeOfficeStatusModal()" style="background:transparent; border:none; font-size:22px; color:var(--text-muted); cursor:pointer;">×</button>
             </div>
             <p style="margin:4px 0 0 0; font-size:13px; color:var(--text-muted);">Inspect which offices are Online (Day Begun) vs Offline (Day Ended).</p>
 
             <div class="status-tabs-row">
                 <div class="status-tab-pill active" id="tabBtnOnlineOffices" onclick="switchOfficeStatusTab('online')">
-                    <span>🟢 Online Offices (Day Begun)</span>
+                    <span><span class="status-dot-inline dot-online"></span>Online Offices (Day Begun)</span>
                     <span id="modalOnlineOfficesBadge" class="kpi-sub-pill pill-green">0</span>
                 </div>
                 <div class="status-tab-pill" id="tabBtnOfflineOffices" onclick="switchOfficeStatusTab('offline')">
-                    <span>🔴 Offline Offices (Day Ended)</span>
+                    <span><span class="status-dot-inline dot-offline"></span>Offline Offices (Day Ended)</span>
                     <span id="modalOfflineOfficesBadge" class="kpi-sub-pill pill-red">0</span>
                 </div>
             </div>
@@ -2713,7 +2920,9 @@
     <!-- TIMEOUT MODAL -->
     <div class="custom-popup-overlay" id="timeoutModalOverlay" style="z-index: 50000000;">
         <div class="custom-popup-card" style="border-top: 6px solid #f59e0b; max-width: 440px;">
-            <div style="font-size: 52px; margin-bottom: 5px;">⚠️</div>
+            <div class="popup-icon-alert" style="background:rgba(245, 158, 11, 0.15); color:#f59e0b;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            </div>
             <h2 style="color: var(--text-primary); font-size: 24px; margin: 8px 0; font-weight: 900;">Session Expiring</h2>
             <p style="color: var(--text-muted); font-size: 14.5px; margin: 0 0 12px 0;">Your session is about to expire due to inactivity.</p>
             <div class="timeout-timer-display" id="timeoutCountdown">60</div>
@@ -2727,7 +2936,7 @@
     <!-- LEGACY FLOATING TOAST ELEMENT (PRESERVED FOR COMPATIBILITY) -->
     <div style="display:none;" id="systemToast"><span id="toastMessage"></span></div>
 
-    <!-- GOODBYE SCREEN (EXACT IMAGE 2 TOP-RIGHT MATCH) -->
+    <!-- GOODBYE SCREEN -->
     <div class="goodbye-screen" id="goodbyeScreen">
         <div class="goodbye-template-card">
             <div class="goodbye-check-orb">
@@ -2742,10 +2951,12 @@
         </div>
     </div>
 
-    <!-- MODALS AND OVERLAYS -->
+    <!-- MODALS AND OVERLAYS (PURE SVG) -->
     <div class='custom-popup-overlay' id='dbdeModal'>
         <div class='custom-popup-card'>
-            <div id="dbdeStatusIcon" style="font-size: 60px; margin-bottom: 12px;">⏳</div>
+            <div id="dbdeStatusIcon" class="popup-icon-alert">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            </div>
             <h2 id="dbdeStatusTitle" style="color: var(--text-primary); font-size:21px; margin-bottom: 8px;">Checking Status...</h2>
             <p id="dbdeStatusDesc" style="color: var(--text-muted); font-size: 14px; margin-bottom: 22px;">Loading your currently mapped office configuration...</p>
             <button class='action-btn' id="btnExecuteDBDE" onclick='executeToggleDayStatus()' style='background: #eab308; color: #0f172a; margin-bottom:10px;' type='button'>Toggle Status</button>
@@ -2755,7 +2966,9 @@
 
     <div class='custom-popup-overlay' id='directMessageModal' style='z-index: 50000000;'>
         <div class='custom-popup-card' style='border-top: 6px solid #f59e0b;'>
-            <div class='popup-icon-alert'>✉️</div>
+            <div class='popup-icon-alert' style="background:rgba(245,158,11,0.14); color:#f59e0b;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+            </div>
             <h3 style='margin-top:0; color:var(--text-primary);'>Message from Admin</h3>
             <p class='popup-message-text' id='dmMessageField' style='font-size:15.5px;'></p>
             <button class='popup-close-btn' onclick='acknowledgeDirectMessage()' style='background:#f59e0b; color:#fff;'>Acknowledge &amp; Clear</button>
@@ -2764,7 +2977,10 @@
 
     <div class='forced-password-overlay' id='forcedPasswordResetOverlay'>
         <div class='forced-password-card'>
-            <h3 style='color:#e11d48; margin-top:0; text-align:center;'>🔒 First-Time Action Required</h3>
+            <h3 style='color:#e11d48; margin-top:0; text-align:center; display:flex; align-items:center; justify-content:center; gap:8px;'>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                First-Time Action Required
+            </h3>
             <p style='font-size:13.5px; color:var(--text-muted); line-height:1.6; text-align:center; margin-bottom:22px;'>
                 An administrator has generated your profile. You must change your default credentials to activate access.
             </p>
@@ -2777,7 +2993,9 @@
     <!-- CENTERED MODAL POPUP (USED FOR DEVELOPMENT NOTICE & LOCK ALERTS) -->
     <div class='custom-popup-overlay' id='customAppAlertModal'>
         <div class='custom-popup-card'>
-            <div class='popup-icon-alert' id='popupAlertIcon'>🔔</div>
+            <div class='popup-icon-alert' id='popupAlertIcon'>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            </div>
             <p class='popup-message-text' id='customAlertMsgField'>Notice</p>
             <button class='popup-close-btn' onclick='closeCustomAlert()'>Continue</button>
         </div>
@@ -2787,8 +3005,124 @@
         <div class='app-loading-spinner'></div>
         <div class='loading-status-msg'>Loading...</div>
     </div>
-    
     <script type="text/javascript">
+        // ============================================================================
+                // SAFE SESSION STORAGE WRAPPER (WORKS IN ALL BROWSERS, FILE://, AND SANDBOXED IFRAMES)
+        const _memSession = {};
+        const safeSession = {
+            getItem(k) {
+                try { return window.sessionStorage.getItem(k); } catch(e) { return _memSession[k] || null; }
+            },
+            setItem(k, v) {
+                try { window.sessionStorage.setItem(k, v); } catch(e) { _memSession[k] = String(v); }
+            },
+            clear() {
+                try { window.sessionStorage.clear(); } catch(e) {}
+                for (const k in _memSession) delete _memSession[k];
+            }
+        };
+
+        // UNIVERSAL HIGH-TECH SVG STOCK ENGINE (CONVERTS ANY EMOJI/TEXT TO VECTOR SVG)
+        // ============================================================================
+        const SVG_ICON_LIBRARY = {
+            hourglass: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M5 22h14"/><path d="M5 2h14"/><path d="M17 22v-4.172a2 2 0 0 0-.586-1.414L12 12l-4.414 4.414A2 2 0 0 0 7 17.828V22"/><path d="M7 2v4.172a2 2 0 0 0 .586 1.414L12 12l4.414-4.414A2 2 0 0 0 17 6.172V2"/></svg>',
+            box: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>',
+            building: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"/><path d="M9 22v-4h6v4"/><path d="M8 6h.01"/><path d="M16 6h.01"/><path d="M12 6h.01"/><path d="M12 10h.01"/><path d="M12 14h.01"/><path d="M16 10h.01"/><path d="M16 14h.01"/><path d="M8 10h.01"/><path d="M8 14h.01"/></svg>',
+            receipt: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 17.5v-11"/></svg>',
+            calendar: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><path d="m9 16 2 2 4-4"/></svg>',
+            holiday: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/></svg>',
+            fileText: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg>',
+            clipboard: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/><path d="M9 14h6"/><path d="M9 10h6"/><path d="M9 18h4"/></svg>',
+            edit: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>',
+            mail: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>',
+            briefcase: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>',
+            truck: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>',
+            ticket: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/><path d="M13 5v2"/><path d="M13 17v2"/><path d="M13 11v2"/></svg>',
+            education: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>',
+            wallet: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>',
+            ai: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="5" r="2"/><path d="M12 7v4"/><line x1="8" y1="16" x2="8.01" y2="16"/><line x1="16" y1="16" x2="16.01" y2="16"/></svg>',
+            settings: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>',
+            lock: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>',
+            shield: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>',
+            chart: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>',
+            users: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>',
+            bolt: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>',
+            globe: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>',
+            folder: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>',
+            bell: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>',
+            checkCircle: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>',
+            alertCircle: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>',
+            layers: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>'
+        };
+
+        // Codepoint map covering keyboard emojis used when creating dynamic cards
+        const EMOJI_CODEPOINT_MAP = {
+            0x23F3: 'hourglass', 0x231B: 'hourglass', 0x23F0: 'hourglass', 0x1F552: 'hourglass',
+            0x1F4E5: 'box', 0x1F4E6: 'box', 0x1F4EE: 'box', 0x1F4EC: 'box', 0x1F6D2: 'box',
+            0x1F3E2: 'building', 0x1F3E6: 'building', 0x1F3DB: 'building', 0x1F3E0: 'building', 0x1F3E3: 'building',
+            0x1F9FE: 'receipt', 0x1F4B0: 'receipt', 0x1F4B8: 'receipt', 0x1F4B5: 'wallet', 0x1F4B3: 'wallet',
+            0x1F3D6: 'holiday', 0x1F5D3: 'holiday', 0x1F4C5: 'calendar', 0x1F4C6: 'calendar',
+            0x1F4C4: 'fileText', 0x1F4C3: 'fileText', 0x1F4DC: 'fileText', 0x1F4D1: 'fileText',
+            0x1F4CB: 'clipboard', 0x1F4CA: 'chart', 0x1F4C8: 'chart', 0x1F4C9: 'chart',
+            0x1F4DD: 'edit', 0x270F: 'edit', 0x1F58A: 'edit',
+            0x2709: 'mail', 0x1F4E7: 'mail', 0x1F4E8: 'mail', 0x1F4E9: 'mail',
+            0x1F9F3: 'briefcase', 0x1F4BC: 'briefcase', 0x1F392: 'briefcase',
+            0x1F69A: 'truck', 0x1F69B: 'truck', 0x1F68C: 'truck', 0x2708: 'truck', 0x1F680: 'bolt',
+            0x1F3AB: 'ticket', 0x1F39F: 'ticket', 0x1F3F7: 'ticket',
+            0x1F393: 'education', 0x1F4DA: 'education', 0x1F4D6: 'education',
+            0x1F916: 'ai', 0x1F4BB: 'ai', 0x1F5A5: 'ai', 0x1F4AC: 'ai',
+            0x2699: 'settings', 0x1F6E0: 'settings', 0x1F527: 'settings',
+            0x1F512: 'lock', 0x1F510: 'lock', 0x1F511: 'lock', 0x1F6E1: 'shield',
+            0x1F464: 'users', 0x1F465: 'users', 0x26A1: 'bolt', 0x1F525: 'bolt', 0x2728: 'bolt',
+            0x1F310: 'globe', 0x1F4C1: 'folder', 0x1F4C2: 'folder', 0x1F514: 'bell'
+        };
+
+        function resolveModernSVG(iconInput, titleHint = '') {
+            if (iconInput && String(iconInput).trim().startsWith('<svg')) {
+                return iconInput;
+            }
+            const raw = String(iconInput || '').trim();
+            for (const ch of Array.from(raw)) {
+                const cp = ch.codePointAt(0);
+                if (EMOJI_CODEPOINT_MAP[cp]) {
+                    return SVG_ICON_LIBRARY[EMOJI_CODEPOINT_MAP[cp]];
+                }
+                // Comprehensive Unicode block fallback for any keyboard emoji
+                if (cp >= 0x1F550 && cp <= 0x1F567) return SVG_ICON_LIBRARY.hourglass; // All clock faces
+                if (cp >= 0x1F4B0 && cp <= 0x1F4B9) return SVG_ICON_LIBRARY.wallet; // Money/currency
+                if (cp >= 0x1F4C0 && cp <= 0x1F4DA) return SVG_ICON_LIBRARY.fileText; // Files/folders/books/calendars
+                if (cp >= 0x1F4DD && cp <= 0x1F4F8) return SVG_ICON_LIBRARY.mail; // Communication/mail/boxes
+                if (cp >= 0x1F680 && cp <= 0x1F6C5) return SVG_ICON_LIBRARY.truck; // Transport/vehicles/travel
+                if (cp >= 0x1F3E0 && cp <= 0x1F3F0) return SVG_ICON_LIBRARY.building; // Buildings/offices
+                if (cp >= 0x1F500 && cp <= 0x1F53D) return SVG_ICON_LIBRARY.lock; // Security/locks/keys/alerts
+                if (cp >= 0x1F460 && cp <= 0x1F487) return SVG_ICON_LIBRARY.users; // People/users/profiles
+                if (cp >= 0x1F910 && cp <= 0x1F9FF) return SVG_ICON_LIBRARY.ai; // Robots/AI/modern symbols
+                if (cp >= 0x2600 && cp <= 0x27BF) return SVG_ICON_LIBRARY.settings; // Misc technical symbols
+            }
+            const t = (raw + ' ' + String(titleHint || '')).toLowerCase();
+            if (t.includes('day begin') || t.includes('day end') || t.includes('time') || t.includes('clock')) return SVG_ICON_LIBRARY.hourglass;
+            if (t.includes('booking') || t.includes('article') || t.includes('parcel') || t.includes('post')) return SVG_ICON_LIBRARY.box;
+            if (t.includes('office') || t.includes('sol') || t.includes('branch') || t.includes('bank')) return SVG_ICON_LIBRARY.building;
+            if (t.includes('bill') || t.includes('acg-17') || t.includes('voucher') || t.includes('invoice')) return SVG_ICON_LIBRARY.receipt;
+            if (t.includes('holiday') || t.includes('sunday')) return SVG_ICON_LIBRARY.holiday;
+            if (t.includes('date') || t.includes('schedule')) return SVG_ICON_LIBRARY.calendar;
+            if (t.includes('acg-61') || t.includes('cash') || t.includes('stamp') || t.includes('report')) return SVG_ICON_LIBRARY.fileText;
+            if (t.includes('general') || t.includes('charge') || t.includes('list')) return SVG_ICON_LIBRARY.clipboard;
+            if (t.includes('s.r.-1') || t.includes('sr1') || t.includes('form') || t.includes('draft')) return SVG_ICON_LIBRARY.edit;
+            if (t.includes('casual') || t.includes('leave') || t.includes('mail') || t.includes('letter')) return SVG_ICON_LIBRARY.mail;
+            if (t.includes('tour') && t.includes('advance')) return SVG_ICON_LIBRARY.briefcase;
+            if (t.includes('transfer') || t.includes('vehicle') || t.includes('dispatch')) return SVG_ICON_LIBRARY.truck;
+            if (t.includes('claim') || t.includes('t.r.') || t.includes('ticket')) return SVG_ICON_LIBRARY.ticket;
+            if (t.includes('education') || t.includes('cea') || t.includes('student') || t.includes('allowance')) return SVG_ICON_LIBRARY.education;
+            if (t.includes('payroll') || t.includes('salary') || t.includes('pay') || t.includes('finance')) return SVG_ICON_LIBRARY.wallet;
+            if (t.includes('ai') || t.includes('assistant') || t.includes('chat') || t.includes('bot')) return SVG_ICON_LIBRARY.ai;
+            if (t.includes('setting') || t.includes('maintenance') || t.includes('config') || t.includes('admin')) return SVG_ICON_LIBRARY.settings;
+            if (t.includes('passcode') || t.includes('password') || t.includes('security') || t.includes('lock')) return SVG_ICON_LIBRARY.lock;
+            if (t.includes('user') || t.includes('staff') || t.includes('profile')) return SVG_ICON_LIBRARY.users;
+            if (t.includes('analytic') || t.includes('stat')) return SVG_ICON_LIBRARY.chart;
+            return SVG_ICON_LIBRARY.layers;
+        }
+
         // ----------------------------------------------------
         // INITIAL SETUP & THEME ENGINE (LIGHT / DARK MODE)
         // ----------------------------------------------------
@@ -2820,7 +3154,7 @@
         }
 
         // ----------------------------------------------------
-        // FLOATING CORNER NOTIFICATION ENGINE (EXACT IMAGE 2 MATCH)
+        // FLOATING CORNER NOTIFICATION ENGINE (100% PURE SVG)
         // ----------------------------------------------------
         function spawnFloatingNotification(title, message, type = 'info') {
             const stack = document.getElementById('floatingNotifStack');
@@ -2829,15 +3163,13 @@
             const toast = document.createElement('div');
             toast.className = `glass-toast-card toast-${type}`;
 
-            let iconSvg = 'ℹ️';
+            let iconSvg = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>`;
             if (type === 'success') {
                 iconSvg = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>`;
             } else if (type === 'error') {
                 iconSvg = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>`;
             } else if (type === 'warning') {
                 iconSvg = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>`;
-            } else {
-                iconSvg = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>`;
             }
 
             toast.innerHTML = `
@@ -2871,8 +3203,11 @@
             messagingSenderId: "893250505080",
             appId: "1:893250505080:web:ae37a3ea6e959b652ca08d"
         };
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
+        let db = null;
+        if (typeof firebase !== 'undefined') {
+            firebase.initializeApp(firebaseConfig);
+            db = firebase.firestore();
+        }
 
         let isCloudDataLoaded = false; 
         let hasSuccessfullySyncedWithCloud = false;
@@ -2978,7 +3313,7 @@
             if (!el) return;
             el.style.animation = 'none';
             void el.offsetWidth;
-            el.style.animation = 'scrollTicker 26s linear infinite';
+            el.style.animation = 'scrollTicker 24s linear infinite';
             isTickerPaused = false;
         }
         function togglePauseNewsTicker() {
@@ -3022,7 +3357,7 @@
         }
 
         window.addEventListener('beforeunload', () => {
-            const activeU = sessionStorage.getItem("activeUser");
+            const activeU = safeSession.getItem("activeUser");
             if (activeU && activeU !== "GUEST" && hasSuccessfullySyncedWithCloud) {
                 const idx = SYSTEM_USER_REGISTRY.findIndex(u => u.user === activeU);
                 if (idx !== -1) {
@@ -3039,7 +3374,7 @@
                 card.classList.remove('allowed-module');
             });
 
-            if (!sessionStorage.getItem("activeUser") || sessionStorage.getItem("2faVerified") !== "true") {
+            if (!safeSession.getItem("activeUser") || safeSession.getItem("2faVerified") !== "true") {
                 document.getElementById("appDashboardView").style.display = "none";
                 document.getElementById("sceneryBackground").style.display = "block";
                 document.getElementById("loginScreen").style.display = "flex";
@@ -3071,7 +3406,7 @@
                             const data = registryDoc.data();
                             let fetchedUsers = data.users || [];
                             
-                            // 🛡️ MASTER ADMIN AUTO-HEAL SYSTEM (PERMANENT FIX) 🛡️
+                            // MASTER ADMIN AUTO-HEAL SYSTEM
                             let adminExists = fetchedUsers.some(u => u.user === 'admin');
                             if (!adminExists) {
                                 fetchedUsers.push({ 
@@ -3097,8 +3432,8 @@
                             isCloudDataLoaded = true;
                             hasSuccessfullySyncedWithCloud = true; 
                             
-                            let sessionUser = sessionStorage.getItem("activeUser");
-                            if (sessionUser && sessionStorage.getItem("2faVerified") === "true") {
+                            let sessionUser = safeSession.getItem("activeUser");
+                            if (sessionUser && safeSession.getItem("2faVerified") === "true") {
                                 let profile = SYSTEM_USER_REGISTRY.find(acc => acc.user === sessionUser);
                                 if (!profile && sessionUser === "GUEST") {
                                     profile = { fullName: "Guest User", user: "GUEST", role: "guest", active: true, locked: false, isFirstTimeDefault: false, totpSecret: "", solId: "GUEST" };
@@ -3135,6 +3470,7 @@
             setTimeout(() => { if(systemLoader) systemLoader.style.display = 'none'; }, 300);
         }
 
+        // AUTO-CONVERT DYNAMIC EMOJI CARDS INTO HIGH-TECH VECTOR SVGS
         function renderDynamicCardsInIndex(cards) {
             document.querySelectorAll('.dynamic-injected-card').forEach(el => el.remove());
             const grid = document.getElementById('mainModuleGrid');
@@ -3152,15 +3488,15 @@
 
                 let cardDiv = document.createElement('div');
                 let opacityStyle = (!c.active) ? "opacity: 0.5;" : ""; 
+                const svgIconMarkup = resolveModernSVG(c.icon, c.title + ' ' + (c.desc || ''));
                 
                 cardDiv.className = `portal-module-card ${c.theme || 'card-blue-variant'} allowed-module dynamic-injected-card`;
                 cardDiv.style.cssText = opacityStyle;
                 cardDiv.setAttribute('data-card-title', c.title);
-                cardDiv.setAttribute('data-card-icon', c.icon || '📦');
                 cardDiv.onclick = () => loadModuleSPA(c.targetFile, cardDiv, `Opening ${c.title}...`);
                 
                 cardDiv.innerHTML = `
-                    <div class='card-icon'>${c.icon || '📦'}</div>
+                    <div class='card-icon'>${svgIconMarkup}</div>
                     <div class="card-body-text">
                         <h3>${c.title} ${!c.active ? '<span style="color:#ef4444; font-size:11px;">(DISABLED)</span>' : ''}</h3>
                         <p>${c.desc || ''}</p>
@@ -3175,10 +3511,10 @@
         }
 
         // =========================================================
-        // 24-HOUR ROLE-BASED MODULE NOTIFICATIONS ENGINE
+        // 24-HOUR ROLE-BASED MODULE NOTIFICATIONS ENGINE (PURE SVG)
         // =========================================================
         function evaluate24HourModuleNotifications(cards) {
-            if (!authenticatedUserSession || ! Array.isArray(cards)) return;
+            if (!authenticatedUserSession || !Array.isArray(cards)) return;
             const myRole = authenticatedUserSession.role;
             const isAdmin = authenticatedUserSession.user === 'admin';
             const now = Date.now();
@@ -3186,7 +3522,7 @@
 
             let activeNotifs = [];
 
-            cards.forEach((c, idx) => {
+            cards.forEach((c) => {
                 if (!c.active) return;
                 const roleMatch = isAdmin || (c.roles && c.roles[myRole]);
                 if (!roleMatch) return;
@@ -3214,7 +3550,7 @@
                     activeNotifs.push({
                         title: c.title,
                         desc: c.desc || 'New module assigned to your role.',
-                        icon: c.icon || '✨',
+                        svgIcon: resolveModernSVG(c.icon, c.title),
                         targetFile: c.targetFile,
                         hoursLeft: hoursLeft
                     });
@@ -3230,7 +3566,7 @@
                 badge.innerText = activeNotifs.length;
                 listEl.innerHTML = activeNotifs.map(n => `
                     <div class="notif-role-item" onclick="loadModuleSPA('${n.targetFile}', null, 'Opening ${n.title}...'); document.getElementById('notifDropdownPanel').classList.remove('open');">
-                        <h5>${n.icon} New Module: ${n.title}</h5>
+                        <h5>${n.svgIcon} <span>New Module: ${n.title}</span></h5>
                         <p>${n.desc}</p>
                         <div class="notif-meta">
                             <span>Role: ${myRole.toUpperCase()}</span>
@@ -3253,7 +3589,7 @@
         }
 
         // =========================================================
-        // DYNAMIC HAMBURGER SIDEBAR GENERATOR
+        // DYNAMIC HAMBURGER SIDEBAR GENERATOR (100% PURE SVG ICONS)
         // =========================================================
         function renderDynamicSidebarMenu() {
             const container = document.getElementById('sidebarDynamicModulesList');
@@ -3265,16 +3601,21 @@
                 const titleEl = card.querySelector('h3');
                 const iconEl = card.querySelector('.card-icon');
                 const rawTitle = titleEl ? titleEl.innerText.replace('(DISABLED)', '').trim() : 'Module';
-                const iconTxt = iconEl ? iconEl.innerText.trim() : '📦';
+                const svgMarkup = (iconEl && iconEl.querySelector('svg'))
+                    ? iconEl.innerHTML
+                    : resolveModernSVG(iconEl ? iconEl.innerText : '', rawTitle);
 
                 const navItem = document.createElement('div');
                 navItem.className = 'sb-nav-item';
+                navItem.title = rawTitle;
                 navItem.innerHTML = `
                     <div class="sb-item-left">
-                        <span class="sb-item-icon">${iconTxt}</span>
+                        <span class="sb-item-icon">${svgMarkup}</span>
                         <span class="sb-item-label">${rawTitle}</span>
                     </div>
-                    <span class="sb-item-chevron">›</span>
+                    <span class="sb-item-chevron">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                    </span>
                 `;
                 navItem.onclick = () => {
                     document.querySelectorAll('#dynamicSidebarNav .sb-nav-item').forEach(el => el.classList.remove('active'));
@@ -3319,11 +3660,9 @@
             const mappedOffice = SYSTEM_OFFICE_REGISTRY.find(o => o.solId === mySol);
             const solName = mappedOffice ? mappedOffice.name : (mySol === '000000' ? 'System Admin HQ' : 'Unmapped Office');
 
-            // Find last login time from SYSTEM_LOGIN_HISTORY or profile
             const userLogs = SYSTEM_LOGIN_HISTORY.filter(l => l.user === u);
             const lastLoginStr = profile.lastLoginTime || (userLogs.length > 0 ? userLogs[userLogs.length - 1].time : 'Active Session');
 
-            // Populate Header Pill & Slide Drawer
             document.getElementById('headerAvatarInitial').innerText = initial;
             document.getElementById('headerProfileName').innerText = fullName.split(' ')[0];
             document.getElementById('headerProfileRole').innerText = u === 'admin' ? 'Master User' : (profile.role || 'Staff').toUpperCase();
@@ -3337,7 +3676,6 @@
             document.getElementById('drawerSolNameVal').innerText = solName;
             document.getElementById('drawerLastLoginVal').innerText = lastLoginStr;
 
-            // Check if HQ System Admin
             const isHQAdmin = (u === 'admin' || mySol === '000000');
             const kpiRow = document.getElementById('kpiSummaryRow');
             const cardOffices = document.getElementById('kpiCardTotalOffices');
@@ -3352,28 +3690,22 @@
                 cardUserStatus.style.display = 'flex';
                 if (manageBtnTop) manageBtnTop.style.display = 'inline-flex';
 
-                // 1. Total Offices
                 document.getElementById('kpiTotalOfficesVal').innerText = SYSTEM_OFFICE_REGISTRY.length;
-
-                // 2. Total Users
                 document.getElementById('kpiTotalUsersVal').innerText = SYSTEM_USER_REGISTRY.length;
 
-                // 3. Live User Status (Online vs Offline)
                 const onlineUsers = SYSTEM_USER_REGISTRY.filter(acc => acc.isOnline === true || acc.user === u);
                 const offlineCount = Math.max(0, SYSTEM_USER_REGISTRY.length - onlineUsers.length);
                 document.getElementById('kpiOnlineUsersVal').innerText = `${onlineUsers.length} Online`;
                 document.getElementById('kpiOfflineUsersBadge').innerText = `${offlineCount} Offline ›`;
 
-                // 4. HQ System Status (Online vs Offline Offices)
                 const onlineOffices = SYSTEM_OFFICE_REGISTRY.filter(o => o.status === 'DAY_BEGUN');
                 const offlineOffices = SYSTEM_OFFICE_REGISTRY.length - onlineOffices.length;
-                document.getElementById('kpiSysStatusTitle').innerText = 'System Status (Offices)';
+                document.getElementById('kpiSysStatusTitle').innerText = 'System Status';
                 document.getElementById('kpiSysStatusMainVal').innerText = `${onlineOffices.length} Online`;
                 const sysBadge = document.getElementById('kpiSysStatusSubVal');
                 sysBadge.className = 'kpi-sub-pill pill-green';
-                sysBadge.innerText = `● ${offlineOffices} Offline ›`;
+                sysBadge.innerHTML = `<span class="status-dot-inline dot-online"></span>${offlineOffices} Offline ›`;
             } else {
-                // Non-HQ Users: Only show System Status + Business Date
                 kpiRow.classList.add('single-status-mode');
                 cardOffices.style.display = 'none';
                 cardUsers.style.display = 'none';
@@ -3386,9 +3718,9 @@
                 document.getElementById('kpiSysStatusMainVal').innerText = isDayBegun ? 'Online' : 'Offline';
                 const sysBadge = document.getElementById('kpiSysStatusSubVal');
                 sysBadge.className = 'kpi-sub-pill ' + (isDayBegun ? 'pill-green' : 'pill-red');
-                sysBadge.innerText = isDayBegun
-                    ? `● Day Begun (${solName})`
-                    : `● Day Ended (${solName})`;
+                sysBadge.innerHTML = isDayBegun
+                    ? `<span class="status-dot-inline dot-online"></span>Day Begun (${solName})`
+                    : `<span class="status-dot-inline dot-offline"></span>Day Ended (${solName})`;
             }
         }
 
@@ -3438,7 +3770,9 @@
                             <div style="font-weight:800; font-size:14px; color:var(--text-primary);">${u.fullName || u.user} <span style="font-size:12px; color:var(--text-muted);">(@${u.user})</span></div>
                             <div style="font-size:12px; color:var(--text-muted);">Role: <strong>${(u.role || 'staff').toUpperCase()}</strong> • SOL: ${u.solId || 'N/A'} (${offName})</div>
                         </div>
-                        <span class="kpi-sub-pill ${tab === 'online' ? 'pill-green' : 'pill-red'}">${tab === 'online' ? '● Online' : '○ Offline'}</span>
+                        <span class="kpi-sub-pill ${tab === 'online' ? 'pill-green' : 'pill-red'}">
+                            <span class="status-dot-inline ${tab === 'online' ? 'dot-online' : 'dot-offline'}"></span>${tab === 'online' ? 'Online' : 'Offline'}
+                        </span>
                     </div>
                 `;
             }).join('');
@@ -3483,7 +3817,9 @@
                         <div style="font-weight:800; font-size:14px; color:var(--text-primary);">${o.name}</div>
                         <div style="font-size:12px; color:var(--text-muted);">SOL ID: <strong>${o.solId}</strong></div>
                     </div>
-                    <span class="kpi-sub-pill ${tab === 'online' ? 'pill-green' : 'pill-red'}">${tab === 'online' ? '● DAY BEGUN (Online)' : '● DAY ENDED (Offline)'}</span>
+                    <span class="kpi-sub-pill ${tab === 'online' ? 'pill-green' : 'pill-red'}">
+                        <span class="status-dot-inline ${tab === 'online' ? 'dot-online' : 'dot-offline'}"></span>${tab === 'online' ? 'DAY BEGUN (Online)' : 'DAY ENDED (Offline)'}
+                    </span>
                 </div>
             `).join('');
         }
@@ -3628,16 +3964,16 @@
 
             profile.failedAttempts = 0; 
             authenticatedUserSession = profile;
-            sessionStorage.setItem("activeUser", profile.user);
-            sessionStorage.setItem("activeRole", profile.role);
+            safeSession.setItem("activeUser", profile.user);
+            safeSession.setItem("activeRole", profile.role);
             
             let mySol = profile.solId || (profile.user === 'admin' ? '000000' : 'UNMAPPED');
-            sessionStorage.setItem("activeSolId", mySol);
+            safeSession.setItem("activeSolId", mySol);
 
             logSystemEvent(u, "Authentication Success");
             
             if(u === "GUEST") {
-                sessionStorage.setItem("2faVerified", "true");
+                safeSession.setItem("2faVerified", "true");
                 document.getElementById('loginScreen').style.display = 'none';
                 document.getElementById('appDashboardView').style.display = 'block';
                 spawnFloatingNotification("Login Successful", "Welcome to PO Staff Utility System.", "success");
@@ -3701,7 +4037,7 @@
         }
 
         function cancelTwoFactor() {
-            sessionStorage.clear();
+            safeSession.clear();
             const screen = document.getElementById('twoFactorScreen');
             screen.classList.remove('active');
             setTimeout(() => { screen.style.display = 'none'; document.getElementById('loginScreen').style.display = 'flex'; }, 200);
@@ -3731,7 +4067,7 @@
                         try { await synchronizeSystemDatabase(false); } catch(e) { return; }
                     }
                 }
-                sessionStorage.setItem("2faVerified", "true");
+                safeSession.setItem("2faVerified", "true");
                 await setUserOnlinePresence(authenticatedUserSession.user, true);
 
                 document.getElementById('twoFactorScreen').classList.remove('active');
@@ -3786,7 +4122,7 @@
             if (officeStatus === "DAY_ENDED" && profile.role !== "admin") {
                 if (profile.role === "maker" || profile.role === "superuser") {
                     userAllowedList = profile.role === "superuser" ? ['menuCardDBDE', 'menuCardSelfPassword'] : ['menuCardSelfPassword'];
-                    setTimeout(() => { displayCustomAlert("SYSTEM LOCKED 🔒\n\nDay End has been executed."); }, 500);
+                    setTimeout(() => { displayCustomAlert("SYSTEM LOCKED\n\nDay End has been executed for your office."); }, 500);
                 }
             }
             
@@ -3821,7 +4157,6 @@
             document.getElementById('portalWelcomeMessage').innerText = `Welcome, ${profile.fullName || profile.user}`;
 
             const badge = document.getElementById('officeStatusBadge');
-            const dot = document.getElementById('statusDot');
             const statusTxt = document.getElementById('statusText');
             if(u !== "GUEST" && mappedOffice && badge) {
                 badge.style.display = "inline-flex";
@@ -3860,7 +4195,7 @@
             clearTimeout(idleWarningTimer);
             clearInterval(countdownInterval);
             
-            if (sessionStorage.getItem("activeUser") && sessionStorage.getItem("2faVerified") === "true") {
+            if (safeSession.getItem("activeUser") && safeSession.getItem("2faVerified") === "true") {
                 idleWarningTimer = setTimeout(() => {
                     showTimeoutWarning();
                 }, 4 * 60 * 1000); 
@@ -3906,12 +4241,12 @@
         }
 
         async function executePortalLogout() {
-            const currentU = sessionStorage.getItem("activeUser");
+            const currentU = safeSession.getItem("activeUser");
             if (currentU && currentU !== "GUEST") {
                 await setUserOnlinePresence(currentU, false);
             }
 
-            sessionStorage.clear();
+            safeSession.clear();
             authenticatedUserSession = null;
             clearTimeout(idleWarningTimer);
             clearInterval(countdownInterval);
@@ -3945,21 +4280,22 @@
             }, 250);
         }
 
-        // SMART POPUP ROUTER: Development Notice uses Centered Modal; Other alerts use Floating Glass Toasts
-        function displayCustomAlert(messageContent, icon = "🔔") {
+        // SMART POPUP ROUTER: Development Notice uses Centered Modal with SVG; Other alerts use Floating Glass Toasts
+        function displayCustomAlert(messageContent, icon = "bell") {
             const msgStr = String(messageContent || '');
 
-            // Keep normal centered modal popup for Development Notice or System Lock
             if (msgStr.includes("Development Notice") || msgStr.includes("SYSTEM LOCKED")) {
                 document.getElementById('customAlertMsgField').innerText = msgStr;
-                if(document.getElementById('popupAlertIcon')) document.getElementById('popupAlertIcon').innerText = icon;
+                const alertIconContainer = document.getElementById('popupAlertIcon');
+                if (alertIconContainer) {
+                    alertIconContainer.innerHTML = msgStr.includes("SYSTEM LOCKED") ? SVG_ICON_LIBRARY.lock : SVG_ICON_LIBRARY.alertCircle;
+                }
                 const targetPopup = document.getElementById('customAppAlertModal'); 
                 targetPopup.style.display = "flex"; 
                 setTimeout(() => { targetPopup.classList.add('active'); }, 10);
                 return;
             }
 
-            // Route all other alerts to the sleek Floating Corner Glass Notifications
             let type = 'info';
             let title = 'System Notification';
             const lower = msgStr.toLowerCase();
@@ -3967,7 +4303,7 @@
             if (lower.includes('invalid') || lower.includes('error') || lower.includes('incorrect') || lower.includes('locked') || lower.includes('disabled')) {
                 type = 'error';
                 title = lower.includes('captcha') ? 'Security CAPTCHA Alert' : 'Invalid Credentials';
-            } else if (lower.includes('success') || lower.includes('secure') || icon === '✅') {
+            } else if (lower.includes('success') || lower.includes('secure') || icon === 'success') {
                 type = 'success';
                 title = lower.includes('saved') || lower.includes('parameters') ? 'Data Saved Successfully' : 'Operation Successful';
             } else if (lower.includes('expir') || lower.includes('warning')) {
@@ -4026,21 +4362,35 @@
             const mySol = authenticatedUserSession.solId;
             const office = SYSTEM_OFFICE_REGISTRY.find(o => o.solId === mySol);
             const modal = document.getElementById('dbdeModal');
+            const iconBox = document.getElementById('dbdeStatusIcon');
             
             if(!office) {
+                if (iconBox) {
+                    iconBox.style.background = "rgba(100,116,139,0.14)";
+                    iconBox.style.color = "#64748b";
+                    iconBox.innerHTML = SVG_ICON_LIBRARY.alertCircle;
+                }
                 document.getElementById('dbdeStatusTitle').innerText = "Unmapped Profile";
                 document.getElementById('dbdeStatusDesc').innerText = "You are currently not mapped to any specific Office SOL ID.";
                 document.getElementById('btnExecuteDBDE').style.display = "none";
             } else {
                 document.getElementById('btnExecuteDBDE').style.display = "inline-block";
                 if(office.status === "DAY_BEGUN") {
-                    document.getElementById('dbdeStatusIcon').innerText = "🟢";
+                    if (iconBox) {
+                        iconBox.style.background = "rgba(16,185,129,0.15)";
+                        iconBox.style.color = "#10b981";
+                        iconBox.innerHTML = SVG_ICON_LIBRARY.checkCircle;
+                    }
                     document.getElementById('dbdeStatusTitle').innerText = `DAY BEGUN [${office.name}]`;
                     document.getElementById('dbdeStatusDesc').innerText = "System is actively running.";
                     document.getElementById('btnExecuteDBDE').innerText = "Execute Day End";
                     document.getElementById('btnExecuteDBDE').style.background = "#eab308";
                 } else {
-                    document.getElementById('dbdeStatusIcon').innerText = "🔴";
+                    if (iconBox) {
+                        iconBox.style.background = "rgba(239,68,68,0.15)";
+                        iconBox.style.color = "#ef4444";
+                        iconBox.innerHTML = SVG_ICON_LIBRARY.lock;
+                    }
                     document.getElementById('dbdeStatusTitle').innerText = `DAY ENDED [${office.name}]`;
                     document.getElementById('dbdeStatusDesc').innerText = "Operations are locked down.";
                     document.getElementById('btnExecuteDBDE').innerText = "Execute Day Begin";
@@ -4076,11 +4426,10 @@
         }
 
         // =========================================================================
-        // ★ THE NEW SPA ENGINE (ULTIMATE ISOLATION & GARBAGE COLLECTION) ★
+        // THE NEW SPA ENGINE (ULTIMATE ISOLATION & GARBAGE COLLECTION)
         // =========================================================================
-        
         async function loadModuleSPA(targetUrl, clickedCard = null, customLoadingMsg = "Connecting to Workspace...") {
-            if (!sessionStorage.getItem("activeUser")) {
+            if (!safeSession.getItem("activeUser")) {
                 executePortalLogout(); 
                 return;
             }
@@ -4158,7 +4507,7 @@
                     siblingCards.forEach(card => card.classList.remove('fade-out', 'expand-active'));
                 }
                 loader.style.display = 'none';
-                displayCustomAlert(`Development Notice:\n\nCannot open '${targetUrl}'. Make sure the file is created and its code is inside a <div id="moduleRenderArea"> tag.`, "⚠️");
+                displayCustomAlert(`Development Notice:\n\nCannot open '${targetUrl}'. Make sure the file is created and its code is inside a <div id="moduleRenderArea"> tag.`, "warning");
             }
         }
 
