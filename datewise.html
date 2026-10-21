@@ -7,143 +7,1112 @@
 </script>
 
 <div id="moduleRenderArea">
-    
+
+    <!-- 100% FLUID RESPONSIVE, THEME-AWARE GLASSMORPHISM CSS (SYNCED WITH INDEX.HTML V3.0) -->
     <style>
-        .portal-page-panel { max-width: 1200px; margin: 0 auto; background: white; padding: 40px; border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.03); border: 1px solid #e2e8f0; font-family: 'Segoe UI', Arial, sans-serif; }
-        
-        h3.module-title { margin: 0; color: #1e293b; font-size: 26px; font-weight: 800; letter-spacing: -0.5px; }
-        .back-nav-link { display: inline-flex; align-items: center; color: #3b82f6; font-weight: 800; font-size: 15px; text-decoration: none; cursor: pointer; transition: color 0.2s; padding: 8px 15px; background: #eff6ff; border-radius: 8px; float: right; }
-        .back-nav-link:hover { color: #1d4ed8; background: #dbeafe; }
-        
-        .form-group { margin-bottom: 20px; clear: both; }
-        .form-group label { display: block; font-weight: 700; margin-bottom: 8px; font-size: 14px; color: #334155; }
-        
-        input[type="text"], input[type="number"], input[type="date"], input[type="file"], select, textarea { width: 100%; padding: 14px 16px; box-sizing: border-box; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14.5px; background: #f8fafc; color: #1e293b !important; transition: all 0.2s ease; font-family: 'Segoe UI', Arial, sans-serif; }
-        input[type="text"]:focus, input[type="number"]:focus, input[type="date"]:focus, select:focus, textarea:focus { border-color: #d32f2f; background: #ffffff; box-shadow: 0 0 0 4px rgba(211, 47, 47, 0.1); outline: none; }
-        
-        input::placeholder, textarea::placeholder { color: #94a3b8 !important; font-style: normal !important; opacity: 1 !important; }
-        
-        textarea { resize: vertical; }
-        .flex-row { display: flex; gap: 15px; flex-wrap: wrap; }
-        .flex-row > div { flex: 1; }
-
-        /* Dynamic Rows Styling */
-        .dynamic-date-row { display: flex; gap: 15px; background: #ffffff; border: 1px solid #e2e8f0; padding: 20px; border-radius: 12px; margin-bottom: 15px; align-items: flex-end; box-shadow: 0 2px 8px rgba(0,0,0,0.02); }
-        @media(max-width: 550px){ .dynamic-date-row { flex-direction: column; align-items: stretch; gap: 15px; } }
-        .delete-row-btn { background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; padding: 14px; border-radius: 8px; cursor: pointer; font-weight: bold; transition: all 0.2s; }
-        .delete-row-btn:hover { background: #fee2e2; color: #dc2626; border-color: #fca5a5; }
-        .add-more-row-container { margin: 20px 0 30px 0; }
-        .secondary-action-btn { background: #f1f5f9; color: #334155; padding: 12px 20px; border: 1px solid #cbd5e1; border-radius: 8px; font-weight: 800; font-size: 13.5px; cursor: pointer; transition: all 0.2s; }
-        .secondary-action-btn:hover { background: #e2e8f0; color: #0f172a; }
-        
-        /* Action Buttons */
-        button.action-btn { width: 100%; padding: 16px; background: #3b82f6; color: white; border: none; border-radius: 8px; font-size: 15.5px; font-weight: 800; cursor: pointer; text-transform: uppercase; letter-spacing: 0.8px; margin-top: 15px; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25); transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
-        button.action-btn:hover { background: #2563eb; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(37, 99, 235, 0.3); }
-
-        /* Method Selection Cards */
-        .method-selection-container { display: flex; gap: 20px; margin-top: 15px; margin-bottom: 30px; }
-        @media(max-width: 768px){ .method-selection-container { flex-direction: column; } }
-        .method-card { flex: 1; background: #ffffff; border: 2px solid #e2e8f0; border-radius: 12px; padding: 25px; text-align: center; cursor: pointer; transition: all 0.3s; position: relative; overflow: hidden; }
-        .method-card:hover { border-color: #3b82f6; transform: translateY(-3px); box-shadow: 0 10px 25px rgba(59, 130, 246, 0.1); }
-        .method-card.active { border-color: #3b82f6; background: #eff6ff; }
-        .method-icon { font-size: 36px; margin-bottom: 10px; }
-        .method-title { font-size: 16px; font-weight: 800; color: #1e293b; margin-bottom: 5px; }
-        .method-desc { font-size: 13px; color: #64748b; margin: 0; }
-
-        /* File Upload Area */
-        .upload-area { border: 2px dashed #cbd5e1; background: #f8fafc; border-radius: 12px; padding: 40px 20px; text-align: center; margin-bottom: 20px; transition: all 0.3s; }
-        .upload-area:hover { border-color: #3b82f6; background: #ffffff; }
-
-        /* --- PERFECT CENTERED MODAL --- */
-        .pdf-modal-overlay {
-            position: fixed !important; top: 0 !important; left: 0 !important;
-            width: 100vw !important; height: 100vh !important;
-            background: rgba(241, 245, 249, 0.85) !important; 
-            backdrop-filter: blur(8px) !important;
-            z-index: 99999999 !important; 
-            display: none; justify-content: center; align-items: center;
-            opacity: 0; transition: opacity 0.3s ease;
+        #dynamicWorkspace {
+            scroll-behavior: smooth !important;
+            -webkit-overflow-scrolling: touch !important;
         }
-        .pdf-modal-overlay.active { display: flex; opacity: 1; }
+
+        .dw-viewport-wrapper {
+            width: 100%;
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: clamp(4px, 0.8vw, 12px);
+            font-family: var(--font-main, 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif);
+            color: var(--text-primary, #0f172a);
+            animation: dwFadeIn 0.32s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+            box-sizing: border-box;
+        }
+
+        .portal-page-panel {
+            width: 100%;
+            background: var(--surface-glass, rgba(255, 255, 255, 0.86));
+            backdrop-filter: blur(22px);
+            -webkit-backdrop-filter: blur(22px);
+            padding: clamp(18px, 2.5vw, 34px);
+            border-radius: 22px;
+            box-shadow: var(--shadow-soft, 0 8px 28px rgba(15, 23, 42, 0.06));
+            border: 1px solid var(--border-glass, rgba(255, 255, 255, 0.9));
+            transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            box-sizing: border-box;
+        }
+
+        /* Decorative top accent bar */
+        .portal-page-panel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, #2563eb 0%, #7c3aed 50%, #10b981 100%);
+        }
+
+        /* HEADER SECTION */
+        .dw-header-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            padding-bottom: clamp(14px, 1.8vw, 22px);
+            margin-bottom: clamp(16px, 2vw, 24px);
+            border-bottom: 1px solid var(--border-subtle, rgba(203, 213, 225, 0.8));
+            flex-wrap: wrap;
+        }
+
+        .dw-header-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            min-width: 0;
+        }
+
+        .dw-hero-icon {
+            width: clamp(44px, 3.6vw, 52px);
+            height: clamp(44px, 3.6vw, 52px);
+            border-radius: 15px;
+            background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            box-shadow: 0 8px 22px rgba(37, 99, 235, 0.34);
+            flex-shrink: 0;
+        }
+
+        .dw-title-block {
+            min-width: 0;
+        }
+
+        h3.module-title {
+            margin: 0;
+            color: var(--text-primary, #0f172a);
+            font-size: clamp(18px, 1.8vw, 24px);
+            font-weight: 900;
+            letter-spacing: -0.5px;
+            line-height: 1.2;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .dw-form-badge {
+            font-size: 11px;
+            font-weight: 800;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(37, 99, 235, 0.14);
+            color: #2563eb;
+            border: 1px solid rgba(37, 99, 235, 0.28);
+            letter-spacing: 0.4px;
+            text-transform: uppercase;
+        }
+        html[data-theme="dark"] .dw-form-badge {
+            color: #60a5fa;
+            background: rgba(59, 130, 246, 0.2);
+        }
+
+        .dw-subtitle {
+            margin: 4px 0 0 0;
+            font-size: clamp(12px, 1vw, 13.5px);
+            color: var(--text-muted, #64748b);
+            font-weight: 500;
+        }
+
+        .back-nav-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-primary, #0f172a);
+            font-weight: 800;
+            font-size: 13.5px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.22s ease;
+            padding: 10px 18px;
+            background: var(--surface-input, #eef3fb);
+            border: 1px solid var(--border-subtle, rgba(203, 213, 225, 0.8));
+            border-radius: 12px;
+            flex-shrink: 0;
+        }
+
+        .back-nav-link:hover {
+            border-color: var(--accent-primary, #2563eb);
+            color: var(--accent-primary, #2563eb);
+            background: var(--surface-card-hover, #ffffff);
+            transform: translateX(-3px);
+            box-shadow: var(--shadow-card, 0 4px 18px rgba(15, 23, 42, 0.05));
+        }
+
+        /* LIVE TELEMETRY STRIP */
+        .dw-telemetry-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: clamp(10px, 1.4vw, 16px);
+            margin-bottom: clamp(18px, 2.2vw, 26px);
+        }
+
+        .dw-stat-pill {
+            background: var(--surface-card, rgba(255, 255, 255, 0.92));
+            border: 1px solid var(--border-glass, rgba(255, 255, 255, 0.9));
+            border-radius: 15px;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: var(--shadow-card, 0 4px 18px rgba(15, 23, 42, 0.04));
+            min-width: 0;
+            transition: transform 0.2s ease, border-color 0.2s ease;
+        }
+
+        .dw-stat-pill:hover {
+            transform: translateY(-2px);
+            border-color: rgba(59, 130, 246, 0.35);
+        }
+
+        .dw-stat-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 11px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .dw-stat-icon.blue { background: rgba(37, 99, 235, 0.13); color: #2563eb; }
+        .dw-stat-icon.purple { background: rgba(124, 58, 237, 0.14); color: #7c3aed; }
+        .dw-stat-icon.emerald { background: rgba(16, 185, 129, 0.14); color: #059669; }
+        html[data-theme="dark"] .dw-stat-icon.blue { color: #60a5fa; }
+        html[data-theme="dark"] .dw-stat-icon.purple { color: #a78bfa; }
+        html[data-theme="dark"] .dw-stat-icon.emerald { color: #34d399; }
+
+        .dw-stat-text {
+            min-width: 0;
+            flex: 1;
+        }
+
+        .dw-stat-label {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-muted, #64748b);
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            margin-bottom: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .dw-stat-val {
+            font-size: clamp(14px, 1.3vw, 17px);
+            font-weight: 900;
+            color: var(--text-primary, #0f172a);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* FORM CONTROLS */
+        .form-group {
+            margin-bottom: 22px;
+            clear: both;
+        }
+
+        .form-group label,
+        .dw-section-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            font-weight: 800;
+            margin-bottom: 8px;
+            font-size: 13.5px;
+            color: var(--text-primary, #0f172a);
+            letter-spacing: -0.1px;
+        }
+
+        .form-group label svg,
+        .dw-section-label svg {
+            color: var(--accent-primary, #2563eb);
+            flex-shrink: 0;
+        }
+
+        .portal-page-panel input[type="text"],
+        .portal-page-panel input[type="number"],
+        .portal-page-panel input[type="date"],
+        .portal-page-panel select,
+        .portal-page-panel textarea {
+            width: 100%;
+            padding: 13px 16px;
+            box-sizing: border-box;
+            border: 1.5px solid var(--border-subtle, rgba(203, 213, 225, 0.85));
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            background: var(--surface-input, #eef3fb);
+            color: var(--text-primary, #0f172a) !important;
+            transition: all 0.22s ease;
+            font-family: var(--font-main, 'Inter', 'Segoe UI', sans-serif);
+        }
+
+        html[data-theme="dark"] .portal-page-panel input[type="date"] {
+            color-scheme: dark;
+        }
+
+        .portal-page-panel input[type="text"]:focus,
+        .portal-page-panel input[type="number"]:focus,
+        .portal-page-panel input[type="date"]:focus,
+        .portal-page-panel select:focus,
+        .portal-page-panel textarea:focus {
+            border-color: var(--accent-primary, #2563eb);
+            background: var(--surface-input-focus, #ffffff);
+            box-shadow: 0 0 0 3.5px rgba(37, 99, 235, 0.15);
+            outline: none;
+        }
+
+        .portal-page-panel input::placeholder,
+        .portal-page-panel textarea::placeholder {
+            color: var(--text-muted, #94a3b8) !important;
+            font-style: normal !important;
+            font-weight: 400 !important;
+            opacity: 1 !important;
+        }
+
+        /* METHOD SELECTION CARDS (EXCEL VS MANUAL) */
+        .method-selection-container {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: clamp(12px, 1.8vw, 20px);
+            margin-top: 10px;
+            margin-bottom: 24px;
+        }
+
+        .method-card {
+            background: var(--surface-card, rgba(255, 255, 255, 0.92));
+            border: 2px solid var(--border-subtle, rgba(203, 213, 225, 0.75));
+            border-radius: 16px;
+            padding: clamp(16px, 2vw, 22px);
+            cursor: pointer;
+            transition: all 0.26s cubic-bezier(0.25, 0.8, 0.25, 1);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            text-align: left;
+            box-shadow: var(--shadow-card, 0 4px 18px rgba(15, 23, 42, 0.04));
+        }
+
+        .method-card:hover {
+            border-color: var(--accent-primary, #2563eb);
+            transform: translateY(-3px);
+            background: var(--surface-card-hover, #ffffff);
+            box-shadow: var(--shadow-elevated, 0 14px 32px rgba(15, 23, 42, 0.1));
+        }
+
+        .method-card.active {
+            border-color: var(--accent-primary, #2563eb);
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.09) 0%, rgba(124, 58, 237, 0.06) 100%);
+            box-shadow: 0 10px 26px rgba(37, 99, 235, 0.15);
+        }
+
+        .method-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 13px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            background: rgba(37, 99, 235, 0.12);
+            color: var(--accent-primary, #2563eb);
+            transition: all 0.25s ease;
+        }
+
+        .method-card.active .method-icon {
+            background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+            color: #ffffff;
+            box-shadow: 0 6px 16px rgba(37, 99, 235, 0.35);
+        }
+
+        .method-body {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .method-title {
+            font-size: 15.5px;
+            font-weight: 800;
+            color: var(--text-primary, #0f172a);
+            margin: 0 0 4px 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+        }
+
+        .method-check-dot {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px solid var(--border-subtle, #cbd5e1);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            color: transparent;
+            transition: all 0.2s ease;
+        }
+
+        .method-card.active .method-check-dot {
+            background: #10b981;
+            border-color: #10b981;
+            color: #ffffff;
+        }
+
+        .method-desc {
+            font-size: 12.8px;
+            color: var(--text-muted, #64748b);
+            margin: 0;
+            line-height: 1.45;
+            font-weight: 500;
+        }
+
+        /* EXCEL UPLOAD DROPZONE & TEMPLATE BAR */
+        .upload-area {
+            border: 2px dashed var(--border-subtle, #94a3b8);
+            background: var(--surface-input, rgba(238, 243, 251, 0.65));
+            border-radius: 18px;
+            padding: clamp(22px, 3vw, 34px) 20px;
+            text-align: center;
+            margin-bottom: 18px;
+            transition: all 0.25s ease;
+            position: relative;
+        }
+
+        .upload-area:hover,
+        .upload-area.drag-over {
+            border-color: var(--accent-primary, #2563eb);
+            background: var(--surface-card-hover, #ffffff);
+            box-shadow: 0 10px 28px rgba(37, 99, 235, 0.08);
+        }
+
+        .dw-upload-orb {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: rgba(16, 185, 129, 0.14);
+            color: #10b981;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 12px auto;
+        }
+
+        .dw-upload-title {
+            margin: 0 0 6px 0;
+            font-weight: 800;
+            font-size: 15px;
+            color: var(--text-primary, #0f172a);
+        }
+
+        .dw-upload-sub {
+            margin: 0 0 16px 0;
+            font-size: 12.5px;
+            color: var(--text-muted, #64748b);
+        }
+
+        .dw-file-input-wrap {
+            max-width: 440px;
+            margin: 0 auto;
+        }
+
+        #excelFileInput {
+            width: 100%;
+            padding: 10px 14px;
+            background: var(--surface-card, #ffffff);
+            border: 1.5px solid var(--border-subtle, #cbd5e1);
+            border-radius: 11px;
+            color: var(--text-primary, #0f172a);
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        #excelFileInput::file-selector-button {
+            background: linear-gradient(90deg, #2563eb, #4f46e5);
+            color: #ffffff;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 12.5px;
+            cursor: pointer;
+            margin-right: 12px;
+            transition: filter 0.2s;
+        }
+
+        #excelFileInput::file-selector-button:hover {
+            filter: brightness(1.1);
+        }
+
+        .dw-excel-ActionBar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            background: var(--surface-card, rgba(255, 255, 255, 0.9));
+            border: 1px solid var(--border-subtle, #e2e8f0);
+            border-radius: 14px;
+            padding: 12px 18px;
+            margin-bottom: 22px;
+            flex-wrap: wrap;
+        }
+
+        .dw-template-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 13px;
+            color: var(--text-secondary, #334155);
+            font-weight: 600;
+        }
+
+        .dw-template-download-btn {
+            background: rgba(16, 185, 129, 0.14);
+            color: #059669;
+            border: 1.5px solid rgba(16, 185, 129, 0.35);
+            padding: 9px 16px;
+            border-radius: 10px;
+            font-weight: 800;
+            font-size: 13px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.22s ease;
+        }
+        html[data-theme="dark"] .dw-template-download-btn {
+            color: #34d399;
+            background: rgba(16, 185, 129, 0.18);
+        }
+        .dw-template-download-btn:hover {
+            background: #10b981;
+            color: #ffffff;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(16, 185, 129, 0.3);
+        }
+
+        /* MANUAL LEDGER ROWS STYLING */
+        #dynamicDateRowsContainer {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .dynamic-date-row {
+            display: grid;
+            grid-template-columns: 42px 1.2fr 1fr 2.4fr 48px;
+            gap: 14px;
+            background: var(--surface-card, #ffffff);
+            border: 1px solid var(--border-subtle, #e2e8f0);
+            padding: 16px 18px;
+            border-radius: 16px;
+            align-items: end;
+            box-shadow: var(--shadow-card, 0 2px 10px rgba(0, 0, 0, 0.03));
+            transition: all 0.22s ease;
+            animation: dwFadeIn 0.24s ease-out forwards;
+        }
+
+        .dynamic-date-row:hover {
+            border-color: rgba(37, 99, 235, 0.4);
+            box-shadow: var(--shadow-soft, 0 8px 22px rgba(15, 23, 42, 0.06));
+        }
+
+        .dw-row-index-badge {
+            width: 40px;
+            height: 44px;
+            border-radius: 11px;
+            background: rgba(37, 99, 235, 0.12);
+            color: var(--accent-primary, #2563eb);
+            font-weight: 900;
+            font-size: 13.5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            user-select: none;
+        }
+
+        .dynamic-date-row label {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 700;
+            font-size: 12.5px;
+            color: var(--text-secondary, #334155);
+            margin-bottom: 6px;
+        }
+
+        .delete-row-btn {
+            width: 46px;
+            height: 45px;
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+            border: 1.5px solid rgba(239, 68, 68, 0.25);
+            border-radius: 11px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            padding: 0;
+        }
+
+        .delete-row-btn:hover {
+            background: #ef4444;
+            color: #ffffff;
+            border-color: #ef4444;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+        }
+
+        .add-more-row-container {
+            margin: 18px 0 22px 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .secondary-action-btn {
+            background: var(--surface-input, #f1f5f9);
+            color: var(--accent-primary, #2563eb);
+            padding: 12px 20px;
+            border: 1.5px dashed rgba(37, 99, 235, 0.45);
+            border-radius: 12px;
+            font-weight: 800;
+            font-size: 13.5px;
+            cursor: pointer;
+            transition: all 0.22s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .secondary-action-btn:hover {
+            background: rgba(37, 99, 235, 0.1);
+            border-style: solid;
+            border-color: var(--accent-primary, #2563eb);
+            transform: translateY(-2px);
+        }
+
+        /* PRIMARY GENERATE BUTTONS */
+        button.action-btn {
+            width: 100%;
+            padding: 15px 24px;
+            background: linear-gradient(90deg, #2563eb 0%, #4f46e5 50%, #7c3aed 100%);
+            background-size: 200% auto;
+            color: #ffffff;
+            border: none;
+            border-radius: 13px;
+            font-size: 14.5px;
+            font-weight: 800;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 0.7px;
+            margin-top: 6px;
+            box-shadow: 0 10px 25px rgba(37, 99, 235, 0.3);
+            transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        button.action-btn:hover {
+            background-position: right center;
+            transform: translateY(-2px);
+            box-shadow: 0 14px 30px rgba(79, 70, 229, 0.4);
+        }
+
+        button.action-btn.manual-theme-btn {
+            background: linear-gradient(90deg, #0d9488 0%, #2563eb 50%, #7c3aed 100%);
+            background-size: 200% auto;
+            box-shadow: 0 10px 25px rgba(13, 148, 136, 0.3);
+        }
+
+        /* --- HIGH-TECH FULL-SCREEN GLASS MODAL FOR PDF PREVIEW --- */
+        .pdf-modal-overlay {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100vw !important;
+            height: 100vh !important;
+            background: rgba(15, 23, 42, 0.72) !important;
+            backdrop-filter: blur(12px) !important;
+            -webkit-backdrop-filter: blur(12px) !important;
+            z-index: 99999999 !important;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.25s ease;
+            padding: clamp(10px, 2vw, 24px);
+            box-sizing: border-box;
+            font-family: var(--font-main, 'Inter', 'Segoe UI', sans-serif);
+        }
+
+        .pdf-modal-overlay.active {
+            display: flex !important;
+            opacity: 1;
+        }
+
         .pdf-modal-card {
-            background: #ffffff; width: 85%; max-width: 900px; height: 85vh;
-            border-radius: 12px; box-shadow: 0 20px 50px rgba(0,0,0,0.2); 
-            display: flex; flex-direction: column; overflow: hidden;
-            border: 1px solid #cbd5e1; border-top: 6px solid #3b82f6;
-            transform: scale(0.95); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            background: var(--surface-glass-strong, #ffffff);
+            color: var(--text-primary, #0f172a);
+            width: 94%;
+            max-width: 1080px;
+            height: 88vh;
+            border-radius: 20px;
+            box-shadow: 0 28px 70px rgba(0, 0, 0, 0.45);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            border: 1px solid var(--border-glass, rgba(255, 255, 255, 0.85));
+            border-top: 5px solid #2563eb;
+            transform: scale(0.95);
+            transition: transform 0.28s cubic-bezier(0.175, 0.885, 0.32, 1.275), background 0.3s ease;
             margin: auto;
         }
-        .pdf-modal-overlay.active .pdf-modal-card { transform: scale(1); }
-        .pdf-modal-header { padding: 15px 25px; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; background: #f8fafc; }
-        .pdf-modal-header h3 { margin: 0; color: #1e293b; font-size: 18px; font-weight: 800; font-family: 'Segoe UI', Arial, sans-serif; }
-        .pdf-close-btn { background: #ef4444; color: white; border: none; padding: 10px 24px; border-radius: 8px; font-weight: 800; cursor: pointer; transition: 0.2s; font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px; }
-        .pdf-close-btn:hover { background: #dc2626; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(220, 38, 38, 0.2);}
-        .pdf-iframe-container { flex: 1; width: 100%; height: 100%; background: #e2e8f0; }
-        #pdfFrameViewerLocal { width: 100%; height: 100%; border: none; display: block; }
+
+        .pdf-modal-overlay.active .pdf-modal-card {
+            transform: scale(1);
+        }
+
+        .pdf-modal-header {
+            padding: 14px 22px;
+            border-bottom: 1px solid var(--border-subtle, #e2e8f0);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--surface-input, #f8fafc);
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .pdf-modal-title-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .pdf-modal-header h3 {
+            margin: 0;
+            color: var(--text-primary, #1e293b);
+            font-size: 16.5px;
+            font-weight: 900;
+            letter-spacing: -0.3px;
+            display: flex;
+            align-items: center;
+            gap: 9px;
+        }
+
+        .pdf-modal-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .pdf-download-btn {
+            background: linear-gradient(90deg, #2563eb, #4f46e5);
+            color: #ffffff;
+            border: none;
+            padding: 9px 18px;
+            border-radius: 10px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 12.5px;
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+
+        .pdf-download-btn:hover {
+            transform: translateY(-1px);
+            filter: brightness(1.08);
+        }
+
+        .pdf-close-btn {
+            background: rgba(239, 68, 68, 0.12);
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            padding: 9px 18px;
+            border-radius: 10px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 12.5px;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .pdf-close-btn:hover {
+            background: #ef4444;
+            color: #ffffff;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(220, 38, 38, 0.28);
+        }
+
+        .pdf-iframe-container {
+            flex: 1;
+            width: 100%;
+            height: 100%;
+            background: #334155;
+        }
+
+        #pdfFrameViewerLocal {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
+        }
+
+        @keyframes dwFadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* RESPONSIVE BREAKPOINTS FOR ALL DEVICES */
+        @media (max-width: 960px) {
+            .dynamic-date-row {
+                grid-template-columns: 38px 1fr 1fr;
+            }
+            .dynamic-date-row .dw-purpose-col {
+                grid-column: 1 / -2;
+            }
+            .dynamic-date-row .dw-delete-col {
+                grid-column: -2 / -1;
+                justify-self: end;
+            }
+        }
+
+        @media (max-width: 720px) {
+            .dw-telemetry-grid,
+            .method-selection-container {
+                grid-template-columns: 1fr;
+            }
+            .dw-header-bar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .back-nav-link {
+                width: 100%;
+                justify-content: center;
+            }
+            .dynamic-date-row {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+            .dynamic-date-row .dw-purpose-col,
+            .dynamic-date-row .dw-delete-col {
+                grid-column: auto;
+            }
+            .dw-row-index-badge {
+                width: 100%;
+                height: 32px;
+            }
+            .delete-row-btn {
+                width: 100%;
+                height: 42px;
+            }
+            .dw-excel-ActionBar {
+                flex-direction: column;
+                align-items: stretch;
+                text-align: center;
+            }
+            .dw-template-download-btn {
+                justify-content: center;
+            }
+            .pdf-modal-card {
+                width: 98%;
+                height: 92vh;
+            }
+        }
     </style>
 
-    <div class='portal-page-panel' style='display:block;'>
-        <div style="margin-bottom: 35px; border-bottom: 2px solid #e2e8f0; padding-bottom: 15px; overflow: hidden;">
-            <div class='back-nav-link' onclick='typeof returnToHomeGridSPA === "function" ? returnToHomeGridSPA() : (window.location.href="index.html")'>⬅️ Back to Dashboard</div>
-            <h3 class="module-title">Module: Isolated Date-Wise Form Compiler</h3>
-        </div>
-        
-        <div class='form-group'>
-            <label>Received From:</label>
-            <input class='text-input-placeholder-gray' id='receivedFromDatewise' placeholder='e.g. The Superintendent of Post Offices / Sanctioning Authority' type='text'/>
-        </div>
+    <div class="dw-viewport-wrapper">
+        <div class="portal-page-panel" style="display:block;">
 
-        <label style="display: block; font-weight: 700; font-size: 16px; color: #0f172a; margin-top: 30px;">Select Generation Method:</label>
-        
-        <div class="method-selection-container">
-            <!-- Card 1: Excel Upload -->
-            <div class="method-card active" id="methodExcelCard" onclick="toggleDatewiseMethod('excel')">
-                <div class="method-icon">📊</div>
-                <div class="method-title">Upload via Excel File</div>
-                <p class="method-desc">Download the template, fill in your dates & amounts, and generate all bills instantly.</p>
-            </div>
-            <!-- Card 2: Manual Entry -->
-            <div class="method-card" id="methodManualCard" onclick="toggleDatewiseMethod('manual')">
-                <div class="method-icon">✍️</div>
-                <div class="method-title">Manual Data Entry</div>
-                <p class="method-desc">Add rows manually and type the bill details directly into the portal.</p>
-            </div>
-        </div>
+            <!-- TOP HEADER BAR -->
+            <div class="dw-header-bar">
+                <div class="dw-header-left">
+                    <div class="dw-hero-icon">
+                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                            <line x1="16" y1="2" x2="16" y2="6"/>
+                            <line x1="8" y1="2" x2="8" y2="6"/>
+                            <line x1="3" y1="10" x2="21" y2="10"/>
+                            <path d="m9 16 2 2 4-4"/>
+                        </svg>
+                    </div>
+                    <div class="dw-title-block">
+                        <h3 class="module-title">
+                            <span>Date-Wise Bill Compiler</span>
+                            <span class="dw-form-badge">Form ACG-17</span>
+                        </h3>
+                        <p class="mb-subtitle dw-subtitle">Compile targeted date-specific ACG-17 vouchers via Excel sheet upload or interactive manual ledger.</p>
+                    </div>
+                </div>
 
-        <!-- SECTION: EXCEL UPLOAD -->
-        <div id="excelMethodSection" style="display: block; animation: fadeIn 0.4s ease-out forwards;">
-            <div class="upload-area">
-                <p style="margin-top: 0; font-weight: 700; color: #334155; margin-bottom: 15px;">Please select your filled Excel (.xlsx) file.</p>
-                <input type="file" id="excelFileInput" accept=".xlsx, .xls" style="max-width: 400px; margin: 0 auto; display: block; background: white; padding: 10px;" />
-            </div>
-            
-            <div style="text-align: center; margin-bottom: 25px;">
-                <span onclick="downloadExcelTemplate()" style="color: #10b981; font-weight: 800; cursor: pointer; text-decoration: underline; font-size: 14.5px;">⬇️ Click here to Download Blank Excel Template</span>
+                <div class="back-nav-link" onclick="dwCleanExit()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="19" y1="12" x2="5" y2="12"/>
+                        <polyline points="12 19 5 12 12 5"/>
+                    </svg>
+                    <span>Back to Dashboard</span>
+                </div>
             </div>
 
-            <button class='action-btn' onclick='triggerSmartGenerationExcel()' type='button'>Generate Bills From Excel</button>
-        </div>
+            <!-- LIVE TELEMETRY STRIP -->
+            <div class="dw-telemetry-grid">
+                <div class="dw-stat-pill">
+                    <div class="dw-stat-icon blue">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <polygon points="12 2 2 7 12 12 22 7 12 2"/>
+                            <polyline points="2 17 12 22 22 17"/>
+                            <polyline points="2 12 12 17 22 12"/>
+                        </svg>
+                    </div>
+                    <div class="dw-stat-text">
+                        <div class="dw-stat-label">Active Compiler Mode</div>
+                        <div class="dw-stat-val" id="dwStatActiveMode">Excel Sheet Upload</div>
+                    </div>
+                </div>
 
-        <!-- SECTION: MANUAL ENTRY -->
-        <div id="manualMethodSection" style="display: none; animation: fadeIn 0.4s ease-out forwards;">
-            <div id='dynamicDateRowsContainer'></div>
-            <div class='add-more-row-container'>
-                <button class='secondary-action-btn' onclick='addNewDateEntryRowLocal()' type='button'>+ Add New Ledger Row Slot</button>
+                <div class="dw-stat-pill">
+                    <div class="dw-stat-icon purple">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                            <polyline points="14 2 14 8 20 8"/>
+                            <line x1="16" y1="13" x2="8" y2="13"/>
+                            <line x1="16" y1="17" x2="8" y2="17"/>
+                        </svg>
+                    </div>
+                    <div class="dw-stat-text">
+                        <div class="dw-stat-label">Ready Voucher Slots</div>
+                        <div class="dw-stat-val" id="dwStatReadyVouchers">Awaiting Excel File</div>
+                    </div>
+                </div>
+
+                <div class="dw-stat-pill">
+                    <div class="dw-stat-icon emerald">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="12" y1="1" x2="12" y2="23"/>
+                            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                        </svg>
+                    </div>
+                    <div class="dw-stat-text">
+                        <div class="dw-stat-label">Total Bill Outlay</div>
+                        <div class="dw-stat-val" id="dwStatTotalAmount">Rs. 0/-</div>
+                    </div>
+                </div>
             </div>
-            <button class='action-btn' onclick='triggerSmartGenerationManual()' type='button' style="background: #0f172a; box-shadow: 0 4px 12px rgba(15, 23, 42, 0.25);">Generate Bills Manually</button>
-        </div>
 
+            <!-- RECEIVED FROM INPUT -->
+            <div class="form-group">
+                <label for="receivedFromDatewise">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="4" y="2" width="16" height="20" rx="2" ry="2"/>
+                        <path d="M9 22v-4h6v4"/>
+                        <path d="M8 6h.01"/><path d="M16 6h.01"/><path d="M12 6h.01"/>
+                    </svg>
+                    <span>Received From (Sanctioning / Paying Authority):</span>
+                </label>
+                <input class="text-input-placeholder-gray" id="receivedFromDatewise" placeholder="e.g. The Superintendent of Post Offices / Sanctioning Authority" type="text" autocomplete="off"/>
+            </div>
+
+            <!-- METHOD SELECTION -->
+            <div class="dw-section-label" style="margin-top: 10px;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="3"/>
+                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9"/>
+                </svg>
+                <span>Select Generation Method:</span>
+            </div>
+
+            <div class="method-selection-container">
+                <!-- Card 1: Excel Upload -->
+                <div class="method-card active" id="methodExcelCard" onclick="toggleDatewiseMethod('excel')">
+                    <div class="method-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                            <polyline points="14 2 14 8 20 8"/>
+                            <line x1="8" y1="13" x2="16" y2="13"/>
+                            <line x1="8" y1="17" x2="16" y2="17"/>
+                            <line x1="10" y1="9" x2="8" y2="9"/>
+                        </svg>
+                    </div>
+                    <div class="method-body">
+                        <div class="method-title">
+                            <span>Upload via Excel File</span>
+                            <span class="method-check-dot">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="20 6 9 17 4 12"/>
+                                </svg>
+                            </span>
+                        </div>
+                        <p class="method-desc">Download the official blank Excel template, fill in your dates &amp; amounts, and compile all bills in one click.</p>
+                    </div>
+                </div>
+
+                <!-- Card 2: Manual Entry -->
+                <div class="method-card" id="methodManualCard" onclick="toggleDatewiseMethod('manual')">
+                    <div class="method-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                        </svg>
+                    </div>
+                    <div class="method-body">
+                        <div class="method-title">
+                            <span>Manual Data Entry</span>
+                            <span class="method-check-dot">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="20 6 9 17 4 12"/>
+                                </svg>
+                            </span>
+                        </div>
+                        <p class="method-desc">Add interactive ledger rows manually and type individual voucher dates, amounts, and purposes directly.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 1: EXCEL UPLOAD -->
+            <div id="excelMethodSection" style="display: block; animation: dwFadeIn 0.3s ease-out forwards;">
+                <div class="upload-area" id="dwExcelDropZone">
+                    <div class="dw-upload-orb">
+                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                            <polyline points="17 8 12 3 7 8"/>
+                            <line x1="12" y1="3" x2="12" y2="15"/>
+                        </svg>
+                    </div>
+                    <p class="dw-upload-title" id="dwUploadStatusTitle">Select your filled Excel (.xlsx / .xls) file</p>
+                    <p class="dw-upload-sub" id="dwUploadStatusSub">Columns required: Date (DD/MM/YYYY) • Amount (Rs) • Purpose Description</p>
+                    <div class="dw-file-input-wrap">
+                        <input type="file" id="excelFileInput" accept=".xlsx, .xls" onchange="dwInspectSelectedExcelFile()"/>
+                    </div>
+                </div>
+
+                <div class="dw-excel-ActionBar">
+                    <div class="dw-template-info">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"/>
+                            <line x1="12" y1="16" x2="12" y2="12"/>
+                            <line x1="12" y1="8" x2="12.01" y2="8"/>
+                        </svg>
+                        <span>Need the standard format? Download the pre-configured Excel template first.</span>
+                    </div>
+
+                    <button type="button" class="dw-template-download-btn" onclick="downloadExcelTemplate()">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                            <polyline points="7 10 12 15 17 10"/>
+                            <line x1="12" y1="15" x2="12" y2="3"/>
+                        </svg>
+                        <span>Download Blank Excel Template</span>
+                    </button>
+                </div>
+
+                <button class="action-btn" onclick="triggerSmartGenerationExcel()" type="button">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="6 9 6 2 18 2 18 9"/>
+                        <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
+                        <rect x="6" y="14" width="12" height="8"/>
+                    </svg>
+                    <span>Generate Bills From Excel</span>
+                </button>
+            </div>
+
+            <!-- SECTION 2: MANUAL ENTRY -->
+            <div id="manualMethodSection" style="display: none; animation: dwFadeIn 0.3s ease-out forwards;">
+                <div id="dynamicDateRowsContainer"></div>
+
+                <div class="add-more-row-container">
+                    <button class="secondary-action-btn" onclick="addNewDateEntryRowLocal(true)" type="button">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="12" y1="5" x2="12" y2="19"/>
+                            <line x1="5" y1="12" x2="19" y2="12"/>
+                        </svg>
+                        <span>Add New Ledger Row Slot</span>
+                    </button>
+
+                    <span style="font-size: 12.5px; color: var(--text-muted); font-weight: 600;">
+                        Tip: All complete rows will be compiled into sequential A4 landscape ACG-17 vouchers.
+                    </span>
+                </div>
+
+                <button class="action-btn manual-theme-btn" onclick="triggerSmartGenerationManual()" type="button">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="6 9 6 2 18 2 18 9"/>
+                        <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
+                        <rect x="6" y="14" width="12" height="8"/>
+                    </svg>
+                    <span>Generate Bills Manually</span>
+                </button>
+            </div>
+
+        </div>
     </div>
 
-    <!-- BEAUTIFUL CENTERED POPUP MODAL FOR PDF PREVIEW -->
+    <!-- HIGH-TECH CENTERED POPUP MODAL FOR PDF PREVIEW (PURE SVG) -->
     <div id="pdfModalOverlay" class="pdf-modal-overlay">
         <div class="pdf-modal-card">
             <div class="pdf-modal-header">
-                <h3>📄 Generated Document Live Preview</h3>
-                <button class="pdf-close-btn" onclick="closePdfModal()">❌ Close Preview</button>
+                <div class="pdf-modal-title-group">
+                    <h3>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                            <polyline points="14 2 14 8 20 8"/>
+                            <line x1="16" y1="13" x2="8" y2="13"/>
+                            <line x1="16" y1="17" x2="8" y2="17"/>
+                        </svg>
+                        <span>Generated Document Live Preview</span>
+                    </h3>
+                    <span class="dw-form-badge" id="dwPreviewCountBadge">ACG-17 Ready</span>
+                </div>
+                <div class="pdf-modal-actions">
+                    <button type="button" class="pdf-download-btn" onclick="dwDownloadGeneratedPdf()">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                            <polyline points="7 10 12 15 17 10"/>
+                            <line x1="12" y1="15" x2="12" y2="3"/>
+                        </svg>
+                        <span>Download PDF</span>
+                    </button>
+                    <button type="button" class="pdf-close-btn" onclick="closePdfModal()">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                            <line x1="18" y1="6" x2="6" y2="18"/>
+                            <line x1="6" y1="6" x2="18" y2="18"/>
+                        </svg>
+                        <span>Close Preview</span>
+                    </button>
+                </div>
             </div>
             <div class="pdf-iframe-container">
-                <iframe id="pdfFrameViewerLocal"></iframe>
+                <iframe id="pdfFrameViewerLocal" title="Date-Wise ACG-17 Vouchers PDF Preview"></iframe>
             </div>
         </div>
     </div>
@@ -163,8 +1132,82 @@
 
         const LOCAL_INDIA_POST_LOGO_URL = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXlVwmm2OUFIPv_sRjEtehJrDPqIS-nbUCLNZU8i4LT-O-V14Wp6hpQGw&s=10";
 
+        let dwCurrentMethod = 'excel';
+        let dwLastCompiledDoc = null;
+        let dwExcelCachedStats = { rows: 0, total: 0, fileName: '' };
+
+        // ====================================================
+        // AUTO-COLLAPSE HAMBURGER MENU & MODAL CLEANUP ON INIT
+        // ====================================================
+        (function initDatewiseModule() {
+            // 1. Automatically collapse the hamburger sidebar when entering this module
+            const sidebar = document.getElementById('appSidebar');
+            if (sidebar) {
+                sidebar.classList.add('collapsed');
+                sidebar.classList.remove('mobile-open');
+            }
+
+            // 2. Remove any duplicate/orphan PDF modal overlays from previous SPA loads
+            document.querySelectorAll('body > #pdfModalOverlay').forEach(el => el.remove());
+
+            // 3. Move fresh modal overlay to document.body for full-viewport coverage
+            const overlay = document.getElementById('pdfModalOverlay');
+            if (overlay && overlay.parentNode !== document.body) {
+                document.body.appendChild(overlay);
+            }
+
+            // 4. Initialize first manual row safely
+            setTimeout(() => {
+                const container = document.getElementById('dynamicDateRowsContainer');
+                if (container && container.children.length === 0) {
+                    addNewDateEntryRowLocal(false);
+                }
+                dwUpdateTelemetry();
+            }, 50);
+        })();
+
+        // Escape key support to close PDF Preview Modal cleanly
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                const overlay = document.getElementById('pdfModalOverlay');
+                if (overlay && overlay.classList.contains('active')) {
+                    closePdfModal();
+                }
+            }
+        });
+
+        // Clean SPA Exit
+        function dwCleanExit() {
+            document.querySelectorAll('body > #pdfModalOverlay').forEach(el => el.remove());
+            if (typeof returnToHomeGridSPA === "function") {
+                returnToHomeGridSPA();
+            } else {
+                window.location.href = "index.html";
+            }
+        }
+
+        // Floating Notification Helper (Synced with index.html)
+        function dwNotify(title, message, type = "info") {
+            if (typeof window.spawnFloatingNotification === "function") {
+                window.spawnFloatingNotification(title, message, type);
+            } else if (typeof window.displayCustomAlert === "function") {
+                window.displayCustomAlert(`${title}: ${message}`, type);
+            } else {
+                alert(`${title}\n${message}`);
+            }
+        }
+
+        // Download Helper for the PDF Preview Modal
+        function dwDownloadGeneratedPdf() {
+            if (!dwLastCompiledDoc) return;
+            const stamp = new Date().toISOString().slice(0, 10);
+            dwLastCompiledDoc.save(`ACG17_DateWise_Vouchers_${stamp}.pdf`);
+            dwNotify("Download Started", "Saved Date-Wise ACG-17 Vouchers PDF.", "success");
+        }
+
         // Toggle UI Between Excel and Manual
         function toggleDatewiseMethod(method) {
+            dwCurrentMethod = method;
             const btnExcel = document.getElementById('methodExcelCard');
             const btnManual = document.getElementById('methodManualCard');
             const secExcel = document.getElementById('excelMethodSection');
@@ -180,51 +1223,191 @@
                 btnExcel.classList.remove('active');
                 secManual.style.display = 'block';
                 secExcel.style.display = 'none';
-                
-                // Add first row if empty
-                if(document.getElementById('dynamicDateRowsContainer').children.length === 0) {
-                    addNewDateEntryRowLocal();
+
+                if (document.getElementById('dynamicDateRowsContainer').children.length === 0) {
+                    addNewDateEntryRowLocal(false);
                 }
             }
+            dwUpdateTelemetry();
         }
 
-        // Add Manual Row Function (Original Setup)
-        function addNewDateEntryRowLocal() {
-            const container = document.getElementById('dynamicDateRowsContainer'); 
-            const newRow = document.createElement('div'); 
+        // Live Telemetry & Row Badge Renumbering
+        function dwRenumberRowsAndUpdate() {
+            const container = document.getElementById('dynamicDateRowsContainer');
+            if (!container) return;
+            const rows = container.querySelectorAll('.dynamic-date-row');
+            rows.forEach((r, idx) => {
+                const badge = r.querySelector('.dw-row-index-badge');
+                if (badge) badge.innerText = `#${idx + 1}`;
+            });
+            dwUpdateTelemetry();
+        }
+
+        function dwUpdateTelemetry() {
+            const modeEl = document.getElementById('dwStatActiveMode');
+            const countEl = document.getElementById('dwStatReadyVouchers');
+            const totalEl = document.getElementById('dwStatTotalAmount');
+            if (!modeEl || !countEl || !totalEl) return;
+
+            if (dwCurrentMethod === 'excel') {
+                modeEl.innerText = "Excel Sheet Upload";
+                if (dwExcelCachedStats.fileName) {
+                    countEl.innerText = `${dwExcelCachedStats.rows} Vouchers Ready`;
+                    totalEl.innerText = `Rs. ${dwExcelCachedStats.total.toLocaleString('en-IN')}/-`;
+                } else {
+                    countEl.innerText = "Awaiting Excel File";
+                    totalEl.innerText = "Rs. 0/-";
+                }
+            } else {
+                modeEl.innerText = "Manual Ledger Entry";
+                const container = document.getElementById('dynamicDateRowsContainer');
+                const dateRows = container ? container.querySelectorAll('.dynamic-date-row') : [];
+                let validRows = 0;
+                let sumAmount = 0;
+
+                dateRows.forEach(row => {
+                    const dVal = row.querySelector('.row-target-date')?.value || "";
+                    const aVal = parseFloat(row.querySelector('.row-target-amount')?.value || "0");
+                    const pVal = (row.querySelector('.row-target-purpose')?.value || "").trim();
+                    if (dVal && !isNaN(aVal) && aVal > 0 && pVal) {
+                        validRows++;
+                    }
+                    if (!isNaN(aVal) && aVal > 0) {
+                        sumAmount += aVal;
+                    }
+                });
+
+                countEl.innerText = `${validRows} of ${dateRows.length} Rows Complete`;
+                totalEl.innerText = `Rs. ${sumAmount.toLocaleString('en-IN')}/-`;
+            }
+        }
+
+        // Inspect Excel File on Selection for Instant Telemetry Feedback
+        function dwInspectSelectedExcelFile() {
+            const fileInput = document.getElementById('excelFileInput');
+            const titleEl = document.getElementById('dwUploadStatusTitle');
+            const subEl = document.getElementById('dwUploadStatusSub');
+
+            if (!fileInput || !fileInput.files || fileInput.files.length === 0) {
+                dwExcelCachedStats = { rows: 0, total: 0, fileName: '' };
+                if (titleEl) titleEl.innerText = "Select your filled Excel (.xlsx / .xls) file";
+                if (subEl) subEl.innerText = "Columns required: Date (DD/MM/YYYY) • Amount (Rs) • Purpose Description";
+                dwUpdateTelemetry();
+                return;
+            }
+
+            const file = fileInput.files[0];
+            if (typeof window.XLSX === 'undefined') {
+                dwExcelCachedStats = { rows: 0, total: 0, fileName: file.name };
+                if (titleEl) titleEl.innerText = `Selected: ${file.name}`;
+                dwUpdateTelemetry();
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = new Uint8Array(e.target.result);
+                    const workbook = XLSX.read(data, { type: 'array' });
+                    const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+                    const jsonData = XLSX.utils.sheet_to_json(firstSheet, { header: 1, raw: false, defval: "" });
+
+                    let validCount = 0;
+                    let totalAmt = 0;
+                    for (let i = 1; i < jsonData.length; i++) {
+                        let row = jsonData[i];
+                        if (!row || row.length < 3) continue;
+                        let dateStr = row[0].toString().trim();
+                        let amountStr = row[1].toString().trim();
+                        let purposeStr = row[2].toString().trim();
+                        if (dateStr !== "" && amountStr !== "" && purposeStr !== "") {
+                            validCount++;
+                            const parsed = parseFloat(amountStr.replace(/,/g, ''));
+                            if (!isNaN(parsed)) totalAmt += parsed;
+                        }
+                    }
+
+                    dwExcelCachedStats = { rows: validCount, total: totalAmt, fileName: file.name };
+                    if (titleEl) titleEl.innerText = `Loaded: ${file.name}`;
+                    if (subEl) subEl.innerText = `${validCount} valid voucher row(s) detected • Total Rs. ${totalAmt.toLocaleString('en-IN')}/-`;
+                    dwUpdateTelemetry();
+                } catch (err) {
+                    console.error(err);
+                }
+            };
+            reader.readAsArrayBuffer(file);
+        }
+
+        // Add Manual Row Function (Upgraded with Pure SVG & Live Telemetry)
+        function addNewDateEntryRowLocal(scrollToNew = false) {
+            const container = document.getElementById('dynamicDateRowsContainer');
+            const rowNumber = container.children.length + 1;
+            const newRow = document.createElement('div');
             newRow.className = 'dynamic-date-row';
-            
+
             newRow.innerHTML = `
-                <div style="flex: 1.2;">
-                    <label>Select Date:</label>
-                    <input type="date" class="row-target-date" />
-                </div>
-                <div style="flex: 1;">
-                    <label>Amount (Rs.):</label>
-                    <input type="number" class="row-target-amount text-input-placeholder-gray" placeholder="e.g. 366" />
-                </div>
-                <div style="flex: 2.5;">
-                    <label>Purpose Description:</label>
-                    <input type="text" class="row-target-purpose text-input-placeholder-gray" placeholder="e.g. Towards the payment of contingency..." />
+                <div class="dw-row-index-badge">#${rowNumber}</div>
+                <div>
+                    <label>
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                            <line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+                        </svg>
+                        <span>Select Date:</span>
+                    </label>
+                    <input type="date" class="row-target-date" onchange="dwUpdateTelemetry()" />
                 </div>
                 <div>
-                    <button type="button" class="delete-row-btn" onclick="this.parentElement.parentElement.remove()">❌</button>
+                    <label>
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="12" y1="1" x2="12" y2="23"/>
+                            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                        </svg>
+                        <span>Amount (Rs.):</span>
+                    </label>
+                    <input type="number" class="row-target-amount text-input-placeholder-gray" placeholder="e.g. 366" oninput="dwUpdateTelemetry()" />
                 </div>
-            `; 
+                <div class="dw-purpose-col">
+                    <label>
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                            <polyline points="14 2 14 8 20 8"/>
+                        </svg>
+                        <span>Purpose Description:</span>
+                    </label>
+                    <input type="text" class="row-target-purpose text-input-placeholder-gray" placeholder="e.g. Towards the payment of contingency..." oninput="dwUpdateTelemetry()" />
+                </div>
+                <div class="dw-delete-col">
+                    <button type="button" class="delete-row-btn" title="Remove Ledger Row" onclick="dwRemoveRow(this)">
+                        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="3 6 5 6 21 6"/>
+                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                            <line x1="10" y1="11" x2="10" y2="17"/>
+                            <line x1="14" y1="11" x2="14" y2="17"/>
+                        </svg>
+                    </button>
+                </div>
+            `;
             container.appendChild(newRow);
+            dwRenumberRowsAndUpdate();
+
+            if (scrollToNew) {
+                newRow.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
         }
 
-        // Initialize first row safely
-        setTimeout(() => {
-            if(document.getElementById('dynamicDateRowsContainer').children.length === 0) {
-                addNewDateEntryRowLocal();
+        function dwRemoveRow(btnEl) {
+            const row = btnEl.closest('.dynamic-date-row');
+            if (row) {
+                row.remove();
+                dwRenumberRowsAndUpdate();
             }
-        }, 100);
+        }
 
-        // Download Excel Template Logic
+        // Download Excel Template Logic (100% Intact)
         function downloadExcelTemplate() {
             if (typeof window.XLSX === 'undefined') {
-                alert("Excel library is loading. Please wait a moment and click again.");
+                dwNotify("Excel Engine Loading", "Excel library is loading. Please wait a moment and click again.", "info");
                 return;
             }
             const ws_data = [
@@ -233,13 +1416,14 @@
                 ["", "", ""] // blank row for clarity
             ];
             const ws = XLSX.utils.aoa_to_sheet(ws_data);
-            
+
             // Set Column Widths for better UX
-            ws['!cols'] = [ {wch: 18}, {wch: 15}, {wch: 50} ];
+            ws['!cols'] = [{ wch: 18 }, { wch: 15 }, { wch: 50 }];
 
             const wb = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(wb, ws, "Vouchers");
             XLSX.writeFile(wb, "Date_Wise_Vouchers_Template.xlsx");
+            dwNotify("Template Downloaded", "Blank Excel template saved as Date_Wise_Vouchers_Template.xlsx.", "success");
         }
 
         // ORIGINAL PDF DRAWING LOGIC (100% UNTOUCHED)
@@ -338,96 +1522,128 @@
         // Modal Logic
         function closePdfModal() {
             const overlay = document.getElementById('pdfModalOverlay');
+            if (!overlay) return;
             overlay.classList.remove('active');
-            setTimeout(() => { overlay.style.display = 'none'; }, 300);
+            setTimeout(() => { overlay.style.display = 'none'; }, 250);
         }
 
-        function finalizeLocalViewer(doc) {
+        function finalizeLocalViewer(doc, compiledCount = 0) {
+            dwLastCompiledDoc = doc;
             const blobDataUrl = doc.output('datauristring');
             const iframe = document.getElementById('pdfFrameViewerLocal');
             const overlay = document.getElementById('pdfModalOverlay');
-            
-            // Move overlay to body to cover whole screen perfectly
+            const badge = document.getElementById('dwPreviewCountBadge');
+
+            if (badge && compiledCount > 0) {
+                badge.innerText = `${compiledCount} Vouchers Compiled`;
+            }
+
             if (overlay.parentNode !== document.body) {
                 document.body.appendChild(overlay);
             }
 
             iframe.src = blobDataUrl;
             overlay.style.display = 'flex';
-            setTimeout(() => { overlay.classList.add('active'); }, 50);
+            requestAnimationFrame(() => {
+                setTimeout(() => { overlay.classList.add('active'); }, 25);
+            });
         }
 
         // GENERATE MANUALLY
         function triggerSmartGenerationManual() {
             const sender = document.getElementById('receivedFromDatewise').value.trim();
-            if (!sender) { alert("Form Defect: 'Received From' field is mandatory."); return; }
-            
+            if (!sender) {
+                dwNotify("Validation Notice", "'Received From' field is mandatory.", "warning");
+                document.getElementById('receivedFromDatewise').focus();
+                return;
+            }
+
             const container = document.getElementById('dynamicDateRowsContainer');
             const dateRows = container.querySelectorAll('.dynamic-date-row');
-            
-            let validCount = 0; 
-            for(let x = 0; x < dateRows.length; x++) {
-                if(dateRows[x].querySelector('.row-target-date').value && dateRows[x].querySelector('.row-target-amount').value && dateRows[x].querySelector('.row-target-purpose').value) { 
-                    validCount++; 
-                } 
-            }
-            if (validCount === 0) { alert("Form Defect: Please complete at least one Date ledger slot row."); return; }
 
-            // Loader
-            const loader = document.getElementById('globalAppLoader');
-            if(loader) loader.style.display = 'flex';
-
-            setTimeout(() => {
-                try {
-                    const { jsPDF } = window.jspdf; 
-                    const doc = new jsPDF('l', 'mm', 'a4');
-                    let voucherIndex = 1; 
-                    let isChainedPage = false;
-
-                    for(let x = 0; x < dateRows.length; x++) {
-                        const row = dateRows[x];
-                        const selectedDateVal = row.querySelector('.row-target-date').value;
-                        const selectedAmount = row.querySelector('.row-target-amount').value;
-                        const selectedPurpose = row.querySelector('.row-target-purpose').value;
-
-                        if(!selectedDateVal || !selectedAmount || !selectedPurpose) continue; 
-
-                        // Convert YYYY-MM-DD to DD/MM/YYYY
-                        const splitPieces = selectedDateVal.split("-");
-                        const localizedDateStr = splitPieces[2] + "/" + splitPieces[1] + "/" + splitPieces[0];
-
-                        if (isChainedPage) { doc.addPage('a4', 'l'); } 
-                        isChainedPage = true;
-
-                        drawStandardVoucherPageLocal(doc, sender, localizedDateStr, voucherIndex, selectedAmount, selectedPurpose);
-                        voucherIndex++;
-                    }
-                    finalizeLocalViewer(doc);
-                } catch (err) {
-                    console.error(err); alert("PDF Error: Failed to generate.");
-                } finally {
-                    if(loader) loader.style.display = 'none';
+            let validCount = 0;
+            for (let x = 0; x < dateRows.length; x++) {
+                if (dateRows[x].querySelector('.row-target-date').value && dateRows[x].querySelector('.row-target-amount').value && dateRows[x].querySelector('.row-target-purpose').value) {
+                    validCount++;
                 }
-            }, 500);
+            }
+            if (validCount === 0) {
+                dwNotify("Validation Notice", "Please complete at least one Date ledger slot row.", "warning");
+                return;
+            }
+
+            const loader = document.getElementById('globalAppLoader');
+            const loaderMsg = document.querySelector('#globalAppLoader .loading-status-msg');
+            if (loader) {
+                if (loaderMsg) loaderMsg.innerText = "Compiling Manual Date-Wise Vouchers...";
+                loader.style.display = 'flex';
+            }
+
+            requestAnimationFrame(() => {
+                setTimeout(() => {
+                    try {
+                        const { jsPDF } = window.jspdf;
+                        const doc = new jsPDF('l', 'mm', 'a4');
+                        let voucherIndex = 1;
+                        let isChainedPage = false;
+
+                        for (let x = 0; x < dateRows.length; x++) {
+                            const row = dateRows[x];
+                            const selectedDateVal = row.querySelector('.row-target-date').value;
+                            const selectedAmount = row.querySelector('.row-target-amount').value;
+                            const selectedPurpose = row.querySelector('.row-target-purpose').value;
+
+                            if (!selectedDateVal || !selectedAmount || !selectedPurpose) continue;
+
+                            // Convert YYYY-MM-DD to DD/MM/YYYY
+                            const splitPieces = selectedDateVal.split("-");
+                            const localizedDateStr = splitPieces[2] + "/" + splitPieces[1] + "/" + splitPieces[0];
+
+                            if (isChainedPage) { doc.addPage('a4', 'l'); }
+                            isChainedPage = true;
+
+                            drawStandardVoucherPageLocal(doc, sender, localizedDateStr, voucherIndex, selectedAmount, selectedPurpose);
+                            voucherIndex++;
+                        }
+                        const totalGenerated = voucherIndex - 1;
+                        finalizeLocalViewer(doc, totalGenerated);
+                        dwNotify("Vouchers Compiled", `Successfully generated ${totalGenerated} manual ACG-17 voucher(s).`, "success");
+                    } catch (err) {
+                        console.error(err);
+                        dwNotify("Compilation Error", "PDF Error: Failed to generate manual vouchers.", "error");
+                    } finally {
+                        if (loader) loader.style.display = 'none';
+                    }
+                }, 400);
+            });
         }
 
         // GENERATE FROM EXCEL
         function triggerSmartGenerationExcel() {
             const sender = document.getElementById('receivedFromDatewise').value.trim();
-            if (!sender) { alert("Form Defect: 'Received From' field is mandatory."); return; }
-            
+            if (!sender) {
+                dwNotify("Validation Notice", "'Received From' field is mandatory.", "warning");
+                document.getElementById('receivedFromDatewise').focus();
+                return;
+            }
+
             const fileInput = document.getElementById('excelFileInput');
             if (!fileInput.files || fileInput.files.length === 0) {
-                alert("Please select an Excel file first.");
+                dwNotify("Excel File Required", "Please select a filled Excel (.xlsx / .xls) file first.", "warning");
                 return;
             }
 
             if (typeof window.XLSX === 'undefined') {
-                alert("Excel engine still loading. Try again in 2 seconds."); return;
+                dwNotify("Excel Engine Loading", "Excel engine still loading. Try again in 2 seconds.", "info");
+                return;
             }
 
             const loader = document.getElementById('globalAppLoader');
-            if(loader) loader.style.display = 'flex';
+            const loaderMsg = document.querySelector('#globalAppLoader .loading-status-msg');
+            if (loader) {
+                if (loaderMsg) loaderMsg.innerText = "Processing Excel & Compiling Vouchers...";
+                loader.style.display = 'flex';
+            }
 
             const file = fileInput.files[0];
             const reader = new FileReader();
@@ -435,14 +1651,14 @@
             reader.onload = function(e) {
                 try {
                     const data = new Uint8Array(e.target.result);
-                    const workbook = XLSX.read(data, {type: 'array'});
+                    const workbook = XLSX.read(data, { type: 'array' });
                     const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
                     // raw: false ensures dates formatted in excel come out as strings like "15/03/2026"
-                    const jsonData = XLSX.utils.sheet_to_json(firstSheet, {header: 1, raw: false, defval: ""});
+                    const jsonData = XLSX.utils.sheet_to_json(firstSheet, { header: 1, raw: false, defval: "" });
 
-                    const { jsPDF } = window.jspdf; 
+                    const { jsPDF } = window.jspdf;
                     const doc = new jsPDF('l', 'mm', 'a4');
-                    let voucherIndex = 1; 
+                    let voucherIndex = 1;
                     let isChainedPage = false;
                     let validRowsFound = 0;
 
@@ -455,33 +1671,34 @@
                         let amountStr = row[1].toString().trim();
                         let purposeStr = row[2].toString().trim();
 
-                        if(dateStr === "" || amountStr === "" || purposeStr === "") continue;
+                        if (dateStr === "" || amountStr === "" || purposeStr === "") continue;
 
                         validRowsFound++;
 
-                        if (isChainedPage) { doc.addPage('a4', 'l'); } 
+                        if (isChainedPage) { doc.addPage('a4', 'l'); }
                         isChainedPage = true;
 
-                        drawStandardVoucherPageLocal(doc, sender, dateString=dateStr, voucherIndex, amountStr, purposeStr);
+                        drawStandardVoucherPageLocal(doc, sender, dateString = dateStr, voucherIndex, amountStr, purposeStr);
                         voucherIndex++;
                     }
 
                     if (validRowsFound === 0) {
-                        alert("No valid data found in Excel. Ensure Date, Amount, and Purpose are filled.");
-                        if(loader) loader.style.display = 'none';
+                        dwNotify("Empty or Invalid Sheet", "No valid data found in Excel. Ensure Date, Amount, and Purpose are filled.", "warning");
+                        if (loader) loader.style.display = 'none';
                         return;
                     }
 
-                    finalizeLocalViewer(doc);
+                    finalizeLocalViewer(doc, validRowsFound);
+                    dwNotify("Excel Vouchers Compiled", `Successfully generated ${validRowsFound} ACG-17 voucher(s) from Excel.`, "success");
 
                 } catch (err) {
                     console.error("Excel processing error: ", err);
-                    alert("Failed to process Excel file. Please use the exact downloaded template format.");
+                    dwNotify("Excel Read Error", "Failed to process Excel file. Please use the exact downloaded template format.", "error");
                 } finally {
-                    if(loader) loader.style.display = 'none';
+                    if (loader) loader.style.display = 'none';
                 }
             };
-            
+
             reader.readAsArrayBuffer(file);
         }
     </script>
