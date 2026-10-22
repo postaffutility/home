@@ -7,168 +7,1158 @@
 </script>
 
 <div id="moduleRenderArea">
-    
-    <!-- 100% SELF-CONTAINED PERFECT DESIGN CSS -->
-    <style>
-        .portal-page-panel { max-width: 1000px; margin: 0 auto; background: white; padding: 40px; border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.03); border: 1px solid #e2e8f0; font-family: 'Segoe UI', Arial, sans-serif; }
-        
-        /* Typography & Layout */
-        h3.module-title { margin: 0; color: #1e293b; font-size: 26px; font-weight: 800; letter-spacing: -0.5px; }
-        .back-nav-link { display: inline-flex; align-items: center; color: #3b82f6; font-weight: 800; font-size: 15px; text-decoration: none; cursor: pointer; transition: color 0.2s; padding: 8px 15px; background: #eff6ff; border-radius: 8px; float: right; }
-        .back-nav-link:hover { color: #1d4ed8; background: #dbeafe; }
-        
-        /* AI Chat Wrapper */
-        .ai-chat-wrapper { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); overflow: hidden; margin-top: 15px; display: flex; flex-direction: column; }
-        
-        .chat-header-accent { background: linear-gradient(135deg, #14b8a6, #0d9488); color: white; padding: 22px 25px; display: flex; align-items: center; gap: 15px; }
-        .chat-header-accent h4 { margin: 0; font-size: 18px; font-weight: 800; letter-spacing: 0.5px; }
-        .chat-header-accent p { margin: 4px 0 0 0; font-size: 13px; opacity: 0.95; }
-        
-        /* Chat History Area */
-        .chat-container-modern { background: #f8fafc; padding: 25px; height: 450px; overflow-y: auto; display: flex; flex-direction: column; gap: 20px; scroll-behavior: smooth; }
-        .chat-msg-row { display: flex; width: 100%; animation: fadeIn 0.3s ease-out; } 
-        .chat-msg-row.user-row { justify-content: flex-end; } 
-        .chat-msg-row.ai-row { justify-content: flex-start; }
-        
-        .modern-bubble { max-width: 75%; padding: 14px 18px; border-radius: 16px; font-size: 14.5px; line-height: 1.6; word-wrap: break-word; white-space: pre-wrap; font-family: 'Segoe UI', Arial, sans-serif; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
-        .user-bubble { background: #0f172a; color: #ffffff; border-bottom-right-radius: 4px; font-weight: 500; }
-        .ai-bubble { background: #ffffff; color: #334155; border-bottom-left-radius: 4px; border: 1px solid #e2e8f0; }
-        
-        /* Code/Template Card within Chat */
-        .ai-template-card { background: #fff8f8; border-left: 4px solid #d32f2f; padding: 15px; margin-top: 10px; border-radius: 4px 8px 8px 4px; font-family: 'Courier New', Courier, monospace; font-size: 13.5px; color: #1e293b; overflow-x: auto; box-shadow: inset 0 0 5px rgba(0,0,0,0.02); }
-        
-        /* Suggestion Chips */
-        .ai-chips-container { display: flex; gap: 10px; padding: 15px 25px; background: #ffffff; border-top: 1px solid #e2e8f0; border-bottom: 1px solid #e2e8f0; overflow-x: auto; white-space: nowrap; }
-        .ai-chips-container::-webkit-scrollbar { height: 6px; }
-        .ai-chips-container::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
-        .suggestion-chip { background: #f0fdfa; color: #0f766e; border: 1px solid #ccfbf1; padding: 10px 18px; border-radius: 20px; font-size: 13.5px; font-weight: 700; cursor: pointer; transition: all 0.2s ease; }
-        .suggestion-chip:hover { background: #14b8a6; color: white; transform: translateY(-2px); box-shadow: 0 4px 10px rgba(20, 184, 166, 0.2); }
-        
-        /* Input Area */
-        .chat-input-area-modern { display: flex; gap: 12px; padding: 20px 25px; background: #ffffff; align-items: center; }
-        .chat-input { flex: 1; padding: 16px 20px; border: 2px solid #e2e8f0; border-radius: 12px; font-size: 15px; background: #f8fafc; color: #1e293b; transition: all 0.2s ease; outline: none; font-family: 'Segoe UI', Arial, sans-serif; }
-        .chat-input:focus { border-color: #14b8a6; background: #ffffff; box-shadow: 0 0 0 4px rgba(20, 184, 166, 0.1); }
-        
-        /* NON-ITALIC PLACEHOLDER */
-        .chat-input::placeholder { color: #94a3b8 !important; font-style: normal !important; opacity: 1 !important; }
-        
-        .chat-send-btn { background: #14b8a6; color: white; border: none; padding: 16px 28px; border-radius: 12px; font-weight: 800; font-size: 15px; cursor: pointer; transition: all 0.2s; text-transform: uppercase; letter-spacing: 0.5px; }
-        .chat-send-btn:hover { background: #0d9488; transform: translateY(-2px); box-shadow: 0 6px 15px rgba(13, 148, 136, 0.25); }
 
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    <!-- 100% FLUID RESPONSIVE, THEME-AWARE GLASSMORPHISM AI STUDIO CSS -->
+    <style>
+        #dynamicWorkspace {
+            scroll-behavior: smooth !important;
+            -webkit-overflow-scrolling: touch !important;
+        }
+
+        .ai-viewport-wrapper {
+            width: 100%;
+            max-width: 1280px;
+            margin: 0 auto;
+            height: calc(100vh - 118px);
+            min-height: 540px;
+            display: flex;
+            flex-direction: column;
+            font-family: var(--font-main, 'Inter', 'Segoe UI', system-ui, sans-serif);
+            color: var(--text-primary, #0f172a);
+            animation: aiFadeIn 0.3s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+            box-sizing: border-box;
+        }
+
+        .portal-page-panel {
+            width: 100%;
+            height: 100%;
+            background: var(--surface-glass, rgba(255, 255, 255, 0.86));
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border-radius: 22px;
+            box-shadow: var(--shadow-soft, 0 8px 28px rgba(15, 23, 42, 0.06));
+            border: 1px solid var(--border-glass, rgba(255, 255, 255, 0.9));
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+            transition: background 0.3s ease, border-color 0.3s ease;
+        }
+
+        /* Top AI Gradient Accent Line */
+        .portal-page-panel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, #2563eb 0%, #7c3aed 45%, #ec4899 80%, #10b981 100%);
+            z-index: 10;
+        }
+
+        /* TOP STUDIO HEADER */
+        .ai-studio-header {
+            padding: 14px 22px;
+            background: var(--surface-card, rgba(255, 255, 255, 0.92));
+            border-bottom: 1px solid var(--border-subtle, rgba(203, 213, 225, 0.8));
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            flex-shrink: 0;
+            flex-wrap: wrap;
+        }
+
+        .ai-brand-cluster {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            min-width: 0;
+        }
+
+        .ai-core-orb {
+            width: 44px;
+            height: 44px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, #2563eb 0%, #7c3aed 55%, #db2777 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            box-shadow: 0 6px 20px rgba(124, 58, 237, 0.38);
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .ai-core-orb::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            right: -2px;
+            width: 11px;
+            height: 11px;
+            border-radius: 50%;
+            background: #10b981;
+            border: 2px solid var(--surface-card, #ffffff);
+            box-shadow: 0 0 8px #10b981;
+        }
+
+        .ai-title-group h3 {
+            margin: 0;
+            font-size: clamp(16px, 1.5vw, 20px);
+            font-weight: 900;
+            color: var(--text-primary, #0f172a);
+            letter-spacing: -0.4px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .ai-live-web-pill {
+            font-size: 10.5px;
+            font-weight: 800;
+            padding: 3px 9px;
+            border-radius: 999px;
+            background: rgba(16, 185, 129, 0.14);
+            color: #059669;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+        }
+        html[data-theme="dark"] .ai-live-web-pill {
+            color: #34d399;
+            background: rgba(16, 185, 129, 0.2);
+        }
+
+        .ai-pulse-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: currentColor;
+            animation: aiPulse 1.6s infinite;
+        }
+
+        .ai-title-group p {
+            margin: 2px 0 0 0;
+            font-size: 12px;
+            color: var(--text-muted, #64748b);
+            font-weight: 500;
+        }
+
+        .ai-header-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .ai-mode-toggle {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 13px;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: 800;
+            cursor: pointer;
+            border: 1px solid var(--border-subtle, #cbd5e1);
+            background: var(--surface-input, #eef3fb);
+            color: var(--text-secondary, #334155);
+            transition: all 0.2s ease;
+        }
+
+        .ai-mode-toggle.active {
+            background: rgba(37, 99, 235, 0.12);
+            border-color: rgba(37, 99, 235, 0.45);
+            color: var(--accent-primary, #2563eb);
+        }
+
+        .ai-icon-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            border: 1px solid var(--border-subtle, #cbd5e1);
+            background: var(--surface-input, #eef3fb);
+            color: var(--text-secondary, #334155);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .ai-icon-btn:hover {
+            border-color: var(--accent-primary, #2563eb);
+            color: var(--accent-primary, #2563eb);
+            background: var(--surface-card-hover, #ffffff);
+        }
+
+        .back-nav-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            color: var(--text-primary, #0f172a);
+            font-weight: 800;
+            font-size: 13px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            padding: 8px 15px;
+            background: var(--surface-input, #eef3fb);
+            border: 1px solid var(--border-subtle, #cbd5e1);
+            border-radius: 10px;
+        }
+
+        .back-nav-link:hover {
+            border-color: var(--accent-primary, #2563eb);
+            color: var(--accent-primary, #2563eb);
+            background: var(--surface-card-hover, #ffffff);
+            transform: translateX(-2px);
+        }
+
+        /* CHAT MESSAGES STREAM AREA */
+        .chat-container-modern {
+            flex: 1;
+            padding: clamp(16px, 2.2vw, 26px);
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            scroll-behavior: smooth;
+            background: transparent;
+        }
+
+        .chat-msg-row {
+            display: flex;
+            gap: 12px;
+            width: 100%;
+            animation: aiFadeIn 0.25s ease-out forwards;
+            align-items: flex-start;
+        }
+
+        .chat-msg-row.user-row {
+            justify-content: flex-end;
+        }
+
+        .chat-msg-row.ai-row {
+            justify-content: flex-start;
+        }
+
+        .msg-avatar {
+            width: 34px;
+            height: 34px;
+            border-radius: 11px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-weight: 800;
+            font-size: 13px;
+            margin-top: 2px;
+        }
+
+        .msg-avatar.ai-av {
+            background: linear-gradient(135deg, #2563eb, #7c3aed);
+            color: #ffffff;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.35);
+        }
+
+        .msg-avatar.user-av {
+            background: var(--surface-input, #e2e8f0);
+            color: var(--text-primary, #0f172a);
+            border: 1px solid var(--border-subtle, #cbd5e1);
+        }
+
+        .modern-bubble {
+            max-width: min(78%, 780px);
+            padding: 14px 18px;
+            border-radius: 18px;
+            font-size: 14px;
+            line-height: 1.62;
+            word-wrap: break-word;
+            box-shadow: var(--shadow-card, 0 4px 15px rgba(0, 0, 0, 0.04));
+            position: relative;
+        }
+
+        .user-bubble {
+            background: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%);
+            color: #ffffff;
+            border-bottom-right-radius: 4px;
+            font-weight: 500;
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.25);
+        }
+
+        .ai-bubble {
+            background: var(--surface-card, #ffffff);
+            color: var(--text-primary, #1e293b);
+            border-bottom-left-radius: 4px;
+            border: 1px solid var(--border-subtle, rgba(203, 213, 225, 0.75));
+        }
+
+        /* WEB SEARCH ANIMATED INDICATOR */
+        .ai-searching-box {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 16px;
+            border-radius: 14px;
+            background: var(--surface-card, #ffffff);
+            border: 1px solid var(--border-subtle, #cbd5e1);
+            color: var(--text-secondary, #334155);
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .ai-spin-globe {
+            color: var(--accent-primary, #2563eb);
+            animation: aiSpin 2s linear infinite;
+            display: flex;
+        }
+
+        /* FORMATTED CODE / OFFICIAL TEMPLATE BLOCK INSIDE AI BUBBLE */
+        .ai-template-card {
+            background: var(--surface-input, #f8fafc);
+            border: 1px solid var(--border-subtle, #cbd5e1);
+            border-left: 4px solid #2563eb;
+            padding: 14px 16px;
+            margin: 10px 0 6px 0;
+            border-radius: 10px;
+            font-family: 'JetBrains Mono', 'Courier New', monospace;
+            font-size: 13px;
+            color: var(--text-primary, #1e293b);
+            overflow-x: auto;
+            white-space: pre-wrap;
+            position: relative;
+        }
+
+        .ai-copy-template-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: var(--surface-card, #ffffff);
+            color: var(--accent-primary, #2563eb);
+            border: 1px solid var(--border-subtle, #cbd5e1);
+            padding: 5px 10px;
+            border-radius: 7px;
+            font-size: 11.5px;
+            font-weight: 800;
+            cursor: pointer;
+            margin-top: 8px;
+            transition: all 0.2s;
+            font-family: var(--font-main, sans-serif);
+        }
+
+        .ai-copy-template-btn:hover {
+            background: var(--accent-primary, #2563eb);
+            color: #ffffff;
+        }
+
+        /* WEB CITATION / SOURCE PILLS */
+        .ai-sources-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 12px;
+            padding-top: 10px;
+            border-top: 1px dashed var(--border-subtle, #cbd5e1);
+        }
+
+        .ai-source-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 700;
+            background: var(--surface-input, #f1f5f9);
+            color: var(--accent-primary, #2563eb);
+            border: 1px solid var(--border-subtle, #cbd5e1);
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .ai-source-chip:hover {
+            background: var(--accent-primary, #2563eb);
+            color: #ffffff;
+        }
+
+        /* QUICK SUGGESTION CHIPS */
+        .ai-chips-container {
+            display: flex;
+            gap: 8px;
+            padding: 10px 20px;
+            background: var(--surface-card, rgba(255, 255, 255, 0.85));
+            border-top: 1px solid var(--border-subtle, #e2e8f0);
+            overflow-x: auto;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .suggestion-chip {
+            background: var(--surface-input, #f1f5f9);
+            color: var(--text-secondary, #334155);
+            border: 1px solid var(--border-subtle, #cbd5e1);
+            padding: 7px 14px;
+            border-radius: 999px;
+            font-size: 12.5px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            flex-shrink: 0;
+        }
+
+        .suggestion-chip svg {
+            color: var(--accent-primary, #2563eb);
+            flex-shrink: 0;
+        }
+
+        .suggestion-chip:hover {
+            background: linear-gradient(90deg, #2563eb, #7c3aed);
+            color: #ffffff;
+            border-color: transparent;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.28);
+        }
+        .suggestion-chip:hover svg {
+            color: #ffffff;
+        }
+
+        /* COMPOSER INPUT BAR */
+        .chat-input-area-modern {
+            display: flex;
+            gap: 10px;
+            padding: 14px 20px;
+            background: var(--surface-card, #ffffff);
+            border-top: 1px solid var(--border-subtle, #e2e8f0);
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .ai-input-box-wrap {
+            flex: 1;
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .chat-input {
+            width: 100%;
+            padding: 13px 44px 13px 18px !important;
+            border: 1.5px solid var(--border-subtle, #cbd5e1) !important;
+            border-radius: 14px !important;
+            font-size: 14px !important;
+            font-weight: 600 !important;
+            background: var(--surface-input, #f8fafc) !important;
+            color: var(--text-primary, #1e293b) !important;
+            transition: all 0.2s ease !important;
+            outline: none !important;
+        }
+
+        .chat-input:focus {
+            border-color: var(--accent-primary, #2563eb) !important;
+            background: var(--surface-input-focus, #ffffff) !important;
+            box-shadow: 0 0 0 3.5px rgba(37, 99, 235, 0.15) !important;
+        }
+
+        .chat-input::placeholder {
+            color: var(--text-muted, #94a3b8) !important;
+            font-style: normal !important;
+            font-weight: 400 !important;
+        }
+
+        .ai-mic-btn {
+            position: absolute;
+            right: 10px;
+            width: 30px;
+            height: 30px;
+            border-radius: 8px;
+            border: none;
+            background: transparent;
+            color: var(--text-muted, #64748b);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .ai-mic-btn:hover,
+        .ai-mic-btn.recording {
+            color: #ef4444;
+            background: rgba(239, 68, 68, 0.12);
+        }
+
+        .chat-send-btn {
+            background: linear-gradient(90deg, #2563eb 0%, #7c3aed 100%);
+            color: #ffffff;
+            border: none;
+            padding: 13px 22px;
+            border-radius: 14px;
+            font-weight: 800;
+            font-size: 13.5px;
+            cursor: pointer;
+            transition: all 0.22s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 6px 18px rgba(37, 99, 235, 0.3);
+            flex-shrink: 0;
+        }
+
+        .chat-send-btn:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.08);
+            box-shadow: 0 10px 24px rgba(124, 58, 237, 0.38);
+        }
+
+        /* SETTINGS MODAL FOR OPTIONAL CUSTOM GEMINI API KEY */
+        .ai-config-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(15, 23, 42, 0.65);
+            backdrop-filter: blur(8px);
+            z-index: 99999999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+        }
+        .ai-config-modal-overlay.open {
+            display: flex;
+        }
+        .ai-config-card {
+            background: var(--surface-glass-strong, #ffffff);
+            border: 1px solid var(--border-glass, #e2e8f0);
+            border-top: 5px solid #2563eb;
+            border-radius: 20px;
+            padding: 24px;
+            width: 100%;
+            max-width: 450px;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.4);
+            color: var(--text-primary, #0f172a);
+            font-family: var(--font-main, sans-serif);
+        }
+
+        @keyframes aiFadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes aiSpin {
+            100% { transform: rotate(360deg); }
+        }
+        @keyframes aiPulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.45; transform: scale(0.85); }
+        }
+
+        @media (max-width: 720px) {
+            .ai-viewport-wrapper {
+                height: calc(100vh - 95px);
+            }
+            .modern-bubble {
+                max-width: 88%;
+            }
+            .ai-studio-header {
+                padding: 12px 14px;
+            }
+            .chat-send-btn span {
+                display: none;
+            }
+            .chat-send-btn {
+                padding: 13px 15px;
+            }
+        }
     </style>
 
-    <div class='portal-page-panel' style='display:block;'>
-        
-        <div style="margin-bottom: 25px; border-bottom: 2px solid #e2e8f0; padding-bottom: 15px; overflow: hidden;">
-            <div class='back-nav-link' onclick='typeof returnToHomeGridSPA === "function" ? returnToHomeGridSPA() : (window.location.href="index.html")'>⬅️ Back to Dashboard</div>
-            <h3 class="module-title">Talk with AI - Postal Assistant</h3>
-        </div>
-        
-        <div class="ai-chat-wrapper">
-            <div class="chat-header-accent">
-                <div style="font-size: 28px;">🤖</div>
-                <div>
-                    <h4>PO Assistant Core AI</h4>
-                    <p>Active Expert Model V2 — Cloud Synchronized Utility Support</p>
+    <div class="ai-viewport-wrapper" id="aiInteractiveRoot">
+        <div class="portal-page-panel">
+
+            <!-- TOP AI STUDIO BAR -->
+            <div class="ai-studio-header">
+                <div class="ai-brand-cluster">
+                    <div class="ai-core-orb">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 2a4 4 0 0 1 4 4v2h2a2 2 0 0 1 2 2v8a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4v-8a2 2 0 0 1 2-2h2V6a4 4 0 0 1 4-4z"/>
+                            <circle cx="9" cy="13" r="1.5"/>
+                            <circle cx="15" cy="13" r="1.5"/>
+                            <path d="M9 17h6"/>
+                        </svg>
+                    </div>
+                    <div class="ai-title-group">
+                        <h3>
+                            <span>PO Staff Neural Copilot</span>
+                            <span class="ai-live-web-pill">
+                                <span class="ai-pulse-dot"></span>
+                                Live Web &amp; Cloud AI
+                            </span>
+                        </h3>
+                        <p>Connected to Live Internet Search, Wikipedia Grounding &amp; Postal Rules Engine</p>
+                    </div>
+                </div>
+
+                <div class="ai-header-actions">
+                    <button type="button" class="ai-mode-toggle active" id="btnToggleWebSearch" onclick="toggleWebSearchGrounding()" title="Toggle Live Internet Search Grounding">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"/>
+                            <line x1="2" y1="12" x2="22" y2="12"/>
+                            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                        </svg>
+                        <span>Web Search: ON</span>
+                    </button>
+
+                    <button type="button" class="ai-icon-btn" onclick="openAiEngineConfig()" title="Configure Custom Gemini API Key (Optional)">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="3"/>
+                            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9"/>
+                        </svg>
+                    </button>
+
+                    <button type="button" class="ai-icon-btn" onclick="clearAiConversation()" title="Clear Conversation History">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="3 6 5 6 21 6"/>
+                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                        </svg>
+                    </button>
+
+                    <div class="back-nav-link" onclick="aiCleanExit()">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="19" y1="12" x2="5" y2="12"/>
+                            <polyline points="12 19 5 12 12 5"/>
+                        </svg>
+                        <span>Dashboard</span>
+                    </div>
                 </div>
             </div>
-            
-            <div class='chat-container-modern' id='chatHistory'>
+
+            <!-- CHAT HISTORY STREAM -->
+            <div class="chat-container-modern" id="chatHistory">
                 <div class="chat-msg-row ai-row">
-                    <div class="modern-bubble ai-bubble">Namaskar! I am your updated PO Assistant AI. Tap any quick option below or type a custom request to generate official formats instantly.</div>
+                    <div class="msg-avatar ai-av">AI</div>
+                    <div class="modern-bubble ai-bubble">
+                        <strong>Namaskar! I am your Live Internet-Connected PO Assistant AI.</strong><br/>
+                        You can ask me <strong>anything</strong>—from official Department of Posts rules (ACG-17, ACG-61, Leave, T.A., CEA, Postal Manuals) and letter drafting to live general knowledge, calculations, or web searches!
+                    </div>
                 </div>
             </div>
-            
+
+            <!-- QUICK SUGGESTION CHIPS (100% PURE SVG) -->
             <div class="ai-chips-container">
-                <div class="suggestion-chip" onclick="triggerQuickChipLocal('Draft Leave Application')">📝 Leave Application</div>
-                <div class="suggestion-chip" onclick="triggerQuickChipLocal('Explain ACG-61 Rules')">📄 ACG-61 Protocol</div>
-                <div class="suggestion-chip" onclick="triggerQuickChipLocal('Format for Transfer Request')">🚚 Transfer Request</div>
-                <div class="suggestion-chip" onclick="triggerQuickChipLocal('Voucher Verification Note')">📦 ACG-17 Ledger Help</div>
+                <div class="suggestion-chip" onclick="triggerQuickChipLocal('Draft an urgent Casual Leave application for Postmaster')">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                    <span>Draft Casual Leave</span>
+                </div>
+                <div class="suggestion-chip" onclick="triggerQuickChipLocal('Explain ACG-61 Charge Report rules and cash verification procedure')">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                    <span>ACG-61 Protocol</span>
+                </div>
+                <div class="suggestion-chip" onclick="triggerQuickChipLocal('Write an official station transfer request application to SPOs')">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+                    <span>Transfer Application</span>
+                </div>
+                <div class="suggestion-chip" onclick="triggerQuickChipLocal('Explain ACG-17 contingency voucher rules and revenue stamp requirement')">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"/></svg>
+                    <span>ACG-17 Voucher Rules</span>
+                </div>
+                <div class="suggestion-chip" onclick="triggerQuickChipLocal('Tell me about India Post history, PIN code zones, and services')">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10"/></svg>
+                    <span>Search India Post Info</span>
+                </div>
             </div>
-            
-            <div class='chat-input-area-modern'>
-                <input class='chat-input' id='aiChatInputLocal' onkeypress='handleChatEnterLocal(event)' placeholder='e.g. Write a letter for urgent casual leave...' type='text' autocomplete="off"/>
-                <button class='chat-send-btn' onclick='sendChatMessageLocal()'>Send</button>
+
+            <!-- MODERN INPUT BAR -->
+            <div class="chat-input-area-modern">
+                <div class="ai-input-box-wrap">
+                    <input class="chat-input" id="aiChatInputLocal" onkeydown="handleChatEnterLocal(event)" placeholder="Ask anything (Postal rules, draft letters, or search the web in English / বাংলা / हिन्दी)..." type="text" autocomplete="off"/>
+                    <button type="button" class="ai-mic-btn" id="aiVoiceMicBtn" onclick="startAiVoiceInput()" title="Voice Input">
+                        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+                            <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                            <line x1="12" y1="19" x2="12" y2="23"/>
+                            <line x1="8" y1="23" x2="16" y2="23"/>
+                        </svg>
+                    </button>
+                </div>
+                <button class="chat-send-btn" onclick="sendChatMessageLocal()" type="button">
+                    <span>Ask AI</span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="22" y1="2" x2="11" y2="13"/>
+                        <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+                    </svg>
+                </button>
             </div>
+
         </div>
-        
     </div>
 
-    <!-- 100% UNTOUCHED ORIGINAL AI CHAT LOGIC -->
+    <!-- OPTIONAL GEMINI API KEY SETTINGS MODAL -->
+    <div class="ai-config-modal-overlay" id="aiConfigModal">
+        <div class="ai-config-card">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                <h4 style="margin:0; font-size:17px; font-weight:900; display:flex; align-items:center; gap:8px;">
+                    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                    AI Engine &amp; Gemini API Settings
+                </h4>
+                <button type="button" onclick="closeAiEngineConfig()" style="background:transparent; border:none; font-size:20px; color:var(--text-muted); cursor:pointer;">×</button>
+            </div>
+            <p style="font-size:12.5px; color:var(--text-muted); line-height:1.5; margin:0 0 14px 0;">
+                By default, this system connects automatically to the <strong>Free Live Cloud AI &amp; Web Search Engine</strong> (zero setup needed). Optionally, you can enter a Google Gemini API Key below for direct Gemini 2.5 Flash responses.
+            </p>
+            <label style="font-size:12.5px; font-weight:800; display:block; margin-bottom:6px;">Google Gemini API Key (Optional):</label>
+            <input type="password" id="customGeminiApiKeyInput" placeholder="AIzaSy... (Leave blank for automatic free Cloud AI)" style="width:100%; padding:11px 14px; border-radius:10px; border:1.5px solid var(--border-subtle); background:var(--surface-input); color:var(--text-primary); font-size:13.5px; margin-bottom:16px;"/>
+            <div style="display:flex; gap:10px;">
+                <button type="button" onclick="saveAiEngineConfig()" style="flex:1; padding:11px; border:none; border-radius:10px; background:linear-gradient(90deg, #2563eb, #7c3aed); color:#fff; font-weight:800; cursor:pointer;">Save Settings</button>
+                <button type="button" onclick="closeAiEngineConfig()" style="padding:11px 16px; border:1px solid var(--border-subtle); border-radius:10px; background:var(--surface-input); color:var(--text-primary); font-weight:700; cursor:pointer;">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- LIVE INTERNET AI + WEB SEARCH + POSTAL KNOWLEDGE SCRIPT -->
     <script>
-        function handleChatEnterLocal(e) { 
-            if(e.key === 'Enter') { 
-                sendChatMessageLocal(); 
-            } 
-        }
-        
-        function triggerQuickChipLocal(promptText) { 
-            document.getElementById('aiChatInputLocal').value = promptText; 
-            sendChatMessageLocal(); 
+        let aiWebSearchEnabled = true;
+        let aiConversationHistory = [
+            {
+                role: "system",
+                content: "You are PO Staff Neural Copilot, an advanced AI assistant integrated into the PO Staff Utility System (Department of Posts, India). You are an expert in India Post rules (Postal Manual Volumes V, VI, VII, Financial Handbook Vol I, ACG-17 Bills, ACG-61 Charge Reports, S.R.-1 Leave, Casual Leave, T.A. Bills TR-25, Children Education Allowance, Finacle SOL operations) AND a general-purpose intelligent assistant capable of answering any world knowledge, math, coding, or drafting query in English, Bengali, or Hindi. Format official letters/drafts inside ```template ... ``` blocks."
+            }
+        ];
+
+        // ====================================================
+        // AUTO-COLLAPSE HAMBURGER MENU ON OPEN & ON TYPING
+        // ====================================================
+        function aiAutoCollapseHamburger() {
+            const sidebar = document.getElementById('appSidebar');
+            if (sidebar) {
+                if (!sidebar.classList.contains('collapsed')) {
+                    sidebar.classList.add('collapsed');
+                }
+                if (sidebar.classList.contains('mobile-open')) {
+                    sidebar.classList.remove('mobile-open');
+                }
+            }
         }
 
-        function sendChatMessageLocal() {
+        (function initAiStudioModule() {
+            aiAutoCollapseHamburger();
+
+            // Hide floating dashboard orb while inside full-screen AI Studio
+            const floatingLauncher = document.getElementById('poFloatingAiContainer');
+            if (floatingLauncher) floatingLauncher.style.display = 'none';
+
+            // Auto-collapse sidebar whenever user clicks or types in any input
+            const rootEl = document.getElementById('aiInteractiveRoot');
+            if (rootEl) {
+                ['focusin', 'input', 'keydown'].forEach(evt => {
+                    rootEl.addEventListener(evt, function(e) {
+                        const tag = e.target && e.target.tagName ? e.target.tagName.toLowerCase() : '';
+                        if (tag === 'input' || tag === 'textarea') {
+                            aiAutoCollapseHamburger();
+                        }
+                    }, true);
+                });
+            }
+
+            // Move config modal to body cleanly
+            document.querySelectorAll('body > #aiConfigModal').forEach(el => el.remove());
+            const cfgModal = document.getElementById('aiConfigModal');
+            if (cfgModal) document.body.appendChild(cfgModal);
+        })();
+
+        function aiCleanExit() {
+            document.querySelectorAll('body > #aiConfigModal').forEach(el => el.remove());
+            if (typeof returnToHomeGridSPA === "function") {
+                returnToHomeGridSPA();
+            } else {
+                window.location.href = "index.html";
+            }
+        }
+
+        function aiNotify(title, msg, type = "info") {
+            if (typeof window.spawnFloatingNotification === "function") {
+                window.spawnFloatingNotification(title, msg, type);
+            }
+        }
+
+        function toggleWebSearchGrounding() {
+            aiWebSearchEnabled = !aiWebSearchEnabled;
+            const btn = document.getElementById('btnToggleWebSearch');
+            if (btn) {
+                btn.classList.toggle('active', aiWebSearchEnabled);
+                const span = btn.querySelector('span');
+                if (span) span.innerText = `Web Search: ${aiWebSearchEnabled ? 'ON' : 'OFF'}`;
+            }
+            aiNotify(
+                aiWebSearchEnabled ? "Live Web Search Enabled" : "Web Search Paused",
+                aiWebSearchEnabled ? "AI will search live web sources before answering." : "AI will use internal neural knowledge only.",
+                "info"
+            );
+        }
+
+        function openAiEngineConfig() {
+            const modal = document.getElementById('aiConfigModal');
+            const inp = document.getElementById('customGeminiApiKeyInput');
+            if (inp) {
+                try { inp.value = localStorage.getItem('po_custom_gemini_key') || ''; } catch (e) {}
+            }
+            if (modal) modal.classList.add('open');
+        }
+
+        function closeAiEngineConfig() {
+            const modal = document.getElementById('aiConfigModal');
+            if (modal) modal.classList.remove('open');
+        }
+
+        function saveAiEngineConfig() {
+            const inp = document.getElementById('customGeminiApiKeyInput');
+            if (inp) {
+                try { localStorage.setItem('po_custom_gemini_key', inp.value.trim()); } catch (e) {}
+            }
+            closeAiEngineConfig();
+            aiNotify("AI Configuration Saved", "Your AI engine preferences have been updated.", "success");
+        }
+
+        function clearAiConversation() {
+            const container = document.getElementById('chatHistory');
+            if (!container) return;
+            aiConversationHistory = aiConversationHistory.slice(0, 1);
+            container.innerHTML = `
+                <div class="chat-msg-row ai-row">
+                    <div class="msg-avatar ai-av">AI</div>
+                    <div class="modern-bubble ai-bubble">
+                        <strong>Conversation Cleared!</strong> Ready for your next query. Ask me anything or tap a quick suggestion below.
+                    </div>
+                </div>
+            `;
+            aiNotify("History Cleared", "Started a fresh AI session.", "info");
+        }
+
+        function handleChatEnterLocal(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                sendChatMessageLocal();
+            }
+        }
+
+        function triggerQuickChipLocal(promptText) {
+            const inp = document.getElementById('aiChatInputLocal');
+            if (inp) {
+                inp.value = promptText;
+                sendChatMessageLocal();
+            }
+        }
+
+        // ====================================================
+        // VOICE INPUT (WEB SPEECH API)
+        // ====================================================
+        function startAiVoiceInput() {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (!SpeechRecognition) {
+                aiNotify("Voice Not Supported", "Your browser does not support Web Speech voice recognition.", "warning");
+                return;
+            }
+            const micBtn = document.getElementById('aiVoiceMicBtn');
+            const recognition = new SpeechRecognition();
+            recognition.lang = 'en-IN';
+            recognition.interimResults = false;
+
+            if (micBtn) micBtn.classList.add('recording');
+            aiNotify("Listening...", "Speak your question clearly into the microphone.", "info");
+
+            recognition.onresult = function(event) {
+                const transcript = event.results[0][0].transcript;
+                const inp = document.getElementById('aiChatInputLocal');
+                if (inp) {
+                    inp.value = transcript;
+                    sendChatMessageLocal();
+                }
+            };
+            recognition.onerror = function() {
+                if (micBtn) micBtn.classList.remove('recording');
+            };
+            recognition.onend = function() {
+                if (micBtn) micBtn.classList.remove('recording');
+            };
+            recognition.start();
+        }
+
+        // ====================================================
+        // LIVE WEB SEARCH ENGINE (WIKIPEDIA + DUCKDUCKGO API)
+        // ====================================================
+        async function performLiveWebSearch(query) {
+            const sources = [];
+            let contextSnippets = "";
+
+            const cleanQ = query.replace(/[?.,!]/g, '').trim();
+            if (!cleanQ) return { contextSnippets, sources };
+
+            try {
+                // 1. Wikipedia Open Search & Summary API (CORS-friendly, fast, reliable)
+                const wikiUrl = `https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(cleanQ)}&utf8=&format=json&origin=*&srlimit=3`;
+                const res = await fetch(wikiUrl);
+                if (res.ok) {
+                    const data = await res.json();
+                    const searchResults = data?.query?.search || [];
+                    searchResults.forEach(item => {
+                        const plainSnippet = item.snippet.replace(/<\/?[^>]+(>|$)/g, "");
+                        contextSnippets += `• [${item.title}]:${plainSnippet}\n`;
+                        sources.push({
+                            title: item.title,
+                            url: `https://en.wikipedia.org/wiki/${encodeURIComponent(item.title.replace(/ /g, '_'))}`
+                        });
+                    });
+                }
+            } catch (e) {}
+
+            try {
+                // 2. DuckDuckGo Instant Answer API
+                const ddgUrl = `https://api.duckduckgo.com/?q=${encodeURIComponent(cleanQ)}&format=json&no_html=1&skip_disambig=1`;
+                const ddgRes = await fetch(ddgUrl);
+                if (ddgRes.ok) {
+                    const ddgData = await ddgRes.json();
+                    if (ddgData.AbstractText) {
+                        contextSnippets += `• [Web Summary]: ${ddgData.AbstractText}\n`;
+                        if (ddgData.AbstractURL) {
+                            sources.push({ title: ddgData.Heading || "Web Source", url: ddgData.AbstractURL });
+                        }
+                    }
+                }
+            } catch (e) {}
+
+            return { contextSnippets, sources: sources.slice(0, 3) };
+        }
+
+        // ====================================================
+        // MULTI-ENGINE LIVE CLOUD AI (GEMINI API + POLLINATIONS FREE LLM + POSTAL FALLBACK)
+        // ====================================================
+        async function fetchLiveAiResponse(userQuery, webContext = "") {
+            let customGeminiKey = "";
+            try { customGeminiKey = (localStorage.getItem('po_custom_gemini_key') || '').trim(); } catch (e) {}
+
+            const augmentedUserPrompt = webContext
+                ? `User Question: ${userQuery}\n\n[Live Web Search Context (use if relevant)]:\n${webContext}\n\nProvide a clear, accurate, well-structured response. If the user asks for an official letter or application, enclose the letter inside \`\`\`template ... \`\`\` tags.`
+                : userQuery;
+
+            // ENGINE 1: Direct Google Gemini API (if user configured an API key)
+            if (customGeminiKey) {
+                try {
+                    const geminiEndpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${encodeURIComponent(customGeminiKey)}`;
+                    const gemRes = await fetch(geminiEndpoint, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({
+                            systemInstruction: { parts: [{ text: aiConversationHistory[0].content }] },
+                            contents: [{ role: "user", parts: [{ text: augmentedUserPrompt }] }]
+                        })
+                    });
+                    if (gemRes.ok) {
+                        const gemJson = await gemRes.json();
+                        const replyText = gemJson?.candidates?.[0]?.content?.parts?.[0]?.text;
+                        if (replyText) return replyText;
+                    }
+                } catch (e) {
+                    console.warn("Custom Gemini API fallback to Cloud AI:", e);
+                }
+            }
+
+            // ENGINE 2: Free Live Cloud LLM API (Pollinations OpenAI-compatible endpoint - Zero API Key Needed)
+            try {
+                const messagesPayload = [
+                    aiConversationHistory[0],
+                    ...aiConversationHistory.slice(-6),
+                    { role: "user", content: augmentedUserPrompt }
+                ];
+
+                const cloudRes = await fetch("https://text.pollinations.ai/openai", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        model: "openai",
+                        messages: messagesPayload,
+                        temperature: 0.5
+                    })
+                });
+
+                if (cloudRes.ok) {
+                    const cloudData = await cloudRes.json();
+                    const textOut = cloudData?.choices?.[0]?.message?.content;
+                    if (textOut && textOut.trim() !== "") {
+                        return textOut.trim();
+                    }
+                }
+            } catch (e) {
+                console.warn("Primary Cloud AI endpoint fallback:", e);
+            }
+
+            // ENGINE 3: Secondary GET Cloud AI Endpoint
+            try {
+                const simpleUrl = `https://text.pollinations.ai/${encodeURIComponent(augmentedUserPrompt)}?model=openai&system=${encodeURIComponent(aiConversationHistory[0].content)}`;
+                const simpleRes = await fetch(simpleUrl);
+                if (simpleRes.ok) {
+                    const txt = await simpleRes.text();
+                    if (txt && txt.trim().length > 5) return txt.trim();
+                }
+            } catch (e) {}
+
+            // ENGINE 4: Built-in Postal Expert + Live Web Synthesis Fallback
+            return getBuiltInExpertFallback(userQuery, webContext);
+        }
+
+        function getBuiltInExpertFallback(query, webContext = "") {
+            const lowQuery = query.toLowerCase();
+
+            if (lowQuery.includes("leave") || lowQuery.includes("casual") || lowQuery.includes("cl")) {
+                return `Here is an official **Casual Leave (CL) Application** format for Department of Posts staff:\n\`\`\`template\nTo,\nThe Postmaster / Competent Authority,\n[Current Office Name]\n\nSubject: Application for Casual Leave (CL)\n\nRespected Sir/Madam,\nI beg to state that I am unable to attend office for [Number] day(s) from [Start Date] to [End Date] on account of urgent domestic work.\n\nI therefore request you to kindly grant me Casual Leave for the said period with permission to prefix/suffix Sundays or postal holidays, if any.\n\nYours faithfully,\n[Staff Name]\n[Designation & CSI ID]\n[Office Name]\n\`\`\``;
+            }
+            if (lowQuery.includes("acg-61") || lowQuery.includes("61") || lowQuery.includes("charge report")) {
+                return `**ACG-61 Charge Report Protocol (Rule 267, P&T FHB Vol-I):**\n• **Purpose:** Used whenever an officer/Postmaster hands over cash and stamp imprest balances on transfer of charge.\n• **Session Indicator:** Always specify whether the transfer occurred in the **Forenoon (FN)** or **Afternoon (AN)**.\n• **Verification:** Both the *Relieved Officer* and *Relieving Officer* must physically verify the net cash and stamp imprest balances and sign simultaneously.`;
+            }
+            if (lowQuery.includes("transfer") || lowQuery.includes("sp")) {
+                return `Here is the official format for a **Station Transfer Request** under Rule 38 / Rotational Deployment:\n\`\`\`template\nTo,\nThe Superintendent of Post Offices,\n[Divisional Office Name]\n\nSubject: Representation for Station Transfer to [Target Office Name]\n\nRespected Sir,\nWith due respect, I beg to submit that I have been working as [Designation] at [Current Office Name] since [Joining Date].\n\nDue to pressing family commitments, I humbly request your benign authority to consider my transfer to [Target Office Location] against an existing or upcoming vacancy.\n\nYours obediently,\n[Staff Name]\n[Designation & SOL ID]\n\`\`\``;
+            }
+            if (lowQuery.includes("voucher") || lowQuery.includes("17") || lowQuery.includes("acg-17")) {
+                return `**ACG-17 Contingency Voucher Guidelines (Appendix II, FHB Vol-I):**\n• Used for daily/monthly office contingency disbursements, wages, and allowance claims.\n• **Revenue Stamp Rule:** Any payment exceeding **Rs. 5,000/-** requires a Rs. 1/- Revenue Stamp duly affixed and crossed by the payee.\n• Ensure the exact sanctioning authority and clear expenditure purpose are recorded on every voucher.`;
+            }
+            if (webContext) {
+                return `**Live Web Search Results for "${query}":**\n\n${webContext}`;
+            }
+            return `I processed your request regarding **"${query}"**. Please check your internet connection or click any of the quick Postal Utility action chips below for instant official templates!`;
+        }
+
+        // ====================================================
+        // MARKDOWN & COPYABLE TEMPLATE RENDERER
+        // ====================================================
+        function formatAiMarkdownToHtml(rawText, sources = []) {
+            let safe = String(rawText || '')
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;");
+
+            // Convert ```template ... ``` or ``` ... ``` blocks into copyable cards
+            safe = safe.replace(/```(?:template|[a-zA-Z]*)\n?([\s\S]*?)```/g, function(_, codeContent) {
+                const trimmed = codeContent.trim();
+                const encoded = encodeURIComponent(trimmed);
+                return `<div class="ai-template-card">${trimmed}<br/><button type="button" class="ai-copy-template-btn" onclick="copyAiDraftText('${encoded}', this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span>Copy Official Draft</span></button></div>`;
+            });
+
+            // Bold & Inline code
+            safe = safe.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
+            safe = safe.replace(/`([^`]+)`/g, "<code style='background:var(--surface-input); padding:2px 6px; border-radius:5px; font-family:monospace;'>$1</code>");
+            safe = safe.replace(/\n/g, "<br/>");
+
+            if (sources && sources.length > 0) {
+                const chipsHtml = sources.map(s => `
+                    <a href="${s.url}" target="_blank" rel="noopener noreferrer" class="ai-source-chip">
+                        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10"/></svg>
+                        <span>${s.title}</span>
+                    </a>
+                `).join('');
+                safe += `<div class="ai-sources-bar">${chipsHtml}</div>`;
+            }
+
+            return safe;
+        }
+
+        function copyAiDraftText(encodedText, btnEl) {
+            const decoded = decodeURIComponent(encodedText);
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(decoded).then(() => {
+                    const span = btnEl.querySelector('span');
+                    if (span) span.innerText = "Copied to Clipboard!";
+                    aiNotify("Draft Copied", "Official template copied to clipboard.", "success");
+                    setTimeout(() => {
+                        if (span) span.innerText = "Copy Official Draft";
+                    }, 2200);
+                });
+            }
+        }
+
+        // ====================================================
+        // SEND MESSAGE & STREAM UI FLOW
+        // ====================================================
+        async function sendChatMessageLocal() {
+            aiAutoCollapseHamburger();
             const inputField = document.getElementById('aiChatInputLocal');
             const text = inputField.value.trim();
-            if(!text) return;
+            if (!text) return;
 
-            appendMessageLocal(text, 'user-row');
+            appendMessageLocal(text, 'user-row', null, true);
             inputField.value = '';
 
             const typingId = 'typing-' + Date.now();
-            appendMessageLocal("Typing response...", 'ai-row', typingId);
-            
-            setTimeout(() => {
-                const typingElement = document.getElementById(typingId);
-                if(typingElement) {
-                    typingElement.remove();
-                }
-                const response = getAIResponseLocal(text);
-                appendMessageLocal(response, 'ai-row');
-            }, 600 + Math.random() * 400);
+            const searchingHtml = `
+                <div class="ai-searching-box">
+                    <span class="ai-spin-globe">
+                        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"/>
+                            <line x1="2" y1="12" x2="22" y2="12"/>
+                            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                        </svg>
+                    </span>
+                    <span id="${typingId}-label">${aiWebSearchEnabled ? 'Searching the web & live neural engine...' : 'Synthesizing neural response...'}</span>
+                </div>
+            `;
+            appendMessageLocal(searchingHtml, 'ai-row', typingId, false);
+
+            let webResults = { contextSnippets: "", sources: [] };
+            if (aiWebSearchEnabled) {
+                webResults = await performLiveWebSearch(text);
+                const statusLbl = document.getElementById(`${typingId}-label`);
+                if (statusLbl) statusLbl.innerText = "Generating intelligent response...";
+            }
+
+            const rawReply = await fetchLiveAiResponse(text, webResults.contextSnippets);
+
+            aiConversationHistory.push({ role: "user", content: text });
+            aiConversationHistory.push({ role: "assistant", content: rawReply });
+
+            const typingElement = document.getElementById(typingId);
+            if (typingElement) typingElement.remove();
+
+            const formattedHtml = formatAiMarkdownToHtml(rawReply, webResults.sources);
+            appendMessageLocal(formattedHtml, 'ai-row', null, false);
         }
 
-        function appendMessageLocal(text, rowClassName, id = null) {
+        function appendMessageLocal(contentHtml, rowClassName, id = null, isPlainText = false) {
             const container = document.getElementById('chatHistory');
-            const rowDiv = document.createElement('div'); 
-            rowDiv.className = 'chat-msg-row ' + rowClassName; 
-            
-            if(id) {
-                rowDiv.id = id;
-            }
-            
-            const bubbleDiv = document.createElement('div'); 
-            bubbleDiv.className = 'modern-bubble ' + (rowClassName === 'user-row' ? 'user-bubble' : 'ai-bubble');
-            bubbleDiv.innerHTML = text;
-            
-            rowDiv.appendChild(bubbleDiv); 
-            container.appendChild(rowDiv); 
-            
-            // Auto scroll to bottom
-            container.scrollTop = container.scrollHeight;
-        }
+            if (!container) return;
 
-        function getAIResponseLocal(query) {
-            const lowQuery = query.toLowerCase();
-            
-            if(lowQuery.includes("leave") || lowQuery.includes("application")) {
-                return "Here is an optimized format for an official casual leave request:<br/><div class='ai-template-card'>To,<br/>The Postmaster / Competent Authority,<br/>[Current Office Name]<br/><br/>Subject: Application for Casual Leave Approval<br/><br/>Respected Sir,<br/>I am writing to formally request casual leave for [Number] days starting from [Date] to [Date] due to mandatory personal business at home.<br/><br/>Arrangements have been made with my workspace colleague to handle any emergency ledger requirements during my temporary absence. I request you to kindly sanction my leave application.<br/><br/>Yours faithfully,<br/>[Staff Name]<br/>Designation, [Current Office Name]</div>";
+            const rowDiv = document.createElement('div');
+            rowDiv.className = 'chat-msg-row ' + rowClassName;
+            if (id) rowDiv.id = id;
+
+            const avatarDiv = document.createElement('div');
+            avatarDiv.className = 'msg-avatar ' + (rowClassName === 'user-row' ? 'user-av' : 'ai-av');
+            avatarDiv.innerText = rowClassName === 'user-row' ? 'YOU' : 'AI';
+
+            const bubbleDiv = document.createElement('div');
+            bubbleDiv.className = 'modern-bubble ' + (rowClassName === 'user-row' ? 'user-bubble' : 'ai-bubble');
+            if (isPlainText) {
+                bubbleDiv.innerText = contentHtml;
+            } else {
+                bubbleDiv.innerHTML = contentHtml;
             }
-            if(lowQuery.includes("acg-61") || lowQuery.includes("61")) {
-                return "<strong>ACG-61 Protocol Instruction:</strong><br/>Whenever a Postmaster or responsible dynamic officer relinquishes charge of an office, an ACG-61 report must be completed. Ensure these vital data checks match your document:<br/><br/>1. Verify that the system time indicator states exactly <strong>Forenoon (FN)</strong> or <strong>Afternoon (AN)</strong>.<br/>2. Check that the net physical cash vault matches the closing entry down to the last paisa.<br/>3. Both the Relieved and Relieving officers must sign the verification block simultaneously to seal the cloud record.";
+
+            if (rowClassName === 'user-row') {
+                rowDiv.appendChild(bubbleDiv);
+                rowDiv.appendChild(avatarDiv);
+            } else {
+                rowDiv.appendChild(avatarDiv);
+                rowDiv.appendChild(bubbleDiv);
             }
-            if(lowQuery.includes("transfer") || lowQuery.includes("request")) {
-                return "Here is the official format for a request targeting a workspace station relocation:<br/><div class='ai-template-card'>To,<br/>The Superintendent of Post Offices,<br/>[Divisional Office Name]<br/><br/>Subject: Application for Station Transfer Request<br/><br/>Respected Sir,<br/>I beg to state that I have been serving as [Your Designation] at [Current Office Name] for the past [X] months/years.<br/><br/>Due to pressing family circumstances and the location of my dependents, I humbly request a transfer to [Target Office Location] against any existing or upcoming vacancy.<br/><br/>I am ready to abide by standard departmental deployment conditions. I pray that my application receives favorable consideration.<br/><br/>Yours obediently,<br/>[Staff Name]<br/>[Designation]</div>";
-            }
-            if(lowQuery.includes("voucher") || lowQuery.includes("17")) {
-                return "<strong>ACG-17 Ledger Management Guide:</strong><br/>The ACG-17 acts as the master receipt blueprint for contingency payments. Avoid audit defects by cross-checking these items:<br/><br/>• Any payment exceeding <strong>Rs. 5,000</strong> strictly requires a revenue stamp affixed and crossed.<br/>• Ensure descriptions do not contain broad, generalized remarks; always state the concrete expenditure details explicitly.";
-            }
-            if(lowQuery.includes("hi") || lowQuery.includes("hello")) {
-                return "Hello! I am initialized and ready. Try selecting one of the template chips above to instantly auto-generate structured layout text blocks.";
-            }
-            
-            return "I am operating as a high-speed cloud utility assistant script. I recognize keywords like 'leave', 'transfer', 'ACG-61', and 'ACG-17'. Try rephrasing your question or tap one of the structural quick-action suggestion chips above!";
+
+            container.appendChild(rowDiv);
+            container.scrollTop = container.scrollHeight;
         }
     </script>
 </div>
