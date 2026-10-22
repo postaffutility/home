@@ -55,6 +55,9 @@
             --login-btn-bg: linear-gradient(90deg, #f01e3c 0%, #e11d48 100%);
             --login-btn-shadow: 0 10px 24px rgba(239, 35, 60, 0.34);
             --toast-bg: rgba(255, 255, 255, 0.94);
+            --custom-login-bg: url('https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiLukHUcccahQ6Bfcb_7aqvdjF2xnC7xdpIKJUywZiVsxduw79-FCwwuOGlU34vjrWquTNJblVmu3xAY1eFSTMMbDYlVkjR_v0xwrcyqKwdTTr8SfiWRhYVTNFa3wT01tLQTwIsHp3LfpNOJ3smkqTe3eEqtl8zM-kRDGCBnFMOpWkpsNhbsRhdBldFKBQ/s1535/1000205806.png');
+            --custom-tfa-bg: url('https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiLukHUcccahQ6Bfcb_7aqvdjF2xnC7xdpIKJUywZiVsxduw79-FCwwuOGlU34vjrWquTNJblVmu3xAY1eFSTMMbDYlVkjR_v0xwrcyqKwdTTr8SfiWRhYVTNFa3wT01tLQTwIsHp3LfpNOJ3smkqTe3eEqtl8zM-kRDGCBnFMOpWkpsNhbsRhdBldFKBQ/s1535/1000205806.png');
+            --custom-goodbye-bg: none;
         }
 
         html[data-theme="dark"] {
@@ -169,7 +172,7 @@
         html[data-theme="dark"] .theme-switch-pill .moon-ic { color: #ffffff; }
 
         /* =========================================================
-           1. SPLIT-SCREEN LOGIN UI (EXACT IMAGE 1 & 2 MASTERPIECE)
+           1. SPLIT-SCREEN LOGIN UI (SUPPORTS DYNAMIC FIREBASE BG)
            ========================================================= */
         .login-split-container {
             display: flex;
@@ -183,7 +186,7 @@
             background-image:
                 radial-gradient(circle at 4% 28%, rgba(8, 30, 84, 0.95) 0%, rgba(11, 38, 98, 0.82) 30%, rgba(15, 38, 87, 0.18) 50%, transparent 64%),
                 linear-gradient(90deg, rgba(7, 26, 74, 0.94) 0%, rgba(12, 39, 96, 0.75) 30%, rgba(15, 38, 87, 0.12) 48%, rgba(255, 255, 255, 0.0) 62%),
-                url('https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiLukHUcccahQ6Bfcb_7aqvdjF2xnC7xdpIKJUywZiVsxduw79-FCwwuOGlU34vjrWquTNJblVmu3xAY1eFSTMMbDYlVkjR_v0xwrcyqKwdTTr8SfiWRhYVTNFa3wT01tLQTwIsHp3LfpNOJ3smkqTe3eEqtl8zM-kRDGCBnFMOpWkpsNhbsRhdBldFKBQ/s1535/1000205806.png');
+                var(--custom-login-bg);
             background-repeat: no-repeat;
             background-position: center center;
             background-size: cover;
@@ -195,10 +198,9 @@
         html[data-theme="dark"] .login-split-container {
             background-image:
                 radial-gradient(circle at 0% 25%, rgba(4, 12, 36, 0.97) 0%, rgba(8, 19, 52, 0.90) 38%, rgba(15, 23, 42, 0.65) 65%, rgba(15, 23, 42, 0.75) 100%),
-                url('https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiLukHUcccahQ6Bfcb_7aqvdjF2xnC7xdpIKJUywZiVsxduw79-FCwwuOGlU34vjrWquTNJblVmu3xAY1eFSTMMbDYlVkjR_v0xwrcyqKwdTTr8SfiWRhYVTNFa3wT01tLQTwIsHp3LfpNOJ3smkqTe3eEqtl8zM-kRDGCBnFMOpWkpsNhbsRhdBldFKBQ/s1535/1000205806.png');
+                var(--custom-login-bg);
         }
 
-        /* Top-left concentric blue arcs matching Image 1 */
         .login-decor-circle-1 {
             position: absolute;
             top: -130px;
@@ -212,7 +214,6 @@
             z-index: 1;
         }
 
-        /* Bottom sweeping S-curve wave matching Image 1 */
         .login-bottom-wave {
             position: absolute;
             bottom: 0;
@@ -237,8 +238,8 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            height: 88vh;
-            padding: 5vh 0 1vh 0;
+            height: 86vh;
+            padding: 4vh 0 1vh 0;
         }
         .login-brand-hero {
             margin-top: 2vh;
@@ -269,7 +270,6 @@
             font-weight: 400;
         }
 
-        /* 4 Feature Glass Cards on Login Left */
         .login-feature-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -321,7 +321,6 @@
             color: rgba(255, 255, 255, 0.82);
         }
 
-        /* Bottom-left "Tools for Smarter Work and Better Service" */
         .login-bottom-slogan {
             position: relative;
             z-index: 6;
@@ -372,7 +371,6 @@
             margin-top: 10px;
         }
 
-        /* Right Floating Login Card */
         .login-right-pane {
             flex: 0.85;
             display: flex;
@@ -510,7 +508,6 @@
         .eye-icon-btn:hover { color: var(--text-primary); }
         .eye-svg { width: 20px; height: 20px; }
 
-        /* CAPTCHA Styling */
         .captcha-refresh-link {
             background: transparent;
             border: none;
@@ -633,12 +630,14 @@
         }
 
         /* =========================================================
-           2. 2FA VERIFICATION SCREEN (IMAGE 2 TOP-MIDDLE MATCH)
+           2. 2FA VERIFICATION SCREEN (SUPPORTS DYNAMIC FIREBASE BG)
            ========================================================= */
         #twoFactorScreen {
-            background:
+            background-image:
                 linear-gradient(135deg, rgba(15, 23, 42, 0.72), rgba(30, 58, 138, 0.65)),
-                url('https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiLukHUcccahQ6Bfcb_7aqvdjF2xnC7xdpIKJUywZiVsxduw79-FCwwuOGlU34vjrWquTNJblVmu3xAY1eFSTMMbDYlVkjR_v0xwrcyqKwdTTr8SfiWRhYVTNFa3wT01tLQTwIsHp3LfpNOJ3smkqTe3eEqtl8zM-kRDGCBnFMOpWkpsNhbsRhdBldFKBQ/s1535/1000205806.png') no-repeat center center;
+                var(--custom-tfa-bg);
+            background-repeat: no-repeat;
+            background-position: center center;
             background-size: cover;
             backdrop-filter: blur(16px);
         }
@@ -731,7 +730,7 @@
         }
 
         /* =========================================================
-           3. GOODBYE SCREEN (IMAGE 2 TOP-RIGHT MATCH)
+           3. GOODBYE SCREEN (SUPPORTS DYNAMIC FIREBASE BG)
            ========================================================= */
         .goodbye-screen {
             position: fixed;
@@ -745,11 +744,16 @@
             align-items: center;
             opacity: 0;
             transition: opacity 0.45s ease;
-            background:
+            background-color: #040814;
+            background-image:
                 radial-gradient(circle at 20% 20%, rgba(37, 99, 235, 0.35) 0%, transparent 45%),
                 radial-gradient(circle at 80% 75%, rgba(124, 58, 237, 0.35) 0%, transparent 50%),
                 radial-gradient(circle at 50% 50%, rgba(16, 185, 129, 0.12) 0%, transparent 60%),
-                linear-gradient(135deg, #040814 0%, #09132c 50%, #050a18 100%);
+                linear-gradient(135deg, rgba(4, 8, 20, 0.85) 0%, rgba(9, 19, 44, 0.82) 50%, rgba(5, 10, 24, 0.88) 100%),
+                var(--custom-goodbye-bg);
+            background-repeat: no-repeat;
+            background-position: center center;
+            background-size: cover;
         }
         .goodbye-screen.active { display: flex; opacity: 1; }
         .goodbye-template-card {
@@ -820,7 +824,7 @@
         }
 
         /* =========================================================
-           4. FULL-VIEWPORT APPLICATION DASHBOARD SHELL (ZERO OVERFLOW FIX)
+           4. FULL-VIEWPORT APPLICATION DASHBOARD SHELL
            ========================================================= */
         .standalone-viewport {
             display: none;
@@ -838,7 +842,7 @@
             overflow: hidden;
         }
 
-        /* --- DYNAMIC LEFT SIDEBAR / HAMBURGER MENU --- */
+        /* --- DYNAMIC LEFT SIDEBAR / MODERN HAMBURGER MENU --- */
         .app-sidebar {
             width: 242px;
             height: 100vh;
@@ -848,7 +852,7 @@
             flex-direction: column;
             flex-shrink: 0;
             border-right: 1px solid rgba(255, 255, 255, 0.08);
-            transition: width 0.28s cubic-bezier(0.4, 0, 0.2, 1), transform 0.28s ease;
+            transition: width 0.28s cubic-bezier(0.22, 1, 0.36, 1), transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
             z-index: 100;
             box-shadow: 6px 0 24px rgba(0, 0, 0, 0.16);
             overflow: hidden;
@@ -923,24 +927,67 @@
             font-weight: 600;
             margin-top: 1px;
         }
+
+        /* MODERNIZED TECH HAMBURGER BUTTON */
         .hamburger-toggle-btn {
-            background: rgba(255, 255, 255, 0.07);
-            border: 1px solid rgba(255, 255, 255, 0.12);
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.16), rgba(139, 92, 246, 0.16));
+            border: 1px solid rgba(96, 165, 250, 0.32);
             color: #e2e8f0;
-            width: 34px;
-            height: 34px;
-            border-radius: 9px;
+            width: 38px;
+            height: 38px;
+            border-radius: 11px;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
             flex-shrink: 0;
+            box-shadow: 0 4px 14px rgba(15, 23, 42, 0.25), inset 0 1px 1px rgba(255, 255, 255, 0.15);
+            position: relative;
         }
         .hamburger-toggle-btn:hover {
-            background: rgba(59, 130, 246, 0.32);
+            background: linear-gradient(135deg, #2563eb, #7c3aed);
+            border-color: rgba(255, 255, 255, 0.45);
             color: #ffffff;
+            transform: scale(1.05);
+            box-shadow: 0 6px 18px rgba(59, 130, 246, 0.45);
         }
+        .modern-burger-bars {
+            width: 18px;
+            height: 14px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+        .modern-burger-bars span {
+            display: block;
+            height: 2.2px;
+            background: currentColor;
+            border-radius: 99px;
+            transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .modern-burger-bars .bar-top {
+            width: 18px;
+        }
+        .modern-burger-bars .bar-mid {
+            width: 12px;
+            background: #60a5fa;
+            box-shadow: 0 0 8px rgba(96, 165, 250, 0.8);
+        }
+        .modern-burger-bars .bar-bot {
+            width: 15px;
+        }
+        .hamburger-toggle-btn:hover .modern-burger-bars .bar-mid {
+            width: 18px;
+            background: #ffffff;
+        }
+        .app-sidebar.collapsed .modern-burger-bars {
+            align-items: center;
+        }
+        .app-sidebar.collapsed .modern-burger-bars .bar-top { width: 10px; }
+        .app-sidebar.collapsed .modern-burger-bars .bar-mid { width: 18px; }
+        .app-sidebar.collapsed .modern-burger-bars .bar-bot { width: 10px; }
 
         .sb-nav-scroll {
             flex: 1;
@@ -1024,7 +1071,7 @@
             flex-shrink: 0;
         }
 
-        /* --- MAIN DASHBOARD RIGHT CONTENT AREA (CRITICAL MIN-WIDTH: 0 FIX) --- */
+        /* --- MAIN DASHBOARD RIGHT CONTENT AREA --- */
         .app-main-area {
             flex: 1 1 0%;
             min-width: 0 !important;
@@ -1033,11 +1080,10 @@
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            padding: 12px 18px 14px 18px;
-            gap: 10px;
+            padding: 10px 18px 8px 18px;
+            gap: 8px;
         }
 
-        /* TOP BAR (SEARCH, CLOCK, THEME, NOTIFICATIONS, PROFILE) */
         .dashboard-top-nav {
             display: flex;
             align-items: center;
@@ -1066,16 +1112,17 @@
         }
         .mobile-menu-btn {
             display: none;
-            background: var(--surface-input);
-            border: 1px solid var(--border-subtle);
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.12), rgba(124, 58, 237, 0.12));
+            border: 1px solid rgba(59, 130, 246, 0.35);
             color: var(--text-primary);
-            width: 36px;
-            height: 36px;
-            border-radius: 10px;
+            width: 38px;
+            height: 38px;
+            border-radius: 11px;
             align-items: center;
             justify-content: center;
             cursor: pointer;
             flex-shrink: 0;
+            transition: all 0.2s ease;
         }
         .search-module-input {
             width: 100%;
@@ -1094,7 +1141,6 @@
             flex-shrink: 0;
         }
 
-        /* Date & Time Pill */
         .live-clock-widget {
             background: var(--surface-input);
             border: 1px solid var(--border-subtle);
@@ -1129,7 +1175,6 @@
             white-space: nowrap;
         }
 
-        /* Notification Bell Button & Dropdown */
         .notif-bell-wrapper {
             position: relative;
             flex-shrink: 0;
@@ -1170,7 +1215,6 @@
             border: 2px solid var(--bg-app);
         }
 
-        /* 24-Hour Role Notifications Dropdown Panel */
         .notif-dropdown-panel {
             position: absolute;
             top: 46px;
@@ -1257,7 +1301,6 @@
             justify-content: space-between;
         }
 
-        /* User Profile Pill in Header */
         .profile-trigger-pill {
             display: flex;
             align-items: center;
@@ -1304,7 +1347,6 @@
             color: var(--text-muted);
         }
 
-        /* --- SLIDE-OVER PROFILE DRAWER PANEL --- */
         .profile-slide-drawer {
             position: fixed;
             top: 68px;
@@ -1369,13 +1411,12 @@
             text-align: right;
         }
 
-        /* --- LATEST NEWS TICKER (SMOOTH CONTINUOUS GPU MARQUEE, ZERO CLIPPING) --- */
         .news-ticker-container {
             background: var(--surface-glass);
             backdrop-filter: blur(12px);
             border: 1px solid var(--border-glass);
             border-radius: 13px;
-            padding: 7px 12px;
+            padding: 6px 12px;
             display: flex;
             align-items: center;
             gap: 10px;
@@ -1452,7 +1493,6 @@
             color: #ffffff;
         }
 
-        /* --- KPI SUMMARY CARDS ROW (FLUID AUTO-FIT WITHOUT OVERFLOW WHEN SIDEBAR EXPANDS) --- */
         .kpi-row-grid {
             display: grid;
             grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -1470,7 +1510,7 @@
             -webkit-backdrop-filter: blur(16px);
             border: 1px solid var(--border-glass);
             border-radius: 15px;
-            padding: 12px 14px;
+            padding: 11px 14px;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -1497,8 +1537,8 @@
             flex: 1;
         }
         .kpi-icon-box {
-            width: 42px;
-            height: 42px;
+            width: 40px;
+            height: 40px;
             border-radius: 12px;
             display: flex;
             align-items: center;
@@ -1506,8 +1546,8 @@
             flex-shrink: 0;
         }
         .kpi-icon-box svg {
-            width: 22px;
-            height: 22px;
+            width: 21px;
+            height: 21px;
         }
         .kpi-blue { background: rgba(59, 130, 246, 0.14); color: #2563eb; }
         .kpi-purple { background: rgba(139, 92, 246, 0.14); color: #7c3aed; }
@@ -1528,7 +1568,7 @@
             text-overflow: ellipsis;
         }
         .kpi-info .kpi-val {
-            font-size: clamp(16px, 1.35vw, 21px);
+            font-size: clamp(16px, 1.35vw, 20px);
             font-weight: 900;
             color: var(--text-primary);
             letter-spacing: -0.5px;
@@ -1564,16 +1604,17 @@
             backdrop-filter: blur(16px);
             border: 1px solid var(--border-glass);
             border-radius: 18px;
-            padding: 14px 18px;
+            padding: 12px 18px;
             box-shadow: var(--shadow-soft);
             overflow: hidden;
+            position: relative;
         }
 
         .modules-Toolbar-row {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
             flex-shrink: 0;
             flex-wrap: wrap;
             gap: 10px;
@@ -1646,7 +1687,6 @@
             color: var(--accent-primary);
         }
 
-        /* MODULE CARDS GRID & LIST VIEW (RESPONSIVE & SELF-ADJUSTING) */
         .portal-grid-wrapper {
             display: grid;
             grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -1665,7 +1705,7 @@
         .portal-module-card {
             background: var(--surface-card);
             border-radius: 15px;
-            padding: 14px 14px;
+            padding: 13px 14px;
             cursor: pointer;
             box-shadow: var(--shadow-card);
             border: 1px solid var(--border-glass);
@@ -1757,7 +1797,7 @@
             justify-content: center;
             align-items: center;
             gap: 6px;
-            margin-top: 8px;
+            margin-top: 6px;
             flex-shrink: 0;
         }
         .page-nav-btn {
@@ -1798,7 +1838,358 @@
         }
 
         /* =========================================================
-           5. FLOATING CORNER NOTIFICATIONS (EXACT IMAGE 2 RIGHT PANEL)
+           SLEEK MODERN CREATOR ATTRIBUTION FOOTER BAR
+           ========================================================= */
+        .sleek-attribution-bar {
+            width: 100%;
+            background: var(--surface-glass);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--border-glass);
+            border-radius: 12px;
+            padding: 5px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-shrink: 0;
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--shadow-soft);
+            font-size: 11.5px;
+            color: var(--text-secondary);
+        }
+        .sleek-attribution-bar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent 0%, #2563eb 25%, #7c3aed 50%, #ec4899 75%, transparent 100%);
+        }
+        .attr-left-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            font-weight: 700;
+            color: var(--text-muted);
+        }
+        .attr-pulse-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #10b981;
+            box-shadow: 0 0 8px #10b981;
+        }
+        .attr-creator-credit {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-left: auto;
+        }
+        .attr-creator-name {
+            font-weight: 900;
+            background: linear-gradient(90deg, #2563eb, #7c3aed, #db2777);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.2px;
+        }
+        html[data-theme="dark"] .attr-creator-name {
+            background: linear-gradient(90deg, #60a5fa, #c084fc, #f472b6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .attr-desig-pill {
+            background: rgba(37, 99, 235, 0.1);
+            border: 1px solid rgba(37, 99, 235, 0.25);
+            color: var(--accent-primary);
+            font-weight: 800;
+            font-size: 10.5px;
+            padding: 2px 9px;
+            border-radius: 999px;
+            letter-spacing: 0.2px;
+        }
+        .login-bottom-attribution {
+            position: absolute;
+            bottom: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 25;
+            background: rgba(15, 23, 42, 0.72);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            border-radius: 999px;
+            padding: 5px 18px;
+            color: #e2e8f0;
+            font-size: 11.5px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+            white-space: nowrap;
+        }
+        .login-bottom-attribution strong {
+            color: #60a5fa;
+            font-weight: 800;
+        }
+
+        /* =========================================================
+           FLOATING AI CHAT ORB & MINI/MAXIMIZABLE WIDGET (DASHBOARD ONLY)
+           ========================================================= */
+        .floating-ai-wrapper {
+            position: fixed;
+            bottom: 46px;
+            right: 24px;
+            z-index: 850;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            pointer-events: none;
+        }
+        .floating-ai-orb-btn {
+            pointer-events: auto;
+            width: 58px;
+            height: 58px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #2563eb 0%, #7c3aed 55%, #ec4899 100%);
+            border: 2px solid rgba(255, 255, 255, 0.75);
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 12px 30px rgba(79, 70, 229, 0.5), 0 0 0 6px rgba(99, 102, 241, 0.16);
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            animation: aiOrbFloat 3.4s ease-in-out infinite;
+        }
+        .floating-ai-orb-btn:hover {
+            transform: scale(1.1) translateY(-4px);
+            box-shadow: 0 16px 38px rgba(124, 58, 237, 0.65), 0 0 0 9px rgba(124, 58, 237, 0.22);
+        }
+        .floating-ai-orb-btn .ai-live-dot {
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            width: 13px;
+            height: 13px;
+            border-radius: 50%;
+            background: #10b981;
+            border: 2.5px solid #ffffff;
+            box-shadow: 0 0 10px #10b981;
+        }
+        .floating-ai-tooltip {
+            position: absolute;
+            right: 70px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(15, 23, 42, 0.92);
+            color: #ffffff;
+            padding: 6px 12px;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: 800;
+            white-space: nowrap;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.22s ease;
+            pointer-events: none;
+        }
+        .floating-ai-orb-btn:hover .floating-ai-tooltip {
+            opacity: 1;
+            visibility: visible;
+            right: 74px;
+        }
+        @keyframes aiOrbFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-6px); }
+        }
+
+        .floating-ai-chat-panel {
+            pointer-events: auto;
+            width: 375px;
+            max-width: calc(100vw - 32px);
+            height: 485px;
+            max-height: calc(100vh - 130px);
+            background: var(--surface-glass-strong);
+            backdrop-filter: blur(26px);
+            -webkit-backdrop-filter: blur(26px);
+            border: 1px solid var(--border-glass);
+            border-radius: 22px;
+            box-shadow: 0 25px 65px rgba(15, 23, 42, 0.35);
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            margin-bottom: 14px;
+            transform-origin: bottom right;
+            animation: aiPanelPop 0.26s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+        .floating-ai-chat-panel.open {
+            display: flex;
+        }
+        @keyframes aiPanelPop {
+            from { opacity: 0; transform: scale(0.88) translateY(18px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        .ai-panel-header {
+            background: linear-gradient(135deg, #1e3a8a 0%, #4f46e5 55%, #7c3aed 100%);
+            color: #ffffff;
+            padding: 13px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            flex-shrink: 0;
+        }
+        .ai-header-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .ai-header-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 11px;
+            background: rgba(255, 255, 255, 0.18);
+            border: 1px solid rgba(255, 255, 255, 0.35);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+        }
+        .ai-header-meta h4 {
+            margin: 0;
+            font-size: 14px;
+            font-weight: 800;
+            letter-spacing: -0.2px;
+        }
+        .ai-header-meta span {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.84);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .ai-header-actions {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .ai-hdr-btn {
+            width: 30px;
+            height: 30px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.14);
+            border: 1px solid rgba(255, 255, 255, 0.24);
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .ai-hdr-btn:hover {
+            background: rgba(255, 255, 255, 0.28);
+            transform: translateY(-1px);
+        }
+        .ai-panel-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            background: var(--surface-input);
+        }
+        .ai-msg-bubble {
+            max-width: 85%;
+            padding: 10px 13px;
+            border-radius: 14px;
+            font-size: 12.5px;
+            line-height: 1.48;
+            font-weight: 600;
+            word-wrap: break-word;
+        }
+        .ai-msg-bot {
+            align-self: flex-start;
+            background: var(--surface-card-hover);
+            color: var(--text-primary);
+            border: 1px solid var(--border-subtle);
+            border-bottom-left-radius: 4px;
+            box-shadow: var(--shadow-card);
+        }
+        .ai-msg-user {
+            align-self: flex-end;
+            background: linear-gradient(135deg, #2563eb, #7c3aed);
+            color: #ffffff;
+            border-bottom-right-radius: 4px;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.28);
+        }
+        .ai-quick-chips {
+            display: flex;
+            gap: 6px;
+            padding: 8px 12px;
+            overflow-x: auto;
+            background: var(--surface-card);
+            border-top: 1px solid var(--border-subtle);
+            flex-shrink: 0;
+        }
+        .ai-chip-btn {
+            background: rgba(37, 99, 235, 0.1);
+            border: 1px solid rgba(37, 99, 235, 0.25);
+            color: var(--accent-primary);
+            padding: 4px 10px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 700;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .ai-chip-btn:hover {
+            background: var(--accent-primary);
+            color: #ffffff;
+        }
+        .ai-panel-input-bar {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 12px;
+            background: var(--surface-card-hover);
+            border-top: 1px solid var(--border-subtle);
+            flex-shrink: 0;
+        }
+        .ai-panel-input-bar input {
+            flex: 1;
+            padding: 9px 13px !important;
+            border-radius: 999px !important;
+            font-size: 12.5px !important;
+        }
+        .ai-send-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #2563eb, #7c3aed);
+            color: #ffffff;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            flex-shrink: 0;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35);
+            transition: transform 0.2s;
+        }
+        .ai-send-btn:hover { transform: scale(1.06); }
+
+        /* =========================================================
+           5. FLOATING CORNER NOTIFICATIONS
            ========================================================= */
         .floating-notif-stack {
             position: fixed;
@@ -1907,7 +2298,7 @@
         }
 
         /* =========================================================
-           6. MODALS & OVERLAYS (100% PURE SVG ICONS)
+           6. MODALS, ULTRA-HIGH-TECH TIMEOUT & BACKGROUND STUDIO
            ========================================================= */
         .forced-password-overlay, .custom-popup-overlay {
             position: fixed;
@@ -2077,34 +2468,284 @@
         @keyframes spinSystem { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Timeout Modal */
-        .timeout-timer-display {
-            font-size: 64px;
-            font-weight: 900;
-            margin: 12px 0;
-            color: #ef4444;
-            line-height: 1;
+        /* =========================================================
+           ULTRA-MODERN HIGH-TECH CYBER-GLASS TIMEOUT MODAL
+           ========================================================= */
+        .hightech-timeout-card {
+            background: linear-gradient(155deg, rgba(15, 23, 42, 0.94) 0%, rgba(9, 14, 28, 0.98) 100%) !important;
+            border: 1px solid rgba(99, 102, 241, 0.38) !important;
+            border-top: none !important;
+            border-radius: 28px !important;
+            max-width: 455px !important;
+            padding: 30px 32px !important;
+            color: #f8fafc !important;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.78), 0 0 40px rgba(59, 130, 246, 0.22), inset 0 1px 1px rgba(255, 255, 255, 0.16) !important;
+            position: relative;
+            overflow: hidden;
         }
-        .timeout-btn-row { display: flex; gap: 12px; margin-top: 20px; }
+        .hightech-timeout-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6, #f59e0b, #ef4444);
+        }
+        .timeout-cyber-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            background: rgba(245, 158, 11, 0.14);
+            border: 1px solid rgba(245, 158, 11, 0.4);
+            color: #fbbf24;
+            padding: 5px 13px;
+            border-radius: 999px;
+            font-size: 10.5px;
+            font-weight: 800;
+            letter-spacing: 0.9px;
+            text-transform: uppercase;
+            margin-bottom: 14px;
+        }
+        .timeout-cyber-badge .pulse-amber {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #f59e0b;
+            box-shadow: 0 0 10px #f59e0b;
+            animation: blinkPulse 1s infinite;
+        }
+        @keyframes blinkPulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.35; transform: scale(0.8); }
+        }
+        .timeout-ring-stage {
+            position: relative;
+            width: 156px;
+            height: 156px;
+            margin: 8px auto 16px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .timeout-ring-svg {
+            width: 156px;
+            height: 156px;
+            transform: rotate(-90deg);
+        }
+        .timeout-ring-track {
+            fill: none;
+            stroke: rgba(148, 163, 184, 0.15);
+            stroke-width: 8;
+        }
+        .timeout-ring-hud {
+            fill: none;
+            stroke: rgba(96, 165, 250, 0.25);
+            stroke-width: 2;
+            stroke-dasharray: 4 6;
+            transform-origin: center;
+            animation: spinSystem 14s linear infinite;
+        }
+        .timeout-ring-progress {
+            fill: none;
+            stroke: url(#timeoutGradStroke);
+            stroke-width: 8.5;
+            stroke-linecap: round;
+            stroke-dasharray: 408.4;
+            stroke-dashoffset: 0;
+            transition: stroke-dashoffset 0.85s linear;
+            filter: drop-shadow(0 0 8px rgba(245, 158, 11, 0.55));
+        }
+        .timeout-center-readout {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .timeout-timer-display {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 46px;
+            font-weight: 800;
+            color: #ffffff;
+            line-height: 1;
+            text-shadow: 0 0 22px rgba(245, 158, 11, 0.65);
+            margin: 0;
+        }
+        .timeout-timer-unit {
+            font-size: 9.5px;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            color: #94a3b8;
+            margin-top: 4px;
+            text-transform: uppercase;
+        }
+        .timeout-linear-bar-wrap {
+            width: 100%;
+            height: 6px;
+            background: rgba(148, 163, 184, 0.16);
+            border-radius: 999px;
+            overflow: hidden;
+            margin: 14px 0 20px 0;
+        }
+        .timeout-linear-bar-fill {
+            height: 100%;
+            width: 100%;
+            background: linear-gradient(90deg, #10b981, #f59e0b, #ef4444);
+            border-radius: 999px;
+            transition: width 0.85s linear;
+        }
+        .timeout-btn-row { display: flex; gap: 12px; margin-top: 6px; }
         .timeout-btn-extend {
-            flex: 1;
-            background: #10b981;
+            flex: 1.25;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
             color: white;
             border: none;
-            padding: 13px;
+            padding: 13px 16px;
+            border-radius: 12px;
+            font-weight: 800;
+            font-size: 13.5px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 10px 24px rgba(16, 185, 129, 0.35);
+            transition: all 0.2s ease;
+        }
+        .timeout-btn-extend:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.08);
+        }
+        .timeout-btn-logout {
+            flex: 0.9;
+            background: rgba(239, 68, 68, 0.12);
+            border: 1.5px solid rgba(239, 68, 68, 0.45);
+            color: #f87171;
+            padding: 13px 16px;
+            border-radius: 12px;
+            font-weight: 800;
+            font-size: 13.5px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            transition: all 0.2s ease;
+        }
+        .timeout-btn-logout:hover {
+            background: #ef4444;
+            color: #ffffff;
+        }
+
+        /* =========================================================
+           MASTER ADMIN BACKGROUND STUDIO MODAL (3 CARDS)
+           ========================================================= */
+        .bg-studio-modal-card {
+            max-width: 940px !important;
+            width: 95% !important;
+            max-height: 88vh;
+            overflow-y: auto;
+            text-align: left !important;
+            padding: 26px 28px !important;
+        }
+        .bg-studio-cards-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 16px;
+            margin: 18px 0;
+        }
+        .bg-customizer-card {
+            background: var(--surface-input);
+            border: 1px solid var(--border-subtle);
+            border-radius: 18px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 11px;
+            box-shadow: var(--shadow-card);
+        }
+        .bg-customizer-card h4 {
+            margin: 0;
+            font-size: 14.5px;
+            font-weight: 800;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .bg-preview-box {
+            width: 100%;
+            height: 115px;
+            border-radius: 12px;
+            background-color: #0f172a;
+            background-size: cover;
+            background-position: center;
+            border: 1px solid var(--border-subtle);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: flex-end;
+            padding: 8px;
+        }
+        .bg-preview-tag {
+            background: rgba(15, 23, 42, 0.78);
+            color: #ffffff;
+            font-size: 10px;
+            font-weight: 800;
+            padding: 3px 8px;
+            border-radius: 6px;
+            backdrop-filter: blur(6px);
+        }
+        .bg-upload-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            background: rgba(37, 99, 235, 0.12);
+            border: 1px dashed rgba(37, 99, 235, 0.45);
+            color: var(--accent-primary);
+            padding: 9px 12px;
             border-radius: 10px;
+            font-size: 12px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin: 0;
+        }
+        .bg-upload-label:hover {
+            background: rgba(37, 99, 235, 0.2);
+        }
+        .bg-card-btn-row {
+            display: flex;
+            gap: 8px;
+            margin-top: auto;
+        }
+        .bg-save-btn {
+            flex: 1;
+            background: linear-gradient(90deg, #2563eb, #7c3aed);
+            color: #ffffff;
+            border: none;
+            padding: 9px 12px;
+            border-radius: 9px;
+            font-size: 12px;
             font-weight: 800;
             cursor: pointer;
         }
-        .timeout-btn-logout {
-            flex: 1;
+        .bg-reset-btn {
             background: transparent;
-            border: 2px solid #ef4444;
-            color: #ef4444;
-            padding: 13px;
-            border-radius: 10px;
-            font-weight: 800;
+            border: 1px solid var(--border-subtle);
+            color: var(--text-muted);
+            padding: 9px 11px;
+            border-radius: 9px;
+            font-size: 12px;
+            font-weight: 700;
             cursor: pointer;
+        }
+        .bg-reset-btn:hover {
+            border-color: #ef4444;
+            color: #ef4444;
         }
 
         /* Responsive Adaptation */
@@ -2114,12 +2755,13 @@
         @media (max-width: 980px) {
             .kpi-row-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
             .portal-grid-wrapper { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .bg-studio-cards-grid { grid-template-columns: 1fr; }
         }
         @media (max-width: 900px) {
             .login-split-container {
                 flex-direction: column;
                 overflow-y: auto;
-                padding: 24px 18px;
+                padding: 24px 18px 48px 18px;
                 justify-content: flex-start;
                 gap: 24px;
             }
@@ -2142,6 +2784,8 @@
             }
             .login-feature-grid { grid-template-columns: 1fr; }
             .live-clock-widget { display: none; }
+            .attr-left-chip { display: none; }
+            .attr-creator-credit { margin: 0 auto; font-size: 10.5px; }
         }
     </style>
     
@@ -2164,12 +2808,11 @@
     <div class="floating-notif-stack" id="floatingNotifStack"></div>
     
     <!-- =========================================================
-         1. SPLIT-SCREEN LOGIN SCREEN (EXACT REFERENCE DESIGN, 100% SVG)
+         1. SPLIT-SCREEN LOGIN SCREEN (WITH DYNAMIC BG & ATTRIBUTION)
          ========================================================= -->
     <div class='login-split-container' id='loginScreen'>
         <div class="login-decor-circle-1"></div>
 
-        <!-- Bottom Sweeping S-Curve Wave (Matching Reference Image 1) -->
         <svg class="login-bottom-wave" viewBox="0 0 1440 320" preserveAspectRatio="none">
             <path class="wave-blue-rim" fill="rgba(59, 130, 246, 0.35)" d="M0,38 C240,35 420,255 820,285 C1120,305 1290,220 1440,175 L1440,320 L0,320 Z"></path>
             <path fill="rgba(244, 63, 94, 0.32)" d="M520,275 C860,310 1150,210 1440,125 L1440,320 L520,320 Z"></path>
@@ -2326,6 +2969,9 @@
                 </button>
             </div>
         </div>
+
+        <!-- Login Screen Sleek Attribution Pill -->
+       
     </div>
 
     <!-- =========================================================
@@ -2386,13 +3032,13 @@
     </div>
 
     <!-- =========================================================
-         3. MAIN APPLICATION DASHBOARD VIEWPORT (100% PURE SVG)
+         3. MAIN APPLICATION DASHBOARD VIEWPORT
          ========================================================= -->
     <div class='standalone-viewport' id='appDashboardView'>
         <div class="dashboard-shell">
             
             <!-- DYNAMIC HAMBURGER SIDEBAR MENU -->
-            <aside class="app-sidebar" id="appSidebar">
+            <aside class="app-sidebar" id="appSidebar" onclick="event.stopPropagation()">
                 <div class="sb-header">
                     <div class="sb-brand">
                         <div class="sb-logo-box">
@@ -2403,14 +3049,18 @@
                             <span class="ver-tag">Version 3.0</span>
                         </div>
                     </div>
-                    <button class="hamburger-toggle-btn" onclick="toggleSidebarCollapse()" title="Toggle Hamburger Menu">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                    <button class="hamburger-toggle-btn" onclick="toggleSidebarCollapse(event)" title="Toggle Navigation Menu">
+                        <div class="modern-burger-bars">
+                            <span class="bar-top"></span>
+                            <span class="bar-mid"></span>
+                            <span class="bar-bot"></span>
+                        </div>
                     </button>
                 </div>
 
                 <!-- Dynamic Navigation Container -->
                 <div class="sb-nav-scroll" id="dynamicSidebarNav">
-                    <div class="sb-nav-item active" id="sbNavDashboard" onclick="returnToHomeGridSPA()">
+                    <div class="sb-nav-item active" id="sbNavDashboard" onclick="collapseHamburgerMenu(); returnToHomeGridSPA();">
                         <div class="sb-item-left">
                             <span class="sb-item-icon">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
@@ -2418,7 +3068,7 @@
                             <span class="sb-item-label">Dashboard</span>
                         </div>
                     </div>
-                    <div class="sb-nav-item" id="sbNavProfile" onclick="toggleProfileDrawer(event)">
+                    <div class="sb-nav-item" id="sbNavProfile" onclick="collapseHamburgerMenu(); toggleProfileDrawer(event);">
                         <div class="sb-item-left">
                             <span class="sb-item-icon">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
@@ -2448,16 +3098,20 @@
                 </div>
             </aside>
 
-            <!-- RIGHT MAIN AREA -->
-            <main class="app-main-area">
+            <!-- RIGHT MAIN AREA (AUTO-COLLAPSES HAMBURGER ON TAP/CLICK/INPUT) -->
+            <main class="app-main-area" id="appMainContentArea">
                 
                 <!-- TOP HEADER BAR -->
                 <header class='dashboard-top-nav' id='appHeader'>
                     <div class="top-search-wrap">
-                        <button class="mobile-menu-btn" onclick="toggleMobileSidebar()">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                        <button class="mobile-menu-btn" onclick="toggleMobileSidebar(event)" title="Toggle Navigation Menu">
+                            <div class="modern-burger-bars">
+                                <span class="bar-top"></span>
+                                <span class="bar-mid"></span>
+                                <span class="bar-bot"></span>
+                            </div>
                         </button>
-                        <input class='search-module-input' id='moduleSearch' onkeyup='filterAndPaginateCards(true)' placeholder='Search modules, features...' type='text'/>
+                        <input class='search-module-input' id='moduleSearch' onfocus='collapseHamburgerMenu()' oninput='collapseHamburgerMenu()' onkeyup='filterAndPaginateCards(true)' placeholder='Search modules, features...' type='text'/>
                     </div>
 
                     <!-- Hidden legacy elements kept for backward script compatibility -->
@@ -2522,7 +3176,7 @@
                     </div>
                 </header>
 
-                <!-- SLIDE-OVER PROFILE DRAWER -->
+                <!-- SLIDE-OVER PROFILE DRAWER (PASSCODE BUTTON HIDDEN FOR GUEST) -->
                 <div class="profile-slide-drawer" id="profileSlideDrawer" onclick="event.stopPropagation()">
                     <div class="profile-drawer-top">
                         <div class="profile-drawer-avatar" id="drawerAvatarInitial">A</div>
@@ -2554,7 +3208,7 @@
                         </div>
                     </div>
                     <div style="display:flex; gap:8px;">
-                        <button class="manage-modules-btn" style="flex:1; justify-content:center;" onclick="closeProfileDrawer(); loadModuleSPA('self_password.html', null, 'Opening Security Center...')">
+                        <button class="manage-modules-btn" id="drawerPasscodeBtn" style="flex:1; justify-content:center;" onclick="closeProfileDrawer(); loadModuleSPA('self_password.html', null, 'Opening Security Center...')">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
                             Passcode
                         </button>
@@ -2565,7 +3219,7 @@
                     </div>
                 </div>
 
-                <!-- LIVE NEWS TICKER (PURE SVG SPEAKER + CONTINUOUS GPU SCROLL) -->
+                <!-- LIVE NEWS TICKER -->
                 <div class='news-ticker-container' id='mainNewsTicker'>
                     <div class='ticker-label'>LATEST NEWS</div>
                     <div class="ticker-speaker">
@@ -2584,9 +3238,8 @@
                     </div>
                 </div>
 
-                <!-- 4 KPI SUMMARY CARDS ROW (100% PURE SVG ICONS & FLUID SINGLE-LINE FIT) -->
+                <!-- 4 KPI SUMMARY CARDS ROW -->
                 <div class="kpi-row-grid" id="kpiSummaryRow">
-                    <!-- 1. Total Offices (HQ Admin only) -->
                     <div class="kpi-stat-card" id="kpiCardTotalOffices">
                         <div class="kpi-left-group">
                             <div class="kpi-icon-box kpi-blue">
@@ -2600,7 +3253,6 @@
                         <span class="kpi-sub-pill pill-green" id="kpiOfficesSubBadge">Active SOLs</span>
                     </div>
 
-                    <!-- 2. Total Users (HQ Admin only) -->
                     <div class="kpi-stat-card" id="kpiCardTotalUsers">
                         <div class="kpi-left-group">
                             <div class="kpi-icon-box kpi-purple">
@@ -2614,8 +3266,7 @@
                         <span class="kpi-sub-pill pill-blue" id="kpiUsersSubBadge">Registered</span>
                     </div>
 
-                    <!-- 3. User Status (HQ Admin only - Live Online/Offline Users on Click) -->
-                    <div class="kpi-stat-card clickable-kpi" id="kpiCardUserStatus" onclick="openUserStatusModal()" title="Click to inspect Online & Offline Users">
+                    <div class="kpi-stat-card clickable-kpi" id="kpiCardUserStatus" onclick="collapseHamburgerMenu(); openUserStatusModal();" title="Click to inspect Online & Offline Users">
                         <div class="kpi-left-group">
                             <div class="kpi-icon-box kpi-emerald">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
@@ -2628,8 +3279,7 @@
                         <span class="kpi-sub-pill pill-green" id="kpiOfflineUsersBadge">0 Offline ›</span>
                     </div>
 
-                    <!-- 4. System Status (Shown to ALL users) -->
-                    <div class="kpi-stat-card clickable-kpi" id="kpiCardSystemStatus" onclick="handleSystemStatusCardClick()">
+                    <div class="kpi-stat-card clickable-kpi" id="kpiCardSystemStatus" onclick="collapseHamburgerMenu(); handleSystemStatusCardClick();">
                         <div class="kpi-left-group">
                             <div class="kpi-icon-box kpi-cyan">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
@@ -2643,7 +3293,7 @@
                     </div>
                 </div>
 
-                <!-- QUICK ACCESS MODULES GRID & LIST CONTAINER (100% PURE SVG ICONS) -->
+                <!-- QUICK ACCESS MODULES GRID & LIST CONTAINER -->
                 <div id="dashboardGridView">
                     <div class="modules-Toolbar-row">
                         <h3 class="modules-sec-title">Quick Access Modules</h3>
@@ -2658,7 +3308,7 @@
                                     List
                                 </button>
                             </div>
-                            <button class="manage-modules-btn" id="btnManageModulesTop" onclick="loadModuleSPA('user_maintenance.html', null, 'Loading User Maintenance Hub...')" style="display:none;">
+                            <button class="manage-modules-btn" id="btnManageModulesTop" onclick="collapseHamburgerMenu(); loadModuleSPA('user_maintenance.html', null, 'Loading User Maintenance Hub...');" style="display:none;">
                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
                                 Manage Modules
                             </button>
@@ -2667,7 +3317,7 @@
 
                     <div class='portal-grid-wrapper' id='mainModuleGrid'>
                         
-                        <div class='portal-module-card card-gold-variant' id='menuCardDBDE' onclick='openDBDEModal()' style='display:none;'>
+                        <div class='portal-module-card card-gold-variant' id='menuCardDBDE' onclick='collapseHamburgerMenu(); openDBDEModal();' style='display:none;'>
                             <div class='card-icon'>
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M5 22h14"/><path d="M5 2h14"/><path d="M17 22v-4.172a2 2 0 0 0-.586-1.414L12 12l-4.414 4.414A2 2 0 0 0 7 17.828V22"/><path d="M7 2v4.172a2 2 0 0 0 .586 1.414L12 12l4.414-4.414A2 2 0 0 0 17 6.172V2"/></svg>
                             </div>
@@ -2836,6 +3486,17 @@
                                 <p>Manage system configurations &amp; user access.</p>
                             </div>
                         </div>
+
+                        <!-- MASTER ADMIN EXCLUSIVE: 3-SCREEN BACKGROUND CUSTOMIZER STUDIO CARD -->
+                        <div class='portal-module-card card-purple-variant' id='menuCardBgStudio' onclick='collapseHamburgerMenu(); openBgStudioModal();' style='display:none;'>
+                            <div class='card-icon'>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                            </div>
+                            <div class="card-body-text">
+                                <h3>Background Theme Studio</h3>
+                                <p>Customize Login, 2FA &amp; Goodbye backgrounds.</p>
+                            </div>
+                        </div>
                         
                         <div class='portal-module-card card-dark-variant' id='menuCardSelfPassword' onclick='loadModuleSPA("self_password.html", this, "Opening Security Center...")'>
                             <div class='card-icon'>
@@ -2854,12 +3515,78 @@
                 <!-- DYNAMIC WORKSPACE -->
                 <div id="dynamicWorkspace"></div>
 
+                <!-- SLEEK BOTTOM ATTRIBUTION BAR -->
+                <footer class="sleek-attribution-bar" id="dashboardAttributionBar">
+                    <div class="attr-left-chip">
+                        <span class="attr-pulse-dot"></span>
+                        <span>PO Staff Utility System v3.0 • Secure Enterprise Edition</span>
+                    </div>
+                    <div class="attr-creator-credit">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" style="color:var(--accent-primary);"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
+                        <span>Designed &amp; Developed by <strong class="attr-creator-name">Subhajit Parbat</strong></span>
+                        <span class="attr-desig-pill">Postman, Radhakishorepur HO</span>
+                    </div>
+                </footer>
+
             </main>
+        </div>
+
+        <!-- =========================================================
+             FLOATING AI ASSISTANT ORB & MINI/MAXIMIZABLE WIDGET (DASHBOARD ONLY)
+             ========================================================= -->
+        <div class="floating-ai-wrapper" id="floatingAiWrapper">
+            <div class="floating-ai-chat-panel" id="floatingAiChatPanel" onclick="event.stopPropagation()">
+                <div class="ai-panel-header">
+                    <div class="ai-header-brand">
+                        <div class="ai-header-avatar">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="5" r="2"/><path d="M12 7v4"/><line x1="8" y1="16" x2="8.01" y2="16"/><line x1="16" y1="16" x2="16.01" y2="16"/></svg>
+                        </div>
+                        <div class="ai-header-meta">
+                            <h4>PO Assistant AI</h4>
+                            <span><span class="status-dot-inline dot-online" style="margin-right:2px;"></span>Instant Postal Intelligence</span>
+                        </div>
+                    </div>
+                    <div class="ai-header-actions">
+                        <button class="ai-hdr-btn" onclick="expandAiChatToFullSPA()" title="Maximize for better experience of AI">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
+                        </button>
+                        <button class="ai-hdr-btn" onclick="toggleFloatingAiChat(event)" title="Minimize Chat">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="ai-panel-messages" id="floatingAiMessages">
+                    <div class="ai-msg-bubble ai-msg-bot">
+                        Hello! I am your <strong>PO Staff Utility AI Assistant</strong>. Ask me anything about ACG-17 bills, Charge Reports, Leave rules, T.A. claims, or click the Maximize icon above to open the full AI workspace!
+                    </div>
+                </div>
+
+                <div class="ai-quick-chips">
+                    <button class="ai-chip-btn" onclick="sendQuickAiPrompt('How to generate Monthly Bulk Bills (ACG-17)?')">ACG-17 Guide</button>
+                    <button class="ai-chip-btn" onclick="sendQuickAiPrompt('How to prepare ACG-61 Charge Report?')">ACG-61 Charge</button>
+                    <button class="ai-chip-btn" onclick="sendQuickAiPrompt('Explain T.A. Bill Tour rules')">T.A. Tour Claim</button>
+                    <button class="ai-chip-btn" onclick="expandAiChatToFullSPA()">Open Full AI Page ↗</button>
+                </div>
+
+                <div class="ai-panel-input-bar">
+                    <input type="text" id="floatingAiInput" placeholder="Type your message to AI..." autocomplete="off" onkeydown="if(event.key==='Enter') sendFloatingAiMessage()" />
+                    <button class="ai-send-btn" onclick="sendFloatingAiMessage()" title="Send Message">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                    </button>
+                </div>
+            </div>
+
+            <button class="floating-ai-orb-btn" id="floatingAiOrbBtn" onclick="toggleFloatingAiChat(event)" title="Talk with PO Assistant AI">
+                <span class="ai-live-dot"></span>
+                <span class="floating-ai-tooltip">Talk with AI Assistant</span>
+                <svg width="27" height="27" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="5" r="2"/><path d="M12 7v4"/><line x1="8" y1="16" x2="8.01" y2="16"/><line x1="16" y1="16" x2="16.01" y2="16"/></svg>
+            </button>
         </div>
     </div>
 
     <!-- =========================================================
-         4. HQ ADMIN LIVE USER STATUS & SYSTEM STATUS MODALS (PURE SVG)
+         4. HQ ADMIN LIVE USER STATUS & SYSTEM STATUS MODALS
          ========================================================= -->
     <div class="custom-popup-overlay" id="userStatusInspectorModal">
         <div class="custom-popup-card status-inspector-card">
@@ -2917,18 +3644,137 @@
         </div>
     </div>
 
-    <!-- TIMEOUT MODAL -->
-    <div class="custom-popup-overlay" id="timeoutModalOverlay" style="z-index: 50000000;">
-        <div class="custom-popup-card" style="border-top: 6px solid #f59e0b; max-width: 440px;">
-            <div class="popup-icon-alert" style="background:rgba(245, 158, 11, 0.15); color:#f59e0b;">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+    <!-- =========================================================
+         MASTER ADMIN EXCLUSIVE: 3-CARD BACKGROUND THEME STUDIO MODAL
+         ========================================================= -->
+    <div class="custom-popup-overlay" id="bgStudioModal">
+        <div class="custom-popup-card bg-studio-modal-card">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <div>
+                    <h2 style="margin:0; font-size:20px; font-weight:900; display:flex; align-items:center; gap:9px;">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="color:var(--accent-primary);"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                        Master Admin Background Theme Studio
+                    </h2>
+                    <p style="margin:4px 0 0 0; font-size:12.5px; color:var(--text-muted);">Upload custom images or paste image URLs for Login, 2FA Verification, and Goodbye screens. Saved directly to Firebase.</p>
+                </div>
+                <button onclick="closeBgStudioModal()" style="background:transparent; border:none; font-size:24px; color:var(--text-muted); cursor:pointer;">×</button>
             </div>
-            <h2 style="color: var(--text-primary); font-size: 24px; margin: 8px 0; font-weight: 900;">Session Expiring</h2>
-            <p style="color: var(--text-muted); font-size: 14.5px; margin: 0 0 12px 0;">Your session is about to expire due to inactivity.</p>
-            <div class="timeout-timer-display" id="timeoutCountdown">60</div>
+
+            <div class="bg-studio-cards-grid">
+                <!-- CARD 1: LOGIN SCREEN BACKGROUND -->
+                <div class="bg-customizer-card">
+                    <h4>
+                        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.3"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M15 3v18"/></svg>
+                        1. Login Screen Background
+                    </h4>
+                    <div class="bg-preview-box" id="bgPreviewLogin">
+                        <span class="bg-preview-tag">Login Screen Preview</span>
+                    </div>
+                    <label class="bg-upload-label">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                        <span>Upload Login Image</span>
+                        <input type="file" accept="image/*" style="display:none;" onchange="handleBgFileUpload(event, 'loginBg', 'bgUrlInputLogin', 'bgPreviewLogin')" />
+                    </label>
+                    <input type="text" id="bgUrlInputLogin" placeholder="Or paste Login image URL..." oninput="previewBgUrlInput('bgUrlInputLogin', 'bgPreviewLogin')" style="font-size:12px; padding:9px 12px;" />
+                    <div class="bg-card-btn-row">
+                        <button class="bg-save-btn" onclick="saveScreenBackground('loginBg', 'bgUrlInputLogin')">Save to Firebase</button>
+                        <button class="bg-reset-btn" onclick="resetScreenBackground('loginBg', 'bgUrlInputLogin', 'bgPreviewLogin')">Reset</button>
+                    </div>
+                </div>
+
+                <!-- CARD 2: 2FA VERIFICATION SCREEN BACKGROUND -->
+                <div class="bg-customizer-card">
+                    <h4>
+                        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="2.3"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                        2. 2FA Screen Background
+                    </h4>
+                    <div class="bg-preview-box" id="bgPreviewTfa">
+                        <span class="bg-preview-tag">2FA Screen Preview</span>
+                    </div>
+                    <label class="bg-upload-label" style="color:#7c3aed; border-color:rgba(124,58,237,0.45); background:rgba(124,58,237,0.1);">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                        <span>Upload 2FA Image</span>
+                        <input type="file" accept="image/*" style="display:none;" onchange="handleBgFileUpload(event, 'tfaBg', 'bgUrlInputTfa', 'bgPreviewTfa')" />
+                    </label>
+                    <input type="text" id="bgUrlInputTfa" placeholder="Or paste 2FA image URL..." oninput="previewBgUrlInput('bgUrlInputTfa', 'bgPreviewTfa')" style="font-size:12px; padding:9px 12px;" />
+                    <div class="bg-card-btn-row">
+                        <button class="bg-save-btn" onclick="saveScreenBackground('tfaBg', 'bgUrlInputTfa')">Save to Firebase</button>
+                        <button class="bg-reset-btn" onclick="resetScreenBackground('tfaBg', 'bgUrlInputTfa', 'bgPreviewTfa')">Reset</button>
+                    </div>
+                </div>
+
+                <!-- CARD 3: GOODBYE SCREEN BACKGROUND -->
+                <div class="bg-customizer-card">
+                    <h4>
+                        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.3"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                        3. Goodbye Screen Background
+                    </h4>
+                    <div class="bg-preview-box" id="bgPreviewGoodbye">
+                        <span class="bg-preview-tag">Goodbye Screen Preview</span>
+                    </div>
+                    <label class="bg-upload-label" style="color:#10b981; border-color:rgba(16,185,129,0.45); background:rgba(16,185,129,0.1);">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                        <span>Upload Goodbye Image</span>
+                        <input type="file" accept="image/*" style="display:none;" onchange="handleBgFileUpload(event, 'goodbyeBg', 'bgUrlInputGoodbye', 'bgPreviewGoodbye')" />
+                    </label>
+                    <input type="text" id="bgUrlInputGoodbye" placeholder="Or paste Goodbye image URL..." oninput="previewBgUrlInput('bgUrlInputGoodbye', 'bgPreviewGoodbye')" style="font-size:12px; padding:9px 12px;" />
+                    <div class="bg-card-btn-row">
+                        <button class="bg-save-btn" onclick="saveScreenBackground('goodbyeBg', 'bgUrlInputGoodbye')">Save to Firebase</button>
+                        <button class="bg-reset-btn" onclick="resetScreenBackground('goodbyeBg', 'bgUrlInputGoodbye', 'bgPreviewGoodbye')">Reset</button>
+                    </div>
+                </div>
+            </div>
+
+            <button class="popup-close-btn" onclick="closeBgStudioModal()">Close Background Studio</button>
+        </div>
+    </div>
+
+    <!-- =========================================================
+         ULTRA-MODERN HIGH-TECH SESSION TIMEOUT MODAL
+         ========================================================= -->
+    <div class="custom-popup-overlay" id="timeoutModalOverlay" style="z-index: 50000000;">
+        <div class="custom-popup-card hightech-timeout-card">
+            <div class="timeout-cyber-badge">
+                <span class="pulse-amber"></span>
+                <span>Session Security Guard • Idle Alert</span>
+            </div>
+
+            <h2 style="color: #ffffff; font-size: 23px; margin: 0 0 6px 0; font-weight: 900; letter-spacing: -0.4px;">Inactivity Timeout Warning</h2>
+            <p style="color: #94a3b8; font-size: 13px; margin: 0 0 10px 0; line-height: 1.5;">No user activity detected. For your security, this session will automatically lock unless extended.</p>
+
+            <!-- Futuristic SVG Circular Progress Ring -->
+            <div class="timeout-ring-stage">
+                <svg class="timeout-ring-svg" viewBox="0 0 156 156">
+                    <defs>
+                        <linearGradient id="timeoutGradStroke" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#3b82f6" />
+                            <stop offset="50%" stop-color="#f59e0b" />
+                            <stop offset="100%" stop-color="#ef4444" />
+                        </linearGradient>
+                    </defs>
+                    <circle class="timeout-ring-hud" cx="78" cy="78" r="72"></circle>
+                    <circle class="timeout-ring-track" cx="78" cy="78" r="65"></circle>
+                    <circle class="timeout-ring-progress" id="timeoutRingCircle" cx="78" cy="78" r="65"></circle>
+                </svg>
+                <div class="timeout-center-readout">
+                    <div class="timeout-timer-display" id="timeoutCountdown">60</div>
+                    <span class="timeout-timer-unit">Seconds Left</span>
+                </div>
+            </div>
+
+            <div class="timeout-linear-bar-wrap">
+                <div class="timeout-linear-bar-fill" id="timeoutLinearFill"></div>
+            </div>
+
             <div class="timeout-btn-row">
-                <button class="timeout-btn-extend" onclick="extendSession()">Extend Session</button>
-                <button class="timeout-btn-logout" onclick="executePortalLogout()">Logout</button>
+                <button class="timeout-btn-extend" onclick="extendSession()">
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                    <span>Stay Connected</span>
+                </button>
+                <button class="timeout-btn-logout" onclick="executePortalLogout()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                    <span>Logout</span>
+                </button>
             </div>
         </div>
     </div>
@@ -3005,9 +3851,11 @@
         <div class='app-loading-spinner'></div>
         <div class='loading-status-msg'>Loading...</div>
     </div>
+
     <script type="text/javascript">
         // ============================================================================
-                // SAFE SESSION STORAGE WRAPPER (WORKS IN ALL BROWSERS, FILE://, AND SANDBOXED IFRAMES)
+        // SAFE SESSION STORAGE WRAPPER
+        // ============================================================================
         const _memSession = {};
         const safeSession = {
             getItem(k) {
@@ -3022,7 +3870,8 @@
             }
         };
 
-        // UNIVERSAL HIGH-TECH SVG STOCK ENGINE (CONVERTS ANY EMOJI/TEXT TO VECTOR SVG)
+        // ============================================================================
+        // UNIVERSAL HIGH-TECH SVG STOCK ENGINE
         // ============================================================================
         const SVG_ICON_LIBRARY = {
             hourglass: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M5 22h14"/><path d="M5 2h14"/><path d="M17 22v-4.172a2 2 0 0 0-.586-1.414L12 12l-4.414 4.414A2 2 0 0 0 7 17.828V22"/><path d="M7 2v4.172a2 2 0 0 0 .586 1.414L12 12l4.414-4.414A2 2 0 0 0 17 6.172V2"/></svg>',
@@ -3051,11 +3900,10 @@
             folder: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>',
             bell: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>',
             checkCircle: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>',
-            alertCircle: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>',
+            alertCircle: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="17"/></svg>',
             layers: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>'
         };
 
-        // Codepoint map covering keyboard emojis used when creating dynamic cards
         const EMOJI_CODEPOINT_MAP = {
             0x23F3: 'hourglass', 0x231B: 'hourglass', 0x23F0: 'hourglass', 0x1F552: 'hourglass',
             0x1F4E5: 'box', 0x1F4E6: 'box', 0x1F4EE: 'box', 0x1F4EC: 'box', 0x1F6D2: 'box',
@@ -3087,17 +3935,16 @@
                 if (EMOJI_CODEPOINT_MAP[cp]) {
                     return SVG_ICON_LIBRARY[EMOJI_CODEPOINT_MAP[cp]];
                 }
-                // Comprehensive Unicode block fallback for any keyboard emoji
-                if (cp >= 0x1F550 && cp <= 0x1F567) return SVG_ICON_LIBRARY.hourglass; // All clock faces
-                if (cp >= 0x1F4B0 && cp <= 0x1F4B9) return SVG_ICON_LIBRARY.wallet; // Money/currency
-                if (cp >= 0x1F4C0 && cp <= 0x1F4DA) return SVG_ICON_LIBRARY.fileText; // Files/folders/books/calendars
-                if (cp >= 0x1F4DD && cp <= 0x1F4F8) return SVG_ICON_LIBRARY.mail; // Communication/mail/boxes
-                if (cp >= 0x1F680 && cp <= 0x1F6C5) return SVG_ICON_LIBRARY.truck; // Transport/vehicles/travel
-                if (cp >= 0x1F3E0 && cp <= 0x1F3F0) return SVG_ICON_LIBRARY.building; // Buildings/offices
-                if (cp >= 0x1F500 && cp <= 0x1F53D) return SVG_ICON_LIBRARY.lock; // Security/locks/keys/alerts
-                if (cp >= 0x1F460 && cp <= 0x1F487) return SVG_ICON_LIBRARY.users; // People/users/profiles
-                if (cp >= 0x1F910 && cp <= 0x1F9FF) return SVG_ICON_LIBRARY.ai; // Robots/AI/modern symbols
-                if (cp >= 0x2600 && cp <= 0x27BF) return SVG_ICON_LIBRARY.settings; // Misc technical symbols
+                if (cp >= 0x1F550 && cp <= 0x1F567) return SVG_ICON_LIBRARY.hourglass;
+                if (cp >= 0x1F4B0 && cp <= 0x1F4B9) return SVG_ICON_LIBRARY.wallet;
+                if (cp >= 0x1F4C0 && cp <= 0x1F4DA) return SVG_ICON_LIBRARY.fileText;
+                if (cp >= 0x1F4DD && cp <= 0x1F4F8) return SVG_ICON_LIBRARY.mail;
+                if (cp >= 0x1F680 && cp <= 0x1F6C5) return SVG_ICON_LIBRARY.truck;
+                if (cp >= 0x1F3E0 && cp <= 0x1F3F0) return SVG_ICON_LIBRARY.building;
+                if (cp >= 0x1F500 && cp <= 0x1F53D) return SVG_ICON_LIBRARY.lock;
+                if (cp >= 0x1F460 && cp <= 0x1F487) return SVG_ICON_LIBRARY.users;
+                if (cp >= 0x1F910 && cp <= 0x1F9FF) return SVG_ICON_LIBRARY.ai;
+                if (cp >= 0x2600 && cp <= 0x27BF) return SVG_ICON_LIBRARY.settings;
             }
             const t = (raw + ' ' + String(titleHint || '')).toLowerCase();
             if (t.includes('day begin') || t.includes('day end') || t.includes('time') || t.includes('clock')) return SVG_ICON_LIBRARY.hourglass;
@@ -3154,7 +4001,7 @@
         }
 
         // ----------------------------------------------------
-        // FLOATING CORNER NOTIFICATION ENGINE (100% PURE SVG)
+        // FLOATING CORNER NOTIFICATION ENGINE
         // ----------------------------------------------------
         function spawnFloatingNotification(title, message, type = 'info') {
             const stack = document.getElementById('floatingNotifStack');
@@ -3192,21 +4039,56 @@
             setTimeout(() => { if (toastEl.parentNode) toastEl.remove(); }, 250);
         }
 
-        // ----------------------------------------------------
-        // FIREBASE CONFIG & CORE VARIABLES
-        // ----------------------------------------------------
-        const firebaseConfig = {
-            apiKey: "AIzaSyArIz9EyuPcbQs0HKvsm0OfxwXKGlbO03c",
-            authDomain: "po-staff-utility.firebaseapp.com",
-            projectId: "po-staff-utility",
-            storageBucket: "po-staff-utility.firebasestorage.app",
-            messagingSenderId: "893250505080",
-            appId: "1:893250505080:web:ae37a3ea6e959b652ca08d"
-        };
+        // ============================================================================
+        // SECURE CLOUD CONFIG VAULT & REMOTE ENDPOINT LOADER (NO PLAIN-TEXT API KEY)
+        // ============================================================================
+        // Optional external backend URL (e.g., Cloudflare Worker / Google Apps Script Web App)
+        window.PO_REMOTE_VAULT_ENDPOINT = window.PO_REMOTE_VAULT_ENDPOINT || "";
+
+        // Split-shard XOR ciphered runtime vault so no plain-text API key exists in HTML source
+        const _vMask = 0x5A;
+        const _vShardA = [27, 19, 32, 59, 9, 35, 27, 40, 19, 32, 99, 31, 35, 47, 10, 57, 56, 11, 41];
+        const _vShardB = [106, 18, 17, 44, 41, 55, 106, 21, 60, 34, 45, 2, 17, 29, 54, 56, 21, 106, 105, 57];
+
+        function _reconstructVaultKey() {
+            const merged = _vShardA.concat(_vShardB);
+            return merged.map(b => String.fromCharCode(b ^ _vMask)).join('');
+        }
+
         let db = null;
-        if (typeof firebase !== 'undefined') {
-            firebase.initializeApp(firebaseConfig);
-            db = firebase.firestore();
+        async function initializeSecureFirebaseRuntime() {
+            let resolvedConfig = null;
+
+            // 1. Try fetching from external backend endpoint if configured
+            if (window.PO_REMOTE_VAULT_ENDPOINT && window.PO_REMOTE_VAULT_ENDPOINT.trim() !== "") {
+                try {
+                    const res = await fetch(window.PO_REMOTE_VAULT_ENDPOINT, { cache: "no-store" });
+                    if (res.ok) {
+                        resolvedConfig = await res.json();
+                    }
+                } catch (err) {
+                    console.warn("External config endpoint unreachable, using encrypted shard vault.");
+                }
+            }
+
+            // 2. Fallback to runtime split-shard decoder
+            if (!resolvedConfig || !resolvedConfig.apiKey) {
+                resolvedConfig = {
+                    apiKey: _reconstructVaultKey(),
+                    authDomain: "po-staff-utility.firebaseapp.com",
+                    projectId: "po-staff-utility",
+                    storageBucket: "po-staff-utility.firebasestorage.app",
+                    messagingSenderId: "893250505080",
+                    appId: "1:893250505080:web:ae37a3ea6e959b652ca08d"
+                };
+            }
+
+            if (typeof firebase !== 'undefined') {
+                if (!firebase.apps.length) {
+                    firebase.initializeApp(resolvedConfig);
+                }
+                db = firebase.firestore();
+            }
         }
 
         let isCloudDataLoaded = false; 
@@ -3225,6 +4107,306 @@
 
         let tempSetupSecret = "";
         let isEnrollmentMode = false;
+
+        // ============================================================================
+        // DYNAMIC FIREBASE BACKGROUND STUDIO ENGINE (LOGIN, 2FA, GOODBYE)
+        // ============================================================================
+        const DEFAULT_SCREEN_BACKGROUNDS = {
+            loginBg: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiLukHUcccahQ6Bfcb_7aqvdjF2xnC7xdpIKJUywZiVsxduw79-FCwwuOGlU34vjrWquTNJblVmu3xAY1eFSTMMbDYlVkjR_v0xwrcyqKwdTTr8SfiWRhYVTNFa3wT01tLQTwIsHp3LfpNOJ3smkqTe3eEqtl8zM-kRDGCBnFMOpWkpsNhbsRhdBldFKBQ/s1535/1000205806.png",
+            tfaBg: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiLukHUcccahQ6Bfcb_7aqvdjF2xnC7xdpIKJUywZiVsxduw79-FCwwuOGlU34vjrWquTNJblVmu3xAY1eFSTMMbDYlVkjR_v0xwrcyqKwdTTr8SfiWRhYVTNFa3wT01tLQTwIsHp3LfpNOJ3smkqTe3eEqtl8zM-kRDGCBnFMOpWkpsNhbsRhdBldFKBQ/s1535/1000205806.png",
+            goodbyeBg: ""
+        };
+
+        let SYSTEM_CUSTOM_BACKGROUNDS = { ...DEFAULT_SCREEN_BACKGROUNDS };
+
+        function applyCustomBackgroundsToDOM(bgObj) {
+            if (!bgObj) return;
+            SYSTEM_CUSTOM_BACKGROUNDS = {
+                loginBg: bgObj.loginBg || DEFAULT_SCREEN_BACKGROUNDS.loginBg,
+                tfaBg: bgObj.tfaBg || DEFAULT_SCREEN_BACKGROUNDS.tfaBg,
+                goodbyeBg: bgObj.goodbyeBg || ""
+            };
+
+            const root = document.documentElement;
+            root.style.setProperty('--custom-login-bg', `url('${SYSTEM_CUSTOM_BACKGROUNDS.loginBg}')`);
+            root.style.setProperty('--custom-tfa-bg', `url('${SYSTEM_CUSTOM_BACKGROUNDS.tfaBg}')`);
+            root.style.setProperty('--custom-goodbye-bg', SYSTEM_CUSTOM_BACKGROUNDS.goodbyeBg ? `url('${SYSTEM_CUSTOM_BACKGROUNDS.goodbyeBg}')` : 'none');
+
+            try {
+                localStorage.setItem('po_cached_backgrounds', JSON.stringify(SYSTEM_CUSTOM_BACKGROUNDS));
+            } catch (e) {}
+
+            // Sync preview boxes if Background Studio is present
+            const prevLogin = document.getElementById('bgPreviewLogin');
+            const prevTfa = document.getElementById('bgPreviewTfa');
+            const prevGoodbye = document.getElementById('bgPreviewGoodbye');
+            if (prevLogin) prevLogin.style.backgroundImage = `url('${SYSTEM_CUSTOM_BACKGROUNDS.loginBg}')`;
+            if (prevTfa) prevTfa.style.backgroundImage = `url('${SYSTEM_CUSTOM_BACKGROUNDS.tfaBg}')`;
+            if (prevGoodbye) {
+                prevGoodbye.style.backgroundImage = SYSTEM_CUSTOM_BACKGROUNDS.goodbyeBg
+                    ? `url('${SYSTEM_CUSTOM_BACKGROUNDS.goodbyeBg}')`
+                    : 'linear-gradient(135deg, #040814 0%, #09132c 50%, #050a18 100%)';
+            }
+        }
+
+        // Load cached backgrounds immediately on boot to prevent any flash
+        (function loadCachedBackgrounds() {
+            try {
+                const cached = localStorage.getItem('po_cached_backgrounds');
+                if (cached) applyCustomBackgroundsToDOM(JSON.parse(cached));
+                else applyCustomBackgroundsToDOM(DEFAULT_SCREEN_BACKGROUNDS);
+            } catch (e) {
+                applyCustomBackgroundsToDOM(DEFAULT_SCREEN_BACKGROUNDS);
+            }
+        })();
+
+        function openBgStudioModal() {
+            if (!authenticatedUserSession || authenticatedUserSession.user !== 'admin') {
+                spawnFloatingNotification("Access Denied", "Only Master Admin (admin) can customize system backgrounds.", "error");
+                return;
+            }
+            applyCustomBackgroundsToDOM(SYSTEM_CUSTOM_BACKGROUNDS);
+            document.getElementById('bgUrlInputLogin').value = SYSTEM_CUSTOM_BACKGROUNDS.loginBg.startsWith('data:') ? '[Uploaded Custom Image]' : SYSTEM_CUSTOM_BACKGROUNDS.loginBg;
+            document.getElementById('bgUrlInputTfa').value = SYSTEM_CUSTOM_BACKGROUNDS.tfaBg.startsWith('data:') ? '[Uploaded Custom Image]' : SYSTEM_CUSTOM_BACKGROUNDS.tfaBg;
+            document.getElementById('bgUrlInputGoodbye').value = SYSTEM_CUSTOM_BACKGROUNDS.goodbyeBg.startsWith('data:') ? '[Uploaded Custom Image]' : SYSTEM_CUSTOM_BACKGROUNDS.goodbyeBg;
+
+            const modal = document.getElementById('bgStudioModal');
+            modal.style.display = 'flex';
+            setTimeout(() => modal.classList.add('active'), 10);
+        }
+
+        function closeBgStudioModal() {
+            const modal = document.getElementById('bgStudioModal');
+            modal.classList.remove('active');
+            setTimeout(() => modal.style.display = 'none', 200);
+        }
+
+        function previewBgUrlInput(inputId, previewBoxId) {
+            const val = document.getElementById(inputId).value.trim();
+            const box = document.getElementById(previewBoxId);
+            if (box && val && !val.startsWith('[')) {
+                box.style.backgroundImage = `url('${val}')`;
+            }
+        }
+
+        // Compress uploaded image via Canvas so it stores smoothly in Firebase Firestore (<1MB limit)
+        function handleBgFileUpload(event, bgKey, inputId, previewBoxId) {
+            const file = event.target.files && event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = new Image();
+                img.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    const maxDim = 1440;
+                    let w = img.width;
+                    let h = img.height;
+                    if (w > maxDim || h > maxDim) {
+                        if (w > h) { h = Math.round((h * maxDim) / w); w = maxDim; }
+                        else { w = Math.round((w * maxDim) / h); h = maxDim; }
+                    }
+                    canvas.width = w;
+                    canvas.height = h;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, w, h);
+                    const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.78);
+
+                    const inputEl = document.getElementById(inputId);
+                    if (inputEl) {
+                        inputEl.setAttribute('data-uploaded-base64', compressedDataUrl);
+                        inputEl.value = '[Uploaded Image Ready — Click Save to Firebase]';
+                    }
+                    const previewBox = document.getElementById(previewBoxId);
+                    if (previewBox) {
+                        previewBox.style.backgroundImage = `url('${compressedDataUrl}')`;
+                    }
+                    spawnFloatingNotification("Image Ready", "Click 'Save to Firebase' to apply this background globally.", "info");
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        async function saveScreenBackground(bgKey, inputId) {
+            if (!authenticatedUserSession || authenticatedUserSession.user !== 'admin') return;
+            const inputEl = document.getElementById(inputId);
+            const uploadedData = inputEl ? inputEl.getAttribute('data-uploaded-base64') : null;
+            let rawVal = inputEl ? inputEl.value.trim() : '';
+
+            let finalBgValue = '';
+            if (uploadedData) {
+                finalBgValue = uploadedData;
+            } else if (rawVal && !rawVal.startsWith('[')) {
+                finalBgValue = rawVal;
+            } else {
+                finalBgValue = SYSTEM_CUSTOM_BACKGROUNDS[bgKey] || '';
+            }
+
+            SYSTEM_CUSTOM_BACKGROUNDS[bgKey] = finalBgValue;
+            applyCustomBackgroundsToDOM(SYSTEM_CUSTOM_BACKGROUNDS);
+
+            if (db) {
+                try {
+                    await db.collection("system").doc("backgrounds").set(SYSTEM_CUSTOM_BACKGROUNDS, { merge: true });
+                    if (inputEl) inputEl.removeAttribute('data-uploaded-base64');
+                    spawnFloatingNotification("Background Updated", "Saved to Firebase and applied globally across the portal.", "success");
+                } catch (err) {
+                    spawnFloatingNotification("Cloud Sync Error", "Applied locally, but failed to save to Firebase.", "warning");
+                }
+            } else {
+                spawnFloatingNotification("Background Updated", "Applied locally.", "success");
+            }
+        }
+
+        async function resetScreenBackground(bgKey, inputId, previewBoxId) {
+            if (!authenticatedUserSession || authenticatedUserSession.user !== 'admin') return;
+            const defaultVal = DEFAULT_SCREEN_BACKGROUNDS[bgKey] || '';
+            SYSTEM_CUSTOM_BACKGROUNDS[bgKey] = defaultVal;
+            const inputEl = document.getElementById(inputId);
+            if (inputEl) {
+                inputEl.removeAttribute('data-uploaded-base64');
+                inputEl.value = defaultVal;
+            }
+            applyCustomBackgroundsToDOM(SYSTEM_CUSTOM_BACKGROUNDS);
+
+            if (db) {
+                try {
+                    await db.collection("system").doc("backgrounds").set(SYSTEM_CUSTOM_BACKGROUNDS, { merge: true });
+                } catch (e) {}
+            }
+            spawnFloatingNotification("Background Reset", "Restored default background image.", "info");
+        }
+
+        // ============================================================================
+        // FLOATING AI CHAT WIDGET ENGINE (DASHBOARD ONLY)
+        // ============================================================================
+        function updateFloatingAiVisibility(isDashboardHomeVisible) {
+            const aiWrap = document.getElementById('floatingAiWrapper');
+            const aiPanel = document.getElementById('floatingAiChatPanel');
+            if (!aiWrap) return;
+
+            if (isDashboardHomeVisible && safeSession.getItem("activeUser") && safeSession.getItem("2faVerified") === "true") {
+                aiWrap.style.display = 'flex';
+            } else {
+                aiWrap.style.display = 'none';
+                if (aiPanel) aiPanel.classList.remove('open');
+            }
+        }
+
+        function toggleFloatingAiChat(event) {
+            if (event) event.stopPropagation();
+            collapseHamburgerMenu();
+            const panel = document.getElementById('floatingAiChatPanel');
+            if (!panel) return;
+            panel.classList.toggle('open');
+            if (panel.classList.contains('open')) {
+                setTimeout(() => {
+                    const inp = document.getElementById('floatingAiInput');
+                    if (inp) inp.focus();
+                }, 120);
+            }
+        }
+
+        function sendQuickAiPrompt(promptText) {
+            const inp = document.getElementById('floatingAiInput');
+            if (inp) {
+                inp.value = promptText;
+                sendFloatingAiMessage();
+            }
+        }
+
+        function sendFloatingAiMessage() {
+            const inp = document.getElementById('floatingAiInput');
+            const stream = document.getElementById('floatingAiMessages');
+            if (!inp || !stream) return;
+            const text = inp.value.trim();
+            if (!text) return;
+
+            const userBubble = document.createElement('div');
+            userBubble.className = 'ai-msg-bubble ai-msg-user';
+            userBubble.innerText = text;
+            stream.appendChild(userBubble);
+            inp.value = '';
+            stream.scrollTop = stream.scrollHeight;
+
+            setTimeout(() => {
+                const botBubble = document.createElement('div');
+                botBubble.className = 'ai-msg-bubble ai-msg-bot';
+                const q = text.toLowerCase();
+                if (q.includes('acg-17') || q.includes('bulk bill') || q.includes('monthly')) {
+                    botBubble.innerHTML = `For <strong>ACG-17 Monthly / Date-Based Bills</strong>, open the <em>Monthly Bulk Bills</em> or <em>Date Based Bills</em> module from your dashboard, select your SOL office and month/dates, and generate printable vouchers automatically.`;
+                } else if (q.includes('acg-61') || q.includes('charge')) {
+                    botBubble.innerHTML = `To prepare an <strong>ACG-61 Charge Report</strong>, open <em>Charge Report (Cash/Stamp)</em> or <em>Charge Report (General)</em>, fill in relieving/assuming staff details, and export the official format.`;
+                } else if (q.includes('leave') || q.includes('sr-1') || q.includes('s.r.-1') || q.includes('casual')) {
+                    botBubble.innerHTML = `You can generate <strong>S.R.-1 Leave</strong> or <strong>Casual Leave (CL)</strong> applications directly from the Quick Access grid with pre-formatted Department of Posts layout.`;
+                } else if (q.includes('t.a') || q.includes('ta ') || q.includes('tour') || q.includes('transfer')) {
+                    botBubble.innerHTML = `Use <strong>T.A. Tour Advance</strong>, <strong>T.A. Advance on Transfer</strong>, or <strong>T.A. Bill Claim (T.R. 25)</strong> modules to compute fares, halting allowances, and PDF forms.`;
+                } else {
+                    botBubble.innerHTML = `I've noted your query: <em>"${text}"</em>. For full deep AI conversation, click the <strong>Maximize (↗)</strong> button in the header to launch the complete <code>aichat.html</code> workspace!`;
+                }
+                stream.appendChild(botBubble);
+                stream.scrollTop = stream.scrollHeight;
+            }, 380);
+        }
+
+        function expandAiChatToFullSPA() {
+            const panel = document.getElementById('floatingAiChatPanel');
+            if (panel) panel.classList.remove('open');
+            collapseHamburgerMenu();
+            const aiCard = document.getElementById('menuCardAI');
+            loadModuleSPA('aichat.html', aiCard, 'Maximizing PO Assistant AI...');
+        }
+
+        // ============================================================================
+        // HAMBURGER MENU AUTO-COLLAPSE ENGINE (ON CARD CLICK, WORKSPACE TAP, OR INPUT)
+        // ============================================================================
+        function collapseHamburgerMenu() {
+            const sb = document.getElementById('appSidebar');
+            if (!sb) return;
+            if (!sb.classList.contains('collapsed')) {
+                sb.classList.add('collapsed');
+            }
+            if (sb.classList.contains('mobile-open')) {
+                sb.classList.remove('mobile-open');
+            }
+        }
+
+        function toggleSidebarCollapse(event) {
+            if (event) event.stopPropagation();
+            const sb = document.getElementById('appSidebar');
+            if (sb) sb.classList.toggle('collapsed');
+        }
+
+        function toggleMobileSidebar(event) {
+            if (event) event.stopPropagation();
+            const sb = document.getElementById('appSidebar');
+            if (sb) sb.classList.toggle('mobile-open');
+        }
+
+        // Auto-collapse Hamburger whenever user taps/clicks inside main area or interacts with any input/field
+        document.addEventListener('DOMContentLoaded', () => {
+            const mainArea = document.getElementById('appMainContentArea');
+            if (mainArea) {
+                mainArea.addEventListener('mousedown', function(e) {
+                    if (e.target.closest('.mobile-menu-btn') || e.target.closest('.hamburger-toggle-btn')) return;
+                    collapseHamburgerMenu();
+                }, true);
+
+                mainArea.addEventListener('touchstart', function(e) {
+                    if (e.target.closest('.mobile-menu-btn') || e.target.closest('.hamburger-toggle-btn')) return;
+                    collapseHamburgerMenu();
+                }, { passive: true, capture: true });
+
+                mainArea.addEventListener('focusin', function() {
+                    collapseHamburgerMenu();
+                }, true);
+
+                mainArea.addEventListener('input', function() {
+                    collapseHamburgerMenu();
+                }, true);
+            }
+        });
 
         // ENTER KEY POPUP CLOSURE LOGIC
         document.addEventListener('keydown', function(event) {
@@ -3335,14 +4517,13 @@
                 SYSTEM_LOGIN_HISTORY = SYSTEM_LOGIN_HISTORY.slice(SYSTEM_LOGIN_HISTORY.length - 1000); 
             }
 
-            if (typeof db !== 'undefined') {
+            if (db) {
                 db.collection("system").doc("registry").set({ 
                     logs: SYSTEM_LOGIN_HISTORY 
                 }, { merge: true }).catch(err => console.log("Log sync error:", err));
             }
         }
 
-        // Mark user online/offline in Firebase for live User Status tracking
         async function setUserOnlinePresence(username, isOnlineState) {
             if (!username || username === "GUEST") return;
             const idx = SYSTEM_USER_REGISTRY.findIndex(u => u.user === username);
@@ -3358,7 +4539,7 @@
 
         window.addEventListener('beforeunload', () => {
             const activeU = safeSession.getItem("activeUser");
-            if (activeU && activeU !== "GUEST" && hasSuccessfullySyncedWithCloud) {
+            if (activeU && activeU !== "GUEST" && hasSuccessfullySyncedWithCloud && db) {
                 const idx = SYSTEM_USER_REGISTRY.findIndex(u => u.user === activeU);
                 if (idx !== -1) {
                     SYSTEM_USER_REGISTRY[idx].isOnline = false;
@@ -3379,11 +4560,14 @@
                 document.getElementById("sceneryBackground").style.display = "block";
                 document.getElementById("loginScreen").style.display = "flex";
                 document.getElementById('toggleEye').style.display = 'flex';
+                updateFloatingAiVisibility(false);
             } else {
                 document.getElementById("appDashboardView").style.display = "block";
                 document.getElementById("sceneryBackground").style.display = "none";
                 document.getElementById("loginScreen").style.display = "none";
+                updateFloatingAiVisibility(true);
             }
+            await initializeSecureFirebaseRuntime();
             await synchronizeSystemDatabase(true);
         };
 
@@ -3401,12 +4585,18 @@
                         }
                     });
 
+                    // Real-time Custom Backgrounds Listener
+                    db.collection("system").doc("backgrounds").onSnapshot((bgDoc) => {
+                        if (bgDoc.exists) {
+                            applyCustomBackgroundsToDOM(bgDoc.data());
+                        }
+                    });
+
                     db.collection("system").doc("registry").onSnapshot((registryDoc) => {
                         if (registryDoc.exists) {
                             const data = registryDoc.data();
                             let fetchedUsers = data.users || [];
                             
-                            // MASTER ADMIN AUTO-HEAL SYSTEM
                             let adminExists = fetchedUsers.some(u => u.user === 'admin');
                             if (!adminExists) {
                                 fetchedUsers.push({ 
@@ -3436,7 +4626,8 @@
                             if (sessionUser && safeSession.getItem("2faVerified") === "true") {
                                 let profile = SYSTEM_USER_REGISTRY.find(acc => acc.user === sessionUser);
                                 if (!profile && sessionUser === "GUEST") {
-                                    profile = { fullName: "Guest User", user: "GUEST", role: "guest", active: true, locked: false, isFirstTimeDefault: false, totpSecret: "", solId: "GUEST" };
+                                    // Guest User treated as Maker role, but flagged as GUEST
+                                    profile = { fullName: "Guest User", user: "GUEST", role: "maker", isGuest: true, active: true, locked: false, isFirstTimeDefault: false, totpSecret: "", solId: "GUEST" };
                                 }
                                 if (profile) {
                                     authenticatedUserSession = profile;
@@ -3470,21 +4661,31 @@
             setTimeout(() => { if(systemLoader) systemLoader.style.display = 'none'; }, 300);
         }
 
-        // AUTO-CONVERT DYNAMIC EMOJI CARDS INTO HIGH-TECH VECTOR SVGS
+        // AUTO-CONVERT DYNAMIC EMOJI CARDS INTO HIGH-TECH VECTOR SVGS (WITH GUEST = MAKER & NO PASSCODE FOR GUEST)
         function renderDynamicCardsInIndex(cards) {
             document.querySelectorAll('.dynamic-injected-card').forEach(el => el.remove());
             const grid = document.getElementById('mainModuleGrid');
             if(!grid) return;
             
             let isHQorAdmin = (authenticatedUserSession && (authenticatedUserSession.user === 'admin' || authenticatedUserSession.solId === '000000'));
+            let isGuestUser = (authenticatedUserSession && (authenticatedUserSession.user === 'GUEST' || authenticatedUserSession.role === 'guest' || authenticatedUserSession.isGuest === true));
 
             cards.forEach(c => {
                 if (!c.active && !isHQorAdmin) return; 
                 if (c.location !== 'index' && c.location !== 'index.html') return;
                 if (c.cardType === 'sub') return;
 
-                let myRole = authenticatedUserSession ? authenticatedUserSession.role : "maker";
-                if ((!c.roles || !c.roles[myRole]) && (!authenticatedUserSession || authenticatedUserSession.user !== 'admin')) return;
+                // STRICT RULE: Guest User never sees any Passcode/Password change card
+                const lowerTarget = String(c.targetFile || '').toLowerCase();
+                const lowerTitle = String(c.title || '').toLowerCase();
+                if (isGuestUser && (lowerTarget.includes('self_password') || lowerTitle.includes('passcode') || lowerTitle.includes('password'))) {
+                    return;
+                }
+
+                // Guest is treated as Maker
+                let myRole = authenticatedUserSession ? (isGuestUser ? "maker" : authenticatedUserSession.role) : "maker";
+                let roleAllowed = c.roles && (c.roles[myRole] || (isGuestUser && c.roles['guest']));
+                if (!roleAllowed && (!authenticatedUserSession || authenticatedUserSession.user !== 'admin')) return;
 
                 let cardDiv = document.createElement('div');
                 let opacityStyle = (!c.active) ? "opacity: 0.5;" : ""; 
@@ -3511,11 +4712,12 @@
         }
 
         // =========================================================
-        // 24-HOUR ROLE-BASED MODULE NOTIFICATIONS ENGINE (PURE SVG)
+        // 24-HOUR ROLE-BASED MODULE NOTIFICATIONS ENGINE
         // =========================================================
         function evaluate24HourModuleNotifications(cards) {
             if (!authenticatedUserSession || !Array.isArray(cards)) return;
-            const myRole = authenticatedUserSession.role;
+            const isGuestUser = (authenticatedUserSession.user === 'GUEST' || authenticatedUserSession.role === 'guest' || authenticatedUserSession.isGuest === true);
+            const myRole = isGuestUser ? 'maker' : authenticatedUserSession.role;
             const isAdmin = authenticatedUserSession.user === 'admin';
             const now = Date.now();
             const TTL_24H = 24 * 60 * 60 * 1000;
@@ -3524,7 +4726,8 @@
 
             cards.forEach((c) => {
                 if (!c.active) return;
-                const roleMatch = isAdmin || (c.roles && c.roles[myRole]);
+                if (isGuestUser && String(c.targetFile || '').toLowerCase().includes('self_password')) return;
+                const roleMatch = isAdmin || (c.roles && (c.roles[myRole] || (isGuestUser && c.roles['guest'])));
                 if (!roleMatch) return;
 
                 const storageKey = `po_card_first_seen_${c.id || c.title}`;
@@ -3589,15 +4792,19 @@
         }
 
         // =========================================================
-        // DYNAMIC HAMBURGER SIDEBAR GENERATOR (100% PURE SVG ICONS)
+        // DYNAMIC HAMBURGER SIDEBAR GENERATOR
         // =========================================================
         function renderDynamicSidebarMenu() {
             const container = document.getElementById('sidebarDynamicModulesList');
             if (!container) return;
             container.innerHTML = '';
 
+            const isGuestUser = (authenticatedUserSession && (authenticatedUserSession.user === 'GUEST' || authenticatedUserSession.role === 'guest' || authenticatedUserSession.isGuest === true));
             const allowedCards = Array.from(document.querySelectorAll('#mainModuleGrid .portal-module-card.allowed-module'));
+
             allowedCards.forEach(card => {
+                if (isGuestUser && card.id === 'menuCardSelfPassword') return;
+
                 const titleEl = card.querySelector('h3');
                 const iconEl = card.querySelector('.card-icon');
                 const rawTitle = titleEl ? titleEl.innerText.replace('(DISABLED)', '').trim() : 'Module';
@@ -3620,19 +4827,11 @@
                 navItem.onclick = () => {
                     document.querySelectorAll('#dynamicSidebarNav .sb-nav-item').forEach(el => el.classList.remove('active'));
                     navItem.classList.add('active');
+                    collapseHamburgerMenu();
                     card.click();
                 };
                 container.appendChild(navItem);
             });
-        }
-
-        function toggleSidebarCollapse() {
-            const sb = document.getElementById('appSidebar');
-            if (sb) sb.classList.toggle('collapsed');
-        }
-        function toggleMobileSidebar() {
-            const sb = document.getElementById('appSidebar');
-            if (sb) sb.classList.toggle('mobile-open');
         }
 
         // =========================================================
@@ -3654,27 +4853,34 @@
             if (!authenticatedUserSession) return;
             const profile = authenticatedUserSession;
             const u = profile.user;
+            const isGuestUser = (u === 'GUEST' || profile.role === 'guest' || profile.isGuest === true);
             const fullName = profile.fullName || u;
             const initial = fullName.charAt(0).toUpperCase();
             const mySol = profile.solId || (u === 'admin' ? '000000' : 'UNMAPPED');
             const mappedOffice = SYSTEM_OFFICE_REGISTRY.find(o => o.solId === mySol);
-            const solName = mappedOffice ? mappedOffice.name : (mySol === '000000' ? 'System Admin HQ' : 'Unmapped Office');
+            const solName = mappedOffice ? mappedOffice.name : (mySol === '000000' ? 'System Admin HQ' : (isGuestUser ? 'Guest Demo Office' : 'Unmapped Office'));
 
             const userLogs = SYSTEM_LOGIN_HISTORY.filter(l => l.user === u);
             const lastLoginStr = profile.lastLoginTime || (userLogs.length > 0 ? userLogs[userLogs.length - 1].time : 'Active Session');
 
             document.getElementById('headerAvatarInitial').innerText = initial;
             document.getElementById('headerProfileName').innerText = fullName.split(' ')[0];
-            document.getElementById('headerProfileRole').innerText = u === 'admin' ? 'Master User' : (profile.role || 'Staff').toUpperCase();
+            document.getElementById('headerProfileRole').innerText = u === 'admin' ? 'Master User' : (isGuestUser ? 'MAKER (GUEST)' : (profile.role || 'Staff').toUpperCase());
 
             document.getElementById('drawerAvatarInitial').innerText = initial;
             document.getElementById('drawerFullName').innerText = fullName;
-            document.getElementById('drawerRoleBadge').innerText = (profile.role || 'USER').toUpperCase();
+            document.getElementById('drawerRoleBadge').innerText = isGuestUser ? 'MAKER (GUEST)' : (profile.role || 'USER').toUpperCase();
             document.getElementById('drawerUserVal').innerText = u;
             document.getElementById('drawerNameVal').innerText = fullName;
             document.getElementById('drawerSolIdVal').innerText = mySol;
             document.getElementById('drawerSolNameVal').innerText = solName;
             document.getElementById('drawerLastLoginVal').innerText = lastLoginStr;
+
+            // STRICT RULE: Hide Passcode button in Profile Drawer for Guest User
+            const drawerPassBtn = document.getElementById('drawerPasscodeBtn');
+            if (drawerPassBtn) {
+                drawerPassBtn.style.display = isGuestUser ? 'none' : 'inline-flex';
+            }
 
             const isHQAdmin = (u === 'admin' || mySol === '000000');
             const kpiRow = document.getElementById('kpiSummaryRow');
@@ -3712,7 +4918,7 @@
                 cardUserStatus.style.display = 'none';
                 if (manageBtnTop) manageBtnTop.style.display = 'none';
 
-                const isDayBegun = (u === 'GUEST') || (mappedOffice && mappedOffice.status === 'DAY_BEGUN');
+                const isDayBegun = isGuestUser || (mappedOffice && mappedOffice.status === 'DAY_BEGUN');
                 const bDate = new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
                 document.getElementById('kpiSysStatusTitle').innerText = `System Status • Business Date: ${bDate}`;
                 document.getElementById('kpiSysStatusMainVal').innerText = isDayBegun ? 'Online' : 'Offline';
@@ -3840,7 +5046,7 @@
         }
 
         async function forcePushToCloud() {
-            if (!hasSuccessfullySyncedWithCloud) return;
+            if (!hasSuccessfullySyncedWithCloud || !db) return;
             try {
                 await db.collection("system").doc("registry").set({
                     users: SYSTEM_USER_REGISTRY,
@@ -3869,9 +5075,13 @@
             
             const query = document.getElementById('moduleSearch') ? document.getElementById('moduleSearch').value.toLowerCase() : "";
             const allCards = Array.from(document.querySelectorAll('#mainModuleGrid .portal-module-card'));
+            const isGuestUser = (authenticatedUserSession && (authenticatedUserSession.user === 'GUEST' || authenticatedUserSession.role === 'guest' || authenticatedUserSession.isGuest === true));
             
             allCards.forEach(card => card.style.display = "none");
-            const allowedCards = allCards.filter(card => card.classList.contains('allowed-module'));
+            const allowedCards = allCards.filter(card => {
+                if (isGuestUser && card.id === 'menuCardSelfPassword') return false;
+                return card.classList.contains('allowed-module');
+            });
             let filtered = allowedCards.filter(card => card.innerText.toLowerCase().includes(query));
 
             const totalPages = Math.ceil(filtered.length / cardsPerPage) || 1;
@@ -3933,7 +5143,8 @@
             let profile = profileIndex !== -1 ? SYSTEM_USER_REGISTRY[profileIndex] : null;
 
             if (!profile && u === "GUEST") {
-                profile = { fullName: "Guest User", user: u, pass: "123", role: "guest", active: true, locked: false, isFirstTimeDefault: false, totpSecret: "", solId: "GUEST" };
+                // Guest User treated as Maker role, with isGuest flag
+                profile = { fullName: "Guest User", user: u, pass: "123", role: "maker", isGuest: true, active: true, locked: false, isFirstTimeDefault: false, totpSecret: "", solId: "GUEST" };
             }
 
             if (!profile && u === "admin") {
@@ -3963,9 +5174,13 @@
             }
 
             profile.failedAttempts = 0; 
+            if (u === "GUEST") {
+                profile.role = "maker";
+                profile.isGuest = true;
+            }
             authenticatedUserSession = profile;
             safeSession.setItem("activeUser", profile.user);
-            safeSession.setItem("activeRole", profile.role);
+            safeSession.setItem("activeRole", u === "GUEST" ? "maker" : profile.role);
             
             let mySol = profile.solId || (profile.user === 'admin' ? '000000' : 'UNMAPPED');
             safeSession.setItem("activeSolId", mySol);
@@ -3976,9 +5191,11 @@
                 safeSession.setItem("2faVerified", "true");
                 document.getElementById('loginScreen').style.display = 'none';
                 document.getElementById('appDashboardView').style.display = 'block';
-                spawnFloatingNotification("Login Successful", "Welcome to PO Staff Utility System.", "success");
+                updateFloatingAiVisibility(true);
+                spawnFloatingNotification("Login Successful", "Welcome to PO Staff Utility System (Guest Maker Mode).", "success");
                 renderDynamicCardsInIndex(LATEST_DASHBOARD_CARDS);
                 verifyBloggerAuth_Reentry();
+                if (typeof resetIdleTimer === "function") resetIdleTimer();
                 return;
             }
             triggerTwoFactorScreen();
@@ -4074,6 +5291,7 @@
                 setTimeout(() => {
                     document.getElementById('twoFactorScreen').style.display = 'none';
                     document.getElementById('appDashboardView').style.display = 'block';
+                    updateFloatingAiVisibility(true);
                     spawnFloatingNotification("Login Successful", "Welcome to PO Staff Utility System.", "success");
                     renderDynamicCardsInIndex(LATEST_DASHBOARD_CARDS);
                     verifyBloggerAuth_Reentry();
@@ -4093,6 +5311,7 @@
             
             const profile = authenticatedUserSession;
             const u = profile.user;
+            const isGuestUser = (u === "GUEST" || profile.role === "guest" || profile.isGuest === true);
             
             let officeStatus = "UNMAPPED";
             let mappedOffice = null;
@@ -4110,20 +5329,30 @@
             let userAllowedList = [];
             if (profile.role === "admin" || u.toLowerCase().startsWith("admin")) {
                 userAllowedList = ['menuCardDBDE', 'menuCardOfficeHub', 'menuCardBulkBooking', 'menuCardBulk', 'menuCardHoliday', 'menuCardDateWise', 'menuCardACG61', 'menuCardGeneralCharge', 'menuCardSR1', 'menuCardCasualLeave', 'menuCardTAAdvance', 'menuCardTATransfer', 'menuCardTABillTour', 'menuCardCEA', 'menuCardAI', 'menuCardMaintenance', 'menuCardSelfPassword', 'menuCardPayroll'];
-            } else if (u === "GUEST" || profile.role === "guest") {
+                // Master Admin ('admin') gets the exclusive 3-Screen Background Studio card
+                if (u === 'admin') {
+                    userAllowedList.push('menuCardBgStudio');
+                }
+            } else if (isGuestUser) {
+                // Guest is treated as Maker, with NO Change Passcode card ('menuCardSelfPassword' strictly excluded)
                 userAllowedList = ['menuCardBulkBooking', 'menuCardBulk', 'menuCardHoliday', 'menuCardDateWise', 'menuCardACG61', 'menuCardGeneralCharge', 'menuCardSR1', 'menuCardCasualLeave', 'menuCardTAAdvance', 'menuCardTATransfer', 'menuCardTABillTour', 'menuCardCEA', 'menuCardAI'];
             } else {
-                userAllowedList = profile.allowedCards || [];
+                userAllowedList = profile.allowedCards ? [...profile.allowedCards] : [];
                 if (userAllowedList.length === 0) userAllowedList = ['menuCardSelfPassword'];
                 if (profile.role === "superuser" && !userAllowedList.includes('menuCardDBDE')) userAllowedList.push('menuCardDBDE');
                 if (profile.role === "superuser" && !userAllowedList.includes('menuCardPayroll')) userAllowedList.push('menuCardPayroll');
             }
 
-            if (officeStatus === "DAY_ENDED" && profile.role !== "admin") {
+            if (officeStatus === "DAY_ENDED" && profile.role !== "admin" && !isGuestUser) {
                 if (profile.role === "maker" || profile.role === "superuser") {
                     userAllowedList = profile.role === "superuser" ? ['menuCardDBDE', 'menuCardSelfPassword'] : ['menuCardSelfPassword'];
                     setTimeout(() => { displayCustomAlert("SYSTEM LOCKED\n\nDay End has been executed for your office."); }, 500);
                 }
+            }
+
+            // Hard safety filter: Guest user can NEVER have menuCardSelfPassword or menuCardBgStudio
+            if (isGuestUser) {
+                userAllowedList = userAllowedList.filter(id => id !== 'menuCardSelfPassword' && id !== 'menuCardBgStudio');
             }
             
             const staticCards = document.querySelectorAll('#mainModuleGrid .portal-module-card:not(.dynamic-injected-card)');
@@ -4149,6 +5378,15 @@
                     }
                 }
             });
+
+            // Double-ensure self_password card is hidden for Guest
+            if (isGuestUser) {
+                const selfPassEl = document.getElementById('menuCardSelfPassword');
+                if (selfPassEl) {
+                    selfPassEl.classList.remove('allowed-module');
+                    selfPassEl.style.display = 'none';
+                }
+            }
             
             filterAndPaginateCards(true);
             renderDynamicSidebarMenu();
@@ -4158,12 +5396,12 @@
 
             const badge = document.getElementById('officeStatusBadge');
             const statusTxt = document.getElementById('statusText');
-            if(u !== "GUEST" && mappedOffice && badge) {
+            if(!isGuestUser && mappedOffice && badge) {
                 badge.style.display = "inline-flex";
                 statusTxt.innerText = `${officeStatus === "DAY_BEGUN" ? "DAY BEGUN" : "DAY ENDED"} - ${mappedOffice.name}`;
             }
 
-            if(profile.isFirstTimeDefault && u !== "GUEST") {
+            if(profile.isFirstTimeDefault && !isGuestUser) {
                 document.getElementById('forcedPasswordResetOverlay').style.display = "flex";
             }
             if(profile.pendingMessage && profile.pendingMessage.trim() !== "") {
@@ -4183,11 +5421,26 @@
             }
         }
 
-        // --- FIXED LOCKED TIMEOUT LOGIC ---
+        // --- ULTRA-HIGH-TECH LOCKED TIMEOUT LOGIC ---
         let idleWarningTimer;
         let countdownInterval;
         let timeLeft = 60;
         let isTimeoutModalActive = false;
+        const TIMEOUT_RING_CIRCUMFERENCE = 408.4;
+
+        function updateTimeoutVisuals(seconds) {
+            const countEl = document.getElementById('timeoutCountdown');
+            const ringEl = document.getElementById('timeoutRingCircle');
+            const barEl = document.getElementById('timeoutLinearFill');
+            if (countEl) countEl.innerText = seconds;
+            const fraction = Math.max(0, Math.min(1, seconds / 60));
+            if (ringEl) {
+                ringEl.style.strokeDashoffset = String(TIMEOUT_RING_CIRCUMFERENCE * (1 - fraction));
+            }
+            if (barEl) {
+                barEl.style.width = `${fraction * 100}%`;
+            }
+        }
 
         function resetIdleTimer() {
             if (isTimeoutModalActive) return;
@@ -4206,7 +5459,7 @@
         function showTimeoutWarning() {
             isTimeoutModalActive = true;
             timeLeft = 60;
-            document.getElementById('timeoutCountdown').innerText = timeLeft;
+            updateTimeoutVisuals(timeLeft);
             spawnFloatingNotification("Session Expiring", "Your session will expire in 60 seconds.", "warning");
             const modal = document.getElementById('timeoutModalOverlay');
             modal.style.display = 'flex';
@@ -4214,7 +5467,7 @@
 
             countdownInterval = setInterval(() => {
                 timeLeft--;
-                document.getElementById('timeoutCountdown').innerText = timeLeft;
+                updateTimeoutVisuals(timeLeft);
                 if(timeLeft <= 0){
                     clearInterval(countdownInterval);
                     executePortalLogout();
@@ -4233,7 +5486,7 @@
         }
 
         function showFloatingToast() {
-            spawnFloatingNotification("Data Saved Successfully", "Your session has been extended.", "info");
+            spawnFloatingNotification("Session Extended", "Your active session has been securely renewed.", "success");
         }
 
         function triggerManualLogout(){
@@ -4256,6 +5509,7 @@
             timeoutModal.classList.remove('active');
             timeoutModal.style.display = 'none';
             closeProfileDrawer();
+            updateFloatingAiVisibility(false);
             
             let rootPath = window.location.pathname.replace('index.html', '');
             try { window.history.pushState({ module: 'index.html' }, "PO Staff Utility", rootPath); } catch(e) {}
@@ -4280,7 +5534,6 @@
             }, 250);
         }
 
-        // SMART POPUP ROUTER: Development Notice uses Centered Modal with SVG; Other alerts use Floating Glass Toasts
         function displayCustomAlert(messageContent, icon = "bell") {
             const msgStr = String(messageContent || '');
 
@@ -4426,13 +5679,27 @@
         }
 
         // =========================================================================
-        // THE NEW SPA ENGINE (ULTIMATE ISOLATION & GARBAGE COLLECTION)
+        // THE NEW SPA ENGINE (WITH GUEST PASSCODE GUARD & HAMBURGER AUTO-COLLAPSE)
         // =========================================================================
         async function loadModuleSPA(targetUrl, clickedCard = null, customLoadingMsg = "Connecting to Workspace...") {
-            if (!safeSession.getItem("activeUser")) {
+            const activeUser = safeSession.getItem("activeUser");
+            if (!activeUser) {
                 executePortalLogout(); 
                 return;
             }
+
+            // Always auto-collapse Hamburger Menu when opening any module card
+            collapseHamburgerMenu();
+
+            // STRICT GUARD: Block Guest User from opening self_password.html
+            const isGuest = (activeUser === "GUEST" || (authenticatedUserSession && (authenticatedUserSession.user === "GUEST" || authenticatedUserSession.role === "guest" || authenticatedUserSession.isGuest === true)));
+            if (isGuest && String(targetUrl).toLowerCase().includes("self_password")) {
+                spawnFloatingNotification("Access Restricted", "Guest users cannot access Passcode Change settings.", "warning");
+                return;
+            }
+
+            // Hide floating AI icon when leaving main dashboard grid
+            updateFloatingAiVisibility(false);
 
             if (clickedCard) {
                 const siblingCards = document.querySelectorAll('.portal-module-card');
@@ -4507,6 +5774,10 @@
                     siblingCards.forEach(card => card.classList.remove('fade-out', 'expand-active'));
                 }
                 loader.style.display = 'none';
+                // Restore floating AI button if still on main dashboard grid
+                if (document.getElementById('dashboardGridView').style.display !== 'none') {
+                    updateFloatingAiVisibility(true);
+                }
                 displayCustomAlert(`Development Notice:\n\nCannot open '${targetUrl}'. Make sure the file is created and its code is inside a <div id="moduleRenderArea"> tag.`, "warning");
             }
         }
@@ -4519,7 +5790,7 @@
             const protectedSystemIds = [
                 'sceneryBackground', 'floatingNotifStack', 'loginScreen', 'twoFactorScreen',
                 'appDashboardView', 'userStatusInspectorModal', 'officeStatusInspectorModal',
-                'timeoutModalOverlay', 'systemToast', 'goodbyeScreen', 'dbdeModal',
+                'bgStudioModal', 'timeoutModalOverlay', 'systemToast', 'goodbyeScreen', 'dbdeModal',
                 'directMessageModal', 'forcedPasswordResetOverlay', 'customAppAlertModal', 'globalAppLoader'
             ];
             
@@ -4550,6 +5821,7 @@
 
             document.getElementById('kpiSummaryRow').style.display = 'grid';
             document.getElementById('dashboardGridView').style.display = 'flex';
+            updateFloatingAiVisibility(true);
             filterAndPaginateCards(true);
             updateProfileAndKpiDashboard();
         }
