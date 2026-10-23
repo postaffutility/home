@@ -151,10 +151,10 @@
         }
 
         /* =========================================================
-           HQ SYSTEM ADMIN EXCLUSIVE DUAL-CARD SELECTOR (000000 / admin)
+           DUAL-CARD SELECTOR (ADAPTS FOR BOTH HQ ADMIN & BRANCH ADMIN)
            ========================================================= */
         .csu-hq-cards-grid {
-            display: none;
+            display: grid;
             grid-template-columns: repeat(2, minmax(0, 1fr));
             gap: 18px;
             margin-bottom: 24px;
@@ -239,6 +239,7 @@
             justify-content: space-between;
             gap: 8px;
             margin-bottom: 5px;
+            flex-wrap: wrap;
         }
 
         .csu-hq-card-top h3 {
@@ -271,7 +272,7 @@
         }
 
         /* =========================================================
-           WORKSPACE PANELS (CREATE FORM vs VERIFY REQUESTS)
+           WORKSPACE PANELS (CREATE FORM vs VERIFY / STATUS TABLE)
            ========================================================= */
         .csu-panel-view {
             display: none;
@@ -369,6 +370,41 @@
             background: var(--surface-input-focus, #ffffff);
             box-shadow: 0 0 0 3.5px rgba(37, 99, 235, 0.15);
             outline: none;
+        }
+
+        /* STRICT LOCKED SOL STYLING FOR BRANCH ADMINS */
+        .csu-input.sol-locked-field {
+            background: rgba(37, 99, 235, 0.08) !important;
+            border-color: rgba(37, 99, 235, 0.38) !important;
+            color: #2563eb !important;
+            font-family: 'JetBrains Mono', monospace !important;
+            font-weight: 900 !important;
+            cursor: not-allowed !important;
+            user-select: none;
+        }
+        html[data-theme="dark"] .csu-input.sol-locked-field {
+            color: #60a5fa !important;
+            background: rgba(59, 130, 246, 0.15) !important;
+        }
+
+        .csu-branch-lock-pill {
+            flex: 1 1 200px;
+            background: rgba(16, 185, 129, 0.1);
+            border: 1.5px solid rgba(16, 185, 129, 0.35);
+            color: #059669;
+            border-radius: 12px;
+            padding: 11px 14px;
+            font-size: 12px;
+            font-weight: 800;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            user-select: none;
+        }
+        html[data-theme="dark"] .csu-branch-lock-pill {
+            color: #34d399;
+            background: rgba(16, 185, 129, 0.16);
         }
 
         /* USERNAME AVAILABILITY PILL & SUGGESTION CHIPS */
@@ -552,7 +588,7 @@
         }
 
         /* =========================================================
-           PANEL 2: VERIFY SINGLE USER REQUESTS TABLE (HQ EXCLUSIVE)
+           PANEL 2: VERIFY / VIEW REQUEST STATUS TABLE (24H TTL)
            ========================================================= */
         .csu-verify-toolbar {
             display: flex;
@@ -584,6 +620,22 @@
             background: linear-gradient(90deg, #059669, #0ea5e9);
             color: #ffffff;
             border-color: transparent;
+        }
+
+        .csu-ttl-info-banner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            padding: 10px 15px;
+            margin-bottom: 14px;
+            border-radius: 12px;
+            background: rgba(37, 99, 235, 0.08);
+            border: 1px solid rgba(59, 130, 246, 0.25);
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text-secondary, #334155);
+            flex-wrap: wrap;
         }
 
         .csu-table-wrap {
@@ -641,6 +693,20 @@
         .csu-audit-btn:hover {
             transform: translateY(-1px);
             filter: brightness(1.08);
+        }
+
+        .csu-ttl-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 10.5px;
+            font-weight: 800;
+            padding: 3px 8px;
+            border-radius: 6px;
+            margin-top: 4px;
+            background: var(--surface-input, #f1f5f9);
+            color: var(--text-muted, #64748b);
+            border: 1px solid var(--border-subtle, #cbd5e1);
         }
 
         /* =========================================================
@@ -759,7 +825,7 @@
             box-shadow: 0 6px 16px rgba(37, 99, 235, 0.12);
         }
 
-        /* BLUE COLORED SOL ID AS REQUESTED */
+        /* BLUE COLORED SOL ID */
         .csu-sol-code-blue {
             font-family: 'JetBrains Mono', monospace;
             font-size: 13.5px;
@@ -868,7 +934,7 @@
                             <span id="csuMainHeaderTitle">Create Single User Studio</span>
                             <span class="csu-mode-badge" id="csuOperatorBadge">Checking Access...</span>
                         </h2>
-                        <p id="csuMainHeaderSubtitle">Provision new staff accounts with live username verification, SOL directory mapping &amp; default passcode vault.</p>
+                        <p id="csuMainHeaderSubtitle">Provision new staff accounts with live username verification, SOL mapping &amp; 24-hour status tracking.</p>
                     </div>
                 </div>
 
@@ -894,7 +960,7 @@
             </div>
 
             <!-- =========================================================
-                 2 PROMINENT CARDS FOR SYSTEM ADMIN HQ (000000 / admin ONLY)
+                 2 PROMINENT CARDS (ADAPTS FOR SYSTEM ADMIN HQ & BRANCH ADMIN)
                  ========================================================= -->
             <div class="csu-hq-cards-grid" id="csuHqDualSelectorGrid">
                 <!-- CARD 1: CREATE SINGLE USER -->
@@ -909,14 +975,14 @@
                     </div>
                     <div class="csu-hq-card-body">
                         <div class="csu-hq-card-top">
-                            <h3>Create Single User</h3>
-                            <span class="csu-mode-badge">Direct HQ Provision</span>
+                            <h3 id="csuCard1Title">Create Single User</h3>
+                            <span class="csu-mode-badge" id="csuCard1Tag">Direct HQ Provision</span>
                         </div>
-                        <p>Create and activate a new staff account directly in the Firebase cloud registry with default passcode 123.</p>
+                        <p id="csuCard1Desc">Create and activate a new staff account directly in the Firebase cloud registry with default passcode 123.</p>
                     </div>
                 </div>
 
-                <!-- CARD 2: VERIFY SINGLE USER REQUESTS (HQ 000000 EXCLUSIVE) -->
+                <!-- CARD 2: VERIFY REQUESTS (FOR HQ ADMIN) OR VIEW SUBMITTED REQUEST STATUS (FOR BRANCH ADMIN) -->
                 <div class="csu-hq-card card-verify" id="csuTabCardVerify" onclick="csuSwitchMainTab('verify')">
                     <div class="csu-hq-card-icon">
                         <svg width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
@@ -926,10 +992,10 @@
                     </div>
                     <div class="csu-hq-card-body">
                         <div class="csu-hq-card-top">
-                            <h3>Verify Single User Requests</h3>
+                            <h3 id="csuCard2Title">Verify Single User Requests</h3>
                             <span class="csu-pending-counter-pill" id="csuPendingBadgeCount">0 Pending</span>
                         </div>
-                        <p>Audit user creation requests from Branch Admins, transfer requests between HQ Admins, or approve &amp; deploy accounts.</p>
+                        <p id="csuCard2Desc">Audit user creation requests from Branch Admins, transfer requests between HQ Admins, or approve &amp; deploy accounts.</p>
                     </div>
                 </div>
             </div>
@@ -988,12 +1054,12 @@
                                     <option value="maker" selected>Maker (Operational Staff)</option>
                                     <option value="checker">Checker (Verification Staff)</option>
                                     <option value="superuser">Superuser (Postmaster / Supervisor)</option>
-                                    <option value="admin">Branch / System Admin</option>
+                                    <option value="admin">Branch / Office Admin</option>
                                     <option value="guest">Guest (Custom Demo Role)</option>
                                 </select>
                             </div>
 
-                            <!-- 4. TARGET SOL ID + LIVE SEARCH BAR TRIGGER -->
+                            <!-- 4. TARGET SOL ID (EDITABLE + SEARCHABLE FOR HQ, STRICTLY LOCKED FOR BRANCH ADMIN) -->
                             <div class="csu-field-box csu-col-7">
                                 <div class="csu-label-row">
                                     <label for="csuInputSolId">
@@ -1007,13 +1073,24 @@
                                     <div class="csu-sol-input-wrap">
                                         <input type="text" id="csuInputSolId" class="csu-input" placeholder="Enter SOL ID (e.g. 799120)" oninput="csuHandleSolIdDirectInput()" autocomplete="off"/>
                                     </div>
-                                    <button type="button" class="csu-sol-search-trigger" onclick="csuOpenSolDirectoryModal()">
+
+                                    <!-- HQ ONLY: Search SOL Directory Button -->
+                                    <button type="button" class="csu-sol-search-trigger" id="csuBtnSearchSolModal" onclick="csuOpenSolDirectoryModal()">
                                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
                                             <circle cx="11" cy="11" r="8"/>
                                             <line x1="21" y1="21" x2="16.65" y2="16.65"/>
                                         </svg>
                                         <span>Search SOL Directory</span>
                                     </button>
+
+                                    <!-- BRANCH ADMIN ONLY: Locked SOL Security Pill -->
+                                    <div class="csu-branch-lock-pill" id="csuBranchSolLockNotice">
+                                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                                            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                                        </svg>
+                                        <span>Locked to Your Mapped Branch SOL</span>
+                                    </div>
                                 </div>
 
                                 <!-- LIVE RESOLVED SOL NAME DISPLAY -->
@@ -1027,7 +1104,7 @@
                             <div class="csu-field-box csu-col-12" style="margin-top:4px;">
                                 <div class="csu-default-pass-card">
                                     <div style="display:flex; align-items:center; gap:12px;">
-                                        <div class="csu-stat-ic emerald" style="width:42px; height:42px; border-radius:12px; background:rgba(16,185,129,0.16); color:#059669; display:flex; align-items:center; justify-content:center;">
+                                        <div style="width:42px; height:42px; border-radius:12px; background:rgba(16,185,129,0.16); color:#059669; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
                                             <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
                                         </div>
                                         <div>
@@ -1107,31 +1184,42 @@
             </div>
 
             <!-- =========================================================
-                 VIEW 2: VERIFY SINGLE USER REQUESTS (HQ 000000 EXCLUSIVE)
+                 VIEW 2: VERIFY REQUESTS (HQ) / VIEW SUBMITTED REQUEST STATUS (BRANCH ADMIN)
                  ========================================================= -->
             <div class="csu-panel-view" id="csuViewVerify">
                 <div class="csu-glass-card">
+
+                    <!-- 24-HOUR RETENTION POLICY BANNER -->
+                    <div class="csu-ttl-info-banner">
+                        <div style="display:flex; align-items:center; gap:8px;">
+                            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.3"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                            <span><strong>Zero-Overload Cloud Retention Policy:</strong> Pending requests remain active until decided by HQ. Approved or Rejected requests remain visible for <strong>24 hours</strong> and are then automatically purged from Firebase.</span>
+                        </div>
+                        <span class="csu-mode-badge">24h Auto-Clean Active</span>
+                    </div>
+
                     <div class="csu-verify-toolbar">
-                        <div class="csu-filter-group">
-                            <button type="button" class="csu-filter-btn active" onclick="csuSetVerifyFilter('pending', this)">Pending Requests</button>
-                            <button type="button" class="csu-filter-btn" onclick="csuSetVerifyFilter('assigned_me', this)">Transferred / Assigned to Me</button>
-                            <button type="button" class="csu-filter-btn" onclick="csuSetVerifyFilter('history', this)">Processed History</button>
+                        <div class="csu-filter-group" id="csuVerifyFilterButtonsGroup">
+                            <button type="button" class="csu-filter-btn active" data-filter="all" onclick="csuSetVerifyFilter('all', this)">All Active Requests</button>
+                            <button type="button" class="csu-filter-btn" data-filter="pending" onclick="csuSetVerifyFilter('pending', this)">Pending HQ Decision</button>
+                            <button type="button" class="csu-filter-btn" id="csuBtnFilterAssignedMe" data-filter="assigned_me" onclick="csuSetVerifyFilter('assigned_me', this)">Assigned / Transferred to Me</button>
+                            <button type="button" class="csu-filter-btn" data-filter="history" onclick="csuSetVerifyFilter('history', this)">Approved / Rejected (Last 24h)</button>
                         </div>
 
-                        <input type="text" id="csuVerifySearchInput" class="csu-input" style="max-width:300px; padding:9px 14px;" placeholder="Search request by user, SOL, or branch admin..." oninput="csuRenderVerifyRequestsTable()" autocomplete="off"/>
+                        <input type="text" id="csuVerifySearchInput" class="csu-input" style="max-width:300px; padding:9px 14px;" placeholder="Search request by ID, user, or SOL..." oninput="csuRenderVerifyRequestsTable()" autocomplete="off"/>
                     </div>
 
                     <div class="csu-table-wrap">
                         <table class="csu-table">
                             <thead>
                                 <tr>
-                                    <th>Req ID &amp; Time</th>
+                                    <th>Req ID &amp; Submitted</th>
                                     <th>Proposed Staff &amp; Username</th>
                                     <th>Role &amp; Target SOL</th>
-                                    <th>Requested By (Branch Admin)</th>
-                                    <th>Assigned HQ Reviewer</th>
-                                    <th>Status</th>
-                                    <th>Audit &amp; Action</th>
+                                    <th>Initiated By (Branch Admin)</th>
+                                    <th>HQ Reviewer / Auto-Expiry</th>
+                                    <th>Current Status</th>
+                                    <th id="csuTableActionColHeader">Audit &amp; Action</th>
                                 </tr>
                             </thead>
                             <tbody id="csuVerifyTableBody">
@@ -1145,7 +1233,7 @@
         </div>
 
         <!-- =========================================================
-             MODAL 1: 50,000+ SOL DIRECTORY LIVE SEARCH (100 PER PAGE)
+             MODAL 1: 50,000+ SOL DIRECTORY LIVE SEARCH (100 PER PAGE - HQ ONLY)
              ========================================================= -->
         <div class="csu-modal-overlay" id="csuSolSearchModal" onclick="csuCloseSolDirectoryModal()">
             <div class="csu-modal-card" onclick="event.stopPropagation()">
@@ -1174,14 +1262,14 @@
         </div>
 
         <!-- =========================================================
-             MODAL 2: HQ ADMIN AUDIT, TRANSFER & APPROVAL INSPECTOR
+             MODAL 2: REQUEST STATUS & HQ AUDIT / TRANSFER INSPECTOR
              ========================================================= -->
         <div class="csu-modal-overlay" id="csuAuditInspectorModal" onclick="csuCloseAuditModal()">
             <div class="csu-modal-card" style="max-width:650px; border-top-color:#10b981;" onclick="event.stopPropagation()">
                 <div class="csu-modal-header">
                     <h3>
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.3"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
-                        <span>HQ System Admin • User Request Audit Inspector</span>
+                        <span id="csuAuditModalHeadingText">User Request Audit &amp; Status Inspector</span>
                     </h3>
                     <button type="button" class="csu-modal-close" onclick="csuCloseAuditModal()">✕ Close</button>
                 </div>
@@ -1189,7 +1277,7 @@
                 <div style="padding:20px 24px; overflow-y:auto; display:flex; flex-direction:column; gap:16px;">
                     <div id="csuAuditDetailsContent"></div>
 
-                    <!-- TRANSFER BETWEEN HQ SYSTEM ADMINS (SOL 000000) -->
+                    <!-- TRANSFER BETWEEN HQ SYSTEM ADMINS (VISIBLE ONLY TO HQ 000000) -->
                     <div id="csuAuditTransferBox" style="background:var(--surface-input); border:1px solid var(--border-subtle); border-radius:14px; padding:15px;">
                         <div style="font-size:13px; font-weight:800; color:var(--text-primary); margin-bottom:10px; display:flex; align-items:center; gap:7px;">
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="2.3"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
@@ -1204,7 +1292,7 @@
                         </div>
                     </div>
 
-                    <!-- APPROVE OR REJECT BUTTONS -->
+                    <!-- APPROVE OR REJECT BUTTONS (VISIBLE ONLY TO HQ 000000) -->
                     <div id="csuAuditDecisionBtnsRow" style="display:flex; gap:12px; flex-wrap:wrap;">
                         <button type="button" class="csu-submit-btn" style="margin-top:0; flex:1.3; background:linear-gradient(90deg, #10b981, #059669);" onclick="csuApprovePendingUserRequest()">
                             <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
@@ -1223,12 +1311,14 @@
     <script>
         (function() {
             const SOLS_PER_PAGE = 100;
+            const TTL_24_HOURS_MS = 24 * 60 * 60 * 1000; // 24 Hours in milliseconds
+
             let csuUsersList = [];
             let csuOfficesList = [];
             let csuPendingRequests = [];
             let csuManualUsernameEdited = false;
             let csuCurrentSolPage = 1;
-            let csuVerifyFilterMode = 'pending';
+            let csuVerifyFilterMode = 'all';
             let csuActiveAuditingReqId = null;
             let csuUnsubscribeRegistry = null;
 
@@ -1265,7 +1355,7 @@
             });
 
             // =========================================================================
-            // 2. DETECT OPERATOR ACCESS: SYSTEM ADMIN HQ (000000 / admin) VS BRANCH ADMIN
+            // 2. DETECT OPERATOR ACCESS & ENFORCE STRICT BRANCH SOL LOCK
             // =========================================================================
             function csuGetOperatorSession() {
                 if (typeof authenticatedUserSession !== "undefined" && authenticatedUserSession) {
@@ -1297,43 +1387,87 @@
             function csuConfigureOperatorUI() {
                 const op = csuGetOperatorSession();
                 const isHQ = csuIsHqSystemAdmin();
+                const mySol = String(op.solId || "").trim();
+
                 const badgeEl = document.getElementById("csuOperatorBadge");
-                const dualGrid = document.getElementById("csuHqDualSelectorGrid");
                 const modeNote = document.getElementById("csuProvisioningModeNote");
                 const submitBtnTxt = document.getElementById("csuPrimarySubmitBtnText");
                 const routePreview = document.getElementById("csuPreviewRouteText");
                 const solInp = document.getElementById("csuInputSolId");
+                const btnSearchSol = document.getElementById("csuBtnSearchSolModal");
+                const branchLockNotice = document.getElementById("csuBranchSolLockNotice");
+
+                // Dual Card Elements
+                const card1Title = document.getElementById("csuCard1Title");
+                const card1Tag = document.getElementById("csuCard1Tag");
+                const card1Desc = document.getElementById("csuCard1Desc");
+                const card2Title = document.getElementById("csuCard2Title");
+                const card2Desc = document.getElementById("csuCard2Desc");
+                const btnFilterAssignedMe = document.getElementById("csuBtnFilterAssignedMe");
+                const tblActionHeader = document.getElementById("csuTableActionColHeader");
 
                 if (isHQ) {
-                    // System Admin HQ sees BOTH cards: Create Single User + Verify Single User Requests
-                    if (badgeEl) badgeEl.innerText = `System Admin HQ (${op.solId || '000000'})`;
-                    if (dualGrid) dualGrid.style.display = "grid";
-                    if (modeNote) modeNote.innerText = "HQ Direct Cloud Provisioning Mode";
+                    // SYSTEM ADMIN HQ (000000 / admin): Can select ANY SOL & Verify/Approve all requests
+                    if (badgeEl) badgeEl.innerText = `System Admin HQ (${mySol || '000000'})`;
+                    if (modeNote) modeNote.innerText = "HQ Direct Cloud Provisioning Mode (Any SOL)";
                     if (submitBtnTxt) submitBtnTxt.innerText = "Create & Save User Directly to Cloud";
                     if (routePreview) {
                         routePreview.innerText = "Direct Firebase Activation (HQ)";
                         routePreview.style.color = "#10b981";
                     }
+
+                    if (solInp) {
+                        solInp.readOnly = false;
+                        solInp.disabled = false;
+                        solInp.classList.remove("sol-locked-field");
+                        solInp.placeholder = "Enter any SOL ID (e.g. 799120)";
+                    }
+                    if (btnSearchSol) btnSearchSol.style.display = "inline-flex";
+                    if (branchLockNotice) branchLockNotice.style.display = "none";
+
+                    if (card1Title) card1Title.innerText = "Create Single User";
+                    if (card1Tag) card1Tag.innerText = "Any SOL • Direct Save";
+                    if (card1Desc) card1Desc.innerText = "Create and activate a new staff account for any SOL directly in the Firebase cloud registry with default passcode 123.";
+
+                    if (card2Title) card2Title.innerText = "Verify Single User Requests";
+                    if (card2Desc) card2Desc.innerText = "Audit user creation requests from Branch Admins, transfer requests between HQ Admins, or approve & deploy accounts (24h auto-purge).";
+
+                    if (btnFilterAssignedMe) btnFilterAssignedMe.style.display = "inline-block";
+                    if (tblActionHeader) tblActionHeader.innerText = "Audit & Action";
                 } else {
-                    // Branch Admin ONLY sees the Create Single User form (No Verify Requests card)
-                    if (badgeEl) badgeEl.innerText = `Branch Admin (SOL: ${op.solId || 'Branch'})`;
-                    if (dualGrid) dualGrid.style.display = "none";
-                    if (modeNote) modeNote.innerText = "Routes to System Admin HQ (000000) for Approval";
-                    if (submitBtnTxt) submitBtnTxt.innerText = "Submit User Request to HQ (000000) for Approval";
+                    // BRANCH ADMIN: Strictly locked to their own mapped SOL ID + View Submitted Request Status
+                    if (badgeEl) badgeEl.innerText = `Branch Admin (Locked SOL: ${mySol || 'UNMAPPED'})`;
+                    if (modeNote) modeNote.innerText = `Strict Branch Lock • Routes to HQ (000000) for Approval`;
+                    if (submitBtnTxt) submitBtnTxt.innerText = `Submit Request for SOL ${mySol || ''} to HQ`;
                     if (routePreview) {
                         routePreview.innerText = "Pending HQ (000000) Verification";
                         routePreview.style.color = "#f59e0b";
                     }
-                    // Pre-fill Branch Admin's own SOL ID by default if empty
-                    if (solInp && !solInp.value && op.solId && op.solId !== "UNMAPPED") {
-                        solInp.value = op.solId;
-                        window.csuHandleSolIdDirectInput();
+
+                    if (solInp) {
+                        solInp.value = mySol;
+                        solInp.readOnly = true;
+                        solInp.disabled = true;
+                        solInp.classList.add("sol-locked-field");
                     }
+                    if (btnSearchSol) btnSearchSol.style.display = "none";
+                    if (branchLockNotice) branchLockNotice.style.display = "inline-flex";
+
+                    if (card1Title) card1Title.innerText = `Create User (SOL ${mySol || 'Branch'})`;
+                    if (card1Tag) card1Tag.innerText = `Locked SOL: ${mySol || 'N/A'}`;
+                    if (card1Desc) card1Desc.innerText = `Initiate a new user creation request exclusively for your mapped Branch SOL (${mySol || 'N/A'}).`;
+
+                    if (card2Title) card2Title.innerText = "View Submitted Request Status";
+                    if (card2Desc) card2Desc.innerText = "Track live approval status of your branch's submitted user requests. Approved/Rejected requests remain visible for 24 hours.";
+
+                    if (btnFilterAssignedMe) btnFilterAssignedMe.style.display = "none";
+                    if (tblActionHeader) tblActionHeader.innerText = "Inspect Status";
+
+                    window.csuHandleSolIdDirectInput();
                 }
             }
 
             window.csuSwitchMainTab = function(tabName) {
-                if (tabName === "verify" && !csuIsHqSystemAdmin()) return;
                 const createView = document.getElementById("csuViewCreate");
                 const verifyView = document.getElementById("csuViewVerify");
                 const cardCreate = document.getElementById("csuTabCardCreate");
@@ -1360,7 +1494,57 @@
             }
 
             // =========================================================================
-            // 3. SMART USERNAME GENERATOR & LIVE FIREBASE AVAILABILITY CHECKER
+            // 3. 24-HOUR TTL AUTO-PURGE ENGINE (PREVENTS FIREBASE OVERLOAD)
+            // =========================================================================
+            async function csuPurgeExpiredRequestsIfNeeded(rawRequestsArray) {
+                if (!Array.isArray(rawRequestsArray)) return [];
+                const nowMs = Date.now();
+                let didPurgeAny = false;
+
+                const validRequests = rawRequestsArray.filter(req => {
+                    if (!req || typeof req !== "object") return false;
+                    // PENDING requests NEVER expire until HQ Approves or Rejects them
+                    if (req.status === "PENDING") {
+                        return true;
+                    }
+                    // APPROVED or REJECTED requests stay for exactly 24 hours from decision timestamp
+                    const decisionTimestamp = req.decidedAtMs || req.updatedAtMs || req.createdAtMs || 0;
+                    if (decisionTimestamp > 0) {
+                        const ageMs = nowMs - decisionTimestamp;
+                        if (ageMs >= TTL_24_HOURS_MS) {
+                            didPurgeAny = true;
+                            return false; // Purge from Firebase!
+                        }
+                    }
+                    return true;
+                });
+
+                if (didPurgeAny && typeof db !== "undefined" && db) {
+                    try {
+                        await db.collection("system").doc("registry").set({
+                            pendingUserRequests: validRequests
+                        }, { merge: true });
+                    } catch (e) {
+                        console.warn("24h auto-purge sync skipped:", e);
+                    }
+                }
+
+                return validRequests;
+            }
+
+            function csuFormatRemainingTtl(req) {
+                if (req.status === "PENDING") {
+                    return `<span class="csu-ttl-pill" style="color:#d97706;">⏳ Active until HQ Decision</span>`;
+                }
+                const decisionTs = req.decidedAtMs || req.updatedAtMs || req.createdAtMs || Date.now();
+                const msLeft = Math.max(0, TTL_24_HOURS_MS - (Date.now() - decisionTs));
+                const hrs = Math.floor(msLeft / (1000 * 60 * 60));
+                const mins = Math.floor((msLeft % (1000 * 60 * 60)) / (1000 * 60));
+                return `<span class="csu-ttl-pill" style="color:#2563eb;">⏱ Auto-clears in ${hrs}h ${mins}m</span>`;
+            }
+
+            // =========================================================================
+            // 4. SMART USERNAME GENERATOR & LIVE FIREBASE AVAILABILITY CHECKER
             // =========================================================================
             function csuIsUsernameTakenInRegistry(candidateUsername) {
                 const norm = String(candidateUsername || "").trim().toLowerCase();
@@ -1408,7 +1592,6 @@
                     if (availableList.length >= 4) break;
                 }
 
-                // Append numbers if base names are already taken in Firebase
                 let counter = 1;
                 const seed = first + (last ? last : "");
                 while (availableList.length < 4 && counter < 500) {
@@ -1493,7 +1676,7 @@
             }
 
             // =========================================================================
-            // 4. TARGET SOL ID RESOLUTION & 50,000+ SOL PAGINATED SEARCH MODAL (100/PAGE)
+            // 5. TARGET SOL ID RESOLUTION & 50,000+ SOL PAGINATED SEARCH MODAL (HQ ONLY)
             // =========================================================================
             function csuFindOfficeBySol(solIdStr) {
                 const norm = String(solIdStr || "").trim();
@@ -1508,6 +1691,12 @@
                 const solInp = document.getElementById("csuInputSolId");
                 const resolvedTextEl = document.getElementById("csuResolvedSolNameText");
                 if (!solInp || !resolvedTextEl) return;
+
+                // Enforce Branch Admin lock if not HQ
+                if (!csuIsHqSystemAdmin()) {
+                    const op = csuGetOperatorSession();
+                    solInp.value = String(op.solId || "").trim();
+                }
 
                 const val = solInp.value.trim();
                 if (!val) {
@@ -1526,6 +1715,11 @@
             };
 
             window.csuOpenSolDirectoryModal = function() {
+                // Strictly block Branch Admins from opening the global SOL selector
+                if (!csuIsHqSystemAdmin()) {
+                    csuNotify("SOL Restricted", "Branch Admins can only create users for their own mapped SOL.", "warning");
+                    return;
+                }
                 const modal = document.getElementById("csuSolSearchModal");
                 const searchInp = document.getElementById("csuModalSolSearchInput");
                 if (searchInp) searchInp.value = "";
@@ -1543,6 +1737,7 @@
             };
 
             window.csuSelectSolFromModal = function(solIdVal) {
+                if (!csuIsHqSystemAdmin()) return;
                 const solInp = document.getElementById("csuInputSolId");
                 if (solInp) {
                     solInp.value = solIdVal;
@@ -1563,7 +1758,6 @@
 
                 if (!gridContainer) return;
 
-                // Include HQ 000000 + all offices in SYSTEM_OFFICE_REGISTRY
                 const fullDirectory = [
                     { solId: "000000", name: "System Admin Headquarters (HQ)", status: "DAY_BEGUN" },
                     ...csuOfficesList
@@ -1615,7 +1809,6 @@
                     }).join("");
                 }
 
-                // Render Smart Windowed Pagination Controls (Supports 50,000+ SOLs / 500+ pages smoothly)
                 if (pageControls) {
                     pageControls.innerHTML = "";
                     if (totalPages <= 1) return;
@@ -1671,13 +1864,17 @@
             };
 
             // =========================================================================
-            // 5. LIVE PREVIEW UPDATER & USER CREATION / REQUEST SUBMISSION
+            // 6. LIVE PREVIEW UPDATER & USER CREATION / REQUEST SUBMISSION
             // =========================================================================
             window.csuUpdateSummaryPreview = function() {
+                const op = csuGetOperatorSession();
+                const isHQ = csuIsHqSystemAdmin();
                 const fullName = (document.getElementById("csuInputFullName")?.value || "").trim() || "New Staff Member";
                 const username = (document.getElementById("csuInputUsername")?.value || "").trim() || "--";
                 const role = document.getElementById("csuSelectRole")?.value || "maker";
-                const solId = (document.getElementById("csuInputSolId")?.value || "").trim() || "UNMAPPED";
+                const solId = isHQ
+                    ? ((document.getElementById("csuInputSolId")?.value || "").trim() || "UNMAPPED")
+                    : (String(op.solId || "").trim() || "UNMAPPED");
                 const matchedOff = csuFindOfficeBySol(solId);
 
                 const avEl = document.getElementById("csuPreviewAvatar");
@@ -1692,14 +1889,20 @@
                 if (roleEl) roleEl.innerText = role.toUpperCase();
                 if (userEl) userEl.innerText = username !== "--" ? `@${username}` : "--";
                 if (solIdEl) solIdEl.innerText = solId;
-                if (solNameEl) solNameEl.innerText = matchedOff ? matchedOff.name : (solId === "UNMAPPED" ? "Not Selected" : "Custom SOL");
+                if (solNameEl) solNameEl.innerText = matchedOff ? matchedOff.name : (solId === "UNMAPPED" ? "Not Selected" : "Branch SOL Office");
             };
 
             window.csuExecuteUserSubmission = async function() {
+                const op = csuGetOperatorSession();
+                const isHQ = csuIsHqSystemAdmin();
                 const fullName = (document.getElementById("csuInputFullName")?.value || "").trim();
                 const username = (document.getElementById("csuInputUsername")?.value || "").trim().toLowerCase();
                 const role = document.getElementById("csuSelectRole")?.value || "maker";
-                const solId = (document.getElementById("csuInputSolId")?.value || "").trim();
+
+                // HARD SECURITY ENFORCEMENT: Branch Admin can ONLY submit for their own mapped SOL ID
+                const solId = isHQ
+                    ? (document.getElementById("csuInputSolId")?.value || "").trim()
+                    : String(op.solId || "").trim();
 
                 if (!fullName) {
                     csuNotify("Validation Notice", "Please enter the Staff Full Name.", "warning");
@@ -1716,17 +1919,21 @@
                     document.getElementById("csuInputUsername")?.focus();
                     return;
                 }
-                if (!solId) {
-                    csuNotify("Validation Notice", "Please enter or select a Target Office SOL ID.", "warning");
-                    document.getElementById("csuInputSolId")?.focus();
+                if (!solId || solId === "UNMAPPED") {
+                    csuNotify("SOL Mapping Error", isHQ ? "Please enter or select a Target Office SOL ID." : "Your Branch Admin account is not mapped to a valid SOL ID.", "error");
                     return;
                 }
 
-                const op = csuGetOperatorSession();
-                const isHQ = csuIsHqSystemAdmin();
+                // Double verification for Branch Admin
+                if (!isHQ && solId !== String(op.solId || "").trim()) {
+                    csuNotify("Security Violation Blocked", "Branch Admins are strictly restricted to creating users for their own mapped SOL ID only.", "error");
+                    return;
+                }
+
                 const matchedOff = csuFindOfficeBySol(solId);
-                const officeName = matchedOff ? matchedOff.name : "Custom SOL Office";
+                const officeName = matchedOff ? matchedOff.name : "Mapped SOL Office";
                 const timeStamp = new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" });
+                const nowMs = Date.now();
 
                 if (isHQ) {
                     // DIRECT FIREBASE SAVE FOR SYSTEM ADMIN HQ (000000 / admin)
@@ -1761,7 +1968,7 @@
                     csuNotify("User Created Successfully", `Account @${username} created with default passcode 123.`, "success");
                 } else {
                     // ROUTE TO HQ (000000) PENDING APPROVAL QUEUE FOR BRANCH ADMIN
-                    const reqId = "REQ-" + Date.now().toString().slice(-6);
+                    const reqId = "REQ-" + nowMs.toString().slice(-6);
                     const pendingItem = {
                         reqId: reqId,
                         fullName: fullName,
@@ -1772,15 +1979,17 @@
                         solName: officeName,
                         requestedBy: op.user || "branch_admin",
                         requestedByName: op.fullName || op.user || "Branch Admin",
-                        requestedBySol: op.solId || "Branch",
+                        requestedBySol: solId,
                         assignedToHqAdmin: "ALL_HQ_ADMINS (000000)",
                         status: "PENDING",
                         createdAt: timeStamp,
+                        createdAtMs: nowMs,
+                        decidedAtMs: null,
                         auditTrail: [
                             {
                                 time: timeStamp,
-                                actor: `${op.user || 'BranchAdmin'} (SOL: ${op.solId || 'N/A'})`,
-                                action: `Submitted user creation request for @${username} (Role: ${role.toUpperCase()}, SOL: ${solId}) to System Admin HQ (000000).`
+                                actor: `@${op.user || 'BranchAdmin'} (Branch SOL: ${solId})`,
+                                action: `Initiated user creation request for @${username} (Role: ${role.toUpperCase()}, SOL: ${solId}) — Routed to System Admin HQ (000000).`
                             }
                         ]
                     };
@@ -1789,14 +1998,14 @@
                     await csuPersistRegistryToFirebase();
 
                     if (typeof window.logSystemEvent === "function") {
-                        window.logSystemEvent(op.user || "branch_admin", `Submitted HQ Approval Request ${reqId} for new user @${username}`);
+                        window.logSystemEvent(op.user || "branch_admin", `Submitted HQ Approval Request ${reqId} for new user @${username} (SOL ${solId})`);
                     }
 
                     csuShowConfirmationBox(
                         "Request Sent to System Admin HQ (000000)!",
-                        `Your request (<strong>${reqId}</strong>) for <strong>${fullName}</strong> (<code>@${username}</code>) at SOL <span class="csu-sol-id-blue">${solId}</span> has been routed to Headquarters (` + `000000` + `) for verification.<br/>Once approved by HQ, the default passcode will be <strong><code>123</code></strong>.`
+                        `Your request (<strong>${reqId}</strong>) for <strong>${fullName}</strong> (<code>@${username}</code>) under your Branch SOL <span class="csu-sol-id-blue">${solId}</span> has been sent to Headquarters (<code>000000</code>).<br/>Track live status anytime in the <strong>View Submitted Request Status</strong> tab above!`
                     );
-                    csuNotify("Request Routed to HQ", `Request ${reqId} sent to System Admin HQ (000000) for approval.`, "info");
+                    csuNotify("Request Routed to HQ", `Request ${reqId} sent to System Admin HQ (000000).`, "info");
                 }
 
                 // Reset Form for Next Entry
@@ -1806,6 +2015,7 @@
                 document.getElementById("csuUsernameSuggestionsBar").innerHTML = "";
                 csuValidateCurrentUsernameField();
                 window.csuUpdateSummaryPreview();
+                window.csuRenderVerifyRequestsTable();
             };
 
             function csuShowConfirmationBox(titleHtml, bodyHtml) {
@@ -1820,7 +2030,7 @@
             }
 
             // =========================================================================
-            // 6. HQ SYSTEM ADMIN VERIFY, AUDIT, TRANSFER & APPROVE ENGINE
+            // 7. VERIFY REQUESTS (HQ) & VIEW SUBMITTED REQUEST STATUS (BRANCH ADMIN)
             // =========================================================================
             window.csuSetVerifyFilter = function(mode, btnEl) {
                 csuVerifyFilterMode = mode;
@@ -1832,20 +2042,32 @@
             window.csuRenderVerifyRequestsTable = function() {
                 const tbody = document.getElementById("csuVerifyTableBody");
                 const badgeEl = document.getElementById("csuPendingBadgeCount");
-                const pendingCount = csuPendingRequests.filter(r => r.status === "PENDING").length;
+                const op = csuGetOperatorSession();
+                const isHQ = csuIsHqSystemAdmin();
+                const myU = String(op.user || "").trim().toLowerCase();
+                const mySol = String(op.solId || "").trim().toLowerCase();
 
+                // Scope requests: HQ sees ALL requests; Branch Admin ONLY sees requests from their own branch SOL / username
+                const scopedRequests = isHQ
+                    ? csuPendingRequests
+                    : csuPendingRequests.filter(r =>
+                        String(r.requestedBy || "").trim().toLowerCase() === myU ||
+                        String(r.requestedBySol || r.solId || "").trim().toLowerCase() === mySol
+                    );
+
+                const pendingCount = scopedRequests.filter(r => r.status === "PENDING").length;
                 if (badgeEl) {
-                    badgeEl.innerText = `${pendingCount} Pending`;
+                    badgeEl.innerText = isHQ
+                        ? `${pendingCount} Pending HQ Audit`
+                        : `${pendingCount} Pending • ${scopedRequests.length} Total`;
                 }
                 if (!tbody) return;
 
-                const op = csuGetOperatorSession();
-                const myU = String(op.user || "").toLowerCase();
                 const q = (document.getElementById("csuVerifySearchInput")?.value || "").toLowerCase().trim();
 
-                const filtered = csuPendingRequests.filter(req => {
+                const filtered = scopedRequests.filter(req => {
                     if (csuVerifyFilterMode === "pending" && req.status !== "PENDING") return false;
-                    if (csuVerifyFilterMode === "assigned_me") {
+                    if (csuVerifyFilterMode === "assigned_me" && isHQ) {
                         if (req.status !== "PENDING") return false;
                         const assigned = String(req.assignedToHqAdmin || "").toLowerCase();
                         if (!assigned.includes(myU) && !assigned.includes("all_hq")) return false;
@@ -1853,7 +2075,7 @@
                     if (csuVerifyFilterMode === "history" && req.status === "PENDING") return false;
 
                     if (!q) return true;
-                    const hay = `${req.reqId} ${req.fullName} ${req.user} ${req.solId} ${req.solName || ''} ${req.requestedBy}`.toLowerCase();
+                    const hay = `${req.reqId} ${req.fullName} ${req.user} ${req.solId} ${req.solName || ''} ${req.requestedBy} ${req.status}`.toLowerCase();
                     return hay.includes(q);
                 });
 
@@ -1861,7 +2083,7 @@
                     tbody.innerHTML = `
                         <tr>
                             <td colspan="7" style="text-align:center; padding:28px; color:var(--text-muted); font-weight:700;">
-                                No user creation requests found in this view.
+                                ${isHQ ? 'No matching user creation requests in queue.' : 'No submitted user requests found for your branch in the last 24 hours.'}
                             </td>
                         </tr>
                     `;
@@ -1869,12 +2091,15 @@
                 }
 
                 tbody.innerHTML = filtered.map(req => {
-                    let statusBadge = `<span class="csu-avail-badge" style="background:rgba(245,158,11,0.15); color:#d97706;">● PENDING HQ AUDIT</span>`;
+                    let statusBadge = `<span class="csu-avail-badge" style="background:rgba(245,158,11,0.15); color:#d97706;">● PENDING HQ APPROVAL</span>`;
                     if (req.status === "APPROVED") {
-                        statusBadge = `<span class="csu-avail-badge csu-avail-ok">✓ APPROVED</span>`;
+                        statusBadge = `<span class="csu-avail-badge csu-avail-ok">✓ APPROVED (Pass: 123)</span>`;
                     } else if (req.status === "REJECTED") {
                         statusBadge = `<span class="csu-avail-badge csu-avail-taken">✕ REJECTED</span>`;
                     }
+
+                    const ttlHtml = csuFormatRemainingTtl(req);
+                    const btnLabel = isHQ ? "Audit & Verify" : "View Status & Trail";
 
                     return `
                         <tr>
@@ -1892,16 +2117,17 @@
                             </td>
                             <td>
                                 <div style="font-weight:800;">@${req.requestedBy}</div>
-                                <div style="font-size:11px; color:var(--text-muted);">Branch SOL: ${req.requestedBySol || 'N/A'}</div>
+                                <div style="font-size:11px; color:var(--text-muted);">Branch SOL: ${req.requestedBySol || req.solId}</div>
                             </td>
                             <td>
-                                <span class="csu-mode-badge">${req.assignedToHqAdmin || 'ALL HQ (000000)'}</span>
+                                <div class="csu-mode-badge">${req.assignedToHqAdmin || 'ALL HQ (000000)'}</div>
+                                <div>${ttlHtml}</div>
                             </td>
                             <td>${statusBadge}</td>
                             <td>
                                 <button type="button" class="csu-audit-btn" onclick="csuOpenAuditModal('${req.reqId}')">
                                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                                    <span>Audit &amp; Verify</span>
+                                    <span>${btnLabel}</span>
                                 </button>
                             </td>
                         </tr>
@@ -1910,18 +2136,25 @@
             };
 
             window.csuOpenAuditModal = function(reqId) {
-                if (!csuIsHqSystemAdmin()) return;
                 const req = csuPendingRequests.find(r => r.reqId === reqId);
                 if (!req) return;
 
+                const isHQ = csuIsHqSystemAdmin();
                 csuActiveAuditingReqId = reqId;
+
+                const headingEl = document.getElementById("csuAuditModalHeadingText");
                 const detailsEl = document.getElementById("csuAuditDetailsContent");
                 const transferBox = document.getElementById("csuAuditTransferBox");
                 const decisionRow = document.getElementById("csuAuditDecisionBtnsRow");
                 const adminSelect = document.getElementById("csuTransferTargetAdminSelect");
 
-                // Populate HQ Admins dropdown (all users with solId === '000000' or user === 'admin')
-                if (adminSelect) {
+                if (headingEl) {
+                    headingEl.innerText = isHQ
+                        ? "HQ System Admin • User Request Audit Inspector"
+                        : `Branch Request Status Inspector (${req.reqId})`;
+                }
+
+                if (isHQ && adminSelect) {
                     const hqAdmins = csuUsersList.filter(u =>
                         String(u.solId || "").trim() === "000000" ||
                         String(u.user || "").trim().toLowerCase() === "admin"
@@ -1941,25 +2174,26 @@
                     detailsEl.innerHTML = `
                         <div style="display:grid; grid-template-columns:repeat(2, 1fr); gap:10px; background:var(--surface-input); padding:14px; border-radius:14px; border:1px solid var(--border-subtle); font-size:12.5px;">
                             <div><span style="color:var(--text-muted);">Request ID:</span><br/><strong style="font-family:monospace; font-size:14px;">${req.reqId}</strong></div>
-                            <div><span style="color:var(--text-muted);">Current Status:</span><br/><strong>${req.status}</strong></div>
+                            <div><span style="color:var(--text-muted);">Current Status:</span><br/><strong>${req.status}</strong> ${csuFormatRemainingTtl(req)}</div>
                             <div><span style="color:var(--text-muted);">Proposed Staff Name:</span><br/><strong style="font-size:14px;">${req.fullName}</strong></div>
                             <div><span style="color:var(--text-muted);">Proposed Username:</span><br/><code style="font-weight:900; color:#059669; font-size:14px;">@${req.user}</code></div>
                             <div><span style="color:var(--text-muted);">Requested Role:</span><br/><strong style="text-transform:uppercase;">${req.role}</strong></div>
                             <div><span style="color:var(--text-muted);">Target SOL Office:</span><br/><span class="csu-sol-id-blue">${req.solId}</span> <strong>${req.solName || ''}</strong></div>
-                            <div><span style="color:var(--text-muted);">Submitted By Branch Admin:</span><br/><strong>@${req.requestedBy} (SOL: ${req.requestedBySol || 'N/A'})</strong></div>
+                            <div><span style="color:var(--text-muted);">Submitted By Branch Admin:</span><br/><strong>@${req.requestedBy} (SOL: ${req.requestedBySol || req.solId})</strong></div>
                             <div><span style="color:var(--text-muted);">Default Passcode on Approval:</span><br/><code style="font-weight:900; color:#2563eb;">123</code></div>
                         </div>
 
                         <div>
-                            <div style="font-size:12px; font-weight:800; color:var(--text-muted); text-transform:uppercase; margin-bottom:6px;">Audit &amp; Transfer Trail</div>
-                            <div style="max-height:140px; overflow-y:auto;">${auditHistoryHtml || 'No audit logs.'}</div>
+                            <div style="font-size:12px; font-weight:800; color:var(--text-muted); text-transform:uppercase; margin-bottom:6px;">Live Audit &amp; Transfer Trail</div>
+                            <div style="max-height:150px; overflow-y:auto;">${auditHistoryHtml || 'No audit logs.'}</div>
                         </div>
                     `;
                 }
 
-                const isPending = req.status === "PENDING";
-                if (transferBox) transferBox.style.display = isPending ? "block" : "none";
-                if (decisionRow) decisionRow.style.display = isPending ? "flex" : "none";
+                // Only HQ System Admin (000000 / admin) can see Transfer / Approve / Reject controls on PENDING requests
+                const canHqAct = isHQ && req.status === "PENDING";
+                if (transferBox) transferBox.style.display = canHqAct ? "block" : "none";
+                if (decisionRow) decisionRow.style.display = canHqAct ? "flex" : "none";
 
                 const modal = document.getElementById("csuAuditInspectorModal");
                 if (modal) modal.classList.add("open");
@@ -1999,7 +2233,7 @@
                 csuNotify("Request Transferred", `Request ${csuActiveAuditingReqId} assigned to @${targetAdmin}.`, "info");
             };
 
-            // Approve Request & Create User in Firebase
+            // Approve Request & Create User in Firebase (Starts 24-Hour TTL Countdown)
             window.csuApprovePendingUserRequest = async function() {
                 if (!csuIsHqSystemAdmin() || !csuActiveAuditingReqId) return;
                 const reqIdx = csuPendingRequests.findIndex(r => r.reqId === csuActiveAuditingReqId);
@@ -2013,6 +2247,7 @@
 
                 const op = csuGetOperatorSession();
                 const nowStr = new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" });
+                const nowMs = Date.now();
 
                 const approvedUser = {
                     fullName: req.fullName,
@@ -2034,10 +2269,11 @@
 
                 csuUsersList.push(approvedUser);
                 csuPendingRequests[reqIdx].status = "APPROVED";
+                csuPendingRequests[reqIdx].decidedAtMs = nowMs; // Starts 24-hour auto-delete countdown
                 csuPendingRequests[reqIdx].auditTrail.push({
                     time: nowStr,
                     actor: `@${op.user || 'admin'} (HQ 000000)`,
-                    action: `APPROVED & provisioned account @${req.user} with default passcode 123.`
+                    action: `APPROVED & provisioned account @${req.user} with default passcode 123. (Record will auto-purge in 24h).`
                 });
 
                 await csuPersistRegistryToFirebase();
@@ -2050,7 +2286,7 @@
                 csuNotify("Request Approved & User Created", `Account @${req.user} is now active with default passcode 123.`, "success");
             };
 
-            // Reject Request
+            // Reject Request (Starts 24-Hour TTL Countdown)
             window.csuRejectPendingUserRequest = async function() {
                 if (!csuIsHqSystemAdmin() || !csuActiveAuditingReqId) return;
                 const reqIdx = csuPendingRequests.findIndex(r => r.reqId === csuActiveAuditingReqId);
@@ -2059,24 +2295,28 @@
                 const remark = (document.getElementById("csuTransferNoteInput")?.value || "").trim() || "Rejected during HQ audit.";
                 const op = csuGetOperatorSession();
                 const nowStr = new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" });
+                const nowMs = Date.now();
 
                 csuPendingRequests[reqIdx].status = "REJECTED";
+                csuPendingRequests[reqIdx].decidedAtMs = nowMs; // Starts 24-hour auto-delete countdown
                 csuPendingRequests[reqIdx].auditTrail.push({
                     time: nowStr,
                     actor: `@${op.user || 'admin'} (HQ 000000)`,
-                    action: `REJECTED request — Reason: "${remark}"`
+                    action: `REJECTED request — Reason: "${remark}" (Record will auto-purge in 24h).`
                 });
 
                 await csuPersistRegistryToFirebase();
                 window.csuCloseAuditModal();
                 window.csuRenderVerifyRequestsTable();
-                csuNotify("Request Rejected", `Request ${csuPendingRequests[reqIdx].reqId} has been marked as rejected.`, "warning");
+                csuNotify("Request Rejected", `Request ${csuPendingRequests[reqIdx].reqId} has been marked as rejected (visible for 24h).`, "warning");
             };
 
             // =========================================================================
-            // 7. FIREBASE CLOUD SYNC & CLEAN EXIT
+            // 8. FIREBASE CLOUD SYNC & CLEAN EXIT
             // =========================================================================
             async function csuPersistRegistryToFirebase() {
+                csuPendingRequests = await csuPurgeExpiredRequestsIfNeeded(csuPendingRequests);
+
                 window.SYSTEM_USER_REGISTRY = csuUsersList;
                 try {
                     if (typeof SYSTEM_USER_REGISTRY !== "undefined") SYSTEM_USER_REGISTRY = csuUsersList;
@@ -2120,7 +2360,7 @@
             };
 
             // =========================================================================
-            // 8. INITIALIZE & REAL-TIME FIREBASE SNAPSHOT LISTENER
+            // 9. INITIALIZE & REAL-TIME FIREBASE SNAPSHOT LISTENER
             // =========================================================================
             try {
                 if (typeof SYSTEM_USER_REGISTRY !== "undefined" && Array.isArray(SYSTEM_USER_REGISTRY)) {
@@ -2144,16 +2384,20 @@
 
             if (typeof db !== "undefined" && db) {
                 try {
-                    csuUnsubscribeRegistry = db.collection("system").doc("registry").onSnapshot((doc) => {
+                    csuUnsubscribeRegistry = db.collection("system").doc("registry").onSnapshot(async (doc) => {
                         if (doc.exists && document.getElementById("csuInteractiveRoot")) {
                             const data = doc.data();
                             csuUsersList = data.users || [];
                             csuOfficesList = data.offices || [];
-                            csuPendingRequests = data.pendingUserRequests || [];
+                            const rawPending = data.pendingUserRequests || [];
+
+                            // Automatically purge any Approved/Rejected requests older than 24 hours
+                            csuPendingRequests = await csuPurgeExpiredRequestsIfNeeded(rawPending);
 
                             const countEl = document.getElementById("csuTotalSolsLoadedCount");
                             if (countEl) countEl.innerText = `${csuOfficesList.length.toLocaleString('en-IN')} SOLs in Registry`;
 
+                            csuConfigureOperatorUI();
                             csuValidateCurrentUsernameField();
                             window.csuHandleSolIdDirectInput();
                             window.csuRenderVerifyRequestsTable();
