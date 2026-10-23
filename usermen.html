@@ -133,7 +133,7 @@
             box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.14) !important;
         }
 
-        /* Right Toolbar Controls (Grid / Matrix / List / Back) */
+        /* Right Toolbar Controls (Grid / Matrix / List / Manage / Back) */
         .um-controls-right {
             display: flex;
             align-items: center;
@@ -231,14 +231,12 @@
             <div class="um-title-cluster">
                 <div class="um-hub-icon-badge" id="umHubHeaderIcon">
                     <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
-                        <circle cx="9" cy="7" r="4"/>
-                        <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
-                        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                        <circle cx="12" cy="12" r="3"/>
+                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
                     </svg>
                 </div>
-                <h3 class="um-sec-title" id="umHubHeaderTitle">User Maintenance Sub-Modules</h3>
-                <span class="um-subcount-pill" id="umSubCardCountPill">0 Modules</span>
+                <h3 class="um-sec-title" id="umHubHeaderTitle">System &amp; User Maintenance</h3>
+                <span class="um-subcount-pill" id="umSubCardCountPill">0 Sub-Modules</span>
             </div>
 
             <!-- LIVE SEARCH -->
@@ -272,7 +270,7 @@
                     </button>
                 </div>
 
-                <!-- SMART GRID MATRIX CUSTOMIZER POPOVER (MIRRORED FROM INDEX.HTML) -->
+                <!-- SMART GRID MATRIX CUSTOMIZER POPOVER -->
                 <div class="grid-customizer-popover" id="umGridMatrixPopover" onclick="event.stopPropagation()">
                     <div class="grid-pop-hdr">
                         <h4>
@@ -346,8 +344,8 @@
                     </div>
                 </div>
 
-                <!-- ADMIN SHORTCUT TO CARD CREATOR -->
-                <button type="button" class="manage-modules-btn" id="umBtnManageSubCards" onclick="loadModuleSPA('user_maintenance.html', null, 'Opening Card & User Maintenance Studio...')" style="display:none;">
+                <!-- STRICTLY MASTER SUPER ADMIN ('admin') ONLY: OPENS createcard.html -->
+                <button type="button" class="manage-modules-btn" id="umBtnManageSubCards" onclick="umOpenCreateCardStudio()" style="display:none;">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
                         <line x1="12" y1="5" x2="12" y2="19"/>
                         <line x1="5" y1="12" x2="19" y2="12"/>
@@ -414,28 +412,83 @@
             });
 
             // ====================================================
-            // 2. FORCEFUL EMOJI-TO-PURE-VECTOR-SVG CONVERTER
+            // 2. STRICT MASTER SUPER ADMIN ('admin') VERIFICATION
+            // ====================================================
+            function umGetSessionProfile() {
+                if (typeof authenticatedUserSession !== 'undefined' && authenticatedUserSession) {
+                    return authenticatedUserSession;
+                }
+                if (window.authenticatedUserSession) {
+                    return window.authenticatedUserSession;
+                }
+                let activeU = '';
+                let activeR = 'maker';
+                let activeSol = '';
+                try {
+                    if (typeof safeSession !== 'undefined' && safeSession.getItem) {
+                        activeU = safeSession.getItem('activeUser') || '';
+                        activeR = safeSession.getItem('activeRole') || 'maker';
+                        activeSol = safeSession.getItem('activeSolId') || '';
+                    }
+                } catch (e) {}
+                if (!activeU) {
+                    try {
+                        activeU = sessionStorage.getItem('activeUser') || '';
+                        activeR = sessionStorage.getItem('activeRole') || 'maker';
+                        activeSol = sessionStorage.getItem('activeSolId') || '';
+                    } catch (e) {}
+                }
+                return { user: activeU, role: activeR, solId: activeSol };
+            }
+
+            // STRICT CHECK: ONLY true when logged-in username is 'admin' (Master Super Admin)
+            function umIsStrictMasterSuperAdmin() {
+                const prof = umGetSessionProfile();
+                const username = String(prof.user || '').trim();
+                return username === 'admin';
+            }
+
+            // Open createcard.html ONLY for Master Super Admin ('admin')
+            window.umOpenCreateCardStudio = function() {
+                if (!umIsStrictMasterSuperAdmin()) {
+                    if (typeof window.spawnFloatingNotification === 'function') {
+                        window.spawnFloatingNotification('Access Restricted', 'Only the Super Admin (admin) can create or manage sub-cards.', 'error');
+                    }
+                    return;
+                }
+                umForceCollapseSidebar();
+                if (typeof window.loadModuleSPA === 'function') {
+                    window.loadModuleSPA('createcard.html', null, 'Opening Card Creator Studio...');
+                }
+            };
+
+            // ====================================================
+            // 3. FORCEFUL EMOJI-TO-PURE-VECTOR-SVG CONVERTER
             // ====================================================
             function umForceConvertEmojiToSVG(rawIcon, titleHint = '', descHint = '') {
-                // Use index.html's global resolveModernSVG first if available
                 if (typeof window.resolveModernSVG === "function") {
                     const resolved = window.resolveModernSVG(rawIcon, titleHint + ' ' + descHint);
                     if (resolved && resolved.trim().startsWith('<svg')) {
                         return resolved;
                     }
                 }
-                // Fallback Pure Vector SVG if resolveModernSVG is unavailable
-                return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>';
+                return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>';
             }
 
             // ====================================================
-            // 3. IDENTIFY CURRENT HUB & FILTER MATCHING SUB-CARDS
+            // 4. IDENTIFY CURRENT HUB & MATCH SUB-CARDS BY ID OR FILENAME
             // ====================================================
-            function umGetActiveHubAliases() {
+            function umGetActiveHubAliases(allCards = []) {
                 const aliases = new Set([
                     'usermen', 'usermen.html',
                     'usermain', 'usermain.html',
-                    'user_main', 'user_main.html'
+                    'user_main', 'user_main.html',
+                    'menucardusermaintenance',
+                    'menucardmaintenance',
+                    'user_maintenance', 'user_maintenance.html',
+                    'usermaintenance', 'usermaintenance.html',
+                    'system & user maintenance',
+                    'user maintenance'
                 ]);
 
                 try {
@@ -455,44 +508,87 @@
                     }
                 } catch (e) {}
 
+                // Automatically link any Main Card whose targetFile is usermen.html / usermain.html
+                if (Array.isArray(allCards)) {
+                    allCards.forEach(c => {
+                        if (!c || typeof c !== 'object') return;
+                        const tf = String(c.targetFile || '').trim().toLowerCase();
+                        const tfBase = tf.replace('.html', '');
+                        if (aliases.has(tf) || aliases.has(tfBase)) {
+                            if (c.id) aliases.add(String(c.id).trim().toLowerCase());
+                            if (c.cardId) aliases.add(String(c.cardId).trim().toLowerCase());
+                            if (c.menuId) aliases.add(String(c.menuId).trim().toLowerCase());
+                            if (c.title) aliases.add(String(c.title).trim().toLowerCase());
+                        }
+                    });
+                }
+
                 return aliases;
             }
 
             function umDoesCardBelongToThisHub(card, hubAliases) {
                 if (!card || typeof card !== 'object') return false;
 
-                const loc = String(card.location || card.parentLocation || card.parentCard || card.parent || '').trim().toLowerCase();
-                const locBase = loc.replace('.html', '');
-                const cType = String(card.cardType || '').trim().toLowerCase();
                 const target = String(card.targetFile || '').trim().toLowerCase();
+                const targetBase = target.replace('.html', '');
 
-                // Prevent the parent card itself from rendering inside its own sub-grid
-                if (hubAliases.has(target) || hubAliases.has(target.replace('.html', ''))) {
+                // Never render the parent hub card itself inside its own sub-card grid
+                if (
+                    target === 'usermen.html' || targetBase === 'usermen' ||
+                    target === 'usermain.html' || targetBase === 'usermain'
+                ) {
                     return false;
                 }
 
-                // Case 1: Card's location explicitly matches usermen / usermain (or current hub view)
-                if (loc && (hubAliases.has(loc) || hubAliases.has(locBase))) {
-                    return true;
-                }
+                // Collect all possible parent/location fields saved by createcard.html
+                const candidateFields = [
+                    card.location,
+                    card.parentLocation,
+                    card.parentCard,
+                    card.parentCardId,
+                    card.parentId,
+                    card.parent,
+                    card.mainCardId,
+                    card.mainCard,
+                    card.hubId,
+                    card.cardType
+                ];
 
-                // Case 2: Card is marked as a Sub-Card ('sub') and either has no other specific location or points to this hub
-                if (cType === 'sub') {
-                    if (!loc || loc === 'index' || loc === 'index.html' || hubAliases.has(loc) || hubAliases.has(locBase)) {
+                for (const rawVal of candidateFields) {
+                    if (!rawVal) continue;
+                    const str = String(rawVal).trim().toLowerCase();
+                    const strNoHtml = str.replace('.html', '');
+
+                    if (hubAliases.has(str) || hubAliases.has(strNoHtml)) {
                         return true;
                     }
+
+                    // Handle formats like "Sub (menuCardusermaintenance)"
+                    const parenMatch = str.match(/\(([^)]+)\)/);
+                    if (parenMatch && parenMatch[1]) {
+                        const inner = parenMatch[1].trim().toLowerCase();
+                        if (hubAliases.has(inner) || hubAliases.has(inner.replace('.html', ''))) {
+                            return true;
+                        }
+                    }
+                }
+
+                // Fallback: if cardType is 'sub' and location is generic ('index' / 'sub' / empty)
+                const cType = String(card.cardType || '').trim().toLowerCase();
+                const loc = String(card.location || '').trim().toLowerCase();
+                if (cType.startsWith('sub') && (!loc || loc === 'index' || loc === 'index.html' || loc === 'sub')) {
+                    return true;
                 }
 
                 return false;
             }
 
-            //Sync Header Title & Icon with Parent Card if found in LATEST_DASHBOARD_CARDS
-            function umSyncHubHeaderMeta(allCards) {
+            // Sync Header Title & Icon with Parent Card if found in allCards
+            function umSyncHubHeaderMeta(allCards, hubAliases) {
                 if (!Array.isArray(allCards)) return;
-                const aliases = umGetActiveHubAliases();
                 const parentCardObj = allCards.find(c => {
                     const tf = String(c.targetFile || '').trim().toLowerCase();
-                    return aliases.has(tf) || aliases.has(tf.replace('.html', ''));
+                    return tf === 'usermen.html' || tf === 'usermen' || tf === 'usermain.html' || tf === 'usermain';
                 });
 
                 if (parentCardObj) {
@@ -508,42 +604,48 @@
             }
 
             // ====================================================
-            // 4. RENDER SUB-CARDS (WITH RBAC & FORCEFUL SVG)
+            // 5. RENDER SUB-CARDS (WITH STRICT RBAC & FORCEFUL SVG)
             // ====================================================
             window.umRenderSubCardsFromRegistry = function(cardsArray) {
                 const grid = document.getElementById('umSubModuleGrid');
                 if (!grid) return;
 
-                const allCards = Array.isArray(cardsArray)
-                    ? cardsArray
-                    : (Array.isArray(window.LATEST_DASHBOARD_CARDS) ? window.LATEST_DASHBOARD_CARDS : []);
-
-                umSyncHubHeaderMeta(allCards);
-
-                const sessionProfile = window.authenticatedUserSession || {
-                    user: (typeof safeSession !== 'undefined' && safeSession.getItem('activeUser')) || 'GUEST',
-                    role: (typeof safeSession !== 'undefined' && safeSession.getItem('activeRole')) || 'maker',
-                    solId: (typeof safeSession !== 'undefined' && safeSession.getItem('activeSolId')) || ''
-                };
-
-                const isHQorAdmin = (sessionProfile.user === 'admin' || sessionProfile.solId === '000000' || sessionProfile.role === 'admin');
-                const isGuestUser = (sessionProfile.user === 'GUEST' || sessionProfile.role === 'guest' || sessionProfile.isGuest === true);
-                const myRole = isGuestUser ? 'maker' : (sessionProfile.role || 'maker');
-
-                // Show "Add / Manage Sub-Cards" button for HQ / Admin
-                const manageBtn = document.getElementById('umBtnManageSubCards');
-                if (manageBtn) {
-                    manageBtn.style.display = isHQorAdmin ? 'inline-flex' : 'none';
+                let allCards = [];
+                if (Array.isArray(cardsArray) && cardsArray.length > 0) {
+                    allCards = cardsArray;
+                } else if (typeof LATEST_DASHBOARD_CARDS !== 'undefined' && Array.isArray(LATEST_DASHBOARD_CARDS)) {
+                    allCards = LATEST_DASHBOARD_CARDS;
+                } else if (Array.isArray(window.LATEST_DASHBOARD_CARDS)) {
+                    allCards = window.LATEST_DASHBOARD_CARDS;
                 }
 
-                const hubAliases = umGetActiveHubAliases();
-                grid.innerHTML = '';
+                const hubAliases = umGetActiveHubAliases(allCards);
+                umSyncHubHeaderMeta(allCards, hubAliases);
 
+                const sessionProfile = umGetSessionProfile();
+                const isStrictSuperAdmin = umIsStrictMasterSuperAdmin();
+                const isGuestUser = (
+                    String(sessionProfile.user || '').toUpperCase() === 'GUEST' ||
+                    String(sessionProfile.role || '').toLowerCase() === 'guest' ||
+                    sessionProfile.isGuest === true
+                );
+                const myRole = isGuestUser ? 'maker' : String(sessionProfile.role || 'maker').toLowerCase();
+
+                // STRICT RULE: Show "+ Add / Manage Sub-Cards" ONLY to username === 'admin'
+                const manageBtn = document.getElementById('umBtnManageSubCards');
+                if (manageBtn) {
+                    manageBtn.style.display = isStrictSuperAdmin ? 'inline-flex' : 'none';
+                }
+
+                grid.innerHTML = '';
                 let matchedCount = 0;
 
                 allCards.forEach(c => {
                     if (!umDoesCardBelongToThisHub(c, hubAliases)) return;
-                    if (!c.active && !isHQorAdmin) return;
+
+                    // Disabled sub-cards are visible only to Master Super Admin ('admin')
+                    const isCardActive = (c.active !== false);
+                    if (!isCardActive && !isStrictSuperAdmin) return;
 
                     // Strict Guest Guard against Passcode Change
                     const lowerTarget = String(c.targetFile || '').toLowerCase();
@@ -552,14 +654,29 @@
                         return;
                     }
 
-                    // Role permission check
-                    const roleAllowed = !c.roles || c.roles[myRole] || (isGuestUser && c.roles['guest']) || sessionProfile.user === 'admin';
+                    // Role-Based Access Control (RBAC) check
+                    let roleAllowed = false;
+                    if (isStrictSuperAdmin || myRole === 'admin') {
+                        roleAllowed = true;
+                    } else if (Array.isArray(sessionProfile.allowedCards) && c.id && sessionProfile.allowedCards.includes(c.id)) {
+                        roleAllowed = true;
+                    } else if (c.roles && typeof c.roles === 'object') {
+                        const hasAnyRoleKey = Object.values(c.roles).some(Boolean);
+                        if (!hasAnyRoleKey) {
+                            roleAllowed = true;
+                        } else {
+                            roleAllowed = Boolean(c.roles[myRole] || (isGuestUser && c.roles['guest']));
+                        }
+                    } else {
+                        roleAllowed = true;
+                    }
+
                     if (!roleAllowed) return;
 
                     matchedCount++;
 
                     const cardDiv = document.createElement('div');
-                    const opacityStyle = (!c.active) ? "opacity: 0.5;" : "";
+                    const opacityStyle = (!isCardActive) ? "opacity: 0.5;" : "";
                     const svgIconMarkup = umForceConvertEmojiToSVG(c.icon, c.title || '', c.desc || '');
 
                     cardDiv.className = `portal-module-card ${c.theme || 'card-blue-variant'} allowed-module um-sub-card-item`;
@@ -576,7 +693,7 @@
                     cardDiv.innerHTML = `
                         <div class="card-icon">${svgIconMarkup}</div>
                         <div class="card-body-text">
-                            <h3>${c.title || 'Untitled Module'} ${!c.active ? '<span style="color:#ef4444; font-size:11px;">(DISABLED)</span>' : ''}</h3>
+                            <h3>${c.title || 'Untitled Module'} ${!isCardActive ? '<span style="color:#ef4444; font-size:11px;">(DISABLED)</span>' : ''}</h3>
                             <p>${c.desc || 'Click to open sub-module workspace.'}</p>
                         </div>
                     `;
@@ -588,7 +705,7 @@
                     countPill.innerText = `${matchedCount} Sub-Module${matchedCount === 1 ? '' : 's'}`;
                 }
 
-                // If 0 sub-cards exist yet, show a clean Dashboard-styled Empty State
+                // If 0 sub-cards exist for this user/hub, render clean Empty State
                 if (matchedCount === 0) {
                     const emptyDiv = document.createElement('div');
                     emptyDiv.className = 'um-empty-state-box';
@@ -603,10 +720,12 @@
                         </div>
                         <h4>No Sub-Cards Assigned Yet</h4>
                         <p>
-                            When creating a Sub-Card in the Card Creator, set <strong>Card Type = Sub-Card</strong> or set <strong>Location = usermen.html / usermain.html</strong>. It will automatically appear here in real time with Pure SVG icons!
+                            ${isStrictSuperAdmin
+                                ? 'Click the button below to open <strong>createcard.html</strong> and create sub-cards for this module.'
+                                : 'No sub-modules are currently assigned to your role in this section.'}
                         </p>
-                        ${isHQorAdmin ? `
-                            <button type="button" class="manage-modules-btn" style="background:linear-gradient(90deg, #2563eb, #7c3aed); color:#fff; border:none; padding:10px 18px;" onclick="loadModuleSPA('user_maintenance.html', null, 'Opening Card Creator...')">
+                        ${isStrictSuperAdmin ? `
+                            <button type="button" class="manage-modules-btn" style="background:linear-gradient(90deg, #2563eb, #7c3aed); color:#fff; border:none; padding:10px 18px;" onclick="umOpenCreateCardStudio()">
                                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
                                 <span>Create Sub-Card Now</span>
                             </button>
@@ -622,13 +741,11 @@
             };
 
             // ====================================================
-            // 5. SMART GRID MATRIX & LIST VIEW ENGINE (EXACT INDEX.HTML MATCH)
+            // 6. SMART GRID MATRIX & LIST VIEW ENGINE (EXACT INDEX.HTML MATCH)
             // ====================================================
             function umGetStorageKey() {
-                const u = (window.authenticatedUserSession && window.authenticatedUserSession.user)
-                    ? window.authenticatedUserSession.user
-                    : ((typeof safeSession !== 'undefined' && safeSession.getItem('activeUser')) || 'default');
-                return `po_subhub_grid_pref_${u}`;
+                const prof = umGetSessionProfile();
+                return `po_subhub_grid_pref_${prof.user || 'default'}`;
             }
 
             function umLoadGridPreference() {
@@ -647,7 +764,6 @@
                     }
                 } catch (e) {}
 
-                // Inherit user's main dashboard grid preference if available
                 if (typeof currentGridPref !== 'undefined' && currentGridPref) {
                     umGridPref = { ...currentGridPref };
                 }
@@ -808,7 +924,7 @@
             };
 
             // ====================================================
-            // 6. SEARCH FILTER & PAGINATION ENGINE
+            // 7. SEARCH FILTER & PAGINATION ENGINE
             // ====================================================
             window.umFilterAndPaginateSubCards = function(resetPage = false) {
                 if (resetPage) umCurrentPage = 1;
@@ -900,10 +1016,15 @@
             };
 
             // ====================================================
-            // 7. INITIALIZE & REAL-TIME FIREBASE LISTENER
+            // 8. INITIALIZE & REAL-TIME FIREBASE LISTENER
             // ====================================================
             umLoadGridPreference();
-            window.umRenderSubCardsFromRegistry(window.LATEST_DASHBOARD_CARDS || []);
+
+            const initialCards = (typeof LATEST_DASHBOARD_CARDS !== 'undefined' && Array.isArray(LATEST_DASHBOARD_CARDS))
+                ? LATEST_DASHBOARD_CARDS
+                : (window.LATEST_DASHBOARD_CARDS || []);
+
+            window.umRenderSubCardsFromRegistry(initialCards);
 
             if (typeof db !== 'undefined' && db) {
                 try {
