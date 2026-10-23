@@ -1592,11 +1592,12 @@
         .pill-blue { background: rgba(59, 130, 246, 0.14); color: #2563eb; }
         html[data-theme="dark"] .pill-blue { color: #60a5fa; }
 
-        /* --- QUICK ACCESS MODULES SECTION --- */
+        /* --- QUICK ACCESS MODULES SECTION (SMART ADAPTIVE FULL-FILL ENGINE) --- */
         #dashboardGridView {
             flex: 1 1 0%;
             display: flex;
             flex-direction: column;
+            justify-content: space-between;
             min-height: 0;
             min-width: 0 !important;
             width: 100%;
@@ -1604,9 +1605,9 @@
             backdrop-filter: blur(16px);
             border: 1px solid var(--border-glass);
             border-radius: 18px;
-            padding: 12px 18px;
+            padding: 12px 18px 10px 18px;
             box-shadow: var(--shadow-soft);
-            overflow: hidden;
+            overflow: hidden !important;
             position: relative;
         }
 
@@ -1618,6 +1619,8 @@
             flex-shrink: 0;
             flex-wrap: wrap;
             gap: 10px;
+            position: relative;
+            z-index: 60;
         }
         .modules-sec-title {
             display: flex;
@@ -1640,6 +1643,7 @@
             display: flex;
             align-items: center;
             gap: 8px;
+            position: relative;
         }
         .view-toggle-box {
             display: inline-flex;
@@ -1648,6 +1652,8 @@
             border-radius: 10px;
             padding: 3px;
             gap: 3px;
+            position: relative;
+            align-items: center;
         }
         .view-mode-btn {
             border: none;
@@ -1664,10 +1670,173 @@
             transition: all 0.2s;
         }
         .view-mode-btn.active {
-            background: #2563eb;
+            background: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%);
             color: #ffffff;
-            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.35);
+            box-shadow: 0 2px 10px rgba(37, 99, 235, 0.38);
         }
+        .grid-matrix-badge {
+            background: rgba(37, 99, 235, 0.13);
+            color: var(--accent-primary);
+            border: 1px solid rgba(59, 130, 246, 0.28);
+            font-size: 10.5px;
+            font-weight: 800;
+            padding: 4px 8px;
+            border-radius: 7px;
+            letter-spacing: 0.2px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            transition: all 0.2s;
+        }
+        .grid-matrix-badge:hover {
+            background: rgba(37, 99, 235, 0.22);
+        }
+
+        /* SMART GRID MATRIX CUSTOMIZER POPOVER */
+        .grid-customizer-popover {
+            position: absolute;
+            top: calc(100% + 8px);
+            right: 0;
+            width: 332px;
+            background: var(--surface-glass-strong);
+            backdrop-filter: blur(26px);
+            -webkit-backdrop-filter: blur(26px);
+            border: 1px solid var(--border-glass);
+            border-radius: 18px;
+            box-shadow: 0 22px 55px rgba(15, 23, 42, 0.28), 0 0 0 1px rgba(59, 130, 246, 0.18);
+            padding: 15px;
+            display: none;
+            flex-direction: column;
+            gap: 12px;
+            z-index: 650;
+            animation: fadeIn 0.18s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+        .grid-customizer-popover.open {
+            display: flex;
+        }
+        .grid-pop-hdr {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--border-subtle);
+            padding-bottom: 9px;
+        }
+        .grid-pop-hdr h4 {
+            margin: 0;
+            font-size: 13px;
+            font-weight: 800;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .grid-pop-hdr span.cap-pill {
+            font-size: 10px;
+            font-weight: 800;
+            background: linear-gradient(90deg, rgba(37, 99, 235, 0.14), rgba(124, 58, 237, 0.14));
+            color: var(--accent-primary);
+            padding: 2.5px 8px;
+            border-radius: 99px;
+            border: 1px solid rgba(59, 130, 246, 0.25);
+        }
+        .grid-presets-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 7px;
+        }
+        .grid-preset-option {
+            background: var(--surface-input);
+            border: 1.5px solid var(--border-subtle);
+            border-radius: 11px;
+            padding: 8px 10px;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            text-align: left;
+            transition: all 0.18s ease;
+            position: relative;
+        }
+        .grid-preset-option:hover {
+            border-color: var(--accent-primary);
+            background: var(--surface-card-hover);
+            transform: translateY(-1px);
+        }
+        .grid-preset-option.active-preset {
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.14), rgba(124, 58, 237, 0.12));
+            border-color: var(--accent-primary);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15);
+        }
+        .grid-preset-option.full-span {
+            grid-column: span 2;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .gp-top-line {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 12px;
+            font-weight: 800;
+            color: var(--text-primary);
+        }
+        .gp-sub-line {
+            font-size: 10.5px;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+        .gp-count-tag {
+            font-size: 10px;
+            font-weight: 800;
+            padding: 1.5px 6px;
+            border-radius: 6px;
+            background: rgba(37, 99, 235, 0.12);
+            color: var(--accent-primary);
+        }
+        .grid-custom-sliders {
+            background: var(--surface-input);
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            padding: 10px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .grid-slider-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+        }
+        .grid-slider-row span.gs-lbl {
+            font-size: 11.5px;
+            font-weight: 700;
+            color: var(--text-secondary);
+        }
+        .grid-step-pills {
+            display: inline-flex;
+            gap: 4px;
+        }
+        .grid-step-btn {
+            border: 1px solid var(--border-subtle);
+            background: var(--surface-card);
+            color: var(--text-primary);
+            font-size: 11.5px;
+            font-weight: 800;
+            width: 30px;
+            height: 25px;
+            border-radius: 7px;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .grid-step-btn.active {
+            background: var(--accent-primary);
+            color: #ffffff;
+            border-color: var(--accent-primary);
+        }
+
         .manage-modules-btn {
             background: var(--surface-card-hover);
             border: 1px solid var(--border-subtle);
@@ -1688,53 +1857,93 @@
         }
 
         .portal-grid-wrapper {
+            --user-grid-cols: 4;
+            --user-grid-rows: 2;
+            --user-grid-gap: 13px;
+            --card-pad-y: 14px;
+            --card-pad-x: 16px;
+            --card-icon-box: 44px;
+            --card-svg-dim: 23px;
+            --card-h3-size: 13.5px;
+            --card-p-size: 11.8px;
             display: grid;
-            grid-template-columns: repeat(4, minmax(0, 1fr));
-            gap: 12px;
-            flex: 1;
-            align-content: start;
-            overflow-y: auto;
-            padding: 2px;
+            grid-template-columns: repeat(var(--user-grid-cols), minmax(0, 1fr));
+            grid-template-rows: repeat(var(--user-grid-rows), minmax(0, 1fr));
+            gap: var(--user-grid-gap);
+            flex: 1 1 0%;
+            min-height: 0;
+            height: 100%;
+            align-content: stretch;
+            align-items: stretch;
+            overflow: hidden !important;
+            padding: 2px 2px 13px 2px; /* ~1.2cm clean breathing room above bottom pagination */
             min-width: 0;
+            transition: gap 0.22s ease;
         }
         .portal-grid-wrapper.list-mode {
-            grid-template-columns: repeat(2, minmax(0, 1fr));
+            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+            grid-template-rows: repeat(var(--user-list-rows, 4), minmax(0, 1fr)) !important;
             gap: 10px;
         }
 
         .portal-module-card {
             background: var(--surface-card);
-            border-radius: 15px;
-            padding: 13px 14px;
+            border-radius: 16px;
+            padding: var(--card-pad-y) var(--card-pad-x);
             cursor: pointer;
             box-shadow: var(--shadow-card);
             border: 1px solid var(--border-glass);
-            transition: all 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
+            transition: transform 0.24s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.24s ease, border-color 0.24s ease, background 0.24s ease;
             position: relative;
             overflow: hidden;
             display: none;
             align-items: center;
-            gap: 12px;
+            gap: 14px;
             min-width: 0;
+            min-height: 0;
+            height: 100%;
+        }
+        .portal-module-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 3.5px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--accent-primary), var(--accent-secondary));
+            opacity: 0;
+            transition: opacity 0.22s ease;
         }
         .portal-module-card::after {
             content: '›';
-            font-size: 20px;
+            font-size: 21px;
             font-weight: 700;
             color: var(--text-muted);
             margin-left: auto;
             transition: transform 0.22s ease, color 0.22s ease;
             flex-shrink: 0;
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: var(--surface-input);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
         }
         .portal-module-card:hover {
-            transform: translateY(-3px);
+            transform: translateY(-2.5px);
             background: var(--surface-card-hover);
             box-shadow: var(--shadow-elevated);
-            border-color: rgba(59, 130, 246, 0.42);
+            border-color: rgba(59, 130, 246, 0.45);
+        }
+        .portal-module-card:hover::before {
+            opacity: 1;
         }
         .portal-module-card:hover::after {
-            transform: translateX(3px);
-            color: var(--accent-primary);
+            transform: translateX(2px);
+            color: #ffffff;
+            background: var(--accent-primary);
         }
         .portal-module-card.fade-out { opacity: 0; transform: scale(0.92); pointer-events: none; }
         .portal-module-card.expand-active { transform: scale(1.03); border-color: var(--accent-primary); }
@@ -1743,17 +1952,18 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            width: 40px;
-            height: 40px;
-            border-radius: 11px;
+            width: var(--card-icon-box);
+            height: var(--card-icon-box);
+            border-radius: 13px;
             background: rgba(59, 130, 246, 0.14);
             color: #2563eb;
             flex-shrink: 0;
-            transition: transform 0.25s ease;
+            transition: transform 0.25s ease, width 0.2s ease, height 0.2s ease;
         }
         .card-icon svg {
-            width: 22px;
-            height: 22px;
+            width: var(--card-svg-dim);
+            height: var(--card-svg-dim);
+            transition: width 0.2s ease, height 0.2s ease;
         }
         .portal-module-card:hover .card-icon { transform: scale(1.07); }
         .card-blue-variant .card-icon { background: rgba(59, 130, 246, 0.14); color: #2563eb; }
@@ -1770,26 +1980,31 @@
         .card-body-text {
             min-width: 0;
             flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
         .portal-module-card h3 {
-            margin: 0 0 3px 0;
-            font-size: 12.8px;
+            margin: 0 0 4px 0;
+            font-size: var(--card-h3-size);
             font-weight: 800;
             color: var(--text-primary);
             letter-spacing: -0.25px;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            transition: font-size 0.2s ease;
         }
         .portal-module-card p {
             margin: 0;
-            font-size: 11.5px;
+            font-size: var(--card-p-size);
             color: var(--text-muted);
-            line-height: 1.38;
+            line-height: 1.42;
             display: -webkit-box;
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
             overflow: hidden;
+            transition: font-size 0.2s ease;
         }
 
         .pagination-container {
@@ -1797,8 +2012,18 @@
             justify-content: center;
             align-items: center;
             gap: 6px;
-            margin-top: 6px;
+            margin-top: 2px;
+            padding-top: 2px;
             flex-shrink: 0;
+            min-height: 28px;
+        }
+        @keyframes kpiLivePulse {
+            0% { transform: scale(1); }
+            40% { transform: scale(1.03); box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.22); }
+            100% { transform: scale(1); }
+        }
+        .kpi-live-flash {
+            animation: kpiLivePulse 0.45s ease;
         }
         .page-nav-btn {
             background: var(--surface-input);
@@ -2749,12 +2974,12 @@
         }
 
         /* Responsive Adaptation */
-        @media (max-width: 1200px) {
-            .portal-grid-wrapper { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+        @media (max-width: 1150px) {
+            .portal-grid-wrapper { grid-template-columns: repeat(min(var(--user-grid-cols, 3), 3), minmax(0, 1fr)); }
         }
-        @media (max-width: 980px) {
+        @media (max-width: 900px) {
             .kpi-row-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-            .portal-grid-wrapper { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .portal-grid-wrapper { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; overflow-y: auto !important; }
             .bg-studio-cards-grid { grid-template-columns: 1fr; }
         }
         @media (max-width: 900px) {
@@ -3297,17 +3522,88 @@
                 <div id="dashboardGridView">
                     <div class="modules-Toolbar-row">
                         <h3 class="modules-sec-title">Quick Access Modules</h3>
-                        <div class="view-controls-group">
+                        <div class="view-controls-group" onclick="event.stopPropagation()">
                             <div class="view-toggle-box">
-                                <button class="view-mode-btn active" id="btnViewGrid" onclick="switchModulesViewMode('grid')">
+                                <button class="view-mode-btn active" id="btnViewGrid" onclick="handleGridButtonClick(event)" title="Click to customize Grid layout & cards per page (up to 12)">
                                     <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
                                     Grid
                                 </button>
+                                <span class="grid-matrix-badge" id="activeGridBadgeText" onclick="handleGridButtonClick(event)" title="Change Grid Matrix (4×3, 4×2, 3×2, Auto)">Auto ▾</span>
                                 <button class="view-mode-btn" id="btnViewList" onclick="switchModulesViewMode('list')">
                                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
                                     List
                                 </button>
                             </div>
+
+                            <!-- SMART PER-USER GRID MATRIX CUSTOMIZER POPOVER -->
+                            <div class="grid-customizer-popover" id="gridMatrixPopover" onclick="event.stopPropagation()">
+                                <div class="grid-pop-hdr">
+                                    <h4>
+                                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" style="color:var(--accent-primary);"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+                                        Smart Grid Layout Studio
+                                    </h4>
+                                    <span class="cap-pill" id="gridPopSummaryPill">Max 12 Cards</span>
+                                </div>
+
+                                <div class="grid-presets-grid">
+                                    <div class="grid-preset-option full-span" id="presetBtnAuto" onclick="applyUserGridPreset('auto')">
+                                        <div>
+                                            <div class="gp-top-line">Smart Auto-Fit Screen</div>
+                                            <div class="gp-sub-line">Auto-scales 4×3 (12) on large screens or 4×2 (8)</div>
+                                        </div>
+                                        <span class="gp-count-tag">AUTO</span>
+                                    </div>
+
+                                    <div class="grid-preset-option" id="presetBtn4x3" onclick="applyUserGridPreset('4x3')">
+                                        <div class="gp-top-line"><span>4 × 3 Matrix</span><span class="gp-count-tag">12</span></div>
+                                        <div class="gp-sub-line">4 per line • 3 rows (Max)</div>
+                                    </div>
+
+                                    <div class="grid-preset-option" id="presetBtn4x2" onclick="applyUserGridPreset('4x2')">
+                                        <div class="gp-top-line"><span>4 × 2 Matrix</span><span class="gp-count-tag">8</span></div>
+                                        <div class="gp-sub-line">4 per line • 2 rows</div>
+                                    </div>
+
+                                    <div class="grid-preset-option" id="presetBtn3x3" onclick="applyUserGridPreset('3x3')">
+                                        <div class="gp-top-line"><span>3 × 3 Matrix</span><span class="gp-count-tag">9</span></div>
+                                        <div class="gp-sub-line">3 per line • 3 rows</div>
+                                    </div>
+
+                                    <div class="grid-preset-option" id="presetBtn3x2" onclick="applyUserGridPreset('3x2')">
+                                        <div class="gp-top-line"><span>3 × 2 Matrix</span><span class="gp-count-tag">6</span></div>
+                                        <div class="gp-sub-line">3 per line • 2 rows</div>
+                                    </div>
+
+                                    <div class="grid-preset-option" id="presetBtn2x3" onclick="applyUserGridPreset('2x3')">
+                                        <div class="gp-top-line"><span>2 × 3 Matrix</span><span class="gp-count-tag">6</span></div>
+                                        <div class="gp-sub-line">2 per line • 3 rows</div>
+                                    </div>
+
+                                    <div class="grid-preset-option" id="presetBtn2x2" onclick="applyUserGridPreset('2x2')">
+                                        <div class="gp-top-line"><span>2 × 2 Matrix</span><span class="gp-count-tag">4</span></div>
+                                        <div class="gp-sub-line">2 per line • 2 rows</div>
+                                    </div>
+                                </div>
+
+                                <div class="grid-custom-sliders">
+                                    <div class="grid-slider-row">
+                                        <span class="gs-lbl">Cards Per Line (Columns)</span>
+                                        <div class="grid-step-pills">
+                                            <button type="button" class="grid-step-btn" id="colBtn2" onclick="setCustomGridDimension('cols', 2)">2</button>
+                                            <button type="button" class="grid-step-btn" id="colBtn3" onclick="setCustomGridDimension('cols', 3)">3</button>
+                                            <button type="button" class="grid-step-btn" id="colBtn4" onclick="setCustomGridDimension('cols', 4)">4</button>
+                                        </div>
+                                    </div>
+                                    <div class="grid-slider-row">
+                                        <span class="gs-lbl">Lines Per Page (Rows)</span>
+                                        <div class="grid-step-pills">
+                                            <button type="button" class="grid-step-btn" id="rowBtn2" onclick="setCustomGridDimension('rows', 2)">2</button>
+                                            <button type="button" class="grid-step-btn" id="rowBtn3" onclick="setCustomGridDimension('rows', 3)">3</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                             <button class="manage-modules-btn" id="btnManageModulesTop" onclick="collapseHamburgerMenu(); loadModuleSPA('user_maintenance.html', null, 'Loading User Maintenance Hub...');" style="display:none;">
                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
                                 Manage Modules
@@ -3655,7 +3951,7 @@
                         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="color:var(--accent-primary);"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
                         Master Admin Background Theme Studio
                     </h2>
-                    <p style="margin:4px 0 0 0; font-size:12.5px; color:var(--text-muted);">Upload custom images or paste image URLs for Login, 2FA Verification, and Goodbye screens. Saved directly to Firebase.</p>
+                    <p style="margin:4px 0 0 0; font-size:12.5px; color:var(--text-muted);">Paste direct external image URLs (InfinityFree / CDN) for Login, 2FA &amp; Goodbye screens. Rendered live online with <strong>0 KB image storage load on Firebase</strong>.</p>
                 </div>
                 <button onclick="closeBgStudioModal()" style="background:transparent; border:none; font-size:24px; color:var(--text-muted); cursor:pointer;">×</button>
             </div>
@@ -3668,14 +3964,13 @@
                         1. Login Screen Background
                     </h4>
                     <div class="bg-preview-box" id="bgPreviewLogin">
-                        <span class="bg-preview-tag">Login Screen Preview</span>
+                        <span class="bg-preview-tag" id="bgStatusTagLogin">Login Screen Live Preview</span>
                     </div>
-                    <label class="bg-upload-label">
-                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-                        <span>Upload Login Image</span>
-                        <input type="file" accept="image/*" style="display:none;" onchange="handleBgFileUpload(event, 'loginBg', 'bgUrlInputLogin', 'bgPreviewLogin')" />
-                    </label>
-                    <input type="text" id="bgUrlInputLogin" placeholder="Or paste Login image URL..." oninput="previewBgUrlInput('bgUrlInputLogin', 'bgPreviewLogin')" style="font-size:12px; padding:9px 12px;" />
+                    <div class="bg-upload-label" onclick="document.getElementById('bgUrlInputLogin').focus()">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+                        <span>Direct External Link (0 KB Firebase Load)</span>
+                    </div>
+                    <input type="text" id="bgUrlInputLogin" placeholder="Paste direct https:// image URL (e.g. InfinityFree)..." oninput="previewBgUrlInput('bgUrlInputLogin', 'bgPreviewLogin', 'bgStatusTagLogin')" style="font-size:12px; padding:9px 12px;" />
                     <div class="bg-card-btn-row">
                         <button class="bg-save-btn" onclick="saveScreenBackground('loginBg', 'bgUrlInputLogin')">Save to Firebase</button>
                         <button class="bg-reset-btn" onclick="resetScreenBackground('loginBg', 'bgUrlInputLogin', 'bgPreviewLogin')">Reset</button>
@@ -3689,14 +3984,13 @@
                         2. 2FA Screen Background
                     </h4>
                     <div class="bg-preview-box" id="bgPreviewTfa">
-                        <span class="bg-preview-tag">2FA Screen Preview</span>
+                        <span class="bg-preview-tag" id="bgStatusTagTfa">2FA Screen Live Preview</span>
                     </div>
-                    <label class="bg-upload-label" style="color:#7c3aed; border-color:rgba(124,58,237,0.45); background:rgba(124,58,237,0.1);">
-                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-                        <span>Upload 2FA Image</span>
-                        <input type="file" accept="image/*" style="display:none;" onchange="handleBgFileUpload(event, 'tfaBg', 'bgUrlInputTfa', 'bgPreviewTfa')" />
-                    </label>
-                    <input type="text" id="bgUrlInputTfa" placeholder="Or paste 2FA image URL..." oninput="previewBgUrlInput('bgUrlInputTfa', 'bgPreviewTfa')" style="font-size:12px; padding:9px 12px;" />
+                    <div class="bg-upload-label" style="color:#7c3aed; border-color:rgba(124,58,237,0.45); background:rgba(124,58,237,0.1);" onclick="document.getElementById('bgUrlInputTfa').focus()">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+                        <span>Direct External Link (0 KB Firebase Load)</span>
+                    </div>
+                    <input type="text" id="bgUrlInputTfa" placeholder="Paste direct https:// image URL (e.g. InfinityFree)..." oninput="previewBgUrlInput('bgUrlInputTfa', 'bgPreviewTfa', 'bgStatusTagTfa')" style="font-size:12px; padding:9px 12px;" />
                     <div class="bg-card-btn-row">
                         <button class="bg-save-btn" onclick="saveScreenBackground('tfaBg', 'bgUrlInputTfa')">Save to Firebase</button>
                         <button class="bg-reset-btn" onclick="resetScreenBackground('tfaBg', 'bgUrlInputTfa', 'bgPreviewTfa')">Reset</button>
@@ -3710,14 +4004,13 @@
                         3. Goodbye Screen Background
                     </h4>
                     <div class="bg-preview-box" id="bgPreviewGoodbye">
-                        <span class="bg-preview-tag">Goodbye Screen Preview</span>
+                        <span class="bg-preview-tag" id="bgStatusTagGoodbye">Goodbye Screen Live Preview</span>
                     </div>
-                    <label class="bg-upload-label" style="color:#10b981; border-color:rgba(16,185,129,0.45); background:rgba(16,185,129,0.1);">
-                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-                        <span>Upload Goodbye Image</span>
-                        <input type="file" accept="image/*" style="display:none;" onchange="handleBgFileUpload(event, 'goodbyeBg', 'bgUrlInputGoodbye', 'bgPreviewGoodbye')" />
-                    </label>
-                    <input type="text" id="bgUrlInputGoodbye" placeholder="Or paste Goodbye image URL..." oninput="previewBgUrlInput('bgUrlInputGoodbye', 'bgPreviewGoodbye')" style="font-size:12px; padding:9px 12px;" />
+                    <div class="bg-upload-label" style="color:#10b981; border-color:rgba(16,185,129,0.45); background:rgba(16,185,129,0.1);" onclick="document.getElementById('bgUrlInputGoodbye').focus()">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+                        <span>Direct External Link (0 KB Firebase Load)</span>
+                    </div>
+                    <input type="text" id="bgUrlInputGoodbye" placeholder="Paste direct https:// image URL (e.g. InfinityFree)..." oninput="previewBgUrlInput('bgUrlInputGoodbye', 'bgPreviewGoodbye', 'bgStatusTagGoodbye')" style="font-size:12px; padding:9px 12px;" />
                     <div class="bg-card-btn-row">
                         <button class="bg-save-btn" onclick="saveScreenBackground('goodbyeBg', 'bgUrlInputGoodbye')">Save to Firebase</button>
                         <button class="bg-reset-btn" onclick="resetScreenBackground('goodbyeBg', 'bgUrlInputGoodbye', 'bgPreviewGoodbye')">Reset</button>
@@ -3725,7 +4018,10 @@
                 </div>
             </div>
 
-            <button class="popup-close-btn" onclick="closeBgStudioModal()">Close Background Studio</button>
+            <div style="display:flex; gap:10px; align-items:center;">
+                <button class="action-btn" style="margin-top:0; flex:1.2; background:linear-gradient(90deg, #10b981, #059669);" onclick="saveAllScreenBackgrounds()">Sync All 3 URLs Globally</button>
+                <button class="popup-close-btn" style="flex:0.8;" onclick="closeBgStudioModal()">Close Background Studio</button>
+            </div>
         </div>
     </div>
 
@@ -4103,13 +4399,61 @@
         
         let authenticatedUserSession = null;
         let currentDashboardPage = 1;
-        const cardsPerPage = 8;
+        let cardsPerPage = 8;
+        let currentGridPref = { mode: 'auto', cols: 4, rows: 2 };
 
         let tempSetupSecret = "";
         let isEnrollmentMode = false;
 
+        // Real-Time Cross-Tab Instant Broadcast Bus (0ms local latency)
+        let livePortalBus = null;
+        try {
+            if (typeof BroadcastChannel !== 'undefined') {
+                livePortalBus = new BroadcastChannel('po_utility_realtime_bus');
+                livePortalBus.onmessage = function(ev) {
+                    if (!ev || !ev.data) return;
+                    const msg = ev.data;
+                    if (msg.type === 'BACKGROUNDS_SYNC' && msg.backgrounds) {
+                        applyCustomBackgroundsToDOM(msg.backgrounds);
+                    } else if (msg.type === 'USERS_SYNC' && Array.isArray(msg.users)) {
+                        SYSTEM_USER_REGISTRY = msg.users;
+                        refreshAllLiveStatusViews();
+                    } else if (msg.type === 'OFFICES_SYNC' && Array.isArray(msg.offices)) {
+                        SYSTEM_OFFICE_REGISTRY = msg.offices;
+                        refreshAllLiveStatusViews();
+                    }
+                };
+            }
+        } catch (e) {}
+
+        function broadcastPortalRealtimeEvent(payload) {
+            try {
+                if (livePortalBus) livePortalBus.postMessage(payload);
+            } catch (e) {}
+            try {
+                localStorage.setItem('po_realtime_bus_evt', JSON.stringify({ ...payload, ts: Date.now() }));
+            } catch (e) {}
+        }
+
+        window.addEventListener('storage', function(e) {
+            if (e.key === 'po_cached_backgrounds' && e.newValue) {
+                try { applyCustomBackgroundsToDOM(JSON.parse(e.newValue)); } catch (err) {}
+            } else if (e.key === 'po_realtime_bus_evt' && e.newValue) {
+                try {
+                    const msg = JSON.parse(e.newValue);
+                    if (msg.type === 'USERS_SYNC' && Array.isArray(msg.users)) {
+                        SYSTEM_USER_REGISTRY = msg.users;
+                        refreshAllLiveStatusViews();
+                    } else if (msg.type === 'OFFICES_SYNC' && Array.isArray(msg.offices)) {
+                        SYSTEM_OFFICE_REGISTRY = msg.offices;
+                        refreshAllLiveStatusViews();
+                    }
+                } catch (err) {}
+            }
+        });
+
         // ============================================================================
-        // DYNAMIC FIREBASE BACKGROUND STUDIO ENGINE (LOGIN, 2FA, GOODBYE)
+        // DYNAMIC EXTERNAL-URL BACKGROUND STUDIO ENGINE (0 KB FIREBASE IMAGE LOAD)
         // ============================================================================
         const DEFAULT_SCREEN_BACKGROUNDS = {
             loginBg: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiLukHUcccahQ6Bfcb_7aqvdjF2xnC7xdpIKJUywZiVsxduw79-FCwwuOGlU34vjrWquTNJblVmu3xAY1eFSTMMbDYlVkjR_v0xwrcyqKwdTTr8SfiWRhYVTNFa3wT01tLQTwIsHp3LfpNOJ3smkqTe3eEqtl8zM-kRDGCBnFMOpWkpsNhbsRhdBldFKBQ/s1535/1000205806.png",
@@ -4119,18 +4463,44 @@
 
         let SYSTEM_CUSTOM_BACKGROUNDS = { ...DEFAULT_SCREEN_BACKGROUNDS };
 
+        function sanitizeExternalImageUrl(rawUrl, fallbackUrl = "") {
+            const trimmed = String(rawUrl || "").trim();
+            if (!trimmed || trimmed.startsWith("data:") || trimmed.startsWith("[")) {
+                return fallbackUrl;
+            }
+            return trimmed;
+        }
+
+        function preloadOnlineBackgroundUrl(urlStr) {
+            if (!urlStr || urlStr.startsWith("data:")) return;
+            try {
+                const img = new Image();
+                img.decoding = "async";
+                img.src = urlStr;
+            } catch (e) {}
+        }
+
         function applyCustomBackgroundsToDOM(bgObj) {
-            if (!bgObj) return;
+            if (!bgObj || typeof bgObj !== 'object') return;
+            const nextLogin = sanitizeExternalImageUrl(bgObj.loginBg, DEFAULT_SCREEN_BACKGROUNDS.loginBg);
+            const nextTfa = sanitizeExternalImageUrl(bgObj.tfaBg, DEFAULT_SCREEN_BACKGROUNDS.tfaBg);
+            const nextGoodbye = sanitizeExternalImageUrl(bgObj.goodbyeBg, "");
+
             SYSTEM_CUSTOM_BACKGROUNDS = {
-                loginBg: bgObj.loginBg || DEFAULT_SCREEN_BACKGROUNDS.loginBg,
-                tfaBg: bgObj.tfaBg || DEFAULT_SCREEN_BACKGROUNDS.tfaBg,
-                goodbyeBg: bgObj.goodbyeBg || ""
+                loginBg: nextLogin,
+                tfaBg: nextTfa,
+                goodbyeBg: nextGoodbye
             };
 
+            preloadOnlineBackgroundUrl(nextLogin);
+            preloadOnlineBackgroundUrl(nextTfa);
+            if (nextGoodbye) preloadOnlineBackgroundUrl(nextGoodbye);
+
             const root = document.documentElement;
-            root.style.setProperty('--custom-login-bg', `url('${SYSTEM_CUSTOM_BACKGROUNDS.loginBg}')`);
-            root.style.setProperty('--custom-tfa-bg', `url('${SYSTEM_CUSTOM_BACKGROUNDS.tfaBg}')`);
-            root.style.setProperty('--custom-goodbye-bg', SYSTEM_CUSTOM_BACKGROUNDS.goodbyeBg ? `url('${SYSTEM_CUSTOM_BACKGROUNDS.goodbyeBg}')` : 'none');
+            const safeCssUrl = (u) => u ? `url("${u.replace(/"/g, '\"')}")` : 'none';
+            root.style.setProperty('--custom-login-bg', safeCssUrl(SYSTEM_CUSTOM_BACKGROUNDS.loginBg));
+            root.style.setProperty('--custom-tfa-bg', safeCssUrl(SYSTEM_CUSTOM_BACKGROUNDS.tfaBg));
+            root.style.setProperty('--custom-goodbye-bg', SYSTEM_CUSTOM_BACKGROUNDS.goodbyeBg ? safeCssUrl(SYSTEM_CUSTOM_BACKGROUNDS.goodbyeBg) : 'none');
 
             try {
                 localStorage.setItem('po_cached_backgrounds', JSON.stringify(SYSTEM_CUSTOM_BACKGROUNDS));
@@ -4140,16 +4510,16 @@
             const prevLogin = document.getElementById('bgPreviewLogin');
             const prevTfa = document.getElementById('bgPreviewTfa');
             const prevGoodbye = document.getElementById('bgPreviewGoodbye');
-            if (prevLogin) prevLogin.style.backgroundImage = `url('${SYSTEM_CUSTOM_BACKGROUNDS.loginBg}')`;
-            if (prevTfa) prevTfa.style.backgroundImage = `url('${SYSTEM_CUSTOM_BACKGROUNDS.tfaBg}')`;
+            if (prevLogin) prevLogin.style.backgroundImage = safeCssUrl(SYSTEM_CUSTOM_BACKGROUNDS.loginBg);
+            if (prevTfa) prevTfa.style.backgroundImage = safeCssUrl(SYSTEM_CUSTOM_BACKGROUNDS.tfaBg);
             if (prevGoodbye) {
                 prevGoodbye.style.backgroundImage = SYSTEM_CUSTOM_BACKGROUNDS.goodbyeBg
-                    ? `url('${SYSTEM_CUSTOM_BACKGROUNDS.goodbyeBg}')`
+                    ? safeCssUrl(SYSTEM_CUSTOM_BACKGROUNDS.goodbyeBg)
                     : 'linear-gradient(135deg, #040814 0%, #09132c 50%, #050a18 100%)';
             }
         }
 
-        // Load cached backgrounds immediately on boot to prevent any flash
+        // Load cached external background links immediately on boot to prevent any flash
         (function loadCachedBackgrounds() {
             try {
                 const cached = localStorage.getItem('po_cached_backgrounds');
@@ -4166,9 +4536,9 @@
                 return;
             }
             applyCustomBackgroundsToDOM(SYSTEM_CUSTOM_BACKGROUNDS);
-            document.getElementById('bgUrlInputLogin').value = SYSTEM_CUSTOM_BACKGROUNDS.loginBg.startsWith('data:') ? '[Uploaded Custom Image]' : SYSTEM_CUSTOM_BACKGROUNDS.loginBg;
-            document.getElementById('bgUrlInputTfa').value = SYSTEM_CUSTOM_BACKGROUNDS.tfaBg.startsWith('data:') ? '[Uploaded Custom Image]' : SYSTEM_CUSTOM_BACKGROUNDS.tfaBg;
-            document.getElementById('bgUrlInputGoodbye').value = SYSTEM_CUSTOM_BACKGROUNDS.goodbyeBg.startsWith('data:') ? '[Uploaded Custom Image]' : SYSTEM_CUSTOM_BACKGROUNDS.goodbyeBg;
+            document.getElementById('bgUrlInputLogin').value = SYSTEM_CUSTOM_BACKGROUNDS.loginBg || '';
+            document.getElementById('bgUrlInputTfa').value = SYSTEM_CUSTOM_BACKGROUNDS.tfaBg || '';
+            document.getElementById('bgUrlInputGoodbye').value = SYSTEM_CUSTOM_BACKGROUNDS.goodbyeBg || '';
 
             const modal = document.getElementById('bgStudioModal');
             modal.style.display = 'flex';
@@ -4181,81 +4551,105 @@
             setTimeout(() => modal.style.display = 'none', 200);
         }
 
-        function previewBgUrlInput(inputId, previewBoxId) {
-            const val = document.getElementById(inputId).value.trim();
+        function previewBgUrlInput(inputId, previewBoxId, statusTagId) {
+            const inputEl = document.getElementById(inputId);
+            const val = inputEl ? inputEl.value.trim() : '';
             const box = document.getElementById(previewBoxId);
-            if (box && val && !val.startsWith('[')) {
-                box.style.backgroundImage = `url('${val}')`;
+            const tag = statusTagId ? document.getElementById(statusTagId) : (box ? box.querySelector('.bg-preview-tag') : null);
+
+            if (!box) return;
+            if (!val) {
+                box.style.backgroundImage = 'linear-gradient(135deg, #040814 0%, #09132c 50%, #050a18 100%)';
+                if (tag) tag.innerText = 'Default / Empty URL';
+                return;
             }
+            if (val.startsWith('data:')) {
+                if (inputEl) inputEl.value = '';
+                spawnFloatingNotification("Direct URL Required", "Base64 images are disabled to keep Firebase 100% lightweight. Please paste an external https:// image link.", "warning");
+                return;
+            }
+            box.style.backgroundImage = `url("${val.replace(/"/g, '\"')}")`;
+            if (tag) tag.innerText = 'Verifying Online Image...';
+            const testImg = new Image();
+            testImg.onload = function() {
+                if (tag) tag.innerText = `✓ Online Ready (${testImg.naturalWidth}×${testImg.naturalHeight})`;
+            };
+            testImg.onerror = function() {
+                if (tag) tag.innerText = 'Preview Set (Direct Link)';
+            };
+            testImg.src = val;
         }
 
-        // Compress uploaded image via Canvas so it stores smoothly in Firebase Firestore (<1MB limit)
+        // Legacy handler kept safe: blocks Base64 uploads and guides user to paste external URL
         function handleBgFileUpload(event, bgKey, inputId, previewBoxId) {
-            const file = event.target.files && event.target.files[0];
-            if (!file) return;
+            spawnFloatingNotification("Use External Link", "To keep Firebase storage load at 0%, upload your image to InfinityFree/CDN and paste the direct URL.", "info");
+        }
 
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const img = new Image();
-                img.onload = function() {
-                    const canvas = document.createElement('canvas');
-                    const maxDim = 1440;
-                    let w = img.width;
-                    let h = img.height;
-                    if (w > maxDim || h > maxDim) {
-                        if (w > h) { h = Math.round((h * maxDim) / w); w = maxDim; }
-                        else { w = Math.round((w * maxDim) / h); h = maxDim; }
-                    }
-                    canvas.width = w;
-                    canvas.height = h;
-                    const ctx = canvas.getContext('2d');
-                    ctx.drawImage(img, 0, 0, w, h);
-                    const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.78);
-
-                    const inputEl = document.getElementById(inputId);
-                    if (inputEl) {
-                        inputEl.setAttribute('data-uploaded-base64', compressedDataUrl);
-                        inputEl.value = '[Uploaded Image Ready — Click Save to Firebase]';
-                    }
-                    const previewBox = document.getElementById(previewBoxId);
-                    if (previewBox) {
-                        previewBox.style.backgroundImage = `url('${compressedDataUrl}')`;
-                    }
-                    spawnFloatingNotification("Image Ready", "Click 'Save to Firebase' to apply this background globally.", "info");
-                };
-                img.src = e.target.result;
+        async function syncBackgroundLinksToFirebase() {
+            const cleanPayload = {
+                loginBg: sanitizeExternalImageUrl(SYSTEM_CUSTOM_BACKGROUNDS.loginBg, DEFAULT_SCREEN_BACKGROUNDS.loginBg),
+                tfaBg: sanitizeExternalImageUrl(SYSTEM_CUSTOM_BACKGROUNDS.tfaBg, DEFAULT_SCREEN_BACKGROUNDS.tfaBg),
+                goodbyeBg: sanitizeExternalImageUrl(SYSTEM_CUSTOM_BACKGROUNDS.goodbyeBg, ""),
+                updatedAt: Date.now()
             };
-            reader.readAsDataURL(file);
+            broadcastPortalRealtimeEvent({ type: 'BACKGROUNDS_SYNC', backgrounds: cleanPayload });
+
+            if (!db) return true;
+
+            // Write URL links into system/registry (guaranteed permitted) AND mirror to announcements/dashboard/backgrounds
+            const results = await Promise.allSettled([
+                db.collection("system").doc("registry").set({ backgrounds: cleanPayload }, { merge: true }),
+                db.collection("system").doc("announcements").set({ backgrounds: cleanPayload }, { merge: true }),
+                db.collection("system").doc("dashboard").set({ backgrounds: cleanPayload }, { merge: true }),
+                db.collection("system").doc("backgrounds").set(cleanPayload, { merge: true })
+            ]);
+            return results.some(r => r.status === 'fulfilled');
         }
 
         async function saveScreenBackground(bgKey, inputId) {
             if (!authenticatedUserSession || authenticatedUserSession.user !== 'admin') return;
             const inputEl = document.getElementById(inputId);
-            const uploadedData = inputEl ? inputEl.getAttribute('data-uploaded-base64') : null;
-            let rawVal = inputEl ? inputEl.value.trim() : '';
+            const rawVal = inputEl ? inputEl.value.trim() : '';
 
-            let finalBgValue = '';
-            if (uploadedData) {
-                finalBgValue = uploadedData;
-            } else if (rawVal && !rawVal.startsWith('[')) {
-                finalBgValue = rawVal;
-            } else {
-                finalBgValue = SYSTEM_CUSTOM_BACKGROUNDS[bgKey] || '';
+            if (rawVal.startsWith('data:')) {
+                spawnFloatingNotification("External Link Only", "Please paste an external https:// image link instead of Base64 data.", "warning");
+                return;
             }
 
-            SYSTEM_CUSTOM_BACKGROUNDS[bgKey] = finalBgValue;
+            SYSTEM_CUSTOM_BACKGROUNDS[bgKey] = rawVal || (bgKey === 'goodbyeBg' ? '' : DEFAULT_SCREEN_BACKGROUNDS[bgKey]);
             applyCustomBackgroundsToDOM(SYSTEM_CUSTOM_BACKGROUNDS);
 
-            if (db) {
-                try {
-                    await db.collection("system").doc("backgrounds").set(SYSTEM_CUSTOM_BACKGROUNDS, { merge: true });
-                    if (inputEl) inputEl.removeAttribute('data-uploaded-base64');
-                    spawnFloatingNotification("Background Updated", "Saved to Firebase and applied globally across the portal.", "success");
-                } catch (err) {
-                    spawnFloatingNotification("Cloud Sync Error", "Applied locally, but failed to save to Firebase.", "warning");
-                }
+            const ok = await syncBackgroundLinksToFirebase();
+            if (ok) {
+                spawnFloatingNotification("Background Link Synced", "External image URL saved globally with 0 KB image load on Firebase.", "success");
             } else {
-                spawnFloatingNotification("Background Updated", "Applied locally.", "success");
+                spawnFloatingNotification("Saved Locally", "Applied to this browser; cloud connection will sync when online.", "info");
+            }
+        }
+
+        async function saveAllScreenBackgrounds() {
+            if (!authenticatedUserSession || authenticatedUserSession.user !== 'admin') return;
+            const loginVal = (document.getElementById('bgUrlInputLogin')?.value || '').trim();
+            const tfaVal = (document.getElementById('bgUrlInputTfa')?.value || '').trim();
+            const goodbyeVal = (document.getElementById('bgUrlInputGoodbye')?.value || '').trim();
+
+            if (loginVal.startsWith('data:') || tfaVal.startsWith('data:') || goodbyeVal.startsWith('data:')) {
+                spawnFloatingNotification("External Link Only", "Please use external https:// image links only.", "warning");
+                return;
+            }
+
+            SYSTEM_CUSTOM_BACKGROUNDS = {
+                loginBg: loginVal || DEFAULT_SCREEN_BACKGROUNDS.loginBg,
+                tfaBg: tfaVal || DEFAULT_SCREEN_BACKGROUNDS.tfaBg,
+                goodbyeBg: goodbyeVal || ""
+            };
+            applyCustomBackgroundsToDOM(SYSTEM_CUSTOM_BACKGROUNDS);
+
+            const ok = await syncBackgroundLinksToFirebase();
+            if (ok) {
+                spawnFloatingNotification("All 3 Background Links Synced", "All external image URLs saved globally across the portal.", "success");
+            } else {
+                spawnFloatingNotification("Saved Locally", "Applied locally.", "info");
             }
         }
 
@@ -4264,18 +4658,11 @@
             const defaultVal = DEFAULT_SCREEN_BACKGROUNDS[bgKey] || '';
             SYSTEM_CUSTOM_BACKGROUNDS[bgKey] = defaultVal;
             const inputEl = document.getElementById(inputId);
-            if (inputEl) {
-                inputEl.removeAttribute('data-uploaded-base64');
-                inputEl.value = defaultVal;
-            }
+            if (inputEl) inputEl.value = defaultVal;
             applyCustomBackgroundsToDOM(SYSTEM_CUSTOM_BACKGROUNDS);
 
-            if (db) {
-                try {
-                    await db.collection("system").doc("backgrounds").set(SYSTEM_CUSTOM_BACKGROUNDS, { merge: true });
-                } catch (e) {}
-            }
-            spawnFloatingNotification("Background Reset", "Restored default background image.", "info");
+            await syncBackgroundLinksToFirebase();
+            spawnFloatingNotification("Background Reset", "Restored default background URL globally.", "info");
         }
 
         // ============================================================================
@@ -4420,6 +4807,8 @@
         document.addEventListener('click', function() {
             const notifPanel = document.getElementById('notifDropdownPanel');
             if (notifPanel) notifPanel.classList.remove('open');
+            const gridPop = document.getElementById('gridMatrixPopover');
+            if (gridPop) gridPop.classList.remove('open');
             closeProfileDrawer();
         });
 
@@ -4524,25 +4913,115 @@
             }
         }
 
+        function isOfficeDayBegun(officeObj) {
+            if (!officeObj) return false;
+            const norm = String(officeObj.status || '').trim().toUpperCase().replace(/\s+/g, '_');
+            return norm === 'DAY_BEGUN' || norm === 'ONLINE';
+        }
+
+        function refreshAllLiveStatusViews() {
+            if (!authenticatedUserSession) return;
+            updateProfileAndKpiDashboard();
+
+            const userModal = document.getElementById('userStatusInspectorModal');
+            if (userModal && userModal.classList.contains('active')) {
+                renderUserStatusList(currentUserStatusTab);
+            }
+            const officeModal = document.getElementById('officeStatusInspectorModal');
+            if (officeModal && officeModal.classList.contains('active')) {
+                renderOfficeStatusList(currentOfficeStatusTab);
+            }
+            const dbdeModal = document.getElementById('dbdeModal');
+            if (dbdeModal && dbdeModal.classList.contains('active')) {
+                refreshDBDEModalViewOnly();
+            }
+        }
+
+        async function pushUsersToCloudOnly(changedUsername = null, changedOnlineState = null, changedLoginTime = null) {
+            broadcastPortalRealtimeEvent({ type: 'USERS_SYNC', users: SYSTEM_USER_REGISTRY });
+            if (!hasSuccessfullySyncedWithCloud || !db) return;
+            const regRef = db.collection("system").doc("registry");
+            try {
+                if (changedUsername !== null && typeof db.runTransaction === 'function') {
+                    await db.runTransaction(async (tx) => {
+                        const snap = await tx.get(regRef);
+                        let list = (snap.exists && Array.isArray(snap.data().users)) ? snap.data().users : SYSTEM_USER_REGISTRY;
+                        const normU = String(changedUsername).trim().toLowerCase();
+                        const i = list.findIndex(u => String(u.user || '').trim().toLowerCase() === normU);
+                        if (i !== -1) {
+                            list[i].isOnline = Boolean(changedOnlineState);
+                            list[i].lastPresenceChangeAt = Date.now();
+                            if (changedLoginTime) list[i].lastLoginTime = changedLoginTime;
+                            if (authenticatedUserSession && authenticatedUserSession.gridLayoutPref && String(authenticatedUserSession.user || '').trim().toLowerCase() === normU) {
+                                list[i].gridLayoutPref = authenticatedUserSession.gridLayoutPref;
+                            }
+                        }
+                        SYSTEM_USER_REGISTRY = list;
+                        tx.set(regRef, { users: list }, { merge: true });
+                    });
+                } else {
+                    await regRef.set({ users: SYSTEM_USER_REGISTRY }, { merge: true });
+                }
+            } catch (e) {
+                try { await regRef.set({ users: SYSTEM_USER_REGISTRY }, { merge: true }); } catch (err) {}
+            }
+        }
+
+        async function pushOfficesToCloudOnly(changedSolId = null, changedStatus = null) {
+            broadcastPortalRealtimeEvent({ type: 'OFFICES_SYNC', offices: SYSTEM_OFFICE_REGISTRY });
+            if (!hasSuccessfullySyncedWithCloud || !db) return;
+            const regRef = db.collection("system").doc("registry");
+            try {
+                if (changedSolId !== null && typeof db.runTransaction === 'function') {
+                    await db.runTransaction(async (tx) => {
+                        const snap = await tx.get(regRef);
+                        let list = (snap.exists && Array.isArray(snap.data().offices)) ? snap.data().offices : SYSTEM_OFFICE_REGISTRY;
+                        const normSol = String(changedSolId).trim();
+                        const i = list.findIndex(o => String(o.solId || '').trim() === normSol);
+                        if (i !== -1) {
+                            list[i].status = changedStatus;
+                            list[i].lastUpdatedAt = Date.now();
+                        }
+                        SYSTEM_OFFICE_REGISTRY = list;
+                        tx.set(regRef, { offices: list }, { merge: true });
+                    });
+                } else {
+                    await regRef.set({ offices: SYSTEM_OFFICE_REGISTRY }, { merge: true });
+                }
+            } catch (e) {
+                try { await regRef.set({ offices: SYSTEM_OFFICE_REGISTRY }, { merge: true }); } catch (err) {}
+            }
+        }
+
         async function setUserOnlinePresence(username, isOnlineState) {
             if (!username || username === "GUEST") return;
-            const idx = SYSTEM_USER_REGISTRY.findIndex(u => u.user === username);
+            const normTarget = String(username).trim().toLowerCase();
+            let idx = SYSTEM_USER_REGISTRY.findIndex(u => String(u.user || '').trim().toLowerCase() === normTarget);
             if (idx !== -1) {
                 let options = { timeZone: 'Asia/Kolkata', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
-                SYSTEM_USER_REGISTRY[idx].isOnline = isOnlineState;
-                if (isOnlineState) {
-                    SYSTEM_USER_REGISTRY[idx].lastLoginTime = new Date().toLocaleString('en-IN', options);
+                const loginStamp = isOnlineState ? new Date().toLocaleString('en-IN', options) : null;
+                SYSTEM_USER_REGISTRY[idx].isOnline = Boolean(isOnlineState);
+                SYSTEM_USER_REGISTRY[idx].lastPresenceChangeAt = Date.now();
+                if (loginStamp) {
+                    SYSTEM_USER_REGISTRY[idx].lastLoginTime = loginStamp;
                 }
-                await forcePushToCloud();
+                if (authenticatedUserSession && String(authenticatedUserSession.user || '').trim().toLowerCase() === normTarget) {
+                    authenticatedUserSession.isOnline = Boolean(isOnlineState);
+                    if (loginStamp) authenticatedUserSession.lastLoginTime = loginStamp;
+                }
+                refreshAllLiveStatusViews();
+                await pushUsersToCloudOnly(username, isOnlineState, loginStamp);
             }
         }
 
         window.addEventListener('beforeunload', () => {
             const activeU = safeSession.getItem("activeUser");
             if (activeU && activeU !== "GUEST" && hasSuccessfullySyncedWithCloud && db) {
-                const idx = SYSTEM_USER_REGISTRY.findIndex(u => u.user === activeU);
+                const normU = String(activeU).trim().toLowerCase();
+                const idx = SYSTEM_USER_REGISTRY.findIndex(u => String(u.user || '').trim().toLowerCase() === normU);
                 if (idx !== -1) {
                     SYSTEM_USER_REGISTRY[idx].isOnline = false;
+                    broadcastPortalRealtimeEvent({ type: 'USERS_SYNC', users: SYSTEM_USER_REGISTRY });
                     db.collection("system").doc("registry").set({ users: SYSTEM_USER_REGISTRY }, { merge: true });
                 }
             }
@@ -4571,32 +5050,37 @@
             await synchronizeSystemDatabase(true);
         };
 
-        // --- DATABASE SYNC LOGIC ---
+        // --- DATABASE SYNC LOGIC (REAL-TIME SUB-SECOND REACTIVITY) ---
         async function synchronizeSystemDatabase(isInitialBoot) {
             const systemLoader = document.getElementById('globalAppLoader');
-            if (systemLoader) systemLoader.style.display = 'flex';
+            if (systemLoader && isInitialBoot) systemLoader.style.display = 'flex';
 
             if (isInitialBoot) {
                 try {
                     db.collection("system").doc("announcements").onSnapshot((doc) => {
                         if (doc.exists) {
-                            SYSTEM_NEWS_FEED = doc.data().tickerText || SYSTEM_NEWS_FEED;
-                            if(document.getElementById('scrollingNewsText')) document.getElementById('scrollingNewsText').innerText = SYSTEM_NEWS_FEED;
+                            const d = doc.data();
+                            SYSTEM_NEWS_FEED = d.tickerText || SYSTEM_NEWS_FEED;
+                            if (document.getElementById('scrollingNewsText')) document.getElementById('scrollingNewsText').innerText = SYSTEM_NEWS_FEED;
+                            if (d.backgrounds) applyCustomBackgroundsToDOM(d.backgrounds);
                         }
                     });
 
-                    // Real-time Custom Backgrounds Listener
+                    // Real-time Custom Backgrounds Listener (Fallback/Direct)
                     db.collection("system").doc("backgrounds").onSnapshot((bgDoc) => {
                         if (bgDoc.exists) {
                             applyCustomBackgroundsToDOM(bgDoc.data());
                         }
-                    });
+                    }, () => {});
 
-                    db.collection("system").doc("registry").onSnapshot((registryDoc) => {
+                    db.collection("system").doc("registry").onSnapshot({ includeMetadataChanges: true }, (registryDoc) => {
                         if (registryDoc.exists) {
                             const data = registryDoc.data();
+                            if (data.backgrounds) {
+                                applyCustomBackgroundsToDOM(data.backgrounds);
+                            }
+
                             let fetchedUsers = data.users || [];
-                            
                             let adminExists = fetchedUsers.some(u => u.user === 'admin');
                             if (!adminExists) {
                                 fetchedUsers.push({ 
@@ -4610,6 +5094,7 @@
                                     isFirstTimeDefault: false, 
                                     totpSecret: "", 
                                     solId: "000000",
+                                    isOnline: false,
                                     allowedCards: [] 
                                 });
                                 db.collection("system").doc("registry").set({ users: fetchedUsers }, { merge: true });
@@ -4618,20 +5103,33 @@
                             SYSTEM_USER_REGISTRY = fetchedUsers;
                             SYSTEM_LOGIN_HISTORY = data.logs || [];
                             SYSTEM_OFFICE_REGISTRY = data.offices || [];
-                            
+                            window.SYSTEM_USER_REGISTRY = SYSTEM_USER_REGISTRY;
+                            window.SYSTEM_OFFICE_REGISTRY = SYSTEM_OFFICE_REGISTRY;
+
                             isCloudDataLoaded = true;
                             hasSuccessfullySyncedWithCloud = true; 
-                            
+
                             let sessionUser = safeSession.getItem("activeUser");
                             if (sessionUser && safeSession.getItem("2faVerified") === "true") {
-                                let profile = SYSTEM_USER_REGISTRY.find(acc => acc.user === sessionUser);
+                                let profile = SYSTEM_USER_REGISTRY.find(acc => String(acc.user || '').toLowerCase() === String(sessionUser).toLowerCase());
                                 if (!profile && sessionUser === "GUEST") {
-                                    // Guest User treated as Maker role, but flagged as GUEST
                                     profile = { fullName: "Guest User", user: "GUEST", role: "maker", isGuest: true, active: true, locked: false, isFirstTimeDefault: false, totpSecret: "", solId: "GUEST" };
                                 }
                                 if (profile) {
+                                    const wasFirstAttach = !authenticatedUserSession;
                                     authenticatedUserSession = profile;
-                                    verifyBloggerAuth_Reentry();
+                                    // Ensure active logged-in non-guest user is always marked online in Firebase even after page reload
+                                    if (sessionUser !== "GUEST" && profile.isOnline !== true) {
+                                        profile.isOnline = true;
+                                        setUserOnlinePresence(profile.user, true);
+                                    }
+                                    if (wasFirstAttach) {
+                                        loadUserGridPreference();
+                                        verifyBloggerAuth_Reentry(true);
+                                    } else {
+                                        verifyBloggerAuth_Reentry(false);
+                                    }
+                                    refreshAllLiveStatusViews();
                                 }
                             }
                         } else {
@@ -4642,11 +5140,13 @@
 
                     db.collection("system").doc("dashboard").onSnapshot((doc) => {
                         if (doc.exists) {
-                            LATEST_DASHBOARD_CARDS = doc.data().cards || [];
-                            DISABLED_SYSTEM_CARDS = doc.data().disabledSystemCards || []; 
+                            const d = doc.data();
+                            if (d.backgrounds) applyCustomBackgroundsToDOM(d.backgrounds);
+                            LATEST_DASHBOARD_CARDS = d.cards || [];
+                            DISABLED_SYSTEM_CARDS = d.disabledSystemCards || []; 
                             if (authenticatedUserSession) {
                                 renderDynamicCardsInIndex(LATEST_DASHBOARD_CARDS);
-                                verifyBloggerAuth_Reentry();
+                                verifyBloggerAuth_Reentry(false);
                             }
                         }
                     });
@@ -4658,7 +5158,9 @@
                 if (!isCloudDataLoaded) return;
                 await forcePushToCloud();
             }
-            setTimeout(() => { if(systemLoader) systemLoader.style.display = 'none'; }, 300);
+            if (isInitialBoot) {
+                setTimeout(() => { if(systemLoader) systemLoader.style.display = 'none'; }, 260);
+            }
         }
 
         // AUTO-CONVERT DYNAMIC EMOJI CARDS INTO HIGH-TECH VECTOR SVGS (WITH GUEST = MAKER & NO PASSCODE FOR GUEST)
@@ -4706,7 +5208,7 @@
                 grid.appendChild(cardDiv);
             });
             
-            filterAndPaginateCards(true);
+            filterAndPaginateCards(false);
             renderDynamicSidebarMenu();
             evaluate24HourModuleNotifications(cards);
         }
@@ -4896,21 +5398,40 @@
                 cardUserStatus.style.display = 'flex';
                 if (manageBtnTop) manageBtnTop.style.display = 'inline-flex';
 
+                const prevOffVal = document.getElementById('kpiTotalOfficesVal').innerText;
+                const prevUsrVal = document.getElementById('kpiTotalUsersVal').innerText;
                 document.getElementById('kpiTotalOfficesVal').innerText = SYSTEM_OFFICE_REGISTRY.length;
                 document.getElementById('kpiTotalUsersVal').innerText = SYSTEM_USER_REGISTRY.length;
 
-                const onlineUsers = SYSTEM_USER_REGISTRY.filter(acc => acc.isOnline === true || acc.user === u);
+                const onlineUsers = SYSTEM_USER_REGISTRY.filter(acc => acc.isOnline === true || String(acc.user || '').toLowerCase() === String(u).toLowerCase());
                 const offlineCount = Math.max(0, SYSTEM_USER_REGISTRY.length - onlineUsers.length);
-                document.getElementById('kpiOnlineUsersVal').innerText = `${onlineUsers.length} Online`;
+                const nextOnlineUsrText = `${onlineUsers.length} Online`;
+                const prevOnlineUsrText = document.getElementById('kpiOnlineUsersVal').innerText;
+                document.getElementById('kpiOnlineUsersVal').innerText = nextOnlineUsrText;
                 document.getElementById('kpiOfflineUsersBadge').innerText = `${offlineCount} Offline ›`;
 
-                const onlineOffices = SYSTEM_OFFICE_REGISTRY.filter(o => o.status === 'DAY_BEGUN');
-                const offlineOffices = SYSTEM_OFFICE_REGISTRY.length - onlineOffices.length;
+                if (prevOnlineUsrText !== nextOnlineUsrText || prevUsrVal !== String(SYSTEM_USER_REGISTRY.length)) {
+                    cardUserStatus.classList.remove('kpi-live-flash');
+                    void cardUserStatus.offsetWidth;
+                    cardUserStatus.classList.add('kpi-live-flash');
+                }
+
+                const onlineOffices = SYSTEM_OFFICE_REGISTRY.filter(o => isOfficeDayBegun(o));
+                const offlineOffices = Math.max(0, SYSTEM_OFFICE_REGISTRY.length - onlineOffices.length);
+                const nextOnlineOffText = `${onlineOffices.length} Online`;
+                const prevOnlineOffText = document.getElementById('kpiSysStatusMainVal').innerText;
                 document.getElementById('kpiSysStatusTitle').innerText = 'System Status';
-                document.getElementById('kpiSysStatusMainVal').innerText = `${onlineOffices.length} Online`;
+                document.getElementById('kpiSysStatusMainVal').innerText = nextOnlineOffText;
                 const sysBadge = document.getElementById('kpiSysStatusSubVal');
-                sysBadge.className = 'kpi-sub-pill pill-green';
-                sysBadge.innerHTML = `<span class="status-dot-inline dot-online"></span>${offlineOffices} Offline ›`;
+                sysBadge.className = 'kpi-sub-pill ' + (onlineOffices.length > 0 ? 'pill-green' : 'pill-red');
+                sysBadge.innerHTML = `<span class="status-dot-inline ${onlineOffices.length > 0 ? 'dot-online' : 'dot-offline'}"></span>${offlineOffices} Offline ›`;
+
+                const cardSysStatus = document.getElementById('kpiCardSystemStatus');
+                if (cardSysStatus && (prevOnlineOffText !== nextOnlineOffText || prevOffVal !== String(SYSTEM_OFFICE_REGISTRY.length))) {
+                    cardSysStatus.classList.remove('kpi-live-flash');
+                    void cardSysStatus.offsetWidth;
+                    cardSysStatus.classList.add('kpi-live-flash');
+                }
             } else {
                 kpiRow.classList.add('single-status-mode');
                 cardOffices.style.display = 'none';
@@ -4918,7 +5439,7 @@
                 cardUserStatus.style.display = 'none';
                 if (manageBtnTop) manageBtnTop.style.display = 'none';
 
-                const isDayBegun = isGuestUser || (mappedOffice && mappedOffice.status === 'DAY_BEGUN');
+                const isDayBegun = isGuestUser || isOfficeDayBegun(mappedOffice);
                 const bDate = new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
                 document.getElementById('kpiSysStatusTitle').innerText = `System Status • Business Date: ${bDate}`;
                 document.getElementById('kpiSysStatusMainVal').innerText = isDayBegun ? 'Online' : 'Offline';
@@ -4931,7 +5452,7 @@
         }
 
         // =========================================================
-        // HQ ADMIN USER STATUS & OFFICE STATUS INSPECTOR MODALS
+        // HQ ADMIN USER STATUS & OFFICE STATUS INSPECTOR MODALS (100% LIVE + ACTIONABLE)
         // =========================================================
         function openUserStatusModal() {
             if (!authenticatedUserSession) return;
@@ -4953,10 +5474,15 @@
             document.getElementById('tabBtnOfflineUsers').classList.toggle('active', tab === 'offline');
             renderUserStatusList(tab);
         }
+        async function adminForceToggleUserOnline(targetUsername, makeOnline) {
+            if (!authenticatedUserSession || (authenticatedUserSession.user !== 'admin' && authenticatedUserSession.solId !== '000000')) return;
+            await setUserOnlinePresence(targetUsername, makeOnline);
+            spawnFloatingNotification("User Status Updated", `@${targetUsername} is now marked ${makeOnline ? 'Online' : 'Offline'}.`, "info");
+        }
         function renderUserStatusList(tab) {
             const currentU = authenticatedUserSession ? authenticatedUserSession.user : '';
-            const onlineList = SYSTEM_USER_REGISTRY.filter(acc => acc.isOnline === true || acc.user === currentU);
-            const offlineList = SYSTEM_USER_REGISTRY.filter(acc => !(acc.isOnline === true || acc.user === currentU));
+            const onlineList = SYSTEM_USER_REGISTRY.filter(acc => acc.isOnline === true || String(acc.user || '').toLowerCase() === String(currentU).toLowerCase());
+            const offlineList = SYSTEM_USER_REGISTRY.filter(acc => !(acc.isOnline === true || String(acc.user || '').toLowerCase() === String(currentU).toLowerCase()));
 
             document.getElementById('modalOnlineCountBadge').innerText = onlineList.length;
             document.getElementById('modalOfflineCountBadge').innerText = offlineList.length;
@@ -4968,17 +5494,25 @@
                 return;
             }
             container.innerHTML = target.map(u => {
-                const off = SYSTEM_OFFICE_REGISTRY.find(o => o.solId === u.solId);
+                const off = SYSTEM_OFFICE_REGISTRY.find(o => String(o.solId || '').trim() === String(u.solId || '').trim());
                 const offName = off ? off.name : (u.solId === '000000' ? 'Headquarters' : 'Unmapped');
+                const isSelf = String(u.user || '').toLowerCase() === String(currentU).toLowerCase();
+                const lastLoginMeta = u.lastLoginTime ? ` • Last Login: ${u.lastLoginTime}` : '';
+                const quickBtn = (!isSelf && tab === 'online')
+                    ? `<button onclick="adminForceToggleUserOnline('${u.user}', false)" style="border:1px solid rgba(239,68,68,0.35); background:rgba(239,68,68,0.1); color:#ef4444; font-size:10.5px; font-weight:800; padding:4px 9px; border-radius:99px; cursor:pointer;">Set Offline</button>`
+                    : '';
                 return `
                     <div class="status-row-item">
                         <div>
                             <div style="font-weight:800; font-size:14px; color:var(--text-primary);">${u.fullName || u.user} <span style="font-size:12px; color:var(--text-muted);">(@${u.user})</span></div>
-                            <div style="font-size:12px; color:var(--text-muted);">Role: <strong>${(u.role || 'staff').toUpperCase()}</strong> • SOL: ${u.solId || 'N/A'} (${offName})</div>
+                            <div style="font-size:11.5px; color:var(--text-muted);">Role: <strong>${(u.role || 'staff').toUpperCase()}</strong> • SOL: ${u.solId || 'N/A'} (${offName})${lastLoginMeta}</div>
                         </div>
-                        <span class="kpi-sub-pill ${tab === 'online' ? 'pill-green' : 'pill-red'}">
-                            <span class="status-dot-inline ${tab === 'online' ? 'dot-online' : 'dot-offline'}"></span>${tab === 'online' ? 'Online' : 'Offline'}
-                        </span>
+                        <div style="display:flex; align-items:center; gap:8px;">
+                            ${quickBtn}
+                            <span class="kpi-sub-pill ${tab === 'online' ? 'pill-green' : 'pill-red'}">
+                                <span class="status-dot-inline ${tab === 'online' ? 'dot-online' : 'dot-offline'}"></span>${tab === 'online' ? 'Online' : 'Offline'}
+                            </span>
+                        </div>
                     </div>
                 `;
             }).join('');
@@ -5004,9 +5538,22 @@
             document.getElementById('tabBtnOfflineOffices').classList.toggle('active', tab === 'offline');
             renderOfficeStatusList(tab);
         }
+        async function adminQuickToggleOfficeDayStatus(targetSolId) {
+            if (!authenticatedUserSession) return;
+            const offIdx = SYSTEM_OFFICE_REGISTRY.findIndex(o => String(o.solId || '').trim() === String(targetSolId || '').trim());
+            if (offIdx === -1) return;
+            const currentlyBegun = isOfficeDayBegun(SYSTEM_OFFICE_REGISTRY[offIdx]);
+            const nextStatus = currentlyBegun ? "DAY_ENDED" : "DAY_BEGUN";
+            SYSTEM_OFFICE_REGISTRY[offIdx].status = nextStatus;
+            SYSTEM_OFFICE_REGISTRY[offIdx].lastUpdatedAt = Date.now();
+            refreshAllLiveStatusViews();
+            logSystemEvent(authenticatedUserSession.user, `Executed ${nextStatus} for SOL ${targetSolId}`);
+            await pushOfficesToCloudOnly(targetSolId, nextStatus);
+            spawnFloatingNotification("Office Status Synced", `SOL ${targetSolId} (${SYSTEM_OFFICE_REGISTRY[offIdx].name}) is now ${nextStatus.replace('_', ' ')}.`, "success");
+        }
         function renderOfficeStatusList(tab) {
-            const onlineOffs = SYSTEM_OFFICE_REGISTRY.filter(o => o.status === 'DAY_BEGUN');
-            const offlineOffs = SYSTEM_OFFICE_REGISTRY.filter(o => o.status !== 'DAY_BEGUN');
+            const onlineOffs = SYSTEM_OFFICE_REGISTRY.filter(o => isOfficeDayBegun(o));
+            const offlineOffs = SYSTEM_OFFICE_REGISTRY.filter(o => !isOfficeDayBegun(o));
 
             document.getElementById('modalOnlineOfficesBadge').innerText = onlineOffs.length;
             document.getElementById('modalOfflineOfficesBadge').innerText = offlineOffs.length;
@@ -5017,32 +5564,222 @@
                 container.innerHTML = `<div style="text-align:center; padding:24px; color:var(--text-muted); font-weight:600;">No ${tab} offices at this moment.</div>`;
                 return;
             }
-            container.innerHTML = target.map(o => `
+            container.innerHTML = target.map(o => {
+                const isBegun = isOfficeDayBegun(o);
+                return `
                 <div class="status-row-item">
                     <div>
                         <div style="font-weight:800; font-size:14px; color:var(--text-primary);">${o.name}</div>
                         <div style="font-size:12px; color:var(--text-muted);">SOL ID: <strong>${o.solId}</strong></div>
                     </div>
-                    <span class="kpi-sub-pill ${tab === 'online' ? 'pill-green' : 'pill-red'}">
-                        <span class="status-dot-inline ${tab === 'online' ? 'dot-online' : 'dot-offline'}"></span>${tab === 'online' ? 'DAY BEGUN (Online)' : 'DAY ENDED (Offline)'}
-                    </span>
+                    <div style="display:flex; align-items:center; gap:8px;">
+                        <button onclick="adminQuickToggleOfficeDayStatus('${o.solId}')" style="border:1px solid ${isBegun ? 'rgba(245,158,11,0.45)' : 'rgba(16,185,129,0.45)'}; background:${isBegun ? 'rgba(245,158,11,0.13)' : 'rgba(16,185,129,0.13)'}; color:${isBegun ? '#d97706' : '#059669'}; font-size:11px; font-weight:800; padding:5px 10px; border-radius:99px; cursor:pointer; transition:all 0.2s;">
+                            ${isBegun ? 'Execute Day End' : 'Execute Day Begin'}
+                        </button>
+                        <span class="kpi-sub-pill ${isBegun ? 'pill-green' : 'pill-red'}">
+                            <span class="status-dot-inline ${isBegun ? 'dot-online' : 'dot-offline'}"></span>${isBegun ? 'DAY BEGUN (Online)' : 'DAY ENDED (Offline)'}
+                        </span>
+                    </div>
                 </div>
-            `).join('');
+            `;
+            }).join('');
         }
+
+        // =========================================================
+        // SMART PER-USER CUSTOMIZABLE GRID & VIEWPORT FILL ENGINE
+        // =========================================================
+        function getActiveUserGridStorageKey() {
+            const u = (authenticatedUserSession && authenticatedUserSession.user) ? authenticatedUserSession.user : (safeSession.getItem("activeUser") || "default");
+            return `po_smart_grid_pref_${u}`;
+        }
+
+        function loadUserGridPreference() {
+            let loaded = null;
+            if (authenticatedUserSession && authenticatedUserSession.gridLayoutPref) {
+                loaded = authenticatedUserSession.gridLayoutPref;
+            }
+            if (!loaded) {
+                try {
+                    const raw = localStorage.getItem(getActiveUserGridStorageKey());
+                    if (raw) loaded = JSON.parse(raw);
+                } catch (e) {}
+            }
+            if (loaded && loaded.cols && loaded.rows) {
+                currentGridPref = {
+                    mode: loaded.mode || 'custom',
+                    cols: Math.min(4, Math.max(2, parseInt(loaded.cols, 10) || 4)),
+                    rows: Math.min(3, Math.max(2, parseInt(loaded.rows, 10) || 2))
+                };
+            } else {
+                currentGridPref = { mode: 'auto', cols: 4, rows: 2 };
+            }
+            applySmartGridConfiguration(false);
+        }
+
+        function saveUserGridPreference() {
+            try {
+                localStorage.setItem(getActiveUserGridStorageKey(), JSON.stringify(currentGridPref));
+            } catch (e) {}
+            if (authenticatedUserSession && authenticatedUserSession.user !== 'GUEST') {
+                authenticatedUserSession.gridLayoutPref = { ...currentGridPref };
+                const idx = SYSTEM_USER_REGISTRY.findIndex(u => u.user === authenticatedUserSession.user);
+                if (idx !== -1) {
+                    SYSTEM_USER_REGISTRY[idx].gridLayoutPref = { ...currentGridPref };
+                    pushUsersToCloudOnly(authenticatedUserSession.user, true, null);
+                }
+            }
+        }
+
+        function resolveEffectiveGridDimensions() {
+            const grid = document.getElementById('mainModuleGrid');
+            if (grid && grid.classList.contains('list-mode')) {
+                const isTall = window.innerHeight >= 820;
+                const listRows = isTall ? 5 : 4;
+                return { cols: 2, rows: listRows, total: Math.min(12, 2 * listRows), label: 'List' };
+            }
+            if (currentGridPref.mode === 'auto') {
+                const vh = window.innerHeight;
+                const vw = window.innerWidth;
+                let autoCols = vw < 900 ? 2 : (vw < 1180 ? 3 : 4);
+                let autoRows = vh >= 810 ? 3 : 2;
+                if (autoCols * autoRows > 12) autoRows = Math.floor(12 / autoCols);
+                return { cols: autoCols, rows: autoRows, total: autoCols * autoRows, label: `Auto (${autoCols}×${autoRows})` };
+            }
+            let c = Math.min(4, Math.max(2, currentGridPref.cols || 4));
+            let r = Math.min(3, Math.max(2, currentGridPref.rows || 2));
+            if (c * r > 12) r = Math.floor(12 / c);
+            return { cols: c, rows: r, total: c * r, label: `${c}×${r} (${c * r})` };
+        }
+
+        function recalculateSmartGridMetrics() {
+            const grid = document.getElementById('mainModuleGrid');
+            if (!grid) return;
+            const dims = resolveEffectiveGridDimensions();
+            cardsPerPage = Math.min(12, Math.max(4, dims.total));
+
+            grid.style.setProperty('--user-grid-cols', String(dims.cols));
+            grid.style.setProperty('--user-grid-rows', String(dims.rows));
+            grid.style.setProperty('--user-list-rows', String(dims.rows));
+
+            const availH = grid.clientHeight || (window.innerHeight - 280);
+            const rowH = Math.max(68, Math.floor((availH - (dims.rows - 1) * 13 - 15) / dims.rows));
+
+            // Smart adaptive typography & icon scaling based on actual available row height
+            let iconBox = 44, svgDim = 23, h3Size = 13.4, pSize = 11.6, padY = 12, padX = 15, gapPx = 13;
+            if (rowH >= 135) {
+                iconBox = 54; svgDim = 27; h3Size = 15.2; pSize = 12.6; padY = 18; padX = 18; gapPx = 15;
+            } else if (rowH >= 105) {
+                iconBox = 48; svgDim = 25; h3Size = 14.2; pSize = 12.0; padY = 14; padX = 16; gapPx = 14;
+            } else if (rowH <= 84) {
+                iconBox = 38; svgDim = 20; h3Size = 12.5; pSize = 11.0; padY = 9; padX = 13; gapPx = 10;
+            }
+
+            grid.style.setProperty('--user-grid-gap', `${gapPx}px`);
+            grid.style.setProperty('--card-icon-box', `${iconBox}px`);
+            grid.style.setProperty('--card-svg-dim', `${svgDim}px`);
+            grid.style.setProperty('--card-h3-size', `${h3Size}px`);
+            grid.style.setProperty('--card-p-size', `${pSize}px`);
+            grid.style.setProperty('--card-pad-y', `${padY}px`);
+            grid.style.setProperty('--card-pad-x', `${padX}px`);
+
+            // Update Toolbar Badge & Popover active states
+            const badgeEl = document.getElementById('activeGridBadgeText');
+            if (badgeEl) badgeEl.innerText = currentGridPref.mode === 'auto' ? `Auto • ${dims.total} ▾` : `${dims.cols}×${dims.rows} • ${dims.total} ▾`;
+            const sumPill = document.getElementById('gridPopSummaryPill');
+            if (sumPill) sumPill.innerText = `${dims.cols}×${dims.rows} = ${dims.total} Cards/Page`;
+
+            const activeKey = currentGridPref.mode === 'auto' ? 'auto' : `${dims.cols}x${dims.rows}`;
+            ['auto', '4x3', '4x2', '3x3', '3x2', '2x3', '2x2'].forEach(k => {
+                const btn = document.getElementById('presetBtn' + (k === 'auto' ? 'Auto' : k));
+                if (btn) btn.classList.toggle('active-preset', k === activeKey);
+            });
+            [2, 3, 4].forEach(c => {
+                const b = document.getElementById('colBtn' + c);
+                if (b) b.classList.toggle('active', dims.cols === c);
+            });
+            [2, 3].forEach(r => {
+                const b = document.getElementById('rowBtn' + r);
+                if (b) b.classList.toggle('active', dims.rows === r);
+            });
+        }
+
+        function applySmartGridConfiguration(showToast = false) {
+            recalculateSmartGridMetrics();
+            filterAndPaginateCards(false);
+            if (showToast) {
+                const dims = resolveEffectiveGridDimensions();
+                spawnFloatingNotification("Smart Grid Updated", `Layout set to ${dims.cols} per line × ${dims.rows} rows (${dims.total} cards per page).`, "info");
+            }
+        }
+
+        function handleGridButtonClick(event) {
+            if (event) event.stopPropagation();
+            const grid = document.getElementById('mainModuleGrid');
+            const pop = document.getElementById('gridMatrixPopover');
+            if (grid && grid.classList.contains('list-mode')) {
+                switchModulesViewMode('grid');
+            }
+            if (pop) {
+                pop.classList.toggle('open');
+                recalculateSmartGridMetrics();
+            }
+        }
+
+        function applyUserGridPreset(presetCode) {
+            if (presetCode === 'auto') {
+                currentGridPref = { mode: 'auto', cols: 4, rows: 2 };
+            } else {
+                const parts = presetCode.split('x');
+                const c = Math.min(4, Math.max(2, parseInt(parts[0], 10) || 4));
+                const r = Math.min(3, Math.max(2, parseInt(parts[1], 10) || 2));
+                currentGridPref = { mode: 'custom', cols: c, rows: r };
+            }
+            switchModulesViewMode('grid');
+            saveUserGridPreference();
+            applySmartGridConfiguration(true);
+            const pop = document.getElementById('gridMatrixPopover');
+            if (pop) pop.classList.remove('open');
+        }
+
+        function setCustomGridDimension(axis, val) {
+            const dims = resolveEffectiveGridDimensions();
+            let nextCols = axis === 'cols' ? val : dims.cols;
+            let nextRows = axis === 'rows' ? val : dims.rows;
+            nextCols = Math.min(4, Math.max(2, nextCols));
+            nextRows = Math.min(3, Math.max(2, nextRows));
+            if (nextCols * nextRows > 12) {
+                nextRows = Math.floor(12 / nextCols);
+            }
+            currentGridPref = { mode: 'custom', cols: nextCols, rows: nextRows };
+            switchModulesViewMode('grid');
+            saveUserGridPreference();
+            applySmartGridConfiguration(true);
+        }
+
+        window.addEventListener('resize', () => {
+            if (authenticatedUserSession) {
+                recalculateSmartGridMetrics();
+                filterAndPaginateCards(false);
+            }
+        });
 
         function switchModulesViewMode(mode) {
             const grid = document.getElementById('mainModuleGrid');
             const btnGrid = document.getElementById('btnViewGrid');
             const btnList = document.getElementById('btnViewList');
+            const pop = document.getElementById('gridMatrixPopover');
             if (mode === 'list') {
                 grid.classList.add('list-mode');
                 btnList.classList.add('active');
                 btnGrid.classList.remove('active');
+                if (pop) pop.classList.remove('open');
             } else {
                 grid.classList.remove('list-mode');
                 btnGrid.classList.add('active');
                 btnList.classList.remove('active');
             }
+            recalculateSmartGridMetrics();
+            filterAndPaginateCards(false);
         }
 
         async function forcePushToCloud() {
@@ -5072,7 +5809,8 @@
 
         function filterAndPaginateCards(resetPage = false) {
             if (resetPage) currentDashboardPage = 1;
-            
+            recalculateSmartGridMetrics();
+
             const query = document.getElementById('moduleSearch') ? document.getElementById('moduleSearch').value.toLowerCase() : "";
             const allCards = Array.from(document.querySelectorAll('#mainModuleGrid .portal-module-card'));
             const isGuestUser = (authenticatedUserSession && (authenticatedUserSession.user === 'GUEST' || authenticatedUserSession.role === 'guest' || authenticatedUserSession.isGuest === true));
@@ -5086,6 +5824,7 @@
 
             const totalPages = Math.ceil(filtered.length / cardsPerPage) || 1;
             if (currentDashboardPage > totalPages) currentDashboardPage = totalPages;
+            if (currentDashboardPage < 1) currentDashboardPage = 1;
             
             const startIndex = (currentDashboardPage - 1) * cardsPerPage;
             const endIndex = startIndex + cardsPerPage;
@@ -5285,6 +6024,7 @@
                     }
                 }
                 safeSession.setItem("2faVerified", "true");
+                loadUserGridPreference();
                 await setUserOnlinePresence(authenticatedUserSession.user, true);
 
                 document.getElementById('twoFactorScreen').classList.remove('active');
@@ -5294,7 +6034,8 @@
                     updateFloatingAiVisibility(true);
                     spawnFloatingNotification("Login Successful", "Welcome to PO Staff Utility System.", "success");
                     renderDynamicCardsInIndex(LATEST_DASHBOARD_CARDS);
-                    verifyBloggerAuth_Reentry();
+                    verifyBloggerAuth_Reentry(true);
+                    setTimeout(() => recalculateSmartGridMetrics(), 60);
                     if (typeof resetIdleTimer === "function") resetIdleTimer();
                 }, 200);
             } else {
@@ -5304,7 +6045,7 @@
         }
 
         // ACCESS CONTROL & MODULE ROUTING LOGIC
-        function verifyBloggerAuth_Reentry() {
+        function verifyBloggerAuth_Reentry(resetPagination = false) {
             if(!authenticatedUserSession) return;
             
             renderDynamicCardsInIndex(LATEST_DASHBOARD_CARDS);
@@ -5388,7 +6129,7 @@
                 }
             }
             
-            filterAndPaginateCards(true);
+            filterAndPaginateCards(resetPagination);
             renderDynamicSidebarMenu();
             updateProfileAndKpiDashboard();
 
@@ -5609,15 +6350,17 @@
             spawnFloatingNotification("Data Saved Successfully", "Your new passcode has been saved.", "info");
         }
 
-        function openDBDEModal() {
-            if(!authenticatedUserSession || (authenticatedUserSession.role !== 'superuser' && authenticatedUserSession.role !== 'admin')) return;
-            
-            const mySol = authenticatedUserSession.solId;
-            const office = SYSTEM_OFFICE_REGISTRY.find(o => o.solId === mySol);
-            const modal = document.getElementById('dbdeModal');
+        function refreshDBDEModalViewOnly() {
+            if (!authenticatedUserSession) return;
+            const mySol = String(authenticatedUserSession.solId || '').trim();
+            let office = SYSTEM_OFFICE_REGISTRY.find(o => String(o.solId || '').trim() === mySol);
+            if (!office && authenticatedUserSession.role === 'admin' && SYSTEM_OFFICE_REGISTRY.length === 1) {
+                office = SYSTEM_OFFICE_REGISTRY[0];
+            }
             const iconBox = document.getElementById('dbdeStatusIcon');
-            
-            if(!office) {
+            const btnExec = document.getElementById('btnExecuteDBDE');
+
+            if (!office) {
                 if (iconBox) {
                     iconBox.style.background = "rgba(100,116,139,0.14)";
                     iconBox.style.color = "#64748b";
@@ -5625,10 +6368,13 @@
                 }
                 document.getElementById('dbdeStatusTitle').innerText = "Unmapped Profile";
                 document.getElementById('dbdeStatusDesc').innerText = "You are currently not mapped to any specific Office SOL ID.";
-                document.getElementById('btnExecuteDBDE').style.display = "none";
+                if (btnExec) btnExec.style.display = "none";
             } else {
-                document.getElementById('btnExecuteDBDE').style.display = "inline-block";
-                if(office.status === "DAY_BEGUN") {
+                if (btnExec) {
+                    btnExec.style.display = "inline-block";
+                    btnExec.setAttribute('data-target-sol', office.solId);
+                }
+                if (isOfficeDayBegun(office)) {
                     if (iconBox) {
                         iconBox.style.background = "rgba(16,185,129,0.15)";
                         iconBox.style.color = "#10b981";
@@ -5636,8 +6382,10 @@
                     }
                     document.getElementById('dbdeStatusTitle').innerText = `DAY BEGUN [${office.name}]`;
                     document.getElementById('dbdeStatusDesc').innerText = "System is actively running.";
-                    document.getElementById('btnExecuteDBDE').innerText = "Execute Day End";
-                    document.getElementById('btnExecuteDBDE').style.background = "#eab308";
+                    if (btnExec) {
+                        btnExec.innerText = "Execute Day End";
+                        btnExec.style.background = "#eab308";
+                    }
                 } else {
                     if (iconBox) {
                         iconBox.style.background = "rgba(239,68,68,0.15)";
@@ -5646,10 +6394,18 @@
                     }
                     document.getElementById('dbdeStatusTitle').innerText = `DAY ENDED [${office.name}]`;
                     document.getElementById('dbdeStatusDesc').innerText = "Operations are locked down.";
-                    document.getElementById('btnExecuteDBDE').innerText = "Execute Day Begin";
-                    document.getElementById('btnExecuteDBDE').style.background = "#10b981";
+                    if (btnExec) {
+                        btnExec.innerText = "Execute Day Begin";
+                        btnExec.style.background = "#10b981";
+                    }
                 }
             }
+        }
+
+        function openDBDEModal() {
+            if(!authenticatedUserSession || (authenticatedUserSession.role !== 'superuser' && authenticatedUserSession.role !== 'admin')) return;
+            refreshDBDEModalViewOnly();
+            const modal = document.getElementById('dbdeModal');
             modal.style.display = "flex";
             setTimeout(() => { modal.classList.add('active'); }, 10);
         }
@@ -5661,21 +6417,24 @@
         }
 
         async function executeToggleDayStatus() {
-            const mySol = authenticatedUserSession.solId;
-            const offIdx = SYSTEM_OFFICE_REGISTRY.findIndex(o => o.solId === mySol);
+            const btnExec = document.getElementById('btnExecuteDBDE');
+            const targetSol = (btnExec && btnExec.getAttribute('data-target-sol')) || authenticatedUserSession.solId;
+            const offIdx = SYSTEM_OFFICE_REGISTRY.findIndex(o => String(o.solId || '').trim() === String(targetSol || '').trim());
             if (offIdx === -1) return;
 
-            const currentStatus = SYSTEM_OFFICE_REGISTRY[offIdx].status;
-            const newStatus = currentStatus === "DAY_BEGUN" ? "DAY_ENDED" : "DAY_BEGUN";
+            const currentlyBegun = isOfficeDayBegun(SYSTEM_OFFICE_REGISTRY[offIdx]);
+            const newStatus = currentlyBegun ? "DAY_ENDED" : "DAY_BEGUN";
             
             SYSTEM_OFFICE_REGISTRY[offIdx].status = newStatus;
-            logSystemEvent(authenticatedUserSession.user, `Executed ${newStatus} for SOL ${mySol}`);
+            SYSTEM_OFFICE_REGISTRY[offIdx].lastUpdatedAt = Date.now();
+            refreshAllLiveStatusViews();
+            logSystemEvent(authenticatedUserSession.user, `Executed ${newStatus} for SOL ${targetSol}`);
             
-            await synchronizeSystemDatabase(false);
+            await pushOfficesToCloudOnly(targetSol, newStatus);
             
             closeDBDEModal();
             spawnFloatingNotification("Data Saved Successfully", `System is now ${newStatus.replace('_', ' ')}.`, "success");
-            verifyBloggerAuth_Reentry(); 
+            verifyBloggerAuth_Reentry(false); 
         }
 
         // =========================================================================
