@@ -1,0 +1,2081 @@
+<!-- createcard.html -->
+<!-- Security Check: Prevent Direct URL Access without SPA -->
+<script>
+    if (!document.getElementById("dynamicWorkspace") || window.location.pathname.endsWith("createcard.html")) {
+        window.location.href = "index.html";
+    }
+</script>
+
+<div id="moduleRenderArea">
+
+    <!-- 100% FLUID RESPONSIVE, THEME-AWARE GLASSMORPHISM CARD ENGINE STUDIO CSS -->
+    <style>
+        #dynamicWorkspace {
+            scroll-behavior: smooth !important;
+            -webkit-overflow-scrolling: touch !important;
+        }
+
+        .cc-viewport-wrapper {
+            width: 100%;
+            max-width: 1320px;
+            margin: 0 auto;
+            padding: clamp(4px, 0.8vw, 10px);
+            font-family: var(--font-main, 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif);
+            color: var(--text-primary, #0f172a);
+            animation: ccFadeIn 0.3s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+            box-sizing: border-box;
+        }
+
+        .cc-studio-shell {
+            width: 100%;
+            background: var(--surface-glass, rgba(255, 255, 255, 0.86));
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid var(--border-glass, rgba(255, 255, 255, 0.9));
+            border-radius: 22px;
+            padding: clamp(18px, 2.2vw, 30px);
+            box-shadow: var(--shadow-soft, 0 8px 28px rgba(15, 23, 42, 0.06));
+            position: relative;
+            overflow: hidden;
+            box-sizing: border-box;
+            transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+        }
+
+        .cc-studio-shell::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, #2563eb 0%, #7c3aed 40%, #ec4899 75%, #10b981 100%);
+        }
+
+        /* TOP HEADER BAR */
+        .cc-top-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            padding-bottom: 18px;
+            margin-bottom: 22px;
+            border-bottom: 1px solid var(--border-subtle, rgba(203, 213, 225, 0.8));
+            flex-wrap: wrap;
+        }
+
+        .cc-brand-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            min-width: 0;
+        }
+
+        .cc-hero-orb {
+            width: 50px;
+            height: 50px;
+            border-radius: 15px;
+            background: linear-gradient(135deg, #2563eb 0%, #7c3aed 55%, #db2777 100%);
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 22px rgba(124, 58, 237, 0.36);
+            flex-shrink: 0;
+        }
+
+        .cc-title-group h2 {
+            margin: 0;
+            font-size: clamp(19px, 1.9vw, 25px);
+            font-weight: 900;
+            color: var(--text-primary, #0f172a);
+            letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .cc-superadmin-pill {
+            font-size: 10.5px;
+            font-weight: 800;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(225, 29, 72, 0.14);
+            color: #e11d48;
+            border: 1px solid rgba(225, 29, 72, 0.3);
+            letter-spacing: 0.4px;
+            text-transform: uppercase;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+        html[data-theme="dark"] .cc-superadmin-pill {
+            color: #fb7185;
+            background: rgba(244, 63, 94, 0.2);
+        }
+
+        .cc-title-group p {
+            margin: 4px 0 0 0;
+            font-size: 13px;
+            color: var(--text-muted, #64748b);
+            font-weight: 500;
+        }
+
+        .cc-header-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .cc-nav-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: 800;
+            cursor: pointer;
+            background: var(--surface-input, #eef3fb);
+            color: var(--text-primary, #0f172a);
+            border: 1px solid var(--border-subtle, #cbd5e1);
+            transition: all 0.22s ease;
+        }
+
+        .cc-nav-btn:hover {
+            border-color: var(--accent-primary, #2563eb);
+            color: var(--accent-primary, #2563eb);
+            background: var(--surface-card-hover, #ffffff);
+            transform: translateY(-2px);
+        }
+
+        .cc-nav-btn.primary-grad {
+            background: linear-gradient(90deg, #10b981 0%, #059669 100%);
+            color: #ffffff;
+            border: none;
+            box-shadow: 0 6px 18px rgba(16, 185, 129, 0.3);
+        }
+        .cc-nav-btn.primary-grad:hover {
+            color: #ffffff;
+            filter: brightness(1.07);
+        }
+
+        /* TELEMETRY SUMMARY BAR */
+        .cc-telemetry-strip {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 12px;
+            margin-bottom: 22px;
+        }
+
+        .cc-stat-box {
+            background: var(--surface-card, rgba(255, 255, 255, 0.92));
+            border: 1px solid var(--border-glass, rgba(255, 255, 255, 0.9));
+            border-radius: 15px;
+            padding: 12px 15px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: var(--shadow-card, 0 4px 18px rgba(15, 23, 42, 0.04));
+            min-width: 0;
+        }
+
+        .cc-stat-ic {
+            width: 40px;
+            height: 40px;
+            border-radius: 11px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .cc-stat-ic.blue { background: rgba(37, 99, 235, 0.13); color: #2563eb; }
+        .cc-stat-ic.purple { background: rgba(124, 58, 237, 0.14); color: #7c3aed; }
+        .cc-stat-ic.emerald { background: rgba(16, 185, 129, 0.14); color: #059669; }
+        .cc-stat-ic.rose { background: rgba(225, 29, 72, 0.14); color: #e11d48; }
+        html[data-theme="dark"] .cc-stat-ic.blue { color: #60a5fa; }
+        html[data-theme="dark"] .cc-stat-ic.purple { color: #c084fc; }
+        html[data-theme="dark"] .cc-stat-ic.emerald { color: #34d399; }
+        html[data-theme="dark"] .cc-stat-ic.rose { color: #fb7185; }
+
+        .cc-stat-info {
+            min-width: 0;
+            flex: 1;
+        }
+        .cc-stat-info span {
+            display: block;
+            font-size: 10.5px;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--text-muted, #64748b);
+            letter-spacing: 0.4px;
+        }
+        .cc-stat-info strong {
+            font-size: 16.5px;
+            font-weight: 900;
+            color: var(--text-primary, #0f172a);
+        }
+
+        /* =========================================================
+           2 PROMINENT MASTER LAUNCH CARDS (HOME SELECTION VIEW)
+           ========================================================= */
+        .cc-master-cards-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 20px;
+            margin-bottom: 24px;
+        }
+
+        .cc-launch-card {
+            background: var(--surface-card, rgba(255, 255, 255, 0.94));
+            border: 2px solid var(--border-subtle, rgba(203, 213, 225, 0.75));
+            border-radius: 20px;
+            padding: 24px;
+            cursor: pointer;
+            transition: all 0.28s cubic-bezier(0.25, 0.8, 0.25, 1);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: flex-start;
+            gap: 18px;
+            box-shadow: var(--shadow-card, 0 4px 18px rgba(15, 23, 42, 0.045));
+        }
+
+        .cc-launch-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            transition: height 0.25s ease;
+        }
+        .cc-launch-card.card-registry::before {
+            background: linear-gradient(90deg, #2563eb, #7c3aed);
+        }
+        .cc-launch-card.card-creator::before {
+            background: linear-gradient(90deg, #10b981, #0ea5e9);
+        }
+
+        .cc-launch-card:hover {
+            transform: translateY(-4px);
+            background: var(--surface-card-hover, #ffffff);
+            box-shadow: var(--shadow-elevated, 0 18px 45px rgba(15, 23, 42, 0.12));
+            border-color: var(--accent-primary, #2563eb);
+        }
+
+        .cc-launch-card.active-mode {
+            border-color: var(--accent-primary, #2563eb);
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.09) 0%, rgba(124, 58, 237, 0.05) 100%);
+            box-shadow: 0 12px 32px rgba(37, 99, 235, 0.15);
+        }
+
+        .cc-launch-card.card-creator.active-mode {
+            border-color: #10b981;
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(14, 165, 233, 0.06) 100%);
+            box-shadow: 0 12px 32px rgba(16, 185, 129, 0.15);
+        }
+
+        .cc-launch-orb {
+            width: 58px;
+            height: 58px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: transform 0.28s ease;
+        }
+        .cc-launch-card:hover .cc-launch-orb {
+            transform: scale(1.08);
+        }
+        .cc-launch-card.card-registry .cc-launch-orb {
+            background: linear-gradient(135deg, #2563eb, #7c3aed);
+            color: #ffffff;
+            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.32);
+        }
+        .cc-launch-card.card-creator .cc-launch-orb {
+            background: linear-gradient(135deg, #10b981, #0284c7);
+            color: #ffffff;
+            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.32);
+        }
+
+        .cc-launch-body {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .cc-launch-top-line {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            margin-bottom: 6px;
+        }
+
+        .cc-launch-body h3 {
+            margin: 0;
+            font-size: 18px;
+            font-weight: 900;
+            color: var(--text-primary, #0f172a);
+            letter-spacing: -0.3px;
+        }
+
+        .cc-launch-tag {
+            font-size: 10.5px;
+            font-weight: 800;
+            padding: 3.5px 9px;
+            border-radius: 999px;
+            background: var(--surface-input, #f1f5f9);
+            color: var(--accent-primary, #2563eb);
+            border: 1px solid var(--border-subtle, #cbd5e1);
+            white-space: nowrap;
+        }
+
+        .cc-launch-body p {
+            margin: 0;
+            font-size: 13px;
+            color: var(--text-muted, #64748b);
+            line-height: 1.5;
+            font-weight: 500;
+        }
+
+        /* =========================================================
+           PANEL 1: VIEW & EDIT PREVIOUS CARDS (ACTIVE REGISTRY)
+           ========================================================= */
+        .cc-view-section {
+            display: none;
+            animation: ccFadeIn 0.26s ease-out forwards;
+        }
+        .cc-view-section.active-panel {
+            display: block;
+        }
+
+        .cc-registry-card {
+            background: var(--surface-card, rgba(255, 255, 255, 0.92));
+            border: 1px solid var(--border-subtle, #e2e8f0);
+            border-radius: 18px;
+            padding: clamp(16px, 2vw, 24px);
+            box-shadow: var(--shadow-card, 0 4px 18px rgba(15, 23, 42, 0.04));
+        }
+
+        .cc-registry-toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+
+        .cc-filter-pills {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .cc-filter-pill {
+            padding: 7px 13px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 800;
+            border: 1px solid var(--border-subtle, #cbd5e1);
+            background: var(--surface-input, #f1f5f9);
+            color: var(--text-secondary, #334155);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .cc-filter-pill.active {
+            background: linear-gradient(90deg, #2563eb, #7c3aed);
+            color: #ffffff;
+            border-color: transparent;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.28);
+        }
+
+        .cc-reg-search {
+            flex: 1 1 220px;
+            max-width: 320px;
+            padding: 9px 14px 9px 36px !important;
+            border-radius: 999px !important;
+            border: 1px solid var(--border-subtle, #cbd5e1) !important;
+            background: var(--surface-input, #eef3fb) url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="%2364748b" viewBox="0 0 16 16"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/></svg>') no-repeat 13px center !important;
+            color: var(--text-primary, #0f172a) !important;
+            font-size: 13px !important;
+            font-weight: 600 !important;
+            outline: none !important;
+        }
+
+        /* MODERN TABLE FOR REGISTRY */
+        .cc-table-scroll {
+            width: 100%;
+            overflow-x: auto;
+            border: 1px solid var(--border-subtle, #e2e8f0);
+            border-radius: 14px;
+        }
+
+        .cc-registry-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 860px;
+            text-align: left;
+        }
+
+        .cc-registry-table th {
+            background: var(--surface-input, #f8fafc);
+            color: var(--text-muted, #64748b);
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            padding: 13px 16px;
+            border-bottom: 1px solid var(--border-subtle, #e2e8f0);
+        }
+
+        .cc-registry-table td {
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--border-subtle, rgba(203, 213, 225, 0.5));
+            font-size: 13px;
+            color: var(--text-primary, #0f172a);
+            vertical-align: middle;
+        }
+
+        .cc-registry-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .cc-registry-table tr:hover td {
+            background: var(--surface-card-hover, rgba(59, 130, 246, 0.03));
+        }
+
+        .cc-id-code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text-secondary, #334155);
+            background: var(--surface-input, #f1f5f9);
+            padding: 4px 8px;
+            border-radius: 6px;
+            border: 1px solid var(--border-subtle, #cbd5e1);
+        }
+
+        .cc-type-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 10.5px;
+            font-weight: 800;
+            padding: 4px 10px;
+            border-radius: 999px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+        .cc-type-system { background: rgba(37, 99, 235, 0.12); color: #2563eb; }
+        .cc-type-main { background: rgba(16, 185, 129, 0.14); color: #059669; }
+        .cc-type-sub { background: rgba(124, 58, 237, 0.14); color: #7c3aed; }
+        html[data-theme="dark"] .cc-type-system { color: #60a5fa; }
+        html[data-theme="dark"] .cc-type-main { color: #34d399; }
+        html[data-theme="dark"] .cc-type-sub { color: #c084fc; }
+
+        .cc-card-cell-title {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+        }
+
+        .cc-mini-svg-box {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: rgba(37, 99, 235, 0.12);
+            color: var(--accent-primary, #2563eb);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .cc-mini-svg-box svg {
+            width: 19px;
+            height: 19px;
+        }
+
+        .cc-status-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 11px;
+            font-weight: 800;
+            padding: 4px 10px;
+            border-radius: 999px;
+            text-transform: uppercase;
+        }
+        .cc-status-active {
+            background: rgba(16, 185, 129, 0.15);
+            color: #059669;
+        }
+        .cc-status-disabled {
+            background: rgba(239, 68, 68, 0.15);
+            color: #ef4444;
+        }
+        html[data-theme="dark"] .cc-status-active { color: #34d399; }
+        html[data-theme="dark"] .cc-status-disabled { color: #f87171; }
+
+        .cc-row-actions {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            flex-wrap: nowrap;
+        }
+
+        .cc-tbl-btn {
+            padding: 6px 11px;
+            border-radius: 8px;
+            font-size: 11.5px;
+            font-weight: 800;
+            cursor: pointer;
+            border: 1px solid var(--border-subtle, #cbd5e1);
+            background: var(--surface-input, #f8fafc);
+            color: var(--text-primary, #0f172a);
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.18s ease;
+        }
+
+        .cc-tbl-btn:hover {
+            border-color: var(--accent-primary, #2563eb);
+            color: var(--accent-primary, #2563eb);
+            transform: translateY(-1px);
+        }
+
+        .cc-tbl-btn.btn-edit {
+            background: rgba(37, 99, 235, 0.1);
+            color: #2563eb;
+            border-color: rgba(37, 99, 235, 0.28);
+        }
+        html[data-theme="dark"] .cc-tbl-btn.btn-edit { color: #60a5fa; }
+
+        .cc-tbl-btn.btn-toggle-off {
+            background: rgba(245, 158, 11, 0.12);
+            color: #d97706;
+            border-color: rgba(245, 158, 11, 0.3);
+        }
+        html[data-theme="dark"] .cc-tbl-btn.btn-toggle-off { color: #fbbf24; }
+
+        .cc-tbl-btn.btn-toggle-on {
+            background: rgba(16, 185, 129, 0.14);
+            color: #059669;
+            border-color: rgba(16, 185, 129, 0.3);
+        }
+        html[data-theme="dark"] .cc-tbl-btn.btn-toggle-on { color: #34d399; }
+
+        .cc-tbl-btn.btn-delete {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+            border-color: rgba(239, 68, 68, 0.28);
+        }
+        .cc-tbl-btn.btn-delete:hover {
+            background: #ef4444;
+            color: #ffffff;
+        }
+
+        /* =========================================================
+           PANEL 2: CREATE / EDIT CARD ARCHITECT STUDIO
+           ========================================================= */
+        .cc-architect-layout {
+            display: grid;
+            grid-template-columns: 1.55fr 0.95fr;
+            gap: 22px;
+            align-items: start;
+        }
+
+        .cc-form-card,
+        .cc-preview-sticky-card {
+            background: var(--surface-card, rgba(255, 255, 255, 0.94));
+            border: 1px solid var(--border-subtle, #e2e8f0);
+            border-radius: 18px;
+            padding: clamp(18px, 2.2vw, 26px);
+            box-shadow: var(--shadow-card, 0 4px 18px rgba(15, 23, 42, 0.04));
+        }
+
+        .cc-section-box {
+            background: var(--surface-input, rgba(238, 243, 251, 0.6));
+            border: 1px solid var(--border-subtle, #cbd5e1);
+            border-radius: 15px;
+            padding: 18px;
+            margin-bottom: 18px;
+        }
+
+        .cc-sec-heading {
+            font-size: 13.5px;
+            font-weight: 800;
+            color: var(--text-primary, #0f172a);
+            margin: 0 0 14px 0;
+            padding-bottom: 9px;
+            border-bottom: 1px solid var(--border-subtle, #cbd5e1);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+        }
+
+        .cc-form-grid {
+            display: grid;
+            grid-template-columns: repeat(12, minmax(0, 1fr));
+            gap: 15px;
+        }
+        .cc-col-12 { grid-column: span 12; }
+        .cc-col-6 { grid-column: span 6; }
+        .cc-col-8 { grid-column: span 8; }
+        .cc-col-4 { grid-column: span 4; }
+
+        .cc-field-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .cc-field-group label {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12.5px;
+            font-weight: 800;
+            color: var(--text-primary, #0f172a);
+            margin-bottom: 7px;
+        }
+
+        .cc-input,
+        .cc-select {
+            width: 100%;
+            padding: 12px 14px;
+            border-radius: 11px;
+            border: 1.5px solid var(--border-subtle, #cbd5e1);
+            background: var(--surface-card, #ffffff);
+            color: var(--text-primary, #0f172a) !important;
+            font-size: 13.5px;
+            font-weight: 600;
+            font-family: var(--font-main, 'Inter', sans-serif);
+            transition: all 0.2s ease;
+            box-sizing: border-box;
+        }
+
+        .cc-input:focus,
+        .cc-select:focus {
+            border-color: var(--accent-primary, #2563eb);
+            box-shadow: 0 0 0 3.5px rgba(37, 99, 235, 0.15);
+            outline: none;
+        }
+
+        /* ROLES MATRIX CHECKBOX PILLS */
+        .cc-roles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(175px, 1fr));
+            gap: 10px;
+            margin-top: 6px;
+        }
+
+        .cc-role-tile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 11px 13px;
+            border-radius: 12px;
+            border: 1.5px solid var(--border-subtle, #cbd5e1);
+            background: var(--surface-card, #ffffff);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            user-select: none;
+        }
+
+        .cc-role-tile:hover {
+            border-color: var(--accent-primary, #2563eb);
+        }
+
+        .cc-role-tile.checked {
+            border-color: #10b981;
+            background: rgba(16, 185, 129, 0.09);
+        }
+
+        .cc-role-tile.superadmin-tile.checked {
+            border-color: #e11d48;
+            background: rgba(225, 29, 72, 0.1);
+        }
+
+        .cc-role-tile input[type="checkbox"] {
+            width: 17px;
+            height: 17px;
+            accent-color: #10b981;
+            cursor: pointer;
+            margin: 0;
+        }
+
+        .cc-role-meta {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.25;
+        }
+        .cc-role-meta strong {
+            font-size: 12.5px;
+            font-weight: 800;
+            color: var(--text-primary, #0f172a);
+        }
+        .cc-role-meta span {
+            font-size: 10.5px;
+            color: var(--text-muted, #64748b);
+            font-weight: 600;
+        }
+
+        /* SVG ICON QUICK PICKER STRIP */
+        .cc-svg-gallery {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 7px;
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 12px;
+            background: var(--surface-card, #ffffff);
+            border: 1px solid var(--border-subtle, #cbd5e1);
+        }
+
+        .cc-svg-pick-btn {
+            width: 34px;
+            height: 34px;
+            border-radius: 9px;
+            border: 1px solid var(--border-subtle, #e2e8f0);
+            background: var(--surface-input, #f8fafc);
+            color: var(--text-secondary, #334155);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.18s ease;
+        }
+        .cc-svg-pick-btn svg {
+            width: 18px;
+            height: 18px;
+        }
+        .cc-svg-pick-btn:hover,
+        .cc-svg-pick-btn.active-icon {
+            background: linear-gradient(135deg, #2563eb, #7c3aed);
+            color: #ffffff;
+            border-color: transparent;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3);
+        }
+
+        /* ACTION BUTTONS ROW */
+        .cc-submit-row {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .cc-btn-deploy {
+            flex: 1.4;
+            min-width: 220px;
+            padding: 15px 24px;
+            border: none;
+            border-radius: 13px;
+            background: linear-gradient(90deg, #10b981 0%, #059669 50%, #2563eb 100%);
+            background-size: 200% auto;
+            color: #ffffff;
+            font-size: 14px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: 0 10px 25px rgba(16, 185, 129, 0.32);
+            transition: all 0.28s ease;
+        }
+
+        .cc-btn-deploy:hover {
+            background-position: right center;
+            transform: translateY(-2px);
+        }
+
+        .cc-btn-cancel {
+            flex: 0.8;
+            min-width: 140px;
+            padding: 15px 20px;
+            border: 1px solid var(--border-subtle, #cbd5e1);
+            border-radius: 13px;
+            background: var(--surface-input, #0f172a);
+            color: var(--text-primary, #ffffff);
+            font-size: 13.5px;
+            font-weight: 800;
+            text-transform: uppercase;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .cc-btn-cancel:hover {
+            border-color: #ef4444;
+            color: #ef4444;
+        }
+
+        @keyframes ccFadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 1024px) {
+            .cc-architect-layout {
+                grid-template-columns: 1fr;
+            }
+            .cc-telemetry-strip {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 720px) {
+            .cc-master-cards-grid,
+            .cc-telemetry-strip {
+                grid-template-columns: 1fr;
+            }
+            .cc-col-6, .cc-col-8, .cc-col-4 {
+                grid-column: span 12;
+            }
+        }
+    </style>
+
+    <div class="cc-viewport-wrapper" id="ccInteractiveRoot">
+        <div class="cc-studio-shell">
+
+            <!-- TOP STUDIO HEADER -->
+            <div class="cc-top-header">
+                <div class="cc-brand-left">
+                    <div class="cc-hero-orb">
+                        <svg width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <polygon points="12 2 2 7 12 12 22 7 12 2"/>
+                            <polyline points="2 17 12 22 22 17"/>
+                            <polyline points="2 12 12 17 22 12"/>
+                        </svg>
+                    </div>
+                    <div class="cc-title-group">
+                        <h2>
+                            <span>Dashboard Card Engine Studio</span>
+                            <span class="cc-superadmin-pill">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                                Master Admin (ADMIN) Exclusive
+                            </span>
+                        </h2>
+                        <p>Build, deploy, edit, or disable SPA portal cards &amp; multi-level nested sub-cards globally in real time.</p>
+                    </div>
+                </div>
+
+                <div class="cc-header-actions">
+                    <button type="button" class="cc-nav-btn" onclick="ccCleanExitToDashboard()">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="19" y1="12" x2="5" y2="12"/>
+                            <polyline points="12 19 5 12 12 5"/>
+                        </svg>
+                        <span>Back to Dashboard</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- LIVE TELEMETRY COUNTERS -->
+            <div class="cc-telemetry-strip">
+                <div class="cc-stat-box">
+                    <div class="cc-stat-ic blue">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+                    </div>
+                    <div class="cc-stat-info">
+                        <span>Total Registered Cards</span>
+                        <strong id="ccStatTotalCards">0 Cards</strong>
+                    </div>
+                </div>
+
+                <div class="cc-stat-box">
+                    <div class="cc-stat-ic emerald">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                    </div>
+                    <div class="cc-stat-info">
+                        <span>Active Modules</span>
+                        <strong id="ccStatActiveCards">0 Active</strong>
+                    </div>
+                </div>
+
+                <div class="cc-stat-box">
+                    <div class="cc-stat-ic purple">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+                    </div>
+                    <div class="cc-stat-info">
+                        <span>Custom Main &amp; Sub Cards</span>
+                        <strong id="ccStatCustomCards">0 Custom</strong>
+                    </div>
+                </div>
+
+                <div class="cc-stat-box">
+                    <div class="cc-stat-ic rose">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
+                    </div>
+                    <div class="cc-stat-info">
+                        <span>Disabled (Admin-Only View)</span>
+                        <strong id="ccStatDisabledCards">0 Disabled</strong>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2 PROMINENT MASTER SELECTION CARDS -->
+            <div class="cc-master-cards-grid">
+                <!-- MASTER CARD 1: VIEW & EDIT PREVIOUS CARDS -->
+                <div class="cc-launch-card card-registry active-mode" id="ccMasterCardRegistry" onclick="ccSwitchWorkspacePanel('registry')">
+                    <div class="cc-launch-orb">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="8" y1="6" x2="21" y2="6"/>
+                            <line x1="8" y1="12" x2="21" y2="12"/>
+                            <line x1="8" y1="18" x2="21" y2="18"/>
+                            <line x1="3" y1="6" x2="3.01" y2="6"/>
+                            <line x1="3" y1="12" x2="3.01" y2="12"/>
+                            <line x1="3" y1="18" x2="3.01" y2="18"/>
+                        </svg>
+                    </div>
+                    <div class="cc-launch-body">
+                        <div class="cc-launch-top-line">
+                            <h3>View &amp; Edit Previous Cards</h3>
+                            <span class="cc-launch-tag">Active Registry</span>
+                        </div>
+                        <p>Inspect all built-in system modules, main cards, and nested sub-cards. Enable/disable cards globally, edit permissions, or delete custom cards.</p>
+                    </div>
+                </div>
+
+                <!-- MASTER CARD 2: CREATE NEW CARD -->
+                <div class="cc-launch-card card-creator" id="ccMasterCardCreator" onclick="ccStartCreateNewCardFlow()">
+                    <div class="cc-launch-orb">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="3" width="18" height="18" rx="3" ry="3"/>
+                            <line x1="12" y1="8" x2="12" y2="16"/>
+                            <line x1="8" y1="12" x2="16" y2="12"/>
+                        </svg>
+                    </div>
+                    <div class="cc-launch-body">
+                        <div class="cc-launch-top-line">
+                            <h3 id="ccCreatorLaunchTitle">Create New Card</h3>
+                            <span class="cc-launch-tag" style="color:#059669;">Card Architect</span>
+                        </div>
+                        <p>Deploy a new Main Dashboard module, a Sub-Card inside a Main Card, or a multi-level Sub-Card inside another Sub-Card with auto SVG icons.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- =========================================================
+                 WORKSPACE PANEL 1: ACTIVE DASHBOARD REGISTRY (VIEW & EDIT)
+                 ========================================================= -->
+            <div class="cc-view-section active-panel" id="ccPanelRegistry">
+                <div class="cc-registry-card">
+                    <div class="cc-registry-toolbar">
+                        <div class="cc-filter-pills">
+                            <button type="button" class="cc-filter-pill active" data-filter="all" onclick="ccSetRegistryFilter('all', this)">All Cards</button>
+                            <button type="button" class="cc-filter-pill" data-filter="system" onclick="ccSetRegistryFilter('system', this)">System Built-In</button>
+                            <button type="button" class="cc-filter-pill" data-filter="main" onclick="ccSetRegistryFilter('main', this)">Custom Main Cards</button>
+                            <button type="button" class="cc-filter-pill" data-filter="sub" onclick="ccSetRegistryFilter('sub', this)">Nested Sub-Cards</button>
+                            <button type="button" class="cc-filter-pill" data-filter="disabled" onclick="ccSetRegistryFilter('disabled', this)">Disabled Only</button>
+                        </div>
+
+                        <input type="text" class="cc-reg-search" id="ccRegistrySearchInput" placeholder="Search by ID, title, target file, or parent..." oninput="ccRenderRegistryTable()" autocomplete="off"/>
+                    </div>
+
+                    <div class="cc-table-scroll">
+                        <table class="cc-registry-table">
+                            <thead>
+                                <tr>
+                                    <th>Card Unique ID</th>
+                                    <th>Deploy Target / Parent</th>
+                                    <th>Architecture Type</th>
+                                    <th>Title &amp; Target HTML</th>
+                                    <th>Role Access</th>
+                                    <th>Status</th>
+                                    <th>Manage Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="ccRegistryTableBody">
+                                <!-- Populated dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- =========================================================
+                 WORKSPACE PANEL 2: CREATE / EDIT NEW CARD ARCHITECT
+                 ========================================================= -->
+            <div class="cc-view-section" id="ccPanelCreator">
+                <div class="cc-architect-layout">
+
+                    <!-- LEFT: DEPLOYMENT FORM -->
+                    <div class="cc-form-card">
+                        <div class="cc-sec-heading" style="font-size:16px; margin-bottom:16px;">
+                            <span style="display:inline-flex; align-items:center; gap:8px;">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.3"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                                <strong id="ccFormModeHeading">Deploy New Portal Card</strong>
+                            </span>
+                            <span class="cc-launch-tag" id="ccEditingBadgeIndicator" style="display:none; background:rgba(245,158,11,0.15); color:#d97706;">EDITING EXISTING CARD</span>
+                        </div>
+
+                        <!-- 1. CARD DETAILS & AUTO ID -->
+                        <div class="cc-section-box">
+                            <div class="cc-sec-heading">
+                                <span>1. Card Identity &amp; Auto-Generated Unique ID</span>
+                                <span style="font-size:11px; color:var(--text-muted);">Auto-fills as you type title</span>
+                            </div>
+                            <div class="cc-form-grid">
+                                <div class="cc-field-group cc-col-6">
+                                    <label for="ccInputTitle">Card Title</label>
+                                    <input type="text" id="ccInputTitle" class="cc-input" placeholder="e.g., Create Single User" oninput="ccHandleTitleInput()" autocomplete="off"/>
+                                </div>
+
+                                <div class="cc-field-group cc-col-6">
+                                    <label for="ccInputCardId">Card Unique ID (Auto-starts with 'menuCard')</label>
+                                    <input type="text" id="ccInputCardId" class="cc-input" value="menuCard" placeholder="menuCardNewModule" oninput="ccHandleManualIdInput()" autocomplete="off"/>
+                                </div>
+
+                                <div class="cc-field-group cc-col-12">
+                                    <label for="ccInputDesc">Short Description</label>
+                                    <input type="text" id="ccInputDesc" class="cc-input" placeholder="e.g., Create and configure individual staff accounts with SOL mapping." oninput="ccUpdateLivePreviewCard()" autocomplete="off"/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 2. DYNAMIC DEPLOYMENT STRATEGY (MAIN OR MULTI-LEVEL SUB-CARD) -->
+                        <div class="cc-section-box">
+                            <div class="cc-sec-heading">
+                                <span style="display:inline-flex; align-items:center; gap:6px;">
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#e11d48" stroke-width="2.3"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                                    <span>2. Dynamic Deployment Strategy (Main Dashboard or Nested Sub-Card)</span>
+                                </span>
+                                <span style="font-size:11px; color:#10b981; font-weight:700;">Live Synced with All Modules</span>
+                            </div>
+
+                            <div class="cc-form-grid">
+                                <div class="cc-field-group cc-col-6">
+                                    <label for="ccSelectTargetLocation">Target Location (Where this card will appear)</label>
+                                    <select id="ccSelectTargetLocation" class="cc-select" onchange="ccHandleLocationChange()">
+                                        <!-- Dynamically populated with Main Dashboard + All Main Cards + All Sub-Cards -->
+                                    </select>
+                                </div>
+
+                                <div class="cc-field-group cc-col-6">
+                                    <label for="ccSelectArchitecture">Card Architecture</label>
+                                    <select id="ccSelectArchitecture" class="cc-select" onchange="ccHandleArchitectureChange()">
+                                        <option value="main">Main Module (Standalone / Parent Hub)</option>
+                                        <option value="sub">Sub-Card (Nested inside Selected Parent)</option>
+                                    </select>
+                                </div>
+
+                                <div class="cc-field-group cc-col-12">
+                                    <label for="ccInputTargetHtml">SPA Target HTML File (e.g., CreateSingleUser.html)</label>
+                                    <input type="text" id="ccInputTargetHtml" class="cc-input" placeholder="e.g., CreateSingleUser.html" oninput="ccHandleManualFileInput()" autocomplete="off"/>
+                                    <span style="font-size:11px; color:var(--text-muted); margin-top:5px; font-weight:600;" id="ccDeploymentHintText">
+                                        Tip: If this card will hold further sub-cards inside it, use the Sub-Hub template for its HTML file.
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 3. ICON (FORCEFUL SVG) & COLOR THEME -->
+                        <div class="cc-section-box">
+                            <div class="cc-sec-heading">
+                                <span>3. Visual Icon (Auto-Converted to Vector SVG) &amp; Color Theme</span>
+                            </div>
+                            <div class="cc-form-grid">
+                                <div class="cc-field-group cc-col-6">
+                                    <label for="ccInputIcon">Emoji or Icon Keyword (Forcefully Renders as SVG)</label>
+                                    <input type="text" id="ccInputIcon" class="cc-input" value="⚙️" placeholder="Type any emoji or pick below..." oninput="ccUpdateLivePreviewCard()" autocomplete="off"/>
+                                </div>
+
+                                <div class="cc-field-group cc-col-6">
+                                    <label for="ccSelectTheme">Color Theme Variant</label>
+                                    <select id="ccSelectTheme" class="cc-select" onchange="ccUpdateLivePreviewCard()">
+                                        <option value="card-blue-variant">Blue (Royal Tech)</option>
+                                        <option value="card-indigo-variant">Indigo (Deep Cyber)</option>
+                                        <option value="card-purple-variant">Purple (Neural Violet)</option>
+                                        <option value="card-teal-variant">Teal (Ocean Mint)</option>
+                                        <option value="card-green-variant">Green (Emerald Ops)</option>
+                                        <option value="card-gold-variant">Gold / Emerald (Status)</option>
+                                        <option value="card-orange-variant">Orange (Amber Billing)</option>
+                                        <option value="card-rose-variant">Rose (Crimson Alert)</option>
+                                        <option value="card-dark-variant">Dark Slate (Security)</option>
+                                    </select>
+                                </div>
+
+                                <div class="cc-field-group cc-col-12">
+                                    <label>Quick-Pick Pure Vector SVG Icon Presets:</label>
+                                    <div class="cc-svg-gallery" id="ccSvgQuickGallery"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 4. TARGETED ROLES & ACCESS PERMISSIONS -->
+                        <div class="cc-section-box" style="margin-bottom:0;">
+                            <div class="cc-sec-heading">
+                                <span>4. Visible To (Targeted Roles &amp; Access Classification)</span>
+                                <span style="font-size:11px; color:var(--accent-primary); cursor:pointer; font-weight:800;" onclick="ccSelectAllStandardRoles()">Select All Staff Roles</span>
+                            </div>
+
+                            <div class="cc-roles-grid">
+                                <!-- Role 1: Guest -->
+                                <label class="cc-role-tile" id="ccTileRoleGuest">
+                                    <input type="checkbox" id="ccRoleGuest" onchange="ccSyncRoleTiles()"/>
+                                    <div class="cc-role-meta">
+                                        <strong>Guest User</strong>
+                                        <span>Custom Demo Access</span>
+                                    </div>
+                                </label>
+
+                                <!-- Role 2: Maker -->
+                                <label class="cc-role-tile checked" id="ccTileRoleMaker">
+                                    <input type="checkbox" id="ccRoleMaker" checked onchange="ccSyncRoleTiles()"/>
+                                    <div class="cc-role-meta">
+                                        <strong>Maker</strong>
+                                        <span>Operational Staff</span>
+                                    </div>
+                                </label>
+
+                                <!-- Role 3: Superuser -->
+                                <label class="cc-role-tile checked" id="ccTileRoleSuperuser">
+                                    <input type="checkbox" id="ccRoleSuperuser" checked onchange="ccSyncRoleTiles()"/>
+                                    <div class="cc-role-meta">
+                                        <strong>Superuser</strong>
+                                        <span>Supervisor / Postmaster</span>
+                                    </div>
+                                </label>
+
+                                <!-- Role 4: Branch / System Admin -->
+                                <label class="cc-role-tile checked" id="ccTileRoleBranchAdmin">
+                                    <input type="checkbox" id="ccRoleBranchAdmin" checked onchange="ccSyncRoleTiles()"/>
+                                    <div class="cc-role-meta">
+                                        <strong>Branch / Office Admin</strong>
+                                        <span>All Admin Role Users</span>
+                                    </div>
+                                </label>
+
+                                <!-- Role 5: Super Admin ('admin' username Exclusive) -->
+                                <label class="cc-role-tile superadmin-tile checked" id="ccTileRoleSuperAdmin">
+                                    <input type="checkbox" id="ccRoleSuperAdmin" checked onchange="ccSyncRoleTiles()"/>
+                                    <div class="cc-role-meta">
+                                        <strong>Super Admin (ADMIN)</strong>
+                                        <span>Master 'admin' User Only</span>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- SUBMIT & CANCEL BUTTONS -->
+                        <div class="cc-submit-row">
+                            <button type="button" class="cc-btn-deploy" onclick="ccDeployAndSaveCard()">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                                    <polyline points="22 4 12 14.01 9 11.01"/>
+                                </svg>
+                                <span id="ccDeployBtnText">Deploy Card &amp; Save</span>
+                            </button>
+
+                            <button type="button" class="cc-btn-cancel" onclick="ccCancelEditAndReturnRegistry()">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                                    <line x1="18" y1="6" x2="6" y2="18"/>
+                                    <line x1="6" y1="6" x2="18" y2="18"/>
+                                </svg>
+                                <span>Cancel</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- RIGHT: LIVE INTERACTIVE CARD PREVIEW & HIERARCHY SUMMARY -->
+                    <div class="cc-preview-sticky-card">
+                        <div class="cc-sec-heading">
+                            <span>Live Dashboard Card Preview</span>
+                            <span class="cc-launch-tag">Real-Time SVG Render</span>
+                        </div>
+
+                        <p style="font-size:12.5px; color:var(--text-muted); margin:0 0 14px 0;">
+                            This is exactly how your card will appear inside the Dashboard or Sub-Hub grid (both Light &amp; Dark themes):
+                        </p>
+
+                        <!-- EXACT PORTAL MODULE CARD PREVIEW -->
+                        <div class="portal-module-card card-blue-variant" id="ccLivePreviewCard" style="display:flex !important; height:auto !important; cursor:default; margin-bottom:20px;">
+                            <div class="card-icon" id="ccPreviewIconContainer"></div>
+                            <div class="card-body-text">
+                                <h3 id="ccPreviewTitleText">New Application</h3>
+                                <p id="ccPreviewDescText">Configure your module description to preview it here.</p>
+                            </div>
+                        </div>
+
+                        <!-- DEPLOYMENT TELEMETRY SUMMARY -->
+                        <div class="cc-section-box" style="margin-bottom:0;">
+                            <div class="cc-sec-heading" style="margin-bottom:10px;">
+                                <span>Deployment Blueprint Summary</span>
+                            </div>
+                            <div style="display:flex; flex-direction:column; gap:8px; font-size:12.5px;">
+                                <div style="display:flex; justify-content:space-between;">
+                                    <span style="color:var(--text-muted); font-weight:600;">Unique ID:</span>
+                                    <code id="ccSummaryId" style="font-weight:800; color:var(--accent-primary);">menuCard</code>
+                                </div>
+                                <div style="display:flex; justify-content:space-between;">
+                                    <span style="color:var(--text-muted); font-weight:600;">Parent / Location:</span>
+                                    <strong id="ccSummaryLocation">Main Dashboard (index.html)</strong>
+                                </div>
+                                <div style="display:flex; justify-content:space-between;">
+                                    <span style="color:var(--text-muted); font-weight:600;">Architecture:</span>
+                                    <strong id="ccSummaryArch">Main Module</strong>
+                                </div>
+                                <div style="display:flex; justify-content:space-between;">
+                                    <span style="color:var(--text-muted); font-weight:600;">Target File:</span>
+                                    <code id="ccSummaryFile" style="font-weight:700;">new_app.html</code>
+                                </div>
+                                <div style="display:flex; justify-content:space-between;">
+                                    <span style="color:var(--text-muted); font-weight:600;">Authorized Roles:</span>
+                                    <strong id="ccSummaryRoles" style="color:#10b981; text-align:right;">Maker, Superuser, Admin</strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            // =========================================================================
+            // 1. STRICT MASTER SUPER ADMIN ('admin' / 'ADMIN') GATEKEEPER
+            // =========================================================================
+            function ccGetActiveUsername() {
+                let u = "";
+                if (typeof authenticatedUserSession !== "undefined" && authenticatedUserSession && authenticatedUserSession.user) {
+                    u = authenticatedUserSession.user;
+                } else if (window.authenticatedUserSession && window.authenticatedUserSession.user) {
+                    u = window.authenticatedUserSession.user;
+                } else if (typeof safeSession !== "undefined" && safeSession.getItem) {
+                    u = safeSession.getItem("activeUser") || "";
+                } else {
+                    try { u = sessionStorage.getItem("activeUser") || ""; } catch (e) {}
+                }
+                return String(u).trim();
+            }
+
+            function ccVerifyStrictMasterAdmin() {
+                return ccGetActiveUsername().toLowerCase() === "admin";
+            }
+
+            if (!ccVerifyStrictMasterAdmin()) {
+                if (typeof window.spawnFloatingNotification === "function") {
+                    window.spawnFloatingNotification(
+                        "Master Admin Access Only",
+                        "createcard.html is restricted exclusively to the Master Super Admin (ADMIN).",
+                        "error"
+                    );
+                }
+                if (typeof window.returnToHomeGridSPA === "function") {
+                    window.returnToHomeGridSPA();
+                } else {
+                    window.location.href = "index.html";
+                }
+                return;
+            }
+
+            // =========================================================================
+            // 2. AUTO-COLLAPSE HAMBURGER SIDEBAR ON OPEN & INTERACTION
+            // =========================================================================
+            function ccAutoCollapseHamburger() {
+                if (typeof window.collapseHamburgerMenu === "function") {
+                    window.collapseHamburgerMenu();
+                } else {
+                    const sb = document.getElementById("appSidebar");
+                    if (sb) {
+                        sb.classList.add("collapsed");
+                        sb.classList.remove("mobile-open");
+                    }
+                }
+            }
+            ccAutoCollapseHamburger();
+
+            const rootEl = document.getElementById("ccInteractiveRoot");
+            if (rootEl) {
+                ["focusin", "input", "keydown"].forEach(evt => {
+                    rootEl.addEventListener(evt, function() {
+                        ccAutoCollapseHamburger();
+                    }, true);
+                });
+            }
+
+            // =========================================================================
+            // 3. BUILT-IN SYSTEM CARDS CATALOG + CUSTOM CARDS STATE
+            // =========================================================================
+            const BUILTIN_SYSTEM_CARDS = [
+                { id: 'menuCardDBDE', title: 'Day Begin / Day End', desc: 'Control operational status of your office.', targetFile: 'Built-In Modal (openDBDEModal)', icon: '⏳', theme: 'card-gold-variant', isSystem: true },
+                { id: 'menuCardBulkBooking', title: 'Bulk Article Booking', desc: 'Generate bulk article bookings & upload files.', targetFile: 'bulkBooking.html', icon: '📦', theme: 'card-indigo-variant', isSystem: true },
+                { id: 'menuCardOfficeHub', title: 'Office & SOL Management', desc: 'Map offices, SOLs and manage users.', targetFile: 'management.html', icon: '🏢', theme: 'card-rose-variant', isSystem: true },
+                { id: 'menuCardBulk', title: 'Monthly Bulk Bills (ACG-17)', desc: 'Generate automated monthly bulk bills.', targetFile: 'monthly_bulk.html', icon: '🧾', theme: 'card-orange-variant', isSystem: true },
+                { id: 'menuCardHoliday', title: 'Holiday & Sunday Bills', desc: 'Generate targeted vouchers for holidays.', targetFile: 'holiday_bulk.html', icon: '🏖️', theme: 'card-rose-variant', isSystem: true },
+                { id: 'menuCardDateWise', title: 'Date Based Bills (ACG-17)', desc: 'Create custom vouchers by specific dates.', targetFile: 'datewise.html', icon: '📅', theme: 'card-blue-variant', isSystem: true },
+                { id: 'menuCardACG61', title: 'Charge Report (Cash/Stamp)', desc: 'Compile official ACG-61 charge reports.', targetFile: 'acg61.html', icon: '📄', theme: 'card-green-variant', isSystem: true },
+                { id: 'menuCardGeneralCharge', title: 'Charge Report (General)', desc: 'Simplified charge reports for general staff.', targetFile: 'general_charge.html', icon: '📋', theme: 'card-dark-variant', isSystem: true },
+                { id: 'menuCardSR1', title: 'S.R.-1 Leave Application', desc: 'Generate official S.R.-1 leave forms instantly.', targetFile: 'sr1.html', icon: '✍️', theme: 'card-orange-variant', isSystem: true },
+                { id: 'menuCardCasualLeave', title: 'Casual Leave Application', desc: 'Draft formal Casual Leave (CL) applications.', targetFile: 'casual_leave.html', icon: '✉️', theme: 'card-blue-variant', isSystem: true },
+                { id: 'menuCardTAAdvance', title: 'T.A. Tour Advance Application', desc: 'Draft official T.A. on Tour advance forms.', targetFile: 'ta_advance.html', icon: '💼', theme: 'card-rose-variant', isSystem: true },
+                { id: 'menuCardTATransfer', title: 'T.A. Advance on Transfer', desc: 'Generate T.A. on Transfer applications.', targetFile: 'ta_transfer.html', icon: '🚚', theme: 'card-indigo-variant', isSystem: true },
+                { id: 'menuCardTABillTour', title: 'T.A. Bill Claim (Tour)', desc: 'Generate Travelling Allowance Bill (T.R. 25).', targetFile: 'ta_bill_tour.html', icon: '🎫', theme: 'card-orange-variant', isSystem: true },
+                { id: 'menuCardCEA', title: 'Children Education Allowance', desc: 'Official formats for CEA/Hostel claims.', targetFile: 'cea.html', icon: '🎓', theme: 'card-purple-variant', isSystem: true },
+                { id: 'menuCardPayroll', title: 'Payroll System', desc: 'Manage staff salaries and monthly pay slips.', targetFile: 'payroll.html', icon: '💳', theme: 'card-teal-variant', isSystem: true },
+                { id: 'menuCardAI', title: 'Talk with AI', desc: 'Built-in intelligent postal assistant.', targetFile: 'aichat.html', icon: '🤖', theme: 'card-indigo-variant', isSystem: true },
+                { id: 'menuCardMaintenance', title: 'System Settings & Users', desc: 'Manage system configurations & user access.', targetFile: 'user_maintenance.html', icon: '⚙️', theme: 'card-blue-variant', isSystem: true },
+                { id: 'menuCardSelfPassword', title: 'Change Passcode', desc: 'Update your system passcode anytime.', targetFile: 'self_password.html', icon: '🔒', theme: 'card-dark-variant', isSystem: true }
+            ];
+
+            let ccCustomCards = [];
+            let ccDisabledSystemIds = [];
+            let ccActiveFilter = 'all';
+            let ccEditingCardOriginalId = null;
+            let ccManualIdTouched = false;
+            let ccManualFileTouched = false;
+            let ccUnsubscribeDashboard = null;
+
+            // Quick-Pick Pure Vector SVG Presets
+            const QUICK_ICON_PRESETS = [
+                { emoji: '⚙️', label: 'Settings' },
+                { emoji: '👤', label: 'Users / Staff' },
+                { emoji: '🏢', label: 'Office / SOL' },
+                { emoji: '📦', label: 'Booking / Parcel' },
+                { emoji: '🧾', label: 'Bills / ACG-17' },
+                { emoji: '📅', label: 'Date / Schedule' },
+                { emoji: '🏖️', label: 'Holiday' },
+                { emoji: '📄', label: 'Document / ACG-61' },
+                { emoji: '📋', label: 'Clipboard / Charge' },
+                { emoji: '✍️', label: 'Edit / S.R.-1' },
+                { emoji: '✉️', label: 'Mail / Leave' },
+                { emoji: '💼', label: 'Tour / Briefcase' },
+                { emoji: '🚚', label: 'Transfer / Dispatch' },
+                { emoji: '🎫', label: 'Claim / Ticket' },
+                { emoji: '🎓', label: 'Education / CEA' },
+                { emoji: '💳', label: 'Payroll / Finance' },
+                { emoji: '🤖', label: 'AI Copilot' },
+                { emoji: '🔒', label: 'Security / Lock' },
+                { emoji: '🛡️', label: 'Shield / Audit' },
+                { emoji: '📊', label: 'Analytics / Reports' },
+                { emoji: '⚡', label: 'Fast / Instant' },
+                { emoji: '🌐', label: 'Web / Network' },
+                { emoji: '📁', label: 'Folder / Hub' },
+                { emoji: '🔔', label: 'Alerts / Notice' }
+            ];
+
+            function ccResolveSVG(iconStr, titleHint = '') {
+                if (typeof window.resolveModernSVG === "function") {
+                    return window.resolveModernSVG(iconStr, titleHint);
+                }
+                return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>';
+            }
+
+            function ccNotify(title, msg, type = 'info') {
+                if (typeof window.spawnFloatingNotification === "function") {
+                    window.spawnFloatingNotification(title, msg, type);
+                }
+            }
+
+            // Build SVG Quick Gallery
+            function ccBuildSvgGallery() {
+                const gal = document.getElementById('ccSvgQuickGallery');
+                if (!gal) return;
+                gal.innerHTML = QUICK_ICON_PRESETS.map(p => `
+                    <button type="button" class="cc-svg-pick-btn" title="${p.label}" onclick="ccPickPresetIcon('${p.emoji}', this)">
+                        ${ccResolveSVG(p.emoji, p.label)}
+                    </button>
+                `).join('');
+            }
+
+            window.ccPickPresetIcon = function(emojiChar, btnEl) {
+                const inp = document.getElementById('ccInputIcon');
+                if (inp) inp.value = emojiChar;
+                document.querySelectorAll('#ccSvgQuickGallery .cc-svg-pick-btn').forEach(b => b.classList.remove('active-icon'));
+                if (btnEl) btnEl.classList.add('active-icon');
+                window.ccUpdateLivePreviewCard();
+            };
+
+            // =========================================================================
+            // 4. DYNAMIC TARGET LOCATION DROPDOWN (SUPPORTS MULTI-LEVEL NESTED SUB-CARDS)
+            // =========================================================================
+            function ccPopulateDynamicLocationsDropdown(selectedValue = 'index') {
+                const sel = document.getElementById('ccSelectTargetLocation');
+                if (!sel) return;
+
+                let html = `<option value="index" data-arch="main" data-file="index.html">Main Dashboard (index.html)</option>`;
+
+                // Built-in hubs that can host sub-cards
+                html += `<optgroup label="── Built-In System Hubs ──">`;
+                html += `<option value="menuCardMaintenance" data-arch="sub" data-file="user_maintenance.html">System Settings &amp; Users (menuCardMaintenance)</option>`;
+                html += `<option value="menuCardOfficeHub" data-arch="sub" data-file="management.html">Office &amp; SOL Management (menuCardOfficeHub)</option>`;
+                html += `</optgroup>`;
+
+                // Custom Main Cards (Level 1 Hubs)
+                const mainCustom = ccCustomCards.filter(c => c.cardType !== 'sub' && c.id !== ccEditingCardOriginalId);
+                if (mainCustom.length > 0) {
+                    html += `<optgroup label="── Custom Main Modules (Level 1 Hubs) ──">`;
+                    mainCustom.forEach(c => {
+                        const safeId = c.id || c.targetFile;
+                        html += `<option value="${safeId}" data-arch="sub" data-file="${c.targetFile || ''}">${c.title} (${safeId} → ${c.targetFile})</option>`;
+                    });
+                    html += `</optgroup>`;
+                }
+
+                // Custom Sub-Cards (Level 2+ Nested Hubs - allows creating Sub-Cards inside Sub-Cards!)
+                const subCustom = ccCustomCards.filter(c => c.cardType === 'sub' && c.id !== ccEditingCardOriginalId);
+                if (subCustom.length > 0) {
+                    html += `<optgroup label="── Existing Sub-Cards (Create Nested Sub-Card Inside Sub-Card) ──">`;
+                    subCustom.forEach(c => {
+                        const safeId = c.id || c.targetFile;
+                        html += `<option value="${safeId}" data-arch="sub" data-file="${c.targetFile || ''}">↳ ${c.title} (${safeId} → ${c.targetFile})</option>`;
+                    });
+                    html += `</optgroup>`;
+                }
+
+                sel.innerHTML = html;
+
+                // Restore or match selectedValue
+                const options = Array.from(sel.options);
+                const directMatch = options.find(o =>
+                    o.value.toLowerCase() === String(selectedValue || '').toLowerCase() ||
+                    (o.getAttribute('data-file') || '').toLowerCase() === String(selectedValue || '').toLowerCase()
+                );
+                if (directMatch) {
+                    sel.value = directMatch.value;
+                } else {
+                    sel.value = 'index';
+                }
+            }
+
+            window.ccHandleLocationChange = function() {
+                const locSel = document.getElementById('ccSelectTargetLocation');
+                const archSel = document.getElementById('ccSelectArchitecture');
+                if (!locSel || !archSel) return;
+
+                if (locSel.value === 'index' || locSel.value === 'index.html') {
+                    archSel.value = 'main';
+                } else {
+                    // Selecting any parent module or sub-card automatically switches architecture to Sub-Card!
+                    archSel.value = 'sub';
+                }
+                window.ccUpdateLivePreviewCard();
+            };
+
+            window.ccHandleArchitectureChange = function() {
+                const locSel = document.getElementById('ccSelectTargetLocation');
+                const archSel = document.getElementById('ccSelectArchitecture');
+                if (!locSel || !archSel) return;
+
+                if (archSel.value === 'main') {
+                    locSel.value = 'index';
+                } else if (locSel.value === 'index') {
+                    // Pick first available parent hub if user manually switches to 'sub'
+                    if (locSel.options.length > 1) {
+                        locSel.selectedIndex = 1;
+                    }
+                }
+                window.ccUpdateLivePreviewCard();
+            };
+
+            // =========================================================================
+            // 5. AUTO-GENERATE 'menuCard...' ID & FILENAME FROM CARD TITLE
+            // =========================================================================
+            window.ccHandleTitleInput = function() {
+                const titleVal = (document.getElementById('ccInputTitle')?.value || '').trim();
+                const idInp = document.getElementById('ccInputCardId');
+                const fileInp = document.getElementById('ccInputTargetHtml');
+
+                if (!ccManualIdTouched && idInp && !ccEditingCardOriginalId) {
+                    const pascal = titleVal
+                        .replace(/[^a-zA-Z0-9\s]/g, '')
+                        .split(/\s+/)
+                        .filter(Boolean)
+                        .map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
+                        .join('');
+                    idInp.value = 'menuCard' + (pascal || '');
+                }
+
+                if (!ccManualFileTouched && fileInp && !ccEditingCardOriginalId && titleVal) {
+                    const snake = titleVal
+                        .toLowerCase()
+                        .replace(/[^a-z0-9\s]/g, '')
+                        .trim()
+                        .replace(/\s+/g, '_');
+                    if (snake) {
+                        fileInp.value = `${snake}.html`;
+                    }
+                }
+
+                window.ccUpdateLivePreviewCard();
+            };
+
+            window.ccHandleManualIdInput = function() {
+                ccManualIdTouched = true;
+                const idInp = document.getElementById('ccInputCardId');
+                if (idInp && !idInp.value.startsWith('menuCard')) {
+                    const stripped = idInp.value.replace(/^menuCard/i, '');
+                    idInp.value = 'menuCard' + stripped;
+                }
+                window.ccUpdateLivePreviewCard();
+            };
+
+            window.ccHandleManualFileInput = function() {
+                ccManualFileTouched = true;
+                window.ccUpdateLivePreviewCard();
+            };
+
+            // =========================================================================
+            // 6. ROLES & LIVE PREVIEW SYNCHRONIZATION
+            // =========================================================================
+            window.ccSyncRoleTiles = function() {
+                const map = [
+                    { chk: 'ccRoleGuest', tile: 'ccTileRoleGuest' },
+                    { chk: 'ccRoleMaker', tile: 'ccTileRoleMaker' },
+                    { chk: 'ccRoleSuperuser', tile: 'ccTileRoleSuperuser' },
+                    { chk: 'ccRoleBranchAdmin', tile: 'ccTileRoleBranchAdmin' },
+                    { chk: 'ccRoleSuperAdmin', tile: 'ccTileRoleSuperAdmin' }
+                ];
+                map.forEach(item => {
+                    const c = document.getElementById(item.chk);
+                    const t = document.getElementById(item.tile);
+                    if (c && t) {
+                        t.classList.toggle('checked', c.checked);
+                    }
+                });
+                window.ccUpdateLivePreviewCard();
+            };
+
+            window.ccSelectAllStandardRoles = function() {
+                ['ccRoleMaker', 'ccRoleSuperuser', 'ccRoleBranchAdmin', 'ccRoleSuperAdmin'].forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) el.checked = true;
+                });
+                window.ccSyncRoleTiles();
+            };
+
+            window.ccUpdateLivePreviewCard = function() {
+                const title = (document.getElementById('ccInputTitle')?.value || '').trim() || 'New Application';
+                const desc = (document.getElementById('ccInputDesc')?.value || '').trim() || 'Configure your module description to preview it here.';
+                const idVal = (document.getElementById('ccInputCardId')?.value || 'menuCard').trim();
+                const iconVal = (document.getElementById('ccInputIcon')?.value || '⚙️').trim();
+                const themeVal = document.getElementById('ccSelectTheme')?.value || 'card-blue-variant';
+                const locSel = document.getElementById('ccSelectTargetLocation');
+                const archVal = document.getElementById('ccSelectArchitecture')?.value || 'main';
+                const fileVal = (document.getElementById('ccInputTargetHtml')?.value || 'new_app.html').trim();
+
+                const previewCard = document.getElementById('ccLivePreviewCard');
+                const previewIcon = document.getElementById('ccPreviewIconContainer');
+                const previewTitle = document.getElementById('ccPreviewTitleText');
+                const previewDesc = document.getElementById('ccPreviewDescText');
+
+                if (previewCard) {
+                    previewCard.className = `portal-module-card ${themeVal}`;
+                }
+                if (previewIcon) {
+                    previewIcon.innerHTML = ccResolveSVG(iconVal, title + ' ' + desc);
+                }
+                if (previewTitle) previewTitle.innerText = title;
+                if (previewDesc) previewDesc.innerText = desc;
+
+                // Update Blueprint Summary
+                const sumId = document.getElementById('ccSummaryId');
+                const sumLoc = document.getElementById('ccSummaryLocation');
+                const sumArch = document.getElementById('ccSummaryArch');
+                const sumFile = document.getElementById('ccSummaryFile');
+                const sumRoles = document.getElementById('ccSummaryRoles');
+
+                if (sumId) sumId.innerText = idVal;
+                if (sumLoc && locSel && locSel.selectedIndex >= 0) {
+                    sumLoc.innerText = locSel.options[locSel.selectedIndex].text;
+                }
+                if (sumArch) {
+                    sumArch.innerText = archVal === 'sub' ? 'Sub-Card (Nested Module)' : 'Main Module (Standalone)';
+                }
+                if (sumFile) sumFile.innerText = fileVal || 'Not specified';
+
+                const activeRoleLabels = [];
+                if (document.getElementById('ccRoleGuest')?.checked) activeRoleLabels.push('Guest');
+                if (document.getElementById('ccRoleMaker')?.checked) activeRoleLabels.push('Maker');
+                if (document.getElementById('ccRoleSuperuser')?.checked) activeRoleLabels.push('Superuser');
+                if (document.getElementById('ccRoleBranchAdmin')?.checked) activeRoleLabels.push('Branch Admin');
+                if (document.getElementById('ccRoleSuperAdmin')?.checked) activeRoleLabels.push('Super Admin');
+
+                if (sumRoles) {
+                    sumRoles.innerText = activeRoleLabels.length > 0 ? activeRoleLabels.join(', ') : 'Super Admin (ADMIN) Only';
+                }
+            };
+
+            // =========================================================================
+            // 7. SWITCH BETWEEN VIEW REGISTRY & CREATE/EDIT PANELS
+            // =========================================================================
+            window.ccSwitchWorkspacePanel = function(panelName) {
+                const regPanel = document.getElementById('ccPanelRegistry');
+                const crePanel = document.getElementById('ccPanelCreator');
+                const regCard = document.getElementById('ccMasterCardRegistry');
+                const creCard = document.getElementById('ccMasterCardCreator');
+
+                if (panelName === 'creator') {
+                    regPanel?.classList.remove('active-panel');
+                    crePanel?.classList.add('active-panel');
+                    regCard?.classList.remove('active-mode');
+                    creCard?.classList.add('active-mode');
+                } else {
+                    crePanel?.classList.remove('active-panel');
+                    regPanel?.classList.add('active-panel');
+                    creCard?.classList.remove('active-mode');
+                    regCard?.classList.add('active-mode');
+                    ccRenderRegistryTable();
+                }
+            };
+
+            window.ccStartCreateNewCardFlow = function() {
+                ccEditingCardOriginalId = null;
+                ccManualIdTouched = false;
+                ccManualFileTouched = false;
+
+                document.getElementById('ccFormModeHeading').innerText = 'Deploy New Portal Card';
+                document.getElementById('ccCreatorLaunchTitle').innerText = 'Create New Card';
+                document.getElementById('ccDeployBtnText').innerText = 'Deploy Card & Save';
+                document.getElementById('ccEditingBadgeIndicator').style.display = 'none';
+
+                document.getElementById('ccInputTitle').value = '';
+                document.getElementById('ccInputCardId').value = 'menuCard';
+                document.getElementById('ccInputCardId').disabled = false;
+                document.getElementById('ccInputDesc').value = '';
+                document.getElementById('ccInputIcon').value = '⚙️';
+                document.getElementById('ccSelectTheme').value = 'card-blue-variant';
+                document.getElementById('ccInputTargetHtml').value = '';
+
+                ccPopulateDynamicLocationsDropdown('index');
+                document.getElementById('ccSelectArchitecture').value = 'main';
+
+                document.getElementById('ccRoleGuest').checked = false;
+                document.getElementById('ccRoleMaker').checked = true;
+                document.getElementById('ccRoleSuperuser').checked = true;
+                document.getElementById('ccRoleBranchAdmin').checked = true;
+                document.getElementById('ccRoleSuperAdmin').checked = true;
+                window.ccSyncRoleTiles();
+
+                window.ccSwitchWorkspacePanel('creator');
+                setTimeout(() => document.getElementById('ccInputTitle')?.focus(), 80);
+            };
+
+            window.ccCancelEditAndReturnRegistry = function() {
+                ccEditingCardOriginalId = null;
+                document.getElementById('ccCreatorLaunchTitle').innerText = 'Create New Card';
+                window.ccSwitchWorkspacePanel('registry');
+            };
+
+            // =========================================================================
+            // 8. RENDER ACTIVE DASHBOARD REGISTRY TABLE (SYSTEM + CUSTOM + SUB-CARDS)
+            // =========================================================================
+            window.ccSetRegistryFilter = function(filterKey, btnEl) {
+                ccActiveFilter = filterKey;
+                document.querySelectorAll('.cc-filter-pill').forEach(b => b.classList.remove('active'));
+                if (btnEl) btnEl.classList.add('active');
+                window.ccRenderRegistryTable();
+            };
+
+            function ccResolveParentDisplayName(card) {
+                if (card.isSystem) return 'MAIN DASHBOARD (SYSTEM BUILT-IN)';
+                const loc = String(card.location || 'index').trim();
+                if (loc === 'index' || loc === 'index.html') return 'MAIN DASHBOARD (index.html)';
+
+                const parentMatch = ccCustomCards.find(p =>
+                    String(p.id || '').toLowerCase() === loc.toLowerCase() ||
+                    String(p.targetFile || '').toLowerCase() === loc.toLowerCase()
+                ) || BUILTIN_SYSTEM_CARDS.find(b =>
+                    String(b.id || '').toLowerCase() === loc.toLowerCase() ||
+                    String(b.targetFile || '').toLowerCase() === loc.toLowerCase()
+                );
+
+                if (parentMatch) {
+                    return `${parentMatch.title.toUpperCase()} (${parentMatch.id})`;
+                }
+                return loc.toUpperCase();
+            }
+
+            window.ccRenderRegistryTable = function() {
+                const tbody = document.getElementById('ccRegistryTableBody');
+                if (!tbody) return;
+
+                const query = (document.getElementById('ccRegistrySearchInput')?.value || '').toLowerCase().trim();
+
+                // Merge Built-in System Cards + Custom Cards
+                const combinedList = [
+                    ...BUILTIN_SYSTEM_CARDS.map(sys => ({
+                        ...sys,
+                        active: !ccDisabledSystemIds.includes(sys.id),
+                        cardType: 'system'
+                    })),
+                    ...ccCustomCards.map(cust => ({
+                        ...cust,
+                        active: cust.active !== false,
+                        isSystem: false,
+                        cardType: cust.cardType === 'sub' ? 'sub' : 'main'
+                    }))
+                ];
+
+                // Update top telemetry counters
+                const totalCount = combinedList.length;
+                const activeCount = combinedList.filter(c => c.active).length;
+                const disabledCount = totalCount - activeCount;
+                const customCount = ccCustomCards.length;
+
+                const elTotal = document.getElementById('ccStatTotalCards');
+                const elActive = document.getElementById('ccStatActiveCards');
+                const elCustom = document.getElementById('ccStatCustomCards');
+                const elDis = document.getElementById('ccStatDisabledCards');
+                if (elTotal) elTotal.innerText = `${totalCount} Cards`;
+                if (elActive) elActive.innerText = `${activeCount} Active`;
+                if (elCustom) elCustom.innerText = `${customCount} Custom`;
+                if (elDis) elDis.innerText = `${disabledCount} Disabled`;
+
+                const filtered = combinedList.filter(item => {
+                    if (ccActiveFilter === 'system' && !item.isSystem) return false;
+                    if (ccActiveFilter === 'main' && (item.isSystem || item.cardType === 'sub')) return false;
+                    if (ccActiveFilter === 'sub' && item.cardType !== 'sub') return false;
+                    if (ccActiveFilter === 'disabled' && item.active) return false;
+
+                    if (!query) return true;
+                    const hay = `${item.id} ${item.title} ${item.desc || ''} ${item.targetFile || ''} ${item.location || ''}`.toLowerCase();
+                    return hay.includes(query);
+                });
+
+                if (filtered.length === 0) {
+                    tbody.innerHTML = `
+                        <tr>
+                            <td colspan="7" style="text-align:center; padding:28px; color:var(--text-muted); font-weight:700;">
+                                No matching cards found in the registry.
+                            </td>
+                        </tr>
+                    `;
+                    return;
+                }
+
+                tbody.innerHTML = filtered.map(c => {
+                    const svgMarkup = ccResolveSVG(c.icon, c.title);
+                    const deployTargetText = ccResolveParentDisplayName(c);
+
+                    let typeBadgeHtml = `<span class="cc-type-badge cc-type-system">System Module</span>`;
+                    if (!c.isSystem) {
+                        if (c.cardType === 'sub') {
+                            typeBadgeHtml = `<span class="cc-type-badge cc-type-sub">Sub (${c.location || 'Hub'})</span>`;
+                        } else {
+                            typeBadgeHtml = `<span class="cc-type-badge cc-type-main">Main Module</span>`;
+                        }
+                    }
+
+                    let roleTags = 'Role Managed';
+                    if (!c.isSystem && c.roles) {
+                        const rList = [];
+                        if (c.roles.guest) rList.push('Guest');
+                        if (c.roles.maker) rList.push('Maker');
+                        if (c.roles.superuser) rList.push('Superuser');
+                        if (c.roles.branchadmin || c.roles.admin) rList.push('Branch Admin');
+                        if (c.roles.superadmin || (!c.roles.admin && !c.roles.maker && !c.roles.superuser && !c.roles.guest)) {
+                            rList.push('Super Admin (ADMIN)');
+                        }
+                        roleTags = rList.join(' • ') || 'Super Admin Only';
+                    }
+
+                    const statusBadge = c.active
+                        ? `<span class="cc-status-pill cc-status-active">● Active</span>`
+                        : `<span class="cc-status-pill cc-status-disabled">● Disabled</span>`;
+
+                    const toggleBtn = c.active
+                        ? `<button type="button" class="cc-tbl-btn btn-toggle-off" onclick="ccToggleCardStatus('${c.id}', ${Boolean(c.isSystem)})">Disable</button>`
+                        : `<button type="button" class="cc-tbl-btn btn-toggle-on" onclick="ccToggleCardStatus('${c.id}', ${Boolean(c.isSystem)})">Enable</button>`;
+
+                    const editBtn = !c.isSystem
+                        ? `<button type="button" class="cc-tbl-btn btn-edit" onclick="ccOpenEditCustomCard('${c.id}')">Edit</button>`
+                        : '';
+
+                    const deleteBtn = !c.isSystem
+                        ? `<button type="button" class="cc-tbl-btn btn-delete" onclick="ccDeleteCustomCard('${c.id}')">Delete</button>`
+                        : '';
+
+                    return `
+                        <tr>
+                            <td><span class="cc-id-code">${c.id}</span></td>
+                            <td style="font-weight:800; font-size:12px;">${deployTargetText}</td>
+                            <td>${typeBadgeHtml}</td>
+                            <td>
+                                <div class="cc-card-cell-title">
+                                    <div class="cc-mini-svg-box">${svgMarkup}</div>
+                                    <div>
+                                        <div style="font-weight:800; color:var(--text-primary);">${c.title}</div>
+                                        <div style="font-size:11.5px; color:var(--accent-primary); font-family:'JetBrains Mono', monospace;">${c.targetFile || ''}</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td style="font-size:11.5px; font-weight:700; color:var(--text-secondary);">${roleTags}</td>
+                            <td>${statusBadge}</td>
+                            <td>
+                                <div class="cc-row-actions">
+                                    ${toggleBtn}
+                                    ${editBtn}
+                                    ${deleteBtn}
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                }).join('');
+            };
+
+            // =========================================================================
+            // 9. ENABLE / DISABLE, EDIT & DELETE OPERATIONS (REAL-TIME FIREBASE SYNC)
+            // =========================================================================
+            async function ccPersistDashboardToFirebase() {
+                window.LATEST_DASHBOARD_CARDS = ccCustomCards;
+                window.DISABLED_SYSTEM_CARDS = ccDisabledSystemIds;
+
+                try {
+                    if (typeof LATEST_DASHBOARD_CARDS !== 'undefined') LATEST_DASHBOARD_CARDS = ccCustomCards;
+                    if (typeof DISABLED_SYSTEM_CARDS !== 'undefined') DISABLED_SYSTEM_CARDS = ccDisabledSystemIds;
+                } catch (e) {}
+
+                if (typeof db !== 'undefined' && db) {
+                    await db.collection("system").doc("dashboard").set({
+                        cards: ccCustomCards,
+                        disabledSystemCards: ccDisabledSystemIds,
+                        updatedAt: Date.now()
+                    }, { merge: true });
+                }
+
+                if (typeof window.renderDynamicCardsInIndex === 'function') {
+                    window.renderDynamicCardsInIndex(ccCustomCards);
+                }
+                if (typeof window.verifyBloggerAuth_Reentry === 'function') {
+                    window.verifyBloggerAuth_Reentry(false);
+                }
+            }
+
+            window.ccToggleCardStatus = async function(cardId, isSystemCard) {
+                if (!ccVerifyStrictMasterAdmin()) return;
+
+                if (isSystemCard) {
+                    const idx = ccDisabledSystemIds.indexOf(cardId);
+                    if (idx > -1) {
+                        ccDisabledSystemIds.splice(idx, 1);
+                        ccNotify("System Module Enabled", `${cardId} is now active for authorized users.`, "success");
+                    } else {
+                        ccDisabledSystemIds.push(cardId);
+                        ccNotify("System Module Disabled", `${cardId} is now hidden from general users (visible only to Admin as DISABLED).`, "warning");
+                    }
+                } else {
+                    const cIdx = ccCustomCards.findIndex(c => c.id === cardId);
+                    if (cIdx === -1) return;
+                    ccCustomCards[cIdx].active = (ccCustomCards[cIdx].active === false) ? true : false;
+                    const stateTxt = ccCustomCards[cIdx].active ? "Enabled" : "Disabled";
+                    ccNotify(`Custom Card ${stateTxt}`, `${ccCustomCards[cIdx].title} is now ${stateTxt.toLowerCase()}.`, ccCustomCards[cIdx].active ? "success" : "warning");
+                }
+
+                await ccPersistDashboardToFirebase();
+                window.ccRenderRegistryTable();
+            };
+
+            window.ccOpenEditCustomCard = function(cardId) {
+                if (!ccVerifyStrictMasterAdmin()) return;
+                const cardObj = ccCustomCards.find(c => c.id === cardId);
+                if (!cardObj) return;
+
+                ccEditingCardOriginalId = cardObj.id;
+                ccManualIdTouched = true;
+                ccManualFileTouched = true;
+
+                document.getElementById('ccFormModeHeading').innerText = `Edit Card: ${cardObj.title}`;
+                document.getElementById('ccCreatorLaunchTitle').innerText = `Editing: ${cardObj.title}`;
+                document.getElementById('ccDeployBtnText').innerText = 'Update Card & Save Changes';
+                document.getElementById('ccEditingBadgeIndicator').style.display = 'inline-flex';
+
+                document.getElementById('ccInputTitle').value = cardObj.title || '';
+                document.getElementById('ccInputCardId').value = cardObj.id || 'menuCard';
+                document.getElementById('ccInputDesc').value = cardObj.desc || '';
+                document.getElementById('ccInputIcon').value = cardObj.icon || '⚙️';
+                document.getElementById('ccSelectTheme').value = cardObj.theme || 'card-blue-variant';
+                document.getElementById('ccInputTargetHtml').value = cardObj.targetFile || '';
+
+                ccPopulateDynamicLocationsDropdown(cardObj.location || 'index');
+                document.getElementById('ccSelectArchitecture').value = cardObj.cardType === 'sub' ? 'sub' : 'main';
+
+                const r = cardObj.roles || {};
+                document.getElementById('ccRoleGuest').checked = Boolean(r.guest);
+                document.getElementById('ccRoleMaker').checked = Boolean(r.maker);
+                document.getElementById('ccRoleSuperuser').checked = Boolean(r.superuser);
+                document.getElementById('ccRoleBranchAdmin').checked = Boolean(r.admin || r.branchadmin);
+                document.getElementById('ccRoleSuperAdmin').checked = (r.superadmin !== false);
+
+                window.ccSyncRoleTiles();
+                window.ccSwitchWorkspacePanel('creator');
+            };
+
+            window.ccDeleteCustomCard = async function(cardId) {
+                if (!ccVerifyStrictMasterAdmin()) return;
+                const target = ccCustomCards.find(c => c.id === cardId);
+                if (!target) return;
+
+                if (!confirm(`Are you sure you want to permanently delete "${target.title}" (${target.id})?`)) {
+                    return;
+                }
+
+                ccCustomCards = ccCustomCards.filter(c => c.id !== cardId);
+                await ccPersistDashboardToFirebase();
+                window.ccRenderRegistryTable();
+                ccNotify("Card Deleted", `${target.title} has been removed from the registry.`, "info");
+            };
+
+            // =========================================================================
+            // 10. DEPLOY & SAVE NEW OR EDITED CARD
+            // =========================================================================
+            window.ccDeployAndSaveCard = async function() {
+                if (!ccVerifyStrictMasterAdmin()) return;
+
+                const title = (document.getElementById('ccInputTitle')?.value || '').trim();
+                let cardId = (document.getElementById('ccInputCardId')?.value || '').trim();
+                const desc = (document.getElementById('ccInputDesc')?.value || '').trim();
+                const icon = (document.getElementById('ccInputIcon')?.value || '⚙️').trim();
+                const theme = document.getElementById('ccSelectTheme')?.value || 'card-blue-variant';
+                const locSel = document.getElementById('ccSelectTargetLocation');
+                const selectedLocation = locSel ? locSel.value : 'index';
+                const selectedOpt = locSel && locSel.selectedIndex >= 0 ? locSel.options[locSel.selectedIndex] : null;
+                const parentFile = selectedOpt ? (selectedOpt.getAttribute('data-file') || '') : '';
+                const arch = document.getElementById('ccSelectArchitecture')?.value || 'main';
+                let targetFile = (document.getElementById('ccInputTargetHtml')?.value || '').trim();
+
+                if (!title) {
+                    ccNotify("Validation Notice", "Card Title is mandatory.", "warning");
+                    document.getElementById('ccInputTitle')?.focus();
+                    return;
+                }
+                if (!cardId.startsWith('menuCard') || cardId.length <= 8) {
+                    const cleanSuffix = title.replace(/[^a-zA-Z0-9]/g, '');
+                    cardId = 'menuCard' + (cleanSuffix || Date.now());
+                }
+                if (!targetFile) {
+                    ccNotify("Validation Notice", "SPA Target HTML File (e.g., new_module.html) is mandatory.", "warning");
+                    document.getElementById('ccInputTargetHtml')?.focus();
+                    return;
+                }
+                if (!targetFile.toLowerCase().endsWith('.html')) {
+                    targetFile += '.html';
+                }
+
+                const isSubCard = (arch === 'sub' || (selectedLocation !== 'index' && selectedLocation !== 'index.html'));
+                const finalLocation = isSubCard ? selectedLocation : 'index';
+
+                const rolesObj = {
+                    guest: Boolean(document.getElementById('ccRoleGuest')?.checked),
+                    maker: Boolean(document.getElementById('ccRoleMaker')?.checked),
+                    superuser: Boolean(document.getElementById('ccRoleSuperuser')?.checked),
+                    branchadmin: Boolean(document.getElementById('ccRoleBranchAdmin')?.checked),
+                    // Note: index.html checks c.roles[myRole] for non-'admin' users and allows 'admin' username automatically.
+                    // So setting 'admin' to ccRoleBranchAdmin ensures non-master admins only see it if Branch Admin is checked,
+                    // while Master Super Admin ('admin' username) ALWAYS sees it when Super Admin is checked!
+                    admin: Boolean(document.getElementById('ccRoleBranchAdmin')?.checked),
+                    superadmin: Boolean(document.getElementById('ccRoleSuperAdmin')?.checked)
+                };
+
+                const existingIdx = ccCustomCards.findIndex(c => c.id === (ccEditingCardOriginalId || cardId));
+
+                const cardPayload = {
+                    id: cardId,
+                    title: title,
+                    desc: desc,
+                    icon: icon,
+                    theme: theme,
+                    targetFile: targetFile,
+                    location: finalLocation,
+                    parentCardId: isSubCard ? finalLocation : 'index',
+                    parentLocation: isSubCard ? (parentFile || finalLocation) : 'index.html',
+                    cardType: isSubCard ? 'sub' : 'main',
+                    active: existingIdx > -1 ? (ccCustomCards[existingIdx].active !== false) : true,
+                    roles: rolesObj,
+                    updatedAt: Date.now(),
+                    createdAt: existingIdx > -1 ? (ccCustomCards[existingIdx].createdAt || Date.now()) : Date.now()
+                };
+
+                if (existingIdx > -1) {
+                    ccCustomCards[existingIdx] = cardPayload;
+                } else {
+                    ccCustomCards.push(cardPayload);
+                }
+
+                await ccPersistDashboardToFirebase();
+                ccEditingCardOriginalId = null;
+                document.getElementById('ccCreatorLaunchTitle').innerText = 'Create New Card';
+
+                ccNotify(
+                    "Card Deployed & Saved",
+                    `${title} (${cardId}) has been deployed to ${isSubCard ? finalLocation : 'Main Dashboard'}!`,
+                    "success"
+                );
+
+                window.ccSwitchWorkspacePanel('registry');
+            };
+
+            window.ccCleanExitToDashboard = function() {
+                if (typeof ccUnsubscribeDashboard === 'function') {
+                    try { ccUnsubscribeDashboard(); } catch (e) {}
+                }
+                if (typeof window.returnToHomeGridSPA === 'function') {
+                    window.returnToHomeGridSPA();
+                } else {
+                    window.location.href = 'index.html';
+                }
+            };
+
+            // =========================================================================
+            // 11. INITIALIZE STUDIO & REAL-TIME FIREBASE LISTENER
+            // =========================================================================
+            ccBuildSvgGallery();
+
+            try {
+                if (typeof LATEST_DASHBOARD_CARDS !== 'undefined' && Array.isArray(LATEST_DASHBOARD_CARDS)) {
+                    ccCustomCards = [...LATEST_DASHBOARD_CARDS];
+                } else if (Array.isArray(window.LATEST_DASHBOARD_CARDS)) {
+                    ccCustomCards = [...window.LATEST_DASHBOARD_CARDS];
+                }
+
+                if (typeof DISABLED_SYSTEM_CARDS !== 'undefined' && Array.isArray(DISABLED_SYSTEM_CARDS)) {
+                    ccDisabledSystemIds = [...DISABLED_SYSTEM_CARDS];
+                } else if (Array.isArray(window.DISABLED_SYSTEM_CARDS)) {
+                    ccDisabledSystemIds = [...window.DISABLED_SYSTEM_CARDS];
+                }
+            } catch (e) {}
+
+            ccPopulateDynamicLocationsDropdown('index');
+            window.ccRenderRegistryTable();
+            window.ccUpdateLivePreviewCard();
+
+            if (typeof db !== 'undefined' && db) {
+                try {
+                    ccUnsubscribeDashboard = db.collection("system").doc("dashboard").onSnapshot((doc) => {
+                        if (doc.exists && document.getElementById('ccRegistryTableBody')) {
+                            const data = doc.data();
+                            ccCustomCards = data.cards || [];
+                            ccDisabledSystemIds = data.disabledSystemCards || [];
+                            window.LATEST_DASHBOARD_CARDS = ccCustomCards;
+                            window.DISABLED_SYSTEM_CARDS = ccDisabledSystemIds;
+                            if (!ccEditingCardOriginalId) {
+                                ccPopulateDynamicLocationsDropdown(document.getElementById('ccSelectTargetLocation')?.value || 'index');
+                            }
+                            window.ccRenderRegistryTable();
+                        }
+                    });
+                } catch (err) {
+                    console.warn("createcard.html live listener error:", err);
+                }
+            }
+        })();
+    </script>
+</div>
