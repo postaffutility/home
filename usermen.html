@@ -1,0 +1,923 @@
+<!-- usermen.html / usermain.html -->
+<!-- Security Check: Prevent Direct URL Access without SPA -->
+<script>
+    if (
+        !document.getElementById("dynamicWorkspace") ||
+        window.location.pathname.endsWith("usermen.html") ||
+        window.location.pathname.endsWith("usermain.html")
+    ) {
+        window.location.href = "index.html";
+    }
+</script>
+
+<div id="moduleRenderArea">
+
+    <!-- 100% DASHBOARD-IDENTICAL SMART GRID, LIST & GLASSMORPHISM CSS -->
+    <style>
+        /* Force #dynamicWorkspace to behave like a clean zero-padding flex container for exact Dashboard match */
+        #dynamicWorkspace {
+            padding: 0 !important;
+            background: transparent !important;
+            border: none !important;
+            box-shadow: none !important;
+            overflow: hidden !important;
+            display: flex !important;
+            flex-direction: column !important;
+        }
+
+        .um-hub-shell {
+            flex: 1 1 0%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 0;
+            min-width: 0 !important;
+            width: 100%;
+            height: 100%;
+            background: var(--surface-glass, rgba(255, 255, 255, 0.84));
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--border-glass, rgba(255, 255, 255, 0.9));
+            border-radius: 18px;
+            padding: 12px 18px 10px 18px;
+            box-shadow: var(--shadow-soft, 0 8px 28px rgba(15, 23, 42, 0.06));
+            overflow: hidden !important;
+            position: relative;
+            font-family: var(--font-main, 'Inter', 'Segoe UI', system-ui, sans-serif);
+            color: var(--text-primary, #0f172a);
+            animation: umHubFadeIn 0.28s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+
+        /* Top Toolbar Row (Identical to Quick Access Modules Toolbar in index.html) */
+        .um-toolbar-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            flex-shrink: 0;
+            flex-wrap: wrap;
+            gap: 10px;
+            position: relative;
+            z-index: 60;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--border-subtle, rgba(203, 213, 225, 0.65));
+        }
+
+        .um-title-cluster {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 0;
+            flex-wrap: wrap;
+        }
+
+        .um-hub-icon-badge {
+            width: 34px;
+            height: 34px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+            color: #ffffff;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.32);
+            flex-shrink: 0;
+        }
+
+        .um-sec-title {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            font-size: 16px;
+            font-weight: 800;
+            color: var(--text-primary, #0f172a);
+            margin: 0;
+            white-space: nowrap;
+        }
+
+        .um-subcount-pill {
+            font-size: 10.5px;
+            font-weight: 800;
+            padding: 3.5px 9px;
+            border-radius: 999px;
+            background: rgba(37, 99, 235, 0.12);
+            color: var(--accent-primary, #2563eb);
+            border: 1px solid rgba(59, 130, 246, 0.28);
+            letter-spacing: 0.2px;
+        }
+
+        /* Hub Inline Search Input */
+        .um-search-wrap {
+            position: relative;
+            flex: 1 1 180px;
+            max-width: 280px;
+            min-width: 140px;
+        }
+
+        .um-search-input {
+            width: 100%;
+            padding: 7px 12px 7px 34px !important;
+            border: 1px solid var(--border-subtle, #cbd5e1) !important;
+            border-radius: 999px !important;
+            font-size: 12.5px !important;
+            font-weight: 600 !important;
+            background: var(--surface-input, #eef3fb) url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="%2364748b" viewBox="0 0 16 16"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/></svg>') no-repeat 12px center !important;
+            color: var(--text-primary, #0f172a) !important;
+            transition: all 0.2s ease !important;
+            outline: none !important;
+        }
+
+        .um-search-input:focus {
+            border-color: var(--accent-primary, #2563eb) !important;
+            background-color: var(--surface-input-focus, #ffffff) !important;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.14) !important;
+        }
+
+        /* Right Toolbar Controls (Grid / Matrix / List / Back) */
+        .um-controls-right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            position: relative;
+        }
+
+        .um-back-dash-btn {
+            background: var(--surface-input, #eef3fb);
+            border: 1px solid var(--border-subtle, #cbd5e1);
+            color: var(--text-primary, #0f172a);
+            font-size: 12px;
+            font-weight: 800;
+            padding: 7px 13px;
+            border-radius: 10px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .um-back-dash-btn:hover {
+            border-color: var(--accent-primary, #2563eb);
+            color: var(--accent-primary, #2563eb);
+            background: var(--surface-card-hover, #ffffff);
+            transform: translateX(-2px);
+        }
+
+        /* Empty State Card (When no sub-cards are created yet) */
+        .um-empty-state-box {
+            grid-column: 1 / -1;
+            grid-row: 1 / -1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 32px 20px;
+            background: var(--surface-card, rgba(255, 255, 255, 0.78));
+            border: 1.5px dashed var(--border-subtle, #cbd5e1);
+            border-radius: 18px;
+            margin: auto;
+            max-width: 520px;
+            width: 100%;
+        }
+
+        .um-empty-orb {
+            width: 58px;
+            height: 58px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.14), rgba(124, 58, 237, 0.14));
+            color: var(--accent-primary, #2563eb);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 14px;
+        }
+
+        .um-empty-state-box h4 {
+            margin: 0 0 6px 0;
+            font-size: 16.5px;
+            font-weight: 800;
+            color: var(--text-primary, #0f172a);
+        }
+
+        .um-empty-state-box p {
+            margin: 0 0 16px 0;
+            font-size: 12.8px;
+            color: var(--text-muted, #64748b);
+            line-height: 1.55;
+        }
+
+        @keyframes umHubFadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 760px) {
+            .um-search-wrap {
+                max-width: 100%;
+                order: 3;
+                width: 100%;
+                flex-basis: 100%;
+            }
+        }
+    </style>
+
+    <!-- MAIN SUB-CARD HUB CONTAINER (EXACT MIRROR OF DASHBOARD GRID VIEW) -->
+    <div class="um-hub-shell" id="umHubShellRoot">
+
+        <!-- TOP TOOLBAR -->
+        <div class="um-toolbar-row">
+            <div class="um-title-cluster">
+                <div class="um-hub-icon-badge" id="umHubHeaderIcon">
+                    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+                        <circle cx="9" cy="7" r="4"/>
+                        <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                    </svg>
+                </div>
+                <h3 class="um-sec-title" id="umHubHeaderTitle">User Maintenance Sub-Modules</h3>
+                <span class="um-subcount-pill" id="umSubCardCountPill">0 Modules</span>
+            </div>
+
+            <!-- LIVE SEARCH -->
+            <div class="um-search-wrap">
+                <input type="text" class="um-search-input" id="umSubModuleSearch" placeholder="Search sub-cards..." oninput="umFilterAndPaginateSubCards(true)" autocomplete="off"/>
+            </div>
+
+            <!-- VIEW CONTROLS (GRID / MATRIX STUDIO / LIST / MANAGE / BACK) -->
+            <div class="um-controls-right" onclick="event.stopPropagation()">
+                <div class="view-toggle-box">
+                    <button type="button" class="view-mode-btn active" id="umBtnViewGrid" onclick="umHandleGridButtonClick(event)" title="Customize Sub-Card Grid Matrix (up to 12 per page)">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                            <rect x="3" y="3" width="7" height="7" rx="1.5"/>
+                            <rect x="14" y="3" width="7" height="7" rx="1.5"/>
+                            <rect x="3" y="14" width="7" height="7" rx="1.5"/>
+                            <rect x="14" y="14" width="7" height="7" rx="1.5"/>
+                        </svg>
+                        <span>Grid</span>
+                    </button>
+                    <span class="grid-matrix-badge" id="umActiveGridBadgeText" onclick="umHandleGridButtonClick(event)" title="Change Grid Matrix (4×3, 4×2, 3×2, Auto)">Auto ▾</span>
+                    <button type="button" class="view-mode-btn" id="umBtnViewList" onclick="umSwitchViewMode('list')">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
+                            <line x1="8" y1="6" x2="21" y2="6"/>
+                            <line x1="8" y1="12" x2="21" y2="12"/>
+                            <line x1="8" y1="18" x2="21" y2="18"/>
+                            <line x1="3" y1="6" x2="3.01" y2="6"/>
+                            <line x1="3" y1="12" x2="3.01" y2="12"/>
+                            <line x1="3" y1="18" x2="3.01" y2="18"/>
+                        </svg>
+                        <span>List</span>
+                    </button>
+                </div>
+
+                <!-- SMART GRID MATRIX CUSTOMIZER POPOVER (MIRRORED FROM INDEX.HTML) -->
+                <div class="grid-customizer-popover" id="umGridMatrixPopover" onclick="event.stopPropagation()">
+                    <div class="grid-pop-hdr">
+                        <h4>
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" style="color:var(--accent-primary);">
+                                <rect x="3" y="3" width="7" height="7" rx="1.5"/>
+                                <rect x="14" y="3" width="7" height="7" rx="1.5"/>
+                                <rect x="3" y="14" width="7" height="7" rx="1.5"/>
+                                <rect x="14" y="14" width="7" height="7" rx="1.5"/>
+                            </svg>
+                            <span>Sub-Hub Grid Layout Studio</span>
+                        </h4>
+                        <span class="cap-pill" id="umGridPopSummaryPill">Max 12 Cards</span>
+                    </div>
+
+                    <div class="grid-presets-grid">
+                        <div class="grid-preset-option full-span" id="umPresetBtnAuto" onclick="umApplyGridPreset('auto')">
+                            <div>
+                                <div class="gp-top-line">Smart Auto-Fit Screen</div>
+                                <div class="gp-sub-line">Auto-scales 4×3 (12) on large screens or 4×2 (8)</div>
+                            </div>
+                            <span class="gp-count-tag">AUTO</span>
+                        </div>
+
+                        <div class="grid-preset-option" id="umPresetBtn4x3" onclick="umApplyGridPreset('4x3')">
+                            <div class="gp-top-line"><span>4 × 3 Matrix</span><span class="gp-count-tag">12</span></div>
+                            <div class="gp-sub-line">4 per line • 3 rows (Max)</div>
+                        </div>
+
+                        <div class="grid-preset-option" id="umPresetBtn4x2" onclick="umApplyGridPreset('4x2')">
+                            <div class="gp-top-line"><span>4 × 2 Matrix</span><span class="gp-count-tag">8</span></div>
+                            <div class="gp-sub-line">4 per line • 2 rows</div>
+                        </div>
+
+                        <div class="grid-preset-option" id="umPresetBtn3x3" onclick="umApplyGridPreset('3x3')">
+                            <div class="gp-top-line"><span>3 × 3 Matrix</span><span class="gp-count-tag">9</span></div>
+                            <div class="gp-sub-line">3 per line • 3 rows</div>
+                        </div>
+
+                        <div class="grid-preset-option" id="umPresetBtn3x2" onclick="umApplyGridPreset('3x2')">
+                            <div class="gp-top-line"><span>3 × 2 Matrix</span><span class="gp-count-tag">6</span></div>
+                            <div class="gp-sub-line">3 per line • 2 rows</div>
+                        </div>
+
+                        <div class="grid-preset-option" id="umPresetBtn2x3" onclick="umApplyGridPreset('2x3')">
+                            <div class="gp-top-line"><span>2 × 3 Matrix</span><span class="gp-count-tag">6</span></div>
+                            <div class="gp-sub-line">2 per line • 3 rows</div>
+                        </div>
+
+                        <div class="grid-preset-option" id="umPresetBtn2x2" onclick="umApplyGridPreset('2x2')">
+                            <div class="gp-top-line"><span>2 × 2 Matrix</span><span class="gp-count-tag">4</span></div>
+                            <div class="gp-sub-line">2 per line • 2 rows</div>
+                        </div>
+                    </div>
+
+                    <div class="grid-custom-sliders">
+                        <div class="grid-slider-row">
+                            <span class="gs-lbl">Cards Per Line (Columns)</span>
+                            <div class="grid-step-pills">
+                                <button type="button" class="grid-step-btn" id="umColBtn2" onclick="umSetCustomGridDimension('cols', 2)">2</button>
+                                <button type="button" class="grid-step-btn" id="umColBtn3" onclick="umSetCustomGridDimension('cols', 3)">3</button>
+                                <button type="button" class="grid-step-btn" id="umColBtn4" onclick="umSetCustomGridDimension('cols', 4)">4</button>
+                            </div>
+                        </div>
+                        <div class="grid-slider-row">
+                            <span class="gs-lbl">Lines Per Page (Rows)</span>
+                            <div class="grid-step-pills">
+                                <button type="button" class="grid-step-btn" id="umRowBtn2" onclick="umSetCustomGridDimension('rows', 2)">2</button>
+                                <button type="button" class="grid-step-btn" id="umRowBtn3" onclick="umSetCustomGridDimension('rows', 3)">3</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ADMIN SHORTCUT TO CARD CREATOR -->
+                <button type="button" class="manage-modules-btn" id="umBtnManageSubCards" onclick="loadModuleSPA('user_maintenance.html', null, 'Opening Card & User Maintenance Studio...')" style="display:none;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="12" y1="5" x2="12" y2="19"/>
+                        <line x1="5" y1="12" x2="19" y2="12"/>
+                    </svg>
+                    <span>Add / Manage Sub-Cards</span>
+                </button>
+
+                <!-- BACK TO MAIN DASHBOARD -->
+                <button type="button" class="um-back-dash-btn" onclick="umExitToMainDashboard()">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="19" y1="12" x2="5" y2="12"/>
+                        <polyline points="12 19 5 12 12 5"/>
+                    </svg>
+                    <span>Dashboard</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- SUB-CARDS GRID WRAPPER (IDENTICAL TO #mainModuleGrid) -->
+        <div class="portal-grid-wrapper" id="umSubModuleGrid"></div>
+
+        <!-- PAGINATION BAR -->
+        <div class="pagination-container" id="umSubHubPagination"></div>
+
+    </div>
+
+    <!-- DYNAMIC SUB-CARD HUB ENGINE SCRIPT -->
+    <script>
+        (function() {
+            let umCurrentPage = 1;
+            let umCardsPerPage = 8;
+            let umGridPref = { mode: 'auto', cols: 4, rows: 2 };
+            let umUnsubscribeSnapshot = null;
+
+            // ====================================================
+            // 1. AUTO-COLLAPSE HAMBURGER MENU ON OPEN & INTERACTION
+            // ====================================================
+            function umForceCollapseSidebar() {
+                if (typeof window.collapseHamburgerMenu === "function") {
+                    window.collapseHamburgerMenu();
+                } else {
+                    const sb = document.getElementById('appSidebar');
+                    if (sb) {
+                        sb.classList.add('collapsed');
+                        sb.classList.remove('mobile-open');
+                    }
+                }
+            }
+            umForceCollapseSidebar();
+
+            const hubRoot = document.getElementById('umHubShellRoot');
+            if (hubRoot) {
+                ['mousedown', 'touchstart', 'focusin', 'input'].forEach(evt => {
+                    hubRoot.addEventListener(evt, function() {
+                        umForceCollapseSidebar();
+                    }, { passive: true, capture: true });
+                });
+            }
+
+            // Close Grid Matrix Popover when clicking anywhere outside
+            document.addEventListener('click', function() {
+                const pop = document.getElementById('umGridMatrixPopover');
+                if (pop) pop.classList.remove('open');
+            });
+
+            // ====================================================
+            // 2. FORCEFUL EMOJI-TO-PURE-VECTOR-SVG CONVERTER
+            // ====================================================
+            function umForceConvertEmojiToSVG(rawIcon, titleHint = '', descHint = '') {
+                // Use index.html's global resolveModernSVG first if available
+                if (typeof window.resolveModernSVG === "function") {
+                    const resolved = window.resolveModernSVG(rawIcon, titleHint + ' ' + descHint);
+                    if (resolved && resolved.trim().startsWith('<svg')) {
+                        return resolved;
+                    }
+                }
+                // Fallback Pure Vector SVG if resolveModernSVG is unavailable
+                return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>';
+            }
+
+            // ====================================================
+            // 3. IDENTIFY CURRENT HUB & FILTER MATCHING SUB-CARDS
+            // ====================================================
+            function umGetActiveHubAliases() {
+                const aliases = new Set([
+                    'usermen', 'usermen.html',
+                    'usermain', 'usermain.html',
+                    'user_main', 'user_main.html'
+                ]);
+
+                try {
+                    const params = new URLSearchParams(window.location.search);
+                    const v = (params.get('view') || '').trim().toLowerCase();
+                    if (v) {
+                        aliases.add(v);
+                        aliases.add(v + '.html');
+                    }
+                } catch (e) {}
+
+                try {
+                    if (window.history.state && window.history.state.module) {
+                        const mod = String(window.history.state.module).trim().toLowerCase();
+                        aliases.add(mod);
+                        aliases.add(mod.replace('.html', ''));
+                    }
+                } catch (e) {}
+
+                return aliases;
+            }
+
+            function umDoesCardBelongToThisHub(card, hubAliases) {
+                if (!card || typeof card !== 'object') return false;
+
+                const loc = String(card.location || card.parentLocation || card.parentCard || card.parent || '').trim().toLowerCase();
+                const locBase = loc.replace('.html', '');
+                const cType = String(card.cardType || '').trim().toLowerCase();
+                const target = String(card.targetFile || '').trim().toLowerCase();
+
+                // Prevent the parent card itself from rendering inside its own sub-grid
+                if (hubAliases.has(target) || hubAliases.has(target.replace('.html', ''))) {
+                    return false;
+                }
+
+                // Case 1: Card's location explicitly matches usermen / usermain (or current hub view)
+                if (loc && (hubAliases.has(loc) || hubAliases.has(locBase))) {
+                    return true;
+                }
+
+                // Case 2: Card is marked as a Sub-Card ('sub') and either has no other specific location or points to this hub
+                if (cType === 'sub') {
+                    if (!loc || loc === 'index' || loc === 'index.html' || hubAliases.has(loc) || hubAliases.has(locBase)) {
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+
+            //Sync Header Title & Icon with Parent Card if found in LATEST_DASHBOARD_CARDS
+            function umSyncHubHeaderMeta(allCards) {
+                if (!Array.isArray(allCards)) return;
+                const aliases = umGetActiveHubAliases();
+                const parentCardObj = allCards.find(c => {
+                    const tf = String(c.targetFile || '').trim().toLowerCase();
+                    return aliases.has(tf) || aliases.has(tf.replace('.html', ''));
+                });
+
+                if (parentCardObj) {
+                    const titleEl = document.getElementById('umHubHeaderTitle');
+                    const iconEl = document.getElementById('umHubHeaderIcon');
+                    if (titleEl && parentCardObj.title) {
+                        titleEl.innerText = parentCardObj.title;
+                    }
+                    if (iconEl) {
+                        iconEl.innerHTML = umForceConvertEmojiToSVG(parentCardObj.icon, parentCardObj.title, parentCardObj.desc);
+                    }
+                }
+            }
+
+            // ====================================================
+            // 4. RENDER SUB-CARDS (WITH RBAC & FORCEFUL SVG)
+            // ====================================================
+            window.umRenderSubCardsFromRegistry = function(cardsArray) {
+                const grid = document.getElementById('umSubModuleGrid');
+                if (!grid) return;
+
+                const allCards = Array.isArray(cardsArray)
+                    ? cardsArray
+                    : (Array.isArray(window.LATEST_DASHBOARD_CARDS) ? window.LATEST_DASHBOARD_CARDS : []);
+
+                umSyncHubHeaderMeta(allCards);
+
+                const sessionProfile = window.authenticatedUserSession || {
+                    user: (typeof safeSession !== 'undefined' && safeSession.getItem('activeUser')) || 'GUEST',
+                    role: (typeof safeSession !== 'undefined' && safeSession.getItem('activeRole')) || 'maker',
+                    solId: (typeof safeSession !== 'undefined' && safeSession.getItem('activeSolId')) || ''
+                };
+
+                const isHQorAdmin = (sessionProfile.user === 'admin' || sessionProfile.solId === '000000' || sessionProfile.role === 'admin');
+                const isGuestUser = (sessionProfile.user === 'GUEST' || sessionProfile.role === 'guest' || sessionProfile.isGuest === true);
+                const myRole = isGuestUser ? 'maker' : (sessionProfile.role || 'maker');
+
+                // Show "Add / Manage Sub-Cards" button for HQ / Admin
+                const manageBtn = document.getElementById('umBtnManageSubCards');
+                if (manageBtn) {
+                    manageBtn.style.display = isHQorAdmin ? 'inline-flex' : 'none';
+                }
+
+                const hubAliases = umGetActiveHubAliases();
+                grid.innerHTML = '';
+
+                let matchedCount = 0;
+
+                allCards.forEach(c => {
+                    if (!umDoesCardBelongToThisHub(c, hubAliases)) return;
+                    if (!c.active && !isHQorAdmin) return;
+
+                    // Strict Guest Guard against Passcode Change
+                    const lowerTarget = String(c.targetFile || '').toLowerCase();
+                    const lowerTitle = String(c.title || '').toLowerCase();
+                    if (isGuestUser && (lowerTarget.includes('self_password') || lowerTitle.includes('passcode') || lowerTitle.includes('password'))) {
+                        return;
+                    }
+
+                    // Role permission check
+                    const roleAllowed = !c.roles || c.roles[myRole] || (isGuestUser && c.roles['guest']) || sessionProfile.user === 'admin';
+                    if (!roleAllowed) return;
+
+                    matchedCount++;
+
+                    const cardDiv = document.createElement('div');
+                    const opacityStyle = (!c.active) ? "opacity: 0.5;" : "";
+                    const svgIconMarkup = umForceConvertEmojiToSVG(c.icon, c.title || '', c.desc || '');
+
+                    cardDiv.className = `portal-module-card ${c.theme || 'card-blue-variant'} allowed-module um-sub-card-item`;
+                    cardDiv.style.cssText = opacityStyle;
+                    cardDiv.setAttribute('data-card-title', c.title || 'Sub-Module');
+
+                    cardDiv.onclick = function() {
+                        umForceCollapseSidebar();
+                        if (typeof window.loadModuleSPA === "function") {
+                            window.loadModuleSPA(c.targetFile, cardDiv, `Opening ${c.title || 'Sub-Module'}...`);
+                        }
+                    };
+
+                    cardDiv.innerHTML = `
+                        <div class="card-icon">${svgIconMarkup}</div>
+                        <div class="card-body-text">
+                            <h3>${c.title || 'Untitled Module'} ${!c.active ? '<span style="color:#ef4444; font-size:11px;">(DISABLED)</span>' : ''}</h3>
+                            <p>${c.desc || 'Click to open sub-module workspace.'}</p>
+                        </div>
+                    `;
+                    grid.appendChild(cardDiv);
+                });
+
+                const countPill = document.getElementById('umSubCardCountPill');
+                if (countPill) {
+                    countPill.innerText = `${matchedCount} Sub-Module${matchedCount === 1 ? '' : 's'}`;
+                }
+
+                // If 0 sub-cards exist yet, show a clean Dashboard-styled Empty State
+                if (matchedCount === 0) {
+                    const emptyDiv = document.createElement('div');
+                    emptyDiv.className = 'um-empty-state-box';
+                    emptyDiv.innerHTML = `
+                        <div class="um-empty-orb">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="3" y="3" width="7" height="7" rx="1.5"/>
+                                <rect x="14" y="3" width="7" height="7" rx="1.5"/>
+                                <rect x="3" y="14" width="7" height="7" rx="1.5"/>
+                                <path d="M14 17.5h7"/><path d="M17.5 14v7"/>
+                            </svg>
+                        </div>
+                        <h4>No Sub-Cards Assigned Yet</h4>
+                        <p>
+                            When creating a Sub-Card in the Card Creator, set <strong>Card Type = Sub-Card</strong> or set <strong>Location = usermen.html / usermain.html</strong>. It will automatically appear here in real time with Pure SVG icons!
+                        </p>
+                        ${isHQorAdmin ? `
+                            <button type="button" class="manage-modules-btn" style="background:linear-gradient(90deg, #2563eb, #7c3aed); color:#fff; border:none; padding:10px 18px;" onclick="loadModuleSPA('user_maintenance.html', null, 'Opening Card Creator...')">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                                <span>Create Sub-Card Now</span>
+                            </button>
+                        ` : ''}
+                    `;
+                    grid.appendChild(emptyDiv);
+                    const pag = document.getElementById('umSubHubPagination');
+                    if (pag) pag.style.display = 'none';
+                    return;
+                }
+
+                umFilterAndPaginateSubCards(false);
+            };
+
+            // ====================================================
+            // 5. SMART GRID MATRIX & LIST VIEW ENGINE (EXACT INDEX.HTML MATCH)
+            // ====================================================
+            function umGetStorageKey() {
+                const u = (window.authenticatedUserSession && window.authenticatedUserSession.user)
+                    ? window.authenticatedUserSession.user
+                    : ((typeof safeSession !== 'undefined' && safeSession.getItem('activeUser')) || 'default');
+                return `po_subhub_grid_pref_${u}`;
+            }
+
+            function umLoadGridPreference() {
+                try {
+                    const raw = localStorage.getItem(umGetStorageKey());
+                    if (raw) {
+                        const parsed = JSON.parse(raw);
+                        if (parsed && parsed.cols && parsed.rows) {
+                            umGridPref = {
+                                mode: parsed.mode || 'custom',
+                                cols: Math.min(4, Math.max(2, parseInt(parsed.cols, 10) || 4)),
+                                rows: Math.min(3, Math.max(2, parseInt(parsed.rows, 10) || 2))
+                            };
+                            return;
+                        }
+                    }
+                } catch (e) {}
+
+                // Inherit user's main dashboard grid preference if available
+                if (typeof currentGridPref !== 'undefined' && currentGridPref) {
+                    umGridPref = { ...currentGridPref };
+                }
+            }
+
+            function umSaveGridPreference() {
+                try {
+                    localStorage.setItem(umGetStorageKey(), JSON.stringify(umGridPref));
+                } catch (e) {}
+            }
+
+            function umResolveEffectiveDimensions() {
+                const grid = document.getElementById('umSubModuleGrid');
+                if (grid && grid.classList.contains('list-mode')) {
+                    const isTall = window.innerHeight >= 820;
+                    const listRows = isTall ? 5 : 4;
+                    return { cols: 2, rows: listRows, total: Math.min(12, 2 * listRows), label: 'List' };
+                }
+                if (umGridPref.mode === 'auto') {
+                    const vh = window.innerHeight;
+                    const vw = window.innerWidth;
+                    let autoCols = vw < 900 ? 2 : (vw < 1180 ? 3 : 4);
+                    let autoRows = vh >= 810 ? 3 : 2;
+                    if (autoCols * autoRows > 12) autoRows = Math.floor(12 / autoCols);
+                    return { cols: autoCols, rows: autoRows, total: autoCols * autoRows, label: `Auto (${autoCols}×${autoRows})` };
+                }
+                let c = Math.min(4, Math.max(2, umGridPref.cols || 4));
+                let r = Math.min(3, Math.max(2, umGridPref.rows || 2));
+                if (c * r > 12) r = Math.floor(12 / c);
+                return { cols: c, rows: r, total: c * r, label: `${c}×${r} (${c * r})` };
+            }
+
+            function umRecalculateGridMetrics() {
+                const grid = document.getElementById('umSubModuleGrid');
+                if (!grid) return;
+                const dims = umResolveEffectiveDimensions();
+                umCardsPerPage = Math.min(12, Math.max(4, dims.total));
+
+                grid.style.setProperty('--user-grid-cols', String(dims.cols));
+                grid.style.setProperty('--user-grid-rows', String(dims.rows));
+                grid.style.setProperty('--user-list-rows', String(dims.rows));
+
+                const availH = grid.clientHeight || (window.innerHeight - 240);
+                const rowH = Math.max(68, Math.floor((availH - (dims.rows - 1) * 13 - 15) / dims.rows));
+
+                let iconBox = 44, svgDim = 23, h3Size = 13.4, pSize = 11.6, padY = 12, padX = 15, gapPx = 13;
+                if (rowH >= 135) {
+                    iconBox = 54; svgDim = 27; h3Size = 15.2; pSize = 12.6; padY = 18; padX = 18; gapPx = 15;
+                } else if (rowH >= 105) {
+                    iconBox = 48; svgDim = 25; h3Size = 14.2; pSize = 12.0; padY = 14; padX = 16; gapPx = 14;
+                } else if (rowH <= 84) {
+                    iconBox = 38; svgDim = 20; h3Size = 12.5; pSize = 11.0; padY = 9; padX = 13; gapPx = 10;
+                }
+
+                grid.style.setProperty('--user-grid-gap', `${gapPx}px`);
+                grid.style.setProperty('--card-icon-box', `${iconBox}px`);
+                grid.style.setProperty('--card-svg-dim', `${svgDim}px`);
+                grid.style.setProperty('--card-h3-size', `${h3Size}px`);
+                grid.style.setProperty('--card-p-size', `${pSize}px`);
+                grid.style.setProperty('--card-pad-y', `${padY}px`);
+                grid.style.setProperty('--card-pad-x', `${padX}px`);
+
+                const badgeEl = document.getElementById('umActiveGridBadgeText');
+                if (badgeEl) {
+                    badgeEl.innerText = umGridPref.mode === 'auto'
+                        ? `Auto • ${dims.total} ▾`
+                        : `${dims.cols}×${dims.rows} • ${dims.total} ▾`;
+                }
+                const sumPill = document.getElementById('umGridPopSummaryPill');
+                if (sumPill) sumPill.innerText = `${dims.cols}×${dims.rows} = ${dims.total} Cards/Page`;
+
+                const activeKey = umGridPref.mode === 'auto' ? 'auto' : `${dims.cols}x${dims.rows}`;
+                ['auto', '4x3', '4x2', '3x3', '3x2', '2x3', '2x2'].forEach(k => {
+                    const btn = document.getElementById('umPresetBtn' + (k === 'auto' ? 'Auto' : k));
+                    if (btn) btn.classList.toggle('active-preset', k === activeKey);
+                });
+                [2, 3, 4].forEach(c => {
+                    const b = document.getElementById('umColBtn' + c);
+                    if (b) b.classList.toggle('active', dims.cols === c);
+                });
+                [2, 3].forEach(r => {
+                    const b = document.getElementById('umRowBtn' + r);
+                    if (b) b.classList.toggle('active', dims.rows === r);
+                });
+            }
+
+            window.umHandleGridButtonClick = function(event) {
+                if (event) event.stopPropagation();
+                const grid = document.getElementById('umSubModuleGrid');
+                const pop = document.getElementById('umGridMatrixPopover');
+                if (grid && grid.classList.contains('list-mode')) {
+                    window.umSwitchViewMode('grid');
+                }
+                if (pop) {
+                    pop.classList.toggle('open');
+                    umRecalculateGridMetrics();
+                }
+            };
+
+            window.umApplyGridPreset = function(presetCode) {
+                if (presetCode === 'auto') {
+                    umGridPref = { mode: 'auto', cols: 4, rows: 2 };
+                } else {
+                    const parts = presetCode.split('x');
+                    const c = Math.min(4, Math.max(2, parseInt(parts[0], 10) || 4));
+                    const r = Math.min(3, Math.max(2, parseInt(parts[1], 10) || 2));
+                    umGridPref = { mode: 'custom', cols: c, rows: r };
+                }
+                window.umSwitchViewMode('grid');
+                umSaveGridPreference();
+                umRecalculateGridMetrics();
+                window.umFilterAndPaginateSubCards(false);
+
+                const pop = document.getElementById('umGridMatrixPopover');
+                if (pop) pop.classList.remove('open');
+
+                if (typeof window.spawnFloatingNotification === "function") {
+                    const dims = umResolveEffectiveDimensions();
+                    window.spawnFloatingNotification("Sub-Hub Grid Updated", `Layout set to ${dims.cols}×${dims.rows} (${dims.total} cards per page).`, "info");
+                }
+            };
+
+            window.umSetCustomGridDimension = function(axis, val) {
+                const dims = umResolveEffectiveDimensions();
+                let nextCols = axis === 'cols' ? val : dims.cols;
+                let nextRows = axis === 'rows' ? val : dims.rows;
+                nextCols = Math.min(4, Math.max(2, nextCols));
+                nextRows = Math.min(3, Math.max(2, nextRows));
+                if (nextCols * nextRows > 12) {
+                    nextRows = Math.floor(12 / nextCols);
+                }
+                umGridPref = { mode: 'custom', cols: nextCols, rows: nextRows };
+                window.umSwitchViewMode('grid');
+                umSaveGridPreference();
+                umRecalculateGridMetrics();
+                window.umFilterAndPaginateSubCards(false);
+            };
+
+            window.umSwitchViewMode = function(mode) {
+                const grid = document.getElementById('umSubModuleGrid');
+                const btnGrid = document.getElementById('umBtnViewGrid');
+                const btnList = document.getElementById('umBtnViewList');
+                const pop = document.getElementById('umGridMatrixPopover');
+                if (!grid) return;
+
+                if (mode === 'list') {
+                    grid.classList.add('list-mode');
+                    if (btnList) btnList.classList.add('active');
+                    if (btnGrid) btnGrid.classList.remove('active');
+                    if (pop) pop.classList.remove('open');
+                } else {
+                    grid.classList.remove('list-mode');
+                    if (btnGrid) btnGrid.classList.add('active');
+                    if (btnList) btnList.classList.remove('active');
+                }
+                umRecalculateGridMetrics();
+                window.umFilterAndPaginateSubCards(false);
+            };
+
+            // ====================================================
+            // 6. SEARCH FILTER & PAGINATION ENGINE
+            // ====================================================
+            window.umFilterAndPaginateSubCards = function(resetPage = false) {
+                if (resetPage) umCurrentPage = 1;
+                umRecalculateGridMetrics();
+
+                const query = (document.getElementById('umSubModuleSearch')?.value || '').toLowerCase().trim();
+                const allSubCards = Array.from(document.querySelectorAll('#umSubModuleGrid .um-sub-card-item'));
+
+                if (allSubCards.length === 0) return;
+
+                allSubCards.forEach(card => card.style.display = 'none');
+                const filtered = allSubCards.filter(card => card.innerText.toLowerCase().includes(query));
+
+                const totalPages = Math.ceil(filtered.length / umCardsPerPage) || 1;
+                if (umCurrentPage > totalPages) umCurrentPage = totalPages;
+                if (umCurrentPage < 1) umCurrentPage = 1;
+
+                const startIndex = (umCurrentPage - 1) * umCardsPerPage;
+                const endIndex = startIndex + umCardsPerPage;
+
+                filtered.forEach((card, idx) => {
+                    if (idx >= startIndex && idx < endIndex) {
+                        card.style.display = 'flex';
+                    }
+                });
+
+                umRenderPaginationControls(totalPages);
+            };
+
+            function umRenderPaginationControls(totalPages) {
+                const container = document.getElementById('umSubHubPagination');
+                if (!container) return;
+                container.innerHTML = '';
+
+                if (totalPages <= 1) {
+                    container.style.display = 'none';
+                    return;
+                }
+                container.style.display = 'flex';
+
+                const prevBtn = document.createElement('button');
+                prevBtn.innerHTML = '&laquo;';
+                prevBtn.className = 'page-nav-btn';
+                prevBtn.disabled = umCurrentPage === 1;
+                prevBtn.onclick = () => {
+                    umCurrentPage--;
+                    window.umFilterAndPaginateSubCards(false);
+                };
+                container.appendChild(prevBtn);
+
+                for (let i = 1; i <= totalPages; i++) {
+                    const pageBtn = document.createElement('button');
+                    pageBtn.innerText = i;
+                    pageBtn.className = 'page-nav-btn ' + (i === umCurrentPage ? 'active-page' : '');
+                    pageBtn.onclick = () => {
+                        umCurrentPage = i;
+                        window.umFilterAndPaginateSubCards(false);
+                    };
+                    container.appendChild(pageBtn);
+                }
+
+                const nextBtn = document.createElement('button');
+                nextBtn.innerHTML = '&raquo;';
+                nextBtn.className = 'page-nav-btn';
+                nextBtn.disabled = umCurrentPage === totalPages;
+                nextBtn.onclick = () => {
+                    umCurrentPage++;
+                    window.umFilterAndPaginateSubCards(false);
+                };
+                container.appendChild(nextBtn);
+            }
+
+            window.addEventListener('resize', function() {
+                if (document.getElementById('umSubModuleGrid')) {
+                    umRecalculateGridMetrics();
+                    window.umFilterAndPaginateSubCards(false);
+                }
+            });
+
+            window.umExitToMainDashboard = function() {
+                if (typeof umUnsubscribeSnapshot === 'function') {
+                    try { umUnsubscribeSnapshot(); } catch (e) {}
+                }
+                if (typeof window.returnToHomeGridSPA === 'function') {
+                    window.returnToHomeGridSPA();
+                } else {
+                    window.location.href = 'index.html';
+                }
+            };
+
+            // ====================================================
+            // 7. INITIALIZE & REAL-TIME FIREBASE LISTENER
+            // ====================================================
+            umLoadGridPreference();
+            window.umRenderSubCardsFromRegistry(window.LATEST_DASHBOARD_CARDS || []);
+
+            if (typeof db !== 'undefined' && db) {
+                try {
+                    umUnsubscribeSnapshot = db.collection("system").doc("dashboard").onSnapshot((doc) => {
+                        if (doc.exists && document.getElementById('umSubModuleGrid')) {
+                            const cards = doc.data().cards || [];
+                            window.LATEST_DASHBOARD_CARDS = cards;
+                            window.umRenderSubCardsFromRegistry(cards);
+                        }
+                    });
+                } catch (err) {
+                    console.warn("Sub-Hub real-time listener fallback:", err);
+                }
+            }
+        })();
+    </script>
+</div>
