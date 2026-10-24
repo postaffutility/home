@@ -7,390 +7,1594 @@
 </script>
 
 <div id="moduleRenderArea">
-    
-    <!-- 100% SELF-CONTAINED PERFECT DESIGN CSS -->
+
+    <!-- Google Fonts: Noto Serif Devanagari for Crisp Official Hindi Rendering -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Devanagari:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <!-- 100% FLUID RESPONSIVE, THEME-AWARE GLASSMORPHISM CSS (SYNCED WITH INDEX.HTML V3.0) -->
     <style>
-        .portal-page-panel { max-width: 1200px; margin: 0 auto; background: white; padding: 40px; border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.03); border: 1px solid #e2e8f0; font-family: 'Segoe UI', Arial, sans-serif; }
-        
-        /* Typography & Layout */
-        h3.module-title { margin: 0; color: #1e293b; font-size: 26px; font-weight: 800; letter-spacing: -0.5px; }
-        .back-nav-link { display: inline-flex; align-items: center; color: #3b82f6; font-weight: 800; font-size: 15px; text-decoration: none; cursor: pointer; transition: color 0.2s; padding: 8px 15px; background: #eff6ff; border-radius: 8px; float: right; }
-        .back-nav-link:hover { color: #1d4ed8; background: #dbeafe; }
-        
-        .form-group { margin-bottom: 20px; clear: both; }
-        .form-group label { display: block; font-weight: 700; margin-bottom: 8px; font-size: 14px; color: #334155; }
-        
-        /* Inputs & Textareas */
-        input[type="text"], input[type="number"], input[type="date"], select, textarea { width: 100%; padding: 14px 16px; box-sizing: border-box; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14.5px; background: #f8fafc; color: #1e293b !important; transition: all 0.2s ease; font-family: 'Segoe UI', Arial, sans-serif; }
-        input[type="text"]:focus, input[type="number"]:focus, input[type="date"]:focus, select:focus, textarea:focus { border-color: #d32f2f; background: #ffffff; box-shadow: 0 0 0 4px rgba(211, 47, 47, 0.1); outline: none; }
-        
-        /* NORMAL (NON-ITALIC) PLACEHOLDERS */
-        input::placeholder, textarea::placeholder { color: #94a3b8 !important; font-style: normal !important; opacity: 1 !important; }
-        
-        textarea { resize: vertical; }
-        .flex-row { display: flex; gap: 15px; flex-wrap: wrap; }
-        .flex-row > div { flex: 1; }
-        .help-note { font-size: 12px; color: #64748b; margin-top: 6px; display: block; }
-        
-        /* Dynamic Row Container styling */
-        .dynamic-date-row { display: flex; gap: 15px; background: #ffffff; border: 1px solid #e2e8f0; padding: 20px; border-radius: 12px; margin-bottom: 15px; align-items: center; box-shadow: 0 2px 8px rgba(0,0,0,0.02); }
-        .delete-row-btn { background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; padding: 14px; border-radius: 8px; cursor: pointer; font-weight: bold; transition: all 0.2s; }
-        .delete-row-btn:hover { background: #fee2e2; color: #dc2626; border-color: #fca5a5; }
-        .add-more-row-container { margin: 20px 0 30px 0; }
-        .secondary-action-btn { background: #f1f5f9; color: #334155; padding: 12px 20px; border: 1px solid #cbd5e1; border-radius: 8px; font-weight: 800; font-size: 13.5px; cursor: pointer; transition: all 0.2s; }
-        .secondary-action-btn:hover { background: #e2e8f0; color: #0f172a; }
-
-        /* Action Button */
-        button.action-btn { width: 100%; padding: 16px; background: #475569; color: white; border: none; border-radius: 8px; font-size: 15.5px; font-weight: 800; cursor: pointer; text-transform: uppercase; letter-spacing: 0.8px; margin-top: 15px; box-shadow: 0 4px 12px rgba(71, 85, 105, 0.25); transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
-        button.action-btn:hover { background: #334155; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(51, 65, 85, 0.3); }
-
-        /* --- PERFECT CENTERED MODAL, FULL SCREEN BLUR --- */
-        .pdf-modal-overlay {
-            position: fixed !important; top: 0 !important; left: 0 !important;
-            width: 100vw !important; height: 100vh !important;
-            background: rgba(241, 245, 249, 0.85) !important; 
-            backdrop-filter: blur(8px) !important;
-            z-index: 99999999 !important; 
-            display: none; justify-content: center; align-items: center;
-            opacity: 0; transition: opacity 0.3s ease;
+        #dynamicWorkspace {
+            scroll-behavior: smooth !important;
+            -webkit-overflow-scrolling: touch !important;
         }
-        .pdf-modal-overlay.active { display: flex; opacity: 1; }
-        
+
+        .gc-viewport-wrapper {
+            width: 100%;
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: clamp(4px, 0.8vw, 12px);
+            font-family: var(--font-main, 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif);
+            color: var(--text-primary, #0f172a);
+            animation: gcFadeIn 0.32s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+            box-sizing: border-box;
+        }
+
+        .portal-page-panel {
+            width: 100%;
+            background: var(--surface-glass, rgba(255, 255, 255, 0.86));
+            backdrop-filter: blur(22px);
+            -webkit-backdrop-filter: blur(22px);
+            padding: clamp(18px, 2.5vw, 34px);
+            border-radius: 22px;
+            box-shadow: var(--shadow-soft, 0 8px 28px rgba(15, 23, 42, 0.06));
+            border: 1px solid var(--border-glass, rgba(255, 255, 255, 0.9));
+            transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            box-sizing: border-box;
+        }
+
+        /* Decorative top accent bar */
+        .portal-page-panel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, #3b82f6 0%, #6366f1 50%, #10b981 100%);
+        }
+
+        /* HEADER SECTION */
+        .gc-header-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            padding-bottom: clamp(14px, 1.8vw, 22px);
+            margin-bottom: clamp(16px, 2vw, 24px);
+            border-bottom: 1px solid var(--border-subtle, rgba(203, 213, 225, 0.8));
+            flex-wrap: wrap;
+        }
+
+        .gc-header-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            min-width: 0;
+        }
+
+        .gc-hero-icon {
+            width: clamp(44px, 3.6vw, 52px);
+            height: clamp(44px, 3.6vw, 52px);
+            border-radius: 15px;
+            background: linear-gradient(135deg, #3b82f6 0%, #6366f1 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            box-shadow: 0 8px 22px rgba(59, 130, 246, 0.34);
+            flex-shrink: 0;
+        }
+
+        .gc-title-block {
+            min-width: 0;
+        }
+
+        h3.module-title {
+            margin: 0;
+            color: var(--text-primary, #0f172a);
+            font-size: clamp(18px, 1.8vw, 24px);
+            font-weight: 900;
+            letter-spacing: -0.5px;
+            line-height: 1.2;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .gc-form-badge {
+            font-size: 11px;
+            font-weight: 800;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(59, 130, 246, 0.14);
+            color: #2563eb;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            letter-spacing: 0.4px;
+            text-transform: uppercase;
+        }
+        html[data-theme="dark"] .gc-form-badge {
+            color: #60a5fa;
+            background: rgba(59, 130, 246, 0.22);
+        }
+
+        .gc-subtitle {
+            margin: 4px 0 0 0;
+            font-size: clamp(12px, 1vw, 13.5px);
+            color: var(--text-muted, #64748b);
+            font-weight: 500;
+        }
+
+        .back-nav-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-primary, #0f172a);
+            font-weight: 800;
+            font-size: 13.5px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.22s ease;
+            padding: 10px 18px;
+            background: var(--surface-input, #eef3fb);
+            border: 1px solid var(--border-subtle, rgba(203, 213, 225, 0.8));
+            border-radius: 12px;
+            flex-shrink: 0;
+        }
+
+        .back-nav-link:hover {
+            border-color: var(--accent-primary, #2563eb);
+            color: var(--accent-primary, #2563eb);
+            background: var(--surface-card-hover, #ffffff);
+            transform: translateX(-3px);
+            box-shadow: var(--shadow-card, 0 4px 18px rgba(15, 23, 42, 0.05));
+        }
+
+        /* LIVE TELEMETRY STRIP */
+        .gc-telemetry-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: clamp(10px, 1.4vw, 16px);
+            margin-bottom: clamp(18px, 2.2vw, 26px);
+        }
+
+        .gc-stat-pill {
+            background: var(--surface-card, rgba(255, 255, 255, 0.92));
+            border: 1px solid var(--border-glass, rgba(255, 255, 255, 0.9));
+            border-radius: 15px;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: var(--shadow-card, 0 4px 18px rgba(15, 23, 42, 0.04));
+            min-width: 0;
+            transition: transform 0.2s ease, border-color 0.2s ease;
+        }
+
+        .gc-stat-pill:hover {
+            transform: translateY(-2px);
+            border-color: rgba(59, 130, 246, 0.38);
+        }
+
+        .gc-stat-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 11px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .gc-stat-icon.blue { background: rgba(37, 99, 235, 0.13); color: #2563eb; }
+        .gc-stat-icon.indigo { background: rgba(99, 102, 241, 0.14); color: #4f46e5; }
+        .gc-stat-icon.emerald { background: rgba(16, 185, 129, 0.14); color: #059669; }
+        html[data-theme="dark"] .gc-stat-icon.blue { color: #60a5fa; }
+        html[data-theme="dark"] .gc-stat-icon.indigo { color: #818cf8; }
+        html[data-theme="dark"] .gc-stat-icon.emerald { color: #34d399; }
+
+        .gc-stat-text {
+            min-width: 0;
+            flex: 1;
+        }
+
+        .gc-stat-label {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-muted, #64748b);
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            margin-bottom: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .gc-stat-val {
+            font-size: clamp(14px, 1.3vw, 17px);
+            font-weight: 900;
+            color: var(--text-primary, #0f172a);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* GLASS SUB-SECTIONS */
+        .gc-glass-section {
+            background: var(--surface-card, rgba(255, 255, 255, 0.9));
+            border: 1px solid var(--border-subtle, rgba(203, 213, 225, 0.75));
+            border-radius: 18px;
+            padding: clamp(16px, 2vw, 24px);
+            margin-bottom: clamp(16px, 2vw, 22px);
+            box-shadow: var(--shadow-card, 0 4px 18px rgba(15, 23, 42, 0.035));
+            transition: border-color 0.25s ease, background 0.3s ease;
+        }
+
+        .gc-glass-section:hover {
+            border-color: rgba(59, 130, 246, 0.35);
+        }
+
+        .gc-section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding-bottom: 12px;
+            margin-bottom: 18px;
+            border-bottom: 1px solid var(--border-subtle, rgba(203, 213, 225, 0.7));
+            flex-wrap: wrap;
+        }
+
+        .gc-section-header h4 {
+            margin: 0;
+            font-size: 15.5px;
+            font-weight: 800;
+            color: var(--text-primary, #0f172a);
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            letter-spacing: -0.2px;
+        }
+
+        .gc-section-header h4 svg {
+            color: #3b82f6;
+            flex-shrink: 0;
+        }
+
+        .gc-section-tag {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-muted, #64748b);
+            background: var(--surface-input, #eef3fb);
+            padding: 4px 10px;
+            border-radius: 999px;
+            border: 1px solid var(--border-subtle, #cbd5e1);
+        }
+
+        /* RESPONSIVE 12-COLUMN FORM GRID */
+        .gc-form-grid {
+            display: grid;
+            grid-template-columns: repeat(12, minmax(0, 1fr));
+            gap: clamp(14px, 1.6vw, 18px);
+        }
+
+        .gc-col-12 { grid-column: span 12; }
+        .gc-col-8 { grid-column: span 8; }
+        .gc-col-6 { grid-column: span 6; }
+        .gc-col-4 { grid-column: span 4; }
+        .gc-col-3 { grid-column: span 3; }
+
+        .form-group {
+            margin-bottom: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            font-weight: 800;
+            margin-bottom: 7px;
+            font-size: 12.8px;
+            color: var(--text-primary, #0f172a);
+            letter-spacing: -0.1px;
+        }
+
+        .form-group label svg {
+            color: #2563eb;
+            flex-shrink: 0;
+        }
+        html[data-theme="dark"] .form-group label svg {
+            color: #60a5fa;
+        }
+
+        .portal-page-panel input[type="text"],
+        .portal-page-panel input[type="number"],
+        .portal-page-panel input[type="date"],
+        .portal-page-panel select,
+        .portal-page-panel textarea {
+            width: 100%;
+            padding: 12.5px 15px;
+            box-sizing: border-box;
+            border: 1.5px solid var(--border-subtle, rgba(203, 213, 225, 0.85));
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            background: var(--surface-input, #eef3fb);
+            color: var(--text-primary, #0f172a) !important;
+            transition: all 0.22s ease;
+            font-family: var(--font-main, 'Inter', 'Segoe UI', sans-serif);
+        }
+
+        html[data-theme="dark"] .portal-page-panel input[type="date"] {
+            color-scheme: dark;
+        }
+
+        .portal-page-panel select {
+            cursor: pointer;
+            appearance: none;
+            -webkit-appearance: none;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="%2364748b" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>');
+            background-repeat: no-repeat;
+            background-position: right 14px center;
+            padding-right: 40px;
+        }
+
+        .portal-page-panel input[type="text"]:focus,
+        .portal-page-panel input[type="number"]:focus,
+        .portal-page-panel input[type="date"]:focus,
+        .portal-page-panel select:focus,
+        .portal-page-panel textarea:focus {
+            border-color: #3b82f6;
+            background: var(--surface-input-focus, #ffffff);
+            box-shadow: 0 0 0 3.5px rgba(59, 130, 246, 0.16);
+            outline: none;
+        }
+
+        .portal-page-panel input::placeholder,
+        .portal-page-panel textarea::placeholder {
+            color: var(--text-muted, #94a3b8) !important;
+            font-style: normal !important;
+            font-weight: 400 !important;
+            opacity: 1 !important;
+        }
+
+        /* COPY FORWARDED TO LEDGER ROWS */
+        #genForwardContainer {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .dynamic-date-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: var(--surface-input, #f8fafc);
+            border: 1px solid var(--border-subtle, #e2e8f0);
+            padding: 12px 14px;
+            border-radius: 14px;
+            transition: all 0.2s ease;
+            animation: gcFadeIn 0.22s ease-out forwards;
+        }
+
+        .dynamic-date-row:hover {
+            border-color: rgba(59, 130, 246, 0.45);
+            background: var(--surface-card-hover, #ffffff);
+        }
+
+        .gc-forward-badge {
+            width: 38px;
+            height: 40px;
+            border-radius: 10px;
+            background: rgba(59, 130, 246, 0.14);
+            color: #2563eb;
+            font-weight: 900;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            user-select: none;
+        }
+        html[data-theme="dark"] .gc-forward-badge {
+            color: #60a5fa;
+        }
+
+        .delete-row-btn {
+            width: 42px;
+            height: 42px;
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+            border: 1.5px solid rgba(239, 68, 68, 0.25);
+            border-radius: 11px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+            padding: 0;
+        }
+
+        .delete-row-btn:hover {
+            background: #ef4444;
+            color: #ffffff;
+            border-color: #ef4444;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.28);
+        }
+
+        .add-more-row-container {
+            margin-top: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .secondary-action-btn {
+            background: var(--surface-input, #f1f5f9);
+            color: #2563eb;
+            padding: 11px 18px;
+            border: 1.5px dashed rgba(59, 130, 246, 0.45);
+            border-radius: 11px;
+            font-weight: 800;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.22s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        html[data-theme="dark"] .secondary-action-btn {
+            color: #60a5fa;
+        }
+
+        .secondary-action-btn:hover {
+            background: rgba(59, 130, 246, 0.12);
+            border-style: solid;
+            border-color: #3b82f6;
+            transform: translateY(-2px);
+        }
+
+        /* HIGH-TECH COLOR-SHIFTING ACTION BUTTON */
+        .gc-action-footer {
+            margin-top: clamp(18px, 2.2vw, 24px);
+            padding-top: clamp(14px, 1.8vw, 20px);
+            border-top: 1px solid var(--border-subtle, rgba(203, 213, 225, 0.8));
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .gc-footer-hint {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12.5px;
+            color: var(--text-muted, #64748b);
+            font-weight: 600;
+        }
+
+        button.action-btn {
+            flex: 1;
+            min-width: 260px;
+            padding: 15px 26px;
+            background: linear-gradient(90deg, #2563eb 0%, #6366f1 50%, #10b981 100%);
+            background-size: 200% auto;
+            color: #ffffff;
+            border: none;
+            border-radius: 13px;
+            font-size: 14.5px;
+            font-weight: 800;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 0.7px;
+            box-shadow: 0 10px 25px rgba(37, 99, 235, 0.32);
+            transition: all 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        button.action-btn:hover {
+            background-position: right center;
+            transform: translateY(-2px);
+            box-shadow: 0 14px 30px rgba(99, 102, 241, 0.38);
+        }
+
+        button.action-btn:active,
+        button.action-btn.generating-pulse {
+            background-position: right center;
+            transform: scale(0.99);
+            box-shadow: 0 6px 18px rgba(16, 185, 129, 0.45);
+        }
+
+        /* --- HIGH-TECH FULL-SCREEN GLASS MODAL FOR PDF PREVIEW --- */
+        .pdf-modal-overlay {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100vw !important;
+            height: 100vh !important;
+            background: rgba(15, 23, 42, 0.72) !important;
+            backdrop-filter: blur(12px) !important;
+            -webkit-backdrop-filter: blur(12px) !important;
+            z-index: 99999999 !important;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.25s ease;
+            padding: clamp(10px, 2vw, 24px);
+            box-sizing: border-box;
+            font-family: var(--font-main, 'Inter', 'Segoe UI', sans-serif);
+        }
+
+        .pdf-modal-overlay.active {
+            display: flex !important;
+            opacity: 1;
+        }
+
         .pdf-modal-card {
-            background: #ffffff; width: 85%; max-width: 900px; height: 85vh;
-            border-radius: 12px; box-shadow: 0 20px 50px rgba(0,0,0,0.2); 
-            display: flex; flex-direction: column; overflow: hidden;
-            border: 1px solid #cbd5e1; border-top: 6px solid #475569;
-            transform: scale(0.95); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            background: var(--surface-glass-strong, #ffffff);
+            color: var(--text-primary, #0f172a);
+            width: 94%;
+            max-width: 1120px;
+            height: 88vh;
+            border-radius: 20px;
+            box-shadow: 0 28px 70px rgba(0, 0, 0, 0.45);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            border: 1px solid var(--border-glass, rgba(255, 255, 255, 0.85));
+            border-top: 5px solid #2563eb;
+            transform: scale(0.95);
+            transition: transform 0.28s cubic-bezier(0.175, 0.885, 0.32, 1.275), background 0.3s ease;
             margin: auto;
         }
-        .pdf-modal-overlay.active .pdf-modal-card { transform: scale(1); }
-        
-        .pdf-modal-header { padding: 15px 25px; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; background: #f8fafc; }
-        .pdf-modal-header h3 { margin: 0; color: #1e293b; font-size: 18px; font-weight: 800; font-family: 'Segoe UI', Arial, sans-serif; }
-        .pdf-close-btn { background: #ef4444; color: white; border: none; padding: 10px 24px; border-radius: 8px; font-weight: 800; cursor: pointer; transition: 0.2s; font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px; }
-        .pdf-close-btn:hover { background: #dc2626; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(220, 38, 38, 0.2);}
-        .pdf-iframe-container { flex: 1; width: 100%; height: 100%; background: #e2e8f0; }
-        #pdfFrameViewerLocal { width: 100%; height: 100%; border: none; display: block; }
+
+        .pdf-modal-overlay.active .pdf-modal-card {
+            transform: scale(1);
+        }
+
+        .pdf-modal-header {
+            padding: 14px 22px;
+            border-bottom: 1px solid var(--border-subtle, #e2e8f0);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--surface-input, #f8fafc);
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .pdf-modal-title-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .pdf-modal-header h3 {
+            margin: 0;
+            color: var(--text-primary, #1e293b);
+            font-size: 16.5px;
+            font-weight: 900;
+            letter-spacing: -0.3px;
+            display: flex;
+            align-items: center;
+            gap: 9px;
+        }
+
+        .pdf-modal-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .pdf-download-btn {
+            background: linear-gradient(90deg, #2563eb, #6366f1);
+            color: #ffffff;
+            border: none;
+            padding: 9px 18px;
+            border-radius: 10px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 12.5px;
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+
+        .pdf-download-btn:hover {
+            transform: translateY(-1px);
+            filter: brightness(1.08);
+        }
+
+        .pdf-close-btn {
+            background: rgba(239, 68, 68, 0.12);
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            padding: 9px 18px;
+            border-radius: 10px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 12.5px;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .pdf-close-btn:hover {
+            background: #ef4444;
+            color: #ffffff;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(220, 38, 38, 0.28);
+        }
+
+        .pdf-iframe-container {
+            flex: 1;
+            width: 100%;
+            height: 100%;
+            background: #334155;
+        }
+
+        #pdfFrameViewerLocal {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
+        }
+
+        @keyframes gcFadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* FLUID BREAKPOINTS FOR ALL SCREEN SIZES */
+        @media (max-width: 960px) {
+            .gc-col-8, .gc-col-6, .gc-col-4, .gc-col-3 {
+                grid-column: span 6;
+            }
+            .gc-telemetry-grid {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 680px) {
+            .gc-telemetry-grid {
+                grid-template-columns: 1fr;
+            }
+            .gc-col-8, .gc-col-6, .gc-col-4, .gc-col-3 {
+                grid-column: span 12;
+            }
+            .gc-header-bar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .back-nav-link {
+                width: 100%;
+                justify-content: center;
+            }
+            .gc-action-footer {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            button.action-btn {
+                width: 100%;
+                min-width: 0;
+            }
+            .pdf-modal-card {
+                width: 98%;
+                height: 92vh;
+            }
+        }
     </style>
 
-    <div class='portal-page-panel' style='display:block;'>
-        
-        <div style="margin-bottom: 35px; border-bottom: 2px solid #e2e8f0; padding-bottom: 15px; overflow: hidden;">
-            <div class='back-nav-link' onclick='typeof returnToHomeGridSPA === "function" ? returnToHomeGridSPA() : (window.location.href="index.html")'>⬅️ Back to Dashboard</div>
-            <h3 class="module-title">Module: General Office Charge Report</h3>
-        </div>
-        
-        <div class='form-group'>
-            <label>Office Name / Post:</label>
-            <input class='text-input-placeholder-gray' id='genOfficeName' placeholder='e.g. MTS, Radhakishorepur HO' type='text'/>
-        </div>
-        <div class='flex-row'>
-            <div class='form-group'>
-                <label>Relieved Officer Name:</label>
-                <input class='text-input-placeholder-gray' id='genRelievedOfficer' placeholder='Name of Officer Handing Over' type='text'/>
+    <div class="gc-viewport-wrapper" id="gcInteractiveRoot">
+        <div class="portal-page-panel" style="display:block;">
+
+            <!-- TOP HEADER BAR -->
+            <div class="gc-header-bar">
+                <div class="gc-header-left">
+                    <div class="gc-hero-icon">
+                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
+                            <rect x="8" y="2" width="8" height="4" rx="1" ry="1"/>
+                            <path d="M9 14h6"/><path d="M9 10h6"/><path d="M9 18h4"/>
+                        </svg>
+                    </div>
+                    <div class="gc-title-block">
+                        <h3 class="module-title">
+                            <span>General Office Charge Report</span>
+                            <span class="gc-form-badge">Bilingual A.C.G.-61 (2-Up Landscape)</span>
+                        </h3>
+                        <p class="gc-subtitle">Official India Post Bilingual (Hindi + English) Side-by-Side A4 Landscape Charge Report Compiler.</p>
+                    </div>
+                </div>
+
+                <div class="back-nav-link" onclick="gcCleanExit()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="19" y1="12" x2="5" y2="12"/>
+                        <polyline points="12 19 5 12 12 5"/>
+                    </svg>
+                    <span>Back to Dashboard</span>
+                </div>
             </div>
-            <div class='form-group'>
-                <label>Relieving Officer Name:</label>
-                <input class='text-input-placeholder-gray' id='genRelievingOfficer' placeholder='Name of Officer Taking Charge' type='text'/>
+
+            <!-- LIVE TELEMETRY STRIP -->
+            <div class="gc-telemetry-grid">
+                <div class="gc-stat-pill">
+                    <div class="gc-stat-icon blue">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"/>
+                            <polyline points="12 6 12 12 16 14"/>
+                        </svg>
+                    </div>
+                    <div class="gc-stat-text">
+                        <div class="gc-stat-label">Transfer Schedule</div>
+                        <div class="gc-stat-val" id="gcStatSchedule">Forenoon (FN) Session</div>
+                    </div>
+                </div>
+
+                <div class="gc-stat-pill">
+                    <div class="gc-stat-icon indigo">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="3" width="18" height="18" rx="2"/>
+                            <line x1="12" y1="3" x2="12" y2="21"/>
+                        </svg>
+                    </div>
+                    <div class="gc-stat-text">
+                        <div class="gc-stat-label">Print Layout Format</div>
+                        <div class="gc-stat-val">A4 Landscape • 2-Up Bilingual</div>
+                    </div>
+                </div>
+
+                <div class="gc-stat-pill">
+                    <div class="gc-stat-icon emerald">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                            <polyline points="14 2 14 8 20 8"/>
+                        </svg>
+                    </div>
+                    <div class="gc-stat-text">
+                        <div class="gc-stat-label">Paper-Saving Output</div>
+                        <div class="gc-stat-val" id="gcStatOutputSheets">1 Sheet (2 Side-by-Side Copies)</div>
+                    </div>
+                </div>
             </div>
+
+            <!-- SECTION 1: CHARGE HANDOVER & MEMORANDUM DETAILS -->
+            <div class="gc-glass-section">
+                <div class="gc-section-header">
+                    <h4>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+                            <circle cx="9" cy="7" r="4"/>
+                            <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                        </svg>
+                        <span>Office / Post, Officers &amp; Memorandum Details</span>
+                    </h4>
+                    <span class="gc-section-tag">Inputs Print in Bold on Form</span>
+                </div>
+
+                <div class="gc-form-grid">
+                    <!-- Office Name / Post -->
+                    <div class="form-group gc-col-8">
+                        <label for="genOfficeName">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="4" y="2" width="16" height="20" rx="2" ry="2"/>
+                                <path d="M9 22v-4h6v4"/>
+                                <path d="M8 6h.01"/><path d="M16 6h.01"/><path d="M12 6h.01"/>
+                            </svg>
+                            <span>Office Name / Post (Certified that the charge of the office of):</span>
+                        </label>
+                        <input class="text-input-placeholder-gray" id="genOfficeName" placeholder="e.g. MTS, Radhakishorepur HO" type="text" oninput="gcSyncDefaultPlace()" autocomplete="off"/>
+                    </div>
+
+                    <!-- Station / Place (स्थान / at Place) -->
+                    <div class="form-group gc-col-4">
+                        <label for="genPlaceName">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                                <circle cx="12" cy="10" r="3"/>
+                            </svg>
+                            <span>Station / Place (स्थान / at Place):</span>
+                        </label>
+                        <input class="text-input-placeholder-gray" id="genPlaceName" placeholder="e.g. Radhakishorepur HO (Auto-fills)" type="text" oninput="gcMarkPlaceManual()" autocomplete="off"/>
+                    </div>
+
+                    <!-- Relieved Officer -->
+                    <div class="form-group gc-col-6">
+                        <label for="genRelievedOfficer">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                                <circle cx="8.5" cy="7" r="4"/>
+                                <polyline points="17 11 19 13 23 9"/>
+                            </svg>
+                            <span>Relieved Officer Name (was made over by / भारमुक्त अधिकारी):</span>
+                        </label>
+                        <input class="text-input-placeholder-gray" id="genRelievedOfficer" placeholder="Name of Officer Handing Over" type="text" autocomplete="off"/>
+                    </div>
+
+                    <!-- Relieving Officer -->
+                    <div class="form-group gc-col-6">
+                        <label for="genRelievingOfficer">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                                <circle cx="8.5" cy="7" r="4"/>
+                                <line x1="20" y1="8" x2="20" y2="14"/>
+                                <line x1="23" y1="11" x2="17" y2="11"/>
+                            </svg>
+                            <span>Relieving Officer Name (to name / भारप्राप्त अधिकारी):</span>
+                        </label>
+                        <input class="text-input-placeholder-gray" id="genRelievingOfficer" placeholder="Name of Officer Taking Charge" type="text" autocomplete="off"/>
+                    </div>
+
+                    <!-- Transfer Date -->
+                    <div class="form-group gc-col-3">
+                        <label for="genTransferDate">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                                <line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+                            </svg>
+                            <span>Transfer Date (तारीख):</span>
+                        </label>
+                        <input id="genTransferDate" type="date" onchange="gcUpdateLiveTelemetry()"/>
+                    </div>
+
+                    <!-- Transfer Time -->
+                    <div class="form-group gc-col-3">
+                        <label for="genTransferTime">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"/>
+                                <polyline points="12 6 12 12 16 14"/>
+                            </svg>
+                            <span>Transfer Time (पूर्वाह्न / अपराह्न):</span>
+                        </label>
+                        <select id="genTransferTime" onchange="gcUpdateLiveTelemetry()">
+                            <option value="FN">Forenoon (FN / पूर्वाह्न)</option>
+                            <option value="AN">Afternoon (AN / अपराह्न)</option>
+                        </select>
+                    </div>
+
+                    <!-- Memo No -->
+                    <div class="form-group gc-col-3">
+                        <label for="genMemoNo">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                <polyline points="14 2 14 8 20 8"/>
+                            </svg>
+                            <span>Memo / Letter No (नं.):</span>
+                        </label>
+                        <input class="text-input-placeholder-gray" id="genMemoNo" placeholder="e.g. Est/1-2/2026" type="text" autocomplete="off"/>
+                    </div>
+
+                    <!-- Memo Date -->
+                    <div class="form-group gc-col-3">
+                        <label for="genMemoDate">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                                <line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+                            </svg>
+                            <span>Memo Date (तारीख / Dated):</span>
+                        </label>
+                        <input id="genMemoDate" type="date"/>
+                    </div>
+
+                    <!-- From Authority -->
+                    <div class="form-group gc-col-12">
+                        <label for="genFromAuthority">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                            </svg>
+                            <span>From Authority (के अनुसार दे दिया / from):</span>
+                        </label>
+                        <input class="text-input-placeholder-gray" id="genFromAuthority" placeholder="e.g. SPOs, Divisional Office" type="text" autocomplete="off"/>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 2: COPY FORWARDED TO LEDGER (2 COPIES PER LANDSCAPE SHEET) -->
+            <div class="gc-glass-section" style="margin-bottom: 0;">
+                <div class="gc-section-header">
+                    <h4>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="22" y1="2" x2="11" y2="13"/>
+                            <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+                        </svg>
+                        <span>Copy Forwarded To Ledger (प्रतिलिपि सूचनार्थ प्रेषित)</span>
+                    </h4>
+                    <span class="gc-section-tag">2 Side-by-Side Copies Per A4 Landscape Sheet</span>
+                </div>
+
+                <div id="genForwardContainer"></div>
+
+                <div class="add-more-row-container">
+                    <button class="secondary-action-btn" onclick="addNewGenForwardRowLocal(true)" type="button">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="12" y1="5" x2="12" y2="19"/>
+                            <line x1="5" y1="12" x2="19" y2="12"/>
+                        </svg>
+                        <span>Add Forwarded Officer</span>
+                    </button>
+                    <span style="font-size: 12px; color: var(--text-muted); font-weight: 600;">
+                        Prints 2 side-by-side reports per A4 Landscape page (auto-generates "Office Copy / Spare" on odd count).
+                    </span>
+                </div>
+            </div>
+
+            <!-- ACTION FOOTER -->
+            <div class="gc-action-footer">
+                <div class="gc-footer-hint">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                    </svg>
+                    <span>A4 Landscape Side-by-Side • Bilingual Hindi &amp; English Form A.C.G.-61</span>
+                </div>
+
+                <button class="action-btn" id="btnGenerateGeneralCharge" onclick="triggerSmartGenerationGeneralCharge()" type="button">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="6 9 6 2 18 2 18 9"/>
+                        <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
+                        <rect x="6" y="14" width="12" height="8"/>
+                    </svg>
+                    <span>Generate General Charge Report</span>
+                </button>
+            </div>
+
         </div>
-        <div class='flex-row'>
-            <div class='form-group'>
-                <label>Transfer Date:</label>
-                <input id='genTransferDate' type='date'/>
-            </div>
-            <div class='form-group'>
-                <label>Transfer Time:</label>
-                <select id='genTransferTime'>
-                    <option value='FN'>Forenoon (FN)</option>
-                    <option value='AN'>Afternoon (AN)</option>
-                </select>
-            </div>
-        </div>
-        <div class='flex-row'>
-            <div class='form-group'>
-                <label>Memorandum / Letter No:</label>
-                <input class='text-input-placeholder-gray' id='genMemoNo' placeholder='e.g. Est/1-2/2026' type='text'/>
-            </div>
-            <div class='form-group'>
-                <label>Memorandum Date:</label>
-                <input id='genMemoDate' type='date'/>
-            </div>
-        </div>
-        <div class='form-group'>
-            <label>From (Authority):</label>
-            <input class='text-input-placeholder-gray' id='genFromAuthority' placeholder='e.g. SPOs, Divisional Office' type='text'/>
-        </div>
-        
-        <div style='background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 25px; margin-bottom: 25px;'>
-            <h4 style='margin-top: 0; color: #0f172a; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;'>Copy Forwarded To Ledger</h4>
-            <p style="font-size: 13px; color: #64748b; margin-top: -5px; margin-bottom: 15px;">Note: Generates 2 copies per page to save paper automatically.</p>
-            <div id='genForwardContainer'></div>
-            <div class='add-more-row-container' style='margin-bottom: 0;'>
-                <button class='secondary-action-btn' onclick='addNewGenForwardRowLocal()' type='button'>+ Add Forwarded Officer</button>
-            </div>
-        </div>
-        
-        <button class='action-btn' onclick='triggerSmartGenerationGeneralCharge()' type='button'>Generate General Charge Report</button>
     </div>
 
-    <!-- BEAUTIFUL CENTERED POPUP MODAL FOR PDF PREVIEW -->
+    <!-- HIGH-TECH CENTERED POPUP MODAL FOR PDF PREVIEW (PURE SVG) -->
     <div id="pdfModalOverlay" class="pdf-modal-overlay">
         <div class="pdf-modal-card">
             <div class="pdf-modal-header">
-                <h3>📄 Generated Document Live Preview</h3>
-                <button class="pdf-close-btn" onclick="closePdfModal()">❌ Close Preview</button>
+                <div class="pdf-modal-title-group">
+                    <h3>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                            <polyline points="14 2 14 8 20 8"/>
+                            <line x1="16" y1="13" x2="8" y2="13"/>
+                            <line x1="16" y1="17" x2="8" y2="17"/>
+                        </svg>
+                        <span>Generated Bilingual Charge Report Preview</span>
+                    </h3>
+                    <span class="gc-form-badge" id="gcPreviewPageBadge">A4 Landscape 2-Up</span>
+                </div>
+                <div class="pdf-modal-actions">
+                    <button type="button" class="pdf-download-btn" onclick="gcDownloadGeneratedPdf()">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                            <polyline points="7 10 12 15 17 10"/>
+                            <line x1="12" y1="15" x2="12" y2="3"/>
+                        </svg>
+                        <span>Download PDF</span>
+                    </button>
+                    <button type="button" class="pdf-close-btn" onclick="closePdfModal()">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                            <line x1="18" y1="6" x2="6" y2="18"/>
+                            <line x1="6" y1="6" x2="18" y2="18"/>
+                        </svg>
+                        <span>Close Preview</span>
+                    </button>
+                </div>
             </div>
             <div class="pdf-iframe-container">
-                <iframe id="pdfFrameViewerLocal"></iframe>
+                <iframe id="pdfFrameViewerLocal" title="General Charge Report Bilingual PDF Preview"></iframe>
             </div>
         </div>
     </div>
 
-    <!-- 100% UNTOUCHED ORIGINAL PDF LOGIC (Adapted for General Charge Report) -->
+    <!-- HIGH-DPI BILINGUAL (HINDI + ENGLISH) SIDE-BY-SIDE A4 LANDSCAPE PDF ENGINE -->
     <script>
-        // Ensure jsPDF loads if standalone
         if (typeof window.jspdf === 'undefined') {
             let script = document.createElement('script');
             script.src = "https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js";
             document.head.appendChild(script);
         }
 
-        // Add dynamic Forward Row Function for General Charge
-        function addNewGenForwardRowLocal() {
-            const container = document.getElementById('genForwardContainer'); 
-            const newRow = document.createElement('div'); 
-            newRow.className = 'dynamic-date-row'; 
-            
-            newRow.innerHTML = `
-                <div style='flex: 1;'>
-                    <input type='text' class='row-gen-forward-target text-input-placeholder-gray' placeholder='e.g. The Superintendent of Post Offices, Divisional Office' />
-                </div>
-                <div>
-                    <button type='button' class='delete-row-btn' onclick='this.parentElement.parentElement.remove()'>❌</button>
-                </div>
-            `; 
-            container.appendChild(newRow);
+        let gcLastCompiledDoc = null;
+        let gcPlaceManuallyEdited = false;
+
+        // ====================================================
+        // 1. SIDEBAR AUTO-COLLAPSE ENGINE (ON LOAD + ON ANY INPUT/TYPING)
+        // ====================================================
+        function gcAutoCollapseHamburger() {
+            const sidebar = document.getElementById('appSidebar');
+            if (sidebar) {
+                if (!sidebar.classList.contains('collapsed')) {
+                    sidebar.classList.add('collapsed');
+                }
+                if (sidebar.classList.contains('mobile-open')) {
+                    sidebar.classList.remove('mobile-open');
+                }
+            }
         }
 
-        // Auto-add first row if empty
-        setTimeout(() => {
-            if(document.getElementById('genForwardContainer').children.length === 0) {
-                addNewGenForwardRowLocal();
+        (function initGeneralChargeModule() {
+            gcAutoCollapseHamburger();
+
+            const rootArea = document.getElementById('gcInteractiveRoot');
+            if (rootArea) {
+                ['focusin', 'input', 'keydown'].forEach(evtName => {
+                    rootArea.addEventListener(evtName, function(e) {
+                        const tag = e.target && e.target.tagName ? e.target.tagName.toLowerCase() : '';
+                        if (tag === 'input' || tag === 'textarea' || tag === 'select') {
+                            gcAutoCollapseHamburger();
+                        }
+                    }, true);
+                });
             }
-        }, 100);
+
+            // Clean up any duplicate modal overlays
+            document.querySelectorAll('body > #pdfModalOverlay').forEach(el => el.remove());
+            const overlay = document.getElementById('pdfModalOverlay');
+            if (overlay && overlay.parentNode !== document.body) {
+                document.body.appendChild(overlay);
+            }
+
+            setTimeout(() => {
+                const container = document.getElementById('genForwardContainer');
+                if (container && container.children.length === 0) {
+                    addNewGenForwardRowLocal(false);
+                }
+                gcUpdateLiveTelemetry();
+            }, 40);
+        })();
+
+        // Escape key closes PDF Preview Modal
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                const overlay = document.getElementById('pdfModalOverlay');
+                if (overlay && overlay.classList.contains('active')) {
+                    closePdfModal();
+                }
+            }
+        });
+
+        function gcCleanExit() {
+            document.querySelectorAll('body > #pdfModalOverlay').forEach(el => el.remove());
+            if (typeof returnToHomeGridSPA === "function") {
+                returnToHomeGridSPA();
+            } else {
+                window.location.href = "index.html";
+            }
+        }
+
+        function gcNotify(title, message, type = "info") {
+            if (typeof window.spawnFloatingNotification === "function") {
+                window.spawnFloatingNotification(title, message, type);
+            } else if (typeof window.displayCustomAlert === "function") {
+                window.displayCustomAlert(`${title}: ${message}`, type);
+            } else {
+                alert(`${title}\n${message}`);
+            }
+        }
+
+        function gcDownloadGeneratedPdf() {
+            if (!gcLastCompiledDoc) return;
+            const offName = (document.getElementById('genOfficeName')?.value || 'Office').trim().replace(/\s+/g, '_');
+            gcLastCompiledDoc.save(`General_Charge_Report_${offName}.pdf`);
+            gcNotify("Download Started", "Saved Bilingual General Charge Report PDF.", "success");
+        }
+
+        function gcSyncDefaultPlace() {
+            if (gcPlaceManuallyEdited) return;
+            const offVal = (document.getElementById('genOfficeName')?.value || '').trim();
+            const placeInp = document.getElementById('genPlaceName');
+            if (!placeInp) return;
+            if (offVal.includes(',')) {
+                placeInp.value = offVal.split(',').slice(1).join(',').trim();
+            } else {
+                placeInp.value = offVal;
+            }
+        }
+
+        function gcMarkPlaceManual() {
+            gcPlaceManuallyEdited = true;
+        }
+
+        function gcRenumberForwardRows() {
+            const container = document.getElementById('genForwardContainer');
+            if (!container) return;
+            const rows = container.querySelectorAll('.dynamic-date-row');
+            rows.forEach((row, idx) => {
+                const badge = row.querySelector('.gc-forward-badge');
+                if (badge) badge.innerText = `#${idx + 1}`;
+            });
+            gcUpdateLiveTelemetry();
+        }
+
+        function gcUpdateLiveTelemetry() {
+            const tDateVal = document.getElementById('genTransferDate')?.value || '';
+            const tTimeVal = document.getElementById('genTransferTime')?.value || 'FN';
+            const sessionLabel = tTimeVal === 'FN' ? 'Forenoon (FN)' : 'Afternoon (AN)';
+
+            const schedEl = document.getElementById('gcStatSchedule');
+            if (schedEl) {
+                if (tDateVal) {
+                    const p = tDateVal.split('-');
+                    schedEl.innerText = `${p[2]}/${p[1]}/${p[0]} • ${sessionLabel}`;
+                } else {
+                    schedEl.innerText = `${sessionLabel} Session`;
+                }
+            }
+
+            const forwardInputs = document.querySelectorAll('.row-gen-forward-target');
+            let filledCount = 0;
+            forwardInputs.forEach(inp => {
+                if (inp.value.trim() !== '') filledCount++;
+            });
+            const totalCopies = Math.max(1, filledCount);
+            const totalSheets = Math.ceil(totalCopies / 2);
+            const hasSpare = (totalCopies % 2 !== 0);
+
+            const outEl = document.getElementById('gcStatOutputSheets');
+            if (outEl) {
+                outEl.innerText = `${totalSheets} Sheet${totalSheets > 1 ? 's' : ''} (${totalCopies} Cop${totalCopies > 1 ? 'ies' : 'y'}${hasSpare ? ' + 1 Spare' : ''})`;
+            }
+        }
+
+        function addNewGenForwardRowLocal(scrollToNew = false) {
+            gcAutoCollapseHamburger();
+            const container = document.getElementById('genForwardContainer');
+            const nextNum = container.children.length + 1;
+            const newRow = document.createElement('div');
+            newRow.className = 'dynamic-date-row';
+
+            newRow.innerHTML = `
+                <div class="gc-forward-badge">#${nextNum}</div>
+                <div style="flex: 1;">
+                    <input type="text" class="row-gen-forward-target text-input-placeholder-gray" placeholder="e.g. The Superintendent of Post Offices, Divisional Office" oninput="gcUpdateLiveTelemetry()" autocomplete="off" />
+                </div>
+                <div>
+                    <button type="button" class="delete-row-btn" title="Remove Recipient" onclick="gcRemoveForwardRow(this)">
+                        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="3 6 5 6 21 6"/>
+                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                            <line x1="10" y1="11" x2="10" y2="17"/>
+                            <line x1="14" y1="11" x2="14" y2="17"/>
+                        </svg>
+                    </button>
+                </div>
+            `;
+            container.appendChild(newRow);
+            gcRenumberForwardRows();
+
+            if (scrollToNew) {
+                const inp = newRow.querySelector('input');
+                if (inp) inp.focus();
+                newRow.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+        }
+
+        function gcRemoveForwardRow(btnEl) {
+            const row = btnEl.closest('.dynamic-date-row');
+            if (row) {
+                row.remove();
+                gcRenumberForwardRows();
+            }
+        }
 
         function closePdfModal() {
             const overlay = document.getElementById('pdfModalOverlay');
+            if (!overlay) return;
             overlay.classList.remove('active');
-            setTimeout(() => { overlay.style.display = 'none'; }, 300);
+            setTimeout(() => { overlay.style.display = 'none'; }, 250);
         }
 
-        function finalizeLocalViewer(doc) {
+        function finalizeLocalViewer(doc, totalSheets = 1, totalCopies = 2) {
+            gcLastCompiledDoc = doc;
             const blobDataUrl = doc.output('datauristring');
             const iframe = document.getElementById('pdfFrameViewerLocal');
             const overlay = document.getElementById('pdfModalOverlay');
-            
-            // Move overlay to body to cover whole screen perfectly
+            const badge = document.getElementById('gcPreviewPageBadge');
+
+            if (badge) {
+                badge.innerText = `${totalSheets} Landscape Sheet${totalSheets > 1 ? 's' : ''} (${totalCopies} Reports)`;
+            }
+
             if (overlay.parentNode !== document.body) {
                 document.body.appendChild(overlay);
             }
 
             iframe.src = blobDataUrl;
-            
-            // Show the modal perfectly centered!
             overlay.style.display = 'flex';
-            setTimeout(() => { overlay.classList.add('active'); }, 50);
+            requestAnimationFrame(() => {
+                setTimeout(() => { overlay.classList.add('active'); }, 25);
+            });
         }
 
-        function triggerSmartGenerationGeneralCharge() {
-            if (!document.getElementById('genOfficeName').value || !document.getElementById('genRelievedOfficer').value || !document.getElementById('genRelievingOfficer').value) { 
-                if(typeof displayCustomAlert === "function") {
-                    displayCustomAlert("Form Defect: Office Name/Post, Relieved Officer, and Relieving Officer are mandatory.");
-                } else {
-                    alert("Form Defect: Office Name/Post, Relieved Officer, and Relieving Officer are mandatory.");
-                }
-                return; 
+        // =========================================================================
+        // 2. 300-DPI BILINGUAL (HINDI + ENGLISH) SIDE-BY-SIDE A4 LANDSCAPE RENDERER
+        //    (100% Matches Official India Post Form A.C.G.-61 Image)
+        // =========================================================================
+        function renderBilingualLandscapeSheetCanvas(data, leftRecipient, rightRecipient) {
+            // A4 Landscape at 300 DPI: 297mm x 210mm -> 3508 x 2480 px (Using 2970 x 2100 for exact 10px = 1mm coordinate mapping!)
+            const SCALE = 10; // 1mm = 10px (Ultra-crisp 254 DPI vector-grade output)
+            const W_MM = 297;
+            const H_MM = 210;
+
+            const canvas = document.createElement('canvas');
+            canvas.width = W_MM * SCALE;
+            canvas.height = H_MM * SCALE;
+            const ctx = canvas.getContext('2d');
+
+            // Pure White Paper Background
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.scale(SCALE, SCALE);
+
+            const SERIF_FONT = "'Noto Serif Devanagari', 'Nirmala UI', 'Mangal', 'Times New Roman', Times, serif";
+
+            // Helper to draw dotted line
+            function drawDottedLine(x1, y1, x2, y2) {
+                ctx.save();
+                ctx.beginPath();
+                ctx.setLineDash([0.6, 0.9]);
+                ctx.lineWidth = 0.28;
+                ctx.strokeStyle = '#1e293b';
+                ctx.moveTo(x1, y1);
+                ctx.lineTo(x2, y2);
+                ctx.stroke();
+                ctx.restore();
             }
+
+            // Helper to draw solid line
+            function drawSolidLine(x1, y1, x2, y2, width = 0.3) {
+                ctx.save();
+                ctx.beginPath();
+                ctx.setLineDash([]);
+                ctx.lineWidth = width;
+                ctx.strokeStyle = '#000000';
+                ctx.moveTo(x1, y1);
+                ctx.lineTo(x2, y2);
+                ctx.stroke();
+                ctx.restore();
+            }
+
+            // Helper to draw text
+            function drawTxt(text, x, y, sizeMm, weight = 'normal', align = 'left', color = '#000000') {
+                ctx.save();
+                ctx.font = `${weight} ${sizeMm}px ${SERIF_FONT}`;
+                ctx.fillStyle = color;
+                ctx.textAlign = align;
+                ctx.textBaseline = 'alphabetic';
+                ctx.fillText(String(text || ''), x, y);
+                ctx.restore();
+            }
+
+            // Helper to fit bold user input cleanly inside a maximum width
+            function drawBoldInputFitted(text, x, y, maxWidthMm, baseSizeMm = 3.5, align = 'left') {
+                const str = String(text || '').trim();
+                if (!str) return;
+                ctx.save();
+                let sz = baseSizeMm;
+                ctx.font = `700 ${sz}px ${SERIF_FONT}`;
+                while (ctx.measureText(str).width > maxWidthMm && sz > 2.2) {
+                    sz -= 0.15;
+                    ctx.font = `700 ${sz}px ${SERIF_FONT}`;
+                }
+                ctx.fillStyle = '#000000';
+                ctx.textAlign = align;
+                ctx.textBaseline = 'alphabetic';
+                ctx.fillText(str, x, y);
+                ctx.restore();
+            }
+
+            // Draw one complete Bilingual A.C.G.-61 Charge Report Half (width: 148.5mm, height: 210mm)
+            function drawSingleBilingualReportHalf(offsetX, recipientText) {
+                const marginL = offsetX + 11;
+                const marginR = offsetX + 137.5;
+                const centerX = offsetX + 74.25;
+                const contentW = marginR - marginL; // 126.5mm
+
+                // 1. Top-Left Form Code (ए.सी.जी. 61 / A.C.G.-61)
+                drawTxt("ए.सी.जी. 61", marginL, 12.5, 3.1, "normal", "left");
+                drawTxt("A.C.G.-61", marginL, 16.5, 3.3, "normal", "left");
+
+                // 2. Centered Bilingual Department Header
+                drawTxt("भारतीय डाक विभाग", centerX, 21.5, 4.1, "normal", "center");
+                drawTxt("DEPARTMENT OF POSTS, INDIA", centerX, 26.2, 4.0, "normal", "center");
+
+                // 3. Rule 267 Citation
+                drawTxt("(देखिए नियम 267, डाक-तार वित्त पुस्तिका का खण्ड 1, द्वितीय संस्करण)", centerX, 31.8, 2.75, "normal", "center");
+                drawTxt("(See Rule 267, Post and Telegraphs Financial Hand Book, Volume-1", centerX, 35.6, 2.75, "normal", "center");
+                drawTxt("Second Edition)", centerX, 39.2, 2.75, "normal", "center");
+
+                // 4. Report Title
+                drawTxt("चार्ज की बदली पर चार्ज रिपोर्ट और नकदी और टिकटों की रसीद", centerX, 45.2, 3.1, "normal", "center");
+                drawTxt("Charge Report and Receipt for cash and stamps, on transfer of charge", centerX, 49.2, 2.95, "normal", "center");
+
+                // 5. Certified that the charge of the office of
+                drawTxt("प्रमाणित किया जाता है कि", centerX, 55.4, 3.1, "normal", "center");
+                drawTxt("Certified that the charge of the office of", centerX, 59.4, 3.05, "normal", "center");
+
+                // 6. Office / Post Input Line (User Input in BOLD)
+                const yOffice = 68.0;
+                drawDottedLine(marginL, yOffice + 0.8, marginR, yOffice + 0.8);
+                drawBoldInputFitted(data.office, centerX, yOffice, contentW - 4, 3.7, "center");
+
+                // 7. Relieved Officer Line: चार्ज..........(नाम) ने.......... / was made over by (name)
+                const yRelieved = 79.5;
+                drawTxt("चार्ज", marginL, yRelieved, 3.1, "normal", "left");
+                drawDottedLine(marginL + 7.5, yRelieved + 0.6, marginL + 56, yRelieved + 0.6);
+                drawTxt("(नाम) ने", marginL + 57, yRelieved, 3.1, "normal", "left");
+                drawDottedLine(marginL + 69.5, yRelieved + 0.6, marginR, yRelieved + 0.6);
+
+                drawTxt("was made over by (name)", marginL, yRelieved + 4.5, 3.0, "normal", "left");
+                drawDottedLine(marginL + 42, yRelieved + 5.1, marginR, yRelieved + 5.1);
+
+                // Bold Relieved Officer Name placed prominently on the line
+                drawBoldInputFitted(data.relieved, marginL + 72, yRelieved - 0.2, 54, 3.55, "left");
+                drawBoldInputFitted(data.relieved, marginL + 45, yRelieved + 4.3, 80, 3.55, "left");
+
+                // 8. Relieving Officer & Place Line: (नाम) को / to (name)   AND   स्थान / at (Place)
+                const yRelieving = 94.5;
+                drawTxt("(नाम) को", marginL, yRelieving, 3.1, "normal", "left");
+                drawTxt("स्थान", marginL + 84, yRelieving, 3.1, "normal", "left");
+
+                drawTxt("to (name)", marginL, yRelieving + 4.5, 3.0, "normal", "left");
+                drawDottedLine(marginL + 17, yRelieving + 5.1, marginL + 80, yRelieving + 5.1);
+
+                drawTxt("at (Place)", marginL + 84, yRelieving + 4.5, 3.0, "normal", "left");
+                drawDottedLine(marginL + 100, yRelieving + 5.1, marginR, yRelieving + 5.1);
+
+                // Bold Relieving Officer Name & Bold Place Name
+                drawBoldInputFitted(data.relieving, marginL + 19, yRelieving + 4.2, 59, 3.55, "left");
+                drawBoldInputFitted(data.place, marginL + 101.5, yRelieving + 4.2, 24.5, 3.35, "left");
+
+                // 9. Transfer Date & Forenoon / Afternoon Session Block
+                // तारीख............................. को पूर्वाह्न / अपराह्न में
+                // on the (date)..................... fore / after noon in accordance with
+                const yDateH = 109.5;
+                drawTxt("तारीख", marginL, yDateH, 3.1, "normal", "left");
+                drawDottedLine(marginL + 10, yDateH + 0.6, marginL + 50, yDateH + 0.6);
+                drawBoldInputFitted(data.transferDate, marginL + 30, yDateH - 0.2, 38, 3.5, "center");
+
+                drawTxt("को", marginL + 51.5, yDateH, 3.1, "normal", "left");
+
+                // Stacked fraction: पूर्वाह्न over अपराह्न
+                const fracX_H = marginL + 62.5;
+                drawTxt("पूर्वाह्न", fracX_H, yDateH - 2.2, 2.85, data.isFN ? "700" : "normal", "center");
+                drawSolidLine(fracX_H - 6.5, yDateH - 1.0, fracX_H + 6.5, yDateH - 1.0, 0.28);
+                drawTxt("अपराह्न", fracX_H, yDateH + 2.3, 2.85, !data.isFN ? "700" : "normal", "center");
+                // Strike through the inactive session
+                if (data.isFN) {
+                    drawSolidLine(fracX_H - 6, yDateH + 1.3, fracX_H + 6, yDateH + 1.3, 0.35);
+                } else {
+                    drawSolidLine(fracX_H - 6, yDateH - 3.1, fracX_H + 6, yDateH - 3.1, 0.35);
+                }
+                drawTxt("में", marginL + 71.5, yDateH, 3.1, "normal", "left");
+
+                // English Date Row
+                const yDateE = 118.5;
+                drawTxt("on the (date)", marginL, yDateE, 3.0, "normal", "left");
+                drawDottedLine(marginL + 21, yDateE + 0.6, marginL + 55, yDateE + 0.6);
+                drawBoldInputFitted(data.transferDate, marginL + 38, yDateE - 0.2, 32, 3.5, "center");
+
+                const fracX_E = marginL + 62.5;
+                drawTxt("fore", fracX_E, yDateE - 2.0, 2.75, data.isFN ? "700" : "normal", "center");
+                drawSolidLine(fracX_E - 5.5, yDateE - 0.9, fracX_E + 5.5, yDateE - 0.9, 0.28);
+                drawTxt("after", fracX_E, yDateE + 2.2, 2.75, !data.isFN ? "700" : "normal", "center");
+                if (data.isFN) {
+                    drawSolidLine(fracX_E - 5, yDateE + 1.3, fracX_E + 5, yDateE + 1.3, 0.35);
+                } else {
+                    drawSolidLine(fracX_E - 5, yDateE - 2.9, fracX_E + 5, yDateE - 2.9, 0.35);
+                }
+
+                drawTxt("noon in accordance with", marginL + 70, yDateE, 3.0, "normal", "left");
+
+                // 10. Memo No, Dated, and From Authority Row
+                // नं. / No          तारीख / Dated          के अनुसार दे दिया / from
+                const yMemoLabels = 132.5;
+                drawTxt("नं.", marginL, yMemoLabels, 3.1, "normal", "left");
+                drawTxt("No", marginL, yMemoLabels + 4.2, 3.0, "normal", "left");
+                drawDottedLine(marginL + 7, yMemoLabels + 4.6, marginL + 44, yMemoLabels + 4.6);
+                drawBoldInputFitted(data.memoNo, marginL + 8.5, yMemoLabels + 3.9, 34.5, 3.35, "left");
+
+                drawTxt("तारीख", marginL + 46.5, yMemoLabels, 3.1, "normal", "left");
+                drawTxt("Dated", marginL + 46.5, yMemoLabels + 4.2, 3.0, "normal", "left");
+                drawDottedLine(marginL + 57, yMemoLabels + 4.6, marginL + 83, yMemoLabels + 4.6);
+                drawBoldInputFitted(data.memoDate, marginL + 58.5, yMemoLabels + 3.9, 23.5, 3.35, "left");
+
+                drawTxt("के अनुसार दे दिया", marginL + 85.5, yMemoLabels, 3.1, "normal", "left");
+                drawTxt("from", marginL + 85.5, yMemoLabels + 4.2, 3.0, "normal", "left");
+                drawDottedLine(marginL + 95, yMemoLabels + 4.6, marginR, yMemoLabels + 4.6);
+                drawBoldInputFitted(data.authority, marginL + 96.5, yMemoLabels + 3.9, 30, 3.35, "left");
+
+                // 11. Signatures Block (भारमुक्त अधिकारी / Relieved Officer  &  भारप्राप्त अधिकारी / Relieving Officer)
+                const ySig = 156.0;
+                drawTxt("भारमुक्त अधिकारी", marginL + 22, ySig, 3.2, "normal", "center");
+                drawTxt("Relieved Officer", marginL + 22, ySig + 4.3, 3.2, "normal", "center");
+
+                drawTxt("भारप्राप्त अधिकारी", marginR - 25, ySig, 3.2, "normal", "center");
+                drawTxt("Relieving Officer", marginR - 25, ySig + 4.3, 3.2, "normal", "center");
+
+                // P.T.O. (पृ.उ. / P.T.O.) on far bottom-right of signature zone
+                drawTxt("पृ.उ.", marginR - 4, ySig + 10.5, 2.7, "normal", "right");
+                drawTxt("P.T.O.", marginR - 4, ySig + 13.8, 2.7, "normal", "right");
+
+                // 12. Bottom Section: Copy Forwarded To (प्रतिलिपि सूचनार्थ प्रेषित / Copy forwarded to:)
+                const yFooterLine = 174.5;
+                drawSolidLine(marginL, yFooterLine, marginR, yFooterLine, 0.3);
+
+                const yMemoRef = 180.5;
+                drawTxt("सं. / No:", marginL, yMemoRef, 2.95, "normal", "left");
+                drawBoldInputFitted(data.memoNo || "....................", marginL + 14.5, yMemoRef, 45, 3.15, "left");
+
+                drawTxt("दिनांक / Dated:", marginL + 68, yMemoRef, 2.95, "normal", "left");
+                drawBoldInputFitted(data.memoDate || "................", marginL + 92, yMemoRef, 32, 3.15, "left");
+
+                const yCopyHdr = 187.0;
+                drawTxt("प्रतिलिपि सूचनार्थ प्रेषित / Copy forwarded to:", marginL, yCopyHdr, 3.05, "normal", "left");
+                drawSolidLine(marginL, yCopyHdr + 1.0, marginL + 66, yCopyHdr + 1.0, 0.25);
+
+                const yRecip = 194.5;
+                drawTxt("1.", marginL + 2, yRecip, 3.2, "normal", "left");
+                drawDottedLine(marginL + 7, yRecip + 0.8, marginR, yRecip + 0.8);
+                if (recipientText && recipientText.trim() !== "") {
+                    drawBoldInputFitted(recipientText, marginL + 8.5, yRecip, contentW - 10, 3.45, "left");
+                }
+            }
+
+            // Draw Left Report (0 to 148.5mm)
+            drawSingleBilingualReportHalf(0, leftRecipient);
+
+            // Draw Center Vertical Cut Line at X = 148.5mm
+            ctx.save();
+            ctx.beginPath();
+            ctx.setLineDash([2.2, 2.2]);
+            ctx.lineWidth = 0.35;
+            ctx.strokeStyle = '#94a3b8';
+            ctx.moveTo(148.5, 6);
+            ctx.lineTo(148.5, 204);
+            ctx.stroke();
+
+            // Center Cut Badge
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(144.5, 96, 8, 18);
+            ctx.translate(148.5, 105);
+            ctx.rotate(-Math.PI / 2);
+            ctx.font = `italic 2.6px ${SERIF_FONT}`;
+            ctx.fillStyle = '#64748b';
+            ctx.textAlign = 'center';
+            ctx.fillText("✂ Cut Here", 0, 0.9);
+            ctx.restore();
+
+            // Draw Right Report (148.5mm to 297mm)
+            drawSingleBilingualReportHalf(148.5, rightRecipient);
+
+            return canvas.toDataURL('image/jpeg', 0.95);
+        }
+
+        // =========================================================================
+        // 3. TRIGGER PDF COMPILATION (A4 LANDSCAPE 2-UP SIDE-BY-SIDE)
+        // =========================================================================
+        async function triggerSmartGenerationGeneralCharge() {
+            gcAutoCollapseHamburger();
+
+            const office = (document.getElementById('genOfficeName')?.value || '').trim();
+            const relieved = (document.getElementById('genRelievedOfficer')?.value || '').trim();
+            const relieving = (document.getElementById('genRelievingOfficer')?.value || '').trim();
+
+            if (!office || !relieved || !relieving) {
+                gcNotify("Validation Notice", "Office Name/Post, Relieved Officer, and Relieving Officer are mandatory.", "warning");
+                return;
+            }
+
+            const genBtn = document.getElementById('btnGenerateGeneralCharge');
+            if (genBtn) genBtn.classList.add('generating-pulse');
 
             const loader = document.getElementById('globalAppLoader');
-            if(loader) {
+            const loaderMsg = document.querySelector('#globalAppLoader .loading-status-msg');
+            if (loader) {
+                if (loaderMsg) loaderMsg.innerText = "Compiling Bilingual Side-by-Side Charge Report...";
                 loader.style.display = 'flex';
-                document.querySelector('.loading-status-msg').innerText = "Processing General Charge Report...";
             }
 
-            setTimeout(() => {
-                try {
-                    if (typeof window.jspdf === 'undefined') {
-                        alert("System Notice: Please wait a moment for the PDF engine to load, then click generate again.");
-                        if(loader) loader.style.display = 'none';
-                        return;
-                    }
+            // Wait briefly for web fonts (Devanagari) to be ready
+            if (document.fonts && document.fonts.ready) {
+                try { await document.fonts.ready; } catch (e) {}
+            }
 
-                    const { jsPDF } = window.jspdf; 
-                    const doc = new jsPDF('p', 'mm', 'a4'); // Exact Portrait Format
-
-                    const office = document.getElementById('genOfficeName').value;
-                    const relieved = document.getElementById('genRelievedOfficer').value;
-                    const relieving = document.getElementById('genRelievingOfficer').value;
-                    const tDateRaw = document.getElementById('genTransferDate').value;
-                    
-                    // --- UPDATED LOGIC FOR FULL 'Forenoon' and 'Afternoon' TEXT ---
-                    const tTimeRaw = document.getElementById('genTransferTime').value;
-                    const tTime = tTimeRaw === 'FN' ? 'Forenoon' : 'Afternoon';
-                    // --------------------------------------------------------------
-
-                    const memoNo = document.getElementById('genMemoNo').value;
-                    const memoDateRaw = document.getElementById('genMemoDate').value;
-                    const authority = document.getElementById('genFromAuthority').value;
-
-                    const formatD = (d) => { if(!d) return ""; const p = d.split("-"); return p[2] + "/" + p[1] + "/" + p[0]; };
-
-                    const forwardInputs = document.querySelectorAll('.row-gen-forward-target');
-                    let targetRecipients = [];
-                    forwardInputs.forEach(input => { let v = input.value.trim(); if(v) targetRecipients.push(v); });
-                    if(targetRecipients.length === 0) targetRecipients.push("");
-
-                    // ORIGINAL SPLIT-PAGE LOGIC TO PRINT TWO COPIES PER PAGE
-                    const drawHalf = (offsetY, recipient) => {
-                        doc.setTextColor(0, 0, 0);
-                        doc.setDrawColor(0, 0, 0);
-                        doc.setLineWidth(0.3);
-
-                        doc.setFont("times", "bold"); 
-                        doc.setFontSize(10); 
-                        doc.text("ACG-61", 15, 15 + offsetY);
-                        
-                        doc.setFontSize(12); 
-                        doc.text("DEPARTMENT OF POSTS, INDIA", 105, 22 + offsetY, { align: "center" });
-                        
-                        doc.setFont("times", "normal"); 
-                        doc.setFontSize(8.5);
-                        doc.text("(See Rule 267, Posts and Telegraphs Financial Hand book, Volume 1, Second Edition)", 105, 27 + offsetY, { align: "center" });
-                        
-                        doc.setFont("times", "bold"); 
-                        doc.setFontSize(11);
-                        doc.text("Charge Report and Receipt of Cash and Stamps on transfer of charge", 105, 36 + offsetY, { align: "center" });
-                        doc.line(40, 38 + offsetY, 170, 38 + offsetY);
-
-                        let blockY = 52 + offsetY;
-                        
-                        doc.setFont("times", "normal");
-                        doc.setFontSize(11);
-                        doc.text("Certified that the charge of the office of", 15, blockY);
-                        doc.line(82, blockY + 1, 195, blockY + 1); 
-                        doc.setFont("times", "bold");
-                        doc.text(office, 85, blockY);
-
-                        blockY += 10;
-                        doc.setFont("times", "normal");
-                        doc.text("was made over by", 15, blockY);
-                        doc.line(45, blockY + 1, 115, blockY + 1);
-                        doc.setFont("times", "bold");
-                        doc.text(relieved, 48, blockY);
-                        
-                        doc.setFont("times", "normal");
-                        doc.text("to", 118, blockY);
-                        doc.line(125, blockY + 1, 195, blockY + 1);
-                        doc.setFont("times", "bold");
-                        doc.text(relieving, 128, blockY);
-
-                        blockY += 10;
-                        doc.setFont("times", "normal");
-                        doc.text("on", 15, blockY);
-                        doc.line(21, blockY + 1, 75, blockY + 1);
-                        doc.setFont("times", "bold");
-                        
-                        // --- BRACKET FIX APPLIED HERE ---
-                        doc.text(formatD(tDateRaw) + (formatD(tDateRaw) ? " (" + tTime + ")" : ""), 24, blockY);
-                        // --------------------------------
-                        
-                        doc.setFont("times", "normal");
-                        doc.text("in accordance with Office Order/ Memorandum/ letter No.", 80, blockY); 
-                        
-                        blockY += 10;
-                        doc.line(15, blockY + 1, 80, blockY + 1);
-                        doc.setFont("times", "bold");
-                        doc.text(memoNo, 17, blockY);
-                        
-                        doc.setFont("times", "normal");
-                        doc.text("dated", 83, blockY);
-                        doc.line(95, blockY + 1, 125, blockY + 1);
-                        doc.setFont("times", "bold");
-                        doc.text(formatD(memoDateRaw), 97, blockY);
-                        
-                        doc.setFont("times", "normal");
-                        doc.text("from", 128, blockY);
-                        doc.line(138, blockY + 1, 195, blockY + 1); 
-                        doc.setFont("times", "bold");
-                        doc.text(authority, 141, blockY);
-
-                        blockY += 24;
-                        doc.text("Relieved Officer", 30, blockY);
-                        doc.text("Relieving Officer", 145, blockY);
-                        doc.setFont("times", "normal");
-
-                        blockY += 20;
-                        doc.setFont("times", "bold"); 
-                        doc.text("Copy forwarded to:", 15, blockY);
-                        doc.line(15, blockY+1, 46, blockY+1);
-                        doc.setFont("times", "normal");
-
-                        if(recipient) {
-                            blockY += 8;
-                            doc.text("1. " + recipient, 20, blockY);
-                        } else {
-                            blockY += 8;
-                            doc.text("1. ............................................................................................................", 20, blockY);
+            requestAnimationFrame(() => {
+                setTimeout(() => {
+                    try {
+                        if (typeof window.jspdf === 'undefined') {
+                            gcNotify("PDF Engine Loading", "Please wait a moment for the PDF engine to load, then click generate again.", "info");
+                            if (loader) loader.style.display = 'none';
+                            if (genBtn) genBtn.classList.remove('generating-pulse');
+                            return;
                         }
-                    };
 
-                    for (let i = 0; i < targetRecipients.length; i += 2) {
-                        if (i > 0) doc.addPage('a4', 'p');
-                        
-                        drawHalf(0, targetRecipients[i]);
-                        
-                        // Center cut line
-                        doc.setDrawColor(180, 180, 180); 
-                        doc.setLineWidth(0.4);
-                        doc.setLineDashPattern([3, 3], 0); 
-                        doc.line(15, 148.5, 195, 148.5); 
-                        
-                        doc.setFillColor(255, 255, 255);
-                        doc.rect(95, 146, 20, 5, 'F');
-                        
-                        doc.setFont("times", "italic");
-                        doc.setFontSize(9);
-                        doc.setTextColor(140, 140, 140);
-                        doc.text("Cut Here", 105, 149.5, { align: "center" });
-                        
-                        doc.setDrawColor(0, 0, 0);
-                        doc.setTextColor(0, 0, 0);
-                        doc.setLineDashPattern([], 0);
-                        doc.setLineWidth(0.3);
+                        const { jsPDF } = window.jspdf;
+                        // A4 Landscape ('l', 'mm', 'a4') -> 297mm x 210mm
+                        const doc = new jsPDF('l', 'mm', 'a4');
 
-                        if (i + 1 < targetRecipients.length) {
-                            drawHalf(148.5, targetRecipients[i+1]);
-                        } else {
-                            drawHalf(148.5, "Office Copy / Spare");
+                        const placeRaw = (document.getElementById('genPlaceName')?.value || '').trim();
+                        const placeFinal = placeRaw || (office.includes(',') ? office.split(',').slice(1).join(',').trim() : office);
+
+                        const tDateRaw = document.getElementById('genTransferDate')?.value || '';
+                        const tTimeRaw = document.getElementById('genTransferTime')?.value || 'FN';
+                        const memoNo = (document.getElementById('genMemoNo')?.value || '').trim();
+                        const memoDateRaw = document.getElementById('genMemoDate')?.value || '';
+                        const authority = (document.getElementById('genFromAuthority')?.value || '').trim();
+
+                        const formatD = (d) => {
+                            if (!d) return "";
+                            const p = d.split("-");
+                            return p.length === 3 ? `${p[2]}/${p[1]}/${p[0]}` : d;
+                        };
+
+                        const reportData = {
+                            office: office,
+                            place: placeFinal,
+                            relieved: relieved,
+                            relieving: relieving,
+                            transferDate: formatD(tDateRaw),
+                            isFN: tTimeRaw === 'FN',
+                            memoNo: memoNo,
+                            memoDate: formatD(memoDateRaw),
+                            authority: authority
+                        };
+
+                        const forwardInputs = document.querySelectorAll('.row-gen-forward-target');
+                        let targetRecipients = [];
+                        forwardInputs.forEach(input => {
+                            let v = input.value.trim();
+                            if (v) targetRecipients.push(v);
+                        });
+                        if (targetRecipients.length === 0) {
+                            targetRecipients.push("");
                         }
-                    }
 
-                    // Send to the centered modal preview
-                    finalizeLocalViewer(doc);
+                        let sheetCount = 0;
+                        for (let i = 0; i < targetRecipients.length; i += 2) {
+                            if (i > 0) doc.addPage('a4', 'l');
+                            sheetCount++;
 
-                } catch (err) {
-                    console.error("PDF generation failure: ", err); 
-                    if(typeof displayCustomAlert === "function") {
-                        displayCustomAlert("Engine Failure Error: Failed to successfully output compile final PDF.");
-                    } else {
-                        alert("Engine Failure Error: Failed to successfully output compile final PDF.");
+                            const leftRecip = targetRecipients[i];
+                            const rightRecip = (i + 1 < targetRecipients.length)
+                                ? targetRecipients[i + 1]
+                                : "Office Copy / Spare";
+
+                            const pageDataUrl = renderBilingualLandscapeSheetCanvas(reportData, leftRecip, rightRecip);
+                            doc.addImage(pageDataUrl, 'JPEG', 0, 0, 297, 210, undefined, 'FAST');
+                        }
+
+                        finalizeLocalViewer(doc, sheetCount, sheetCount * 2);
+                        gcNotify(
+                            "Charge Report Compiled",
+                            `Generated ${sheetCount} A4 Landscape sheet(s) (${sheetCount * 2} Bilingual Side-by-Side copies).`,
+                            "success"
+                        );
+
+                    } catch (err) {
+                        console.error("PDF generation failure: ", err);
+                        gcNotify("Compilation Error", "Failed to compile the final General Charge Report PDF.", "error");
+                    } finally {
+                        if (loader) loader.style.display = 'none';
+                        if (genBtn) genBtn.classList.remove('generating-pulse');
                     }
-                } finally {
-                    if(loader) loader.style.display = 'none';
-                }
-            }, 750);
+                }, 380);
+            });
         }
     </script>
 </div>
