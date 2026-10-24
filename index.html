@@ -5143,6 +5143,101 @@
             if (banner) banner.classList.remove('active');
         }
 
+        function isMasterSuperAdminAccount(profile = authenticatedUserSession) {
+            if (!profile) return false;
+            return String(profile.user || '').trim().toLowerCase() === 'admin';
+        }
+
+        function isDynamicCardAllowedForUser(c, profile = authenticatedUserSession) {
+            if (!c || !profile) return false;
+            const u = String(profile.user || '').trim();
+            const normUser = u.toLowerCase();
+            const isMasterAdmin = (normUser === 'admin');
+            const isHQorAdmin = (isMasterAdmin || String(profile.solId || '').trim() === '000000' || profile.role === 'admin');
+            const isGuestUser = (u === 'GUEST' || profile.role === 'guest' || profile.isGuest === true);
+
+            // Disabled cards are only visible to Master Super Admin ('admin') with a (DISABLED) tag
+            if (c.active === false && !isMasterAdmin) {
+                return false;
+            }
+
+            // Guest user never gets passcode/password cards
+            const lowerTarget = String(c.targetFile || '').trim().toLowerCase();
+            const lowerTitle = String(c.title || '').trim().toLowerCase();
+            const lowerId = String(c.id || '').trim().toLowerCase();
+            if (isGuestUser && (lowerTarget.includes('self_password') || lowerTitle.includes('passcode') || lowerTitle.includes('password'))) {
+                return false;
+            }
+
+            // STRICT RULE 1: createcard.html (Card Engine Studio) is ALWAYS exclusively for Master Super Admin ('admin')
+            if (
+                lowerTarget === 'createcard.html' ||
+                lowerTarget.endsWith('/createcard.html') ||
+                lowerId === 'menucardcreatecard' ||
+                lowerTitle === 'create card' ||
+                lowerTitle === 'dashboard card engine studio'
+            ) {
+                return isMasterAdmin;
+            }
+
+            // STRICT RULE 2: Master Super Admin ('admin') has access to all cards unless superadmin is explicitly unchecked and no other role/custom match
+            const r = c.roles || {};
+            if (isMasterAdmin) {
+                return r.superadmin !== false || true;
+            }
+
+            // STRICT RULE 3: If this card is configured as Super Admin Exclusive (superadmin: true, while branchadmin/admin/maker/superuser/guest are false), ONLY Master Admin ('admin') can see it!
+            const isSuperAdminExclusiveCard = (
+                r.superadmin === true &&
+                !r.branchadmin &&
+                !r.admin &&
+                !r.maker &&
+                !r.superuser &&
+                !r.guest
+            );
+
+            // Check per-user customized allowedCards array (from User Maintenance Panel)
+            const hasExplicitCustomCards = Array.isArray(profile.allowedCards) && profile.allowedCards.length > 0;
+            const isExplicitlyInUserAllowedCards = hasExplicitCustomCards && (
+                profile.allowedCards.some(item => {
+                    const normItem = String(item || '').trim().toLowerCase();
+                    return normItem && (normItem === lowerId || normItem === lowerTarget || normItem === lowerTitle);
+                })
+            );
+
+            if (isExplicitlyInUserAllowedCards) {
+                return true;
+            }
+
+            if (isSuperAdminExclusiveCard) {
+                return false;
+            }
+
+            // STRICT RULE 4: Evaluate exact role match from createcard.html's roles matrix
+            const effectiveRole = isGuestUser ? 'guest' : String(profile.role || '').trim().toLowerCase();
+            let roleMatch = false;
+            if (isGuestUser) {
+                roleMatch = Boolean(r.guest || r.maker);
+            } else if (effectiveRole === 'admin' || effectiveRole === 'branchadmin') {
+                // Branch / Office Admin (role === 'admin' or username starting with admin, but NOT 'admin' itself)
+                roleMatch = Boolean(r.branchadmin || r.admin);
+            } else if (effectiveRole === 'superuser') {
+                roleMatch = Boolean(r.superuser);
+            } else if (effectiveRole === 'maker') {
+                roleMatch = Boolean(r.maker);
+            } else {
+                roleMatch = Boolean(r[effectiveRole]);
+            }
+
+            // Note: If an admin has customized a non-admin user's allowedCards list AND the user's allowedCards list was explicitly curated,
+            // we still allow newly deployed role-targeted dynamic cards when roleMatch is true, unless c.customUsersOnly is set.
+            if (c.customUsersOnly === true) {
+                return isExplicitlyInUserAllowedCards;
+            }
+
+            return roleMatch;
+        }
+
         function computeAllowedStaticCardIds(profile) {
             if (!profile) return [];
             const u = String(profile.user || '').trim();
@@ -5154,11 +5249,13 @@
             }
 
             let userAllowedList = [];
-            if (profile.role === "admin" || u.toLowerCase().startsWith("admin")) {
+            const isMasterAdmin = (u.toLowerCase() === 'admin');
+            const hasCustomCardList = Array.isArray(profile.allowedCards) && profile.allowedCards.length > 0;
+
+            if (isMasterAdmin) {
+                userAllowedList = ['menuCardDBDE', 'menuCardOfficeHub', 'menuCardBulkBooking', 'menuCardBulk', 'menuCardHoliday', 'menuCardDateWise', 'menuCardACG61', 'menuCardGeneralCharge', 'menuCardSR1', 'menuCardCasualLeave', 'menuCardTAAdvance', 'menuCardTATransfer', 'menuCardTABillTour', 'menuCardCEA', 'menuCardAI', 'menuCardMaintenance', 'menuCardSelfPassword', 'menuCardPayroll', 'menuCardBgStudio'];
+            } else if ((profile.role === "admin" || u.toLowerCase().startsWith("admin")) && !hasCustomCardList) {
                 userAllowedList = ['menuCardDBDE', 'menuCardOfficeHub', 'menuCardBulkBooking', 'menuCardBulk', 'menuCardHoliday', 'menuCardDateWise', 'menuCardACG61', 'menuCardGeneralCharge', 'menuCardSR1', 'menuCardCasualLeave', 'menuCardTAAdvance', 'menuCardTATransfer', 'menuCardTABillTour', 'menuCardCEA', 'menuCardAI', 'menuCardMaintenance', 'menuCardSelfPassword', 'menuCardPayroll'];
-                if (u.toLowerCase() === 'admin') {
-                    userAllowedList.push('menuCardBgStudio');
-                }
             } else if (isGuestUser) {
                 userAllowedList = ['menuCardBulkBooking', 'menuCardBulk', 'menuCardHoliday', 'menuCardDateWise', 'menuCardACG61', 'menuCardGeneralCharge', 'menuCardSR1', 'menuCardCasualLeave', 'menuCardTAAdvance', 'menuCardTATransfer', 'menuCardTABillTour', 'menuCardCEA', 'menuCardAI'];
             } else {
@@ -5194,12 +5291,16 @@
             }
 
             const u = String(profile.user || '').trim();
-            const isSuperAdmin = (u.toLowerCase() === 'admin' || profile.role === 'admin' || u.toLowerCase().startsWith('admin'));
-            const isHQorAdmin = (isSuperAdmin || String(profile.solId || '').trim() === '000000');
+            const isMasterAdmin = (u.toLowerCase() === 'admin');
             const isGuestUser = (u === 'GUEST' || profile.role === 'guest' || profile.isGuest === true);
 
             if (isGuestUser && normTarget.includes('self_password')) {
                 return { allowed: false, cardTitle: 'Change Passcode', cardId: 'menuCardSelfPassword' };
+            }
+
+            // Hard Exclusivity Check: createcard.html is strictly for Master Super Admin ('admin') ONLY
+            if (normTarget === 'createcard.html' || normTarget.endsWith('/createcard.html')) {
+                return { allowed: isMasterAdmin, cardTitle: 'Dashboard Card Engine Studio', cardId: 'menuCardCreateCard' };
             }
 
             // 1. Check static system cards map
@@ -5210,23 +5311,20 @@
                 return { allowed: isAllowed, cardTitle: staticMeta.title, cardId: staticMeta.id };
             }
 
-            // 2. Check dynamic dashboard cards from Firebase
+            // 2. Check dynamic dashboard cards from Firebase (Main Cards & Sub-Cards)
             const dynCard = (LATEST_DASHBOARD_CARDS || []).find(c => String(c.targetFile || '').trim().toLowerCase() === normTarget);
             if (dynCard) {
-                if (!dynCard.active && !isHQorAdmin) {
-                    return { allowed: false, cardTitle: dynCard.title || cleanTarget, cardId: dynCard.id || cleanTarget };
-                }
-                const myRole = isGuestUser ? 'maker' : profile.role;
-                const roleAllowed = Boolean(dynCard.roles && (dynCard.roles[myRole] || (isGuestUser && dynCard.roles['guest'])));
-                const customAllowed = Array.isArray(profile.allowedCards) && (profile.allowedCards.includes(dynCard.id) || profile.allowedCards.includes(dynCard.targetFile) || profile.allowedCards.includes(dynCard.title));
-                if (isSuperAdmin || roleAllowed || customAllowed) {
-                    return { allowed: true, cardTitle: dynCard.title || cleanTarget, cardId: dynCard.id || cleanTarget };
-                }
-                return { allowed: false, cardTitle: dynCard.title || cleanTarget, cardId: dynCard.id || cleanTarget };
+                const allowed = isDynamicCardAllowedForUser(dynCard, profile);
+                return { allowed: allowed, cardTitle: dynCard.title || cleanTarget, cardId: dynCard.id || cleanTarget };
             }
 
-            // 3. Unknown or unlisted direct module file: only Super Admin can open arbitrary unlisted modules
-            return { allowed: isSuperAdmin, cardTitle: cleanTarget.replace('.html', ''), cardId: cleanTarget };
+            // 3. Also check if the user has this exact file/id in their customized allowedCards
+            if (Array.isArray(profile.allowedCards) && profile.allowedCards.some(x => String(x || '').trim().toLowerCase() === normTarget)) {
+                return { allowed: true, cardTitle: cleanTarget.replace('.html', ''), cardId: cleanTarget };
+            }
+
+            // 4. Unknown or unlisted direct module file: ONLY Master Super Admin ('admin') can open arbitrary unlisted modules
+            return { allowed: isMasterAdmin, cardTitle: cleanTarget.replace('.html', ''), cardId: cleanTarget };
         }
 
         async function reportUnauthorizedUrlAccessToSuperAdmin(targetUrl, cardMeta = {}, accessMethod = 'Direct URL / Module Request') {
@@ -5592,33 +5690,14 @@
         function renderDynamicCardsInIndex(cards) {
             document.querySelectorAll('.dynamic-injected-card').forEach(el => el.remove());
             const grid = document.getElementById('mainModuleGrid');
-            if(!grid) return;
-            
-            let isHQorAdmin = (authenticatedUserSession && (authenticatedUserSession.user === 'admin' || authenticatedUserSession.solId === '000000'));
-            let isGuestUser = (authenticatedUserSession && (authenticatedUserSession.user === 'GUEST' || authenticatedUserSession.role === 'guest' || authenticatedUserSession.isGuest === true));
+            if(!grid || !authenticatedUserSession) return;
 
             cards.forEach(c => {
-                if (!c.active && !isHQorAdmin) return; 
                 if (c.location !== 'index' && c.location !== 'index.html') return;
                 if (c.cardType === 'sub') return;
 
-                // STRICT RULE: Guest User never sees any Passcode/Password change card
-                const lowerTarget = String(c.targetFile || '').toLowerCase();
-                const lowerTitle = String(c.title || '').toLowerCase();
-                if (isGuestUser && (lowerTarget.includes('self_password') || lowerTitle.includes('passcode') || lowerTitle.includes('password'))) {
-                    return;
-                }
-
-                // Guest is treated as Maker; also respect per-user customized allowedCards
-                let myRole = authenticatedUserSession ? (isGuestUser ? "maker" : authenticatedUserSession.role) : "maker";
-                let roleAllowed = c.roles && (c.roles[myRole] || (isGuestUser && c.roles['guest']));
-                let customCardAllowed = authenticatedUserSession && Array.isArray(authenticatedUserSession.allowedCards) && (
-                    authenticatedUserSession.allowedCards.includes(c.id) ||
-                    authenticatedUserSession.allowedCards.includes(c.targetFile) ||
-                    authenticatedUserSession.allowedCards.includes(c.title)
-                );
-                let isSuperAdminUser = authenticatedUserSession && (authenticatedUserSession.user === 'admin' || authenticatedUserSession.role === 'admin' || String(authenticatedUserSession.user || '').toLowerCase().startsWith('admin'));
-                if (!roleAllowed && !customCardAllowed && !isSuperAdminUser) return;
+                // Strict evaluation: only render if this user's exact role / custom card list / Master Admin status permits it!
+                if (!isDynamicCardAllowedForUser(c, authenticatedUserSession)) return;
 
                 let cardDiv = document.createElement('div');
                 let opacityStyle = (!c.active) ? "opacity: 0.5;" : ""; 
@@ -5659,9 +5738,7 @@
 
             cards.forEach((c) => {
                 if (!c.active) return;
-                if (isGuestUser && String(c.targetFile || '').toLowerCase().includes('self_password')) return;
-                const roleMatch = isAdmin || (c.roles && (c.roles[myRole] || (isGuestUser && c.roles['guest'])));
-                if (!roleMatch) return;
+                if (!isDynamicCardAllowedForUser(c, authenticatedUserSession)) return;
 
                 const storageKey = `po_card_first_seen_${c.id || c.title}`;
                 let createdTs = c.createdAt || c.timestamp || null;
@@ -6528,33 +6605,12 @@
                 }
             }
 
-            let userAllowedList = [];
-            if (profile.role === "admin" || u.toLowerCase().startsWith("admin")) {
-                userAllowedList = ['menuCardDBDE', 'menuCardOfficeHub', 'menuCardBulkBooking', 'menuCardBulk', 'menuCardHoliday', 'menuCardDateWise', 'menuCardACG61', 'menuCardGeneralCharge', 'menuCardSR1', 'menuCardCasualLeave', 'menuCardTAAdvance', 'menuCardTATransfer', 'menuCardTABillTour', 'menuCardCEA', 'menuCardAI', 'menuCardMaintenance', 'menuCardSelfPassword', 'menuCardPayroll'];
-                // Master Admin ('admin') gets the exclusive 3-Screen Background Studio card
-                if (u === 'admin') {
-                    userAllowedList.push('menuCardBgStudio');
-                }
-            } else if (isGuestUser) {
-                // Guest is treated as Maker, with NO Change Passcode card ('menuCardSelfPassword' strictly excluded)
-                userAllowedList = ['menuCardBulkBooking', 'menuCardBulk', 'menuCardHoliday', 'menuCardDateWise', 'menuCardACG61', 'menuCardGeneralCharge', 'menuCardSR1', 'menuCardCasualLeave', 'menuCardTAAdvance', 'menuCardTATransfer', 'menuCardTABillTour', 'menuCardCEA', 'menuCardAI'];
-            } else {
-                userAllowedList = profile.allowedCards ? [...profile.allowedCards] : [];
-                if (userAllowedList.length === 0) userAllowedList = ['menuCardSelfPassword'];
-                if (profile.role === "superuser" && !userAllowedList.includes('menuCardDBDE')) userAllowedList.push('menuCardDBDE');
-                if (profile.role === "superuser" && !userAllowedList.includes('menuCardPayroll')) userAllowedList.push('menuCardPayroll');
-            }
+            let userAllowedList = computeAllowedStaticCardIds(profile);
 
-            if (officeStatus === "DAY_ENDED" && profile.role !== "admin" && !isGuestUser) {
+            if (officeStatus === "DAY_ENDED" && profile.role !== "admin" && !u.toLowerCase().startsWith("admin") && !isGuestUser) {
                 if (profile.role === "maker" || profile.role === "superuser") {
-                    userAllowedList = profile.role === "superuser" ? ['menuCardDBDE', 'menuCardSelfPassword'] : ['menuCardSelfPassword'];
                     setTimeout(() => { displayCustomAlert("SYSTEM LOCKED\n\nDay End has been executed for your office."); }, 500);
                 }
-            }
-
-            // Hard safety filter: Guest user can NEVER have menuCardSelfPassword or menuCardBgStudio
-            if (isGuestUser) {
-                userAllowedList = userAllowedList.filter(id => id !== 'menuCardSelfPassword' && id !== 'menuCardBgStudio');
             }
             
             const staticCards = document.querySelectorAll('#mainModuleGrid .portal-module-card:not(.dynamic-injected-card)');
