@@ -2973,6 +2973,91 @@
             color: #ef4444;
         }
 
+        /* =========================================================
+           DIRECT URL PRIVILEGE GUARD TOP RED WARNING BANNER
+           ========================================================= */
+        .security-privilege-banner {
+            display: none;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            background: linear-gradient(90deg, #dc2626 0%, #ef4444 50%, #b91c1c 100%);
+            color: #ffffff;
+            padding: 10px 16px;
+            border-radius: 13px;
+            border: 1px solid rgba(255, 255, 255, 0.32);
+            box-shadow: 0 10px 26px rgba(220, 38, 38, 0.38);
+            font-size: 13px;
+            font-weight: 800;
+            flex-shrink: 0;
+            z-index: 55;
+            animation: fadeIn 0.25s ease-out forwards;
+        }
+        .security-privilege-banner.active {
+            display: flex;
+        }
+        .sec-banner-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 0;
+        }
+        .sec-banner-pulse {
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .sec-banner-close {
+            background: rgba(255, 255, 255, 0.18);
+            border: 1px solid rgba(255, 255, 255, 0.35);
+            color: #ffffff;
+            border-radius: 8px;
+            padding: 4px 10px;
+            font-size: 11.5px;
+            font-weight: 800;
+            cursor: pointer;
+            flex-shrink: 0;
+            transition: background 0.2s;
+        }
+        .sec-banner-close:hover {
+            background: rgba(255, 255, 255, 0.32);
+        }
+        .notif-security-breach-item {
+            background: rgba(239, 68, 68, 0.09);
+            border: 1px solid rgba(239, 68, 68, 0.35);
+            border-left: 4px solid #ef4444;
+            border-radius: 12px;
+            padding: 10px 12px;
+            transition: transform 0.15s ease;
+        }
+        .notif-security-breach-item h5 {
+            margin: 0 0 3px 0;
+            font-size: 12.5px;
+            font-weight: 800;
+            color: #ef4444;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .notif-security-breach-item p {
+            margin: 0 0 5px 0;
+            font-size: 11.5px;
+            color: var(--text-secondary);
+            line-height: 1.4;
+        }
+        .notif-security-breach-item .notif-meta {
+            font-size: 10.5px;
+            color: var(--text-muted);
+            font-weight: 700;
+            display: flex;
+            justify-content: space-between;
+        }
+
         /* Responsive Adaptation */
         @media (max-width: 1150px) {
             .portal-grid-wrapper { grid-template-columns: repeat(min(var(--user-grid-cols, 3), 3), minmax(0, 1fr)); }
@@ -3444,6 +3529,17 @@
                     </div>
                 </div>
 
+                <!-- TOP RED PRIVILEGE WARNING BANNER (AUTO-SHOWN ON UNAUTHORIZED URL ACCESS) -->
+                <div class="security-privilege-banner" id="privilegeErrorBanner">
+                    <div class="sec-banner-left">
+                        <span class="sec-banner-pulse">
+                            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                        </span>
+                        <span id="privilegeErrorBannerText">You are not privileged to see this card! Unauthorized access attempt has been reported to Super Admin.</span>
+                    </div>
+                    <button type="button" class="sec-banner-close" onclick="dismissPrivilegeErrorBanner()">Dismiss ×</button>
+                </div>
+
                 <!-- LIVE NEWS TICKER -->
                 <div class='news-ticker-container' id='mainNewsTicker'>
                     <div class='ticker-label'>LATEST NEWS</div>
@@ -3859,7 +3955,7 @@
                 </div>
 
                 <div class="ai-quick-chips">
-                    <button class="ai-chip-btn" onclick="sendQuickAiPrompt('How to generate Monthly Bulk Bills (ACG-17)?')">ACG-17 Guide</button>
+                    <button class="ai-chip-btn" onclick="sendQuickAiPrompt('How to generate Monthly Bulk Bills ACG-17?')">ACG-17 Guide</button>
                     <button class="ai-chip-btn" onclick="sendQuickAiPrompt('How to prepare ACG-61 Charge Report?')">ACG-61 Charge</button>
                     <button class="ai-chip-btn" onclick="sendQuickAiPrompt('Explain T.A. Bill Tour rules')">T.A. Tour Claim</button>
                     <button class="ai-chip-btn" onclick="expandAiChatToFullSPA()">Open Full AI Page ↗</button>
@@ -4396,6 +4492,29 @@
         let SYSTEM_OFFICE_REGISTRY = [];
         let DISABLED_SYSTEM_CARDS = []; 
         let LATEST_DASHBOARD_CARDS = []; 
+        let SYSTEM_SECURITY_NOTIFICATIONS = [];
+        let CURRENT_ACTIVE_SPA_MODULE = 'index.html';
+        let PREVIOUS_USER_SECURITY_SNAPSHOT = null;
+
+        const STATIC_CARD_MODULE_MAP = {
+            'bulkbooking.html': { id: 'menuCardBulkBooking', title: 'Bulk Article Booking' },
+            'management.html': { id: 'menuCardOfficeHub', title: 'Office & SOL Management' },
+            'monthly_bulk.html': { id: 'menuCardBulk', title: 'Monthly Bulk Bills (ACG-17)' },
+            'holiday_bulk.html': { id: 'menuCardHoliday', title: 'Holiday & Sunday Bills' },
+            'datewise.html': { id: 'menuCardDateWise', title: 'Date Based Bills (ACG-17)' },
+            'acg61.html': { id: 'menuCardACG61', title: 'Charge Report (Cash/Stamp)' },
+            'general_charge.html': { id: 'menuCardGeneralCharge', title: 'Charge Report (General)' },
+            'sr1.html': { id: 'menuCardSR1', title: 'S.R.-1 Leave Application' },
+            'casual_leave.html': { id: 'menuCardCasualLeave', title: 'Casual Leave Application' },
+            'ta_advance.html': { id: 'menuCardTAAdvance', title: 'T.A. Tour Advance Application' },
+            'ta_transfer.html': { id: 'menuCardTATransfer', title: 'T.A. Advance on Transfer' },
+            'ta_bill_tour.html': { id: 'menuCardTABillTour', title: 'T.A. Bill Claim (Tour)' },
+            'cea.html': { id: 'menuCardCEA', title: 'Children Education Allowance' },
+            'payroll.html': { id: 'menuCardPayroll', title: 'Payroll System' },
+            'aichat.html': { id: 'menuCardAI', title: 'Talk with AI' },
+            'user_maintenance.html': { id: 'menuCardMaintenance', title: 'System Settings & Users' },
+            'self_password.html': { id: 'menuCardSelfPassword', title: 'Change Passcode' }
+        };
         
         let authenticatedUserSession = null;
         let currentDashboardPage = 1;
@@ -4421,6 +4540,11 @@
                     } else if (msg.type === 'OFFICES_SYNC' && Array.isArray(msg.offices)) {
                         SYSTEM_OFFICE_REGISTRY = msg.offices;
                         refreshAllLiveStatusViews();
+                        if (authenticatedUserSession) verifyBloggerAuth_Reentry(false);
+                    } else if (msg.type === 'SECURITY_NOTIFS_SYNC' && Array.isArray(msg.securityNotifications)) {
+                        SYSTEM_SECURITY_NOTIFICATIONS = msg.securityNotifications;
+                        window.SYSTEM_SECURITY_NOTIFICATIONS = SYSTEM_SECURITY_NOTIFICATIONS;
+                        evaluate24HourModuleNotifications(LATEST_DASHBOARD_CARDS);
                     }
                 };
             }
@@ -4447,6 +4571,11 @@
                     } else if (msg.type === 'OFFICES_SYNC' && Array.isArray(msg.offices)) {
                         SYSTEM_OFFICE_REGISTRY = msg.offices;
                         refreshAllLiveStatusViews();
+                        if (authenticatedUserSession) verifyBloggerAuth_Reentry(false);
+                    } else if (msg.type === 'SECURITY_NOTIFS_SYNC' && Array.isArray(msg.securityNotifications)) {
+                        SYSTEM_SECURITY_NOTIFICATIONS = msg.securityNotifications;
+                        window.SYSTEM_SECURITY_NOTIFICATIONS = SYSTEM_SECURITY_NOTIFICATIONS;
+                        evaluate24HourModuleNotifications(LATEST_DASHBOARD_CARDS);
                     }
                 } catch (err) {}
             }
@@ -4939,31 +5068,32 @@
 
         async function pushUsersToCloudOnly(changedUsername = null, changedOnlineState = null, changedLoginTime = null) {
             broadcastPortalRealtimeEvent({ type: 'USERS_SYNC', users: SYSTEM_USER_REGISTRY });
-            if (!hasSuccessfullySyncedWithCloud || !db) return;
+            if (!db) return;
             const regRef = db.collection("system").doc("registry");
             try {
-                if (changedUsername !== null && typeof db.runTransaction === 'function') {
-                    await db.runTransaction(async (tx) => {
-                        const snap = await tx.get(regRef);
-                        let list = (snap.exists && Array.isArray(snap.data().users)) ? snap.data().users : SYSTEM_USER_REGISTRY;
-                        const normU = String(changedUsername).trim().toLowerCase();
-                        const i = list.findIndex(u => String(u.user || '').trim().toLowerCase() === normU);
-                        if (i !== -1) {
-                            list[i].isOnline = Boolean(changedOnlineState);
-                            list[i].lastPresenceChangeAt = Date.now();
-                            if (changedLoginTime) list[i].lastLoginTime = changedLoginTime;
-                            if (authenticatedUserSession && authenticatedUserSession.gridLayoutPref && String(authenticatedUserSession.user || '').trim().toLowerCase() === normU) {
-                                list[i].gridLayoutPref = authenticatedUserSession.gridLayoutPref;
-                            }
-                        }
-                        SYSTEM_USER_REGISTRY = list;
-                        tx.set(regRef, { users: list }, { merge: true });
-                    });
-                } else {
-                    await regRef.set({ users: SYSTEM_USER_REGISTRY }, { merge: true });
-                }
+                // Fast direct merge write first for millisecond onSnapshot propagation across all HQ Admin clients
+                await regRef.set({
+                    users: SYSTEM_USER_REGISTRY,
+                    lastPresencePulseAt: Date.now()
+                }, { merge: true });
             } catch (e) {
-                try { await regRef.set({ users: SYSTEM_USER_REGISTRY }, { merge: true }); } catch (err) {}
+                if (changedUsername !== null && typeof db.runTransaction === 'function') {
+                    try {
+                        await db.runTransaction(async (tx) => {
+                            const snap = await tx.get(regRef);
+                            let list = (snap.exists && Array.isArray(snap.data().users)) ? snap.data().users : SYSTEM_USER_REGISTRY;
+                            const normU = String(changedUsername).trim().toLowerCase();
+                            const i = list.findIndex(u => String(u.user || '').trim().toLowerCase() === normU);
+                            if (i !== -1) {
+                                list[i].isOnline = Boolean(changedOnlineState);
+                                list[i].lastPresenceChangeAt = Date.now();
+                                if (changedLoginTime) list[i].lastLoginTime = changedLoginTime;
+                            }
+                            SYSTEM_USER_REGISTRY = list;
+                            tx.set(regRef, { users: list, lastPresencePulseAt: Date.now() }, { merge: true });
+                        });
+                    } catch (err) {}
+                }
             }
         }
 
@@ -4991,6 +5121,208 @@
             } catch (e) {
                 try { await regRef.set({ offices: SYSTEM_OFFICE_REGISTRY }, { merge: true }); } catch (err) {}
             }
+        }
+
+        function showPrivilegeErrorBanner(customMsg) {
+            const banner = document.getElementById('privilegeErrorBanner');
+            const txt = document.getElementById('privilegeErrorBannerText');
+            if (txt) {
+                txt.innerText = customMsg || "You are not privileged to see this card!";
+            }
+            if (banner) {
+                banner.classList.add('active');
+                clearTimeout(window._privBannerTimer);
+                window._privBannerTimer = setTimeout(() => {
+                    banner.classList.remove('active');
+                }, 8500);
+            }
+        }
+
+        function dismissPrivilegeErrorBanner() {
+            const banner = document.getElementById('privilegeErrorBanner');
+            if (banner) banner.classList.remove('active');
+        }
+
+        function computeAllowedStaticCardIds(profile) {
+            if (!profile) return [];
+            const u = String(profile.user || '').trim();
+            const isGuestUser = (u === "GUEST" || profile.role === "guest" || profile.isGuest === true);
+            let officeStatus = "UNMAPPED";
+            if (profile.solId) {
+                const mappedOffice = SYSTEM_OFFICE_REGISTRY.find(o => String(o.solId || '').trim() === String(profile.solId || '').trim());
+                if (mappedOffice) officeStatus = mappedOffice.status;
+            }
+
+            let userAllowedList = [];
+            if (profile.role === "admin" || u.toLowerCase().startsWith("admin")) {
+                userAllowedList = ['menuCardDBDE', 'menuCardOfficeHub', 'menuCardBulkBooking', 'menuCardBulk', 'menuCardHoliday', 'menuCardDateWise', 'menuCardACG61', 'menuCardGeneralCharge', 'menuCardSR1', 'menuCardCasualLeave', 'menuCardTAAdvance', 'menuCardTATransfer', 'menuCardTABillTour', 'menuCardCEA', 'menuCardAI', 'menuCardMaintenance', 'menuCardSelfPassword', 'menuCardPayroll'];
+                if (u.toLowerCase() === 'admin') {
+                    userAllowedList.push('menuCardBgStudio');
+                }
+            } else if (isGuestUser) {
+                userAllowedList = ['menuCardBulkBooking', 'menuCardBulk', 'menuCardHoliday', 'menuCardDateWise', 'menuCardACG61', 'menuCardGeneralCharge', 'menuCardSR1', 'menuCardCasualLeave', 'menuCardTAAdvance', 'menuCardTATransfer', 'menuCardTABillTour', 'menuCardCEA', 'menuCardAI'];
+            } else {
+                userAllowedList = Array.isArray(profile.allowedCards) ? [...profile.allowedCards] : [];
+                if (userAllowedList.length === 0) userAllowedList = ['menuCardSelfPassword'];
+                if (profile.role === "superuser" && !userAllowedList.includes('menuCardDBDE')) userAllowedList.push('menuCardDBDE');
+                if (profile.role === "superuser" && !userAllowedList.includes('menuCardPayroll')) userAllowedList.push('menuCardPayroll');
+            }
+
+            if (officeStatus === "DAY_ENDED" && profile.role !== "admin" && !u.toLowerCase().startsWith("admin") && !isGuestUser) {
+                if (profile.role === "maker" || profile.role === "superuser") {
+                    userAllowedList = profile.role === "superuser" ? ['menuCardDBDE', 'menuCardSelfPassword'] : ['menuCardSelfPassword'];
+                }
+            }
+
+            if (isGuestUser) {
+                userAllowedList = userAllowedList.filter(id => id !== 'menuCardSelfPassword' && id !== 'menuCardBgStudio');
+            }
+
+            const isHQorAdmin = (u.toLowerCase() === 'admin' || String(profile.solId || '').trim() === '000000');
+            if (!isHQorAdmin) {
+                userAllowedList = userAllowedList.filter(id => !DISABLED_SYSTEM_CARDS.includes(id));
+            }
+            return userAllowedList;
+        }
+
+        function checkUserPrivilegeForModule(targetUrl, profile = authenticatedUserSession) {
+            if (!profile) return { allowed: false, cardTitle: targetUrl, cardId: '' };
+            const cleanTarget = String(targetUrl || '').split('?')[0].split('#')[0].trim();
+            const normTarget = cleanTarget.toLowerCase();
+            if (!normTarget || normTarget === 'index.html' || normTarget === 'index') {
+                return { allowed: true, cardTitle: 'Dashboard', cardId: 'index' };
+            }
+
+            const u = String(profile.user || '').trim();
+            const isSuperAdmin = (u.toLowerCase() === 'admin' || profile.role === 'admin' || u.toLowerCase().startsWith('admin'));
+            const isHQorAdmin = (isSuperAdmin || String(profile.solId || '').trim() === '000000');
+            const isGuestUser = (u === 'GUEST' || profile.role === 'guest' || profile.isGuest === true);
+
+            if (isGuestUser && normTarget.includes('self_password')) {
+                return { allowed: false, cardTitle: 'Change Passcode', cardId: 'menuCardSelfPassword' };
+            }
+
+            // 1. Check static system cards map
+            if (STATIC_CARD_MODULE_MAP[normTarget]) {
+                const staticMeta = STATIC_CARD_MODULE_MAP[normTarget];
+                const allowedIds = computeAllowedStaticCardIds(profile);
+                const isAllowed = allowedIds.includes(staticMeta.id);
+                return { allowed: isAllowed, cardTitle: staticMeta.title, cardId: staticMeta.id };
+            }
+
+            // 2. Check dynamic dashboard cards from Firebase
+            const dynCard = (LATEST_DASHBOARD_CARDS || []).find(c => String(c.targetFile || '').trim().toLowerCase() === normTarget);
+            if (dynCard) {
+                if (!dynCard.active && !isHQorAdmin) {
+                    return { allowed: false, cardTitle: dynCard.title || cleanTarget, cardId: dynCard.id || cleanTarget };
+                }
+                const myRole = isGuestUser ? 'maker' : profile.role;
+                const roleAllowed = Boolean(dynCard.roles && (dynCard.roles[myRole] || (isGuestUser && dynCard.roles['guest'])));
+                const customAllowed = Array.isArray(profile.allowedCards) && (profile.allowedCards.includes(dynCard.id) || profile.allowedCards.includes(dynCard.targetFile) || profile.allowedCards.includes(dynCard.title));
+                if (isSuperAdmin || roleAllowed || customAllowed) {
+                    return { allowed: true, cardTitle: dynCard.title || cleanTarget, cardId: dynCard.id || cleanTarget };
+                }
+                return { allowed: false, cardTitle: dynCard.title || cleanTarget, cardId: dynCard.id || cleanTarget };
+            }
+
+            // 3. Unknown or unlisted direct module file: only Super Admin can open arbitrary unlisted modules
+            return { allowed: isSuperAdmin, cardTitle: cleanTarget.replace('.html', ''), cardId: cleanTarget };
+        }
+
+        async function reportUnauthorizedUrlAccessToSuperAdmin(targetUrl, cardMeta = {}, accessMethod = 'Direct URL / Module Request') {
+            const u = authenticatedUserSession ? authenticatedUserSession.user : (safeSession.getItem("activeUser") || "Unknown");
+            const fullName = authenticatedUserSession ? (authenticatedUserSession.fullName || u) : u;
+            const role = authenticatedUserSession ? (authenticatedUserSession.role || "unknown") : (safeSession.getItem("activeRole") || "unknown");
+            const solId = authenticatedUserSession ? (authenticatedUserSession.solId || "UNMAPPED") : (safeSession.getItem("activeSolId") || "UNMAPPED");
+            const options = { timeZone: 'Asia/Kolkata', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
+            const timeStamp = new Date().toLocaleString('en-IN', options);
+
+            const breachRecord = {
+                id: 'sec_' + Date.now() + '_' + Math.random().toString(36).substring(2, 7),
+                timestamp: Date.now(),
+                timeFormatted: timeStamp,
+                user: u,
+                fullName: fullName,
+                role: String(role).toUpperCase(),
+                solId: solId,
+                attemptedModule: targetUrl,
+                cardTitle: cardMeta.cardTitle || targetUrl,
+                cardId: cardMeta.cardId || targetUrl,
+                accessMethod: accessMethod,
+                targetAdmin: 'admin',
+                status: 'UNREAD',
+                message: `Unauthorized direct URL access attempt by ${fullName} (@${u}, Role: ${String(role).toUpperCase()}, SOL: ${solId}) to restricted module "${cardMeta.cardTitle || targetUrl}" (${targetUrl}).`
+            };
+
+            SYSTEM_SECURITY_NOTIFICATIONS.unshift(breachRecord);
+            if (SYSTEM_SECURITY_NOTIFICATIONS.length > 300) {
+                SYSTEM_SECURITY_NOTIFICATIONS = SYSTEM_SECURITY_NOTIFICATIONS.slice(0, 300);
+            }
+            window.SYSTEM_SECURITY_NOTIFICATIONS = SYSTEM_SECURITY_NOTIFICATIONS;
+
+            logSystemEvent(u, `SECURITY ALERT: Unauthorized URL attempt on ${cardMeta.cardTitle || targetUrl} (${targetUrl})`);
+            broadcastPortalRealtimeEvent({ type: 'SECURITY_NOTIFS_SYNC', securityNotifications: SYSTEM_SECURITY_NOTIFICATIONS });
+
+            if (db) {
+                try {
+                    await Promise.allSettled([
+                        db.collection("system").doc("registry").set({
+                            securityNotifications: SYSTEM_SECURITY_NOTIFICATIONS,
+                            logs: SYSTEM_LOGIN_HISTORY
+                        }, { merge: true }),
+                        db.collection("system").doc("security_alerts").set({
+                            alerts: SYSTEM_SECURITY_NOTIFICATIONS,
+                            lastUpdatedAt: Date.now()
+                        }, { merge: true })
+                    ]);
+                } catch (err) {
+                    console.log("Security notification sync error:", err);
+                }
+            }
+        }
+
+        async function forceExecuteAdminLockOrDisableLogout(reasonTitle, reasonPopupMessage) {
+            const currentU = safeSession.getItem("activeUser");
+            if (currentU && currentU !== "GUEST") {
+                await setUserOnlinePresence(currentU, false);
+            }
+
+            safeSession.clear();
+            authenticatedUserSession = null;
+            PREVIOUS_USER_SECURITY_SNAPSHOT = null;
+            CURRENT_ACTIVE_SPA_MODULE = 'index.html';
+            clearTimeout(idleWarningTimer);
+            clearInterval(countdownInterval);
+            isTimeoutModalActive = false;
+
+            const timeoutModal = document.getElementById('timeoutModalOverlay');
+            if (timeoutModal) {
+                timeoutModal.classList.remove('active');
+                timeoutModal.style.display = 'none';
+            }
+            closeProfileDrawer();
+            updateFloatingAiVisibility(false);
+
+            let rootPath = window.location.pathname.replace('index.html', '');
+            try { window.history.pushState({ module: 'index.html' }, "PO Staff Utility", rootPath); } catch(e) {}
+
+            document.getElementById('appDashboardView').style.display = 'none';
+            document.getElementById('goodbyeScreen').classList.remove('active');
+            document.getElementById('goodbyeScreen').style.display = 'none';
+            document.getElementById('sysUser').value = '';
+            document.getElementById('sysPass').value = '';
+            document.getElementById('captchaInput').value = '';
+            document.getElementById('toggleEye').style.display = 'flex';
+            generateCaptcha();
+            document.getElementById('loginScreen').style.display = 'flex';
+
+            spawnFloatingNotification(reasonTitle, reasonPopupMessage, "error");
+            document.getElementById('customAlertMsgField').innerText = reasonPopupMessage;
+            const alertIconContainer = document.getElementById('popupAlertIcon');
+            if (alertIconContainer) alertIconContainer.innerHTML = SVG_ICON_LIBRARY.lock;
+            const targetPopup = document.getElementById('customAppAlertModal');
+            targetPopup.style.display = "flex";
+            setTimeout(() => { targetPopup.classList.add('active'); }, 15);
         }
 
         async function setUserOnlinePresence(username, isOnlineState) {
@@ -5100,11 +5432,16 @@
                                 db.collection("system").doc("registry").set({ users: fetchedUsers }, { merge: true });
                             }
 
+                            const prevSecCount = SYSTEM_SECURITY_NOTIFICATIONS.length;
                             SYSTEM_USER_REGISTRY = fetchedUsers;
                             SYSTEM_LOGIN_HISTORY = data.logs || [];
                             SYSTEM_OFFICE_REGISTRY = data.offices || [];
+                            if (Array.isArray(data.securityNotifications)) {
+                                SYSTEM_SECURITY_NOTIFICATIONS = data.securityNotifications;
+                            }
                             window.SYSTEM_USER_REGISTRY = SYSTEM_USER_REGISTRY;
                             window.SYSTEM_OFFICE_REGISTRY = SYSTEM_OFFICE_REGISTRY;
+                            window.SYSTEM_SECURITY_NOTIFICATIONS = SYSTEM_SECURITY_NOTIFICATIONS;
 
                             isCloudDataLoaded = true;
                             hasSuccessfullySyncedWithCloud = true; 
@@ -5115,7 +5452,51 @@
                                 if (!profile && sessionUser === "GUEST") {
                                     profile = { fullName: "Guest User", user: "GUEST", role: "maker", isGuest: true, active: true, locked: false, isFirstTimeDefault: false, totpSecret: "", solId: "GUEST" };
                                 }
+
+                                // Real-time Super Admin Security Breach Toast if a new breach arrived
+                                if (String(sessionUser).toLowerCase() === 'admin' && SYSTEM_SECURITY_NOTIFICATIONS.length > prevSecCount && prevSecCount > 0) {
+                                    const newestAlert = SYSTEM_SECURITY_NOTIFICATIONS[0];
+                                    if (newestAlert) {
+                                        spawnFloatingNotification("Security Breach Attempt!", `${newestAlert.fullName || newestAlert.user} (@${newestAlert.user}) tried to open ${newestAlert.cardTitle} via direct URL.`, "error");
+                                    }
+                                }
+
                                 if (profile) {
+                                    // REAL-TIME MILLISECOND ENFORCEMENT: Check Lock / Disable / Role / Custom Cards
+                                    if (sessionUser !== "GUEST" && String(sessionUser).toLowerCase() !== "admin") {
+                                        if (profile.locked === true) {
+                                            forceExecuteAdminLockOrDisableLogout("Account Locked", "You have been locked by Admin.");
+                                            return;
+                                        }
+                                        if (profile.active === false) {
+                                            forceExecuteAdminLockOrDisableLogout("Account Disabled", "You have been disabled by Admin.");
+                                            return;
+                                        }
+
+                                        const currentCardsSig = JSON.stringify((profile.allowedCards || []).slice().sort());
+                                        if (PREVIOUS_USER_SECURITY_SNAPSHOT && String(PREVIOUS_USER_SECURITY_SNAPSHOT.user).toLowerCase() === String(profile.user).toLowerCase()) {
+                                            if (PREVIOUS_USER_SECURITY_SNAPSHOT.role !== profile.role) {
+                                                safeSession.setItem("activeRole", profile.role);
+                                                spawnFloatingNotification("Role Updated by Admin", `Your system role has been updated to ${String(profile.role || '').toUpperCase()} by Admin.`, "info");
+                                            }
+                                            if (PREVIOUS_USER_SECURITY_SNAPSHOT.solId !== profile.solId) {
+                                                safeSession.setItem("activeSolId", profile.solId || "UNMAPPED");
+                                                spawnFloatingNotification("Office Mapping Updated", `Your SOL ID has been updated to ${profile.solId || 'UNMAPPED'} by Admin.`, "info");
+                                            }
+                                            if (PREVIOUS_USER_SECURITY_SNAPSHOT.cardsSig !== currentCardsSig) {
+                                                spawnFloatingNotification("Customized Cards Updated", "Your assigned module cards have been updated in real-time by Admin.", "info");
+                                            }
+                                        }
+                                        PREVIOUS_USER_SECURITY_SNAPSHOT = {
+                                            user: profile.user,
+                                            role: profile.role,
+                                            solId: profile.solId,
+                                            cardsSig: currentCardsSig,
+                                            locked: Boolean(profile.locked),
+                                            active: profile.active !== false
+                                        };
+                                    }
+
                                     const wasFirstAttach = !authenticatedUserSession;
                                     authenticatedUserSession = profile;
                                     // Ensure active logged-in non-guest user is always marked online in Firebase even after page reload
@@ -5129,7 +5510,38 @@
                                     } else {
                                         verifyBloggerAuth_Reentry(false);
                                     }
+
+                                    // If user is currently inside an open module whose privilege was just revoked in real-time by Admin, kick back to home dashboard immediately!
+                                    if (CURRENT_ACTIVE_SPA_MODULE && CURRENT_ACTIVE_SPA_MODULE !== 'index.html') {
+                                        const liveCheck = checkUserPrivilegeForModule(CURRENT_ACTIVE_SPA_MODULE, profile);
+                                        if (!liveCheck.allowed) {
+                                            returnToHomeGridSPA();
+                                            showPrivilegeErrorBanner("You are not privileged to see this card! Access was revoked in real-time by Admin.");
+                                            spawnFloatingNotification("Access Revoked", "You are not privileged to see this card.", "error");
+                                        }
+                                    }
+
                                     refreshAllLiveStatusViews();
+                                }
+                            } else {
+                                // User is on the Login screen: if Admin unlocks or enables an account in real-time, notify if that username is typed in sysUser
+                                const typedUserEl = document.getElementById("sysUser");
+                                const typedUser = typedUserEl ? typedUserEl.value.trim().toLowerCase() : "";
+                                if (typedUser) {
+                                    const matchedAcc = SYSTEM_USER_REGISTRY.find(acc => String(acc.user || '').toLowerCase() === typedUser);
+                                    if (matchedAcc) {
+                                        const prevKey = `_loginWatch_${typedUser}`;
+                                        const prevState = window[prevKey];
+                                        if (prevState) {
+                                            if (prevState.locked === true && matchedAcc.locked === false) {
+                                                spawnFloatingNotification("Account Unlocked", "You have been unlocked by Admin. You may now log in.", "success");
+                                            }
+                                            if (prevState.active === false && matchedAcc.active !== false) {
+                                                spawnFloatingNotification("Account Enabled", "You have been enabled by Admin. You may now log in.", "success");
+                                            }
+                                        }
+                                        window[prevKey] = { locked: Boolean(matchedAcc.locked), active: matchedAcc.active !== false };
+                                    }
                                 }
                             }
                         } else {
@@ -5137,6 +5549,19 @@
                             isCloudDataLoaded = true;
                         }
                     });
+
+                    db.collection("system").doc("security_alerts").onSnapshot((secDoc) => {
+                        if (secDoc.exists) {
+                            const sd = secDoc.data();
+                            if (Array.isArray(sd.alerts)) {
+                                SYSTEM_SECURITY_NOTIFICATIONS = sd.alerts;
+                                window.SYSTEM_SECURITY_NOTIFICATIONS = SYSTEM_SECURITY_NOTIFICATIONS;
+                                if (authenticatedUserSession) {
+                                    evaluate24HourModuleNotifications(LATEST_DASHBOARD_CARDS);
+                                }
+                            }
+                        }
+                    }, () => {});
 
                     db.collection("system").doc("dashboard").onSnapshot((doc) => {
                         if (doc.exists) {
@@ -5184,10 +5609,16 @@
                     return;
                 }
 
-                // Guest is treated as Maker
+                // Guest is treated as Maker; also respect per-user customized allowedCards
                 let myRole = authenticatedUserSession ? (isGuestUser ? "maker" : authenticatedUserSession.role) : "maker";
                 let roleAllowed = c.roles && (c.roles[myRole] || (isGuestUser && c.roles['guest']));
-                if (!roleAllowed && (!authenticatedUserSession || authenticatedUserSession.user !== 'admin')) return;
+                let customCardAllowed = authenticatedUserSession && Array.isArray(authenticatedUserSession.allowedCards) && (
+                    authenticatedUserSession.allowedCards.includes(c.id) ||
+                    authenticatedUserSession.allowedCards.includes(c.targetFile) ||
+                    authenticatedUserSession.allowedCards.includes(c.title)
+                );
+                let isSuperAdminUser = authenticatedUserSession && (authenticatedUserSession.user === 'admin' || authenticatedUserSession.role === 'admin' || String(authenticatedUserSession.user || '').toLowerCase().startsWith('admin'));
+                if (!roleAllowed && !customCardAllowed && !isSuperAdminUser) return;
 
                 let cardDiv = document.createElement('div');
                 let opacityStyle = (!c.active) ? "opacity: 0.5;" : ""; 
@@ -5266,10 +5697,29 @@
             const listEl = document.getElementById('notifItemsList');
             if (!badge || !listEl) return;
 
-            if (activeNotifs.length > 0) {
+            // For Super Admin ('admin'), include recent 24h Unauthorized URL Security Alerts at the top of the bell feed
+            let securityAlertHtml = '';
+            let securityAlertCount = 0;
+            if (isAdmin && Array.isArray(SYSTEM_SECURITY_NOTIFICATIONS)) {
+                const recentSecAlerts = SYSTEM_SECURITY_NOTIFICATIONS.filter(s => !s.timestamp || (now - s.timestamp) < TTL_24H);
+                securityAlertCount = recentSecAlerts.length;
+                securityAlertHtml = recentSecAlerts.slice(0, 15).map(s => `
+                    <div class="notif-security-breach-item">
+                        <h5>${SVG_ICON_LIBRARY.alertCircle} <span>Security Alert: Unauthorized URL</span></h5>
+                        <p><strong>${s.fullName || s.user}</strong> (@${s.user} • ${s.role || 'STAFF'}) tried to open <strong>${s.cardTitle || s.attemptedModule}</strong> via Direct URL.</p>
+                        <div class="notif-meta">
+                            <span>SOL: ${s.solId || 'N/A'}</span>
+                            <span>${s.timeFormatted || 'Just now'}</span>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            const totalCount = activeNotifs.length + securityAlertCount;
+            if (totalCount > 0) {
                 badge.style.display = 'inline-flex';
-                badge.innerText = activeNotifs.length;
-                listEl.innerHTML = activeNotifs.map(n => `
+                badge.innerText = totalCount;
+                const moduleHtml = activeNotifs.map(n => `
                     <div class="notif-role-item" onclick="loadModuleSPA('${n.targetFile}', null, 'Opening ${n.title}...'); document.getElementById('notifDropdownPanel').classList.remove('open');">
                         <h5>${n.svgIcon} <span>New Module: ${n.title}</span></h5>
                         <p>${n.desc}</p>
@@ -5279,6 +5729,7 @@
                         </div>
                     </div>
                 `).join('');
+                listEl.innerHTML = securityAlertHtml + moduleHtml;
             } else {
                 badge.style.display = 'none';
                 badge.innerText = '0';
@@ -5890,10 +6341,20 @@
                 profile = { fullName: "Master System Admin", user: "admin", pass: "123", role: "admin", active: true, locked: false, failedAttempts: 0, isFirstTimeDefault: false, totpSecret: "", solId: "000000", allowedCards: [] };
             }
 
-            if(!profile || !profile.active || profile.locked) { 
+            if(!profile) { 
                 await synchronizeSystemDatabase(false); 
-                displayCustomAlert("Invalid Credentials: Account does not exist, is disabled, or locked."); 
+                displayCustomAlert("Invalid Credentials: Account does not exist."); 
                 return; 
+            }
+            if(profile.locked) {
+                await synchronizeSystemDatabase(false);
+                displayCustomAlert("SYSTEM LOCKED\n\nYou have been locked by Admin. Please contact System Administrator.");
+                return;
+            }
+            if(!profile.active) {
+                await synchronizeSystemDatabase(false);
+                displayCustomAlert("SYSTEM LOCKED\n\nYou have been disabled by Admin. Please contact System Administrator.");
+                return;
             }
 
             if(profile.pass !== p) {
@@ -6156,9 +6617,18 @@
             const requestedView = urlParams.get('view');
             if (requestedView && !window.hasRestoredView) {
                 window.hasRestoredView = true;
+                const candidateFile = requestedView.endsWith('.html') ? requestedView : (requestedView + ".html");
                 setTimeout(() => {
-                    loadModuleSPA(requestedView + ".html", null, "Restoring Workspace...");
-                }, 400);
+                    const privCheck = checkUserPrivilegeForModule(candidateFile, profile);
+                    if (!privCheck.allowed) {
+                        returnToHomeGridSPA();
+                        showPrivilegeErrorBanner("You are not privileged to see this card!");
+                        spawnFloatingNotification("Privilege Violation", "You are not privileged to see this card.", "error");
+                        reportUnauthorizedUrlAccessToSuperAdmin(candidateFile, privCheck, "Direct URL Query (?view=" + requestedView + ")");
+                    } else {
+                        loadModuleSPA(candidateFile, null, "Restoring Workspace...");
+                    }
+                }, 250);
             }
         }
 
@@ -6239,6 +6709,8 @@
             if (currentU && currentU !== "GUEST") {
                 await setUserOnlinePresence(currentU, false);
             }
+            PREVIOUS_USER_SECURITY_SNAPSHOT = null;
+            CURRENT_ACTIVE_SPA_MODULE = 'index.html';
 
             safeSession.clear();
             authenticatedUserSession = null;
@@ -6442,7 +6914,7 @@
         // =========================================================================
         async function loadModuleSPA(targetUrl, clickedCard = null, customLoadingMsg = "Connecting to Workspace...") {
             const activeUser = safeSession.getItem("activeUser");
-            if (!activeUser) {
+            if (!activeUser || safeSession.getItem("2faVerified") !== "true") {
                 executePortalLogout(); 
                 return;
             }
@@ -6450,12 +6922,18 @@
             // Always auto-collapse Hamburger Menu when opening any module card
             collapseHamburgerMenu();
 
-            // STRICT GUARD: Block Guest User from opening self_password.html
-            const isGuest = (activeUser === "GUEST" || (authenticatedUserSession && (authenticatedUserSession.user === "GUEST" || authenticatedUserSession.role === "guest" || authenticatedUserSession.isGuest === true)));
-            if (isGuest && String(targetUrl).toLowerCase().includes("self_password")) {
-                spawnFloatingNotification("Access Restricted", "Guest users cannot access Passcode Change settings.", "warning");
+            // STRICT ROLE & CUSTOMIZED CARD PRIVILEGE GUARD (BLOCKS DIRECT URL & UNAUTHORIZED INVOCATION)
+            const privResult = checkUserPrivilegeForModule(targetUrl, authenticatedUserSession);
+            if (!privResult.allowed) {
+                returnToHomeGridSPA();
+                showPrivilegeErrorBanner("You are not privileged to see this card!");
+                spawnFloatingNotification("Access Denied", "You are not privileged to see this card.", "error");
+                await reportUnauthorizedUrlAccessToSuperAdmin(targetUrl, privResult, clickedCard ? "Card Click Attempt" : "Direct URL Execution");
                 return;
             }
+
+            dismissPrivilegeErrorBanner();
+            CURRENT_ACTIVE_SPA_MODULE = targetUrl;
 
             // Hide floating AI icon when leaving main dashboard grid
             updateFloatingAiVisibility(false);
@@ -6542,6 +7020,7 @@
         }
 
         function returnToHomeGridSPA() {
+            CURRENT_ACTIVE_SPA_MODULE = 'index.html';
             const workspace = document.getElementById('dynamicWorkspace');
             workspace.style.display = 'none';
             workspace.innerHTML = ''; 
@@ -6591,6 +7070,33 @@
             } else {
                 returnToHomeGridSPA(); 
             }
+        };
+
+        // Global Helper APIs for Child Modules (User Maintenance & Super Admin Notification Card)
+        window.getSuperAdminSecurityNotifications = function() {
+            return SYSTEM_SECURITY_NOTIFICATIONS || [];
+        };
+        window.clearSuperAdminSecurityNotifications = async function() {
+            if (!authenticatedUserSession || String(authenticatedUserSession.user || '').toLowerCase() !== 'admin') return false;
+            SYSTEM_SECURITY_NOTIFICATIONS = [];
+            window.SYSTEM_SECURITY_NOTIFICATIONS = [];
+            broadcastPortalRealtimeEvent({ type: 'SECURITY_NOTIFS_SYNC', securityNotifications: [] });
+            evaluate24HourModuleNotifications(LATEST_DASHBOARD_CARDS);
+            if (db) {
+                await Promise.allSettled([
+                    db.collection("system").doc("registry").set({ securityNotifications: [] }, { merge: true }),
+                    db.collection("system").doc("security_alerts").set({ alerts: [], lastUpdatedAt: Date.now() }, { merge: true })
+                ]);
+            }
+            return true;
+        };
+        window.syncRealtimeUserMutationFromAdmin = async function(updatedUsersArray) {
+            if (Array.isArray(updatedUsersArray)) {
+                SYSTEM_USER_REGISTRY = updatedUsersArray;
+                window.SYSTEM_USER_REGISTRY = SYSTEM_USER_REGISTRY;
+            }
+            refreshAllLiveStatusViews();
+            await pushUsersToCloudOnly();
         };
     </script>
 </body>
