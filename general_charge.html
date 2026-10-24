@@ -361,6 +361,16 @@
             opacity: 1 !important;
         }
 
+        .gc-smart-hint-chip {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-muted, #64748b);
+            margin-top: 5px;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
         /* COPY FORWARDED TO LEDGER ROWS */
         #genForwardContainer {
             display: flex;
@@ -723,7 +733,7 @@
                             <span>General Office Charge Report</span>
                             <span class="gc-form-badge">Bilingual A.C.G.-61 (2-Up Landscape)</span>
                         </h3>
-                        <p class="gc-subtitle">Official India Post Bilingual (Hindi + English) Side-by-Side A4 Landscape Charge Report Compiler.</p>
+                        <p class="gc-subtitle">Official India Post Bilingual (Hindi + English) Side-by-Side A4 Landscape Charge Report with Smart Assumed/Relinquished Detection.</p>
                     </div>
                 </div>
 
@@ -759,8 +769,8 @@
                         </svg>
                     </div>
                     <div class="gc-stat-text">
-                        <div class="gc-stat-label">Print Layout Format</div>
-                        <div class="gc-stat-val">A4 Landscape • 2-Up Bilingual</div>
+                        <div class="gc-stat-label">Smart Handover Mode</div>
+                        <div class="gc-stat-val" id="gcStatHandoverMode">Standard Charge Handover</div>
                     </div>
                 </div>
 
@@ -790,7 +800,7 @@
                         </svg>
                         <span>Office / Post, Officers &amp; Memorandum Details</span>
                     </h4>
-                    <span class="gc-section-tag">Inputs Print in Bold on Form</span>
+                    <span class="gc-section-tag">English Lines Only • Auto Assumed/Relinquished</span>
                 </div>
 
                 <div class="gc-form-grid">
@@ -804,7 +814,7 @@
                             </svg>
                             <span>Office Name / Post (Certified that the charge of the office of):</span>
                         </label>
-                        <input class="text-input-placeholder-gray" id="genOfficeName" placeholder="e.g. MTS, Radhakishorepur HO" type="text" oninput="gcSyncDefaultPlace()" autocomplete="off"/>
+                        <input class="text-input-placeholder-gray" id="genOfficeName" placeholder="e.g. POSTMAN, R.K PUR HO" type="text" oninput="gcSyncDefaultPlace()" autocomplete="off"/>
                     </div>
 
                     <!-- Station / Place (स्थान / at Place) -->
@@ -814,9 +824,9 @@
                                 <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
                                 <circle cx="12" cy="10" r="3"/>
                             </svg>
-                            <span>Station / Place (स्थान / at Place):</span>
+                            <span>Station / Place (at Place):</span>
                         </label>
-                        <input class="text-input-placeholder-gray" id="genPlaceName" placeholder="e.g. Radhakishorepur HO (Auto-fills)" type="text" oninput="gcMarkPlaceManual()" autocomplete="off"/>
+                        <input class="text-input-placeholder-gray" id="genPlaceName" placeholder="e.g. R.K PUR HO (Auto-fills)" type="text" oninput="gcMarkPlaceManual()" autocomplete="off"/>
                     </div>
 
                     <!-- Relieved Officer -->
@@ -827,9 +837,10 @@
                                 <circle cx="8.5" cy="7" r="4"/>
                                 <polyline points="17 11 19 13 23 9"/>
                             </svg>
-                            <span>Relieved Officer Name (was made over by / भारमुक्त अधिकारी):</span>
+                            <span>Relieved Officer Name (was made over by / Type 'ASSUMED' if assuming):</span>
                         </label>
-                        <input class="text-input-placeholder-gray" id="genRelievedOfficer" placeholder="Name of Officer Handing Over" type="text" autocomplete="off"/>
+                        <input class="text-input-placeholder-gray" id="genRelievedOfficer" placeholder="Name of Officer Handing Over (or ASSUMED)" type="text" oninput="gcUpdateLiveTelemetry()" autocomplete="off"/>
+                        <span class="gc-smart-hint-chip">Tip: Typing <strong>ASSUMED</strong> automatically changes label to <em>"was assumed by (name)"</em>.</span>
                     </div>
 
                     <!-- Relieving Officer -->
@@ -841,9 +852,10 @@
                                 <line x1="20" y1="8" x2="20" y2="14"/>
                                 <line x1="23" y1="11" x2="17" y2="11"/>
                             </svg>
-                            <span>Relieving Officer Name (to name / भारप्राप्त अधिकारी):</span>
+                            <span>Relieving Officer Name (to name / Type 'RELINQUISHED' if relinquishing):</span>
                         </label>
-                        <input class="text-input-placeholder-gray" id="genRelievingOfficer" placeholder="Name of Officer Taking Charge" type="text" autocomplete="off"/>
+                        <input class="text-input-placeholder-gray" id="genRelievingOfficer" placeholder="Name of Officer Taking Charge (or RELINQUISHED)" type="text" oninput="gcUpdateLiveTelemetry()" autocomplete="off"/>
+                        <span class="gc-smart-hint-chip">Tip: Typing <strong>RELINQUISHED</strong> keeps officer name in <em>"was made over by"</em> &amp; sets <em>"to (name)"</em> as RELINQUISHED.</span>
                     </div>
 
                     <!-- Transfer Date -->
@@ -853,7 +865,7 @@
                                 <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
                                 <line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
                             </svg>
-                            <span>Transfer Date (तारीख):</span>
+                            <span>Transfer Date (on the date):</span>
                         </label>
                         <input id="genTransferDate" type="date" onchange="gcUpdateLiveTelemetry()"/>
                     </div>
@@ -865,11 +877,11 @@
                                 <circle cx="12" cy="12" r="10"/>
                                 <polyline points="12 6 12 12 16 14"/>
                             </svg>
-                            <span>Transfer Time (पूर्वाह्न / अपराह्न):</span>
+                            <span>Transfer Time (fore / after noon):</span>
                         </label>
                         <select id="genTransferTime" onchange="gcUpdateLiveTelemetry()">
-                            <option value="FN">Forenoon (FN / पूर्वाह्न)</option>
-                            <option value="AN">Afternoon (AN / अपराह्न)</option>
+                            <option value="FN">Forenoon (FN)</option>
+                            <option value="AN">Afternoon (AN)</option>
                         </select>
                     </div>
 
@@ -880,9 +892,9 @@
                                 <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
                                 <polyline points="14 2 14 8 20 8"/>
                             </svg>
-                            <span>Memo / Letter No (नं.):</span>
+                            <span>Order / Memo No (No):</span>
                         </label>
-                        <input class="text-input-placeholder-gray" id="genMemoNo" placeholder="e.g. Est/1-2/2026" type="text" autocomplete="off"/>
+                        <input class="text-input-placeholder-gray" id="genMemoNo" placeholder="e.g. B-2/SUBHAJIT/2026" type="text" autocomplete="off"/>
                     </div>
 
                     <!-- Memo Date -->
@@ -892,7 +904,7 @@
                                 <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
                                 <line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
                             </svg>
-                            <span>Memo Date (तारीख / Dated):</span>
+                            <span>Order / Memo Date (Dated):</span>
                         </label>
                         <input id="genMemoDate" type="date"/>
                     </div>
@@ -903,9 +915,9 @@
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
                             </svg>
-                            <span>From Authority (के अनुसार दे दिया / from):</span>
+                            <span>From Authority (from):</span>
                         </label>
-                        <input class="text-input-placeholder-gray" id="genFromAuthority" placeholder="e.g. SPOs, Divisional Office" type="text" autocomplete="off"/>
+                        <input class="text-input-placeholder-gray" id="genFromAuthority" placeholder="e.g. SPOs, AGARTALA" type="text" autocomplete="off"/>
                     </div>
                 </div>
             </div>
@@ -945,7 +957,7 @@
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
                     </svg>
-                    <span>A4 Landscape Side-by-Side • Bilingual Hindi &amp; English Form A.C.G.-61</span>
+                    <span>A4 Landscape Side-by-Side • Smart Multi-Line Order No • Clean English-Only Fill</span>
                 </div>
 
                 <button class="action-btn" id="btnGenerateGeneralCharge" onclick="triggerSmartGenerationGeneralCharge()" type="button">
@@ -1121,6 +1133,44 @@
             gcUpdateLiveTelemetry();
         }
 
+        // Smart Resolver for ASSUMED and RELINQUISHED
+        function gcResolveSmartOfficerConfig(rawRelieved, rawRelieving) {
+            const r1 = String(rawRelieved || '').trim();
+            const r2 = String(rawRelieving || '').trim();
+            const u1 = r1.toUpperCase();
+            const u2 = r2.toUpperCase();
+
+            // Case 1: "ASSUMED" typed in either Relieved or Relieving box
+            if (u1 === 'ASSUMED' || u2 === 'ASSUMED') {
+                const actualOfficerName = (u1 === 'ASSUMED') ? r2 : r1;
+                return {
+                    mode: 'ASSUMED',
+                    englishLine1Label: 'was assumed by (name)',
+                    line1Value: 'ASSUMED',
+                    line2Value: actualOfficerName
+                };
+            }
+
+            // Case 2: "RELINQUISHED" typed in either Relieving or Relieved box
+            if (u2 === 'RELINQUISHED' || u1 === 'RELINQUISHED') {
+                const actualOfficerName = (u2 === 'RELINQUISHED') ? r1 : r2;
+                return {
+                    mode: 'RELINQUISHED',
+                    englishLine1Label: 'was made over by (name)',
+                    line1Value: actualOfficerName,
+                    line2Value: 'RELINQUISHED'
+                };
+            }
+
+            // Case 3: Normal two-officer charge handover
+            return {
+                mode: 'STANDARD',
+                englishLine1Label: 'was made over by (name)',
+                line1Value: r1,
+                line2Value: r2
+            };
+        }
+
         function gcUpdateLiveTelemetry() {
             const tDateVal = document.getElementById('genTransferDate')?.value || '';
             const tTimeVal = document.getElementById('genTransferTime')?.value || 'FN';
@@ -1133,6 +1183,24 @@
                     schedEl.innerText = `${p[2]}/${p[1]}/${p[0]} • ${sessionLabel}`;
                 } else {
                     schedEl.innerText = `${sessionLabel} Session`;
+                }
+            }
+
+            // Update Smart Handover Mode Pill
+            const r1 = document.getElementById('genRelievedOfficer')?.value || '';
+            const r2 = document.getElementById('genRelievingOfficer')?.value || '';
+            const smartCfg = gcResolveSmartOfficerConfig(r1, r2);
+            const modeEl = document.getElementById('gcStatHandoverMode');
+            if (modeEl) {
+                if (smartCfg.mode === 'ASSUMED') {
+                    modeEl.innerText = 'Smart Mode: "was assumed by"';
+                    modeEl.style.color = '#2563eb';
+                } else if (smartCfg.mode === 'RELINQUISHED') {
+                    modeEl.innerText = 'Smart Mode: "RELINQUISHED"';
+                    modeEl.style.color = '#d97706';
+                } else {
+                    modeEl.innerText = 'Standard Charge Handover';
+                    modeEl.style.color = '';
                 }
             }
 
@@ -1223,11 +1291,10 @@
 
         // =========================================================================
         // 2. 300-DPI BILINGUAL (HINDI + ENGLISH) SIDE-BY-SIDE A4 LANDSCAPE RENDERER
-        //    (100% Matches Official India Post Form A.C.G.-61 Image)
+        //    (English-Only Fill, Smart Assumed/Relinquished, Multi-line Order No, No PTO)
         // =========================================================================
         function renderBilingualLandscapeSheetCanvas(data, leftRecipient, rightRecipient) {
-            // A4 Landscape at 300 DPI: 297mm x 210mm -> 3508 x 2480 px (Using 2970 x 2100 for exact 10px = 1mm coordinate mapping!)
-            const SCALE = 10; // 1mm = 10px (Ultra-crisp 254 DPI vector-grade output)
+            const SCALE = 10; // 1mm = 10px (Ultra-crisp vector-grade output)
             const W_MM = 297;
             const H_MM = 210;
 
@@ -1243,7 +1310,6 @@
 
             const SERIF_FONT = "'Noto Serif Devanagari', 'Nirmala UI', 'Mangal', 'Times New Roman', Times, serif";
 
-            // Helper to draw dotted line
             function drawDottedLine(x1, y1, x2, y2) {
                 ctx.save();
                 ctx.beginPath();
@@ -1256,7 +1322,6 @@
                 ctx.restore();
             }
 
-            // Helper to draw solid line
             function drawSolidLine(x1, y1, x2, y2, width = 0.3) {
                 ctx.save();
                 ctx.beginPath();
@@ -1269,7 +1334,6 @@
                 ctx.restore();
             }
 
-            // Helper to draw text
             function drawTxt(text, x, y, sizeMm, weight = 'normal', align = 'left', color = '#000000') {
                 ctx.save();
                 ctx.font = `${weight} ${sizeMm}px ${SERIF_FONT}`;
@@ -1280,15 +1344,14 @@
                 ctx.restore();
             }
 
-            // Helper to fit bold user input cleanly inside a maximum width
-            function drawBoldInputFitted(text, x, y, maxWidthMm, baseSizeMm = 3.5, align = 'left') {
+            function drawBoldInputFitted(text, x, y, maxWidthMm, baseSizeMm = 3.55, minSizeMm = 2.75, align = 'left') {
                 const str = String(text || '').trim();
                 if (!str) return;
                 ctx.save();
                 let sz = baseSizeMm;
                 ctx.font = `700 ${sz}px ${SERIF_FONT}`;
-                while (ctx.measureText(str).width > maxWidthMm && sz > 2.2) {
-                    sz -= 0.15;
+                while (ctx.measureText(str).width > maxWidthMm && sz > minSizeMm) {
+                    sz -= 0.12;
                     ctx.font = `700 ${sz}px ${SERIF_FONT}`;
                 }
                 ctx.fillStyle = '#000000';
@@ -1296,6 +1359,81 @@
                 ctx.textBaseline = 'alphabetic';
                 ctx.fillText(str, x, y);
                 ctx.restore();
+            }
+
+            // Smart Multi-Line Vertical Wrapper for Long Order / Memo Numbers & Authorities
+            // Never shrinks font too small and never overlaps adjacent columns!
+            function wrapTextToLines(text, maxWidthMm, fontSizeMm) {
+                const raw = String(text || '').trim();
+                if (!raw) return [];
+                ctx.save();
+                ctx.font = `700 ${fontSizeMm}px ${SERIF_FONT}`;
+
+                if (ctx.measureText(raw).width <= maxWidthMm) {
+                    ctx.restore();
+                    return [raw];
+                }
+
+                // Split by natural delimiters (/, -, space) while keeping delimiters attached
+                const tokens = raw.split(/(?<=[\/\- ])|(?=[ ])/);
+                const lines = [];
+                let currentLine = "";
+
+                for (let tok of tokens) {
+                    const testLine = currentLine + tok;
+                    if (ctx.measureText(testLine).width <= maxWidthMm) {
+                        currentLine = testLine;
+                    } else {
+                        if (currentLine.trim() !== "") {
+                            lines.push(currentLine.trim());
+                            currentLine = "";
+                        }
+                        // If a single token itself is wider than maxWidthMm, slice it character by character
+                        if (ctx.measureText(tok).width > maxWidthMm) {
+                            let sub = "";
+                            for (const ch of tok) {
+                                if (ctx.measureText(sub + ch).width <= maxWidthMm) {
+                                    sub += ch;
+                                } else {
+                                    if (sub) lines.push(sub);
+                                    sub = ch;
+                                }
+                            }
+                            currentLine = sub;
+                        } else {
+                            currentLine = tok.trimStart();
+                        }
+                    }
+                }
+                if (currentLine.trim() !== "") {
+                    lines.push(currentLine.trim());
+                }
+                ctx.restore();
+                return lines;
+            }
+
+            function drawMultiLineStackedField(text, lineStartX, lineEndX, baseLineY, fontSizeMm = 3.25, lineStepMm = 4.2) {
+                const maxW = (lineEndX - lineStartX) - 2.0;
+                const lines = wrapTextToLines(text, maxW, fontSizeMm);
+
+                if (lines.length <= 1) {
+                    drawDottedLine(lineStartX, baseLineY + 0.6, lineEndX, baseLineY + 0.6);
+                    if (lines.length === 1) {
+                        drawTxt(lines[0], lineStartX + 1.0, baseLineY - 0.1, fontSizeMm, "700", "left");
+                    }
+                    return;
+                }
+
+                // Stack top-to-bottom utilizing vertical space above and below baseLineY
+                const startY = lines.length === 2
+                    ? baseLineY - 2.8
+                    : baseLineY - 4.4;
+
+                lines.forEach((ln, idx) => {
+                    const curY = startY + (idx * lineStepMm);
+                    drawDottedLine(lineStartX, curY + 0.6, lineEndX, curY + 0.6);
+                    drawTxt(ln, lineStartX + 1.0, curY - 0.1, fontSizeMm, "700", "left");
+                });
             }
 
             // Draw one complete Bilingual A.C.G.-61 Charge Report Half (width: 148.5mm, height: 210mm)
@@ -1306,151 +1444,139 @@
                 const contentW = marginR - marginL; // 126.5mm
 
                 // 1. Top-Left Form Code (ए.सी.जी. 61 / A.C.G.-61)
-                drawTxt("ए.सी.जी. 61", marginL, 12.5, 3.1, "normal", "left");
-                drawTxt("A.C.G.-61", marginL, 16.5, 3.3, "normal", "left");
+                drawTxt("ए.सी.जी. 61", marginL, 11.5, 3.1, "normal", "left");
+                drawTxt("A.C.G.-61", marginL, 15.2, 3.25, "normal", "left");
 
                 // 2. Centered Bilingual Department Header
-                drawTxt("भारतीय डाक विभाग", centerX, 21.5, 4.1, "normal", "center");
-                drawTxt("DEPARTMENT OF POSTS, INDIA", centerX, 26.2, 4.0, "normal", "center");
+                drawTxt("भारतीय डाक विभाग", centerX, 19.5, 4.05, "normal", "center");
+                drawTxt("DEPARTMENT OF POSTS, INDIA", centerX, 24.0, 3.95, "normal", "center");
 
                 // 3. Rule 267 Citation
-                drawTxt("(देखिए नियम 267, डाक-तार वित्त पुस्तिका का खण्ड 1, द्वितीय संस्करण)", centerX, 31.8, 2.75, "normal", "center");
-                drawTxt("(See Rule 267, Post and Telegraphs Financial Hand Book, Volume-1", centerX, 35.6, 2.75, "normal", "center");
-                drawTxt("Second Edition)", centerX, 39.2, 2.75, "normal", "center");
+                drawTxt("(देखिए नियम 267, डाक-तार वित्त पुस्तिका का खण्ड 1, द्वितीय संस्करण)", centerX, 29.3, 2.75, "normal", "center");
+                drawTxt("(See Rule 267, Post and Telegraphs Financial Hand Book, Volume-1", centerX, 33.1, 2.75, "normal", "center");
+                drawTxt("Second Edition)", centerX, 36.6, 2.75, "normal", "center");
 
                 // 4. Report Title
-                drawTxt("चार्ज की बदली पर चार्ज रिपोर्ट और नकदी और टिकटों की रसीद", centerX, 45.2, 3.1, "normal", "center");
-                drawTxt("Charge Report and Receipt for cash and stamps, on transfer of charge", centerX, 49.2, 2.95, "normal", "center");
+                drawTxt("चार्ज की बदली पर चार्ज रिपोर्ट और नकदी और टिकटों की रसीद", centerX, 42.4, 3.05, "normal", "center");
+                drawTxt("Charge Report and Receipt for cash and stamps, on transfer of charge", centerX, 46.3, 2.95, "normal", "center");
 
                 // 5. Certified that the charge of the office of
-                drawTxt("प्रमाणित किया जाता है कि", centerX, 55.4, 3.1, "normal", "center");
-                drawTxt("Certified that the charge of the office of", centerX, 59.4, 3.05, "normal", "center");
+                drawTxt("प्रमाणित किया जाता है कि", centerX, 52.3, 3.05, "normal", "center");
+                drawTxt("Certified that the charge of the office of", centerX, 56.2, 3.0, "normal", "center");
 
                 // 6. Office / Post Input Line (User Input in BOLD)
-                const yOffice = 68.0;
+                const yOffice = 64.2;
                 drawDottedLine(marginL, yOffice + 0.8, marginR, yOffice + 0.8);
-                drawBoldInputFitted(data.office, centerX, yOffice, contentW - 4, 3.7, "center");
+                drawBoldInputFitted(data.office, centerX, yOffice, contentW - 4, 3.7, 2.8, "center");
 
-                // 7. Relieved Officer Line: चार्ज..........(नाम) ने.......... / was made over by (name)
-                const yRelieved = 79.5;
-                drawTxt("चार्ज", marginL, yRelieved, 3.1, "normal", "left");
-                drawDottedLine(marginL + 7.5, yRelieved + 0.6, marginL + 56, yRelieved + 0.6);
-                drawTxt("(नाम) ने", marginL + 57, yRelieved, 3.1, "normal", "left");
-                drawDottedLine(marginL + 69.5, yRelieved + 0.6, marginR, yRelieved + 0.6);
+                // 7. Relieved Officer / Assumed Block (With generous 7.2mm vertical spacing & English-only fill)
+                const yRelievedHindi = 73.5;
+                drawTxt("चार्ज", marginL, yRelievedHindi, 3.05, "normal", "left");
+                drawDottedLine(marginL + 7.5, yRelievedHindi + 0.6, marginL + 56, yRelievedHindi + 0.6);
+                drawTxt("(नाम) ने", marginL + 57.5, yRelievedHindi, 3.05, "normal", "left");
+                drawDottedLine(marginL + 70, yRelievedHindi + 0.6, marginR, yRelievedHindi + 0.6);
 
-                drawTxt("was made over by (name)", marginL, yRelieved + 4.5, 3.0, "normal", "left");
-                drawDottedLine(marginL + 42, yRelieved + 5.1, marginR, yRelieved + 5.1);
+                const yRelievedEng = 80.8; // Generous 7.3mm below Hindi line so bold text never crowds!
+                drawTxt(data.englishLine1Label, marginL, yRelievedEng, 3.0, "normal", "left");
+                const label1Width = data.englishLine1Label.includes("assumed") ? 36.5 : 42.0;
+                drawDottedLine(marginL + label1Width, yRelievedEng + 0.6, marginR, yRelievedEng + 0.6);
+                drawBoldInputFitted(data.line1Value, marginL + label1Width + 3.0, yRelievedEng - 0.15, (marginR - (marginL + label1Width)) - 4, 3.55, 2.8, "left");
 
-                // Bold Relieved Officer Name placed prominently on the line
-                drawBoldInputFitted(data.relieved, marginL + 72, yRelieved - 0.2, 54, 3.55, "left");
-                drawBoldInputFitted(data.relieved, marginL + 45, yRelieved + 4.3, 80, 3.55, "left");
+                // 8. Relieving Officer & Station/Place Block (Generous 7.0mm vertical spacing)
+                const yRelievingHindi = 90.2;
+                drawTxt("(नाम) को", marginL, yRelievingHindi, 3.05, "normal", "left");
+                drawTxt("स्थान", marginL + 83, yRelievingHindi, 3.05, "normal", "left");
 
-                // 8. Relieving Officer & Place Line: (नाम) को / to (name)   AND   स्थान / at (Place)
-                const yRelieving = 94.5;
-                drawTxt("(नाम) को", marginL, yRelieving, 3.1, "normal", "left");
-                drawTxt("स्थान", marginL + 84, yRelieving, 3.1, "normal", "left");
+                const yRelievingEng = 97.2;
+                drawTxt("to (name)", marginL, yRelievingEng, 3.0, "normal", "left");
+                drawDottedLine(marginL + 17, yRelievingEng + 0.6, marginL + 79.5, yRelievingEng + 0.6);
+                drawBoldInputFitted(data.line2Value, marginL + 19.5, yRelievingEng - 0.15, 58.5, 3.55, 2.8, "left");
 
-                drawTxt("to (name)", marginL, yRelieving + 4.5, 3.0, "normal", "left");
-                drawDottedLine(marginL + 17, yRelieving + 5.1, marginL + 80, yRelieving + 5.1);
-
-                drawTxt("at (Place)", marginL + 84, yRelieving + 4.5, 3.0, "normal", "left");
-                drawDottedLine(marginL + 100, yRelieving + 5.1, marginR, yRelieving + 5.1);
-
-                // Bold Relieving Officer Name & Bold Place Name
-                drawBoldInputFitted(data.relieving, marginL + 19, yRelieving + 4.2, 59, 3.55, "left");
-                drawBoldInputFitted(data.place, marginL + 101.5, yRelieving + 4.2, 24.5, 3.35, "left");
+                drawTxt("at (Place)", marginL + 83, yRelievingEng, 3.0, "normal", "left");
+                drawDottedLine(marginL + 99, yRelievingEng + 0.6, marginR, yRelievingEng + 0.6);
+                drawBoldInputFitted(data.place, marginL + 100.5, yRelievingEng - 0.15, 25.5, 3.4, 2.6, "left");
 
                 // 9. Transfer Date & Forenoon / Afternoon Session Block
-                // तारीख............................. को पूर्वाह्न / अपराह्न में
-                // on the (date)..................... fore / after noon in accordance with
-                const yDateH = 109.5;
-                drawTxt("तारीख", marginL, yDateH, 3.1, "normal", "left");
+                // Hindi line: NO duplicate date & NO strike-through on पूर्वाह्न / अपराह्न
+                const yDateH = 107.2;
+                drawTxt("तारीख", marginL, yDateH, 3.05, "normal", "left");
                 drawDottedLine(marginL + 10, yDateH + 0.6, marginL + 50, yDateH + 0.6);
-                drawBoldInputFitted(data.transferDate, marginL + 30, yDateH - 0.2, 38, 3.5, "center");
+                drawTxt("को", marginL + 51.5, yDateH, 3.05, "normal", "left");
 
-                drawTxt("को", marginL + 51.5, yDateH, 3.1, "normal", "left");
-
-                // Stacked fraction: पूर्वाह्न over अपराह्न
                 const fracX_H = marginL + 62.5;
-                drawTxt("पूर्वाह्न", fracX_H, yDateH - 2.2, 2.85, data.isFN ? "700" : "normal", "center");
-                drawSolidLine(fracX_H - 6.5, yDateH - 1.0, fracX_H + 6.5, yDateH - 1.0, 0.28);
-                drawTxt("अपराह्न", fracX_H, yDateH + 2.3, 2.85, !data.isFN ? "700" : "normal", "center");
-                // Strike through the inactive session
-                if (data.isFN) {
-                    drawSolidLine(fracX_H - 6, yDateH + 1.3, fracX_H + 6, yDateH + 1.3, 0.35);
-                } else {
-                    drawSolidLine(fracX_H - 6, yDateH - 3.1, fracX_H + 6, yDateH - 3.1, 0.35);
-                }
-                drawTxt("में", marginL + 71.5, yDateH, 3.1, "normal", "left");
+                drawTxt("पूर्वाह्न", fracX_H, yDateH - 2.0, 2.8, "normal", "center");
+                drawSolidLine(fracX_H - 6.2, yDateH - 0.9, fracX_H + 6.2, yDateH - 0.9, 0.25);
+                drawTxt("अपराह्न", fracX_H, yDateH + 2.3, 2.8, "normal", "center");
+                drawTxt("में", marginL + 71.5, yDateH, 3.05, "normal", "left");
 
-                // English Date Row
-                const yDateE = 118.5;
+                // English Date Row: Date & Strike-through ONLY here!
+                const yDateE = 116.5;
                 drawTxt("on the (date)", marginL, yDateE, 3.0, "normal", "left");
-                drawDottedLine(marginL + 21, yDateE + 0.6, marginL + 55, yDateE + 0.6);
-                drawBoldInputFitted(data.transferDate, marginL + 38, yDateE - 0.2, 32, 3.5, "center");
+                drawDottedLine(marginL + 21, yDateE + 0.6, marginL + 54.5, yDateE + 0.6);
+                drawBoldInputFitted(data.transferDate, marginL + 37.75, yDateE - 0.2, 31.5, 3.5, 2.8, "center");
 
                 const fracX_E = marginL + 62.5;
-                drawTxt("fore", fracX_E, yDateE - 2.0, 2.75, data.isFN ? "700" : "normal", "center");
+                drawTxt("fore", fracX_E, yDateE - 2.0, 2.8, data.isFN ? "700" : "normal", "center");
                 drawSolidLine(fracX_E - 5.5, yDateE - 0.9, fracX_E + 5.5, yDateE - 0.9, 0.28);
-                drawTxt("after", fracX_E, yDateE + 2.2, 2.75, !data.isFN ? "700" : "normal", "center");
+                drawTxt("after", fracX_E, yDateE + 2.2, 2.8, !data.isFN ? "700" : "normal", "center");
+                // Strike-through ONLY on English inactive session
                 if (data.isFN) {
-                    drawSolidLine(fracX_E - 5, yDateE + 1.3, fracX_E + 5, yDateE + 1.3, 0.35);
+                    drawSolidLine(fracX_E - 5.2, yDateE + 1.3, fracX_E + 5.2, yDateE + 1.3, 0.36);
                 } else {
-                    drawSolidLine(fracX_E - 5, yDateE - 2.9, fracX_E + 5, yDateE - 2.9, 0.35);
+                    drawSolidLine(fracX_E - 5.2, yDateE - 2.9, fracX_E + 5.2, yDateE - 2.9, 0.36);
                 }
 
                 drawTxt("noon in accordance with", marginL + 70, yDateE, 3.0, "normal", "left");
 
-                // 10. Memo No, Dated, and From Authority Row
-                // नं. / No          तारीख / Dated          के अनुसार दे दिया / from
-                const yMemoLabels = 132.5;
-                drawTxt("नं.", marginL, yMemoLabels, 3.1, "normal", "left");
-                drawTxt("No", marginL, yMemoLabels + 4.2, 3.0, "normal", "left");
-                drawDottedLine(marginL + 7, yMemoLabels + 4.6, marginL + 44, yMemoLabels + 4.6);
-                drawBoldInputFitted(data.memoNo, marginL + 8.5, yMemoLabels + 3.9, 34.5, 3.35, "left");
+                // 10. Order / Memo No, Dated, and From Authority Row (Smart Multi-Line Stack)
+                const yMemoHindi = 128.0;
+                const yMemoEng = 132.8;
 
-                drawTxt("तारीख", marginL + 46.5, yMemoLabels, 3.1, "normal", "left");
-                drawTxt("Dated", marginL + 46.5, yMemoLabels + 4.2, 3.0, "normal", "left");
-                drawDottedLine(marginL + 57, yMemoLabels + 4.6, marginL + 83, yMemoLabels + 4.6);
-                drawBoldInputFitted(data.memoDate, marginL + 58.5, yMemoLabels + 3.9, 23.5, 3.35, "left");
+                // Column 1: नं. / No (Multi-line top-to-bottom stack so long order numbers never shrink tiny or overlap Dated)
+                drawTxt("नं.", marginL, yMemoHindi, 3.05, "normal", "left");
+                drawTxt("No", marginL, yMemoEng, 3.0, "normal", "left");
+                drawMultiLineStackedField(data.memoNo, marginL + 6.5, marginL + 46.5, yMemoEng, 3.2, 4.1);
 
-                drawTxt("के अनुसार दे दिया", marginL + 85.5, yMemoLabels, 3.1, "normal", "left");
-                drawTxt("from", marginL + 85.5, yMemoLabels + 4.2, 3.0, "normal", "left");
-                drawDottedLine(marginL + 95, yMemoLabels + 4.6, marginR, yMemoLabels + 4.6);
-                drawBoldInputFitted(data.authority, marginL + 96.5, yMemoLabels + 3.9, 30, 3.35, "left");
+                // Column 2: तारीख / Dated
+                drawTxt("तारीख", marginL + 48.5, yMemoHindi, 3.05, "normal", "left");
+                drawTxt("Dated", marginL + 48.5, yMemoEng, 3.0, "normal", "left");
+                drawDottedLine(marginL + 59.0, yMemoEng + 0.6, marginL + 84.0, yMemoEng + 0.6);
+                drawBoldInputFitted(data.memoDate, marginL + 71.5, yMemoEng - 0.15, 23.5, 3.35, 2.7, "center");
 
-                // 11. Signatures Block (भारमुक्त अधिकारी / Relieved Officer  &  भारप्राप्त अधिकारी / Relieving Officer)
-                const ySig = 156.0;
+                // Column 3: के अनुसार दे दिया / from (Multi-line stack if authority is long)
+                drawTxt("के अनुसार दे दिया", marginL + 86.0, yMemoHindi, 3.05, "normal", "left");
+                drawTxt("from", marginL + 86.0, yMemoEng, 3.0, "normal", "left");
+                drawMultiLineStackedField(data.authority, marginL + 95.0, marginR, yMemoEng, 3.2, 4.1);
+
+                // 11. Signatures Block (भारमुक्त अधिकारी / Relieved Officer  &  भारप्राप्त अधिकारी / Relieving Officer) — NO P.T.O.
+                const ySig = 156.5;
                 drawTxt("भारमुक्त अधिकारी", marginL + 22, ySig, 3.2, "normal", "center");
-                drawTxt("Relieved Officer", marginL + 22, ySig + 4.3, 3.2, "normal", "center");
+                drawTxt("Relieved Officer", marginL + 22, ySig + 4.4, 3.2, "normal", "center");
 
-                drawTxt("भारप्राप्त अधिकारी", marginR - 25, ySig, 3.2, "normal", "center");
-                drawTxt("Relieving Officer", marginR - 25, ySig + 4.3, 3.2, "normal", "center");
-
-                // P.T.O. (पृ.उ. / P.T.O.) on far bottom-right of signature zone
-                drawTxt("पृ.उ.", marginR - 4, ySig + 10.5, 2.7, "normal", "right");
-                drawTxt("P.T.O.", marginR - 4, ySig + 13.8, 2.7, "normal", "right");
+                drawTxt("भारप्राप्त अधिकारी", marginR - 23, ySig, 3.2, "normal", "center");
+                drawTxt("Relieving Officer", marginR - 23, ySig + 4.4, 3.2, "normal", "center");
 
                 // 12. Bottom Section: Copy Forwarded To (प्रतिलिपि सूचनार्थ प्रेषित / Copy forwarded to:)
-                const yFooterLine = 174.5;
+                const yFooterLine = 171.5;
                 drawSolidLine(marginL, yFooterLine, marginR, yFooterLine, 0.3);
 
-                const yMemoRef = 180.5;
+                const yMemoRef = 177.5;
                 drawTxt("सं. / No:", marginL, yMemoRef, 2.95, "normal", "left");
-                drawBoldInputFitted(data.memoNo || "....................", marginL + 14.5, yMemoRef, 45, 3.15, "left");
+                drawMultiLineStackedField(data.memoNo || "", marginL + 14.0, marginL + 72.0, yMemoRef, 3.1, 3.8);
 
-                drawTxt("दिनांक / Dated:", marginL + 68, yMemoRef, 2.95, "normal", "left");
-                drawBoldInputFitted(data.memoDate || "................", marginL + 92, yMemoRef, 32, 3.15, "left");
+                drawTxt("दिनांक / Dated:", marginL + 74.5, yMemoRef, 2.95, "normal", "left");
+                drawDottedLine(marginL + 97.5, yMemoRef + 0.6, marginR, yMemoRef + 0.6);
+                drawBoldInputFitted(data.memoDate || "", marginL + 112.0, yMemoRef - 0.15, 27.0, 3.2, 2.6, "center");
 
-                const yCopyHdr = 187.0;
+                const yCopyHdr = 186.5;
                 drawTxt("प्रतिलिपि सूचनार्थ प्रेषित / Copy forwarded to:", marginL, yCopyHdr, 3.05, "normal", "left");
                 drawSolidLine(marginL, yCopyHdr + 1.0, marginL + 66, yCopyHdr + 1.0, 0.25);
 
-                const yRecip = 194.5;
+                const yRecip = 194.2;
                 drawTxt("1.", marginL + 2, yRecip, 3.2, "normal", "left");
                 drawDottedLine(marginL + 7, yRecip + 0.8, marginR, yRecip + 0.8);
                 if (recipientText && recipientText.trim() !== "") {
-                    drawBoldInputFitted(recipientText, marginL + 8.5, yRecip, contentW - 10, 3.45, "left");
+                    drawBoldInputFitted(recipientText, marginL + 8.5, yRecip - 0.1, contentW - 10, 3.45, 2.6, "left");
                 }
             }
 
@@ -1509,7 +1635,6 @@
                 loader.style.display = 'flex';
             }
 
-            // Wait briefly for web fonts (Devanagari) to be ready
             if (document.fonts && document.fonts.ready) {
                 try { await document.fonts.ready; } catch (e) {}
             }
@@ -1525,7 +1650,6 @@
                         }
 
                         const { jsPDF } = window.jspdf;
-                        // A4 Landscape ('l', 'mm', 'a4') -> 297mm x 210mm
                         const doc = new jsPDF('l', 'mm', 'a4');
 
                         const placeRaw = (document.getElementById('genPlaceName')?.value || '').trim();
@@ -1543,11 +1667,14 @@
                             return p.length === 3 ? `${p[2]}/${p[1]}/${p[0]}` : d;
                         };
 
+                        const smartOfficers = gcResolveSmartOfficerConfig(relieved, relieving);
+
                         const reportData = {
                             office: office,
                             place: placeFinal,
-                            relieved: relieved,
-                            relieving: relieving,
+                            englishLine1Label: smartOfficers.englishLine1Label,
+                            line1Value: smartOfficers.line1Value,
+                            line2Value: smartOfficers.line2Value,
                             transferDate: formatD(tDateRaw),
                             isFN: tTimeRaw === 'FN',
                             memoNo: memoNo,
@@ -1593,7 +1720,7 @@
                         if (loader) loader.style.display = 'none';
                         if (genBtn) genBtn.classList.remove('generating-pulse');
                     }
-                }, 380);
+                }, 360);
             });
         }
     </script>
