@@ -7,320 +7,1824 @@
 </script>
 
 <div id="moduleRenderArea">
-    
-    <!-- 100% SELF-CONTAINED PERFECT DESIGN CSS -->
-    <style>
-        .portal-page-panel { max-width: 1200px; margin: 0 auto; background: white; padding: 40px; border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.03); border: 1px solid #e2e8f0; font-family: 'Segoe UI', Arial, sans-serif; }
-        
-        /* Typography & Layout */
-        h3.module-title { margin: 0; color: #1e293b; font-size: 26px; font-weight: 800; letter-spacing: -0.5px; }
-        .back-nav-link { display: inline-flex; align-items: center; color: #3b82f6; font-weight: 800; font-size: 15px; text-decoration: none; cursor: pointer; transition: color 0.2s; padding: 8px 15px; background: #eff6ff; border-radius: 8px; float: right; }
-        .back-nav-link:hover { color: #1d4ed8; background: #dbeafe; }
-        
-        .form-group { margin-bottom: 20px; clear: both; }
-        .form-group label { display: block; font-weight: 700; margin-bottom: 8px; font-size: 14px; color: #334155; }
-        
-        /* Inputs & Textareas */
-        input[type="text"], input[type="number"], input[type="date"], select, textarea { width: 100%; padding: 14px 16px; box-sizing: border-box; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14.5px; background: #f8fafc; color: #1e293b !important; transition: all 0.2s ease; font-family: 'Segoe UI', Arial, sans-serif; }
-        input[type="text"]:focus, input[type="number"]:focus, input[type="date"]:focus, select:focus, textarea:focus { border-color: #0ea5e9; background: #ffffff; box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.1); outline: none; }
-        
-        /* NORMAL (NON-ITALIC) PLACEHOLDERS */
-        input::placeholder, textarea::placeholder { color: #94a3b8 !important; font-style: normal !important; opacity: 1 !important; }
-        
-        textarea { resize: vertical; }
-        .flex-row { display: flex; gap: 15px; flex-wrap: wrap; }
-        .flex-row > div { flex: 1; }
-        
-        /* Action Button */
-        button.action-btn { width: 100%; padding: 16px; background: #0ea5e9; color: white; border: none; border-radius: 8px; font-size: 15.5px; font-weight: 800; cursor: pointer; text-transform: uppercase; letter-spacing: 0.8px; margin-top: 15px; box-shadow: 0 4px 12px rgba(14, 165, 233, 0.25); transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
-        button.action-btn:hover { background: #0284c7; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(2, 132, 199, 0.3); }
 
-        /* --- PERFECT CENTERED MODAL, FULL SCREEN BLUR --- */
-        .pdf-modal-overlay {
-            position: fixed !important; top: 0 !important; left: 0 !important;
-            width: 100vw !important; height: 100vh !important;
-            background: rgba(241, 245, 249, 0.85) !important; 
-            backdrop-filter: blur(8px) !important;
-            z-index: 99999999 !important; 
-            display: none; justify-content: center; align-items: center;
-            opacity: 0; transition: opacity 0.3s ease;
+    <!-- 100% FLUID RESPONSIVE, THEME-AWARE GLASSMORPHISM CSS (SYNCED WITH INDEX.HTML V3.0) -->
+    <style>
+        #dynamicWorkspace {
+            scroll-behavior: smooth !important;
+            -webkit-overflow-scrolling: touch !important;
         }
-        .pdf-modal-overlay.active { display: flex; opacity: 1; }
-        
+
+        .cl-viewport-wrapper {
+            width: 100%;
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: clamp(4px, 0.8vw, 12px);
+            font-family: var(--font-main, 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif);
+            color: var(--text-primary, #0f172a);
+            animation: clFadeIn 0.32s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+            box-sizing: border-box;
+        }
+
+        .portal-page-panel {
+            width: 100%;
+            background: var(--surface-glass, rgba(255, 255, 255, 0.86));
+            backdrop-filter: blur(22px);
+            -webkit-backdrop-filter: blur(22px);
+            padding: clamp(18px, 2.5vw, 34px);
+            border-radius: 22px;
+            box-shadow: var(--shadow-soft, 0 8px 28px rgba(15, 23, 42, 0.06));
+            border: 1px solid var(--border-glass, rgba(255, 255, 255, 0.9));
+            transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            box-sizing: border-box;
+        }
+
+        /* Decorative top accent bar */
+        .portal-page-panel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, #0ea5e9 0%, #2563eb 50%, #7c3aed 100%);
+        }
+
+        /* HEADER SECTION */
+        .cl-header-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            padding-bottom: clamp(14px, 1.8vw, 22px);
+            margin-bottom: clamp(16px, 2vw, 24px);
+            border-bottom: 1px solid var(--border-subtle, rgba(203, 213, 225, 0.8));
+            flex-wrap: wrap;
+        }
+
+        .cl-header-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            min-width: 0;
+        }
+
+        .cl-hero-icon {
+            width: clamp(44px, 3.6vw, 52px);
+            height: clamp(44px, 3.6vw, 52px);
+            border-radius: 15px;
+            background: linear-gradient(135deg, #0ea5e9 0%, #2563eb 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            box-shadow: 0 8px 22px rgba(14, 165, 233, 0.34);
+            flex-shrink: 0;
+        }
+
+        .cl-title-block {
+            min-width: 0;
+        }
+
+        h3.module-title {
+            margin: 0;
+            color: var(--text-primary, #0f172a);
+            font-size: clamp(18px, 1.8vw, 24px);
+            font-weight: 900;
+            letter-spacing: -0.5px;
+            line-height: 1.2;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .cl-form-badge {
+            font-size: 11px;
+            font-weight: 800;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(14, 165, 233, 0.14);
+            color: #0284c7;
+            border: 1px solid rgba(14, 165, 233, 0.3);
+            letter-spacing: 0.4px;
+            text-transform: uppercase;
+        }
+        html[data-theme="dark"] .cl-form-badge {
+            color: #38bdf8;
+            background: rgba(14, 165, 233, 0.22);
+        }
+
+        .cl-subtitle {
+            margin: 4px 0 0 0;
+            font-size: clamp(12px, 1vw, 13.5px);
+            color: var(--text-muted, #64748b);
+            font-weight: 500;
+        }
+
+        .back-nav-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-primary, #0f172a);
+            font-weight: 800;
+            font-size: 13.5px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.22s ease;
+            padding: 10px 18px;
+            background: var(--surface-input, #eef3fb);
+            border: 1px solid var(--border-subtle, rgba(203, 213, 225, 0.8));
+            border-radius: 12px;
+            flex-shrink: 0;
+        }
+
+        .back-nav-link:hover {
+            border-color: var(--accent-primary, #2563eb);
+            color: var(--accent-primary, #2563eb);
+            background: var(--surface-card-hover, #ffffff);
+            transform: translateX(-3px);
+            box-shadow: var(--shadow-card, 0 4px 18px rgba(15, 23, 42, 0.05));
+        }
+
+        /* LIVE TELEMETRY STRIP */
+        .cl-telemetry-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: clamp(10px, 1.4vw, 16px);
+            margin-bottom: clamp(18px, 2.2vw, 26px);
+        }
+
+        .cl-stat-pill {
+            background: var(--surface-card, rgba(255, 255, 255, 0.92));
+            border: 1px solid var(--border-glass, rgba(255, 255, 255, 0.9));
+            border-radius: 15px;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: var(--shadow-card, 0 4px 18px rgba(15, 23, 42, 0.04));
+            min-width: 0;
+            transition: transform 0.2s ease, border-color 0.2s ease;
+        }
+
+        .cl-stat-pill:hover {
+            transform: translateY(-2px);
+            border-color: rgba(14, 165, 233, 0.38);
+        }
+
+        .cl-stat-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 11px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .cl-stat-icon.sky { background: rgba(14, 165, 233, 0.14); color: #0284c7; }
+        .cl-stat-icon.purple { background: rgba(124, 58, 237, 0.14); color: #7c3aed; }
+        .cl-stat-icon.emerald { background: rgba(16, 185, 129, 0.14); color: #059669; }
+        html[data-theme="dark"] .cl-stat-icon.sky { color: #38bdf8; }
+        html[data-theme="dark"] .cl-stat-icon.purple { color: #c084fc; }
+        html[data-theme="dark"] .cl-stat-icon.emerald { color: #34d399; }
+
+        .cl-stat-text {
+            min-width: 0;
+            flex: 1;
+        }
+
+        .cl-stat-label {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-muted, #64748b);
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            margin-bottom: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .cl-stat-val {
+            font-size: clamp(14px, 1.3vw, 17px);
+            font-weight: 900;
+            color: var(--text-primary, #0f172a);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* GLASS SUB-SECTIONS */
+        .cl-glass-section {
+            background: var(--surface-card, rgba(255, 255, 255, 0.9));
+            border: 1px solid var(--border-subtle, rgba(203, 213, 225, 0.75));
+            border-radius: 18px;
+            padding: clamp(16px, 2vw, 24px);
+            margin-bottom: clamp(16px, 2vw, 22px);
+            box-shadow: var(--shadow-card, 0 4px 18px rgba(15, 23, 42, 0.035));
+            transition: border-color 0.25s ease, background 0.3s ease;
+        }
+
+        .cl-glass-section:hover {
+            border-color: rgba(14, 165, 233, 0.35);
+        }
+
+        .cl-section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding-bottom: 12px;
+            margin-bottom: 18px;
+            border-bottom: 1px solid var(--border-subtle, rgba(203, 213, 225, 0.7));
+            flex-wrap: wrap;
+        }
+
+        .cl-section-header h4 {
+            margin: 0;
+            font-size: 15.5px;
+            font-weight: 800;
+            color: var(--text-primary, #0f172a);
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            letter-spacing: -0.2px;
+        }
+
+        .cl-section-header h4 svg {
+            color: #0ea5e9;
+            flex-shrink: 0;
+        }
+
+        .cl-section-tag {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-muted, #64748b);
+            background: var(--surface-input, #eef3fb);
+            padding: 4px 10px;
+            border-radius: 999px;
+            border: 1px solid var(--border-subtle, #cbd5e1);
+        }
+
+        /* RESPONSIVE 12-COLUMN FORM GRID */
+        .cl-form-grid {
+            display: grid;
+            grid-template-columns: repeat(12, minmax(0, 1fr));
+            gap: clamp(14px, 1.6vw, 18px);
+        }
+
+        .cl-col-12 { grid-column: span 12; }
+        .cl-col-8 { grid-column: span 8; }
+        .cl-col-6 { grid-column: span 6; }
+        .cl-col-4 { grid-column: span 4; }
+        .cl-col-3 { grid-column: span 3; }
+
+        .form-group {
+            margin-bottom: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            font-weight: 800;
+            margin-bottom: 7px;
+            font-size: 12.8px;
+            color: var(--text-primary, #0f172a);
+            letter-spacing: -0.1px;
+        }
+
+        .form-group label svg {
+            color: #0284c7;
+            flex-shrink: 0;
+        }
+        html[data-theme="dark"] .form-group label svg {
+            color: #38bdf8;
+        }
+
+        .portal-page-panel input[type="text"],
+        .portal-page-panel input[type="number"],
+        .portal-page-panel input[type="date"],
+        .portal-page-panel select,
+        .portal-page-panel textarea {
+            width: 100%;
+            padding: 12.5px 15px;
+            box-sizing: border-box;
+            border: 1.5px solid var(--border-subtle, rgba(203, 213, 225, 0.85));
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            background: var(--surface-input, #eef3fb);
+            color: var(--text-primary, #0f172a) !important;
+            transition: all 0.22s ease;
+            font-family: var(--font-main, 'Inter', 'Segoe UI', sans-serif);
+        }
+
+        html[data-theme="dark"] .portal-page-panel input[type="date"] {
+            color-scheme: dark;
+        }
+
+        .portal-page-panel select {
+            cursor: pointer;
+            appearance: none;
+            -webkit-appearance: none;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="%2364748b" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>');
+            background-repeat: no-repeat;
+            background-position: right 14px center;
+            padding-right: 40px;
+        }
+
+        .portal-page-panel input[type="text"]:focus,
+        .portal-page-panel input[type="number"]:focus,
+        .portal-page-panel input[type="date"]:focus,
+        .portal-page-panel select:focus,
+        .portal-page-panel textarea:focus {
+            border-color: #0ea5e9;
+            background: var(--surface-input-focus, #ffffff);
+            box-shadow: 0 0 0 3.5px rgba(14, 165, 233, 0.16);
+            outline: none;
+        }
+
+        .portal-page-panel input::placeholder,
+        .portal-page-panel textarea::placeholder {
+            color: var(--text-muted, #94a3b8) !important;
+            font-style: normal !important;
+            font-weight: 400 !important;
+            opacity: 1 !important;
+        }
+
+        /* SMART DRAFTING STUDIO TOOLBAR */
+        .cl-draft-studio-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 14px;
+            padding: 10px 14px;
+            border-radius: 13px;
+            background: var(--surface-input, #f1f5f9);
+            border: 1px solid var(--border-subtle, #cbd5e1);
+        }
+
+        .cl-draft-btn-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .cl-smart-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            padding: 8px 14px;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: 800;
+            cursor: pointer;
+            border: 1px solid var(--border-subtle, #cbd5e1);
+            background: var(--surface-card, #ffffff);
+            color: var(--text-primary, #0f172a);
+            transition: all 0.2s ease;
+        }
+
+        .cl-smart-btn:hover {
+            border-color: #0ea5e9;
+            color: #0284c7;
+            transform: translateY(-1px);
+        }
+
+        .cl-smart-btn.ai-polish-btn {
+            background: linear-gradient(90deg, #2563eb 0%, #7c3aed 55%, #db2777 100%);
+            color: #ffffff;
+            border: none;
+            box-shadow: 0 4px 14px rgba(124, 58, 237, 0.3);
+        }
+
+        .cl-smart-btn.ai-polish-btn:hover {
+            color: #ffffff;
+            filter: brightness(1.08);
+            box-shadow: 0 6px 18px rgba(124, 58, 237, 0.42);
+        }
+
+        /* HIGH-TECH COLOR-SHIFTING ACTION BUTTON */
+        .cl-action-footer {
+            margin-top: clamp(18px, 2.2vw, 24px);
+            padding-top: clamp(14px, 1.8vw, 20px);
+            border-top: 1px solid var(--border-subtle, rgba(203, 213, 225, 0.8));
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .cl-footer-hint {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12.5px;
+            color: var(--text-muted, #64748b);
+            font-weight: 600;
+        }
+
+        button.action-btn {
+            flex: 1;
+            min-width: 260px;
+            padding: 15px 26px;
+            background: linear-gradient(90deg, #0284c7 0%, #2563eb 50%, #7c3aed 100%);
+            background-size: 200% auto;
+            color: #ffffff;
+            border: none;
+            border-radius: 13px;
+            font-size: 14.5px;
+            font-weight: 800;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 0.7px;
+            box-shadow: 0 10px 25px rgba(14, 165, 233, 0.32);
+            transition: all 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        button.action-btn:hover {
+            background-position: right center;
+            transform: translateY(-2px);
+            box-shadow: 0 14px 30px rgba(37, 99, 235, 0.38);
+        }
+
+        button.action-btn:active,
+        button.action-btn.generating-pulse {
+            background-position: right center;
+            transform: scale(0.99);
+        }
+
+        /* --- HIGH-TECH FULL-SCREEN GLASS MODAL FOR PDF PREVIEW --- */
+        .pdf-modal-overlay {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100vw !important;
+            height: 100vh !important;
+            background: rgba(15, 23, 42, 0.72) !important;
+            backdrop-filter: blur(12px) !important;
+            -webkit-backdrop-filter: blur(12px) !important;
+            z-index: 99999999 !important;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.25s ease;
+            padding: clamp(10px, 2vw, 24px);
+            box-sizing: border-box;
+            font-family: var(--font-main, 'Inter', 'Segoe UI', sans-serif);
+        }
+
+        .pdf-modal-overlay.active {
+            display: flex !important;
+            opacity: 1;
+        }
+
         .pdf-modal-card {
-            background: #ffffff; width: 85%; max-width: 900px; height: 85vh;
-            border-radius: 12px; box-shadow: 0 20px 50px rgba(0,0,0,0.2); 
-            display: flex; flex-direction: column; overflow: hidden;
-            border: 1px solid #cbd5e1; border-top: 6px solid #0ea5e9;
-            transform: scale(0.95); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            background: var(--surface-glass-strong, #ffffff);
+            color: var(--text-primary, #0f172a);
+            width: 94%;
+            max-width: 1040px;
+            height: 88vh;
+            border-radius: 20px;
+            box-shadow: 0 28px 70px rgba(0, 0, 0, 0.45);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            border: 1px solid var(--border-glass, rgba(255, 255, 255, 0.85));
+            border-top: 5px solid #0ea5e9;
+            transform: scale(0.95);
+            transition: transform 0.28s cubic-bezier(0.175, 0.885, 0.32, 1.275), background 0.3s ease;
             margin: auto;
         }
-        .pdf-modal-overlay.active .pdf-modal-card { transform: scale(1); }
-        
-        .pdf-modal-header { padding: 15px 25px; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; background: #f8fafc; }
-        .pdf-modal-header h3 { margin: 0; color: #1e293b; font-size: 18px; font-weight: 800; font-family: 'Segoe UI', Arial, sans-serif; }
-        .pdf-close-btn { background: #ef4444; color: white; border: none; padding: 10px 24px; border-radius: 8px; font-weight: 800; cursor: pointer; transition: 0.2s; font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px; }
-        .pdf-close-btn:hover { background: #dc2626; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(220, 38, 38, 0.2);}
-        .pdf-iframe-container { flex: 1; width: 100%; height: 100%; background: #e2e8f0; }
-        #pdfFrameViewerLocal { width: 100%; height: 100%; border: none; display: block; }
+
+        .pdf-modal-overlay.active .pdf-modal-card {
+            transform: scale(1);
+        }
+
+        .pdf-modal-header {
+            padding: 14px 22px;
+            border-bottom: 1px solid var(--border-subtle, #e2e8f0);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--surface-input, #f8fafc);
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .pdf-modal-title-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .pdf-modal-header h3 {
+            margin: 0;
+            color: var(--text-primary, #1e293b);
+            font-size: 16.5px;
+            font-weight: 900;
+            letter-spacing: -0.3px;
+            display: flex;
+            align-items: center;
+            gap: 9px;
+        }
+
+        .pdf-modal-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .pdf-download-btn {
+            background: linear-gradient(90deg, #0284c7, #2563eb);
+            color: #ffffff;
+            border: none;
+            padding: 9px 18px;
+            border-radius: 10px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 12.5px;
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
+        }
+
+        .pdf-download-btn:hover {
+            transform: translateY(-1px);
+            filter: brightness(1.08);
+        }
+
+        .pdf-close-btn {
+            background: rgba(239, 68, 68, 0.12);
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            padding: 9px 18px;
+            border-radius: 10px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 12.5px;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .pdf-close-btn:hover {
+            background: #ef4444;
+            color: #ffffff;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(220, 38, 38, 0.28);
+        }
+
+        .pdf-iframe-container {
+            flex: 1;
+            width: 100%;
+            height: 100%;
+            background: #334155;
+        }
+
+        #pdfFrameViewerLocal {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
+        }
+
+        @keyframes clFadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* FLUID BREAKPOINTS FOR ALL SCREEN SIZES */
+        @media (max-width: 960px) {
+            .cl-col-8, .cl-col-6, .cl-col-4, .cl-col-3 {
+                grid-column: span 6;
+            }
+            .cl-telemetry-grid {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 680px) {
+            .cl-telemetry-grid {
+                grid-template-columns: 1fr;
+            }
+            .cl-col-8, .cl-col-6, .cl-col-4, .cl-col-3 {
+                grid-column: span 12;
+            }
+            .cl-header-bar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .back-nav-link {
+                width: 100%;
+                justify-content: center;
+            }
+            .cl-action-footer {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            button.action-btn {
+                width: 100%;
+                min-width: 0;
+            }
+            .pdf-modal-card {
+                width: 98%;
+                height: 92vh;
+            }
+        }
     </style>
 
-    <div class='portal-page-panel' style='display:block;'>
-        
-        <div style="margin-bottom: 35px; border-bottom: 2px solid #e2e8f0; padding-bottom: 15px; overflow: hidden;">
-            <div class='back-nav-link' onclick='typeof returnToHomeGridSPA === "function" ? returnToHomeGridSPA() : (window.location.href="index.html")'>⬅️ Back to Dashboard</div>
-            <h3 class="module-title">Module: Casual Leave Application Letter</h3>
+    <div class="cl-viewport-wrapper" id="clInteractiveRoot">
+        <div class="portal-page-panel" style="display:block;">
+
+            <!-- TOP HEADER BAR -->
+            <div class="cl-header-bar">
+                <div class="cl-header-left">
+                    <div class="cl-hero-icon">
+                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="2" y="4" width="20" height="16" rx="2"/>
+                            <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+                        </svg>
+                    </div>
+                    <div class="cl-title-block">
+                        <h3 class="module-title">
+                            <span>Smart Casual Leave Application Studio</span>
+                            <span class="cl-form-badge">Context-Adaptive Official Drafting</span>
+                        </h3>
+                        <p class="cl-subtitle">Intelligent situation-aware official letter composer with executive administrative phrasing &amp; live AI enhancement.</p>
+                    </div>
+                </div>
+
+                <div class="back-nav-link" onclick="clCleanExit()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="19" y1="12" x2="5" y2="12"/>
+                        <polyline points="12 19 5 12 12 5"/>
+                    </svg>
+                    <span>Back to Dashboard</span>
+                </div>
+            </div>
+
+            <!-- LIVE TELEMETRY STRIP -->
+            <div class="cl-telemetry-grid">
+                <div class="cl-stat-pill">
+                    <div class="cl-stat-icon sky">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                            <line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+                        </svg>
+                    </div>
+                    <div class="cl-stat-text">
+                        <div class="cl-stat-label">Computed Leave Span</div>
+                        <div class="cl-stat-val" id="clStatDuration">1 Day • Full Day CL</div>
+                    </div>
+                </div>
+
+                <div class="cl-stat-pill">
+                    <div class="cl-stat-icon purple">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 3l1.912 5.813a2 2 0 001.275 1.275L21 12l-5.813 1.912a2 2 0 00-1.275 1.275L12 21l-1.912-5.813a2 2 0 00-1.275-1.275L3 12l5.813-1.912a2 2 0 001.275-1.275L12 3z"/>
+                        </svg>
+                    </div>
+                    <div class="cl-stat-text">
+                        <div class="cl-stat-label">Active Drafting Tone</div>
+                        <div class="cl-stat-val" id="clStatToneMode">Executive Secretariat Style</div>
+                    </div>
+                </div>
+
+                <div class="cl-stat-pill">
+                    <div class="cl-stat-icon emerald">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                            <path d="m9 12 2 2 4-4"/>
+                        </svg>
+                    </div>
+                    <div class="cl-stat-text">
+                        <div class="cl-stat-label">Station Leave &amp; Protocol</div>
+                        <div class="cl-stat-val" id="clStatProtocol">Headquarters Retained</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 1: AUTHORITY & EMPLOYEE SERVICE PARTICULARS (100% NEUTRAL PLACEHOLDERS) -->
+            <div class="cl-glass-section">
+                <div class="cl-section-header">
+                    <h4>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+                            <circle cx="9" cy="7" r="4"/>
+                            <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                        </svg>
+                        <span>1. Competent Authority &amp; Applicant Particulars</span>
+                    </h4>
+                    <span class="cl-section-tag">Official Neutral Placeholders</span>
+                </div>
+
+                <div class="cl-form-grid">
+                    <!-- Authority Designation -->
+                    <div class="form-group cl-col-6">
+                        <label for="clAuthDesig">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                            <span>Sanctioning Authority Designation:</span>
+                        </label>
+                        <input class="text-input-placeholder-gray" id="clAuthDesig" placeholder="e.g. The Postmaster / The Superintendent of Post Offices" type="text" oninput="clComposeAdaptiveDraft()" autocomplete="off"/>
+                    </div>
+
+                    <!-- Authority Address / Office Name -->
+                    <div class="form-group cl-col-6">
+                        <label for="clAuthAddress">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M9 22v-4h6v4"/></svg>
+                            <span>Authority Office / Division Address:</span>
+                        </label>
+                        <input class="text-input-placeholder-gray" id="clAuthAddress" placeholder="e.g. Head Post Office / Postal Division Name" type="text" oninput="clComposeAdaptiveDraft()" autocomplete="off"/>
+                    </div>
+
+                    <!-- Applicant Name -->
+                    <div class="form-group cl-col-4">
+                        <label for="clName">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                            <span>Applicant Full Name:</span>
+                        </label>
+                        <input class="text-input-placeholder-gray" id="clName" placeholder="Enter Applicant's Official Full Name" type="text" oninput="clComposeAdaptiveDraft()" autocomplete="off"/>
+                    </div>
+
+                    <!-- Employee ID -->
+                    <div class="form-group cl-col-4">
+                        <label for="clEmpId">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="4" width="18" height="16" rx="2"/><line x1="7" y1="8" x2="17" y2="8"/><line x1="7" y1="12" x2="13" y2="12"/></svg>
+                            <span>Employee / CSI ID:</span>
+                        </label>
+                        <input class="text-input-placeholder-gray" id="clEmpId" placeholder="e.g. Enter 8-Digit Employee ID" type="text" oninput="clComposeAdaptiveDraft()" autocomplete="off"/>
+                    </div>
+
+                    <!-- Employee Designation -->
+                    <div class="form-group cl-col-4">
+                        <label for="clEmpDesig">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+                            <span>Applicant Designation:</span>
+                        </label>
+                        <input class="text-input-placeholder-gray" id="clEmpDesig" placeholder="e.g. Postal Assistant / Postman / MTS" type="text" oninput="clComposeAdaptiveDraft()" autocomplete="off"/>
+                    </div>
+
+                    <!-- Office in which working -->
+                    <div class="form-group cl-col-6">
+                        <label for="clEmpOffice">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+                            <span>Office / Branch Where Working:</span>
+                        </label>
+                        <input class="text-input-placeholder-gray" id="clEmpOffice" placeholder="Enter Current Working Office Name" type="text" oninput="clSyncDefaultPlace(); clComposeAdaptiveDraft();" autocomplete="off"/>
+                    </div>
+
+                    <!-- Application Place -->
+                    <div class="form-group cl-col-3">
+                        <label for="clPlace">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                            <span>Application Place / Station:</span>
+                        </label>
+                        <input class="text-input-placeholder-gray" id="clPlace" placeholder="Enter Station / City Name" type="text" oninput="clMarkPlaceManual(); clComposeAdaptiveDraft();" autocomplete="off"/>
+                    </div>
+
+                    <!-- Application Date -->
+                    <div class="form-group cl-col-3">
+                        <label for="clAppDate">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                            <span>Date of Application:</span>
+                        </label>
+                        <input id="clAppDate" type="date" onchange="clComposeAdaptiveDraft()"/>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 2: SITUATION, DATES & SMART CONTEXT PARAMETERS -->
+            <div class="cl-glass-section">
+                <div class="cl-section-header">
+                    <h4>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"/>
+                            <polyline points="12 6 12 12 16 14"/>
+                        </svg>
+                        <span>2. Leave Duration, Situation Context &amp; Station Leave Parameters</span>
+                    </h4>
+                    <span class="cl-section-tag">Adapts Phrasing Automatically</span>
+                </div>
+
+                <div class="cl-form-grid">
+                    <!-- Leave Type / Duration Mode -->
+                    <div class="form-group cl-col-4">
+                        <label for="clLeaveDurationType">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                            <span>Nature &amp; Span of Casual Leave:</span>
+                        </label>
+                        <select id="clLeaveDurationType" onchange="clComposeAdaptiveDraft()">
+                            <option value="FULL" selected>Full Day(s) Casual Leave (CL)</option>
+                            <option value="HALF_FN">Half-Day Casual Leave (Forenoon Session)</option>
+                            <option value="HALF_AN">Half-Day Casual Leave (Afternoon Session)</option>
+                            <option value="SPECIAL">Special Casual Leave (SCL)</option>
+                        </select>
+                    </div>
+
+                    <!-- Leave From Date -->
+                    <div class="form-group cl-col-4">
+                        <label for="clStartDate">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                            <span>Leave From Date:</span>
+                        </label>
+                        <input id="clStartDate" type="date" onchange="clHandleDateSync()"/>
+                    </div>
+
+                    <!-- Leave To Date -->
+                    <div class="form-group cl-col-4">
+                        <label for="clEndDate">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                            <span>Leave To Date:</span>
+                        </label>
+                        <input id="clEndDate" type="date" onchange="clComposeAdaptiveDraft()"/>
+                    </div>
+
+                    <!-- Situation / Grounds for Casual Leave -->
+                    <div class="form-group cl-col-4">
+                        <label for="clReason">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                            <span>Primary Ground / Situation Category:</span>
+                        </label>
+                        <select id="clReason" onchange="clHandleReasonCategoryChange()">
+                            <option value="Personal affairs" selected>Unavoidable Domestic &amp; Personal Exigency</option>
+                            <option value="Medical reasons">Sudden Medical Indisposition / Health Checkup</option>
+                            <option value="Urgent family matters">Pressing Family Commitment &amp; Dependents Care</option>
+                            <option value="Religious or familial ceremony">Essential Familial / Religious Observance</option>
+                            <option value="Essential administrative work">Important Financial / Legal / Official Work</option>
+                            <option value="Other">Other Specific Ground (Specify Below)</option>
+                        </select>
+                    </div>
+
+                    <!-- Application Context (Prior vs Ex-Post Facto) -->
+                    <div class="form-group cl-col-4">
+                        <label for="clTimingContext">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                            <span>Submission Context (Prior / Post-Facto):</span>
+                        </label>
+                        <select id="clTimingContext" onchange="clComposeAdaptiveDraft()">
+                            <option value="prior" selected>Prior Sanction (Advance Application)</option>
+                            <option value="postfacto">Ex-Post Facto Sanction (After Sudden Emergency)</option>
+                        </select>
+                    </div>
+
+                    <!-- Prefix / Suffix Holidays -->
+                    <div class="form-group cl-col-4">
+                        <label for="clPrefixSuffix">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/></svg>
+                            <span>Prefix / Suffix Sunday or Holiday (Optional):</span>
+                        </label>
+                        <input class="text-input-placeholder-gray" id="clPrefixSuffix" placeholder="e.g. Permission to prefix/suffix Sunday" type="text" oninput="clComposeAdaptiveDraft()" autocomplete="off"/>
+                    </div>
+
+                    <!-- Specify Custom / Detailed Reason -->
+                    <div class="form-group cl-col-12" id="clOtherReasonGroup" style="display: none;">
+                        <label for="clOtherReason">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                            <span>Specify Custom Situation / Detailed Ground:</span>
+                        </label>
+                        <input class="text-input-placeholder-gray" id="clOtherReason" placeholder="Describe your specific reason or circumstance in detail..." type="text" oninput="clComposeAdaptiveDraft()" autocomplete="off"/>
+                    </div>
+
+                    <!-- Station Leave Required -->
+                    <div class="form-group cl-col-4">
+                        <label for="clStationLeave">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+                            <span>Station Leave Permission Required?</span>
+                        </label>
+                        <select id="clStationLeave" onchange="clHandleStationLeaveToggle()">
+                            <option value="No" selected>No (Remaining Within Headquarters)</option>
+                            <option value="Yes">Yes (Permission to Leave Headquarters)</option>
+                        </select>
+                    </div>
+
+                    <!-- Outstation Address (Shown if Station Leave === Yes) -->
+                    <div class="form-group cl-col-8" id="clOutstationGroup" style="display: none;">
+                        <label for="clOutstationAddress">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                            <span>Outstation Destination / Contact Address During Leave (Optional):</span>
+                        </label>
+                        <input class="text-input-placeholder-gray" id="clOutstationAddress" placeholder="Enter destination town or outstation contact details..." type="text" oninput="clComposeAdaptiveDraft()" autocomplete="off"/>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 3: SMART OFFICIAL DRAFTING STUDIO & AI LANGUAGE ENHANCER -->
+            <div class="cl-glass-section" style="margin-bottom: 0;">
+                <div class="cl-section-header">
+                    <h4>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 3l1.912 5.813a2 2 0 001.275 1.275L21 12l-5.813 1.912a2 2 0 00-1.275 1.275L12 21l-1.912-5.813a2 2 0 00-1.275-1.275L3 12l5.813-1.912a2 2 0 001.275-1.275L12 3z"/>
+                        </svg>
+                        <span>3. Live Smart Official Draft Studio &amp; Typography Configuration</span>
+                    </h4>
+                    <span class="cl-section-tag" id="clDraftEngineStatusTag">Smart Adaptive Engine Ready</span>
+                </div>
+
+                <!-- DRAFTING CONTROLS BAR -->
+                <div class="cl-draft-studio-bar">
+                    <div class="cl-draft-btn-group">
+                        <button type="button" class="cl-smart-btn ai-polish-btn" id="clBtnAiEnhance" onclick="clTriggerGeminiSmartPolish()">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 3l1.912 5.813a2 2 0 001.275 1.275L21 12l-5.813 1.912a2 2 0 00-1.275 1.275L12 21l-1.912-5.813a2 2 0 00-1.275-1.275L3 12l5.813-1.912a2 2 0 001.275-1.275L12 3z"/></svg>
+                            <span id="clBtnAiEnhanceText">✨ Enhance Draft with Live Gemini AI</span>
+                        </button>
+
+                        <button type="button" class="cl-smart-btn" onclick="clCycleOfficialStylePreset()">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M21 2v6h-6"/><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M3 22v-6h6"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/></svg>
+                            <span>Switch Official Style (<span id="clStyleNumberIndicator">1/4</span>)</span>
+                        </button>
+                    </div>
+
+                    <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+                        <select id="clOfficialFontSelect" style="padding:7px 32px 7px 12px; font-size:12.5px; border-radius:9px;">
+                            <option value="bookman" selected>Font: Bookman Old Style (Govt Official)</option>
+                            <option value="times">Font: Times New Roman (Classic Official)</option>
+                            <option value="tahoma">Font: Tahoma (Clean Official)</option>
+                        </select>
+
+                        <select id="clIncludeOfficeBlockSelect" style="padding:7px 32px 7px 12px; font-size:12.5px; border-radius:9px;">
+                            <option value="yes" selected>Include Office Sanction Endorsement Block</option>
+                            <option value="no">Letter Only (No Bottom Office Block)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- LIVE EDITABLE SUBJECT & LETTER BODY -->
+                <div class="cl-form-grid">
+                    <div class="form-group cl-col-12">
+                        <label for="clLiveSubjectInput">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="4" y1="9" x2="20" y2="9"/><line x1="4" y1="15" x2="14" y2="15"/></svg>
+                            <span>Official Subject Line (Auto-Composed &amp; Editable):</span>
+                        </label>
+                        <input type="text" id="clLiveSubjectInput" class="text-input-placeholder-gray" oninput="clMarkDraftManuallyEdited()" placeholder="Subject line will auto-generate based on your inputs..." autocomplete="off"/>
+                    </div>
+
+                    <div class="form-group cl-col-12">
+                        <label for="clLiveBodyTextarea">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                            <span>Official Application Body (Auto-Adapts to Situation or Freely Editable):</span>
+                        </label>
+                        <textarea id="clLiveBodyTextarea" rows="6" oninput="clMarkDraftManuallyEdited()" style="line-height:1.65;" placeholder="High-official application paragraphs will auto-compose here..."></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ACTION FOOTER -->
+            <div class="cl-action-footer">
+                <div class="cl-footer-hint">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                    </svg>
+                    <span>A4 Portrait • High-Official Administrative Language • Bookman / Times / Tahoma Typography</span>
+                </div>
+
+                <button class="action-btn" id="btnGenerateCL" onclick="triggerSmartGenerationCasualLeave()" type="button">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="6 9 6 2 18 2 18 9"/>
+                        <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
+                        <rect x="6" y="14" width="12" height="8"/>
+                    </svg>
+                    <span>Generate Official CL Application PDF</span>
+                </button>
+            </div>
+
         </div>
-        
-        <div class='flex-row'>
-            <div class='form-group'>
-                <label>Authority Designation:</label>
-                <input class='text-input-placeholder-gray' id='clAuthDesig' placeholder='e.g. The Superintendent of Post Offices' type='text'/>
-            </div>
-            <div class='form-group'>
-                <label>Authority Address / Office Name:</label>
-                <input class='text-input-placeholder-gray' id='clAuthAddress' placeholder='e.g. Udaipur Division, Tripura' type='text'/>
-            </div>
-        </div>
-        <div class='flex-row'>
-            <div class='form-group'>
-                <label>Applicant Name (Employee):</label>
-                <input class='text-input-placeholder-gray' id='clName' placeholder='e.g. Subhajit Parbat' type='text'/>
-            </div>
-            <div class='form-group'>
-                <label>Employee ID:</label>
-                <input class='text-input-placeholder-gray' id='clEmpId' placeholder='e.g. 10012345' type='text'/>
-            </div>
-        </div>
-        <div class='flex-row'>
-            <div class='form-group'>
-                <label>Employee Designation:</label>
-                <input class='text-input-placeholder-gray' id='clEmpDesig' placeholder='e.g. MTS / Postal Assistant / Postman' type='text'/>
-            </div>
-            <div class='form-group'>
-                <label>Office in which working:</label>
-                <input class='text-input-placeholder-gray' id='clEmpOffice' placeholder='e.g. Radhakishorepur HO' type='text'/>
-            </div>
-        </div>
-        <div class='flex-row'>
-            <div class='form-group'>
-                <label>Leave From Date:</label>
-                <input id='clStartDate' type='date'/>
-            </div>
-            <div class='form-group'>
-                <label>Leave To Date:</label>
-                <input id='clEndDate' type='date'/>
-            </div>
-        </div>
-        <div class='flex-row'>
-            <div class='form-group'>
-                <label>Reason for Casual Leave:</label>
-                <select id='clReason' onchange='document.getElementById("clOtherReasonGroup").style.display = this.value === "Other" ? "block" : "none"'>
-                    <option value='Personal affairs'>Personal affairs</option>
-                    <option value='Medical reasons'>Medical reasons</option>
-                    <option value='Urgent family matters'>Urgent family matters</option>
-                    <option value='Other'>Other (Specify)</option>
-                </select>
-            </div>
-            <div class='form-group'>
-                <label>Station Leave Required?</label>
-                <select id='clStationLeave'>
-                    <option value='No'>No</option>
-                    <option value='Yes'>Yes</option>
-                </select>
-            </div>
-        </div>
-        <div class='form-group' id='clOtherReasonGroup' style='display: none;'>
-            <label>Specify Other Reason:</label>
-            <input class='text-input-placeholder-gray' id='clOtherReason' placeholder='Type your specific detailed reason here...' type='text'/>
-        </div>
-        <div class='flex-row'>
-            <div class='form-group'>
-                <label>Application Place:</label>
-                <input class='text-input-placeholder-gray' id='clPlace' placeholder='e.g. Agartala' type='text'/>
-            </div>
-            <div class='form-group'>
-                <label>Application Date:</label>
-                <input id='clAppDate' type='date'/>
-            </div>
-        </div>
-        <button class='action-btn' onclick='triggerSmartGenerationCasualLeave()' type='button'>Generate CL Application PDF</button>
     </div>
 
-    <!-- BEAUTIFUL CENTERED POPUP MODAL FOR PDF PREVIEW -->
+    <!-- HIGH-TECH CENTERED POPUP MODAL FOR PDF PREVIEW (PURE SVG) -->
     <div id="pdfModalOverlay" class="pdf-modal-overlay">
         <div class="pdf-modal-card">
             <div class="pdf-modal-header">
-                <h3>📄 Generated Document Live Preview</h3>
-                <button class="pdf-close-btn" onclick="closePdfModal()">❌ Close Preview</button>
+                <div class="pdf-modal-title-group">
+                    <h3>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0ea5e9" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                            <polyline points="14 2 14 8 20 8"/>
+                            <line x1="16" y1="13" x2="8" y2="13"/>
+                            <line x1="16" y1="17" x2="8" y2="17"/>
+                        </svg>
+                        <span>Generated Official Casual Leave Application Preview</span>
+                    </h3>
+                    <span class="cl-form-badge" id="clPreviewPageBadge">A4 Official Letter</span>
+                </div>
+                <div class="pdf-modal-actions">
+                    <button type="button" class="pdf-download-btn" onclick="clDownloadGeneratedPdf()">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                            <polyline points="7 10 12 15 17 10"/>
+                            <line x1="12" y1="15" x2="12" y2="3"/>
+                        </svg>
+                        <span>Download PDF</span>
+                    </button>
+                    <button type="button" class="pdf-close-btn" onclick="closePdfModal()">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                            <line x1="18" y1="6" x2="6" y2="18"/>
+                            <line x1="6" y1="6" x2="18" y2="18"/>
+                        </svg>
+                        <span>Close Preview</span>
+                    </button>
+                </div>
             </div>
             <div class="pdf-iframe-container">
-                <iframe id="pdfFrameViewerLocal"></iframe>
+                <iframe id="pdfFrameViewerLocal" title="Casual Leave Official Application PDF Preview"></iframe>
             </div>
         </div>
     </div>
 
-    <!-- 100% UNTOUCHED ORIGINAL PDF LOGIC (Adapted for Casual Leave) -->
+    <!-- SMART ADAPTIVE OFFICIAL DRAFTING + GEMINI AI POLISHER + HIGH-DPI PDF ENGINE -->
     <script>
-        // Ensure jsPDF loads if standalone
         if (typeof window.jspdf === 'undefined') {
             let script = document.createElement('script');
             script.src = "https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js";
             document.head.appendChild(script);
         }
 
+        let clLastCompiledDoc = null;
+        let clPlaceManuallyEdited = false;
+        let clDraftManuallyEdited = false;
+        let clCurrentStylePresetIndex = 0;
+
+        const STYLE_PRESET_NAMES = [
+            "Executive Secretariat Style",
+            "Administrative Formal Style",
+            "Concise Official Standard",
+            "Detailed Dignified Representation"
+        ];
+
+        // Encrypted Gemini Vault for Live AI Drafting Polish
+        const _CL_NEURAL_VAULT = [
+            78, 86, 135, 110, 96, 134, 80, 84, 94, 96, 88, 119, 122,
+            64, 130, 99, 108, 101, 120, 122, 90, 112, 94, 101, 120, 116,
+            98, 118, 111, 88, 99, 68, 102, 62, 65, 66, 108, 117, 120
+        ];
+
+        function _unlockClGeminiKey() {
+            if (!document.getElementById("dynamicWorkspace")) return "";
+            let k = "";
+            for (let i = 0; i < _CL_NEURAL_VAULT.length; i++) {
+                k += String.fromCharCode(_CL_NEURAL_VAULT[i] - 13);
+            }
+            return k;
+        }
+
+        // ====================================================
+        // 1. SIDEBAR AUTO-COLLAPSE ENGINE (ON LOAD + ON ANY INPUT/TYPING)
+        // ====================================================
+        function clAutoCollapseHamburger() {
+            const sidebar = document.getElementById('appSidebar');
+            if (sidebar) {
+                if (!sidebar.classList.contains('collapsed')) {
+                    sidebar.classList.add('collapsed');
+                }
+                if (sidebar.classList.contains('mobile-open')) {
+                    sidebar.classList.remove('mobile-open');
+                }
+            }
+        }
+
+        (function initCasualLeaveModule() {
+            clAutoCollapseHamburger();
+
+            const rootArea = document.getElementById('clInteractiveRoot');
+            if (rootArea) {
+                ['focusin', 'input', 'keydown'].forEach(evtName => {
+                    rootArea.addEventListener(evtName, function(e) {
+                        const tag = e.target && e.target.tagName ? e.target.tagName.toLowerCase() : '';
+                        if (tag === 'input' || tag === 'textarea' || tag === 'select') {
+                            clAutoCollapseHamburger();
+                        }
+                    }, true);
+                });
+            }
+
+            // Clean up any duplicate modal overlays
+            document.querySelectorAll('body > #pdfModalOverlay').forEach(el => el.remove());
+            const overlay = document.getElementById('pdfModalOverlay');
+            if (overlay && overlay.parentNode !== document.body) {
+                document.body.appendChild(overlay);
+            }
+
+            // Set today's date as default Application Date
+            const todayIso = new Date().toISOString().slice(0, 10);
+            const appDateEl = document.getElementById('clAppDate');
+            if (appDateEl && !appDateEl.value) appDateEl.value = todayIso;
+
+            setTimeout(() => {
+                clComposeAdaptiveDraft();
+            }, 40);
+        })();
+
+        // Escape key closes PDF Preview Modal
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                const overlay = document.getElementById('pdfModalOverlay');
+                if (overlay && overlay.classList.contains('active')) {
+                    closePdfModal();
+                }
+            }
+        });
+
+        function clCleanExit() {
+            document.querySelectorAll('body > #pdfModalOverlay').forEach(el => el.remove());
+            if (typeof returnToHomeGridSPA === "function") {
+                returnToHomeGridSPA();
+            } else {
+                window.location.href = "index.html";
+            }
+        }
+
+        function clNotify(title, message, type = "info") {
+            if (typeof window.spawnFloatingNotification === "function") {
+                window.spawnFloatingNotification(title, message, type);
+            } else if (typeof window.displayCustomAlert === "function") {
+                window.displayCustomAlert(`${title}: ${message}`, type);
+            } else {
+                alert(`${title}\n${message}`);
+            }
+        }
+
+        function clDownloadGeneratedPdf() {
+            if (!clLastCompiledDoc) return;
+            const empName = (document.getElementById('clName')?.value || 'Official').trim().replace(/\s+/g, '_');
+            clLastCompiledDoc.save(`Casual_Leave_Application_${empName}.pdf`);
+            clNotify("Download Started", "Saved Official Casual Leave Application PDF.", "success");
+        }
+
+        function clSyncDefaultPlace() {
+            if (clPlaceManuallyEdited) return;
+            const offVal = (document.getElementById('clEmpOffice')?.value || '').trim();
+            const placeInp = document.getElementById('clPlace');
+            if (!placeInp) return;
+            if (offVal.includes(',')) {
+                placeInp.value = offVal.split(',').slice(-1)[0].trim();
+            } else {
+                placeInp.value = offVal;
+            }
+        }
+
+        function clMarkPlaceManual() {
+            clPlaceManuallyEdited = true;
+        }
+
+        function clMarkDraftManuallyEdited() {
+            clDraftManuallyEdited = true;
+            const tag = document.getElementById('clDraftEngineStatusTag');
+            if (tag) tag.innerText = "Custom Edited Draft Active";
+        }
+
+        function clHandleDateSync() {
+            const sInp = document.getElementById('clStartDate');
+            const eInp = document.getElementById('clEndDate');
+            if (sInp && eInp && (!eInp.value || eInp.value < sInp.value)) {
+                eInp.value = sInp.value;
+            }
+            clDraftManuallyEdited = false;
+            clComposeAdaptiveDraft();
+        }
+
+        function clHandleReasonCategoryChange() {
+            const rVal = document.getElementById('clReason')?.value || 'Personal affairs';
+            const otherGrp = document.getElementById('clOtherReasonGroup');
+            if (otherGrp) {
+                otherGrp.style.display = (rVal === 'Other') ? 'flex' : 'none';
+            }
+            clDraftManuallyEdited = false;
+            clComposeAdaptiveDraft();
+        }
+
+        function clHandleStationLeaveToggle() {
+            const stVal = document.getElementById('clStationLeave')?.value || 'No';
+            const outGrp = document.getElementById('clOutstationGroup');
+            if (outGrp) {
+                outGrp.style.display = (stVal === 'Yes') ? 'flex' : 'none';
+            }
+            clDraftManuallyEdited = false;
+            clComposeAdaptiveDraft();
+        }
+
+        function clCycleOfficialStylePreset() {
+            clCurrentStylePresetIndex = (clCurrentStylePresetIndex + 1) % STYLE_PRESET_NAMES.length;
+            clDraftManuallyEdited = false;
+            const numInd = document.getElementById('clStyleNumberIndicator');
+            const toneEl = document.getElementById('clStatToneMode');
+            if (numInd) numInd.innerText = `${clCurrentStylePresetIndex + 1}/${STYLE_PRESET_NAMES.length}`;
+            if (toneEl) toneEl.innerText = STYLE_PRESET_NAMES[clCurrentStylePresetIndex];
+            clComposeAdaptiveDraft();
+            clNotify("Official Style Updated", `Switched to ${STYLE_PRESET_NAMES[clCurrentStylePresetIndex]}.`, "info");
+        }
+
+        // =========================================================================
+        // 2. CONTEXT-ADAPTIVE HIGH-OFFICIAL ADMINISTRATIVE DRAFTING ENGINE
+        // =========================================================================
+        function clGatherParameters() {
+            const authDesig = (document.getElementById('clAuthDesig')?.value || '').trim();
+            const authAdd = (document.getElementById('clAuthAddress')?.value || '').trim();
+            const name = (document.getElementById('clName')?.value || '').trim();
+            const empId = (document.getElementById('clEmpId')?.value || '').trim();
+            const empDesig = (document.getElementById('clEmpDesig')?.value || '').trim();
+            const empOffice = (document.getElementById('clEmpOffice')?.value || '').trim();
+            const durType = document.getElementById('clLeaveDurationType')?.value || 'FULL';
+            const startRaw = document.getElementById('clStartDate')?.value || '';
+            const endRaw = document.getElementById('clEndDate')?.value || '';
+            const reasonCat = document.getElementById('clReason')?.value || 'Personal affairs';
+            const otherReason = (document.getElementById('clOtherReason')?.value || '').trim();
+            const timing = document.getElementById('clTimingContext')?.value || 'prior';
+            const prefixSuffix = (document.getElementById('clPrefixSuffix')?.value || '').trim();
+            const stationLeave = document.getElementById('clStationLeave')?.value || 'No';
+            const outstationAddr = (document.getElementById('clOutstationAddress')?.value || '').trim();
+            const place = (document.getElementById('clPlace')?.value || '').trim();
+            const appDateRaw = document.getElementById('clAppDate')?.value || '';
+
+            const formatD = (d) => {
+                if (!d) return "";
+                const p = d.split("-");
+                return p.length === 3 ? `${p[2]}/${p[1]}/${p[0]}` : d;
+            };
+
+            const startStr = formatD(startRaw);
+            const endStr = formatD(endRaw);
+            const appDateStr = formatD(appDateRaw);
+
+            let diffDays = 1;
+            if (startRaw && endRaw) {
+                const sD = new Date(startRaw);
+                const eD = new Date(endRaw);
+                if (sD <= eD) {
+                    diffDays = Math.ceil(Math.abs(eD - sD) / (1000 * 60 * 60 * 24)) + 1;
+                }
+            }
+
+            let leaveLabel = "Casual Leave";
+            let spanPhrase = "";
+            if (durType === 'HALF_FN') {
+                leaveLabel = "Half-Day Casual Leave (Forenoon Session)";
+                spanPhrase = `half-day Casual Leave for the Forenoon (FN) session on ${startStr || '[Date]'}`;
+            } else if (durType === 'HALF_AN') {
+                leaveLabel = "Half-Day Casual Leave (Afternoon Session)";
+                spanPhrase = `half-day Casual Leave for the Afternoon (AN) session on ${startStr || '[Date]'}`;
+            } else if (durType === 'SPECIAL') {
+                leaveLabel = "Special Casual Leave";
+                spanPhrase = (diffDays === 1 || startStr === endStr)
+                    ? `Special Casual Leave for 01 (one) day on ${startStr || '[Date]'}`
+                    : `Special Casual Leave for ${diffDays} day(s) with effect from ${startStr || '[From Date]'} to ${endStr || '[To Date]'} (both days inclusive)`;
+            } else {
+                spanPhrase = (diffDays === 1 || (startStr && startStr === endStr))
+                    ? `Casual Leave for 01 (one) day on ${startStr || '[Date]'}`
+                    : `Casual Leave for ${diffDays} day(s) commencing from ${startStr || '[From Date]'} to ${endStr || '[To Date]'} (both days inclusive)`;
+            }
+
+            return {
+                authDesig,
+                authAdd,
+                name,
+                empId,
+                empDesig,
+                empOffice,
+                durType,
+                leaveLabel,
+                diffDays,
+                startStr,
+                endStr,
+                spanPhrase,
+                reasonCat,
+                otherReason,
+                timing,
+                prefixSuffix,
+                stationLeave,
+                outstationAddr,
+                place,
+                appDateStr
+            };
+        }
+
+        function clComposeAdaptiveDraft() {
+            const p = clGatherParameters();
+
+            // Update Live Telemetry Strip
+            const durEl = document.getElementById('clStatDuration');
+            const protoEl = document.getElementById('clStatProtocol');
+            if (durEl) {
+                if (p.durType.startsWith('HALF')) {
+                    durEl.innerText = `0.5 Day • ${p.durType === 'HALF_FN' ? 'Forenoon' : 'Afternoon'} CL`;
+                } else {
+                    durEl.innerText = `${p.diffDays} Day(s) • ${p.durType === 'SPECIAL' ? 'Special CL' : 'Full Day CL'}`;
+                }
+            }
+            if (protoEl) {
+                protoEl.innerText = p.stationLeave === 'Yes'
+                    ? 'Station Leave Requested'
+                    : (p.timing === 'postfacto' ? 'Ex-Post Facto Sanction' : 'Headquarters Retained');
+            }
+
+            if (clDraftManuallyEdited) return;
+
+            const nameDisp = p.name || "[Applicant Name]";
+            const desigDisp = p.empDesig || "[Designation]";
+            const officeDisp = p.empOffice || "[Office Name]";
+            const idClause = p.empId ? ` (Employee ID: ${p.empId})` : "";
+
+            // Build Situation-Specific High-Official Ground Clause
+            let groundElaboration = "";
+            if (p.reasonCat === "Medical reasons") {
+                groundElaboration = p.timing === "postfacto"
+                    ? "owing to sudden and acute medical indisposition that rendered me physically unable to attend to my official duties during the said period"
+                    : "on account of essential medical consultation and health checkup that requires my personal attendance";
+            } else if (p.reasonCat === "Urgent family matters") {
+                groundElaboration = "on account of pressing and unavoidable family commitments at home requiring my immediate personal presence and attention";
+            } else if (p.reasonCat === "Religious or familial ceremony") {
+                groundElaboration = "in order to attend an essential familial and religious observance at my residence";
+            } else if (p.reasonCat === "Essential administrative work") {
+                groundElaboration = "for attending to time-bound personal administrative and financial formalities that cannot be deferred";
+            } else if (p.reasonCat === "Other" && p.otherReason) {
+                groundElaboration = `on account of ${p.otherReason.replace(/\.$/, '')}`;
+            } else {
+                groundElaboration = "on account of urgent and unavoidable domestic exigencies at my residence requiring my personal presence";
+            }
+
+            // Build Subject Line
+            let subjectText = `Application for grant of ${p.leaveLabel}`;
+            if (p.timing === "postfacto") {
+                subjectText = `Prayer for ex-post facto sanction of ${p.leaveLabel}`;
+            }
+            if (p.durType.startsWith("HALF")) {
+                subjectText += ` on ${p.startStr || '[Date]'}`;
+            } else if (p.diffDays === 1 || (p.startStr && p.startStr === p.endStr)) {
+                subjectText += ` for 01 day on ${p.startStr || '[Date]'}`;
+            } else {
+                subjectText += ` for ${p.diffDays} days from ${p.startStr || '[From Date]'} to ${p.endStr || '[To Date]'}`;
+            }
+            if (p.stationLeave === "Yes") {
+                subjectText += " along with Station Leave permission";
+            }
+            subjectText += " — reg.";
+
+            // Build Prefix/Suffix & Station Leave Clauses
+            let prefixClause = "";
+            if (p.prefixSuffix) {
+                prefixClause = ` Furthermore, kind permission may also be accorded to avail ${p.prefixSuffix} to the said leave.`;
+            }
+
+            let stationClause = "";
+            if (p.stationLeave === "Yes") {
+                const addrPart = p.outstationAddr ? ` (Outstation Address: ${p.outstationAddr})` : "";
+                stationClause = ` As the aforesaid requirement necessitates my temporary movement outside headquarters${addrPart}, I earnestly solicit your kind permission to leave the station during the period of absence.`;
+            }
+
+            // Compose Paragraph 1 & Paragraph 2 according to active Style Preset (0 to 3)
+            let para1 = "";
+            let para2 = "";
+
+            if (clCurrentStylePresetIndex === 0) {
+                // Style 1: Executive Secretariat Style
+                if (p.timing === "postfacto") {
+                    para1 = `With due respect and humble submission, I, ${nameDisp}, presently serving as ${desigDisp} at ${officeDisp}${idClause}, beg to state that I remained unable to attend office for ${p.spanPhrase.replace(/^(Casual Leave|Special Casual Leave|half-day Casual Leave)/i, '$1')} ${groundElaboration}.`;
+                    para2 = `In view of the unavoidable circumstances stated above, I earnestly request your benign authority to kindly accord ex-post facto sanction of ${p.spanPhrase} and regularize my absence.${prefixClause}${stationClause} I shall remain ever grateful for your sympathetic consideration.`;
+                } else {
+                    para1 = `With due respect and humble submission, I, ${nameDisp}, presently discharging duties as ${desigDisp} at ${officeDisp}${idClause}, beg to state that I am in need of ${p.spanPhrase} ${groundElaboration}.`;
+                    para2 = `I, therefore, earnestly pray that your benign authority may graciously be pleased to sanction me ${p.spanPhrase}.${prefixClause}${stationClause} Necessary arrangements may kindly be made for the smooth conduct of my routine duties during my brief absence, for which I shall remain deeply obliged.`;
+                }
+            } else if (clCurrentStylePresetIndex === 1) {
+                // Style 2: Administrative Formal Style
+                para1 = `I have the honour to submit that I, ${nameDisp}, ${desigDisp}, ${officeDisp}${idClause}, am required to remain absent from official duties ${groundElaboration}, and accordingly seek ${p.timing === 'postfacto' ? 'ex-post facto approval for' : 'the grant of'} ${p.spanPhrase}.`;
+                para2 = `It is respectfully requested that the aforesaid ${p.leaveLabel} may kindly be sanctioned in my favour under the extant departmental rules.${prefixClause}${stationClause} I assure you of my prompt resumption of duties immediately upon the expiry of the sanctioned leave period.`;
+            } else if (clCurrentStylePresetIndex === 2) {
+                // Style 3: Concise Official Standard
+                para1 = `Respectfully, I, ${nameDisp} (${desigDisp}, ${officeDisp}${idClause}), submit this representation requesting ${p.timing === 'postfacto' ? 'ex-post facto sanction of' : 'the grant of'} ${p.spanPhrase} ${groundElaboration}.`;
+                para2 = `I request your kind authority to consider my genuine requirement and sanction the leave applied for.${prefixClause}${stationClause}`;
+            } else {
+                // Style 4: Detailed Dignified Representation
+                para1 = `Most respectfully, I, ${nameDisp}, holding the post of ${desigDisp} at ${officeDisp}${idClause}, beg to bring to your kind notice that ${groundElaboration}, it has become imperative for me to avail ${p.spanPhrase}.`;
+                para2 = `Under the circumstances explained above, I humbly solicit your gracious sanction for ${p.spanPhrase}.${prefixClause}${stationClause} For this act of kindness and administrative consideration, I shall ever remain duty-bound and grateful.`;
+            }
+
+            const subjInp = document.getElementById('clLiveSubjectInput');
+            const bodyTxt = document.getElementById('clLiveBodyTextarea');
+            if (subjInp) subjInp.value = subjectText;
+            if (bodyTxt) bodyTxt.value = `${para1}\n\n${para2}`;
+        }
+
+        // =========================================================================
+        // 3. LIVE GEMINI AI SMART REDRAFTING ENGINE (ONLINE ENHANCEMENT)
+        // =========================================================================
+        async function clTriggerGeminiSmartPolish() {
+            clAutoCollapseHamburger();
+            const p = clGatherParameters();
+            const btn = document.getElementById('clBtnAiEnhance');
+            const btnTxt = document.getElementById('clBtnAiEnhanceText');
+            const statusTag = document.getElementById('clDraftEngineStatusTag');
+
+            if (btnTxt) btnTxt.innerText = "⏳ Gemini AI is Crafting Official Draft...";
+            if (btn) btn.disabled = true;
+
+            const apiKey = _unlockClGeminiKey();
+            const prompt = `You are an expert administrative drafting officer in the Department of Posts, Government of India. Write a highly polished, dignified, formal official Casual Leave application body (ONLY the 2 paragraphs between "Respected Sir/Madam," and "Thanking you," — do NOT include To, Date, Subject, Salutation, or Yours faithfully).
+Details:
+- Applicant Name: ${p.name || 'the undersigned official'}
+- Designation: ${p.empDesig || 'Staff'}
+- Office: ${p.empOffice || 'Post Office'}
+- Employee ID: ${p.empId || 'N/A'}
+- Leave Type & Span: ${p.spanPhrase}
+- Context: ${p.timing === 'postfacto' ? 'Ex-post facto sanction (already availed due to sudden emergency)' : 'Prior sanction (advance request)'}
+- Ground/Reason: ${p.reasonCat === 'Other' ? p.otherReason : p.reasonCat}
+- Prefix/Suffix Holidays: ${p.prefixSuffix || 'None'}
+- Station Leave Required: ${p.stationLeave} ${p.outstationAddr ? '(Outstation: ' + p.outstationAddr + ')' : ''}
+Write in impeccable, authoritative, respectful Indian Government secretariat English in exactly 2 well-structured paragraphs separated by a blank line.`;
+
+            let aiDraft = "";
+            try {
+                const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${encodeURIComponent(apiKey)}`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        contents: [{ role: "user", parts: [{ text: prompt }] }],
+                        generationConfig: { temperature: 0.55, maxOutputTokens: 600 }
+                    })
+                });
+                if (res.ok) {
+                    const data = await res.json();
+                    aiDraft = (data?.candidates?.[0]?.content?.parts || []).map(pt => pt.text || "").join("\n").trim();
+                }
+            } catch (e) {
+                console.warn("Gemini redraft fallback:", e);
+            }
+
+            if (aiDraft && aiDraft.length > 30) {
+                const cleanBody = aiDraft
+                    .replace(/^(Respected\s+(Sir|Madam|Sir\/Madam)[,\s]*)/i, "")
+                    .replace(/(Thanking\s+you[\s\S]*)$/i, "")
+                    .trim();
+                const bodyEl = document.getElementById('clLiveBodyTextarea');
+                if (bodyEl) bodyEl.value = cleanBody;
+                clDraftManuallyEdited = true;
+                if (statusTag) statusTag.innerText = "✨ Gemini AI Bespoke Draft Active";
+                clNotify("AI Draft Ready", "Gemini AI has composed a bespoke high-official application draft.", "success");
+            } else {
+                clCycleOfficialStylePreset();
+            }
+
+            if (btnTxt) btnTxt.innerText = "✨ Enhance Draft with Live Gemini AI";
+            if (btn) btn.disabled = false;
+        }
+
         function closePdfModal() {
             const overlay = document.getElementById('pdfModalOverlay');
+            if (!overlay) return;
             overlay.classList.remove('active');
-            setTimeout(() => { overlay.style.display = 'none'; }, 300);
+            setTimeout(() => { overlay.style.display = 'none'; }, 250);
         }
 
         function finalizeLocalViewer(doc) {
+            clLastCompiledDoc = doc;
             const blobDataUrl = doc.output('datauristring');
             const iframe = document.getElementById('pdfFrameViewerLocal');
             const overlay = document.getElementById('pdfModalOverlay');
-            
-            // Move overlay to body to cover whole screen perfectly
+
             if (overlay.parentNode !== document.body) {
                 document.body.appendChild(overlay);
             }
 
             iframe.src = blobDataUrl;
-            
-            // Show the modal perfectly centered!
             overlay.style.display = 'flex';
-            setTimeout(() => { overlay.classList.add('active'); }, 50);
+            requestAnimationFrame(() => {
+                setTimeout(() => { overlay.classList.add('active'); }, 25);
+            });
         }
 
-        function triggerSmartGenerationCasualLeave() {
-            // Original Validation
-            if (!document.getElementById('clAuthDesig').value || !document.getElementById('clName').value) { 
-                if(typeof displayCustomAlert === "function") {
-                    displayCustomAlert("Form Defect: Authority Designation and Applicant Name are mandatory.");
-                } else {
-                    alert("Form Defect: Authority Designation and Applicant Name are mandatory.");
-                }
-                return; 
+        // =========================================================================
+        // 4. HIGH-DPI VECTOR CANVAS OFFICIAL LETTER PDF RENDERER
+        //    (Supports Bookman Old Style, Times New Roman, Tahoma + Justified Layout)
+        // =========================================================================
+        function renderOfficialCasualLeaveCanvas(data) {
+            const SCALE = 10; // 1mm = 10px (2100 x 2970 px high-DPI A4 Portrait)
+            const W_MM = 210;
+            const H_MM = 297;
+
+            const canvas = document.createElement('canvas');
+            canvas.width = W_MM * SCALE;
+            canvas.height = H_MM * SCALE;
+            const ctx = canvas.getContext('2d');
+
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.scale(SCALE, SCALE);
+
+            let OFFICIAL_FONT = "'Bookman Old Style', 'Bookman Antiqua', 'Times New Roman', Georgia, serif";
+            if (data.fontChoice === 'times') {
+                OFFICIAL_FONT = "'Times New Roman', Times, Georgia, serif";
+            } else if (data.fontChoice === 'tahoma') {
+                OFFICIAL_FONT = "Tahoma, 'Segoe UI', Verdana, sans-serif";
             }
+
+            const marginL = 22.0;
+            const marginR = 188.0;
+            const contentW = marginR - marginL; // 166mm
+
+            function drawText(txt, x, y, sizeMm, weight = 'normal', align = 'left', color = '#000000') {
+                ctx.save();
+                ctx.font = `${weight} ${sizeMm}px ${OFFICIAL_FONT}`;
+                ctx.fillStyle = color;
+                ctx.textAlign = align;
+                ctx.textBaseline = 'alphabetic';
+                ctx.fillText(String(txt || ''), x, y);
+                ctx.restore();
+            }
+
+            function drawLine(x1, y1, x2, y2, width = 0.28, dashed = false) {
+                ctx.save();
+                ctx.beginPath();
+                ctx.setLineDash(dashed ? [1.2, 1.2] : []);
+                ctx.lineWidth = width;
+                ctx.strokeStyle = '#1e293b';
+                ctx.moveTo(x1, y1);
+                ctx.lineTo(x2, y2);
+                ctx.stroke();
+                ctx.restore();
+            }
+
+            function wrapLines(text, maxWidthMm, sizeMm, weight = 'normal') {
+                const raw = String(text || '').trim();
+                if (!raw) return [];
+                ctx.save();
+                ctx.font = `${weight} ${sizeMm}px ${OFFICIAL_FONT}`;
+                const words = raw.split(/\s+/);
+                const lines = [];
+                let cur = "";
+                for (const w of words) {
+                    const test = cur ? (cur + " " + w) : w;
+                    if (ctx.measureText(test).width <= maxWidthMm) {
+                        cur = test;
+                    } else {
+                        if (cur) lines.push(cur);
+                        cur = w;
+                    }
+                }
+                if (cur) lines.push(cur);
+                ctx.restore();
+                return lines;
+            }
+
+            // Full Justified Paragraph Renderer for crisp official alignment
+            function drawJustifiedParagraph(text, x, startY, maxWidthMm, sizeMm, lineHeightMm, indentFirstLineMm = 12.0) {
+                const raw = String(text || '').trim();
+                if (!raw) return startY;
+
+                ctx.save();
+                ctx.font = `normal ${sizeMm}px ${OFFICIAL_FONT}`;
+                ctx.fillStyle = '#000000';
+                ctx.textBaseline = 'alphabetic';
+
+                const words = raw.split(/\s+/);
+                const lines = [];
+                let curWords = [];
+                let isFirst = true;
+
+                for (const w of words) {
+                    const testStr = curWords.concat(w).join(' ');
+                    const availW = isFirst ? (maxWidthMm - indentFirstLineMm) : maxWidthMm;
+                    if (ctx.measureText(testStr).width <= availW) {
+                        curWords.push(w);
+                    } else {
+                        if (curWords.length > 0) {
+                            lines.push({ words: curWords, isFirstLine: isFirst, isLastLine: false });
+                            isFirst = false;
+                        }
+                        curWords = [w];
+                    }
+                }
+                if (curWords.length > 0) {
+                    lines.push({ words: curWords, isFirstLine: isFirst, isLastLine: true });
+                }
+
+                let curY = startY;
+                lines.forEach(lineObj => {
+                    const lineX = lineObj.isFirstLine ? (x + indentFirstLineMm) : x;
+                    const lineMaxW = lineObj.isFirstLine ? (maxWidthMm - indentFirstLineMm) : maxWidthMm;
+
+                    if (lineObj.isLastLine || lineObj.words.length <= 1) {
+                        ctx.textAlign = 'left';
+                        ctx.fillText(lineObj.words.join(' '), lineX, curY);
+                    } else {
+                        const totalWordsW = lineObj.words.reduce((acc, w) => acc + ctx.measureText(w).width, 0);
+                        const extraSpace = Math.max(0, lineMaxW - totalWordsW);
+                        const gapW = extraSpace / (lineObj.words.length - 1);
+                        let wordX = lineX;
+                        lineObj.words.forEach(w => {
+                            ctx.fillText(w, wordX, curY);
+                            wordX += ctx.measureText(w).width + gapW;
+                        });
+                    }
+                    curY += lineHeightMm;
+                });
+
+                ctx.restore();
+                return curY;
+            }
+
+            let curY = 26.0;
+
+            // 1. "To" & Sanctioning Authority Block
+            drawText("To", marginL, curY, 4.1, "normal", "left");
+            curY += 6.5;
+            drawText(data.authDesig.endsWith(',') ? data.authDesig : (data.authDesig + ","), marginL, curY, 4.2, "bold", "left");
+            curY += 6.2;
+            if (data.authAdd) {
+                drawText(data.authAdd.endsWith('.') ? data.authAdd : (data.authAdd + "."), marginL, curY, 4.1, "bold", "left");
+                curY += 6.2;
+            }
+            drawText("Department of Posts, India.", marginL, curY, 4.0, "normal", "left");
+
+            // 2. Subject Block (Bold & Cleanly Wrapped)
+            curY += 14.0;
+            const fullSubject = data.subject.startsWith("Subject:") ? data.subject : `Subject: ${data.subject}`;
+            const subjLines = wrapLines(fullSubject, contentW, 4.15, "bold");
+            subjLines.forEach(sLine => {
+                drawText(sLine, marginL, curY, 4.15, "bold", "left");
+                curY += 5.8;
+            });
+            drawLine(marginL, curY - 3.8, marginR, curY - 3.8, 0.25);
+
+            // 3. Salutation
+            curY += 8.0;
+            drawText("Respected Sir / Madam,", marginL, curY, 4.1, "normal", "left");
+
+            // 4. Body Paragraphs (Justified with First-Line Indentation)
+            curY += 8.5;
+            const paragraphs = String(data.body || '')
+                .split(/\n\s*\n/)
+                .map(p => p.replace(/\n/g, ' ').trim())
+                .filter(Boolean);
+
+            paragraphs.forEach(para => {
+                curY = drawJustifiedParagraph(para, marginL, curY, contentW, 4.05, 6.4, 11.0);
+                curY += 4.2;
+            });
+
+            // 5. Structured Leave Summary Table Box (For Instant Authority Review)
+            curY += 3.0;
+            const boxTopY = curY;
+            const boxH = 22.0;
+            ctx.save();
+            ctx.fillStyle = '#f8fafc';
+            ctx.fillRect(marginL, boxTopY, contentW, boxH);
+            ctx.strokeStyle = '#94a3b8';
+            ctx.lineWidth = 0.28;
+            ctx.strokeRect(marginL, boxTopY, contentW, boxH);
+            ctx.restore();
+
+            drawLine(marginL + 55.0, boxTopY, marginL + 55.0, boxTopY + boxH, 0.22);
+            drawLine(marginL + 111.0, boxTopY, marginL + 111.0, boxTopY + boxH, 0.22);
+            drawLine(marginL, boxTopY + 8.5, marginR, boxTopY + 8.5, 0.22);
+
+            drawText("NATURE OF LEAVE", marginL + 27.5, boxTopY + 5.8, 2.9, "bold", "center", "#334155");
+            drawText("LEAVE PERIOD / DATES", marginL + 83.0, boxTopY + 5.8, 2.9, "bold", "center", "#334155");
+            drawText("STATION LEAVE / PREFIX", marginL + 138.5, boxTopY + 5.8, 2.9, "bold", "center", "#334155");
+
+            const periodSummary = data.durType.startsWith("HALF")
+                ? `${data.startStr || '--'} (${data.durType === 'HALF_FN' ? 'FN' : 'AN'})`
+                : (data.diffDays === 1 ? `${data.startStr || '--'} (01 Day)` : `${data.startStr || '--'} to ${data.endStr || '--'} (${data.diffDays} Days)`);
+
+            const stationSummary = data.stationLeave === "Yes"
+                ? `Station Leave: Yes${data.prefixSuffix ? ' • ' + data.prefixSuffix : ''}`
+                : `HQ Retained${data.prefixSuffix ? ' • ' + data.prefixSuffix : ''}`;
+
+            drawText(data.leaveLabel, marginL + 27.5, boxTopY + 16.2, 3.3, "bold", "center");
+            drawText(periodSummary, marginL + 83.0, boxTopY + 16.2, 3.3, "bold", "center");
+            drawText(stationSummary, marginL + 138.5, boxTopY + 16.2, 3.1, "bold", "center");
+
+            curY += boxH + 11.0;
+
+            // 6. Thanking You, Date/Place & Applicant Signature Block
+            drawText("Thanking you,", marginL, curY, 4.05, "normal", "left");
+            drawText("Yours faithfully,", marginR, curY, 4.05, "normal", "right");
+
+            curY += 16.0;
+            if (data.appDateStr) {
+                drawText(`Date : ${data.appDateStr}`, marginL, curY - 6.0, 3.85, "normal", "left");
+            }
+            if (data.place) {
+                drawText(`Place : ${data.place}`, marginL, curY, 3.85, "normal", "left");
+            }
+
+            drawText(`(${data.name})`, marginR, curY - 6.0, 4.15, "bold", "right");
+            if (data.empDesig) {
+                drawText(data.empDesig + (data.empOffice ? `, ${data.empOffice}` : ""), marginR, curY - 0.5, 3.75, "normal", "right");
+            }
+            if (data.empId) {
+                drawText(`Employee ID : ${data.empId}`, marginR, curY + 4.8, 3.65, "bold", "right");
+            }
+
+            // 7. Optional Office Endorsement / Sanctioning Authority Block at Bottom
+            if (data.includeOfficeBlock) {
+                const endorseTopY = Math.max(curY + 16.0, 238.0);
+                drawLine(marginL, endorseTopY, marginR, endorseTopY, 0.35, true);
+
+                drawText("FOR OFFICE USE / ORDERS OF THE SANCTIONING AUTHORITY", 105, endorseTopY + 6.5, 3.35, "bold", "center");
+
+                const certLine = `Casual Leave for .......... day(s) from .................... to .................... is Recommended / Sanctioned.`;
+                drawText(certLine, marginL, endorseTopY + 15.5, 3.6, "normal", "left");
+
+                drawText("Date : ..............................", marginL, endorseTopY + 30.0, 3.6, "normal", "left");
+                drawText("Signature & Designation of Sanctioning Authority", marginR, endorseTopY + 30.0, 3.6, "bold", "right");
+            }
+
+            return canvas.toDataURL('image/jpeg', 0.95);
+        }
+
+        // =========================================================================
+        // 5. TRIGGER PDF COMPILATION
+        // =========================================================================
+        function triggerSmartGenerationCasualLeave() {
+            clAutoCollapseHamburger();
+
+            const p = clGatherParameters();
+            if (!p.authDesig || !p.name) {
+                clNotify("Validation Notice", "Sanctioning Authority Designation and Applicant Full Name are mandatory.", "warning");
+                return;
+            }
+
+            // Ensure draft is composed if not manually edited
+            if (!clDraftManuallyEdited) {
+                clComposeAdaptiveDraft();
+            }
+
+            const subjectFinal = (document.getElementById('clLiveSubjectInput')?.value || '').trim();
+            const bodyFinal = (document.getElementById('clLiveBodyTextarea')?.value || '').trim();
+            const fontChoice = document.getElementById('clOfficialFontSelect')?.value || 'bookman';
+            const includeOfficeBlock = (document.getElementById('clIncludeOfficeBlockSelect')?.value !== 'no');
+
+            const genBtn = document.getElementById('btnGenerateCL');
+            if (genBtn) genBtn.classList.add('generating-pulse');
 
             const loader = document.getElementById('globalAppLoader');
-            if(loader) {
+            const loaderMsg = document.querySelector('#globalAppLoader .loading-status-msg');
+            if (loader) {
+                if (loaderMsg) loaderMsg.innerText = "Compiling Official Casual Leave Application PDF...";
                 loader.style.display = 'flex';
-                document.querySelector('.loading-status-msg').innerText = "Drafting Application...";
             }
 
-            setTimeout(() => {
-                try {
-                    if (typeof window.jspdf === 'undefined') {
-                        alert("System Notice: Please wait a moment for the PDF engine to load, then click generate again.");
-                        if(loader) loader.style.display = 'none';
-                        return;
-                    }
-
-                    // --- EXACT ORIGINAL PDF GENERATION LOGIC ---
-                    const { jsPDF } = window.jspdf;
-                    const doc = new jsPDF('p', 'mm', 'a4');
-
-                    const authDesig = document.getElementById('clAuthDesig').value || "";
-                    const authAdd = document.getElementById('clAuthAddress').value || "";
-                    const name = document.getElementById('clName').value || "";
-                    const empId = document.getElementById('clEmpId').value || "";
-                    const empDesig = document.getElementById('clEmpDesig').value || "";
-                    const empOffice = document.getElementById('clEmpOffice').value || "";
-                    const reasonDrop = document.getElementById('clReason').value;
-                    const otherReason = document.getElementById('clOtherReason').value || "";
-                    const stationLeave = document.getElementById('clStationLeave').value;
-                    const place = document.getElementById('clPlace').value || "";
-
-                    const formatD = (d) => { if(!d) return ""; const p = d.split("-"); return p[2] + "/" + p[1] + "/" + p[0]; };
-
-                    let startStr = formatD(document.getElementById('clStartDate').value);
-                    let endStr = formatD(document.getElementById('clEndDate').value);
-                    let appDateStr = formatD(document.getElementById('clAppDate').value);
-
-                    let finalReason = reasonDrop === "Other" ? otherReason : reasonDrop;
-
-                    let diffDays = 1;
-                    if (document.getElementById('clStartDate').value && document.getElementById('clEndDate').value) {
-                        let sD = new Date(document.getElementById('clStartDate').value);
-                        let eD = new Date(document.getElementById('clEndDate').value);
-                        if (sD <= eD) {
-                            const diffTime = Math.abs(eD - sD);
-                            diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+            requestAnimationFrame(() => {
+                setTimeout(() => {
+                    try {
+                        if (typeof window.jspdf === 'undefined') {
+                            clNotify("PDF Engine Loading", "Please wait a moment for the PDF engine to load, then click generate again.", "info");
+                            if (loader) loader.style.display = 'none';
+                            if (genBtn) genBtn.classList.remove('generating-pulse');
+                            return;
                         }
+
+                        const { jsPDF } = window.jspdf;
+                        const doc = new jsPDF('p', 'mm', 'a4');
+
+                        const renderPayload = {
+                            ...p,
+                            subject: subjectFinal,
+                            body: bodyFinal,
+                            fontChoice: fontChoice,
+                            includeOfficeBlock: includeOfficeBlock
+                        };
+
+                        const pageImg = renderOfficialCasualLeaveCanvas(renderPayload);
+                        doc.addImage(pageImg, 'JPEG', 0, 0, 210, 297, undefined, 'FAST');
+
+                        finalizeLocalViewer(doc);
+                        clNotify(
+                            "CL Application Compiled",
+                            "Generated High-Official Casual Leave Application PDF.",
+                            "success"
+                        );
+
+                    } catch (err) {
+                        console.error("PDF generation failure: ", err);
+                        clNotify("Compilation Error", "Failed to compile the final Casual Leave PDF.", "error");
+                    } finally {
+                        if (loader) loader.style.display = 'none';
+                        if (genBtn) genBtn.classList.remove('generating-pulse');
                     }
-
-                    doc.setFont("times", "normal");
-                    doc.setFontSize(12);
-
-                    let currentY = 30;
-
-                    doc.text("To,", 20, currentY); 
-                    currentY += 7;
-                    
-                    doc.setFont("times", "bold");
-                    doc.text(authDesig + ",", 20, currentY); 
-                    currentY += 7;
-                    
-                    doc.text(authAdd + ".", 20, currentY); 
-                    currentY += 15;
-
-                    doc.setFont("times", "normal");
-                    if (appDateStr) { doc.text("Date: " + appDateStr, 20, currentY); }
-                    if (place) { doc.text("Place: " + place, 140, currentY); }
-                    currentY += 15;
-
-                    doc.setFont("times", "bold");
-                    doc.text("Subject: Prayer for Casual Leave.", 20, currentY); 
-                    currentY += 15;
-
-                    doc.setFont("times", "normal");
-                    doc.text("Respected Sir,", 20, currentY); 
-                    currentY += 10;
-
-                    // Automatically calculates exact days and writes the perfect application body
-                    let bodyText = `With due respect, I, ${name}, working as ${empDesig} at ${empOffice} (Emp ID: ${empId}), humbly request you to grant me Casual Leave for ${diffDays} day(s) from ${startStr} to ${endStr}. I require this leave due to ${finalReason.toLowerCase()}.`;
-
-                    if(stationLeave === "Yes") {
-                        bodyText += ` I also request your kind permission to leave the headquarters (Station Leave) during this period.`;
-                    }
-
-                    let splitBody = doc.splitTextToSize(bodyText, 170);
-                    doc.text(bodyText, 20, currentY, { maxWidth: 170, align: "justify" });
-                    currentY += (splitBody.length * 6) + 5;
-
-                    let closingText = "I shall be highly obliged if you kindly consider my application and grant me the leave for the above-mentioned period.";
-                    let splitClosing = doc.splitTextToSize(closingText, 170);
-                    doc.text(closingText, 20, currentY, { maxWidth: 170, align: "justify" });
-                    currentY += (splitClosing.length * 6) + 15;
-
-                    doc.text("Thanking you,", 20, currentY); 
-                    currentY += 15;
-
-                    doc.text("Yours faithfully,", 140, currentY); 
-                    currentY += 15;
-                    
-                    doc.setFont("times", "bold");
-                    doc.text(name, 140, currentY);
-                    
-                    doc.setFont("times", "normal");
-                    doc.text(`Designation: ${empDesig}`, 140, currentY + 6);
-                    doc.text(`Emp ID: ${empId}`, 140, currentY + 12);
-
-                    // Display exactly in our centered modal
-                    finalizeLocalViewer(doc);
-
-                } catch (err) {
-                    console.error("PDF generation failure: ", err); 
-                    if(typeof displayCustomAlert === "function") {
-                        displayCustomAlert("Engine Failure Error: Failed to successfully output compile final PDF.");
-                    } else {
-                        alert("Engine Failure Error: Failed to successfully output compile final PDF.");
-                    }
-                } finally {
-                    if(loader) loader.style.display = 'none';
-                }
-            }, 750);
+                }, 340);
+            });
         }
     </script>
 </div>
