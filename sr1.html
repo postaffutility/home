@@ -7,429 +7,1754 @@
 </script>
 
 <div id="moduleRenderArea">
-    
-    <!-- 100% SELF-CONTAINED PERFECT DESIGN CSS -->
-    <style>
-        .portal-page-panel { max-width: 1200px; margin: 0 auto; background: white; padding: 40px; border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.03); border: 1px solid #e2e8f0; font-family: 'Segoe UI', Arial, sans-serif; }
-        
-        /* Typography & Layout */
-        h3.module-title { margin: 0; color: #1e293b; font-size: 26px; font-weight: 800; letter-spacing: -0.5px; }
-        .back-nav-link { display: inline-flex; align-items: center; color: #3b82f6; font-weight: 800; font-size: 15px; text-decoration: none; cursor: pointer; transition: color 0.2s; padding: 8px 15px; background: #eff6ff; border-radius: 8px; float: right; }
-        .back-nav-link:hover { color: #1d4ed8; background: #dbeafe; }
-        
-        .form-group { margin-bottom: 20px; clear: both; }
-        .form-group label { display: block; font-weight: 700; margin-bottom: 8px; font-size: 14px; color: #334155; }
-        
-        /* Inputs & Textareas */
-        input[type="text"], input[type="number"], input[type="date"], select, textarea { width: 100%; padding: 14px 16px; box-sizing: border-box; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14.5px; background: #f8fafc; color: #1e293b !important; transition: all 0.2s ease; font-family: 'Segoe UI', Arial, sans-serif; }
-        input[type="text"]:focus, input[type="number"]:focus, input[type="date"]:focus, select:focus, textarea:focus { border-color: #d32f2f; background: #ffffff; box-shadow: 0 0 0 4px rgba(211, 47, 47, 0.1); outline: none; }
-        
-        /* NORMAL (NON-ITALIC) PLACEHOLDERS */
-        input::placeholder, textarea::placeholder { color: #94a3b8 !important; font-style: normal !important; opacity: 1 !important; }
-        
-        textarea { resize: vertical; }
-        .flex-row { display: flex; gap: 15px; flex-wrap: wrap; }
-        .flex-row > div { flex: 1; }
-        
-        /* Action Button */
-        button.action-btn { width: 100%; padding: 16px; background: #f59e0b; color: white; border: none; border-radius: 8px; font-size: 15.5px; font-weight: 800; cursor: pointer; text-transform: uppercase; letter-spacing: 0.8px; margin-top: 15px; box-shadow: 0 4px 12px rgba(245, 158, 11, 0.25); transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
-        button.action-btn:hover { background: #d97706; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(217, 119, 6, 0.3); }
 
-        /* --- PERFECT CENTERED MODAL, FULL SCREEN BLUR --- */
-        .pdf-modal-overlay {
-            position: fixed !important; top: 0 !important; left: 0 !important;
-            width: 100vw !important; height: 100vh !important;
-            background: rgba(241, 245, 249, 0.85) !important; 
-            backdrop-filter: blur(8px) !important;
-            z-index: 99999999 !important; 
-            display: none; justify-content: center; align-items: center;
-            opacity: 0; transition: opacity 0.3s ease;
+    <!-- Google Fonts: Noto Serif Devanagari for Crisp Official Hindi Rendering -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Devanagari:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <!-- 100% FLUID RESPONSIVE, THEME-AWARE GLASSMORPHISM CSS (SYNCED WITH INDEX.HTML V3.0) -->
+    <style>
+        #dynamicWorkspace {
+            scroll-behavior: smooth !important;
+            -webkit-overflow-scrolling: touch !important;
         }
-        .pdf-modal-overlay.active { display: flex; opacity: 1; }
-        
+
+        .sr1-viewport-wrapper {
+            width: 100%;
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: clamp(4px, 0.8vw, 12px);
+            font-family: var(--font-main, 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif);
+            color: var(--text-primary, #0f172a);
+            animation: sr1FadeIn 0.32s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+            box-sizing: border-box;
+        }
+
+        .portal-page-panel {
+            width: 100%;
+            background: var(--surface-glass, rgba(255, 255, 255, 0.86));
+            backdrop-filter: blur(22px);
+            -webkit-backdrop-filter: blur(22px);
+            padding: clamp(18px, 2.5vw, 34px);
+            border-radius: 22px;
+            box-shadow: var(--shadow-soft, 0 8px 28px rgba(15, 23, 42, 0.06));
+            border: 1px solid var(--border-glass, rgba(255, 255, 255, 0.9));
+            transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            box-sizing: border-box;
+        }
+
+        /* Decorative top accent bar */
+        .portal-page-panel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, #f59e0b 0%, #2563eb 50%, #10b981 100%);
+        }
+
+        /* HEADER SECTION */
+        .sr1-header-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            padding-bottom: clamp(14px, 1.8vw, 22px);
+            margin-bottom: clamp(16px, 2vw, 24px);
+            border-bottom: 1px solid var(--border-subtle, rgba(203, 213, 225, 0.8));
+            flex-wrap: wrap;
+        }
+
+        .sr1-header-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            min-width: 0;
+        }
+
+        .sr1-hero-icon {
+            width: clamp(44px, 3.6vw, 52px);
+            height: clamp(44px, 3.6vw, 52px);
+            border-radius: 15px;
+            background: linear-gradient(135deg, #f59e0b 0%, #ea580c 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            box-shadow: 0 8px 22px rgba(245, 158, 11, 0.34);
+            flex-shrink: 0;
+        }
+
+        .sr1-title-block {
+            min-width: 0;
+        }
+
+        h3.module-title {
+            margin: 0;
+            color: var(--text-primary, #0f172a);
+            font-size: clamp(18px, 1.8vw, 24px);
+            font-weight: 900;
+            letter-spacing: -0.5px;
+            line-height: 1.2;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .sr1-form-badge {
+            font-size: 11px;
+            font-weight: 800;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(245, 158, 11, 0.15);
+            color: #d97706;
+            border: 1px solid rgba(245, 158, 11, 0.32);
+            letter-spacing: 0.4px;
+            text-transform: uppercase;
+        }
+        html[data-theme="dark"] .sr1-form-badge {
+            color: #fbbf24;
+            background: rgba(245, 158, 11, 0.22);
+        }
+
+        .sr1-subtitle {
+            margin: 4px 0 0 0;
+            font-size: clamp(12px, 1vw, 13.5px);
+            color: var(--text-muted, #64748b);
+            font-weight: 500;
+        }
+
+        .back-nav-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-primary, #0f172a);
+            font-weight: 800;
+            font-size: 13.5px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.22s ease;
+            padding: 10px 18px;
+            background: var(--surface-input, #eef3fb);
+            border: 1px solid var(--border-subtle, rgba(203, 213, 225, 0.8));
+            border-radius: 12px;
+            flex-shrink: 0;
+        }
+
+        .back-nav-link:hover {
+            border-color: var(--accent-primary, #2563eb);
+            color: var(--accent-primary, #2563eb);
+            background: var(--surface-card-hover, #ffffff);
+            transform: translateX(-3px);
+            box-shadow: var(--shadow-card, 0 4px 18px rgba(15, 23, 42, 0.05));
+        }
+
+        /* LIVE TELEMETRY STRIP */
+        .sr1-telemetry-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: clamp(10px, 1.4vw, 16px);
+            margin-bottom: clamp(18px, 2.2vw, 26px);
+        }
+
+        .sr1-stat-pill {
+            background: var(--surface-card, rgba(255, 255, 255, 0.92));
+            border: 1px solid var(--border-glass, rgba(255, 255, 255, 0.9));
+            border-radius: 15px;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: var(--shadow-card, 0 4px 18px rgba(15, 23, 42, 0.04));
+            min-width: 0;
+            transition: transform 0.2s ease, border-color 0.2s ease;
+        }
+
+        .sr1-stat-pill:hover {
+            transform: translateY(-2px);
+            border-color: rgba(245, 158, 11, 0.4);
+        }
+
+        .sr1-stat-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 11px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .sr1-stat-icon.amber { background: rgba(245, 158, 11, 0.14); color: #d97706; }
+        .sr1-stat-icon.blue { background: rgba(37, 99, 235, 0.13); color: #2563eb; }
+        .sr1-stat-icon.emerald { background: rgba(16, 185, 129, 0.14); color: #059669; }
+        html[data-theme="dark"] .sr1-stat-icon.amber { color: #fbbf24; }
+        html[data-theme="dark"] .sr1-stat-icon.blue { color: #60a5fa; }
+        html[data-theme="dark"] .sr1-stat-icon.emerald { color: #34d399; }
+
+        .sr1-stat-text {
+            min-width: 0;
+            flex: 1;
+        }
+
+        .sr1-stat-label {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-muted, #64748b);
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            margin-bottom: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .sr1-stat-val {
+            font-size: clamp(14px, 1.3vw, 17px);
+            font-weight: 900;
+            color: var(--text-primary, #0f172a);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* GLASS SUB-SECTIONS */
+        .sr1-glass-section {
+            background: var(--surface-card, rgba(255, 255, 255, 0.9));
+            border: 1px solid var(--border-subtle, rgba(203, 213, 225, 0.75));
+            border-radius: 18px;
+            padding: clamp(16px, 2vw, 24px);
+            margin-bottom: clamp(16px, 2vw, 22px);
+            box-shadow: var(--shadow-card, 0 4px 18px rgba(15, 23, 42, 0.035));
+            transition: border-color 0.25s ease, background 0.3s ease;
+        }
+
+        .sr1-glass-section:hover {
+            border-color: rgba(245, 158, 11, 0.38);
+        }
+
+        .sr1-section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding-bottom: 12px;
+            margin-bottom: 18px;
+            border-bottom: 1px solid var(--border-subtle, rgba(203, 213, 225, 0.7));
+            flex-wrap: wrap;
+        }
+
+        .sr1-section-header h4 {
+            margin: 0;
+            font-size: 15.5px;
+            font-weight: 800;
+            color: var(--text-primary, #0f172a);
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            letter-spacing: -0.2px;
+        }
+
+        .sr1-section-header h4 svg {
+            color: #f59e0b;
+            flex-shrink: 0;
+        }
+
+        .sr1-section-tag {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-muted, #64748b);
+            background: var(--surface-input, #eef3fb);
+            padding: 4px 10px;
+            border-radius: 999px;
+            border: 1px solid var(--border-subtle, #cbd5e1);
+        }
+
+        /* RESPONSIVE 12-COLUMN FORM GRID */
+        .sr1-form-grid {
+            display: grid;
+            grid-template-columns: repeat(12, minmax(0, 1fr));
+            gap: clamp(14px, 1.6vw, 18px);
+        }
+
+        .sr1-col-12 { grid-column: span 12; }
+        .sr1-col-8 { grid-column: span 8; }
+        .sr1-col-6 { grid-column: span 6; }
+        .sr1-col-4 { grid-column: span 4; }
+        .sr1-col-3 { grid-column: span 3; }
+
+        .form-group {
+            margin-bottom: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            font-weight: 800;
+            margin-bottom: 7px;
+            font-size: 12.8px;
+            color: var(--text-primary, #0f172a);
+            letter-spacing: -0.1px;
+        }
+
+        .form-group label svg {
+            color: #d97706;
+            flex-shrink: 0;
+        }
+        html[data-theme="dark"] .form-group label svg {
+            color: #fbbf24;
+        }
+
+        .portal-page-panel input[type="text"],
+        .portal-page-panel input[type="number"],
+        .portal-page-panel input[type="date"],
+        .portal-page-panel select,
+        .portal-page-panel textarea {
+            width: 100%;
+            padding: 12.5px 15px;
+            box-sizing: border-box;
+            border: 1.5px solid var(--border-subtle, rgba(203, 213, 225, 0.85));
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            background: var(--surface-input, #eef3fb);
+            color: var(--text-primary, #0f172a) !important;
+            transition: all 0.22s ease;
+            font-family: var(--font-main, 'Inter', 'Segoe UI', sans-serif);
+        }
+
+        html[data-theme="dark"] .portal-page-panel input[type="date"] {
+            color-scheme: dark;
+        }
+
+        .portal-page-panel select {
+            cursor: pointer;
+            appearance: none;
+            -webkit-appearance: none;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="%2364748b" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>');
+            background-repeat: no-repeat;
+            background-position: right 14px center;
+            padding-right: 40px;
+        }
+
+        .portal-page-panel input[type="text"]:focus,
+        .portal-page-panel input[type="number"]:focus,
+        .portal-page-panel input[type="date"]:focus,
+        .portal-page-panel select:focus,
+        .portal-page-panel textarea:focus {
+            border-color: #f59e0b;
+            background: var(--surface-input-focus, #ffffff);
+            box-shadow: 0 0 0 3.5px rgba(245, 158, 11, 0.16);
+            outline: none;
+        }
+
+        .portal-page-panel input::placeholder,
+        .portal-page-panel textarea::placeholder {
+            color: var(--text-muted, #94a3b8) !important;
+            font-style: normal !important;
+            font-weight: 400 !important;
+            opacity: 1 !important;
+        }
+
+        /* HIGH-TECH COLOR-SHIFTING ACTION BUTTON */
+        .sr1-action-footer {
+            margin-top: clamp(18px, 2.2vw, 24px);
+            padding-top: clamp(14px, 1.8vw, 20px);
+            border-top: 1px solid var(--border-subtle, rgba(203, 213, 225, 0.8));
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .sr1-footer-hint {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12.5px;
+            color: var(--text-muted, #64748b);
+            font-weight: 600;
+        }
+
+        button.action-btn {
+            flex: 1;
+            min-width: 260px;
+            padding: 15px 26px;
+            background: linear-gradient(90deg, #f59e0b 0%, #ea580c 50%, #2563eb 100%);
+            background-size: 200% auto;
+            color: #ffffff;
+            border: none;
+            border-radius: 13px;
+            font-size: 14.5px;
+            font-weight: 800;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 0.7px;
+            box-shadow: 0 10px 25px rgba(245, 158, 11, 0.32);
+            transition: all 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        button.action-btn:hover {
+            background-position: right center;
+            transform: translateY(-2px);
+            box-shadow: 0 14px 30px rgba(37, 99, 235, 0.38);
+        }
+
+        button.action-btn:active,
+        button.action-btn.generating-pulse {
+            background-position: right center;
+            transform: scale(0.99);
+        }
+
+        /* --- HIGH-TECH FULL-SCREEN GLASS MODAL FOR PDF PREVIEW --- */
+        .pdf-modal-overlay {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100vw !important;
+            height: 100vh !important;
+            background: rgba(15, 23, 42, 0.72) !important;
+            backdrop-filter: blur(12px) !important;
+            -webkit-backdrop-filter: blur(12px) !important;
+            z-index: 99999999 !important;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.25s ease;
+            padding: clamp(10px, 2vw, 24px);
+            box-sizing: border-box;
+            font-family: var(--font-main, 'Inter', 'Segoe UI', sans-serif);
+        }
+
+        .pdf-modal-overlay.active {
+            display: flex !important;
+            opacity: 1;
+        }
+
         .pdf-modal-card {
-            background: #ffffff; width: 85%; max-width: 900px; height: 85vh;
-            border-radius: 12px; box-shadow: 0 20px 50px rgba(0,0,0,0.2); 
-            display: flex; flex-direction: column; overflow: hidden;
-            border: 1px solid #cbd5e1; border-top: 6px solid #f59e0b;
-            transform: scale(0.95); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            background: var(--surface-glass-strong, #ffffff);
+            color: var(--text-primary, #0f172a);
+            width: 94%;
+            max-width: 1040px;
+            height: 88vh;
+            border-radius: 20px;
+            box-shadow: 0 28px 70px rgba(0, 0, 0, 0.45);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            border: 1px solid var(--border-glass, rgba(255, 255, 255, 0.85));
+            border-top: 5px solid #f59e0b;
+            transform: scale(0.95);
+            transition: transform 0.28s cubic-bezier(0.175, 0.885, 0.32, 1.275), background 0.3s ease;
             margin: auto;
         }
-        .pdf-modal-overlay.active .pdf-modal-card { transform: scale(1); }
-        
-        .pdf-modal-header { padding: 15px 25px; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; background: #f8fafc; }
-        .pdf-modal-header h3 { margin: 0; color: #1e293b; font-size: 18px; font-weight: 800; font-family: 'Segoe UI', Arial, sans-serif; }
-        .pdf-close-btn { background: #ef4444; color: white; border: none; padding: 10px 24px; border-radius: 8px; font-weight: 800; cursor: pointer; transition: 0.2s; font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px; }
-        .pdf-close-btn:hover { background: #dc2626; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(220, 38, 38, 0.2);}
-        .pdf-iframe-container { flex: 1; width: 100%; height: 100%; background: #e2e8f0; }
-        #pdfFrameViewerLocal { width: 100%; height: 100%; border: none; display: block; }
+
+        .pdf-modal-overlay.active .pdf-modal-card {
+            transform: scale(1);
+        }
+
+        .pdf-modal-header {
+            padding: 14px 22px;
+            border-bottom: 1px solid var(--border-subtle, #e2e8f0);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--surface-input, #f8fafc);
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .pdf-modal-title-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .pdf-modal-header h3 {
+            margin: 0;
+            color: var(--text-primary, #1e293b);
+            font-size: 16.5px;
+            font-weight: 900;
+            letter-spacing: -0.3px;
+            display: flex;
+            align-items: center;
+            gap: 9px;
+        }
+
+        .pdf-modal-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .pdf-download-btn {
+            background: linear-gradient(90deg, #f59e0b, #ea580c);
+            color: #ffffff;
+            border: none;
+            padding: 9px 18px;
+            border-radius: 10px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 12.5px;
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+        }
+
+        .pdf-download-btn:hover {
+            transform: translateY(-1px);
+            filter: brightness(1.08);
+        }
+
+        .pdf-close-btn {
+            background: rgba(239, 68, 68, 0.12);
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            padding: 9px 18px;
+            border-radius: 10px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 12.5px;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .pdf-close-btn:hover {
+            background: #ef4444;
+            color: #ffffff;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(220, 38, 38, 0.28);
+        }
+
+        .pdf-iframe-container {
+            flex: 1;
+            width: 100%;
+            height: 100%;
+            background: #334155;
+        }
+
+        #pdfFrameViewerLocal {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
+        }
+
+        @keyframes sr1FadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* FLUID BREAKPOINTS FOR ALL SCREEN SIZES */
+        @media (max-width: 960px) {
+            .sr1-col-8, .sr1-col-6, .sr1-col-4, .sr1-col-3 {
+                grid-column: span 6;
+            }
+            .sr1-telemetry-grid {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 680px) {
+            .sr1-telemetry-grid {
+                grid-template-columns: 1fr;
+            }
+            .sr1-col-8, .sr1-col-6, .sr1-col-4, .sr1-col-3 {
+                grid-column: span 12;
+            }
+            .sr1-header-bar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .back-nav-link {
+                width: 100%;
+                justify-content: center;
+            }
+            .sr1-action-footer {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            button.action-btn {
+                width: 100%;
+                min-width: 0;
+            }
+            .pdf-modal-card {
+                width: 98%;
+                height: 92vh;
+            }
+        }
     </style>
 
-    <div class='portal-page-panel' style='display:block;'>
-        
-        <div style="margin-bottom: 35px; border-bottom: 2px solid #e2e8f0; padding-bottom: 15px; overflow: hidden;">
-            <div class='back-nav-link' onclick='typeof returnToHomeGridSPA === "function" ? returnToHomeGridSPA() : (window.location.href="index.html")'>⬅️ Back to Dashboard</div>
-            <h3 class="module-title">Module: Application for Leave (S.R.-1)</h3>
-        </div>
-        
-        <div class='flex-row'>
-            <div class='form-group'>
-                <label>1. Name of the applicant:</label>
-                <input class='text-input-placeholder-gray' id='sr1Name' placeholder='e.g. Official Full Name' type='text'/>
-            </div>
-            <div class='form-group'>
-                <label>2. Leave rules applicable:</label>
-                <input class='text-input-placeholder-gray' id='sr1Rules' placeholder='e.g. CCS Leave Rules 1972' type='text' value='CCS Leave Rules 1972'/>
-            </div>
-        </div>
-        <div class='flex-row'>
-            <div class='form-group'>
-                <label>3. Post held:</label>
-                <input class='text-input-placeholder-gray' id='sr1Post' placeholder='e.g. MTS / Postal Assistant / Postmaster' type='text'/>
-            </div>
-            <div class='form-group'>
-                <label>4. Department, Office and Section:</label>
-                <input class='text-input-placeholder-gray' id='sr1Dept' placeholder='e.g. Dept of Posts, Radhakishorepur HO' type='text'/>
-            </div>
-        </div>
-        <div class='flex-row'>
-            <div class='form-group'>
-                <label>5. Pay (Rs.):</label>
-                <input class='text-input-placeholder-gray' id='sr1Pay' placeholder='e.g. 25500' type='text'/>
-            </div>
-            <div class='form-group'>
-                <label>6. Allowances drawn in the present post:</label>
-                <input class='text-input-placeholder-gray' id='sr1Allowances' placeholder='e.g. HRA, DA, TA' type='text'/>
-            </div>
-        </div>
-        
-        <div style='background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 25px; margin-bottom: 20px;'>
-            <h4 style='margin-top: 0; color: #0f172a; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;'>7. Nature and period of leave applied for</h4>
-            <div class='flex-row'>
-                <div class='form-group'>
-                    <label>Nature of Leave:</label>
-                    <select id='sr1Nature'>
-                        <option value='Casual Leave'>Casual Leave</option>
-                        <option value='Earned Leave'>Earned Leave</option>
-                        <option value='Half Pay Leave'>Half Pay Leave</option>
-                        <option value='Commuted Leave'>Commuted Leave</option>
-                        <option value='Medical Leave'>Medical Leave</option>
-                    </select>
+    <div class="sr1-viewport-wrapper" id="sr1InteractiveRoot">
+        <div class="portal-page-panel" style="display:block;">
+
+            <!-- TOP HEADER BAR -->
+            <div class="sr1-header-bar">
+                <div class="sr1-header-left">
+                    <div class="sr1-hero-icon">
+                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                        </svg>
+                    </div>
+                    <div class="sr1-title-block">
+                        <h3 class="module-title">
+                            <span>Application for Leave (S.R.-1)</span>
+                            <span class="sr1-form-badge">Bilingual Hindi + English (Items 1–15)</span>
+                        </h3>
+                        <p class="sr1-subtitle">Official Supplementary Rule 216 Bilingual 2-Page Leave Application with Controlling, Audit &amp; Sanctioning Authority Sections.</p>
+                    </div>
                 </div>
-                <div class='form-group'>
-                    <label>Period (No. of days):</label>
-                    <input class='text-input-placeholder-gray' id='sr1Period' placeholder='e.g. 3' type='number'/>
+
+                <div class="back-nav-link" onclick="sr1CleanExit()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="19" y1="12" x2="5" y2="12"/>
+                        <polyline points="12 19 5 12 12 5"/>
+                    </svg>
+                    <span>Back to Dashboard</span>
                 </div>
             </div>
-            <div class='flex-row'>
-                <div class='form-group'><label>From Date:</label><input id='sr1FromDate' type='date'/></div>
-                <div class='form-group'><label>To Date:</label><input id='sr1ToDate' type='date'/></div>
-            </div>
-        </div>
-        
-        <div class='form-group'>
-            <label>8. Sunday and holidays, if any proposed to be prefixed/suffixed:</label>
-            <input class='text-input-placeholder-gray' id='sr1PrefixSuffix' placeholder='e.g. Prefixed Sunday 14th, Suffixed Holiday 18th' type='text'/>
-        </div>
-        <div class='form-group'>
-            <label>9. Ground on which leave is applied for:</label>
-            <textarea class='text-input-placeholder-gray' id='sr1Grounds' placeholder='e.g. Urgent personal work at home / Medical checkup' rows='2'></textarea>
-        </div>
-        <div class='form-group'>
-            <label>10. Date of return from last leave and nature/period of that leave:</label>
-            <input class='text-input-placeholder-gray' id='sr1LastLeave' placeholder='e.g. Returned on 10/02/2026 after 2 days EL' type='text'/>
-        </div>
-        
-        <div style='background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 25px; margin-bottom: 20px;'>
-            <h4 style='margin-top: 0; color: #0f172a; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;'>11. Leave Travel Concession (LTC) Proposal</h4>
-            <div class='flex-row'>
-                <div class='form-group'>
-                    <label>Do you propose to avail LTC?</label>
-                    <select id='sr1LtcProp'>
-                        <option value='do not propose'>I do NOT propose</option>
-                        <option value='propose'>I propose</option>
-                    </select>
+
+            <!-- LIVE TELEMETRY STRIP -->
+            <div class="sr1-telemetry-grid">
+                <div class="sr1-stat-pill">
+                    <div class="sr1-stat-icon amber">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                            <line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+                        </svg>
+                    </div>
+                    <div class="sr1-stat-text">
+                        <div class="sr1-stat-label">Leave Nature &amp; Duration</div>
+                        <div class="sr1-stat-val" id="sr1StatLeaveSummary">Earned Leave • 0 Days</div>
+                    </div>
                 </div>
-                <div class='form-group'>
-                    <label>In the block years:</label>
-                    <input class='text-input-placeholder-gray' id='sr1LtcBlock' placeholder='e.g. 2026-2029' type='text'/>
+
+                <div class="sr1-stat-pill">
+                    <div class="sr1-stat-icon blue">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                            <polyline points="14 2 14 8 20 8"/>
+                        </svg>
+                    </div>
+                    <div class="sr1-stat-text">
+                        <div class="sr1-stat-label">Bilingual Format</div>
+                        <div class="sr1-stat-val">2-Page A4 Portrait (Items 1–15)</div>
+                    </div>
+                </div>
+
+                <div class="sr1-stat-pill">
+                    <div class="sr1-stat-icon emerald">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="4 7 4 4 20 4 20 7"/>
+                            <line x1="9" y1="20" x2="15" y2="20"/>
+                            <line x1="12" y1="4" x2="12" y2="20"/>
+                        </svg>
+                    </div>
+                    <div class="sr1-stat-text">
+                        <div class="sr1-stat-label">Active Print Font</div>
+                        <div class="sr1-stat-val" id="sr1StatFontName">Bookman Old Style Bold</div>
+                    </div>
                 </div>
             </div>
-        </div>
-        
-        <div class='flex-row'>
-            <div class='form-group'>
-                <label>Station:</label>
-                <input class='text-input-placeholder-gray' id='sr1Station' placeholder='e.g. Agartala' type='text'/>
+
+            <!-- SECTION 1: APPLICANT & POST DETAILS (ITEMS 1 TO 6) -->
+            <div class="sr1-glass-section">
+                <div class="sr1-section-header">
+                    <h4>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                            <circle cx="12" cy="7" r="4"/>
+                        </svg>
+                        <span>Applicant Service &amp; Pay Particulars (Items 1 to 6)</span>
+                    </h4>
+                    <span class="sr1-section-tag">आवेदक का विवरण • Inputs Print in Bold</span>
+                </div>
+
+                <div class="sr1-form-grid">
+                    <!-- 1. Name -->
+                    <div class="form-group sr1-col-6">
+                        <label for="sr1Name">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                            <span>1. Name of Applicant (आवेदक का नाम):</span>
+                        </label>
+                        <input class="text-input-placeholder-gray" id="sr1Name" placeholder="e.g. SUBHAJIT PARBAT" type="text" autocomplete="off"/>
+                    </div>
+
+                    <!-- 2. Leave Rules -->
+                    <div class="form-group sr1-col-6">
+                        <label for="sr1Rules">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                            <span>2. Leave Rules Applicable (लागू छुट्टी नियम):</span>
+                        </label>
+                        <input class="text-input-placeholder-gray" id="sr1Rules" placeholder="e.g. CCS (Leave) Rules, 1972" type="text" value="CCS (Leave) Rules, 1972" autocomplete="off"/>
+                    </div>
+
+                    <!-- 3. Post Held -->
+                    <div class="form-group sr1-col-6">
+                        <label for="sr1Post">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+                            <span>3. Post Held (धारित पद):</span>
+                        </label>
+                        <input class="text-input-placeholder-gray" id="sr1Post" placeholder="e.g. Postman / Postal Assistant / MTS" type="text" autocomplete="off"/>
+                    </div>
+
+                    <!-- 4. Department, Office & Section -->
+                    <div class="form-group sr1-col-6">
+                        <label for="sr1Dept">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M9 22v-4h6v4"/></svg>
+                            <span>4. Department, Office &amp; Section (विभाग, कार्यालय और अनुभाग):</span>
+                        </label>
+                        <input class="text-input-placeholder-gray" id="sr1Dept" placeholder="e.g. Department of Posts, Radhakishorepur HO" type="text" autocomplete="off"/>
+                    </div>
+
+                    <!-- 5. Pay -->
+                    <div class="form-group sr1-col-4">
+                        <label for="sr1Pay">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                            <span>5. Basic Pay (वेतन - Rs.):</span>
+                        </label>
+                        <input class="text-input-placeholder-gray" id="sr1Pay" placeholder="e.g. 25500/-" type="text" autocomplete="off"/>
+                    </div>
+
+                    <!-- 6. Allowances -->
+                    <div class="form-group sr1-col-8">
+                        <label for="sr1Allowances">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+                            <span>6. HRA, Conveyance or Other Compensatory Allowances Drawn:</span>
+                        </label>
+                        <input class="text-input-placeholder-gray" id="sr1Allowances" placeholder="e.g. DA, HRA, TPA as admissible under rules" type="text" autocomplete="off"/>
+                    </div>
+                </div>
             </div>
-            <div class='form-group'>
-                <label>Date of Application:</label>
-                <input id='sr1Date' type='date'/>
+
+            <!-- SECTION 2: NATURE, PERIOD & GROUNDS OF LEAVE (ITEMS 7 TO 10) -->
+            <div class="sr1-glass-section">
+                <div class="sr1-section-header">
+                    <h4>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                            <line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+                        </svg>
+                        <span>7 to 10. Nature, Period, Prefix/Suffix &amp; Grounds of Leave</span>
+                    </h4>
+                    <span class="sr1-section-tag">Auto-Calculates Days from Dates</span>
+                </div>
+
+                <div class="sr1-form-grid">
+                    <!-- 7A. Nature of Leave -->
+                    <div class="form-group sr1-col-3">
+                        <label for="sr1Nature">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                            <span>7(a). Nature of Leave:</span>
+                        </label>
+                        <select id="sr1Nature" onchange="sr1UpdateLiveTelemetry()">
+                            <option value="Earned Leave (EL)" selected>Earned Leave (EL)</option>
+                            <option value="Commuted Leave">Commuted Leave</option>
+                            <option value="Half Pay Leave (HPL)">Half Pay Leave (HPL)</option>
+                            <option value="Casual Leave (CL)">Casual Leave (CL)</option>
+                            <option value="Medical Leave">Medical Leave</option>
+                            <option value="Child Care Leave (CCL)">Child Care Leave (CCL)</option>
+                            <option value="Maternity / Paternity Leave">Maternity / Paternity Leave</option>
+                        </select>
+                    </div>
+
+                    <!-- 7B. From Date -->
+                    <div class="form-group sr1-col-3">
+                        <label for="sr1FromDate">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                            <span>7(b). From Date:</span>
+                        </label>
+                        <input id="sr1FromDate" type="date" onchange="sr1AutoCalculateDays()"/>
+                    </div>
+
+                    <!-- 7C. To Date -->
+                    <div class="form-group sr1-col-3">
+                        <label for="sr1ToDate">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                            <span>7(c). To Date:</span>
+                        </label>
+                        <input id="sr1ToDate" type="date" onchange="sr1AutoCalculateDays()"/>
+                    </div>
+
+                    <!-- 7D. Period (No. of Days) -->
+                    <div class="form-group sr1-col-3">
+                        <label for="sr1Period">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                            <span>7(d). Period (No. of Days):</span>
+                        </label>
+                        <input class="text-input-placeholder-gray" id="sr1Period" placeholder="e.g. 5" type="number" min="1" oninput="sr1UpdateLiveTelemetry()"/>
+                    </div>
+
+                    <!-- 8. Sunday & Holidays Prefix/Suffix -->
+                    <div class="form-group sr1-col-6">
+                        <label for="sr1PrefixSuffix">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/></svg>
+                            <span>8. Sunday &amp; Holidays Proposed to be Prefixed / Suffixed:</span>
+                        </label>
+                        <input class="text-input-placeholder-gray" id="sr1PrefixSuffix" placeholder="e.g. Nil / Prefixed Sunday on 25/10/2026" type="text" autocomplete="off"/>
+                    </div>
+
+                    <!-- 10. Date of return from last leave -->
+                    <div class="form-group sr1-col-6">
+                        <label for="sr1LastLeave">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+                            <span>10. Date of Return from Last Leave &amp; Nature/Period:</span>
+                        </label>
+                        <input class="text-input-placeholder-gray" id="sr1LastLeave" placeholder="e.g. Returned on 10/02/2026 after 4 days EL" type="text" autocomplete="off"/>
+                    </div>
+
+                    <!-- 9. Ground on which leave is applied for -->
+                    <div class="form-group sr1-col-12">
+                        <label for="sr1Grounds">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                            <span>9. Ground on Which Leave is Applied For (छुट्टी का आधार) &amp; Leave Address (if any):</span>
+                        </label>
+                        <textarea class="text-input-placeholder-gray" id="sr1Grounds" placeholder="e.g. Urgent domestic affairs at native place / Medical treatment" rows="2"></textarea>
+                    </div>
+                </div>
             </div>
+
+            <!-- SECTION 3: LTC PROPOSAL, APPLICATION DATE & OFFICIAL TYPOGRAPHY SETTINGS -->
+            <div class="sr1-glass-section" style="margin-bottom: 0;">
+                <div class="sr1-section-header">
+                    <h4>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="3"/>
+                            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4"/>
+                        </svg>
+                        <span>11. LTC Proposal, Station/Date &amp; Official Print Font Configuration</span>
+                    </h4>
+                    <span class="sr1-section-tag">Includes Page 2 Items 13, 14 &amp; 15</span>
+                </div>
+
+                <div class="sr1-form-grid">
+                    <!-- 11A. LTC Proposal -->
+                    <div class="form-group sr1-col-3">
+                        <label for="sr1LtcProp">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/></svg>
+                            <span>11(a). Avail LTC?</span>
+                        </label>
+                        <select id="sr1LtcProp">
+                            <option value="do not propose" selected>I do NOT propose (प्रस्ताव नहीं है)</option>
+                            <option value="propose">I propose (प्रस्ताव है)</option>
+                        </select>
+                    </div>
+
+                    <!-- 11B. Block Years -->
+                    <div class="form-group sr1-col-3">
+                        <label for="sr1LtcBlock">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                            <span>11(b). LTC Block Years:</span>
+                        </label>
+                        <input class="text-input-placeholder-gray" id="sr1LtcBlock" placeholder="e.g. 2026-2029 (or N/A)" type="text" autocomplete="off"/>
+                    </div>
+
+                    <!-- Station -->
+                    <div class="form-group sr1-col-3">
+                        <label for="sr1Station">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                            <span>Station (स्थान):</span>
+                        </label>
+                        <input class="text-input-placeholder-gray" id="sr1Station" placeholder="e.g. Radhakishorepur HO" type="text" autocomplete="off"/>
+                    </div>
+
+                    <!-- Date of Application -->
+                    <div class="form-group sr1-col-3">
+                        <label for="sr1Date">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                            <span>Date of Application (तारीख):</span>
+                        </label>
+                        <input id="sr1Date" type="date"/>
+                    </div>
+
+                    <!-- Official Print Font -->
+                    <div class="form-group sr1-col-6">
+                        <label for="sr1OfficialFontSelect">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg>
+                            <span>Official Print Font (For Bold User Inputs):</span>
+                        </label>
+                        <select id="sr1OfficialFontSelect" onchange="sr1UpdateLiveTelemetry()">
+                            <option value="bookman" selected>Bookman Old Style / Antiqua Bold (Govt Official)</option>
+                            <option value="times">Times New Roman Bold (Classic Official)</option>
+                            <option value="tahoma">Tahoma Bold (Clean Official)</option>
+                        </select>
+                    </div>
+
+                    <!-- Item 14 Certificate Pre-Fill Option -->
+                    <div class="form-group sr1-col-6">
+                        <label for="sr1PrefillCertSelect">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                            <span>Page 2 • Item 14 (Admissibility Certificate) Mode:</span>
+                        </label>
+                        <select id="sr1PrefillCertSelect">
+                            <option value="blank" selected>Keep Dotted Lines Blank for Office Verification (Standard)</option>
+                            <option value="prefill">Pre-fill Leave Nature, Period &amp; Dates on Dotted Lines</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ACTION FOOTER -->
+            <div class="sr1-action-footer">
+                <div class="sr1-footer-hint">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                    </svg>
+                    <span>A4 Portrait (2 Pages) • Complete Bilingual Hindi + English Form S.R.-1 (Items 1 to 15)</span>
+                </div>
+
+                <button class="action-btn" id="btnGenerateSR1" onclick="triggerSmartGenerationSR1()" type="button">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="6 9 6 2 18 2 18 9"/>
+                        <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
+                        <rect x="6" y="14" width="12" height="8"/>
+                    </svg>
+                    <span>Generate Bilingual S.R.-1 Leave PDF</span>
+                </button>
+            </div>
+
         </div>
-        
-        <button class='action-btn' onclick='triggerSmartGenerationSR1()' type='button'>Generate S.R.-1 Leave PDF</button>
     </div>
 
-    <!-- BEAUTIFUL CENTERED POPUP MODAL FOR PDF PREVIEW -->
+    <!-- HIGH-TECH CENTERED POPUP MODAL FOR PDF PREVIEW (PURE SVG) -->
     <div id="pdfModalOverlay" class="pdf-modal-overlay">
         <div class="pdf-modal-card">
             <div class="pdf-modal-header">
-                <h3>📄 Generated Document Live Preview</h3>
-                <button class="pdf-close-btn" onclick="closePdfModal()">❌ Close Preview</button>
+                <div class="pdf-modal-title-group">
+                    <h3>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                            <polyline points="14 2 14 8 20 8"/>
+                            <line x1="16" y1="13" x2="8" y2="13"/>
+                            <line x1="16" y1="17" x2="8" y2="17"/>
+                        </svg>
+                        <span>Generated Bilingual S.R.-1 Leave Application Preview</span>
+                    </h3>
+                    <span class="sr1-form-badge" id="sr1PreviewPageBadge">2 Pages • Bilingual S.R.-1</span>
+                </div>
+                <div class="pdf-modal-actions">
+                    <button type="button" class="pdf-download-btn" onclick="sr1DownloadGeneratedPdf()">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                            <polyline points="7 10 12 15 17 10"/>
+                            <line x1="12" y1="15" x2="12" y2="3"/>
+                        </svg>
+                        <span>Download PDF</span>
+                    </button>
+                    <button type="button" class="pdf-close-btn" onclick="closePdfModal()">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                            <line x1="18" y1="6" x2="6" y2="18"/>
+                            <line x1="6" y1="6" x2="18" y2="18"/>
+                        </svg>
+                        <span>Close Preview</span>
+                    </button>
+                </div>
             </div>
             <div class="pdf-iframe-container">
-                <iframe id="pdfFrameViewerLocal"></iframe>
+                <iframe id="pdfFrameViewerLocal" title="S.R.-1 Leave Application Bilingual PDF Preview"></iframe>
             </div>
         </div>
     </div>
 
-    <!-- 100% UNTOUCHED ORIGINAL PDF LOGIC (Adapted for SR-1) -->
+    <!-- HIGH-DPI BILINGUAL (HINDI + ENGLISH) 2-PAGE S.R.-1 VECTOR CANVAS PDF ENGINE -->
     <script>
-        // Ensure jsPDF loads if standalone
         if (typeof window.jspdf === 'undefined') {
             let script = document.createElement('script');
             script.src = "https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js";
             document.head.appendChild(script);
         }
 
+        let sr1LastCompiledDoc = null;
+
+        // ====================================================
+        // 1. SIDEBAR AUTO-COLLAPSE ENGINE (ON LOAD + ON ANY INPUT/TYPING)
+        // ====================================================
+        function sr1AutoCollapseHamburger() {
+            const sidebar = document.getElementById('appSidebar');
+            if (sidebar) {
+                if (!sidebar.classList.contains('collapsed')) {
+                    sidebar.classList.add('collapsed');
+                }
+                if (sidebar.classList.contains('mobile-open')) {
+                    sidebar.classList.remove('mobile-open');
+                }
+            }
+        }
+
+        (function initSR1Module() {
+            sr1AutoCollapseHamburger();
+
+            const rootArea = document.getElementById('sr1InteractiveRoot');
+            if (rootArea) {
+                ['focusin', 'input', 'keydown'].forEach(evtName => {
+                    rootArea.addEventListener(evtName, function(e) {
+                        const tag = e.target && e.target.tagName ? e.target.tagName.toLowerCase() : '';
+                        if (tag === 'input' || tag === 'textarea' || tag === 'select') {
+                            sr1AutoCollapseHamburger();
+                        }
+                    }, true);
+                });
+            }
+
+            // Clean up any duplicate modal overlays
+            document.querySelectorAll('body > #pdfModalOverlay').forEach(el => el.remove());
+            const overlay = document.getElementById('pdfModalOverlay');
+            if (overlay && overlay.parentNode !== document.body) {
+                document.body.appendChild(overlay);
+            }
+
+            // Default application date to today
+            const dateInp = document.getElementById('sr1Date');
+            if (dateInp && !dateInp.value) {
+                dateInp.value = new Date().toISOString().slice(0, 10);
+            }
+
+            setTimeout(() => {
+                sr1UpdateLiveTelemetry();
+            }, 40);
+        })();
+
+        // Escape key closes PDF Preview Modal
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                const overlay = document.getElementById('pdfModalOverlay');
+                if (overlay && overlay.classList.contains('active')) {
+                    closePdfModal();
+                }
+            }
+        });
+
+        function sr1CleanExit() {
+            document.querySelectorAll('body > #pdfModalOverlay').forEach(el => el.remove());
+            if (typeof returnToHomeGridSPA === "function") {
+                returnToHomeGridSPA();
+            } else {
+                window.location.href = "index.html";
+            }
+        }
+
+        function sr1Notify(title, message, type = "info") {
+            if (typeof window.spawnFloatingNotification === "function") {
+                window.spawnFloatingNotification(title, message, type);
+            } else if (typeof window.displayCustomAlert === "function") {
+                window.displayCustomAlert(`${title}: ${message}`, type);
+            } else {
+                alert(`${title}\n${message}`);
+            }
+        }
+
+        function sr1DownloadGeneratedPdf() {
+            if (!sr1LastCompiledDoc) return;
+            const appName = (document.getElementById('sr1Name')?.value || 'Applicant').trim().replace(/\s+/g, '_');
+            sr1LastCompiledDoc.save(`SR1_Leave_Application_${appName}.pdf`);
+            sr1Notify("Download Started", "Saved Bilingual S.R.-1 Leave Application PDF.", "success");
+        }
+
+        function sr1AutoCalculateDays() {
+            const fVal = document.getElementById('sr1FromDate')?.value || '';
+            const tVal = document.getElementById('sr1ToDate')?.value || '';
+            const periodInp = document.getElementById('sr1Period');
+            if (fVal && tVal && periodInp) {
+                const d1 = new Date(fVal);
+                const d2 = new Date(tVal);
+                const diffMs = d2 - d1;
+                if (diffMs >= 0) {
+                    const days = Math.round(diffMs / (1000 * 60 * 60 * 24)) + 1;
+                    periodInp.value = days;
+                }
+            }
+            sr1UpdateLiveTelemetry();
+        }
+
+        function sr1UpdateLiveTelemetry() {
+            const nature = document.getElementById('sr1Nature')?.value || 'Earned Leave';
+            const period = document.getElementById('sr1Period')?.value || '0';
+            const sumEl = document.getElementById('sr1StatLeaveSummary');
+            if (sumEl) {
+                sumEl.innerText = `${nature} • ${period || 0} Day(s)`;
+            }
+
+            const fontSel = document.getElementById('sr1OfficialFontSelect')?.value || 'bookman';
+            const fontEl = document.getElementById('sr1StatFontName');
+            if (fontEl) {
+                if (fontSel === 'times') fontEl.innerText = 'Times New Roman Bold';
+                else if (fontSel === 'tahoma') fontEl.innerText = 'Tahoma Bold';
+                else fontEl.innerText = 'Bookman Old Style Bold';
+            }
+        }
+
         function closePdfModal() {
             const overlay = document.getElementById('pdfModalOverlay');
+            if (!overlay) return;
             overlay.classList.remove('active');
-            setTimeout(() => { overlay.style.display = 'none'; }, 300);
+            setTimeout(() => { overlay.style.display = 'none'; }, 250);
         }
 
         function finalizeLocalViewer(doc) {
+            sr1LastCompiledDoc = doc;
             const blobDataUrl = doc.output('datauristring');
             const iframe = document.getElementById('pdfFrameViewerLocal');
             const overlay = document.getElementById('pdfModalOverlay');
-            
-            // Move overlay to body to cover whole screen perfectly
+
             if (overlay.parentNode !== document.body) {
                 document.body.appendChild(overlay);
             }
 
             iframe.src = blobDataUrl;
-            
-            // Show the modal perfectly centered!
             overlay.style.display = 'flex';
-            setTimeout(() => { overlay.classList.add('active'); }, 50);
+            requestAnimationFrame(() => {
+                setTimeout(() => { overlay.classList.add('active'); }, 25);
+            });
         }
 
-        function triggerSmartGenerationSR1() {
-            // Validation
-            if (!document.getElementById('sr1Name').value) { 
-                if(typeof displayCustomAlert === "function") {
-                    displayCustomAlert("Form Defect: Name of the applicant is mandatory.");
-                } else {
-                    alert("Form Defect: Name of the applicant is mandatory.");
-                }
-                return; 
+        // =========================================================================
+        // 2. 300-DPI BILINGUAL (HINDI + OFFICIAL GOVT ENGLISH) 2-PAGE S.R.-1 ENGINE
+        // =========================================================================
+        function createA4PortraitCanvas(fontChoice) {
+            const SCALE = 10; // 1mm = 10px (2100 x 2970 px high-DPI canvas)
+            const W_MM = 210;
+            const H_MM = 297;
+
+            const canvas = document.createElement('canvas');
+            canvas.width = W_MM * SCALE;
+            canvas.height = H_MM * SCALE;
+            const ctx = canvas.getContext('2d');
+
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.scale(SCALE, SCALE);
+
+            const HINDI_FONT = "'Noto Serif Devanagari', 'Nirmala UI', 'Mangal', serif";
+            const ENG_LABEL_FONT = "'Times New Roman', 'Bookman Old Style', 'Bookman Antiqua', Georgia, serif";
+            let USER_OFFICIAL_FONT = "'Bookman Old Style', 'Bookman Antiqua', 'Times New Roman', Georgia, serif";
+            if (fontChoice === 'times') {
+                USER_OFFICIAL_FONT = "'Times New Roman', Times, 'Bookman Old Style', serif";
+            } else if (fontChoice === 'tahoma') {
+                USER_OFFICIAL_FONT = "Tahoma, 'Segoe UI', Verdana, sans-serif";
             }
+
+            function drawSolidLine(x1, y1, x2, y2, width = 0.28, color = '#000000') {
+                ctx.save();
+                ctx.beginPath();
+                ctx.setLineDash([]);
+                ctx.lineWidth = width;
+                ctx.strokeStyle = color;
+                ctx.moveTo(x1, y1);
+                ctx.lineTo(x2, y2);
+                ctx.stroke();
+                ctx.restore();
+            }
+
+            function drawDottedLine(x1, y1, x2, y2) {
+                ctx.save();
+                ctx.beginPath();
+                ctx.setLineDash([0.6, 0.9]);
+                ctx.lineWidth = 0.28;
+                ctx.strokeStyle = '#1e293b';
+                ctx.moveTo(x1, y1);
+                ctx.lineTo(x2, y2);
+                ctx.stroke();
+                ctx.restore();
+            }
+
+            function drawHindi(text, x, y, sizeMm, weight = 'normal', align = 'left', color = '#000000') {
+                ctx.save();
+                ctx.font = `${weight} ${sizeMm}px ${HINDI_FONT}`;
+                ctx.fillStyle = color;
+                ctx.textAlign = align;
+                ctx.textBaseline = 'alphabetic';
+                ctx.fillText(String(text || ''), x, y);
+                ctx.restore();
+            }
+
+            function drawEng(text, x, y, sizeMm, weight = 'normal', align = 'left', color = '#000000') {
+                ctx.save();
+                ctx.font = `${weight} ${sizeMm}px ${ENG_LABEL_FONT}`;
+                ctx.fillStyle = color;
+                ctx.textAlign = align;
+                ctx.textBaseline = 'alphabetic';
+                ctx.fillText(String(text || ''), x, y);
+                ctx.restore();
+            }
+
+            function drawUserBold(text, x, y, maxWidthMm, baseSizeMm = 3.55, minSizeMm = 2.7, align = 'left') {
+                const str = String(text || '').trim();
+                if (!str) return;
+                ctx.save();
+                let sz = baseSizeMm;
+                ctx.font = `bold ${sz}px ${USER_OFFICIAL_FONT}`;
+                while (ctx.measureText(str).width > maxWidthMm && sz > minSizeMm) {
+                    sz -= 0.12;
+                    ctx.font = `bold ${sz}px ${USER_OFFICIAL_FONT}`;
+                }
+                ctx.fillStyle = '#000000';
+                ctx.textAlign = align;
+                ctx.textBaseline = 'alphabetic';
+                ctx.fillText(str, x, y);
+                ctx.restore();
+            }
+
+            function wrapParagraph(text, maxWidthMm, fontStack, sizeMm, weight = 'normal') {
+                const raw = String(text || '').trim();
+                if (!raw) return [];
+                ctx.save();
+                ctx.font = `${weight} ${sizeMm}px ${fontStack}`;
+                const words = raw.split(/\s+/);
+                const lines = [];
+                let cur = "";
+                for (const w of words) {
+                    const test = cur ? (cur + " " + w) : w;
+                    if (ctx.measureText(test).width <= maxWidthMm) {
+                        cur = test;
+                    } else {
+                        if (cur) lines.push(cur);
+                        cur = w;
+                    }
+                }
+                if (cur) lines.push(cur);
+                ctx.restore();
+                return lines;
+            }
+
+            return {
+                canvas,
+                ctx,
+                HINDI_FONT,
+                ENG_LABEL_FONT,
+                USER_OFFICIAL_FONT,
+                drawSolidLine,
+                drawDottedLine,
+                drawHindi,
+                drawEng,
+                drawUserBold,
+                wrapParagraph
+            };
+        }
+
+        // RENDER PAGE 1 OF S.R.-1 (ITEMS 1 TO 12(b) + APPLICANT SIGNATURE)
+        function renderSR1Page1(d) {
+            const p = createA4PortraitCanvas(d.fontChoice);
+            const marginL = 13;
+            const marginR = 197;
+            const centerX = 105;
+
+            // Top-Right Form Number: एस. आर.-1 / S. R.: 1
+            p.drawHindi("एस. आर.-1", marginR, 14.5, 3.3, "bold", "right");
+            p.drawEng("S. R.: 1", marginR, 18.5, 3.5, "bold", "right");
+
+            // Main Title: छुट्टी के लिए आवेदन पत्र / FORM OF APPLICATION FOR LEAVE
+            p.drawHindi("छुट्टी के लिए आवेदन पत्र", centerX, 16.0, 4.3, "bold", "center");
+            p.drawEng("FORM OF APPLICATION FOR LEAVE", centerX, 21.0, 4.3, "bold", "center");
+
+            // Subtitle: (अनुपूरक नियम 216 देखिए) / (See Supplementary Rule 216)
+            p.drawHindi("(अनुपूरक नियम 216 देखिए)", centerX, 25.8, 2.9, "normal", "center");
+            p.drawEng("(See Supplementary Rule 216)", centerX, 29.5, 3.0, "normal", "center");
+
+            // Note
+            p.drawHindi("टिप्पणी: मद 1 से 11 तक सभी आवेदकों द्वारा भरी जानी चाहिए, चाहे वे राजपत्रित हों या अराजपत्रित।", centerX, 34.8, 2.75, "normal", "center");
+            p.drawEng("Note: Items 1 to 11 must be filled in by all applicants whether gazetted or non-gazetted.", centerX, 38.4, 2.85, "normal", "center");
+
+            // Structured Table Grid for Items 1 to 10
+            let curY = 42.0;
+            const tableTopY = curY;
+            const colSnoX = 15.0;
+            const colLabelX = 22.0;
+            const colColonX = 101.5;
+            const colValX = 105.0;
+            const maxValW = marginR - colValX - 2.5; // 89.5mm
+
+            p.drawSolidLine(marginL, curY, marginR, curY, 0.35);
+
+            function drawBilingualRow(sno, hindiLines, engLines, userVal, rowHeightMm) {
+                const startY = curY;
+                p.drawEng(sno, colSnoX, startY + 5.2, 3.2, "bold", "left");
+
+                let lblY = startY + 4.4;
+                hindiLines.forEach(hl => {
+                    p.drawHindi(hl, colLabelX, lblY, 2.85, "normal", "left");
+                    lblY += 3.6;
+                });
+                engLines.forEach(el => {
+                    p.drawEng(el, colLabelX, lblY, 2.9, "normal", "left");
+                    lblY += 3.5;
+                });
+
+                p.drawEng(":", colColonX, startY + (rowHeightMm / 2) + 1.0, 3.4, "bold", "center");
+
+                // Wrap user value in Official Bold Font inside right column
+                const valLines = p.wrapParagraph(userVal, maxValW, p.USER_OFFICIAL_FONT, 3.45, "bold");
+                if (valLines.length <= 1) {
+                    p.drawUserBold(userVal, colValX, startY + (rowHeightMm / 2) + 1.1, maxValW, 3.55, 2.75, "left");
+                } else {
+                    let vY = startY + 5.0;
+                    valLines.slice(0, 3).forEach(vl => {
+                        p.drawUserBold(vl, colValX, vY, maxValW, 3.35, 2.75, "left");
+                        vY += 4.1;
+                    });
+                }
+
+                curY += rowHeightMm;
+                p.drawSolidLine(marginL, curY, marginR, curY, 0.25);
+            }
+
+            drawBilingualRow("1.", ["आवेदक का नाम"], ["Name of Applicant"], d.name, 11.0);
+            drawBilingualRow("2.", ["लागू छुट्टी नियम"], ["Leave rules applicable"], d.rules, 11.0);
+            drawBilingualRow("3.", ["धारित पद"], ["Post held"], d.post, 11.0);
+            drawBilingualRow("4.", ["विभाग, कार्यालय और अनुभाग"], ["Department, office and section"], d.dept, 12.0);
+            drawBilingualRow("5.", ["वेतन"], ["Pay"], d.pay ? `Rs. ${d.pay.replace(/^Rs\.?\s*/i, '')}` : "", 10.5);
+            drawBilingualRow(
+                "6.",
+                ["वर्तमान पद में आहरित मकान किराया भत्ता, सवारी भत्ता", "या अन्य प्रतिपूरक भत्ते"],
+                ["House rent allowance, conveyance allowance or", "other compensatory allowances drawn in the present post."],
+                d.allowances,
+                17.5
+            );
+            drawBilingualRow(
+                "7.",
+                ["आवेदित छुट्टी की प्रकृति और अवधि तथा किस तारीख से", "अपेक्षित है"],
+                ["Nature and period of leave applied for and date", "from which required."],
+                d.natureString,
+                15.0
+            );
+            drawBilingualRow(
+                "8.",
+                ["रविवार और छुट्टियां, यदि कोई हों, जिन्हें छुट्टी से पहले/बाद", "में जोड़ने का प्रस्ताव है"],
+                ["Sunday and holidays, if any, proposed to be", "prefixed/suffixed to leave."],
+                d.prefixSuffix,
+                15.0
+            );
+            drawBilingualRow(
+                "9.",
+                ["आधार जिस पर छुट्टी के लिए आवेदन किया गया है"],
+                ["Ground on which leave is applied for"],
+                d.grounds,
+                12.5
+            );
+            drawBilingualRow(
+                "10.",
+                ["पिछली छुट्टी से लौटने की तारीख, तथा उस छुट्टी की प्रकृति", "और अवधि"],
+                ["Date of return from last leave, and the nature", "and period of the leave."],
+                d.lastLeave,
+                15.0
+            );
+
+            const items1To10BottomY = curY;
+
+            // ITEM 11: LTC Proposal (Full Width Row)
+            const r11TopY = curY;
+            p.drawEng("11.", colSnoX, r11TopY + 5.2, 3.2, "bold", "left");
+
+            const blockDisplay = d.ltcBlock || "....................";
+            const isPropose = (d.ltcProp === "propose");
+
+            p.drawHindi(
+                `मैं आगामी छुट्टी के दौरान ब्लॉक वर्ष ${blockDisplay} के लिए छुट्टी यात्रा रियायत (LTC) का लाभ उठाने का प्रस्ताव करता हूँ / नहीं करता हूँ।`,
+                colLabelX,
+                r11TopY + 4.8,
+                2.8,
+                "normal",
+                "left"
+            );
+
+            // English LTC Line with Bold Block Year and Smart Strike-Through on inactive option
+            const eng11Y = r11TopY + 9.4;
+            p.drawEng("I ", colLabelX, eng11Y, 2.95, "normal", "left");
+            p.drawEng("propose", colLabelX + 3.0, eng11Y, 2.95, isPropose ? "bold" : "normal", "left");
+            p.drawEng(" / ", colLabelX + 16.0, eng11Y, 2.95, "normal", "left");
+            p.drawEng("do not propose", colLabelX + 19.0, eng11Y, 2.95, !isPropose ? "bold" : "normal", "left");
+
+            // Strike through inactive option in English
+            if (isPropose) {
+                p.drawSolidLine(colLabelX + 19.0, eng11Y - 1.0, colLabelX + 41.5, eng11Y - 1.0, 0.35);
+            } else {
+                p.drawSolidLine(colLabelX + 3.0, eng11Y - 1.0, colLabelX + 15.2, eng11Y - 1.0, 0.35);
+            }
+
+            p.drawEng("to avail myself of leave travel concession for the block year", colLabelX + 43.0, eng11Y, 2.95, "normal", "left");
+            p.drawDottedLine(colLabelX + 135.5, eng11Y + 0.6, marginR - 2, eng11Y + 0.6);
+            if (d.ltcBlock) {
+                p.drawUserBold(d.ltcBlock, colLabelX + 137.5, eng11Y - 0.1, 32, 3.25, 2.6, "left");
+            }
+            p.drawEng("during the ensuing leave.", colLabelX, eng11Y + 4.0, 2.95, "normal", "left");
+
+            curY += 16.0;
+            p.drawSolidLine(marginL, curY, marginR, curY, 0.25);
+
+            // ITEM 11(a) & 12(b): Undertakings + Date/Station & Signature of Applicant
+            const r12TopY = curY;
+            p.drawEng("11.(a)", colSnoX - 1.2, curY + 5.0, 2.9, "bold", "left");
+
+            const ud1Hindi = "मैं छुट्टी की समाप्ति पर या छुट्टी की अवधि के दौरान सेवा से सेवानिवृत्ति की स्थिति में, औसत वेतन/परिवर्तित छुट्टी के दौरान आहरित छुट्टी वेतन और अर्ध औसत वेतन/अर्ध वेतन छुट्टी पर स्वीकार्य छुट्टी वेतन के बीच के अंतर को वापस करने का वचन देता हूँ, जो संशोधित छुट्टी नियम, 1933 के नियम 11(c)(iii) / F.R. 81(b)(ii) के परन्तुक के लागू न होने पर स्वीकार्य नहीं होता।";
+            const ud1Eng = "I undertake to refund the difference between the leave salary drawn during leave on average pay/commuted leave and that admissible during leave on half average pay/half pay leave, which would not have been admissible had the proviso to F.R. 81 (b)(ii)/Rule 11 (c)(iii) of the Revised Leave Rules, 1933, not been applied in the event of my retirement from service at the end or during the currency of the leave.";
+
+            let uY = curY + 4.4;
+            const hLines1 = p.wrapParagraph(ud1Hindi, 172, p.HINDI_FONT, 2.6, "normal");
+            hLines1.forEach(ln => {
+                p.drawHindi(ln, colLabelX, uY, 2.6, "normal", "left");
+                uY += 3.3;
+            });
+            uY += 0.6;
+            const eLines1 = p.wrapParagraph(ud1Eng, 172, p.ENG_LABEL_FONT, 2.7, "normal");
+            eLines1.forEach(ln => {
+                p.drawEng(ln, colLabelX, uY, 2.7, "normal", "left");
+                uY += 3.3;
+            });
+
+            uY += 2.2;
+            p.drawEng("12.(b)", colSnoX - 1.2, uY, 2.9, "bold", "left");
+
+            const ud2Hindi = "मैं किसी भी समय सेवा से स्वैच्छिक सेवानिवृत्ति या त्यागपत्र की स्थिति में, जब तक कि मैं अपने द्वारा ली गई 'अदेय छुट्टी' (leave not due) की मात्रा से कम अर्ध वेतन छुट्टी अर्जित न कर लूँ, 'अदेय छुट्टी' के दौरान आहरित छुट्टी वेतन को वापस करने का वचन देता हूँ जो संशोधित छुट्टी नियम, 1933 के नियम 11(d) / F.R. 81(c) के लागू न होने पर स्वीकार्य नहीं होता।";
+            const ud2Eng = "I undertake to refund the leave salary drawn during 'leave not due' which would not have been admissible had F.R. 81(c) / Rule 11(d) of the Revised Leave Rules, 1933 not been applied, in the event of my voluntary retirement or resignation from service at any time until I earn half pay leave not less than the amount of leave not due availed of by me.";
+
+            const hLines2 = p.wrapParagraph(ud2Hindi, 172, p.HINDI_FONT, 2.6, "normal");
+            hLines2.forEach(ln => {
+                p.drawHindi(ln, colLabelX, uY, 2.6, "normal", "left");
+                uY += 3.3;
+            });
+            uY += 0.6;
+            const eLines2 = p.wrapParagraph(ud2Eng, 172, p.ENG_LABEL_FONT, 2.7, "normal");
+            eLines2.forEach(ln => {
+                p.drawEng(ln, colLabelX, uY, 2.7, "normal", "left");
+                uY += 3.3;
+            });
+
+            // Station, Date & Applicant Signature Block at bottom of Page 1
+            const sigBlockY = Math.max(uY + 9.0, 266.0);
+            p.drawHindi("स्थान", colLabelX, sigBlockY - 4.2, 2.8, "normal", "left");
+            p.drawEng("/ Station :", colLabelX + 7.2, sigBlockY - 4.2, 2.9, "normal", "left");
+            p.drawDottedLine(colLabelX + 22.5, sigBlockY - 3.6, colLabelX + 75.0, sigBlockY - 3.6);
+            p.drawUserBold(d.station, colLabelX + 24.0, sigBlockY - 4.3, 50.0, 3.3, 2.6, "left");
+
+            p.drawHindi("तारीख", colLabelX, sigBlockY + 1.5, 2.8, "normal", "left");
+            p.drawEng("/ Date :", colLabelX + 8.0, sigBlockY + 1.5, 2.9, "normal", "left");
+            p.drawDottedLine(colLabelX + 20.0, sigBlockY + 2.1, colLabelX + 75.0, sigBlockY + 2.1);
+            p.drawUserBold(d.appDate, colLabelX + 22.0, sigBlockY + 1.4, 50.0, 3.4, 2.7, "left");
+
+            p.drawHindi("आवेदक के हस्ताक्षर", marginR - 4, sigBlockY - 2.2, 3.0, "normal", "right");
+            p.drawEng("Signature of applicant.", marginR - 4, sigBlockY + 1.8, 3.1, "bold", "right");
+
+            const tableBottomY = sigBlockY + 6.5;
+            p.drawSolidLine(marginL, tableBottomY, marginR, tableBottomY, 0.35);
+
+            // Outer & Inner Vertical Borders for Page 1 Table
+            p.drawSolidLine(marginL, tableTopY, marginL, tableBottomY, 0.35);
+            p.drawSolidLine(marginR, tableTopY, marginR, tableBottomY, 0.35);
+            p.drawSolidLine(20.5, tableTopY, 20.5, tableBottomY, 0.25);
+            p.drawSolidLine(colColonX, tableTopY, colColonX, items1To10BottomY, 0.22);
+
+            p.drawEng("Page 1 of 2", centerX, 289.0, 2.9, "normal", "center", "#475569");
+
+            return p.canvas.toDataURL('image/jpeg', 0.95);
+        }
+
+        // RENDER PAGE 2 OF S.R.-1 (ITEMS 13, 14, 15 + FOOTNOTE — 100% MATCH TO SR-I PDF)
+        function renderSR1Page2(d) {
+            const p = createA4PortraitCanvas(d.fontChoice);
+            const marginL = 13;
+            const marginR = 197;
+            const centerX = 105;
+            const colSnoX = 15.0;
+            const colTextX = 22.5;
+
+            let curY = 18.0;
+            const boxTopY = curY;
+            p.drawSolidLine(marginL, curY, marginR, curY, 0.35);
+
+            // =========================================================
+            // ITEM 13: Remarks and/or recommendation of the Controlling Officer
+            // =========================================================
+            p.drawEng("13.", colSnoX, curY + 6.5, 3.3, "bold", "left");
+            p.drawHindi("नियंत्रण अधिकारी की अभ्युक्ति और/या सिफारिश।", colTextX, curY + 6.2, 3.1, "normal", "left");
+            p.drawEng("Remarks and/or recommendation of the Controlling Officer.", colTextX, curY + 10.6, 3.15, "normal", "left");
+
+            curY += 34.0;
+            p.drawHindi("तारीख", colTextX, curY, 2.95, "normal", "left");
+            p.drawEng("/ Date", colTextX + 8.5, curY, 3.0, "normal", "left");
+            p.drawDottedLine(colTextX + 19.0, curY + 0.6, colTextX + 68.0, curY + 0.6);
+
+            p.drawHindi("हस्ताक्षर", marginR - 68.0, curY - 6.0, 2.95, "normal", "left");
+            p.drawEng("/ Signature", marginR - 57.0, curY - 6.0, 3.0, "normal", "left");
+            p.drawDottedLine(marginR - 39.0, curY - 5.4, marginR - 4.0, curY - 5.4);
+
+            p.drawHindi("पदनाम", marginR - 68.0, curY + 2.0, 2.95, "normal", "left");
+            p.drawEng("/ Designation", marginR - 58.0, curY + 2.0, 3.0, "normal", "left");
+            p.drawDottedLine(marginR - 37.0, curY + 2.6, marginR - 4.0, curY + 2.6);
+
+            curY += 9.5;
+            p.drawSolidLine(marginL, curY, marginR, curY, 0.3);
+
+            // =========================================================
+            // CERTIFICATE REGARDING ADMISSIBILITY OF LEAVE (ITEM 14)
+            // =========================================================
+            curY += 9.0;
+            p.drawHindi("छुट्टी की ग्राह्यता के संबंध में प्रमाण-पत्र", centerX, curY, 3.7, "bold", "center");
+            p.drawEng("CERTIFICATE REGARDING ADMISSIBILITY OF LEAVE", centerX, curY + 4.8, 3.6, "bold", "center");
+
+            p.drawHindi("(राजपत्रित अधिकारियों के मामले में महालेखाकार द्वारा)", centerX, curY + 10.0, 2.85, "normal", "center");
+            p.drawEng("(By Accountant General in the case of gazetted officers)", centerX, curY + 13.8, 2.9, "normal", "center");
+
+            curY += 23.0;
+            p.drawEng("14.", colSnoX, curY, 3.3, "bold", "left");
+
+            // Line 1 of Item 14: Certified that ................ (Nature of leave) for ................ (Period)
+            p.drawHindi("प्रमाणित किया जाता है कि", colTextX, curY - 4.2, 2.95, "normal", "left");
+            p.drawEng("Certified that", colTextX, curY, 3.1, "normal", "left");
+            p.drawDottedLine(colTextX + 23.0, curY + 0.6, colTextX + 102.0, curY + 0.6);
+            p.drawHindi("(छुट्टी की प्रकृति / Nature of leave)", colTextX + 62.5, curY + 4.0, 2.45, "normal", "center", "#334155");
+
+            p.drawHindi("अवधि", colTextX + 105.0, curY - 4.2, 2.95, "normal", "left");
+            p.drawEng("for", colTextX + 105.0, curY, 3.1, "normal", "left");
+            p.drawDottedLine(colTextX + 112.0, curY + 0.6, marginR - 4.0, curY + 0.6);
+            p.drawHindi("(अवधि / Period)", colTextX + 141.0, curY + 4.0, 2.45, "normal", "center", "#334155");
+
+            if (d.prefillCert) {
+                p.drawUserBold(d.nature, colTextX + 62.5, curY - 0.2, 75.0, 3.45, 2.7, "center");
+                p.drawUserBold(d.period ? `${d.period} Days` : "", colTextX + 141.0, curY - 0.2, 54.0, 3.45, 2.7, "center");
+            }
+
+            // Line 2 of Item 14: from ......................... to ......................... is admissible under rule
+            curY += 13.5;
+            p.drawHindi("तारीख", colTextX, curY - 4.2, 2.95, "normal", "left");
+            p.drawEng("from", colTextX, curY, 3.1, "normal", "left");
+            p.drawDottedLine(colTextX + 10.0, curY + 0.6, colTextX + 62.0, curY + 0.6);
+
+            p.drawHindi("से", colTextX + 64.5, curY - 4.2, 2.95, "normal", "left");
+            p.drawEng("to", colTextX + 64.5, curY, 3.1, "normal", "left");
+            p.drawDottedLine(colTextX + 70.0, curY + 0.6, colTextX + 122.0, curY + 0.6);
+
+            p.drawHindi("तक", colTextX + 124.5, curY - 4.2, 2.95, "normal", "left");
+            p.drawEng("is admissible under rule", colTextX + 124.5, curY, 3.05, "normal", "left");
+
+            if (d.prefillCert) {
+                p.drawUserBold(d.fromDate, colTextX + 36.0, curY - 0.2, 48.0, 3.4, 2.7, "center");
+                p.drawUserBold(d.toDate, colTextX + 96.0, curY - 0.2, 48.0, 3.4, 2.7, "center");
+            }
+
+            // Line 3 of Item 14: ......................... of the ................................................... Rules.
+            curY += 11.5;
+            p.drawDottedLine(colTextX, curY + 0.6, colTextX + 52.0, curY + 0.6);
+            p.drawEng("of the", colTextX + 54.5, curY, 3.1, "normal", "left");
+            p.drawDottedLine(colTextX + 65.5, curY + 0.6, colTextX + 142.0, curY + 0.6);
+            p.drawHindi("नियमों के अधीन ग्राह्य है।", colTextX + 144.0, curY - 4.0, 2.85, "normal", "left");
+            p.drawEng("Rules.", colTextX + 144.0, curY, 3.1, "normal", "left");
+
+            if (d.prefillCert && d.rules) {
+                p.drawUserBold(d.rules, colTextX + 103.5, curY - 0.2, 73.0, 3.35, 2.6, "center");
+            }
+
+            // Item 14 Signature & Date Block
+            curY += 24.0;
+            p.drawHindi("तारीख", colTextX, curY, 2.95, "normal", "left");
+            p.drawEng("/ Date", colTextX + 8.5, curY, 3.0, "normal", "left");
+            p.drawDottedLine(colTextX + 19.0, curY + 0.6, colTextX + 68.0, curY + 0.6);
+
+            p.drawHindi("हस्ताक्षर", marginR - 68.0, curY - 6.0, 2.95, "normal", "left");
+            p.drawEng("/ Signature", marginR - 57.0, curY - 6.0, 3.0, "normal", "left");
+            p.drawDottedLine(marginR - 39.0, curY - 5.4, marginR - 4.0, curY - 5.4);
+
+            p.drawHindi("पदनाम", marginR - 68.0, curY + 2.0, 2.95, "normal", "left");
+            p.drawEng("/ Designation", marginR - 58.0, curY + 2.0, 3.0, "normal", "left");
+            p.drawDottedLine(marginR - 37.0, curY + 2.6, marginR - 4.0, curY + 2.6);
+
+            curY += 9.5;
+            p.drawSolidLine(marginL, curY, marginR, curY, 0.3);
+
+            // =========================================================
+            // ITEM 15: *Orders of the sanctioning authority:- (RESTORED FROM SR-I PDF!)
+            // =========================================================
+            curY += 8.0;
+            p.drawEng("15.", colSnoX, curY + 1.0, 3.3, "bold", "left");
+            p.drawHindi("*स्वीकृति प्राधिकारी के आदेश :-", colTextX, curY, 3.15, "bold", "left");
+            p.drawEng("*Orders of the sanctioning authority :-", colTextX, curY + 4.6, 3.2, "bold", "left");
+
+            // Dotted lines for Sanctioning Authority Order notes
+            p.drawDottedLine(colTextX, curY + 14.0, marginR - 4.0, curY + 14.0);
+            p.drawDottedLine(colTextX, curY + 22.0, marginR - 4.0, curY + 22.0);
+
+            curY += 38.0;
+            p.drawHindi("तारीख", colTextX, curY, 2.95, "normal", "left");
+            p.drawEng("/ Date", colTextX + 8.5, curY, 3.0, "normal", "left");
+            p.drawDottedLine(colTextX + 19.0, curY + 0.6, colTextX + 68.0, curY + 0.6);
+
+            p.drawHindi("हस्ताक्षर", marginR - 68.0, curY - 6.0, 2.95, "normal", "left");
+            p.drawEng("/ Signature", marginR - 57.0, curY - 6.0, 3.0, "normal", "left");
+            p.drawDottedLine(marginR - 39.0, curY - 5.4, marginR - 4.0, curY - 5.4);
+
+            p.drawHindi("पदनाम", marginR - 68.0, curY + 2.0, 2.95, "normal", "left");
+            p.drawEng("/ Designation", marginR - 58.0, curY + 2.0, 3.0, "normal", "left");
+            p.drawDottedLine(marginR - 37.0, curY + 2.6, marginR - 4.0, curY + 2.6);
+
+            curY += 10.0;
+            const boxBottomY = curY;
+            p.drawSolidLine(marginL, boxBottomY, marginR, boxBottomY, 0.35);
+
+            // Outer & Inner Vertical Borders for Page 2 Box
+            p.drawSolidLine(marginL, boxTopY, marginL, boxBottomY, 0.35);
+            p.drawSolidLine(marginR, boxTopY, marginR, boxBottomY, 0.35);
+            p.drawSolidLine(20.5, boxTopY, 20.5, boxBottomY, 0.25);
+
+            // =========================================================
+            // OFFICIAL FOOTNOTE (* Compensatory Allowance Return Clause)
+            // =========================================================
+            let footY = boxBottomY + 7.5;
+            const footHindi = "* यदि आवेदक कोई प्रतिपूरक भत्ता ले रहा है, तो स्वीकृति प्राधिकारी को यह बताना चाहिए कि छुट्टी की समाप्ति के बाद उसके उसी पद पर या समान भत्ते वाले किसी अन्य पद पर लौटने की संभावना है या नहीं।";
+            const footEng = "* If the applicant is drawing any compensatory allowances, the sanctioning authority should state whether after the expiry of leave he is likely to return to the same post or to another post carrying a similar allowance.";
+
+            const fhLines = p.wrapParagraph(footHindi, 180, p.HINDI_FONT, 2.65, "normal");
+            fhLines.forEach(ln => {
+                p.drawHindi(ln, marginL + 1, footY, 2.65, "normal", "left");
+                footY += 3.5;
+            });
+            footY += 0.8;
+            const feLines = p.wrapParagraph(footEng, 180, p.ENG_LABEL_FONT, 2.75, "normal");
+            feLines.forEach(ln => {
+                p.drawEng(ln, marginL + 1, footY, 2.75, "normal", "left");
+                footY += 3.5;
+            });
+
+            p.drawEng("Page 2 of 2", centerX, 289.0, 2.9, "normal", "center", "#475569");
+
+            return p.canvas.toDataURL('image/jpeg', 0.95);
+        }
+
+        // =========================================================================
+        // 3. TRIGGER PDF COMPILATION (2-PAGE BILINGUAL S.R.-1)
+        // =========================================================================
+        async function triggerSmartGenerationSR1() {
+            sr1AutoCollapseHamburger();
+
+            const name = (document.getElementById('sr1Name')?.value || '').trim();
+            if (!name) {
+                sr1Notify("Validation Notice", "1. Name of the applicant is mandatory.", "warning");
+                document.getElementById('sr1Name')?.focus();
+                return;
+            }
+
+            const genBtn = document.getElementById('btnGenerateSR1');
+            if (genBtn) genBtn.classList.add('generating-pulse');
 
             const loader = document.getElementById('globalAppLoader');
-            if(loader) {
+            const loaderMsg = document.querySelector('#globalAppLoader .loading-status-msg');
+            if (loader) {
+                if (loaderMsg) loaderMsg.innerText = "Compiling Bilingual 2-Page S.R.-1 Application...";
                 loader.style.display = 'flex';
-                document.querySelector('.loading-status-msg').innerText = "Processing S.R.-1 Application...";
             }
 
-            setTimeout(() => {
-                try {
-                    if (typeof window.jspdf === 'undefined') {
-                        alert("System Notice: Please wait a moment for the PDF engine to load, then click generate again.");
-                        if(loader) loader.style.display = 'none';
-                        return;
+            if (document.fonts && document.fonts.ready) {
+                try { await document.fonts.ready; } catch (e) {}
+            }
+
+            requestAnimationFrame(() => {
+                setTimeout(() => {
+                    try {
+                        if (typeof window.jspdf === 'undefined') {
+                            sr1Notify("PDF Engine Loading", "Please wait a moment for the PDF engine to load, then click generate again.", "info");
+                            if (loader) loader.style.display = 'none';
+                            if (genBtn) genBtn.classList.remove('generating-pulse');
+                            return;
+                        }
+
+                        const { jsPDF } = window.jspdf;
+                        const doc = new jsPDF('p', 'mm', 'a4');
+
+                        const rules = (document.getElementById('sr1Rules')?.value || '').trim();
+                        const post = (document.getElementById('sr1Post')?.value || '').trim();
+                        const dept = (document.getElementById('sr1Dept')?.value || '').trim();
+                        const pay = (document.getElementById('sr1Pay')?.value || '').trim();
+                        const allowances = (document.getElementById('sr1Allowances')?.value || '').trim();
+                        const nature = (document.getElementById('sr1Nature')?.value || '').trim();
+                        const period = (document.getElementById('sr1Period')?.value || '').trim();
+
+                        const fDateRaw = document.getElementById('sr1FromDate')?.value || '';
+                        const tDateRaw = document.getElementById('sr1ToDate')?.value || '';
+                        const fromDateStr = fDateRaw ? fDateRaw.split("-").reverse().join("/") : "";
+                        const toDateStr = tDateRaw ? tDateRaw.split("-").reverse().join("/") : "";
+
+                        let natureString = nature;
+                        if (period && fromDateStr && toDateStr) {
+                            natureString = `${nature} for ${period} day(s) from ${fromDateStr} to ${toDateStr}`;
+                        } else if (period) {
+                            natureString = `${nature} for ${period} day(s)`;
+                        }
+
+                        const prefixSuffix = (document.getElementById('sr1PrefixSuffix')?.value || '').trim();
+                        const grounds = (document.getElementById('sr1Grounds')?.value || '').trim();
+                        const lastLeave = (document.getElementById('sr1LastLeave')?.value || '').trim();
+                        const ltcProp = document.getElementById('sr1LtcProp')?.value || 'do not propose';
+                        const ltcBlock = (document.getElementById('sr1LtcBlock')?.value || '').trim();
+                        const station = (document.getElementById('sr1Station')?.value || '').trim();
+                        const aDateRaw = document.getElementById('sr1Date')?.value || '';
+                        const appDateStr = aDateRaw ? aDateRaw.split("-").reverse().join("/") : "";
+                        const fontChoice = document.getElementById('sr1OfficialFontSelect')?.value || 'bookman';
+                        const prefillCert = (document.getElementById('sr1PrefillCertSelect')?.value === 'prefill');
+
+                        const formData = {
+                            name,
+                            rules,
+                            post,
+                            dept,
+                            pay,
+                            allowances,
+                            nature,
+                            period,
+                            fromDate: fromDateStr,
+                            toDate: toDateStr,
+                            natureString,
+                            prefixSuffix,
+                            grounds,
+                            lastLeave,
+                            ltcProp,
+                            ltcBlock,
+                            station,
+                            appDate: appDateStr,
+                            fontChoice,
+                            prefillCert
+                        };
+
+                        // Render Page 1 & Page 2
+                        const page1Img = renderSR1Page1(formData);
+                        const page2Img = renderSR1Page2(formData);
+
+                        doc.addImage(page1Img, 'JPEG', 0, 0, 210, 297, undefined, 'FAST');
+                        doc.addPage('a4', 'p');
+                        doc.addImage(page2Img, 'JPEG', 0, 0, 210, 297, undefined, 'FAST');
+
+                        finalizeLocalViewer(doc);
+                        sr1Notify(
+                            "S.R.-1 Application Compiled",
+                            "Generated 2-Page Bilingual (Hindi + English) S.R.-1 Leave Application with Official Typography.",
+                            "success"
+                        );
+
+                    } catch (err) {
+                        console.error("PDF generation failure: ", err);
+                        sr1Notify("Compilation Error", "Failed to compile the final S.R.-1 PDF.", "error");
+                    } finally {
+                        if (loader) loader.style.display = 'none';
+                        if (genBtn) genBtn.classList.remove('generating-pulse');
                     }
-
-                    // --- ORIGINAL PDF GENERATION LOGIC ---
-                    const { jsPDF } = window.jspdf;
-                    const doc = new jsPDF('p', 'mm', 'a4');
-
-                    const name = document.getElementById('sr1Name').value || "";
-                    const rules = document.getElementById('sr1Rules').value || "";
-                    const post = document.getElementById('sr1Post').value || "";
-                    const dept = document.getElementById('sr1Dept').value || "";
-                    const pay = document.getElementById('sr1Pay').value || "";
-                    const allowances = document.getElementById('sr1Allowances').value || "";
-                    const nature = document.getElementById('sr1Nature').value || "";
-                    const period = document.getElementById('sr1Period').value || "";
-                    
-                    let fDateRaw = document.getElementById('sr1FromDate').value;
-                    let tDateRaw = document.getElementById('sr1ToDate').value;
-                    let fromDateStr = fDateRaw ? fDateRaw.split("-").reverse().join("/") : "";
-                    let toDateStr = tDateRaw ? tDateRaw.split("-").reverse().join("/") : "";
-                    let natureString = period ? `${nature} for ${period} days (From ${fromDateStr} to ${toDateStr})` : nature;
-
-                    const prefixSuffix = document.getElementById('sr1PrefixSuffix').value || "";
-                    const grounds = document.getElementById('sr1Grounds').value || "";
-                    const lastLeave = document.getElementById('sr1LastLeave').value || "";
-                    
-                    const ltcProp = document.getElementById('sr1LtcProp').value || "";
-                    const ltcBlock = document.getElementById('sr1LtcBlock').value || "";
-                    const station = document.getElementById('sr1Station').value || "";
-                    
-                    let aDateRaw = document.getElementById('sr1Date').value;
-                    let appDateStr = aDateRaw ? aDateRaw.split("-").reverse().join("/") : "";
-
-                    doc.setFont("times", "bold");
-                    doc.setFontSize(14);
-                    doc.text("FORM FOR APPLICATION FOR LEAVE", 105, 20, { align: "center" });
-                    
-                    doc.setFontSize(10);
-                    doc.text("(See Supplementary Rule 216)", 105, 26, { align: "center" });
-                    
-                    doc.setFontSize(12);
-                    doc.text("S.R.-1", 195, 20, { align: "right" });
-
-                    doc.setFontSize(9);
-                    doc.setFont("times", "normal");
-                    doc.text("Note: Items 1 to 11 must be filled in by all applicants whether gazetted or non-gazetted", 105, 36, { align: "center" });
-
-                    let currentY = 46; 
-
-                    const drawRow = (sno, label, val, h) => {
-                        doc.setFont("times", "bold");
-                        doc.text(sno, 15, currentY + 5.5);
-                        
-                        doc.setFont("times", "normal");
-                        let splitLabel = doc.splitTextToSize(label, 75);
-                        doc.text(splitLabel, 22, currentY + 5.5);
-                        
-                        doc.setFont("times", "bold");
-                        let splitVal = doc.splitTextToSize(val, 90);
-                        doc.text(splitVal, 105, currentY + 5.5);
-                        
-                        currentY += h;
-                        doc.line(12, currentY, 198, currentY); 
-                    };
-
-                    doc.line(12, currentY, 198, currentY); 
-
-                    drawRow("1.", "Name of the applicant", name, 10);
-                    drawRow("2.", "Leave rules applicable", rules, 10);
-                    drawRow("3.", "Post held", post, 10);
-                    drawRow("4.", "Department, Office and Section", dept, 10);
-                    drawRow("5.", "Pay", pay ? "Rs. " + pay : "", 10);
-                    drawRow("6.", "House rent allowance, conveyance\nallowance or other compensatory\nallowances drawn in the present post.", allowances, 16);
-                    drawRow("7.", "Nature and period of leave applied for\nand date from which required", natureString, 12);
-                    drawRow("8.", "Sunday and holidays, if any proposed\nto be prefixed/suffixed to leave.", prefixSuffix, 12);
-                    drawRow("9.", "Ground on which leave is applied for", grounds, 10);
-                    drawRow("10.", "Date of return from last leave and the\nnature and period of that leave", lastLeave, 12);
-
-                    let r11StartY = currentY;
-                    doc.setFont("times", "bold");
-                    doc.text("11.", 15, currentY + 5.5);
-                    doc.setFont("times", "normal");
-                    
-                    let ltcString = `I ${ltcProp} to avail myself of leave travel concession in the block years ${ltcBlock} during the ensuing leave.`;
-                    let splitLtc = doc.splitTextToSize(ltcString, 170);
-                    doc.text(splitLtc, 22, currentY + 5.5);
-                    
-                    currentY += 12;
-                    doc.line(12, currentY, 198, currentY); 
-
-                    let r12StartY = currentY;
-                    doc.setFont("times", "bold");
-                    doc.text("12.", 15, currentY + 5.5);
-                    doc.setFont("times", "normal");
-
-                    let ud1 = "(a) I undertake to refund the difference between the leave salary drawn during leave on average pay/commuted leave and that admissible leave on half average pay half leave, which would not have been admissible had the provision to F.R.81(b)(II) Rule 11(c)(III) of the revised Leave Rules, 1933 not been applied in the event of my retirement from service at end or during the currency of the leave.";
-                    let ud2 = "(b) I undertake to refund leave salary drawn during leave not due which would not have been admissible had F.R.81(c) Rule 11(d) of the Revised Leave Rule 1933 not been applied, in the event of my voluntary retirement or resignation from service at any time until I earn half pay leave not less than the amount of leave not due availed of by me.";
-
-                    let splitUd1 = doc.splitTextToSize(ud1, 170);
-                    doc.text(splitUd1, 22, currentY + 5.5);
-                    currentY += (splitUd1.length * 4) + 4;
-                    
-                    let splitUd2 = doc.splitTextToSize(ud2, 170);
-                    doc.text(splitUd2, 22, currentY);
-                    currentY += (splitUd2.length * 4) + 4;
-
-                    doc.text("Date:", 22, currentY + 6);
-                    doc.setFont("times", "bold");
-                    doc.text(appDateStr, 33, currentY + 6);
-                    
-                    doc.setFont("times", "normal");
-                    doc.text("Signature of applicant", 190, currentY + 6, { align: "right" });
-                    currentY += 10;
-                    doc.line(12, currentY, 198, currentY); 
-
-                    doc.line(12, 46, 12, currentY); 
-                    doc.line(198, 46, 198, currentY); 
-                    doc.line(20, 46, 20, r11StartY); 
-                    doc.line(100, 46, 100, r11StartY); 
-                    doc.line(20, r11StartY, 20, currentY); 
-
-                    doc.setFontSize(10);
-                    doc.text("Page 1 of 2", 105, 285, { align: "center" });
-
-                    doc.addPage('a4', 'p');
-                    currentY = 20;
-
-                    let r13StartY = currentY;
-                    doc.line(12, currentY, 198, currentY); 
-                    
-                    doc.setFont("times", "bold");
-                    doc.text("13.", 15, currentY + 6);
-                    doc.setFont("times", "normal");
-                    doc.text("Remarks and/or recommendation of the\ncontrolling Officer.", 22, currentY + 6);
-                    
-                    currentY += 24;
-                    doc.text("Date ....................................................", 22, currentY);
-                    doc.text("Signature ......................................................", 190, currentY - 5, { align: "right" });
-                    doc.text("Designation ....................................................", 190, currentY + 5, { align: "right" });
-                    currentY += 10;
-                    doc.line(12, currentY, 198, currentY);
-
-                    currentY += 12;
-                    doc.setFont("times", "bold");
-                    doc.text("CERTIFICATE REGARDING ADMISSIBILITY OF LEAVE", 105, currentY, { align: "center" });
-                    doc.setFontSize(9);
-                    doc.text("(By Accountant General in the case of gazetted Officers)", 105, currentY + 6, { align: "center" });
-                    doc.setFontSize(10);
-                    
-                    currentY += 20;
-                    doc.setFont("times", "bold");
-                    doc.text("14.", 15, currentY);
-                    doc.setFont("times", "normal");
-                    
-                    let certLine = "Certified that ....................................................................... for ................................... from ...................................\nto ................................... is admissible under rule ................................... of the ........................................................ Rules.";
-                    let splitCert = doc.splitTextToSize(certLine, 170);
-                    doc.text(splitCert, 22, currentY);
-
-                    currentY += 25;
-                    doc.text("Date ....................................................", 22, currentY);
-                    doc.text("Signature ......................................................", 190, currentY - 5, { align: "right" });
-                    doc.text("Designation ....................................................", 190, currentY + 5, { align: "right" });
-
-                    currentY += 15;
-                    doc.line(12, currentY, 198, currentY); 
-                    
-                    doc.setFontSize(8.5);
-                    let footNote = "* If the applicant is drawing any compensatory allowance the sanctioning authority should state whether on the expiry of leave he is likely to return the same post or to another post carrying a similar allowance.";
-                    let splitFoot = doc.splitTextToSize(footNote, 180);
-                    doc.text(splitFoot, 15, currentY + 5);
-                    
-                    doc.line(12, 20, 12, currentY); 
-                    doc.line(198, 20, 198, currentY); 
-                    doc.line(20, 20, 20, currentY); 
-
-                    doc.setFontSize(10);
-                    doc.text("Page 2 of 2", 105, 285, { align: "center" });
-                    
-                    // Display exactly in our centered modal
-                    finalizeLocalViewer(doc);
-
-                } catch (err) {
-                    console.error("PDF generation failure: ", err); 
-                    if(typeof displayCustomAlert === "function") {
-                        displayCustomAlert("Engine Failure Error: Failed to successfully output compile final PDF.");
-                    } else {
-                        alert("Engine Failure Error: Failed to successfully output compile final PDF.");
-                    }
-                } finally {
-                    if(loader) loader.style.display = 'none';
-                }
-            }, 750);
+                }, 360);
+            });
         }
     </script>
 </div>
