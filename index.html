@@ -3057,6 +3057,58 @@
             display: flex;
             justify-content: space-between;
         }
+        .notif-item-top-bar {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 8px;
+            margin-bottom: 3px;
+        }
+        .notif-item-top-bar h5 {
+            margin: 0 !important;
+            flex: 1;
+            min-width: 0;
+        }
+        .notif-dismiss-x-btn {
+            background: rgba(148, 163, 184, 0.14);
+            border: 1px solid rgba(148, 163, 184, 0.28);
+            color: var(--text-muted);
+            width: 20px;
+            height: 20px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 800;
+            line-height: 1;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            flex-shrink: 0;
+            padding: 0;
+            transition: all 0.18s ease;
+        }
+        .notif-dismiss-x-btn:hover {
+            background: #ef4444;
+            border-color: #ef4444;
+            color: #ffffff;
+            transform: scale(1.06);
+        }
+        .notif-clear-all-btn {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #ef4444;
+            font-size: 10px;
+            font-weight: 800;
+            padding: 3px 8px;
+            border-radius: 99px;
+            cursor: pointer;
+            transition: all 0.18s ease;
+            display: none;
+        }
+        .notif-clear-all-btn:hover {
+            background: #ef4444;
+            color: #ffffff;
+        }
 
         /* Responsive Adaptation */
         @media (max-width: 1150px) {
@@ -3097,20 +3149,285 @@
             .attr-left-chip { display: none; }
             .attr-creator-credit { margin: 0 auto; font-size: 10.5px; }
         }
+
+        /* =========================================================
+           ZERO-FLASH HARD REFRESH & BANKING SESSION SECURITY STYLES
+           ========================================================= */
+        html.session-restoring-active #loginScreen,
+        html.session-authenticated #loginScreen {
+            display: none !important;
+            opacity: 0 !important;
+            visibility: hidden !important;
+            pointer-events: none !important;
+        }
+        html.session-restoring-active #appDashboardView,
+        html.session-authenticated #appDashboardView {
+            display: block !important;
+        }
+        html.session-restoring-active #sceneryBackground,
+        html.session-authenticated #sceneryBackground {
+            display: none !important;
+        }
+
+        .page-refresh-overlay {
+            position: fixed;
+            inset: 0;
+            width: 100vw;
+            height: 100vh;
+            background: radial-gradient(circle at 20% 20%, rgba(37, 99, 235, 0.28) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 80%, rgba(124, 58, 237, 0.25) 0%, transparent 50%),
+                        linear-gradient(135deg, rgba(6, 11, 25, 0.96) 0%, rgba(15, 23, 42, 0.98) 100%);
+            backdrop-filter: blur(22px);
+            -webkit-backdrop-filter: blur(22px);
+            z-index: 99999995;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: #ffffff;
+            opacity: 0;
+            transition: opacity 0.28s ease;
+            user-select: none;
+        }
+        html.session-restoring-active #pageRefreshOverlay,
+        .page-refresh-overlay.active {
+            display: flex !important;
+            opacity: 1 !important;
+        }
+        .refresh-cyber-card {
+            background: rgba(15, 23, 42, 0.78);
+            border: 1px solid rgba(96, 165, 250, 0.32);
+            border-radius: 24px;
+            padding: 34px 40px;
+            max-width: 440px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 28px 70px rgba(0, 0, 0, 0.65), 0 0 40px rgba(37, 99, 235, 0.2), inset 0 1px 1px rgba(255, 255, 255, 0.14);
+            position: relative;
+            overflow: hidden;
+        }
+        .refresh-cyber-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3.5px;
+            background: linear-gradient(90deg, #2563eb, #7c3aed, #10b981, #2563eb);
+            background-size: 200% 100%;
+            animation: shimmerRefreshBar 2s linear infinite;
+        }
+        @keyframes shimmerRefreshBar {
+            0% { background-position: 0% 0%; }
+            100% { background-position: 200% 0%; }
+        }
+        .refresh-spinner-stage {
+            position: relative;
+            width: 76px;
+            height: 76px;
+            margin: 0 auto 18px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .refresh-ring-outer {
+            position: absolute;
+            inset: 0;
+            border: 3.5px solid rgba(59, 130, 246, 0.18);
+            border-top-color: #3b82f6;
+            border-right-color: #8b5cf6;
+            border-radius: 50%;
+            animation: spinSystem 0.85s cubic-bezier(0.5, 0.1, 0.5, 0.9) infinite;
+        }
+        .refresh-ring-inner {
+            position: absolute;
+            inset: 10px;
+            border: 2.5px dashed rgba(16, 185, 129, 0.45);
+            border-radius: 50%;
+            animation: spinSystemReverse 1.6s linear infinite;
+        }
+        @keyframes spinSystemReverse {
+            0% { transform: rotate(360deg); }
+            100% { transform: rotate(0deg); }
+        }
+        .refresh-center-icon {
+            color: #60a5fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .refresh-title-main {
+            font-size: 22px;
+            font-weight: 900;
+            color: #ffffff;
+            margin: 0 0 8px 0;
+            letter-spacing: -0.4px;
+        }
+        .refresh-sub-desc {
+            font-size: 13px;
+            color: #94a3b8;
+            line-height: 1.55;
+            margin: 0 0 18px 0;
+            font-weight: 500;
+        }
+        .refresh-session-shield-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            background: rgba(16, 185, 129, 0.12);
+            border: 1px solid rgba(16, 185, 129, 0.35);
+            color: #34d399;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10.5px;
+            font-weight: 800;
+            padding: 6px 12px;
+            border-radius: 999px;
+            letter-spacing: 0.3px;
+        }
+
+        /* Banking Session ID & Countdown Strip inside Login & 2FA Cards */
+        .banking-session-strip {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            background: var(--surface-input);
+            border: 1px solid var(--border-subtle);
+            border-left: 3.5px solid #2563eb;
+            border-radius: 10px;
+            padding: 7px 11px;
+            margin-bottom: 14px;
+            font-size: 11px;
+            transition: all 0.25s ease;
+        }
+        .banking-session-strip.expiring-soon {
+            border-left-color: #ef4444;
+            background: rgba(239, 68, 68, 0.08);
+            border-color: rgba(239, 68, 68, 0.35);
+        }
+        .bs-left-meta {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            min-width: 0;
+            flex: 1;
+        }
+        .bs-left-meta svg {
+            color: #10b981;
+            flex-shrink: 0;
+        }
+        .bs-sid-text {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10.5px;
+            font-weight: 800;
+            color: var(--text-primary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            letter-spacing: 0.2px;
+        }
+        .bs-timer-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: rgba(37, 99, 235, 0.12);
+            color: var(--accent-primary);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10.5px;
+            font-weight: 800;
+            padding: 3px 8px;
+            border-radius: 999px;
+            flex-shrink: 0;
+            border: 1px solid rgba(37, 99, 235, 0.25);
+        }
+        .banking-session-strip.expiring-soon .bs-timer-badge {
+            background: rgba(239, 68, 68, 0.16);
+            color: #ef4444;
+            border-color: rgba(239, 68, 68, 0.4);
+        }
+        .crypto-status-footnote {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            margin-top: 10px;
+            font-size: 10.5px;
+            font-weight: 700;
+            color: var(--text-muted);
+        }
+        .crypto-status-footnote svg {
+            color: #10b981;
+            flex-shrink: 0;
+        }
     </style>
     
     <script>
-        // STRICT SECURITY: Disable Inspect Element and Right Click 
+        // ============================================================================
+        // SYNCHRONOUS PRE-PAINT SESSION DETECTOR (ZERO LOGIN FLASH ON REFRESH / F5)
+        // ============================================================================
+        (function prePaintSessionBootCheck() {
+            try {
+                var rawVault = null;
+                try { rawVault = window.sessionStorage.getItem('_po_enc_session_v3'); } catch (e) {}
+                if (!rawVault) {
+                    var m = document.cookie.match(/(?:^|; )PO_SEC_SESSION_VAULT=([^;]*)/);
+                    if (m && m[1]) rawVault = decodeURIComponent(m[1]);
+                }
+                var legacyUser = null;
+                var legacy2fa = null;
+                try {
+                    legacyUser = window.rawSessionGet ? window.rawSessionGet('activeUser') : window.sessionStorage.getItem('activeUser');
+                    legacy2fa = window.rawSessionGet ? window.rawSessionGet('2faVerified') : window.sessionStorage.getItem('2faVerified');
+                } catch (e) {}
+
+                var hasValidEncryptedVault = (rawVault && rawVault.indexOf('encv3$') === 0 && rawVault.length > 32);
+                var hasLegacyAuthenticated = (legacyUser && legacy2fa === 'true');
+
+                if (hasValidEncryptedVault || hasLegacyAuthenticated) {
+                    document.documentElement.classList.add('session-restoring-active');
+                    document.documentElement.classList.add('session-authenticated');
+                    window.__PO_BOOT_RESTORING_SESSION = true;
+                }
+            } catch (err) {}
+        })();
+
+        // STRICT SECURITY: Disable Inspect Element, Right Click, and Intercept F5 / Ctrl+R for In-Built Hard Refresh
         document.addEventListener('contextmenu', event => event.preventDefault());
 
         document.onkeydown = function(e) {
             if (e.keyCode == 123) { return false; } // F12
             if (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74)) { return false; } // Ctrl+Shift+I/J
             if (e.ctrlKey && e.keyCode == 85) { return false; } // Ctrl+U
-        }
+
+            // Intercept F5 or Ctrl+R / Cmd+R to run built-in "Page is Refreshing..." Hard Refresh while preserving session
+            var isF5 = (e.key === 'F5' || e.keyCode === 116);
+            var isCtrlR = ((e.ctrlKey || e.metaKey) && (e.key === 'r' || e.key === 'R' || e.keyCode === 82));
+            if (isF5 || isCtrlR) {
+                if (typeof window.triggerInBuiltHardRefresh === 'function') {
+                    e.preventDefault();
+                    window.triggerInBuiltHardRefresh();
+                    return false;
+                }
+            }
+        };
     </script>
 </head>
 <body>
+
+    <!-- IN-BUILT HARD REFRESH OVERLAY ("PAGE IS REFRESHING...") -->
+    <div class="page-refresh-overlay" id="pageRefreshOverlay">
+        <div class="refresh-cyber-card">
+            <div class="refresh-spinner-stage">
+                <div class="refresh-ring-outer"></div>
+                <div class="refresh-ring-inner"></div>
+                <div class="refresh-center-icon">
+                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2v6h-6"/><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M3 22v-6h6"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/></svg>
+                </div>
+            </div>
+            <h2 class="refresh-title-main" id="pageRefreshTitleText">Page is Refreshing...</h2>
+            <p class="refresh-sub-desc" style="margin-bottom: 0;" id="pageRefreshSubText">Executing Hard Refresh • Fetching latest cloud updates &amp; refreshing workspace while preserving your encrypted login session...</p>
+        </div>
+    </div>
 
     <div id='sceneryBackground'></div>
 
@@ -3308,6 +3625,7 @@
             <div class="tfa-brand-title">PO Staff <span>Utility</span></div>
             <h2 id="tfaTitle" style="color: var(--text-primary); font-size: 20px; margin: 0 0 8px 0; font-weight: 800;">Security Verification</h2>
             <p id="tfaDesc" style="color: var(--text-muted); font-size: 13.5px; margin: 0; line-height: 1.55;">Enter the 6-digit code from your Authenticator app to continue to the system.</p>
+
             
             <div id="qrSetupContainer" style="display: none; text-align: center; margin: 14px 0; padding: 14px; background: var(--surface-input); border-radius: 14px; border: 1px dashed var(--border-subtle);">
                 <div id="qrCodeDisplay" style="display: flex; justify-content: center; margin-bottom: 10px;"></div>
@@ -3464,9 +3782,12 @@
                                 <div class="notif-panel-header">
                                     <h4>
                                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" style="color:var(--accent-primary);"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-                                        Module Alerts
+                                        Notifications
                                     </h4>
-                                    <span class="ttl-tag">Auto-expires in 24h</span>
+                                    <div style="display:flex; align-items:center; gap:6px;">
+                                        <span class="ttl-tag">Auto-expires in 24h</span>
+                                        <button type="button" class="notif-clear-all-btn" id="notifClearAllBtn" onclick="clearAllVisibleNotifications(event)" title="Delete all notifications">Clear All</button>
+                                    </div>
                                 </div>
                                 <div class="notif-items-list" id="notifItemsList">
                                     <div style="text-align:center; padding:18px 8px; color:var(--text-muted); font-size:12.5px;">No new module notifications in the last 24 hours.</div>
@@ -4246,21 +4567,697 @@
 
     <script type="text/javascript">
         // ============================================================================
-        // SAFE SESSION STORAGE WRAPPER
+        // ENTERPRISE CRYPTOGRAPHIC HASHING (SHA-256) & E2E ENCRYPTION VAULT ENGINE
         // ============================================================================
-        const _memSession = {};
+        const PO_CRYPTO_ENGINE = (function() {
+            // Pure synchronous FIPS 180-4 SHA-256 implementation (works in all contexts)
+            const K = [
+                0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5,
+                0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174,
+                0xe49b69c1, 0xefbe4786, 0x0fc19dc6, 0x240ca1cc, 0x2de92c6f, 0x4a7484aa, 0x5cb0a9dc, 0x76f988da,
+                0x983e5152, 0xa831c66d, 0xb00327c8, 0xbf597fc7, 0xc6e00bf3, 0xd5a79147, 0x06ca6351, 0x14292967,
+                0x27b70a85, 0x2e1b2138, 0x4d2c6dfc, 0x53380d13, 0x650a7354, 0x766a0abb, 0x81c2c92e, 0x92722c85,
+                0xa2bfe8a1, 0xa81a664b, 0xc24b8b70, 0xc76c51a3, 0xd192e819, 0xd6990624, 0xf40e3585, 0x106aa070,
+                0x19a4c116, 0x1e376c08, 0x2748774c, 0x34b0bcb5, 0x391c0cb3, 0x4ed8aa4a, 0x5b9cca4f, 0x682e6ff3,
+                0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208, 0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2
+            ];
+
+            function rotr(n, x) { return (x >>> n) | (x << (32 - n)); }
+
+            function utf8ToBytes(str) {
+                const utf8 = unescape(encodeURIComponent(String(str ?? '')));
+                const bytes = new Uint8Array(utf8.length);
+                for (let i = 0; i < utf8.length; i++) bytes[i] = utf8.charCodeAt(i);
+                return bytes;
+            }
+
+            function bytesToUtf8(bytes) {
+                let bin = '';
+                for (let i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
+                try { return decodeURIComponent(escape(bin)); } catch (e) { return bin; }
+            }
+
+            function bytesToHex(bytes) {
+                let hex = '';
+                for (let i = 0; i < bytes.length; i++) {
+                    hex += (bytes[i] >>> 4).toString(16) + (bytes[i] & 0x0f).toString(16);
+                }
+                return hex;
+            }
+
+            function hexToBytes(hex) {
+                const clean = String(hex || '').replace(/[^0-9a-fA-F]/g, '');
+                const out = new Uint8Array(Math.floor(clean.length / 2));
+                for (let i = 0; i < out.length; i++) {
+                    out[i] = parseInt(clean.substr(i * 2, 2), 16);
+                }
+                return out;
+            }
+
+            function sha256Bytes(inputBytes) {
+                const msg = (inputBytes instanceof Uint8Array) ? inputBytes : utf8ToBytes(inputBytes);
+                const bitLenHi = Math.floor((msg.length * 8) / 0x100000000);
+                const bitLenLo = (msg.length * 8) >>> 0;
+                const padLen = ((msg.length + 9 + 63) & ~63);
+                const padded = new Uint8Array(padLen);
+                padded.set(msg, 0);
+                padded[msg.length] = 0x80;
+                const dv = new DataView(padded.buffer);
+                dv.setUint32(padLen - 8, bitLenHi, false);
+                dv.setUint32(padLen - 4, bitLenLo, false);
+
+                let H0 = 0x6a09e667, H1 = 0xbb67ae85, H2 = 0x3c6ef372, H3 = 0xa54ff53a;
+                let H4 = 0x510e527f, H5 = 0x9b05688c, H6 = 0x1f83d9ab, H7 = 0x5be0cd19;
+                const W = new Uint32Array(64);
+
+                for (let offset = 0; offset < padLen; offset += 64) {
+                    for (let t = 0; t < 16; t++) W[t] = dv.getUint32(offset + t * 4, false);
+                    for (let t = 16; t < 64; t++) {
+                        const s0 = rotr(7, W[t - 15]) ^ rotr(18, W[t - 15]) ^ (W[t - 15] >>> 3);
+                        const s1 = rotr(17, W[t - 2]) ^ rotr(19, W[t - 2]) ^ (W[t - 2] >>> 10);
+                        W[t] = (W[t - 16] + s0 + W[t - 7] + s1) >>> 0;
+                    }
+                    let a = H0, b = H1, c = H2, d = H3, e = H4, f = H5, g = H6, h = H7;
+                    for (let t = 0; t < 64; t++) {
+                        const S1 = rotr(6, e) ^ rotr(11, e) ^ rotr(25, e);
+                        const ch = (e & f) ^ (~e & g);
+                        const temp1 = (h + S1 + ch + K[t] + W[t]) >>> 0;
+                        const S0 = rotr(2, a) ^ rotr(13, a) ^ rotr(22, a);
+                        const maj = (a & b) ^ (a & c) ^ (b & c);
+                        const temp2 = (S0 + maj) >>> 0;
+                        h = g; g = f; f = e; e = (d + temp1) >>> 0;
+                        d = c; c = b; b = a; a = (temp1 + temp2) >>> 0;
+                    }
+                    H0 = (H0 + a) >>> 0; H1 = (H1 + b) >>> 0; H2 = (H2 + c) >>> 0; H3 = (H3 + d) >>> 0;
+                    H4 = (H4 + e) >>> 0; H5 = (H5 + f) >>> 0; H6 = (H6 + g) >>> 0; H7 = (H7 + h) >>> 0;
+                }
+                const out = new Uint8Array(32);
+                const outDv = new DataView(out.buffer);
+                outDv.setUint32(0, H0, false); outDv.setUint32(4, H1, false);
+                outDv.setUint32(8, H2, false); outDv.setUint32(12, H3, false);
+                outDv.setUint32(16, H4, false); outDv.setUint32(20, H5, false);
+                outDv.setUint32(24, H6, false); outDv.setUint32(28, H7, false);
+                return out;
+            }
+
+            function sha256(str) {
+                return bytesToHex(sha256Bytes(utf8ToBytes(str)));
+            }
+
+            function hmacSha256(keyStr, messageStr) {
+                let keyBytes = utf8ToBytes(keyStr);
+                if (keyBytes.length > 64) keyBytes = sha256Bytes(keyBytes);
+                const oKeyPad = new Uint8Array(64);
+                const iKeyPad = new Uint8Array(64);
+                for (let i = 0; i < 64; i++) {
+                    const kb = i < keyBytes.length ? keyBytes[i] : 0;
+                    oKeyPad[i] = kb ^ 0x5c;
+                    iKeyPad[i] = kb ^ 0x36;
+                }
+                const msgBytes = utf8ToBytes(messageStr);
+                const innerInput = new Uint8Array(64 + msgBytes.length);
+                innerInput.set(iKeyPad, 0);
+                innerInput.set(msgBytes, 64);
+                const innerHash = sha256Bytes(innerInput);
+
+                const outerInput = new Uint8Array(64 + 32);
+                outerInput.set(oKeyPad, 0);
+                outerInput.set(innerHash, 64);
+                return bytesToHex(sha256Bytes(outerInput));
+            }
+
+            const MASTER_PEPPER = "PO_UTILITY_V3_ENTERPRISE_VAULT::9F8A7B6C5D4E3F2A1B0C";
+
+            function randomBytes(len) {
+                const arr = new Uint8Array(len);
+                if (window.crypto && window.crypto.getRandomValues) {
+                    window.crypto.getRandomValues(arr);
+                } else {
+                    for (let i = 0; i < len; i++) arr[i] = Math.floor(Math.random() * 256);
+                }
+                return arr;
+            }
+
+            // Authenticated 256-Bit CTR-SHA256 Keystream Cipher + HMAC-SHA256 Signature
+            function encryptData(plainText, contextDomain = "DEFAULT") {
+                if (plainText === null || plainText === undefined || plainText === "") return "";
+                const str = String(plainText);
+                if (str.startsWith("encv3$")) return str;
+                const ivBytes = randomBytes(16);
+                const ivHex = bytesToHex(ivBytes);
+                const plainBytes = utf8ToBytes(str);
+                const cipherBytes = new Uint8Array(plainBytes.length);
+
+                let blockCounter = 0;
+                for (let offset = 0; offset < plainBytes.length; offset += 32) {
+                    const streamKey = sha256Bytes(utf8ToBytes(`${MASTER_PEPPER}::${contextDomain}::${ivHex}::${blockCounter}`));
+                    const chunkLen = Math.min(32, plainBytes.length - offset);
+                    for (let j = 0; j < chunkLen; j++) {
+                        cipherBytes[offset + j] = plainBytes[offset + j] ^ streamKey[j];
+                    }
+                    blockCounter++;
+                }
+                const cipherHex = bytesToHex(cipherBytes);
+                const mac = hmacSha256(`${MASTER_PEPPER}::MAC::${contextDomain}`, `${ivHex}.${cipherHex}`).substring(0, 32);
+                return `encv3$${ivHex}.${cipherHex}.${mac}`;
+            }
+
+            function decryptData(cipherPayload, contextDomain = "DEFAULT") {
+                if (!cipherPayload || typeof cipherPayload !== "string") return "";
+                if (!cipherPayload.startsWith("encv3$")) return cipherPayload;
+                try {
+                    const body = cipherPayload.slice(6);
+                    const parts = body.split(".");
+                    if (parts.length !== 3) return "";
+                    const [ivHex, cipherHex, mac] = parts;
+                    const expectedMac = hmacSha256(`${MASTER_PEPPER}::MAC::${contextDomain}`, `${ivHex}.${cipherHex}`).substring(0, 32);
+                    if (mac !== expectedMac) return "";
+
+                    const cipherBytes = hexToBytes(cipherHex);
+                    const plainBytes = new Uint8Array(cipherBytes.length);
+                    let blockCounter = 0;
+                    for (let offset = 0; offset < cipherBytes.length; offset += 32) {
+                        const streamKey = sha256Bytes(utf8ToBytes(`${MASTER_PEPPER}::${contextDomain}::${ivHex}::${blockCounter}`));
+                        const chunkLen = Math.min(32, cipherBytes.length - offset);
+                        for (let j = 0; j < chunkLen; j++) {
+                            plainBytes[offset + j] = cipherBytes[offset + j] ^ streamKey[j];
+                        }
+                        blockCounter++;
+                    }
+                    return bytesToUtf8(plainBytes);
+                } catch (e) {
+                    return "";
+                }
+            }
+
+            function hashUsername(username) {
+                const norm = String(username || "").trim().toLowerCase();
+                return "sha256$" + sha256(`${MASTER_PEPPER}::UID_HASH::${norm}`);
+            }
+
+            function hashUserPasscode(username, plainPass) {
+                const rawP = String(plainPass || "").trim();
+                if (rawP.startsWith("sha256$")) return rawP;
+                const normU = String(username || "").trim().toLowerCase();
+                return "sha256$" + sha256(`${MASTER_PEPPER}::PASS_HASH::${normU}::${rawP}`);
+            }
+
+            function verifyUserPasscode(username, enteredPlainPass, userRecord) {
+                if (!userRecord) return false;
+                const rawEntered = String(enteredPlainPass || "").trim();
+                const expectedSaltedHash = hashUserPasscode(username, rawEntered);
+
+                // 1. Check explicit passHash field
+                if (userRecord.passHash && userRecord.passHash === expectedSaltedHash) return true;
+
+                // 2. Check if userRecord.pass is already a sha256$ hash
+                const storedPass = String(userRecord.pass || "").trim();
+                if (storedPass.startsWith("sha256$")) {
+                    if (storedPass === expectedSaltedHash) return true;
+                    const globalHash = "sha256$" + sha256(`${MASTER_PEPPER}::GLOBAL_PASS::${rawEntered}`);
+                    if (storedPass === globalHash) return true;
+                }
+
+                // 3. Check if userRecord.passCipher or userRecord.pass is an encv3$ ciphertext
+                if (userRecord.passCipher && String(userRecord.passCipher).startsWith("encv3$")) {
+                    const dec = decryptData(userRecord.passCipher, "USER_PASS");
+                    if (dec && (dec === rawEntered || hashUserPasscode(username, dec) === expectedSaltedHash)) return true;
+                }
+                if (storedPass.startsWith("encv3$")) {
+                    const dec = decryptData(storedPass, "USER_PASS");
+                    if (dec && (dec === rawEntered || hashUserPasscode(username, dec) === expectedSaltedHash)) return true;
+                }
+
+                // 4. Legacy plain-text fallback (auto-upgraded to encrypted/hashed on sync)
+                if (storedPass === rawEntered) return true;
+
+                return false;
+            }
+
+            function encryptTotpSecret(rawSecret) {
+                const s = String(rawSecret || "").trim();
+                if (!s) return "";
+                if (s.startsWith("encv3$")) return s;
+                return encryptData(s, "TOTP_2FA_SECRET");
+            }
+
+            function decryptTotpSecret(storedSecret) {
+                const s = String(storedSecret || "").trim();
+                if (!s) return "";
+                if (s.startsWith("encv3$")) return decryptData(s, "TOTP_2FA_SECRET");
+                return s;
+            }
+
+            function generateBankingSessionId(prefix = "SID") {
+                const b = randomBytes(18);
+                const hex = bytesToHex(b).toUpperCase();
+                return `${prefix}-${hex.slice(0, 12)}-${hex.slice(12, 24)}-${hex.slice(24, 36)}`;
+            }
+
+            return {
+                sha256,
+                hmacSha256,
+                encryptData,
+                decryptData,
+                hashUsername,
+                hashUserPasscode,
+                verifyUserPasscode,
+                encryptTotpSecret,
+                decryptTotpSecret,
+                generateBankingSessionId
+            };
+        })();
+        window.PO_CRYPTO_ENGINE = PO_CRYPTO_ENGINE;
+
+        // ============================================================================
+        // ENCRYPTED SESSION VAULT & COOKIE ENGINE (ZERO PLAIN-TEXT IN BROWSER STORAGE)
+        // ============================================================================
+        const _nativeSessionGet = window.sessionStorage ? window.sessionStorage.getItem.bind(window.sessionStorage) : null;
+        const _nativeSessionSet = window.sessionStorage ? window.sessionStorage.setItem.bind(window.sessionStorage) : null;
+        const _nativeSessionRemove = window.sessionStorage ? window.sessionStorage.removeItem.bind(window.sessionStorage) : null;
+        const _nativeSessionClear = window.sessionStorage ? window.sessionStorage.clear.bind(window.sessionStorage) : null;
+        window.rawSessionGet = _nativeSessionGet;
+
+        const SENSITIVE_SESSION_KEYS = new Set([
+            "activeUser", "activeRole", "activeSolId", "2faVerified", "sessionId", "loginTimestamp", "authHash"
+        ]);
+        const ENCRYPTED_VAULT_STORAGE_KEY = "_po_enc_session_v3";
+        const ENCRYPTED_COOKIE_NAME = "PO_SEC_SESSION_VAULT";
+
+        let _memSession = {};
+
+        function _setEncryptedSessionCookie(cipherStr) {
+            try {
+                if (!cipherStr) {
+                    document.cookie = `${ENCRYPTED_COOKIE_NAME}=; path=/; max-age=0; SameSite=Strict`;
+                } else {
+                    document.cookie = `${ENCRYPTED_COOKIE_NAME}=${encodeURIComponent(cipherStr)}; path=/; max-age=43200; SameSite=Strict`;
+                }
+            } catch (e) {}
+        }
+
+        function _getEncryptedSessionCookie() {
+            try {
+                const m = document.cookie.match(new RegExp('(?:^|; )' + ENCRYPTED_COOKIE_NAME + '=([^;]*)'));
+                return (m && m[1]) ? decodeURIComponent(m[1]) : null;
+            } catch (e) {
+                return null;
+            }
+        }
+
+        function _persistEncryptedSessionVault() {
+            try {
+                const keys = Object.keys(_memSession);
+                if (keys.length === 0 || !_memSession.activeUser) {
+                    if (_nativeSessionRemove) {
+                        _nativeSessionRemove(ENCRYPTED_VAULT_STORAGE_KEY);
+                        _nativeSessionRemove("_po_sid_sha256");
+                    }
+                    _setEncryptedSessionCookie("");
+                    return;
+                }
+                const payloadStr = JSON.stringify(_memSession);
+                const encryptedVault = PO_CRYPTO_ENGINE.encryptData(payloadStr, "BROWSER_SESSION_VAULT");
+                if (_nativeSessionSet) {
+                    _nativeSessionSet(ENCRYPTED_VAULT_STORAGE_KEY, encryptedVault);
+                    if (_memSession.sessionId) {
+                        _nativeSessionSet("_po_sid_sha256", PO_CRYPTO_ENGINE.sha256(_memSession.sessionId));
+                    }
+                }
+                _setEncryptedSessionCookie(encryptedVault);
+            } catch (e) {}
+        }
+
+        function _restoreEncryptedSessionVaultOnBoot() {
+            try {
+                let cipher = _nativeSessionGet ? _nativeSessionGet(ENCRYPTED_VAULT_STORAGE_KEY) : null;
+                if (!cipher) {
+                    cipher = _getEncryptedSessionCookie();
+                }
+                if (cipher && cipher.startsWith("encv3$")) {
+                    const plainJson = PO_CRYPTO_ENGINE.decryptData(cipher, "BROWSER_SESSION_VAULT");
+                    if (plainJson) {
+                        const parsed = JSON.parse(plainJson);
+                        if (parsed && typeof parsed === "object") {
+                            _memSession = { ...parsed };
+                        }
+                    }
+                }
+                // Migrate & scrub any legacy plain-text session keys so nothing remains unencrypted
+                if (_nativeSessionGet && _nativeSessionRemove) {
+                    let migrated = false;
+                    SENSITIVE_SESSION_KEYS.forEach(k => {
+                        const legacyVal = _nativeSessionGet(k);
+                        if (legacyVal !== null && legacyVal !== undefined) {
+                            if (!_memSession[k]) _memSession[k] = legacyVal;
+                            _nativeSessionRemove(k);
+                            migrated = true;
+                        }
+                    });
+                    if (migrated || (_memSession.activeUser && _memSession["2faVerified"] === "true")) {
+                        _persistEncryptedSessionVault();
+                    }
+                }
+            } catch (e) {}
+        }
+        _restoreEncryptedSessionVaultOnBoot();
+
+        // Transparently intercept window.sessionStorage for sensitive keys so child SPA modules work seamlessly
+        // while DevTools Application -> Session Storage only ever holds encrypted ciphertext!
+        try {
+            if (window.Storage && window.Storage.prototype) {
+                const origGetItem = window.Storage.prototype.getItem;
+                const origSetItem = window.Storage.prototype.setItem;
+                const origRemoveItem = window.Storage.prototype.removeItem;
+                const origClear = window.Storage.prototype.clear;
+
+                window.Storage.prototype.getItem = function(k) {
+                    if (this === window.sessionStorage && SENSITIVE_SESSION_KEYS.has(k)) {
+                        return Object.prototype.hasOwnProperty.call(_memSession, k) ? _memSession[k] : null;
+                    }
+                    return origGetItem.call(this, k);
+                };
+                window.Storage.prototype.setItem = function(k, v) {
+                    if (this === window.sessionStorage && SENSITIVE_SESSION_KEYS.has(k)) {
+                        _memSession[k] = String(v);
+                        _persistEncryptedSessionVault();
+                        return;
+                    }
+                    return origSetItem.call(this, k, v);
+                };
+                window.Storage.prototype.removeItem = function(k) {
+                    if (this === window.sessionStorage && SENSITIVE_SESSION_KEYS.has(k)) {
+                        delete _memSession[k];
+                        _persistEncryptedSessionVault();
+                        return;
+                    }
+                    return origRemoveItem.call(this, k);
+                };
+                window.Storage.prototype.clear = function() {
+                    if (this === window.sessionStorage) {
+                        for (const k in _memSession) delete _memSession[k];
+                        _setEncryptedSessionCookie("");
+                    }
+                    return origClear.call(this);
+                };
+            }
+        } catch (e) {}
+
         const safeSession = {
             getItem(k) {
-                try { return window.sessionStorage.getItem(k); } catch(e) { return _memSession[k] || null; }
+                if (SENSITIVE_SESSION_KEYS.has(k)) {
+                    return Object.prototype.hasOwnProperty.call(_memSession, k) ? _memSession[k] : null;
+                }
+                try { return _nativeSessionGet ? _nativeSessionGet(k) : (_memSession[k] || null); } catch(e) { return _memSession[k] || null; }
             },
             setItem(k, v) {
-                try { window.sessionStorage.setItem(k, v); } catch(e) { _memSession[k] = String(v); }
+                _memSession[k] = String(v);
+                if (SENSITIVE_SESSION_KEYS.has(k)) {
+                    _persistEncryptedSessionVault();
+                } else {
+                    try { if (_nativeSessionSet) _nativeSessionSet(k, String(v)); } catch(e) {}
+                }
             },
             clear() {
-                try { window.sessionStorage.clear(); } catch(e) {}
                 for (const k in _memSession) delete _memSession[k];
+                _setEncryptedSessionCookie("");
+                try { if (_nativeSessionClear) _nativeSessionClear(); } catch(e) {}
             }
         };
+
+        // ============================================================================
+        // BANKING / INDUSTRIAL PORTAL LOGIN HANDSHAKE SESSION ID & 3-MIN EXPIRY ENGINE
+        // ============================================================================
+        const LOGIN_HANDSHAKE_TTL_SECONDS = 180; // 3 Minutes (180s) to complete login + 2FA
+        let currentLoginHandshakeSessionId = "";
+        let loginHandshakeSecondsLeft = LOGIN_HANDSHAKE_TTL_SECONDS;
+        let loginHandshakeInterval = null;
+        let loginHandshakeCreatedAt = 0;
+
+        function formatHandshakeCountdown(sec) {
+            const s = Math.max(0, parseInt(sec, 10) || 0);
+            const m = Math.floor(s / 60);
+            const r = s % 60;
+            return `${String(m).padStart(2, '0')}:${String(r).padStart(2, '0')}`;
+        }
+
+        function updateLoginHandshakeUI() {
+            // Runs silently in the background (Session ID is reflected only in Browser URL bar)
+        }
+
+        function syncSessionIdToBrowserUrl(sid, activeViewModule = null) {
+            try {
+                const url = new URL(window.location.href);
+                if (activeViewModule && activeViewModule !== 'index.html') {
+                    url.searchParams.set('view', activeViewModule.replace('.html', ''));
+                }
+                if (sid) {
+                    url.searchParams.set('session_id', sid);
+                }
+                window.history.replaceState({ module: activeViewModule || 'index.html', sessionId: sid }, document.title, url.pathname + url.search);
+            } catch (e) {}
+        }
+
+        function stopLoginHandshakeSessionTimer() {
+            if (loginHandshakeInterval) {
+                clearInterval(loginHandshakeInterval);
+                loginHandshakeInterval = null;
+            }
+        }
+
+        function initOrRotateLoginHandshakeSession(isExpiredReset = false) {
+            stopLoginHandshakeSessionTimer();
+            if (safeSession.getItem("activeUser") && safeSession.getItem("2faVerified") === "true") {
+                return;
+            }
+            currentLoginHandshakeSessionId = PO_CRYPTO_ENGINE.generateBankingSessionId("SID");
+            loginHandshakeCreatedAt = Date.now();
+            loginHandshakeSecondsLeft = LOGIN_HANDSHAKE_TTL_SECONDS;
+            updateLoginHandshakeUI();
+            syncSessionIdToBrowserUrl(currentLoginHandshakeSessionId, null);
+
+            loginHandshakeInterval = setInterval(() => {
+                if (safeSession.getItem("activeUser") && safeSession.getItem("2faVerified") === "true") {
+                    stopLoginHandshakeSessionTimer();
+                    return;
+                }
+                const elapsed = Math.floor((Date.now() - loginHandshakeCreatedAt) / 1000);
+                loginHandshakeSecondsLeft = Math.max(0, LOGIN_HANDSHAKE_TTL_SECONDS - elapsed);
+                updateLoginHandshakeUI();
+
+                if (loginHandshakeSecondsLeft <= 0) {
+                    handleLoginHandshakeSessionExpired();
+                }
+            }, 1000);
+        }
+
+        function isLoginHandshakeSessionValid() {
+            if (!currentLoginHandshakeSessionId || !loginHandshakeCreatedAt) return false;
+            const elapsed = Math.floor((Date.now() - loginHandshakeCreatedAt) / 1000);
+            return elapsed < LOGIN_HANDSHAKE_TTL_SECONDS;
+        }
+
+        function handleLoginHandshakeSessionExpired() {
+            stopLoginHandshakeSessionTimer();
+
+            // Clear any partial login state silently in the background
+            safeSession.clear();
+            authenticatedUserSession = null;
+
+            const tfaScreen = document.getElementById('twoFactorScreen');
+            if (tfaScreen) {
+                tfaScreen.classList.remove('active');
+                tfaScreen.style.display = 'none';
+            }
+            document.documentElement.classList.remove('session-restoring-active', 'session-authenticated');
+            const dashView = document.getElementById('appDashboardView');
+            if (dashView) dashView.style.display = 'none';
+            const loginScreen = document.getElementById('loginScreen');
+            if (loginScreen) loginScreen.style.display = 'flex';
+
+            const uInput = document.getElementById('sysUser');
+            const pInput = document.getElementById('sysPass');
+            const cInput = document.getElementById('captchaInput');
+            if (uInput) uInput.value = '';
+            if (pInput) pInput.value = '';
+            if (cInput) cInput.value = '';
+            document.querySelectorAll('.otp-input').forEach(inp => inp.value = '');
+            if (typeof generateCaptcha === 'function') generateCaptcha();
+
+            // Generate brand-new Session ID in browser URL bar silently
+            initOrRotateLoginHandshakeSession(true);
+
+            // Show only a clean, minimal floating notification toast (no modal or technical Session ID exposure)
+            spawnFloatingNotification("Session Expired", "Your login session has expired. Please log in again.", "warning");
+        }
+
+        // ============================================================================
+        // FIREBASE USER CREDENTIAL ENCRYPTION & AUTO-MIGRATION ENGINE
+        // ============================================================================
+        function prepareUsersForEncryptedCloudSync(usersList) {
+            if (!Array.isArray(usersList)) return [];
+            return usersList.map(u => {
+                if (!u || typeof u !== 'object') return u;
+                const copy = { ...u };
+                const uname = String(copy.user || '').trim();
+                const rawPass = String(copy.pass || '').trim();
+
+                copy.userHash = PO_CRYPTO_ENGINE.hashUsername(uname);
+
+                if (rawPass && !rawPass.startsWith('sha256$') && !rawPass.startsWith('encv3$')) {
+                    copy.passHash = PO_CRYPTO_ENGINE.hashUserPasscode(uname, rawPass);
+                    copy.passCipher = PO_CRYPTO_ENGINE.encryptData(rawPass, "USER_PASS");
+                    // Store SHA-256 hash in `pass` on Firebase so plain-text passwords are never exposed in Firestore!
+                    copy.pass = copy.passHash;
+                } else if (rawPass.startsWith('sha256$')) {
+                    copy.passHash = rawPass;
+                }
+
+                if (copy.totpSecret && String(copy.totpSecret).trim() !== '' && !String(copy.totpSecret).startsWith('encv3$')) {
+                    copy.totpSecret = PO_CRYPTO_ENGINE.encryptTotpSecret(copy.totpSecret);
+                }
+                return copy;
+            });
+        }
+
+        function hydrateUsersFromEncryptedCloud(usersList) {
+            if (!Array.isArray(usersList)) return [];
+            return usersList.map(u => {
+                if (!u || typeof u !== 'object') return u;
+                const copy = { ...u };
+                const uname = String(copy.user || '').trim();
+                copy.userHash = copy.userHash || PO_CRYPTO_ENGINE.hashUsername(uname);
+                if (copy.pass && !String(copy.pass).startsWith('sha256$') && !String(copy.pass).startsWith('encv3$')) {
+                    copy.passHash = PO_CRYPTO_ENGINE.hashUserPasscode(uname, copy.pass);
+                    copy.passCipher = PO_CRYPTO_ENGINE.encryptData(copy.pass, "USER_PASS");
+                }
+                return copy;
+            });
+        }
+
+        // ============================================================================
+        // IN-BUILT HARD REFRESH ENGINE ("PAGE IS REFRESHING..." WITHOUT LOGOUT/FLASH)
+        // ============================================================================
+        function showPageRefreshOverlay(titleText = "Page is Refreshing...", subText = null) {
+            const ov = document.getElementById('pageRefreshOverlay');
+            const tEl = document.getElementById('pageRefreshTitleText');
+            const sEl = document.getElementById('pageRefreshSubText');
+            if (tEl && titleText) tEl.innerText = titleText;
+            if (sEl && subText) sEl.innerText = subText;
+            if (ov) {
+                ov.style.display = 'flex';
+                ov.classList.add('active');
+            }
+        }
+
+        function hidePageRefreshOverlay() {
+            document.documentElement.classList.remove('session-restoring-active');
+            const ov = document.getElementById('pageRefreshOverlay');
+            if (ov) {
+                ov.classList.remove('active');
+                setTimeout(() => {
+                    if (!document.documentElement.classList.contains('session-restoring-active')) {
+                        ov.style.display = 'none';
+                    }
+                }, 260);
+            }
+        }
+
+        async function triggerInBuiltHardRefresh() {
+            const isLogged = Boolean(safeSession.getItem("activeUser") && safeSession.getItem("2faVerified") === "true");
+            showPageRefreshOverlay(
+                "Page is Refreshing...",
+                isLogged
+                    ? "Executing Hard Refresh • Fetching latest cloud updates & refreshing workspace while preserving your encrypted login session..."
+                    : "Executing Hard Refresh • Generating fresh encrypted session & reloading security parameters..."
+            );
+
+            // Preserve encrypted session cookie + sessionStorage across hard refresh
+            if (isLogged) {
+                document.documentElement.classList.add('session-authenticated');
+                _persistEncryptedSessionVault();
+            }
+
+            try {
+                if (db) {
+                    const [regSnap, dashSnap, annSnap, bgSnap, secSnap] = await Promise.allSettled([
+                        db.collection("system").doc("registry").get({ source: 'server' }).catch(() => db.collection("system").doc("registry").get()),
+                        db.collection("system").doc("dashboard").get({ source: 'server' }).catch(() => db.collection("system").doc("dashboard").get()),
+                        db.collection("system").doc("announcements").get({ source: 'server' }).catch(() => db.collection("system").doc("announcements").get()),
+                        db.collection("system").doc("backgrounds").get({ source: 'server' }).catch(() => db.collection("system").doc("backgrounds").get()),
+                        db.collection("system").doc("security_alerts").get({ source: 'server' }).catch(() => db.collection("system").doc("security_alerts").get())
+                    ]);
+
+                    if (annSnap.status === 'fulfilled' && annSnap.value && annSnap.value.exists) {
+                        const d = annSnap.value.data();
+                        SYSTEM_NEWS_FEED = d.tickerText || SYSTEM_NEWS_FEED;
+                        if (document.getElementById('scrollingNewsText')) document.getElementById('scrollingNewsText').innerText = SYSTEM_NEWS_FEED;
+                        if (d.backgrounds) applyCustomBackgroundsToDOM(d.backgrounds);
+                    }
+                    if (bgSnap.status === 'fulfilled' && bgSnap.value && bgSnap.value.exists) {
+                        applyCustomBackgroundsToDOM(bgSnap.value.data());
+                    }
+                    if (secSnap.status === 'fulfilled' && secSnap.value && secSnap.value.exists) {
+                        const sd = secSnap.value.data();
+                        if (Array.isArray(sd.alerts)) {
+                            SYSTEM_SECURITY_NOTIFICATIONS = sd.alerts;
+                            window.SYSTEM_SECURITY_NOTIFICATIONS = SYSTEM_SECURITY_NOTIFICATIONS;
+                        }
+                    }
+                    if (regSnap.status === 'fulfilled' && regSnap.value && regSnap.value.exists) {
+                        const rData = regSnap.value.data();
+                        if (rData.backgrounds) applyCustomBackgroundsToDOM(rData.backgrounds);
+                        SYSTEM_USER_REGISTRY = hydrateUsersFromEncryptedCloud(rData.users || []);
+                        SYSTEM_LOGIN_HISTORY = rData.logs || [];
+                        SYSTEM_OFFICE_REGISTRY = rData.offices || [];
+                        if (Array.isArray(rData.securityNotifications)) {
+                            SYSTEM_SECURITY_NOTIFICATIONS = rData.securityNotifications;
+                        }
+                        window.SYSTEM_USER_REGISTRY = SYSTEM_USER_REGISTRY;
+                        window.SYSTEM_OFFICE_REGISTRY = SYSTEM_OFFICE_REGISTRY;
+                        window.SYSTEM_SECURITY_NOTIFICATIONS = SYSTEM_SECURITY_NOTIFICATIONS;
+                    }
+                    if (dashSnap.status === 'fulfilled' && dashSnap.value && dashSnap.value.exists) {
+                        const dData = dashSnap.value.data();
+                        if (dData.backgrounds) applyCustomBackgroundsToDOM(dData.backgrounds);
+                        LATEST_DASHBOARD_CARDS = dData.cards || [];
+                        DISABLED_SYSTEM_CARDS = dData.disabledSystemCards || [];
+                    }
+                }
+
+                if (isLogged) {
+                    const sessionUser = safeSession.getItem("activeUser");
+                    let profile = SYSTEM_USER_REGISTRY.find(acc => String(acc.user || '').toLowerCase() === String(sessionUser).toLowerCase());
+                    if (!profile && sessionUser === "GUEST") {
+                        profile = { fullName: "Guest User", user: "GUEST", role: "maker", isGuest: true, active: true, locked: false, isFirstTimeDefault: false, totpSecret: "", solId: "GUEST" };
+                    }
+                    if (profile) {
+                        authenticatedUserSession = profile;
+                        renderDynamicCardsInIndex(LATEST_DASHBOARD_CARDS);
+                        verifyBloggerAuth_Reentry(false);
+                        refreshAllLiveStatusViews();
+                    }
+
+                    // If currently inside a child SPA module, hard-reload that module with cache-busting
+                    if (CURRENT_ACTIVE_SPA_MODULE && CURRENT_ACTIVE_SPA_MODULE !== 'index.html') {
+                        await loadModuleSPA(CURRENT_ACTIVE_SPA_MODULE, null, "Page is Refreshing...", true);
+                    }
+                } else {
+                    generateCaptcha();
+                    initOrRotateLoginHandshakeSession(false);
+                }
+            } catch (err) {
+                console.warn("Hard refresh sync warning:", err);
+            }
+
+            setTimeout(() => {
+                hidePageRefreshOverlay();
+                if (isLogged) {
+                    spawnFloatingNotification("Page Refreshed", "Hard refresh completed • All live cloud updates & modules synchronized.", "success");
+                }
+            }, 480);
+        }
+        window.triggerInBuiltHardRefresh = triggerInBuiltHardRefresh;
 
         // ============================================================================
         // UNIVERSAL HIGH-TECH SVG STOCK ENGINE
@@ -5067,6 +6064,8 @@
         }
 
         async function pushUsersToCloudOnly(changedUsername = null, changedOnlineState = null, changedLoginTime = null) {
+            SYSTEM_USER_REGISTRY = prepareUsersForEncryptedCloudSync(SYSTEM_USER_REGISTRY);
+            window.SYSTEM_USER_REGISTRY = SYSTEM_USER_REGISTRY;
             broadcastPortalRealtimeEvent({ type: 'USERS_SYNC', users: SYSTEM_USER_REGISTRY });
             if (!db) return;
             const regRef = db.collection("system").doc("registry");
@@ -5327,6 +6326,54 @@
             return { allowed: isMasterAdmin, cardTitle: cleanTarget.replace('.html', ''), cardId: cleanTarget };
         }
 
+        async function pushSuperAdminSecurityAlert(alertCategory, alertTitle, detailMessage, userMeta = {}) {
+            const now = Date.now();
+            const TTL_24H = 24 * 60 * 60 * 1000;
+            const options = { timeZone: 'Asia/Kolkata', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
+            const timeStamp = new Date().toLocaleString('en-IN', options);
+
+            const alertRecord = {
+                id: 'sec_' + now + '_' + Math.random().toString(36).substring(2, 7),
+                timestamp: now,
+                timeFormatted: timeStamp,
+                alertCategory: alertCategory || 'SECURITY_EVENT',
+                alertTitle: alertTitle || 'Security Alert',
+                user: userMeta.user || 'Unknown',
+                fullName: userMeta.fullName || userMeta.user || 'Unknown User',
+                role: String(userMeta.role || 'STAFF').toUpperCase(),
+                solId: userMeta.solId || 'UNMAPPED',
+                attemptedModule: userMeta.attemptedModule || '',
+                cardTitle: userMeta.cardTitle || alertTitle || 'System Security',
+                targetAdmin: 'admin',
+                status: 'UNREAD',
+                message: detailMessage
+            };
+
+            // Filter out any alerts older than 24 hours automatically so cloud storage stays lean
+            SYSTEM_SECURITY_NOTIFICATIONS = [
+                alertRecord,
+                ...(SYSTEM_SECURITY_NOTIFICATIONS || []).filter(item => item && item.timestamp && (now - item.timestamp) < TTL_24H)
+            ].slice(0, 250);
+            window.SYSTEM_SECURITY_NOTIFICATIONS = SYSTEM_SECURITY_NOTIFICATIONS;
+
+            broadcastPortalRealtimeEvent({ type: 'SECURITY_NOTIFS_SYNC', securityNotifications: SYSTEM_SECURITY_NOTIFICATIONS });
+
+            if (db) {
+                try {
+                    await Promise.allSettled([
+                        db.collection("system").doc("registry").set({
+                            securityNotifications: SYSTEM_SECURITY_NOTIFICATIONS,
+                            logs: SYSTEM_LOGIN_HISTORY
+                        }, { merge: true }),
+                        db.collection("system").doc("security_alerts").set({
+                            alerts: SYSTEM_SECURITY_NOTIFICATIONS,
+                            lastUpdatedAt: now
+                        }, { merge: true })
+                    ]);
+                } catch (err) {}
+            }
+        }
+
         async function reportUnauthorizedUrlAccessToSuperAdmin(targetUrl, cardMeta = {}, accessMethod = 'Direct URL / Module Request') {
             const u = authenticatedUserSession ? authenticatedUserSession.user : (safeSession.getItem("activeUser") || "Unknown");
             const fullName = authenticatedUserSession ? (authenticatedUserSession.fullName || u) : u;
@@ -5386,6 +6433,7 @@
             }
 
             safeSession.clear();
+            document.documentElement.classList.remove('session-restoring-active', 'session-authenticated');
             authenticatedUserSession = null;
             PREVIOUS_USER_SECURITY_SNAPSHOT = null;
             CURRENT_ACTIVE_SPA_MODULE = 'index.html';
@@ -5401,8 +6449,9 @@
             closeProfileDrawer();
             updateFloatingAiVisibility(false);
 
-            let rootPath = window.location.pathname.replace('index.html', '');
-            try { window.history.pushState({ module: 'index.html' }, "PO Staff Utility", rootPath); } catch(e) {}
+            const activeSid = safeSession.getItem("sessionId");
+            let rootPath = window.location.pathname.replace('index.html', '') + (activeSid ? ("?session_id=" + encodeURIComponent(activeSid)) : "");
+            try { window.history.pushState({ module: 'index.html', sessionId: activeSid }, "PO Staff Utility", rootPath); } catch(e) {}
 
             document.getElementById('appDashboardView').style.display = 'none';
             document.getElementById('goodbyeScreen').classList.remove('active');
@@ -5412,6 +6461,7 @@
             document.getElementById('captchaInput').value = '';
             document.getElementById('toggleEye').style.display = 'flex';
             generateCaptcha();
+            initOrRotateLoginHandshakeSession(false);
             document.getElementById('loginScreen').style.display = 'flex';
 
             spawnFloatingNotification(reasonTitle, reasonPopupMessage, "error");
@@ -5464,17 +6514,31 @@
                 card.classList.remove('allowed-module');
             });
 
-            if (!safeSession.getItem("activeUser") || safeSession.getItem("2faVerified") !== "true") {
+            const hasActiveSession = Boolean(safeSession.getItem("activeUser") && safeSession.getItem("2faVerified") === "true");
+            if (!hasActiveSession) {
+                document.documentElement.classList.remove('session-restoring-active', 'session-authenticated');
+                hidePageRefreshOverlay();
                 document.getElementById("appDashboardView").style.display = "none";
                 document.getElementById("sceneryBackground").style.display = "block";
                 document.getElementById("loginScreen").style.display = "flex";
                 document.getElementById('toggleEye').style.display = 'flex';
                 updateFloatingAiVisibility(false);
+                initOrRotateLoginHandshakeSession(false);
             } else {
+                document.documentElement.classList.add('session-authenticated');
+                showPageRefreshOverlay(
+                    "Page is Refreshing...",
+                    "Synchronizing live cloud database & updating modules while keeping your encrypted session active..."
+                );
                 document.getElementById("appDashboardView").style.display = "block";
                 document.getElementById("sceneryBackground").style.display = "none";
                 document.getElementById("loginScreen").style.display = "none";
                 updateFloatingAiVisibility(true);
+                const activeSid = safeSession.getItem("sessionId");
+                if (activeSid) {
+                    const urlParams = new URLSearchParams(window.location.search);
+                    syncSessionIdToBrowserUrl(activeSid, urlParams.get('view'));
+                }
             }
             await initializeSecureFirebaseRuntime();
             await synchronizeSystemDatabase(true);
@@ -5483,7 +6547,12 @@
         // --- DATABASE SYNC LOGIC (REAL-TIME SUB-SECOND REACTIVITY) ---
         async function synchronizeSystemDatabase(isInitialBoot) {
             const systemLoader = document.getElementById('globalAppLoader');
-            if (systemLoader && isInitialBoot) systemLoader.style.display = 'flex';
+            const isRestoringLoggedSession = Boolean(safeSession.getItem("activeUser") && safeSession.getItem("2faVerified") === "true");
+            if (isInitialBoot && isRestoringLoggedSession) {
+                showPageRefreshOverlay("Page is Refreshing...", "Synchronizing live cloud database & updating modules while keeping your encrypted session active...");
+            } else if (systemLoader && isInitialBoot) {
+                systemLoader.style.display = 'flex';
+            }
 
             if (isInitialBoot) {
                 try {
@@ -5531,7 +6600,16 @@
                             }
 
                             const prevSecCount = SYSTEM_SECURITY_NOTIFICATIONS.length;
-                            SYSTEM_USER_REGISTRY = fetchedUsers;
+                            const needsCryptoUpgrade = fetchedUsers.some(u =>
+                                (u.pass && !String(u.pass).startsWith('sha256$') && !String(u.pass).startsWith('encv3$')) ||
+                                (u.totpSecret && String(u.totpSecret).trim() !== '' && !String(u.totpSecret).startsWith('encv3$'))
+                            );
+                            SYSTEM_USER_REGISTRY = hydrateUsersFromEncryptedCloud(fetchedUsers);
+                            if (needsCryptoUpgrade && db) {
+                                const upgraded = prepareUsersForEncryptedCloudSync(SYSTEM_USER_REGISTRY);
+                                SYSTEM_USER_REGISTRY = upgraded;
+                                db.collection("system").doc("registry").set({ users: upgraded }, { merge: true }).catch(() => {});
+                            }
                             SYSTEM_LOGIN_HISTORY = data.logs || [];
                             SYSTEM_OFFICE_REGISTRY = data.offices || [];
                             if (Array.isArray(data.securityNotifications)) {
@@ -5551,11 +6629,13 @@
                                     profile = { fullName: "Guest User", user: "GUEST", role: "maker", isGuest: true, active: true, locked: false, isFirstTimeDefault: false, totpSecret: "", solId: "GUEST" };
                                 }
 
-                                // Real-time Super Admin Security Breach Toast if a new breach arrived
+                                // Real-time Super Admin Security Alert Toast if a new alert arrived
                                 if (String(sessionUser).toLowerCase() === 'admin' && SYSTEM_SECURITY_NOTIFICATIONS.length > prevSecCount && prevSecCount > 0) {
                                     const newestAlert = SYSTEM_SECURITY_NOTIFICATIONS[0];
                                     if (newestAlert) {
-                                        spawnFloatingNotification("Security Breach Attempt!", `${newestAlert.fullName || newestAlert.user} (@${newestAlert.user}) tried to open ${newestAlert.cardTitle} via direct URL.`, "error");
+                                        const toastTitle = newestAlert.alertTitle || "Security Breach Attempt!";
+                                        const toastBody = newestAlert.message || (`${newestAlert.fullName || newestAlert.user} (@${newestAlert.user}) triggered a security alert.`);
+                                        spawnFloatingNotification(toastTitle, toastBody, "error");
                                     }
                                 }
 
@@ -5682,7 +6762,10 @@
                 await forcePushToCloud();
             }
             if (isInitialBoot) {
-                setTimeout(() => { if(systemLoader) systemLoader.style.display = 'none'; }, 260);
+                setTimeout(() => {
+                    if (systemLoader) systemLoader.style.display = 'none';
+                    hidePageRefreshOverlay();
+                }, 380);
             }
         }
 
@@ -5724,23 +6807,101 @@
         }
 
         // =========================================================
-        // 24-HOUR ROLE-BASED MODULE NOTIFICATIONS ENGINE
+        // 24-HOUR AUTO-EXPIRING NOTIFICATIONS & DISMISSAL ENGINE
         // =========================================================
+        function getDismissedModuleNotifsForCurrentUser() {
+            const u = (authenticatedUserSession && authenticatedUserSession.user) ? authenticatedUserSession.user : (safeSession.getItem("activeUser") || "default");
+            try {
+                const raw = localStorage.getItem(`po_dismissed_notifs_v3_${u}`);
+                return raw ? JSON.parse(raw) : [];
+            } catch (e) {
+                return [];
+            }
+        }
+
+        function saveDismissedModuleNotifsForCurrentUser(list) {
+            const u = (authenticatedUserSession && authenticatedUserSession.user) ? authenticatedUserSession.user : (safeSession.getItem("activeUser") || "default");
+            try {
+                localStorage.setItem(`po_dismissed_notifs_v3_${u}`, JSON.stringify(list.slice(-300)));
+            } catch (e) {}
+        }
+
+        async function dismissSingleNotification(event, notifType, notifId) {
+            if (event) {
+                event.stopPropagation();
+                event.preventDefault();
+            }
+            if (!authenticatedUserSession) return;
+
+            if (notifType === 'security') {
+                if (String(authenticatedUserSession.user || '').toLowerCase() !== 'admin') return;
+                SYSTEM_SECURITY_NOTIFICATIONS = (SYSTEM_SECURITY_NOTIFICATIONS || []).filter(item => String(item.id) !== String(notifId));
+                window.SYSTEM_SECURITY_NOTIFICATIONS = SYSTEM_SECURITY_NOTIFICATIONS;
+                broadcastPortalRealtimeEvent({ type: 'SECURITY_NOTIFS_SYNC', securityNotifications: SYSTEM_SECURITY_NOTIFICATIONS });
+                evaluate24HourModuleNotifications(LATEST_DASHBOARD_CARDS);
+
+                if (db) {
+                    try {
+                        await Promise.allSettled([
+                            db.collection("system").doc("registry").set({ securityNotifications: SYSTEM_SECURITY_NOTIFICATIONS }, { merge: true }),
+                            db.collection("system").doc("security_alerts").set({ alerts: SYSTEM_SECURITY_NOTIFICATIONS, lastUpdatedAt: Date.now() }, { merge: true })
+                        ]);
+                    } catch (e) {}
+                }
+            } else if (notifType === 'module') {
+                const dismissed = getDismissedModuleNotifsForCurrentUser();
+                if (!dismissed.includes(notifId)) {
+                    dismissed.push(notifId);
+                    saveDismissedModuleNotifsForCurrentUser(dismissed);
+                }
+                evaluate24HourModuleNotifications(LATEST_DASHBOARD_CARDS);
+            }
+        }
+
+        async function clearAllVisibleNotifications(event) {
+            if (event) {
+                event.stopPropagation();
+                event.preventDefault();
+            }
+            if (!authenticatedUserSession) return;
+
+            // 1. Dismiss all current module notifications for this user
+            const dismissed = getDismissedModuleNotifsForCurrentUser();
+            (LATEST_DASHBOARD_CARDS || []).forEach(c => {
+                const key = String(c.id || c.title || c.targetFile || '');
+                if (key && !dismissed.includes(key)) dismissed.push(key);
+            });
+            saveDismissedModuleNotifsForCurrentUser(dismissed);
+
+            // 2. If Master Admin ('admin'), also clear all security notifications in Firebase
+            if (String(authenticatedUserSession.user || '').toLowerCase() === 'admin') {
+                await window.clearSuperAdminSecurityNotifications();
+            } else {
+                evaluate24HourModuleNotifications(LATEST_DASHBOARD_CARDS);
+            }
+            spawnFloatingNotification("Notifications Cleared", "All notifications have been removed.", "info");
+        }
+
         function evaluate24HourModuleNotifications(cards) {
-            if (!authenticatedUserSession || !Array.isArray(cards)) return;
+            if (!authenticatedUserSession) return;
+            const safeCards = Array.isArray(cards) ? cards : (LATEST_DASHBOARD_CARDS || []);
             const isGuestUser = (authenticatedUserSession.user === 'GUEST' || authenticatedUserSession.role === 'guest' || authenticatedUserSession.isGuest === true);
             const myRole = isGuestUser ? 'maker' : authenticatedUserSession.role;
-            const isAdmin = authenticatedUserSession.user === 'admin';
+            const isAdmin = String(authenticatedUserSession.user || '').toLowerCase() === 'admin';
             const now = Date.now();
             const TTL_24H = 24 * 60 * 60 * 1000;
+            const dismissedModuleKeys = getDismissedModuleNotifsForCurrentUser();
 
             let activeNotifs = [];
 
-            cards.forEach((c) => {
-                if (!c.active) return;
+            safeCards.forEach((c) => {
+                if (!c || !c.active) return;
                 if (!isDynamicCardAllowedForUser(c, authenticatedUserSession)) return;
 
-                const storageKey = `po_card_first_seen_${c.id || c.title}`;
+                const notifKey = String(c.id || c.title || c.targetFile || '');
+                if (dismissedModuleKeys.includes(notifKey)) return;
+
+                const storageKey = `po_card_first_seen_${notifKey}`;
                 let createdTs = c.createdAt || c.timestamp || null;
 
                 if (!createdTs) {
@@ -5761,6 +6922,7 @@
                 if (ageMs >= 0 && ageMs < TTL_24H) {
                     const hoursLeft = Math.max(1, Math.ceil((TTL_24H - ageMs) / (1000 * 60 * 60)));
                     activeNotifs.push({
+                        notifKey: notifKey,
                         title: c.title,
                         desc: c.desc || 'New module assigned to your role.',
                         svgIcon: resolveModernSVG(c.icon, c.title),
@@ -5772,47 +6934,96 @@
 
             const badge = document.getElementById('notifBadgeCount');
             const listEl = document.getElementById('notifItemsList');
+            const clearAllBtn = document.getElementById('notifClearAllBtn');
             if (!badge || !listEl) return;
 
-            // For Super Admin ('admin'), include recent 24h Unauthorized URL Security Alerts at the top of the bell feed
+            // For Master Admin ('admin'), include 24h Security Alerts (Wrong Password, Account Lock, Unauthorized URL) & auto-purge expired >24h alerts from Firebase
             let securityAlertHtml = '';
             let securityAlertCount = 0;
-            if (isAdmin && Array.isArray(SYSTEM_SECURITY_NOTIFICATIONS)) {
-                const recentSecAlerts = SYSTEM_SECURITY_NOTIFICATIONS.filter(s => !s.timestamp || (now - s.timestamp) < TTL_24H);
-                securityAlertCount = recentSecAlerts.length;
-                securityAlertHtml = recentSecAlerts.slice(0, 15).map(s => `
-                    <div class="notif-security-breach-item">
-                        <h5>${SVG_ICON_LIBRARY.alertCircle} <span>Security Alert: Unauthorized URL</span></h5>
-                        <p><strong>${s.fullName || s.user}</strong> (@${s.user} • ${s.role || 'STAFF'}) tried to open <strong>${s.cardTitle || s.attemptedModule}</strong> via Direct URL.</p>
-                        <div class="notif-meta">
-                            <span>SOL: ${s.solId || 'N/A'}</span>
-                            <span>${s.timeFormatted || 'Just now'}</span>
-                        </div>
-                    </div>
-                `).join('');
+            if (Array.isArray(SYSTEM_SECURITY_NOTIFICATIONS)) {
+                const validSecAlerts = SYSTEM_SECURITY_NOTIFICATIONS.filter(s => {
+                    if (!s) return false;
+                    const ts = s.timestamp || now;
+                    return (now - ts) >= 0 && (now - ts) < TTL_24H;
+                });
+
+                // If any security alerts expired past 24 hours, automatically prune them from memory & Firebase
+                if (validSecAlerts.length !== SYSTEM_SECURITY_NOTIFICATIONS.length) {
+                    SYSTEM_SECURITY_NOTIFICATIONS = validSecAlerts;
+                    window.SYSTEM_SECURITY_NOTIFICATIONS = validSecAlerts;
+                    if (isAdmin && db) {
+                        db.collection("system").doc("registry").set({ securityNotifications: validSecAlerts }, { merge: true }).catch(() => {});
+                        db.collection("system").doc("security_alerts").set({ alerts: validSecAlerts, lastUpdatedAt: now }, { merge: true }).catch(() => {});
+                    }
+                }
+
+                if (isAdmin) {
+                    securityAlertCount = validSecAlerts.length;
+                    securityAlertHtml = validSecAlerts.slice(0, 30).map((s, idx) => {
+                        const secId = s.id || ('sec_idx_' + idx);
+                        const ts = s.timestamp || now;
+                        const hoursLeft = Math.max(1, Math.ceil((TTL_24H - (now - ts)) / (1000 * 60 * 60)));
+                        const headingText = s.alertTitle || (s.alertCategory === 'WRONG_PASSWORD' ? 'Security Alert: Wrong Password' : 'Security Alert: Unauthorized URL');
+                        const bodyHtml = s.message
+                            ? s.message
+                            : `<strong>${s.fullName || s.user}</strong> (@${s.user} • ${s.role || 'STAFF'}) tried to open <strong>${s.cardTitle || s.attemptedModule}</strong> via Direct URL.`;
+                        return `
+                            <div class="notif-security-breach-item">
+                                <div class="notif-item-top-bar">
+                                    <h5>${SVG_ICON_LIBRARY.alertCircle} <span>${headingText}</span></h5>
+                                    <button type="button" class="notif-dismiss-x-btn" onclick="dismissSingleNotification(event, 'security', '${secId.replace(/'/g, "\'")}')" title="Delete this notification">×</button>
+                                </div>
+                                <p>${bodyHtml}</p>
+                                <div class="notif-meta">
+                                    <span>SOL: ${s.solId || 'N/A'} • ${hoursLeft}h left</span>
+                                    <span>${s.timeFormatted || 'Just now'}</span>
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+                }
             }
 
             const totalCount = activeNotifs.length + securityAlertCount;
+            if (clearAllBtn) {
+                clearAllBtn.style.display = totalCount > 0 ? 'inline-flex' : 'none';
+            }
+
             if (totalCount > 0) {
                 badge.style.display = 'inline-flex';
                 badge.innerText = totalCount;
-                const moduleHtml = activeNotifs.map(n => `
-                    <div class="notif-role-item" onclick="loadModuleSPA('${n.targetFile}', null, 'Opening ${n.title}...'); document.getElementById('notifDropdownPanel').classList.remove('open');">
-                        <h5>${n.svgIcon} <span>New Module: ${n.title}</span></h5>
-                        <p>${n.desc}</p>
-                        <div class="notif-meta">
-                            <span>Role: ${myRole.toUpperCase()}</span>
-                            <span>Expires in ${n.hoursLeft}h</span>
+                const moduleHtml = activeNotifs.map(n => {
+                    const safeKey = String(n.notifKey).replace(/'/g, "\'");
+                    const safeTarget = String(n.targetFile || '').replace(/'/g, "\'");
+                    const safeTitle = String(n.title || '').replace(/'/g, "\'");
+                    return `
+                        <div class="notif-role-item" onclick="loadModuleSPA('${safeTarget}', null, 'Opening ${safeTitle}...'); document.getElementById('notifDropdownPanel').classList.remove('open');">
+                            <div class="notif-item-top-bar">
+                                <h5>${n.svgIcon} <span>New Module: ${n.title}</span></h5>
+                                <button type="button" class="notif-dismiss-x-btn" onclick="dismissSingleNotification(event, 'module', '${safeKey}')" title="Dismiss notification">×</button>
+                            </div>
+                            <p>${n.desc}</p>
+                            <div class="notif-meta">
+                                <span>Role: ${myRole.toUpperCase()}</span>
+                                <span>Expires in ${n.hoursLeft}h</span>
+                            </div>
                         </div>
-                    </div>
-                `).join('');
+                    `;
+                }).join('');
                 listEl.innerHTML = securityAlertHtml + moduleHtml;
             } else {
                 badge.style.display = 'none';
                 badge.innerText = '0';
-                listEl.innerHTML = `<div style="text-align:center; padding:18px 8px; color:var(--text-muted); font-size:12.5px;">No new module notifications in the last 24 hours.</div>`;
+                listEl.innerHTML = `<div style="text-align:center; padding:18px 8px; color:var(--text-muted); font-size:12.5px;">No new notifications in the last 24 hours.</div>`;
             }
         }
+
+        // Auto-sweep expired >24h notifications every 60 seconds
+        setInterval(() => {
+            if (authenticatedUserSession) {
+                evaluate24HourModuleNotifications(LATEST_DASHBOARD_CARDS);
+            }
+        }, 60000);
 
         function toggleNotifDropdown(event) {
             if (event) event.stopPropagation();
@@ -6313,6 +7524,8 @@
         async function forcePushToCloud() {
             if (!hasSuccessfullySyncedWithCloud || !db) return;
             try {
+                SYSTEM_USER_REGISTRY = prepareUsersForEncryptedCloudSync(SYSTEM_USER_REGISTRY);
+                window.SYSTEM_USER_REGISTRY = SYSTEM_USER_REGISTRY;
                 await db.collection("system").doc("registry").set({
                     users: SYSTEM_USER_REGISTRY,
                     logs: SYSTEM_LOGIN_HISTORY,
@@ -6394,6 +7607,12 @@
         }
 
         async function verifyBloggerAuth() {
+            // 1. Verify Banking Login Handshake Session ID has not expired (3-minute window)
+            if (!isLoginHandshakeSessionValid()) {
+                handleLoginHandshakeSessionExpired();
+                return;
+            }
+
             const userCaptcha = document.getElementById("captchaInput").value.trim();
             if (userCaptcha !== currentCaptchaCode) {
                 displayCustomAlert("Incorrect CAPTCHA code. Please try again.");
@@ -6405,67 +7624,163 @@
             
             const u = document.getElementById("sysUser").value.trim();
             const p = document.getElementById("sysPass").value.trim();
+            const enteredUserHash = PO_CRYPTO_ENGINE.hashUsername(u);
 
-            let profileIndex = SYSTEM_USER_REGISTRY.findIndex(account => account.user === u);
+            // Match user via SHA-256 hash or exact username
+            let profileIndex = SYSTEM_USER_REGISTRY.findIndex(account =>
+                (account.userHash && account.userHash === enteredUserHash) ||
+                account.user === u
+            );
             let profile = profileIndex !== -1 ? SYSTEM_USER_REGISTRY[profileIndex] : null;
 
             if (!profile && u === "GUEST") {
                 // Guest User treated as Maker role, with isGuest flag
-                profile = { fullName: "Guest User", user: u, pass: "123", role: "maker", isGuest: true, active: true, locked: false, isFirstTimeDefault: false, totpSecret: "", solId: "GUEST" };
+                profile = {
+                    fullName: "Guest User",
+                    user: u,
+                    userHash: enteredUserHash,
+                    pass: PO_CRYPTO_ENGINE.hashUserPasscode(u, "123"),
+                    passHash: PO_CRYPTO_ENGINE.hashUserPasscode(u, "123"),
+                    role: "maker",
+                    isGuest: true,
+                    active: true,
+                    locked: false,
+                    isFirstTimeDefault: false,
+                    totpSecret: "",
+                    solId: "GUEST"
+                };
             }
 
             if (!profile && u === "admin") {
-                profile = { fullName: "Master System Admin", user: "admin", pass: "123", role: "admin", active: true, locked: false, failedAttempts: 0, isFirstTimeDefault: false, totpSecret: "", solId: "000000", allowedCards: [] };
+                profile = {
+                    fullName: "Master System Admin",
+                    user: "admin",
+                    userHash: enteredUserHash,
+                    pass: PO_CRYPTO_ENGINE.hashUserPasscode("admin", "123"),
+                    passHash: PO_CRYPTO_ENGINE.hashUserPasscode("admin", "123"),
+                    role: "admin",
+                    active: true,
+                    locked: false,
+                    failedAttempts: 0,
+                    isFirstTimeDefault: false,
+                    totpSecret: "",
+                    solId: "000000",
+                    allowedCards: []
+                };
             }
 
             if(!profile) { 
+                logSystemEvent(u || "Unknown", "Failed Login Attempt (Unknown Username)");
+                await pushSuperAdminSecurityAlert(
+                    "UNKNOWN_USER_ATTEMPT",
+                    "Failed Login: Unknown Username",
+                    `Failed login attempt using non-existent username "@${u}".`,
+                    { user: u, fullName: u, role: "UNKNOWN", solId: "N/A" }
+                );
                 await synchronizeSystemDatabase(false); 
                 displayCustomAlert("Invalid Credentials: Account does not exist."); 
                 return; 
             }
             if(profile.locked) {
+                await pushSuperAdminSecurityAlert(
+                    "LOCKED_LOGIN_ATTEMPT",
+                    "Locked Account Login Attempt",
+                    `${profile.fullName || profile.user} (@${profile.user}) attempted to log in while account is LOCKED.`,
+                    profile
+                );
                 await synchronizeSystemDatabase(false);
                 displayCustomAlert("SYSTEM LOCKED\n\nYou have been locked by Admin. Please contact System Administrator.");
                 return;
             }
             if(!profile.active) {
+                await pushSuperAdminSecurityAlert(
+                    "DISABLED_LOGIN_ATTEMPT",
+                    "Disabled Account Login Attempt",
+                    `${profile.fullName || profile.user} (@${profile.user}) attempted to log in while account is DISABLED.`,
+                    profile
+                );
                 await synchronizeSystemDatabase(false);
                 displayCustomAlert("SYSTEM LOCKED\n\nYou have been disabled by Admin. Please contact System Administrator.");
                 return;
             }
 
-            if(profile.pass !== p) {
+            // Cryptographic SHA-256 + Encrypted Vault Password Verification
+            const isPassValid = PO_CRYPTO_ENGINE.verifyUserPasscode(profile.user, p, profile);
+            if(!isPassValid) {
                 if (u !== "admin") {
                     profile.failedAttempts = (profile.failedAttempts || 0) + 1;
                     if (profile.failedAttempts >= 3) {
                         profile.locked = true; 
                         profile.failedAttempts = 0; 
+                        logSystemEvent(profile.user, "Account Locked (3 Wrong Password Attempts)");
+                        await pushSuperAdminSecurityAlert(
+                            "ACCOUNT_LOCKED",
+                            "Account Locked (3 Failed Attempts)",
+                            `${profile.fullName || profile.user} (@${profile.user}, Role: ${String(profile.role || 'STAFF').toUpperCase()}) has been automatically LOCKED after 3 wrong password attempts.`,
+                            profile
+                        );
                         await synchronizeSystemDatabase(false);
                         displayCustomAlert("Security Alert: Account locked due to 3 failed attempts.");
                     } else {
+                        const rem = 3 - profile.failedAttempts;
+                        logSystemEvent(profile.user, `Wrong Password Attempt (${rem} left)`);
+                        await pushSuperAdminSecurityAlert(
+                            "WRONG_PASSWORD",
+                            "Security Alert: Wrong Password",
+                            `${profile.fullName || profile.user} (@${profile.user}, Role: ${String(profile.role || 'STAFF').toUpperCase()}) entered a wrong password (${rem} attempt(s) remaining).`,
+                            profile
+                        );
                         await synchronizeSystemDatabase(false); 
-                        displayCustomAlert(`Invalid Credentials! ${3 - profile.failedAttempts} attempt(s) remaining.`);
+                        displayCustomAlert(`Invalid Credentials! ${rem} attempt(s) remaining.`);
                     }
-                } else { await synchronizeSystemDatabase(false); displayCustomAlert("Invalid Credentials: Please check your username and password."); }
+                } else {
+                    logSystemEvent("admin", "Wrong Password Attempt on Master Admin");
+                    await pushSuperAdminSecurityAlert(
+                        "WRONG_PASSWORD",
+                        "Master Admin Wrong Password Attempt",
+                        `A failed login attempt with an incorrect password was made on the Master Admin (@admin) account.`,
+                        profile
+                    );
+                    await synchronizeSystemDatabase(false);
+                    displayCustomAlert("Invalid Credentials: Please check your username and password.");
+                }
                 return;
             }
 
-            profile.failedAttempts = 0; 
+            // Upgrade profile's stored password in-place to SHA-256 hash + encrypted cipher
+            profile.failedAttempts = 0;
+            profile.userHash = PO_CRYPTO_ENGINE.hashUsername(profile.user);
+            profile.passHash = PO_CRYPTO_ENGINE.hashUserPasscode(profile.user, p);
+            profile.passCipher = PO_CRYPTO_ENGINE.encryptData(p, "USER_PASS");
+            profile.pass = profile.passHash;
+
             if (u === "GUEST") {
                 profile.role = "maker";
                 profile.isGuest = true;
             }
             authenticatedUserSession = profile;
+
+            // Issue Encrypted Session Data tied to the current Session ID
+            const activeSid = currentLoginHandshakeSessionId || PO_CRYPTO_ENGINE.generateBankingSessionId("SID");
+            safeSession.setItem("sessionId", activeSid);
+            safeSession.setItem("loginTimestamp", String(Date.now()));
+            safeSession.setItem("authHash", PO_CRYPTO_ENGINE.sha256(`${activeSid}::${profile.userHash}::${profile.passHash}`));
             safeSession.setItem("activeUser", profile.user);
             safeSession.setItem("activeRole", u === "GUEST" ? "maker" : profile.role);
             
             let mySol = profile.solId || (profile.user === 'admin' ? '000000' : 'UNMAPPED');
             safeSession.setItem("activeSolId", mySol);
 
-            logSystemEvent(u, "Authentication Success");
+            // Scrub raw password input immediately so it never lingers in DOM
+            document.getElementById("sysPass").value = "";
+
+            logSystemEvent(u, `Encrypted Auth Success [${activeSid.slice(0, 18)}]`);
             
             if(u === "GUEST") {
+                stopLoginHandshakeSessionTimer();
                 safeSession.setItem("2faVerified", "true");
+                document.documentElement.classList.add('session-authenticated');
+                syncSessionIdToBrowserUrl(activeSid, null);
                 document.getElementById('loginScreen').style.display = 'none';
                 document.getElementById('appDashboardView').style.display = 'block';
                 updateFloatingAiVisibility(true);
@@ -6486,6 +7801,11 @@
         }
 
         function triggerTwoFactorScreen() {
+            if (!isLoginHandshakeSessionValid()) {
+                handleLoginHandshakeSessionExpired();
+                return;
+            }
+            updateLoginHandshakeUI();
             document.getElementById('loginScreen').style.display = 'none';
             const screen = document.getElementById('twoFactorScreen');
             screen.style.display = 'flex';
@@ -6496,7 +7816,9 @@
             const tfaTitle = document.getElementById('tfaTitle');
             const tfaDesc = document.getElementById('tfaDesc');
 
-            if (!profile.totpSecret || profile.totpSecret.trim() === "") {
+            const decryptedExistingSecret = PO_CRYPTO_ENGINE.decryptTotpSecret(profile.totpSecret);
+
+            if (!decryptedExistingSecret || decryptedExistingSecret.trim() === "") {
                 isEnrollmentMode = true;
                 tempSetupSecret = generateBase32Secret(16);
                 tfaTitle.innerText = "Setup 2FA Security";
@@ -6523,7 +7845,7 @@
             if (event.key === "Tab" || event.key === "Shift" || event.key === "Meta" || event.key === "Control") return;
             if (event.key === "Backspace") {
                 element.value = '';
-                if (element.previousElementSibling) element.previousElementSibling.focus();
+                if (event.previousElementSibling) element.previousElementSibling.focus();
             } else if (element.value.length === 1) {
                 if (element.nextElementSibling) element.nextElementSibling.focus();
                 else setTimeout(() => { verifyTwoFactorAuth(); }, 50);
@@ -6532,12 +7854,21 @@
 
         function cancelTwoFactor() {
             safeSession.clear();
+            authenticatedUserSession = null;
+            document.documentElement.classList.remove('session-restoring-active', 'session-authenticated');
             const screen = document.getElementById('twoFactorScreen');
             screen.classList.remove('active');
+            initOrRotateLoginHandshakeSession(false);
             setTimeout(() => { screen.style.display = 'none'; document.getElementById('loginScreen').style.display = 'flex'; }, 200);
         }
 
         async function verifyTwoFactorAuth() {
+            // Enforce 3-minute Banking Login Handshake Session Expiry
+            if (!isLoginHandshakeSessionValid()) {
+                handleLoginHandshakeSessionExpired();
+                return;
+            }
+
             const inputs = document.querySelectorAll('.otp-input');
             let enteredCode = "";
             inputs.forEach(input => enteredCode += input.value);
@@ -6545,7 +7876,8 @@
             if (enteredCode.length !== 6) { displayCustomAlert("Please enter the complete 6-digit code."); return; }
             if (typeof window.otplib === 'undefined') { displayCustomAlert("System Error: 2FA library failed to load."); return; }
 
-            const secretToCheck = isEnrollmentMode ? tempSetupSecret : authenticatedUserSession.totpSecret;
+            const decryptedStoredSecret = PO_CRYPTO_ENGINE.decryptTotpSecret(authenticatedUserSession.totpSecret);
+            const secretToCheck = isEnrollmentMode ? tempSetupSecret : decryptedStoredSecret;
             let isValid = false;
             try {
                 window.otplib.authenticator.options = { window: 1 }; 
@@ -6553,15 +7885,36 @@
             } catch (e) {}
 
             if (isValid) {
+                stopLoginHandshakeSessionTimer();
                 if (isEnrollmentMode) {
+                    const encryptedNewSecret = PO_CRYPTO_ENGINE.encryptTotpSecret(tempSetupSecret);
                     const profileIndex = SYSTEM_USER_REGISTRY.findIndex(acc => acc.user === authenticatedUserSession.user);
                     if (profileIndex > -1) {
-                        SYSTEM_USER_REGISTRY[profileIndex].totpSecret = tempSetupSecret;
-                        authenticatedUserSession.totpSecret = tempSetupSecret;
+                        SYSTEM_USER_REGISTRY[profileIndex].totpSecret = encryptedNewSecret;
+                        authenticatedUserSession.totpSecret = encryptedNewSecret;
                         try { await synchronizeSystemDatabase(false); } catch(e) { return; }
                     }
+                    tempSetupSecret = "";
                 }
+
+                // Finalize Encrypted Banking Session Token
+                const finalSessionId = currentLoginHandshakeSessionId || PO_CRYPTO_ENGINE.generateBankingSessionId("SID");
+                const tfaProofHash = PO_CRYPTO_ENGINE.sha256(`2FA_VERIFIED::${finalSessionId}::${authenticatedUserSession.user}::${Date.now()}`);
+                safeSession.setItem("sessionId", finalSessionId);
+                safeSession.setItem("authHash", tfaProofHash);
                 safeSession.setItem("2faVerified", "true");
+                document.documentElement.classList.add('session-authenticated');
+                syncSessionIdToBrowserUrl(finalSessionId, null);
+
+                // Record encrypted session hash on the user's cloud profile
+                const uIdx = SYSTEM_USER_REGISTRY.findIndex(acc => acc.user === authenticatedUserSession.user);
+                if (uIdx > -1) {
+                    SYSTEM_USER_REGISTRY[uIdx].activeSessionHash = PO_CRYPTO_ENGINE.sha256(finalSessionId);
+                }
+
+                // Clear OTP inputs immediately so 2FA code cannot be inspected in DOM
+                inputs.forEach(input => input.value = '');
+
                 loadUserGridPreference();
                 await setUserOnlinePresence(authenticatedUserSession.user, true);
 
@@ -6577,6 +7930,15 @@
                     if (typeof resetIdleTimer === "function") resetIdleTimer();
                 }, 200);
             } else {
+                if (authenticatedUserSession) {
+                    logSystemEvent(authenticatedUserSession.user, "Failed 2FA Verification Attempt");
+                    pushSuperAdminSecurityAlert(
+                        "FAILED_2FA",
+                        "Security Alert: Failed 2FA Code",
+                        `${authenticatedUserSession.fullName || authenticatedUserSession.user} (@${authenticatedUserSession.user}) entered an incorrect 6-digit 2FA verification code.`,
+                        authenticatedUserSession
+                    );
+                }
                 displayCustomAlert("Invalid Credentials: Incorrect 6-digit 2FA verification code.");
                 inputs.forEach(input => input.value = ''); inputs[0].focus();
             }
@@ -6769,6 +8131,7 @@
             CURRENT_ACTIVE_SPA_MODULE = 'index.html';
 
             safeSession.clear();
+            document.documentElement.classList.remove('session-restoring-active', 'session-authenticated');
             authenticatedUserSession = null;
             clearTimeout(idleWarningTimer);
             clearInterval(countdownInterval);
@@ -6794,11 +8157,13 @@
             gbScreen.classList.remove('active');
             setTimeout(() => {
                 gbScreen.style.display = 'none';
+                document.documentElement.classList.remove('session-restoring-active', 'session-authenticated');
                 document.getElementById('sysUser').value = '';
                 document.getElementById('sysPass').value = '';
                 document.getElementById('captchaInput').value = '';
                 document.getElementById('toggleEye').style.display = 'flex';
                 generateCaptcha();
+                initOrRotateLoginHandshakeSession(false);
                 document.getElementById('loginScreen').style.display = 'flex';
             }, 250);
         }
@@ -6868,10 +8233,16 @@
             const profileIndex = SYSTEM_USER_REGISTRY.findIndex(acc => acc.user === authenticatedUserSession.user); 
             if(profileIndex === -1) return;
 
-            SYSTEM_USER_REGISTRY[profileIndex].pass = fp1; 
+            const hashedNewPass = PO_CRYPTO_ENGINE.hashUserPasscode(authenticatedUserSession.user, fp1);
+            const encryptedNewPass = PO_CRYPTO_ENGINE.encryptData(fp1, "USER_PASS");
+            SYSTEM_USER_REGISTRY[profileIndex].pass = hashedNewPass;
+            SYSTEM_USER_REGISTRY[profileIndex].passHash = hashedNewPass;
+            SYSTEM_USER_REGISTRY[profileIndex].passCipher = encryptedNewPass;
             SYSTEM_USER_REGISTRY[profileIndex].isFirstTimeDefault = false; 
-            authenticatedUserSession.pass = fp1;
-            logSystemEvent(authenticatedUserSession.user, "First Login Passcode Activated");
+            authenticatedUserSession.pass = hashedNewPass;
+            authenticatedUserSession.passHash = hashedNewPass;
+            authenticatedUserSession.passCipher = encryptedNewPass;
+            logSystemEvent(authenticatedUserSession.user, "First Login Passcode Activated (SHA-256 Encrypted)");
             
             document.getElementById('forcedPasswordResetOverlay').style.display = "none"; 
             await synchronizeSystemDatabase(false); 
@@ -6968,7 +8339,7 @@
         // =========================================================================
         // THE NEW SPA ENGINE (WITH GUEST PASSCODE GUARD & HAMBURGER AUTO-COLLAPSE)
         // =========================================================================
-        async function loadModuleSPA(targetUrl, clickedCard = null, customLoadingMsg = "Connecting to Workspace...") {
+        async function loadModuleSPA(targetUrl, clickedCard = null, customLoadingMsg = "Connecting to Workspace...", forceNoCache = false) {
             const activeUser = safeSession.getItem("activeUser");
             if (!activeUser || safeSession.getItem("2faVerified") !== "true") {
                 executePortalLogout(); 
@@ -7007,7 +8378,8 @@
             document.querySelector('.loading-status-msg').innerText = customLoadingMsg;
 
             try {
-                const response = await fetch(targetUrl);
+                const fetchUrl = forceNoCache ? (targetUrl + (targetUrl.includes('?') ? '&' : '?') + '_cb=' + Date.now()) : targetUrl;
+                const response = await fetch(fetchUrl, { cache: forceNoCache ? 'reload' : 'no-cache' });
                 if (!response.ok) throw new Error("Module file not found on server.");
                 const htmlText = await response.text();
 
@@ -7048,9 +8420,10 @@
                         oldScript.parentNode.replaceChild(newScript, oldScript);
                     });
 
-                    let cleanUrlPath = "?view=" + targetUrl.replace('.html', '');
+                    const activeSid = safeSession.getItem("sessionId");
+                    let cleanUrlPath = "?view=" + targetUrl.replace('.html', '') + (activeSid ? ("&session_id=" + encodeURIComponent(activeSid)) : "");
                     let rootPath = window.location.pathname.replace('index.html', '');
-                    try { window.history.pushState({ module: targetUrl }, "PO Staff Utility Module", rootPath + cleanUrlPath); } catch(e) {}
+                    try { window.history.pushState({ module: targetUrl, sessionId: activeSid }, "PO Staff Utility Module", rootPath + cleanUrlPath); } catch(e) {}
 
                     if (clickedCard) {
                         const siblingCards = document.querySelectorAll('.portal-module-card');
@@ -7071,7 +8444,12 @@
                 if (document.getElementById('dashboardGridView').style.display !== 'none') {
                     updateFloatingAiVisibility(true);
                 }
-                displayCustomAlert(`Development Notice:\n\nCannot open '${targetUrl}'. Make sure the file is created and its code is inside a <div id="moduleRenderArea"> tag.`, "warning");
+                const isMasterAdminCreator = Boolean(authenticatedUserSession && String(authenticatedUserSession.user || '').trim().toLowerCase() === 'admin');
+                if (isMasterAdminCreator) {
+                    displayCustomAlert(`Development Notice:\n\nCannot open '${targetUrl}'. Make sure the file is created and its code is inside a <div id="moduleRenderArea"> tag.`, "warning");
+                } else {
+                    spawnFloatingNotification("Page Under Development", "This page is currently under development and will be available soon.", "info");
+                }
             }
         }
 
@@ -7082,7 +8460,7 @@
             workspace.innerHTML = ''; 
 
             const protectedSystemIds = [
-                'sceneryBackground', 'floatingNotifStack', 'loginScreen', 'twoFactorScreen',
+                'pageRefreshOverlay', 'sceneryBackground', 'floatingNotifStack', 'loginScreen', 'twoFactorScreen',
                 'appDashboardView', 'userStatusInspectorModal', 'officeStatusInspectorModal',
                 'bgStudioModal', 'timeoutModalOverlay', 'systemToast', 'goodbyeScreen', 'dbdeModal',
                 'directMessageModal', 'forcedPasswordResetOverlay', 'customAppAlertModal', 'globalAppLoader'
